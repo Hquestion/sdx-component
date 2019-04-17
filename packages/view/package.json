@@ -1,0 +1,35 @@
+{
+  "name": "@sdx/view",
+  "version": "1.0.0",
+  "description": "页面级组件库",
+  "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
+  "homepage": "https://github.com/Hquestion/lerna-template#readme",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://192.168.20.38:4873/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hquestion/lerna-template.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+      "build:component": "webpack --config ./build/webpack.component.js",
+      "build:lib": "webpack --config ./build/webpack.common.js",
+      "build": "npm run build:lib && npm run build:component"
+  },
+  "bugs": {
+    "url": "https://github.com/Hquestion/lerna-template/issues"
+  },
+  "dependencies": {
+    "@sdx/utils": "^1.0.0"
+  }
+}

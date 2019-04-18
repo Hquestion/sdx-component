@@ -37,6 +37,15 @@ npm run dev
 
 开发环境只是启动example项目，可以在example项目中引用组件库中的组件进行调试
 
+- 提交代码
+
+```
+git add .
+npm run cm
+```
+
+会启动一个交互式命令行，自动生成格式规范的commit comment
+
 - 打包构建
 
 ```

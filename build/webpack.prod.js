@@ -26,7 +26,7 @@ module.exports = {
         WebpackNodeExternals()
     ],
     resolve: {
-        extensions: ['.js', '.vue', '.json'],
+        extensions: ['','.js', '.vue', '.json'],
         modules: ['node_modules']
     },
     module: {

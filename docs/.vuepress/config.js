@@ -8,16 +8,7 @@ module.exports = {
     // 添加导航栏
     nav: [
       { text: '主页', link: '/' }, // 导航条
-      { text: '组件文档', link: '/baseComponents/base/test1' },
-      { text: '知识库', link: '/knowledge/' },
-      {
-        text: 'github',
-        // 这里是下拉列表展现形式。
-        items: [
-          { text: 'focus-outside', link: 'https://github.com/TaoXuSheng/focus-outside' },
-          { text: 'stylus-converter', link: 'https://github.com/TaoXuSheng/stylus-converter' },
-        ]
-      }
+      { text: '组件文档', link: '/baseComponents/base/test1' }
     ],
     // 为以下路由添加侧边栏
     sidebar:{
@@ -43,34 +34,15 @@ module.exports = {
           collapsable: true,
           children: [
           ]
-        }
-      ],
-      '/knowledge/': [
-        {
-          title: 'CSS知识库',
-          collapsable: false,
-          children: [
-          ]
         },
         {
-          title: 'JS知识库',
-          collapsable: false,
-          children: [
-          ]
-        },
-        {
-          title: 'node知识库',
-          collapsable: false,
-          children: [
-          ]
-        },
-        {
-          title: 'vue知识库',
-          collapsable: false,
+          title: '工具集',
+          collapsable: true,
           children: [
           ]
         }
       ]
+      
     }
   }
 }

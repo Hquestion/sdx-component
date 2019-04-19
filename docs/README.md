@@ -9,7 +9,7 @@ features:
   details: 业务组件
 - title: 业务系统
   details: 业务系统组件
-
-  footer: MIT Licensed | Copyright © 2018-present Edison
+- title: 工具集
+  details: 业务通用的工具函数
 
 ---

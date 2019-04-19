@@ -8,7 +8,7 @@
         }
     },
     "lint-staged": {
-        "*.[js, vue]": [
+        "*.{js, vue}": [
             "eslint --fix",
             "git add"
         ]
@@ -24,7 +24,8 @@
         "build:view": "lerna run build --scope=@sdx/view",
         "build": "lerna run build",
         "dev": "cd examples && npm install && npm run serve",
-        "docs": "vuepress dev docs"
+        "doc:dev": "vuepress dev docs",
+        "doc:build": "vuepress build docs"
     },
     "devDependencies": {
         "@babel/cli": "^7.4.3",

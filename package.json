@@ -24,7 +24,7 @@
         "build:view": "lerna run build --scope=@sdx/view",
         "build": "lerna run build",
         "dev": "cd examples && npm install && npm run serve",
-        "vuepress": "vuepress dev docs"
+        "docs": "vuepress dev docs"
     },
     "devDependencies": {
         "@babel/cli": "^7.4.3",

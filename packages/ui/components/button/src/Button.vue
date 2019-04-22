@@ -1,6 +1,6 @@
 <template>
     <div
-        class="ilv-button"
+        class="sdxui-button"
         @click="handleClick"
     >
         <slot>{{ t('ui.button.ok') }}</slot>

@@ -1,3 +1,7 @@
-.ilv-button {
-    color: $ilv-primary-color;
+@include block('button', 'component') {
+    color: $sdx-warning-color;
 }
+
+// .ilv-button {
+//     color: $ilv-primary-color;
+// }

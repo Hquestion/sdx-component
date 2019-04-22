@@ -1,5 +1,5 @@
 <template>
-    <div class="ilv-radio">
+    <div class="sdxui-radio">
         这是一个radio
     </div>
 </template>
@@ -10,7 +10,7 @@ export default {
     data() {
         return {};
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

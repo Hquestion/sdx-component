@@ -18,6 +18,6 @@ module.exports = {
         }
     },
     devServer: {
-        writeToDisk: true
+        writeToDisk: false
     }
 };

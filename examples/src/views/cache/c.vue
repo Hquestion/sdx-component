@@ -17,7 +17,7 @@
         </p>
         <p class="page-link">
             <button @click="toReturn">
-                返回
+                back回退返回
             </button>
         </p>
     </div>

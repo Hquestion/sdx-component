@@ -17,7 +17,7 @@
         </p>
         <p class="page-link">
             <button @click="toReturn">
-                返回
+                push返回
             </button>
         </p>
     </div>
@@ -32,7 +32,6 @@ export default {
         };
     },
     beforeRouteEnter(to, from, next) {
-        console.log(to, from, 'b');
         next(vm => vm.fullPath = from.fullPath);   
     },
     methods: {

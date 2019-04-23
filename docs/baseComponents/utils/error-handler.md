@@ -16,9 +16,15 @@ import errorCodeMap from 'path/to/errorCodeMap';
 // 注册errorCodeMap和i18n服务
 errorHandler.register(errorCodeMap, i18n);
 
-// 使用，如在ajax请求出错时调用
-errorHandler(resp);
+// 使用，如在ajax请求出错时调用。
+// preventDefaultNotify用于阻止该方法封装的
+// notification提示，在应用中处理，默认false
+errorHandler(resp, preventDefaultNotify);
 ```
+
+::: warning 抑制默认错误处理
+有些场景需要抑制默认错误码的处理，可以在ajax请求中配置preventError: true来阻止默认处理
+:::
 
 ::: tip 错误码映射表
 

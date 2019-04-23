@@ -1,19 +1,25 @@
 <template>
     <div
-        class="ilv-button"
+        class="sdxui-button"
         @click="handleClick"
     >
-        <slot>{{ t('ui.button.ok') }}</slot>
+        <slot />
     </div>
 </template>
 
 <script>
 import localeMixin from '@sdx/utils/src/mixins/locale';
 export default {
-    name: 'IlvButton',
+    name: 'SdxuiButton',
     mixins: [localeMixin],
     data() {
         return {};
+    },
+    props: {
+        size: {
+            type: String,
+            default: 'medium'
+        }
     },
     methods: {
         handleClick() {

@@ -25,5 +25,8 @@
   },
   "bugs": {
     "url": "https://github.com/Hquestion/lerna-template/issues"
+  },
+  "peerDependencies": {
+    "sass-bem-constructor": "^1.1.0"
   }
 }

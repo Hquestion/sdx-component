@@ -73,10 +73,19 @@ function matchErrorCode(httpCode, code, reqConfig) {
     }
 }
 
-function handler(resp) {
+/**
+ *
+ * @param resp
+ * @param preventDefaultNotify  阻止默认的提示处理，可以在应用中处理
+ * @returns {{msg, code, httpCode}}
+ */
+function handler(resp, preventDefaultNotify) {
     // 没用响应体时，默认处理
     if (!resp) {
         const errorInfo = matchErrorCode('', '');
+        if (preventDefaultNotify) {
+            return errorInfo;
+        }
         Notification.error({
             title: `错误码: ${errorInfo.code || '未知'}`,
             message: i18n.t(errorInfo.msg),
@@ -92,6 +101,9 @@ function handler(resp) {
         return;
     }
     const errorInfo = matchErrorCode(httpCode, code, {url, method});
+    if (preventDefaultNotify) {
+        return errorInfo;
+    }
     Notification.error({
         title: `错误码: ${errorInfo.code || '未知'}`,
         message: i18n.t(errorInfo.msg),

@@ -1,9 +1,9 @@
 module.exports = {
     title: '组件文档', // 设置网站标题
-    base: '/dataCom/',
+    base: '/',
     description: 'SDX组件库文档', //描述
     dest: './dist',   // 设置输出目录
-    port: 9527, //端口
+    port: 3200, //端口
     themeConfig: { //主题配置
         // 添加导航栏
         nav: [

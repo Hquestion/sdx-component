@@ -18,6 +18,7 @@ module.exports = {
         }
     },
     devServer: {
-        writeToDisk: false
+        writeToDisk: false,
+        port: 3300
     }
 };

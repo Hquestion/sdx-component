@@ -38,7 +38,9 @@ module.exports = {
                 {
                     title: '工具集',
                     collapsable: true,
-                    children: []
+                    children: [
+                        'utils/error-handler'
+                    ]
                 }
             ]
 

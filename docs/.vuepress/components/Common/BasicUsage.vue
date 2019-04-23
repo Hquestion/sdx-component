@@ -13,6 +13,9 @@
       <slot name="codeText"></slot>
     </div>
     <div v-if="$slots.codeText" class="code--button" @click="handleToggleShow">{{codeTextBtn}}</div>
+    <div  class="deceription">
+      <slot name="deceription"></slot>
+    </div>
     <div  class="api">
       <slot name="api"></slot>
     </div>

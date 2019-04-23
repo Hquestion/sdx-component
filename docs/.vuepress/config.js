@@ -26,7 +26,9 @@ module.exports = {
                 {
                     title: '业务控件',
                     collapsable: true,
-                    children: []
+                    children: [
+                        'widget/breadcrumb'
+                    ]
                 },
                 {
                     title: '业务系统',

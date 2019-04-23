@@ -1,7 +1,12 @@
 import Vue from 'vue';
+import febAlive from 'feb-alive';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
-
+import Cache from './views/cache/index';
+import A from './views/cache/a';
+import B from './views/cache/b';
+import C from './views/cache/c';
+febAlive.resetHistory();
 Vue.use(Router);
 
 export default new Router({
@@ -10,6 +15,33 @@ export default new Router({
             path: '/',
             name: 'home',
             component: Home
+        },
+        {
+            path: '/Cache',
+            name: 'cache',
+            component: Cache,
+            redirect: '/Cache/a/:id',
+            children: [{
+                path: 'a/:id',
+                component: A,
+                meta: {
+                    name: 'a',
+                    disableCache: false
+                }
+            },{
+                path: 'b',
+                component: B,
+                meta: {
+                    name: 'b'
+                }
+            },{
+                path: 'c',
+                component: C,
+                meta: {
+                    name: 'c'
+                }
+            }
+            ]
         },
         {
             path: '/about',

@@ -10,7 +10,7 @@
 
 ```js
 
-import errorHandler from '@sdx/utils/src/error-handler';
+import errorHandler from '@sdx/utils/lib/error-handler';
 import errorCodeMap from 'path/to/errorCodeMap';
 
 // 注册errorCodeMap和i18n服务
@@ -88,8 +88,8 @@ i18n还可以通过其他方式注入：
 
 ```js
 
-import locale from '@sdx/utils/src/locale';
-import { registerI18n } from '@sdx/utils/src/locale';
+import locale from '@sdx/utils/lib/locale';
+import { registerI18n } from '@sdx/utils/lib/locale';
 
 locale.registerI18n(i18n);
 registerI18n(i18n);
@@ -102,7 +102,7 @@ import sdxUI from '@sdx/ui';
 vue.use(sdxUI, {i18n});
 ```
 
-因为在ui/utils/widget/view中国际化处理共用了@sdx/utils/src/locale处理，最终都会将i18n存储在@sdx/utils/src/locale里
+因为在ui/utils/widget/view中国际化处理共用了@sdx/utils/lib/locale处理，最终都会将i18n存储在@sdx/utils/lib/locale里
 :::
 
 ## API

@@ -4,12 +4,12 @@ import router from './router';
 import store from './store';
 import i18n from './i18n';
 import './assets/scss/app.scss';
-import {Button} from '@sdx/ui';
+import {Button, Transfer} from '@sdx/ui';
 import enMsg from  '@sdx/utils/src/locale/lang/en';
 import febAlive from 'feb-alive';
 Vue.use(febAlive, { router, keyName: 'feb'});
 Vue.use(Button);
-
+Vue.use(Transfer);
 Vue.config.productionTip = false;
 
 const app = new Vue({

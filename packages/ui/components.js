@@ -2,5 +2,6 @@
 // 会用于构建时作为入口
 module.exports = {
     button: './components/button/index.js',
-    radio: './components/radio/index.js'
+    radio: './components/radio/index.js',
+    transfer: './components/transfer/index.js'
 };

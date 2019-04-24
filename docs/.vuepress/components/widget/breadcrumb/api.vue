@@ -1,6 +1,6 @@
 <template>
   <div class="demo-button">
-    <CommonApi :apiData="attrData" title="Breadcrumb Attributes"/>
+    <CommonApi :apiData="attrData" title="Attributes"/>
   </div>
 </template>
 

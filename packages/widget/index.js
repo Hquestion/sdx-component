@@ -1,5 +1,5 @@
 // 这里会暴露所有组件
-import Breadcrumb from './components/widget-breadcrumb';
+import Breadcrumb from './components/breadcrumb';
 
 const IluvatarWidget = {
     Breadcrumb

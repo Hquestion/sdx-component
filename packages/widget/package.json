@@ -25,9 +25,9 @@
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-      "build:component": "webpack --config ./build/webpack.component.js",
-      "build:lib": "webpack --config ./build/webpack.common.js",
-      "build": "npm run build:lib && npm run build:component"
+    "build:component": "webpack --config ./build/webpack.component.js",
+    "build:lib": "webpack --config ./build/webpack.common.js",
+    "build": "npm run build:lib && npm run build:component"
   },
   "bugs": {
     "url": "https://github.com/Hquestion/lerna-template/issues"
@@ -36,6 +36,8 @@
     "@sdx/utils": "^1.0.0"
   },
   "peerDependencies": {
-    "sass-bem-constructor": "^1.1.0"
+      "element-ui": "^2.7.2",
+    "sass-bem-constructor": "^1.1.0",
+      "vue": "^2.6.10"
   }
 }

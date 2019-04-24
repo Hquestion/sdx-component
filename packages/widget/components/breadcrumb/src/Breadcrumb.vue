@@ -17,12 +17,16 @@
 </template>
 
 <script>
+import { Breadcrumb } from 'element-ui';
 export default {
     name: 'SdxwBreadcrumb',
     data() {
         return {
             breadcrumbs: []
         };
+    },
+    components: {
+        [Breadcrumb.name]: Breadcrumb
     },
     props: {
         seperator: {

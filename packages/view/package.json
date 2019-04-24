@@ -1,6 +1,6 @@
 {
   "name": "@sdx/view",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "页面级组件库",
   "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
   "homepage": "https://github.com/Hquestion/lerna-template#readme",
@@ -30,7 +30,7 @@
     "url": "https://github.com/Hquestion/lerna-template/issues"
   },
   "dependencies": {
-    "@sdx/utils": "^1.0.1"
+    "@sdx/utils": "^1.0.2"
   },
   "peerDependencies": {
     "element-ui": "^2.7.2",

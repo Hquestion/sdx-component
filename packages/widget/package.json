@@ -1,6 +1,6 @@
 {
   "name": "@sdx/widget",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "控件级业务组件库",
   "keywords": [
     "widget"
@@ -33,7 +33,7 @@
     "url": "https://github.com/Hquestion/lerna-template/issues"
   },
   "dependencies": {
-    "@sdx/utils": "^1.0.1"
+    "@sdx/utils": "^1.0.2"
   },
   "peerDependencies": {
     "element-ui": "^2.7.2",

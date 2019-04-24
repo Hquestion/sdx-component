@@ -12,7 +12,7 @@ Object.keys(components).forEach(cate => {
 });
 
 let mixinsList = [
-    '@sdx/utils/src/mixins/locale'
+    '@sdx/utils/lib/mixins/locale'
 ];
 
 mixinsList.forEach(key => {
@@ -20,7 +20,8 @@ mixinsList.forEach(key => {
 });
 
 externals = [Object.assign({
-    vue: 'vue'
+    vue: 'vue',
+    'element-ui': 'element-ui'
 }, externals), nodeExternals()];
 
 exports.externals = externals;

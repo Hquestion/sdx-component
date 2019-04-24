@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import localeMixin from '@sdx/utils/src/mixins/locale';
+import localeMixin from '@sdx/utils/lib/mixins/locale';
 export default {
     name: 'SdxuiButton',
     mixins: [localeMixin],

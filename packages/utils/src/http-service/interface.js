@@ -40,8 +40,8 @@ function remove (url, data, config) {
     });
 }
 
-function register (handler, config) {
-    axios.register(handler, config);
+function register (handler, config, mock) {
+    axios.register(handler, config, mock);
 }
 
 export default {

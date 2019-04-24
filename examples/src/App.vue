@@ -7,10 +7,19 @@
             <router-link to="/about">
                 About
             </router-link>
-            <IlvButton @click="setlang">你好，点我</IlvButton>
+            <IlvButton @click="setlang">
+                你好，点我
+            </IlvButton>
             <IlvButton />
         </div>
-        <router-view />
+        <p class="page-link">
+            <button @click="toFeb">
+                feb-alive
+            </button>
+        </p>
+        <feb-alive>
+            <router-view />
+        </feb-alive>
     </div>
 </template>
 
@@ -39,6 +48,9 @@ export default {
     methods: {
         setlang() {
             this.$i18n.locale = 'en';
+        },
+        toFeb() {
+            this.$router.push(`/Cache/a/${123456}`);
         }
     },
     mounted() {

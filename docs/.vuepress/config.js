@@ -26,7 +26,9 @@ module.exports = {
                 {
                     title: '业务控件',
                     collapsable: true,
-                    children: []
+                    children: [
+                        'widget/breadcrumb'
+                    ]
                 },
                 {
                     title: '业务系统',
@@ -36,7 +38,10 @@ module.exports = {
                 {
                     title: '工具集',
                     collapsable: true,
-                    children: []
+                    children: [
+                        'utils/error-handler',
+                        'utils/http-service'
+                    ]
                 }
             ]
 

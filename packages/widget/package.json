@@ -25,9 +25,11 @@
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-      "build:component": "webpack --config ./build/webpack.component.js",
-      "build:lib": "webpack --config ./build/webpack.common.js",
-      "build": "npm run build:lib && npm run build:component"
+    "build:component": "webpack --config ./build/webpack.component.js",
+    "build:lib": "webpack --config ./build/webpack.common.js",
+    "build": "npm run build:lib && npm run build:component",
+    "test:unit": "jest --passWithNoTests",
+    "test:unit:coverage": "jest --passWithNoTests --coverage"
   },
   "bugs": {
     "url": "https://github.com/Hquestion/lerna-template/issues"

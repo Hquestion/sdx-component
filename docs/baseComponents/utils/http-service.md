@@ -13,7 +13,11 @@ import httpService from '@sdx/utils/src/http-service';
 
 // 初始化httpService, 可指定axios请求配置, 错误处理, mock转发以及请求携带token
 // 视具体需求可调可不调, 具体参数见下方Api列表
-httpService.register(errorHandler, config, mockUrlList);
+// configs可以包含:
+//     errorHandler: 错误处理函数
+//     config: 请求配置
+//     mockUrlList: mock请求转发url列表
+httpService.register(configs);
 
 // get请求
 httpService.get(url, data, config);
@@ -210,7 +214,7 @@ httpService.remove(url, params, config);
 
 | 方法名 | 功能 | 参数 |  响应 |
 | --- | --- | --- | --- |
-| register | 注册函数, 用来提供默认配置, mock请求转发url列表, 请求header中携带token以及错误处理 | errorHandler: [请求错误处理方法](https://www.npmjs.com/package/babel-plugin-component-customize)<br>config: 见上<br>mockUrlList: 需要转发请求至mock的url列表 | --- |
+| register | 注册函数, 用来提供默认配置, mock请求转发url列表, 请求header中携带token以及错误处理 | configs: 该方法接收一个对象, 对象里可以有如下属性(皆为可选)<br>configs.errorHandler: [请求错误处理方法](https://www.npmjs.com/package/babel-plugin-component-customize)<br>configs.config: 见上<br>configs.mockUrlList: 需要转发请求至mock的url列表 | --- |
 | get | get请求 | url: 请求地址<br>data: 请求参数<br>config(可选): 配置项,见上 | Promise |
 | post | post请求 | url: 请求地址<br>params: 请求参数<br>config(可选): 配置项,见上 | Promise |
 | put | put请求 | url: 请求地址<br>params: 请求参数<br>config(可选): 配置项,见上 | Promise |

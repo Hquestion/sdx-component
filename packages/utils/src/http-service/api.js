@@ -26,7 +26,7 @@ export default function $axios(options) {
                         config.headers[axiosConfig.tokenKey] = axiosConfig.tokenValue;
                     }
                     if (process.env.NODE_ENV === 'development') {
-                        let needMock = mockUrlList.some(url => {
+                        let needMock = mockUrlList && mockUrlList.some(url => {
                             if (typeof url === 'string') {
                                 return url === config.url;
                             } else if (typeof url === 'object' && url instanceof RegExp) {
@@ -50,12 +50,12 @@ export default function $axios(options) {
                     let data = response.data;
 
                     // 根据返回的code值来做不同的处理（和后端约定）
-                    switch (data.code) {
-                    case "":
-                        break;
-                    default:
-                        break;
-                    }
+                    // switch (data.code) {
+                    // case "":
+                    //     break;
+                    // default:
+                    //     break;
+                    // }
                     // 若不是正确的返回code，且已经登录，就抛出错误
                     // const err = new Error(data.description)
 
@@ -65,8 +65,8 @@ export default function $axios(options) {
                     // throw err
                     return data;
                 },
-                err => {
-                    if (errorHandler) errorHandler();
+                (err) => {
+                    if (errorHandler) errorHandler(err.response);
                     return Promise.reject(err); // 返回接口返回的错误信息
                 }
             );

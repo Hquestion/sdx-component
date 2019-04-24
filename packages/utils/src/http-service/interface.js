@@ -40,7 +40,8 @@ function remove (url, data, config) {
     });
 }
 
-function register (handler, config, mock) {
+function register (configs) {
+    let { handler, config, mock} = configs;
     axios.register(handler, config, mock);
 }
 

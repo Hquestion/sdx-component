@@ -1,5 +1,6 @@
 let defaultLang = 'zh-CN';
 let merged = false;
+let i18n;
 
 function getLangMessage(lang) {
     let langMsg;
@@ -25,13 +26,17 @@ function getLang() {
     return defaultLang;
 }
 
+function registerI18n(i18nInstance) {
+    i18n = i18nInstance;
+}
+
 function i18nHandler() {
-    const vuei18n = Object.getPrototypeOf(this).$t;
-    if (typeof vuei18n === 'function' && !!this.$i18n) {
+    const vuei18n = Object.getPrototypeOf(this).$t || (i18n && i18n.t);
+    if (typeof vuei18n === 'function' && (!!this.$i18n || !!i18n)) {
         if (!merged) {
             merged = true;
-            defaultLang = this.$i18n.locale;
-            this.$i18n.mergeLocaleMessage(defaultLang, getLangMessage(defaultLang));
+            defaultLang = (this.$i18n || i18n).locale;
+            (this.$i18n || i18n).mergeLocaleMessage(defaultLang, getLangMessage(defaultLang));
         }
         return vuei18n.apply(this, arguments);
     }
@@ -52,5 +57,5 @@ function t(key, langOpt) {
     return key;
 }
 
-export {setLang, getLang, t};
-export default {setLang, getLang, t};
+export {setLang, getLang, t, registerI18n};
+export default {setLang, getLang, t, registerI18n};

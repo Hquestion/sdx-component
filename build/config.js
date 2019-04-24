@@ -7,12 +7,12 @@ let externals = {};
 
 Object.keys(components).forEach(cate => {
     Object.keys(components[cate]).forEach(key => {
-        externals[`@sdx/${cate}/src/${key}`] = `@sdx/${cate}/lib/${key}`;
+        externals[`@sdx/${cate}/components/${key}`] = `@sdx/${cate}/lib/${key}`;
     });
 });
 
 let mixinsList = [
-    '@sdx/utils/src/mixins/locale'
+    '@sdx/utils/lib/mixins/locale'
 ];
 
 mixinsList.forEach(key => {
@@ -20,7 +20,8 @@ mixinsList.forEach(key => {
 });
 
 externals = [Object.assign({
-    vue: 'vue'
+    vue: 'vue',
+    'element-ui': 'element-ui'
 }, externals), nodeExternals()];
 
 exports.externals = externals;

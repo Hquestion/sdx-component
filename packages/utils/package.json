@@ -28,6 +28,7 @@
     "url": "https://github.com/Hquestion/lerna-template/issues"
   },
   "peerDependencies": {
+      "axios": "^0.18.0",
     "sass-bem-constructor": "^1.1.0",
     "vue": "^2.6.10"
   },

@@ -39,7 +39,8 @@ module.exports = {
                     title: '工具集',
                     collapsable: true,
                     children: [
-                        'utils/error-handler'
+                        'utils/error-handler',
+                        'utils/http-service'
                     ]
                 }
             ]

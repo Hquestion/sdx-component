@@ -1,7 +1,4 @@
 import axios from './api';
-import {setErrorHandler} from './api';
-import qs from 'qs';
-
 
 function get (url, params, config) {
     if (!url) return;
@@ -18,7 +15,7 @@ function post (url, data, config) {
     return axios({
         method: 'post',
         url,
-        data: qs.stringify(data),
+        data,
         ...config
     });
 }
@@ -28,7 +25,7 @@ function put (url, data, config) {
     return axios({
         method: 'put',
         url,
-        data: qs.stringify(data),
+        data,
         ...config
     });
 }
@@ -38,13 +35,14 @@ function remove (url, data, config) {
     return axios({
         method: 'delete',
         url,
-        data: qs.stringify(data),
+        data,
         ...config
     });
 }
 
-function registerErrorHandler (handler) {
-    setErrorHandler(handler);
+function register (configs) {
+    let { handler, config, mock} = configs;
+    axios.register(handler, config, mock);
 }
 
 export default {
@@ -52,5 +50,5 @@ export default {
     put,
     post,
     remove,
-    registerErrorHandler
+    register
 };

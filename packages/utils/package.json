@@ -27,6 +27,10 @@
     "url": "https://github.com/Hquestion/lerna-template/issues"
   },
   "peerDependencies": {
-    "sass-bem-constructor": "^1.1.0"
+    "sass-bem-constructor": "^1.1.0",
+      "vue": "^2.6.10"
+  },
+  "dependencies": {
+    "vue": "^2.6.10"
   }
 }

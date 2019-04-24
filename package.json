@@ -26,7 +26,7 @@
         "dev": "cd examples && npm run serve",
         "doc:dev": "vuepress dev docs",
         "doc:build": "vuepress build docs",
-        "prepublish": "npm run build"
+        "prepublishOnly": "npm run build"
     },
     "devDependencies": {
         "@babel/cli": "^7.4.3",

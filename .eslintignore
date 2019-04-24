@@ -2,3 +2,4 @@ node_modules/*
 **/__tests__/*.js
 .commitlintrc.js
 .eslintrc.js
+packages/**/lib/**/*.js

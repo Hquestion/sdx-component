@@ -7,7 +7,7 @@ let externals = {};
 
 Object.keys(components).forEach(cate => {
     Object.keys(components[cate]).forEach(key => {
-        externals[`@sdx/${cate}/component/${key}`] = `@sdx/${cate}/lib/${key}`;
+        externals[`@sdx/${cate}/components/${key}`] = `@sdx/${cate}/lib/${key}`;
     });
 });
 

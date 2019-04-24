@@ -26,7 +26,8 @@
         "build": "lerna run build",
         "dev": "cd examples && npm run serve",
         "doc:dev": "vuepress dev docs",
-        "doc:build": "vuepress build docs"
+        "doc:build": "vuepress build docs",
+        "prepublishOnly": "npm run build"
     },
     "devDependencies": {
         "@babel/cli": "^7.4.3",
@@ -78,7 +79,7 @@
         "vue": "^2.6.10",
         "vue-highlight.js": "^2.2.0",
         "vue-loader": "^15.7.0",
-        "vuepress": "^0.14.10"
+        "vuepress": "0.14.10"
     },
     "config": {
         "commitizen": {

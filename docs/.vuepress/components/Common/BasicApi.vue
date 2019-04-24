@@ -76,10 +76,10 @@ export default {
     margin: 30px 0 20px;
   }
   + .api-wrap {
-    margin: 40px 0;
+    margin: 0px 0;
   }
   &:first-child {
-    margin-top: 80px;
+    /*margin-top: 80px;*/
   }
   &:last-child {
     margin-bottom: 80px;

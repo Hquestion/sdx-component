@@ -21,12 +21,22 @@
     "url": "git+https://github.com/Hquestion/lerna-template.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "babel src --out-dir lib && gulp copy"
   },
   "bugs": {
     "url": "https://github.com/Hquestion/lerna-template/issues"
   },
   "peerDependencies": {
-    "sass-bem-constructor": "^1.1.0"
+    "sass-bem-constructor": "^1.1.0",
+    "vue": "^2.6.10"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "devDependencies": {
+    "gulp": "^4.0.1"
   }
 }

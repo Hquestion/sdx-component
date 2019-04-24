@@ -1,9 +1,5 @@
 <template>
   <div class="code">
-    <div class="code--title">
-      <div class="title">{{title}}</div>
-      <small>{{description}}</small>
-    </div>
     <div class="code--demo">
       <div class="code-content">
         <slot></slot>
@@ -13,6 +9,9 @@
       <slot name="codeText"></slot>
     </div>
     <div v-if="$slots.codeText" class="code--button" @click="handleToggleShow">{{codeTextBtn}}</div>
+    <div  class="deceription">
+      <slot name="deceription"></slot>
+    </div>
     <div  class="api">
       <slot name="api"></slot>
     </div>
@@ -25,7 +24,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: '基本用法'
+      default: 'Example'
     },
     description: {
       type: String,

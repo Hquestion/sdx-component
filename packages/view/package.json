@@ -36,5 +36,6 @@
     "element-ui": "^2.7.2",
     "sass-bem-constructor": "^1.1.0",
     "vue": "^2.6.10"
-  }
+  },
+  "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

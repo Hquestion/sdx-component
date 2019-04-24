@@ -5,7 +5,7 @@ import store from './store';
 import i18n from './i18n';
 import './assets/scss/app.scss';
 import {Button} from '@sdx/ui';
-import enMsg from  '@sdx/utils/src/locale/lang/en';
+import enMsg from  '@sdx/utils/lib/locale/lang/en';
 import febAlive from 'feb-alive';
 Vue.use(febAlive, { router, keyName: 'feb'});
 Vue.use(Button);

@@ -22,6 +22,7 @@
         "build:ui": "lerna run build --scope=@sdx/ui",
         "build:widget": "lerna run build --scope=@sdx/widget",
         "build:view": "lerna run build --scope=@sdx/view",
+        "build:utils": "lerna run build --scope=@sdx/utils",
         "build": "lerna run build",
         "dev": "cd examples && npm run serve",
         "doc:dev": "vuepress dev docs",

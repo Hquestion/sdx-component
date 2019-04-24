@@ -22,7 +22,7 @@ module.exports = {
         libraryExport: "default"
     },
     externals: [
-        '@sdx/utils/src/mixins/locale',
+        '@sdx/utils/lib/mixins/locale',
         WebpackNodeExternals()
     ],
     resolve: {

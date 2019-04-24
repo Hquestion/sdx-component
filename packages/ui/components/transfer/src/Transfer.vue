@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import {Transfer} from 'element-ui';
 export default {
     name: 'SdxuTransfer',
     data() {
@@ -29,6 +30,9 @@ export default {
             data: generateData(),
             value: [1, 4]
         };
+    },
+    components: {
+        [Transfer.name]: Transfer
     },
     methods: {
         // handleChange(value, direction, movedKeys) {

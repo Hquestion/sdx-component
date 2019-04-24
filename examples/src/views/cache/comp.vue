@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {Transfer} from '@sdx/ui';
+import Transfer from '@sdx/ui/components/transfer';
 export default {
     data () {
         return {

@@ -1,6 +1,6 @@
 {
   "name": "@sdx/view",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "页面级组件库",
   "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
   "homepage": "https://github.com/Hquestion/lerna-template#readme",
@@ -30,11 +30,11 @@
     "url": "https://github.com/Hquestion/lerna-template/issues"
   },
   "dependencies": {
-    "@sdx/utils": "^1.0.0"
+    "@sdx/utils": "^1.0.1"
   },
   "peerDependencies": {
-      "element-ui": "^2.7.2",
+    "element-ui": "^2.7.2",
     "sass-bem-constructor": "^1.1.0",
-      "vue": "^2.6.10"
+    "vue": "^2.6.10"
   }
 }

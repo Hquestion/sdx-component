@@ -1,6 +1,6 @@
 {
     "name": "@sdx/ui",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "iluvatar基础组件库",
     "keywords": [
         "ui"
@@ -38,6 +38,6 @@
         "vue": "^2.6.10"
     },
     "dependencies": {
-        "@sdx/utils": "^1.0.0"
+        "@sdx/utils": "^1.0.1"
     }
 }

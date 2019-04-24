@@ -1,6 +1,6 @@
 {
   "name": "@sdx/utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "sdx工具类组件库",
   "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
   "homepage": "https://github.com/Hquestion/lerna-template#readme",
@@ -28,7 +28,7 @@
     "url": "https://github.com/Hquestion/lerna-template/issues"
   },
   "peerDependencies": {
-      "axios": "^0.18.0",
+    "axios": "^0.18.0",
     "sass-bem-constructor": "^1.1.0",
     "vue": "^2.6.10"
   },

@@ -18,7 +18,7 @@
 
 <script>
 export default {
-    name: 'Breadcrumb',
+    name: 'SdxwBreadcrumb',
     data() {
         return {
             breadcrumbs: []

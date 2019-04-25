@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "sdx工具类组件库",
   "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
-  "homepage": "https://github.com/Hquestion/lerna-template#readme",
+  "homepage": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "directories": {
@@ -18,14 +18,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hquestion/lerna-template.git"
+    "url": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component.git"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build": "babel src --out-dir lib && gulp copy"
-  },
-  "bugs": {
-    "url": "https://github.com/Hquestion/lerna-template/issues"
   },
   "peerDependencies": {
     "axios": "^0.18.0",

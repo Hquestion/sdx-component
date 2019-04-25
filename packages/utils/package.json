@@ -22,7 +22,7 @@
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
-    "test:unit": "jest --passWithNoTests",
+    "test:unit": "jest --passWithNoTests --no-cache",
     "test:unit:coverage": "jest --passWithNoTests --coverage",
     "build": "babel src --out-dir lib && gulp copy"
   },

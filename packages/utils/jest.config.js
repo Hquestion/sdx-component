@@ -12,5 +12,5 @@ module.exports = {
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1'
     },
-    transformIgnorePatterns: ["<rootDir>/node_modules/(?!(lodash-es|other-es-lib|@sdx))"]
+    transformIgnorePatterns: ["<rootDir>/node_modules/(?!@sdx)"]
 };

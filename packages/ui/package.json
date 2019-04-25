@@ -27,7 +27,9 @@
         "test": "echo \"Error: run tests from root\" && exit 1",
         "build:component": "webpack --config ./build/webpack.component.js",
         "build:lib": "webpack --config ./build/webpack.common.js",
-        "build": "npm run build:lib && npm run build:component"
+        "build": "npm run build:lib && npm run build:component",
+        "test:unit": "jest --passWithNoTests --no-cache",
+        "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "peerDependencies": {
         "element-ui": "^2.7.2",

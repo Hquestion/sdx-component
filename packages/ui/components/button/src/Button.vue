@@ -1,6 +1,6 @@
 <template>
     <div
-        class="sdxui-button"
+        class="sdxu-button"
         @click="handleClick"
     >
         <slot />

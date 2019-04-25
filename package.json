@@ -27,7 +27,8 @@
         "dev": "cd examples && npm run serve",
         "doc:dev": "vuepress dev docs",
         "doc:build": "vuepress build docs",
-        "test": "jest",
+        "test:unit": "lerna run test:unit",
+        "test:unit:coverage": "lerna run test:unit:coverage",
         "prepublishOnly": "npm run build"
     },
     "devDependencies": {

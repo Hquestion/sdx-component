@@ -1,6 +1,6 @@
 <template>
     <el-dialog
-        class="sdxui-dialog"
+        class="sdxu-dialog"
         :class="size"
         :visible.sync="dialogVisible"
         :fullscreen="fullscreen"
@@ -28,14 +28,34 @@
             </slot>
         </div>
         <div><slot /></div>
-        <div slot="footer">
-            <slot name="footer" />
+        <div
+            slot="footer"
+            v-if="!noFooter"
+        >
+            <slot name="footer">
+                <SdxuButton
+                    type="default"
+                    size="small"
+                    style="margin-right: 20px"
+                    @click="cancel"
+                >
+                    取消
+                </SdxuButton>
+                <SdxuButton
+                    type="primary"
+                    size="small"
+                    @click="confirm"
+                >
+                    确认
+                </SdxuButton>
+            </slot>
         </div>
     </el-dialog>
 </template>
 
 <script>
 import { Dialog } from 'element-ui';
+import Button from '@sdx/ui/components/button';
 export default {
     name: 'SdxuDialog',
     data() {
@@ -54,7 +74,8 @@ export default {
         }
     },
     components: {
-        [Dialog.name]: Dialog
+        [Dialog.name]: Dialog,
+        [Button.name]: Button
     },
     props: {
         visible: {
@@ -112,6 +133,10 @@ export default {
         beforeClose: {
             type: Function,
             default: (done)=>{done();}
+        },
+        noFooter: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {
@@ -127,6 +152,14 @@ export default {
         },
         dialogOpened() {
             this.$emit('opened');
+        },
+        confirm() {
+            this.dialogVisible = false;
+            this.$emit('confirm');
+        },
+        cancel() {
+            this.dialogVisible = false;
+            this.$emit('cancel');
         }
     }
 };

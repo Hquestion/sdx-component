@@ -19,7 +19,8 @@ module.exports = {
                     title: '基础组件',
                     collapsable: true,
                     children: [
-                        'ui/button'
+                        'ui/button',
+                        'ui/dialog'
                     ]
                 },
                 {

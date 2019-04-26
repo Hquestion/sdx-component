@@ -9,14 +9,16 @@
             @closed="dialogClosed"
             @open="dialogOpen"
             @opened="dialogOpened"
+            @confirm="dialogConfirm"
+            @cancel="dialogCancel"
         >
             <div slot="title">
                 我是标题
             </div>
             <div>我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111我是内容1111</div>
-            <div slot="footer">
+            <!-- <div slot="footer">
                 我是footer
-            </div>
+            </div> -->
         </sdxu-dialog>
     </div>
 </template>
@@ -35,16 +37,22 @@ export default {
             this.dialogVisible = true;
         },
         dialogClose() {
-            console.log('dialogClose');
+            // console.log('dialogClose');
         },
         dialogClosed() {
-            console.log('dialogClosed');
+            // console.log('dialogClosed');
         },
         dialogOpen() {
-            console.log('dialogOpen');
+            // console.log('dialogOpen');
         },
         dialogOpened() {
-            console.log('dialogOpened');
+            // console.log('dialogOpened');
+        },
+        dialogConfirm() {
+            console.log('dialogConfirm');
+        },
+        dialogCancel() {
+            console.log('dialogCancel');
         }
     }
 };

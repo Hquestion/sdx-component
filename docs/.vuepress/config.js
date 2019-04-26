@@ -39,7 +39,8 @@ module.exports = {
                     collapsable: true,
                     children: [
                         'utils/error-handler',
-                        'utils/http-service'
+                        'utils/http-service',
+                        'utils/国际化'
                     ]
                 }
             ]

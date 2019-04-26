@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SdxuButton from '../../src/SdxuButton';
+import SdxuButton from '@sdx/ui/components/button';
 export default {
     name: 'ButtonDemo',
     data() {

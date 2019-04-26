@@ -1,5 +1,5 @@
 <template>
-    <div class="bread-crumb-container">
+    <div class="sdxw-breadcrumb">
         <el-breadcrumb
             :separator="seperator"
             :separator-class="seperatorClass"

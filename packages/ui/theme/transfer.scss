@@ -14,7 +14,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     .boxStyle {
         width: 210px;
         height: 270px;
-        border: 1px solid $ilv-border-color;
+        border: 1px solid $sdxu-button-default-border-color;
     }
     .el-input--small {
         margin: 16px;
@@ -22,7 +22,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
     .tree {
         @extend .boxStyle;
-        
         .el-tree {
             height: 170px;
             overflow-y: scroll;
@@ -31,14 +30,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         .moveAll {
             height: 36px;
             color: #909399;
-            font-size:$ilv-primary-size14;
+            font-size:$sdx-content-font-size;
             line-height: 36px;
-            border-top: 1px solid $ilv-border-color;
+            border-top: 1px solid $sdxu-button-default-border-color;
             width: 100%;
             span {
                 cursor:pointer;
                 float: right;
-                padding-right: $ilv-primary-size16;
+                padding-right: 16px;
             }
         }
     }

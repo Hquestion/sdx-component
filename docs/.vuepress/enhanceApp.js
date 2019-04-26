@@ -5,6 +5,9 @@ import VueHighlightJS from 'vue-highlight.js'; //代码高亮组件
 import 'highlight.js/styles/atom-one-dark.css'; //代码高亮样式
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
+import '@sdx/ui/theme/index.scss';
+import '@sdx/widget/theme/index.scss';
+import '@sdx/view/theme/index.scss';
 
 import '../.vuepress/public/css/index.css'
 

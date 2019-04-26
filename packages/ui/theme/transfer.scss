@@ -7,7 +7,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~sass-bem-constructor/dist/sass-bem-constructor';
 
 
-.sdxu-transfer {
+@include block('transfer', 'component') {
     display: flex;
     justify-content: space-between;
     width: 446px;
@@ -17,35 +17,36 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         border: 1px solid $sdxu-button-default-border-color;
     }
     .el-input--small {
-        margin: 16px;
-        width: 179px;
-    }
-    .tree {
-        @extend .boxStyle;
-        .el-tree {
-            height: 170px;
-            overflow-y: scroll;
-            padding-left: 4px;
-        }
-        .moveAll {
-            height: 36px;
-            color: #909399;
-            font-size:$sdx-content-font-size;
-            line-height: 36px;
-            border-top: 1px solid $sdxu-button-default-border-color;
-            width: 100%;
-            span {
-                cursor:pointer;
-                float: right;
-                padding-right: 16px;
+                margin: 16px;
+                width: 179px;
             }
-        }
+    @include element('tree') {
+            @extend .boxStyle;
+            .el-tree {
+                height: 170px;
+                overflow-y: scroll;
+                padding-left: 4px;
+            }
     }
-    .moveIcon {
+    @include element('moveall') {
+        height: 36px;
+        color: #909399;
+        font-size:$sdx-content-font-size;
+        line-height: 36px;
+        border-top: 1px solid $sdxu-button-default-border-color;
+        width: 100%;
+    }
+    @include element('moveicon') {
         height: 270px;
-        line-height: 270px;
+        line-height: 270px;   
+        span {
+            cursor:pointer;
+            float: right;
+            padding-right: 16px;
+        }   
     }
-    .tag {
+
+    @include element('tag') {
         @extend .boxStyle;
         .el-tag{
             margin: 4px;
@@ -59,23 +60,26 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             color: #616266;
             background: none;
         }
-        .tagItem {
-            display: flex;
-            justify-content: space-between;
-            width: 186px;
-            flex-wrap: wrap;
-            padding: 13px;
-            padding-top: 0;
-            font-size: 13px;
-            font-weight: 700;
-            .group {
+    }
+    @include element('tagitem') {
+        display: flex;
+        justify-content: space-between;
+        width: 186px;
+        flex-wrap: wrap;
+        padding: 13px;
+        padding-top: 0;
+        font-size: 13px;
+        font-weight: 700;
+        & /deep/ .el-tag {
+            @include state('group') {
                 background: #E3FFF8;
                 opacity: 0.8;
             }
-            .user {
+            @include state('user') {
                 background: #D5E2FF;
             }
         }
+        
     }
     ::-webkit-scrollbar {/*滚动条整体样式*/
         width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/

@@ -1,6 +1,6 @@
 <template>
     <div class="sdxu-transfer">
-        <div class="tree">
+        <div class="sdxu-transfer__tree">
             <el-input
                 size="small"
                 placeholder="请输入"
@@ -8,6 +8,7 @@
                 v-model="filterText"
             />
             <el-tree
+                class="sdxu-transfer__eltree"
                 :data="data"
                 show-checkbox
                 node-key="id"
@@ -17,31 +18,31 @@
                 check-on-click-node
                 :default-checked-keys="defaultKeys"
             />
-            <div class="moveAll">
+            <div class="sdxu-transfer__moveall">
                 <span @click="moveAllTag">
                     移动全部
                 </span>
             </div>
         </div>
-        <div class="moveIcon">
+        <div class="sdxu-transfer__moveicon">
             <span @click="movetag">
                 =
             </span>
         </div>
-        <div class="tag">
+        <div class="sdxu-transfer__tag">
             <el-input
                 size="small"
                 placeholder="请输入"
                 suffix-icon="el-icon-search"
                 v-model="filterTag"
             />
-            <div class="tagItem">
+            <div class="sdxu-transfer__tagitem">
                 <el-tag
                     v-for="tag in tags"
                     :key="tag.id"
                     closable
                     @close="handleClose(tag)"
-                    :class="tag.is_group ? 'group' : 'user'"
+                    :class="tag.is_group ? 'is-group' : 'is-user'"
                 >
                     {{ tag.name }}
                 </el-tag>

@@ -6,7 +6,7 @@
     "widget"
   ],
   "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
-  "homepage": "https://github.com/Hquestion/lerna-template#readme",
+  "homepage": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "directories": {
@@ -21,16 +21,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hquestion/lerna-template.git"
+    "url": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component.git"
   },
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1",
     "build:component": "webpack --config ./build/webpack.component.js",
     "build:lib": "webpack --config ./build/webpack.common.js",
-    "build": "npm run build:lib && npm run build:component"
-  },
-  "bugs": {
-    "url": "https://github.com/Hquestion/lerna-template/issues"
+    "build": "npm run build:lib && npm run build:component",
+    "test:unit": "jest --passWithNoTests --no-cache",
+    "test:unit:coverage": "jest --passWithNoTests --coverage"
   },
   "dependencies": {
     "@sdx/utils": "^1.0.2"

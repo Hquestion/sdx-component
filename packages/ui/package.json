@@ -1,12 +1,12 @@
 {
     "name": "@sdx/ui",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "description": "iluvatar基础组件库",
     "keywords": [
         "ui"
     ],
     "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
-    "homepage": "https://github.com/Hquestion/lerna-template#readme",
+    "homepage": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component#readme",
     "license": "ISC",
     "main": "lib/index.js",
     "directories": {
@@ -14,23 +14,22 @@
         "test": "__tests__"
     },
     "files": [
-        "components"
+        "lib"
     ],
     "publishConfig": {
         "registry": "http://192.168.20.38:4873/"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Hquestion/lerna-template.git"
+        "url": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component.git"
     },
     "scripts": {
         "test": "echo \"Error: run tests from root\" && exit 1",
         "build:component": "webpack --config ./build/webpack.component.js",
         "build:lib": "webpack --config ./build/webpack.common.js",
-        "build": "npm run build:lib && npm run build:component"
-    },
-    "bugs": {
-        "url": "https://github.com/Hquestion/lerna-template/issues"
+        "build": "npm run build:lib && npm run build:component",
+        "test:unit": "jest --passWithNoTests --no-cache",
+        "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "peerDependencies": {
         "element-ui": "^2.7.2",

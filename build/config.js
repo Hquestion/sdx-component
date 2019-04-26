@@ -21,7 +21,8 @@ mixinsList.forEach(key => {
 
 externals = [Object.assign({
     vue: 'vue',
-    'element-ui': 'element-ui'
+    'element-ui': 'element-ui',
+    'axios': 'axios'
 }, externals), nodeExternals()];
 
 exports.externals = externals;

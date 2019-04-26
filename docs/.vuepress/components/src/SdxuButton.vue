@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import localeMixin from '@sdx/utils/lib/mixins/locale';
+import localeMixin from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxuButton',
     mixins: [localeMixin],

@@ -1,7 +1,7 @@
 <template>
     <el-dialog
-        class="sdxu-dialog"
-        :class="size"
+        :class="['sdxu-dialog',
+                 `sdxu-dialog--${size}`]"
         :visible.sync="dialogVisible"
         :fullscreen="fullscreen"
         :top="top"
@@ -62,11 +62,6 @@ export default {
         return {
             dialogVisible: this.visible
         };
-    },
-    created() {
-    },
-    mounted() {
-
     },
     watch: {
         visible (nVal) {

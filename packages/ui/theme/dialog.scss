@@ -2,14 +2,15 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @import '~element-ui/packages/theme-chalk/src/base';
 @import '~element-ui/packages/theme-chalk/src/Dialog';
+@import './button.scss';
 
 @include block('dialog', 'component') {
-    &.small {
+    @include modifier('small') {
         .el-dialog {
             width: 460px;
         }
     }
-    &.normal {
+    @include modifier('normal') {
         .el-dialog {
             width: 600px;
         }

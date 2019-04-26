@@ -7,17 +7,22 @@
                 suffix-icon="el-icon-search"
                 v-model="filterText"
             />
-            <el-tree
-                class="sdxu-transfer__eltree"
-                :data="data"
-                show-checkbox
-                node-key="id"
-                ref="tree"
-                highlight-current
-                :filter-node-method="filterNode"
-                check-on-click-node
-                :default-checked-keys="defaultKeys"
-            />
+            <el-scrollbar
+                class="sdxu-transfer-scrollbar"
+                wrap-class="sdxu-transfer__wrap" 
+            >
+                <el-tree
+                    class="sdxu-transfer__eltree"
+                    :data="data"
+                    show-checkbox
+                    node-key="id"
+                    ref="tree"
+                    highlight-current
+                    :filter-node-method="filterNode"
+                    check-on-click-node
+                    :default-checked-keys="defaultKeys"
+                />
+            </el-scrollbar>
             <div class="sdxu-transfer__moveall">
                 <span @click="moveAllTag">
                     移动全部
@@ -52,7 +57,7 @@
 </template>
 
 <script>
-import {Tree,Input, Tag} from 'element-ui';
+import {Tree,Input, Tag, Scrollbar} from 'element-ui';
 export default {
     name: 'SdxuTransfer',
     data() {
@@ -96,7 +101,8 @@ export default {
     components: {
         [Tree.name]: Tree,
         [Input.name]: Input,
-        [Tag.name]: Tag
+        [Tag.name]: Tag,
+        [Scrollbar.name]: Scrollbar
     },
     methods: {
         filterNode(value, data) {

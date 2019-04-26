@@ -1,7 +1,7 @@
 import Button from './components/button';
 import Radio from './components/radio';
 
-import { registerI18n } from "@sdx/utils/src/locale";
+import { registerI18n } from "@sdx/utils/lib/locale";
 
 const IluvatarUI = {
     Button,

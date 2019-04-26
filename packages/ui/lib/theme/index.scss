@@ -1,2 +1,9 @@
+@import '../../../../node_modules/sass-bem-constructor/dist/sass-bem-constructor';
+// 设置命名空间为 sdxui
+$bem-block-namespaces: (
+    'component': 'sdxui'
+);
+
 @import "base";
 @import "button";
+@import "radio";

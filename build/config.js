@@ -1,26 +1,32 @@
 const path = require('path');
 const fs = require('fs');
 const nodeExternals = require('webpack-node-externals');
-const components = require('./component');
 
 let externals = {};
 
-Object.keys(components).forEach(cate => {
-    Object.keys(components[cate]).forEach(key => {
+const commonComponentPackages = ['ui', 'view', 'widget'];
+
+commonComponentPackages.forEach(cate => {
+    const components = fs.readdirSync(path.resolve(__dirname, `../packages/${cate}/components`));
+    components.forEach(key => {
         externals[`@sdx/${cate}/components/${key}`] = `@sdx/${cate}/lib/${key}`;
     });
 });
 
 let mixinsList = [
-    '@sdx/utils/src/mixins/locale'
+    {'@sdx/utils/src/mixins/locale': '@sdx/utils/lib/mixins/locale'}
 ];
 
-mixinsList.forEach(key => {
-    externals[key] = key;
+mixinsList.forEach(item => {
+    Object.keys(item).forEach(key => {
+        externals[key] = item[key];
+    });
 });
 
 externals = [Object.assign({
-    vue: 'vue'
+    vue: 'vue',
+    'element-ui': 'element-ui',
+    'axios': 'axios'
 }, externals), nodeExternals()];
 
 exports.externals = externals;

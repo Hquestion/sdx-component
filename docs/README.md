@@ -1,7 +1,8 @@
 ---
 home: true
+heroImage: /login-logo.png
 actionText: 前往 →
-actionLink: /baseComponents/base/test1
+actionLink: /baseComponents/ui/button
 features:
 - title: 基础组件
   details: 基本组件，为常用组件提供快速，可用的组件

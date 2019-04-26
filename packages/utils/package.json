@@ -1,9 +1,9 @@
 {
   "name": "@sdx/utils",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "sdx工具类组件库",
   "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
-  "homepage": "https://github.com/Hquestion/lerna-template#readme",
+  "homepage": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component#readme",
   "license": "ISC",
   "main": "lib/index.js",
   "directories": {
@@ -18,15 +18,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Hquestion/lerna-template.git"
+    "url": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "bugs": {
-    "url": "https://github.com/Hquestion/lerna-template/issues"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "test:unit": "jest --passWithNoTests --no-cache",
+    "test:unit:coverage": "jest --passWithNoTests --coverage",
+    "build": "babel src --out-dir lib && gulp copy"
   },
   "peerDependencies": {
-    "sass-bem-constructor": "^1.1.0"
-  }
+    "axios": "^0.18.0",
+    "sass-bem-constructor": "^1.1.0",
+    "vue": "^2.6.10"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "devDependencies": {
+    "gulp": "^4.0.1"
+  },
+  "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

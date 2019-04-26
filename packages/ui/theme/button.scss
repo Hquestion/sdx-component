@@ -1,3 +1,7 @@
+// 引入element动画样式库
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import '~element-ui/packages/theme-chalk/src/base';
+
 @include block('button', 'component') {
     display: inline-block;
     height: $sdxu-button-height-regular;
@@ -11,6 +15,7 @@
     border: 1px solid $sdx-primary-color;
     cursor: pointer;
     box-sizing: border-box;
+    position: relative;
     @include modifier('regular') {
         height: $sdxu-button-height-regular;
         line-height: $sdxu-button-height-regular;
@@ -73,6 +78,21 @@
             opacity: 0.4;
         }
     }
+    @include modifier('text') {
+        background: transparent;
+        color: $sdx-text-regular-color;
+        border: none;
+        padding: 0;
+        &:hover {
+            color: $sdx-primary-color;
+            border: none;
+        }
+        @include state('disabled') {
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+    }
     @include state('loading') {
         cursor: default;
         pointer-events: none;
@@ -83,10 +103,49 @@
     }
     @include state('block') {
         display: block;
+        & + .sdxu-button {
+            margin-left: 0;
+        }
     }
     @include element('icon') {
         font-size: 14px;
         margin-right: 10px;
         box-sizing: border-box;
+    }
+    @include element('icon-dropdown') {
+        font-size: 14px;
+        margin-left: 10px;
+        box-sizing: border-box;
+        display: inline-block;
+        transition: transform ease-in 0.2s;
+        @include state('reverse') {
+            transform: rotate(180deg);
+        }
+    }
+    @include element('dropdown') {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        @include modifier('main') {
+            width: 100%;
+            height: auto;
+            background: #fff;
+            z-index: 3;
+            //border: 1px solid $sdx-border-color;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 8px 1px rgba(87,127,255,0.17);
+            & /deep/ .sdxu-button {
+                display: block;
+                border-top: 1px solid $sdx-border-color;
+                &:first-child {
+                    border-top: none;
+                }
+            }
+        }
+    }
+    & + .sdxu-button {
+        margin-left: $sdx-margin;
     }
 }

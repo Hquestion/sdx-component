@@ -7,8 +7,11 @@ import './assets/scss/app.scss';
 import {Button} from '@sdx/ui';
 import enMsg from  '@sdx/utils/lib/locale/lang/en';
 import febAlive from 'feb-alive';
+import Dialog from '@sdx/ui/components/dialog';
+import '@sdx/ui/theme/index.scss';
 Vue.use(febAlive, { router, keyName: 'feb'});
 Vue.use(Button);
+Vue.use(Dialog);
 
 Vue.config.productionTip = false;
 

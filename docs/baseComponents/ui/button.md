@@ -67,6 +67,24 @@ Vue.use(SdxUI);
 
 ```
 
+## SCSS定制
+
+可以通过变量修改默认的scss样式。
+
+```scss
+
+// 最小宽度
+$sdxu-button-min-width: 95px !default; 
+// 边距
+$sdxu-button-padding: $sdx-padding !default;
+// 常规尺寸按钮高度
+$sdxu-button-height-regular: $sdx-form-element-height-regular !default;
+// 小尺寸按钮高度
+$sdxu-button-height-small: $sdx-form-element-height-small !default;
+// default类型按钮边框颜色
+$sdxu-button-default-border-color: #E4E7Ed !default;
+```
+
 ## API
 
 <ui-button-api slot="api" />

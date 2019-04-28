@@ -1,6 +1,7 @@
 <template>
     <div class="api">
         <CommonApi :apiData="attrData" title="Attributes"/>
+        <CommonApi :apiData="slotData" title="Slots" type="slot"/>
         <CommonApi :apiData="eventData" title="Events" type="event"/>
     </div>
 </template>
@@ -66,6 +67,18 @@
                         type: 'string',
                         optionValue: '—',
                         defaultValue: '',
+                    }, {
+                        params: 'trigger',
+                        describe: '下拉框展示的触发方式',
+                        type: 'string',
+                        optionValue: 'click / hover',
+                        defaultValue: 'hover',
+                    }, {
+                        params: 'dropdownWidth',
+                        describe: '下拉框宽度',
+                        type: 'String',
+                        optionValue: '—',
+                        defaultValue: '100%， 与按钮宽度相同',
                     }
                 ],
                 eventData: [
@@ -73,6 +86,16 @@
                         params: 'click',
                         describe: '鼠标点击事件',
                         cbparams: '—',
+                    }
+                ],
+                slotData: [
+                    {
+                        params: 'default',
+                        describe: '默认插槽，按钮内容'
+                    },
+                    {
+                        params: 'dropdown',
+                        describe: 'dropdown插槽，dropdown内容，按钮插入时会以block方式展示'
                     }
                 ]
             }

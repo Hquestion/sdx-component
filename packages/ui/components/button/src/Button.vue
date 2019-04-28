@@ -31,7 +31,8 @@
         <el-collapse-transition>
             <div
                 class="sdxu-button__dropdown"
-                :style="{width: dropdownWidth}"
+                :style="{width: `calc(${dropdownWidth} + 20px)`}"
+                :class="{'is-hover': trigger==='hover'}"
                 v-if="$slots.dropdown"
                 v-show="dropdownVisible"
             >

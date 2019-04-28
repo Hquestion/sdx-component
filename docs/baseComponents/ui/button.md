@@ -19,6 +19,20 @@
         <SdxuButton type="primary" size="regular" :disabled="true">禁用</SdxuButton>
         <SdxuButton type="default" size="regular" :shadow="true">投影</SdxuButton>
         <SdxuButton type="primary" size="regular" :block="true">block</SdxuButton>
+      <SdxuButton type="text" size="regular" trigger="click">
+                      中文
+                      <template slot="dropdown">
+                          <SdxuButton type="text" size="regular" block>中文</SdxuButton>
+                          <SdxuButton type="text" size="regular" block>English</SdxuButton>
+                      </template>
+                  </SdxuButton>
+                  <SdxuButton type="primary" size="regular" trigger="click" dropdown-width="150px">
+                      中文
+                      <template slot="dropdown">
+                          <SdxuButton type="text" size="regular" block>中文</SdxuButton>
+                          <SdxuButton type="text" size="regular" block>English</SdxuButton>
+                      </template>
+                  </SdxuButton>
       </div>
     </template>
   </highlight-code>

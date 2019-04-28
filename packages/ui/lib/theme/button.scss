@@ -1,7 +1,158 @@
-@include block('button', 'component') {
-    color: $sdx-warning-color;
-}
+// 引入element动画样式库
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import '~element-ui/packages/theme-chalk/src/base';
 
-// .ilv-button {
-//     color: $ilv-primary-color;
-// }
+@include block('button', 'component') {
+    display: inline-block;
+    height: $sdxu-button-height-regular;
+    min-width: $sdxu-button-min-width;
+    padding: 0 $sdx-padding;
+    line-height: $sdxu-button-height-regular;
+    border-radius: $sdx-border-radius;
+    background: $sdx-primary-color;
+    color: #fff;
+    text-align: center;
+    border: 1px solid $sdx-primary-color;
+    cursor: pointer;
+    box-sizing: border-box;
+    position: relative;
+    @include modifier('regular') {
+        height: $sdxu-button-height-regular;
+        line-height: $sdxu-button-height-regular;
+    }
+    @include modifier('small') {
+        height: $sdxu-button-height-small;
+        line-height: $sdxu-button-height-small;
+    }
+    @include modifier('primary') {
+        background: $sdx-primary-color;
+        border: 1px solid $sdx-primary-color;
+        color: #fff;
+        &:hover {
+            background: $sdx-primary-hover-color;
+            border: 1px solid $sdx-primary-hover-color;
+        }
+        @include state('plain') {
+            color: $sdx-primary-color;
+            border: none;
+            background: transparent;
+            &:hover {
+                color: $sdx-primary-hover-color;
+            }
+        }
+        @include state('invert') {
+            color: $sdx-primary-color;
+            border: 1px solid $sdx-primary-color;
+            background: #fff;
+            &:hover {
+                color: #fff;
+                border: 1px solid $sdx-primary-color;
+                background: $sdx-primary-color;
+            }
+        }
+        @include state('disabled') {
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+    }
+    @include modifier('default') {
+        background: #fff;
+        color: $sdx-text-regular-color;
+        border: 1px solid $sdxu-button-default-border-color;
+        &:hover {
+            color: $sdx-primary-color;
+            border: 1px solid $sdx-primary-color;
+        }
+        @include state('plain') {
+            color: $sdx-text-regular-color;
+            border: none;
+            background: transparent;
+            &:hover {
+                color: $sdx-primary-color;
+            }
+        }
+        @include state('disabled') {
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+    }
+    @include modifier('text') {
+        background: transparent;
+        color: $sdx-text-regular-color;
+        border: none;
+        padding: 0;
+        &:hover {
+            color: $sdx-primary-color;
+            border: none;
+        }
+        @include state('disabled') {
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+    }
+    @include state('loading') {
+        cursor: default;
+        pointer-events: none;
+        opacity: 0.8;
+    }
+    @include state('shadow') {
+        box-shadow: 1px 1px 10px 1px rgba(87,127,255,0.17);
+    }
+    @include state('block') {
+        display: block;
+        & + .sdxu-button {
+            margin-left: 0;
+        }
+    }
+    @include element('icon') {
+        font-size: 14px;
+        margin-right: 10px;
+        box-sizing: border-box;
+    }
+    @include element('icon-dropdown') {
+        font-size: 14px;
+        margin-left: 10px;
+        box-sizing: border-box;
+        display: inline-block;
+        transition: transform ease-in-out 0.2s;
+        @include state('reverse') {
+            transform: rotate(180deg);
+        }
+    }
+    @include element('dropdown') {
+        position: absolute;
+        top: calc(100% - 5px);
+        left: -10px;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        z-index: 3;
+        @include state('hover') {
+            padding: 10px !important;
+        }
+        @include modifier('main') {
+            width: 100%;
+            height: auto;
+            background: #fff;
+            z-index: 3;
+            //border: 1px solid $sdx-border-color;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 8px 1px rgba(87,127,255,0.17);
+            & /deep/ .sdxu-button {
+                display: block;
+                border: none;
+                border-radius: 0;
+                border-top: 1px solid $sdx-border-color;
+                &:first-child {
+                    border-top: none;
+                }
+            }
+        }
+    }
+    & + .sdxu-button {
+        margin-left: $sdx-margin;
+    }
+}

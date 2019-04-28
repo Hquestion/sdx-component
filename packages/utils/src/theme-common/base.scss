@@ -1,3 +1,6 @@
+@import 'var';
+@import "mixins";
+
 @font-face {
     font-family: iconfont;
     src: url($sdx-base-iconfont-path + 'iconfont.eot');
@@ -181,6 +184,3 @@
 .iconicon-picture:before {
     content: "\e6f8";
 }
-
-@import 'var';
-@import "mixins";

@@ -1,4 +1,4 @@
-@include block('button', 'component') {
+@include block('button') {
     display: inline-block;
     height: $sdxu-button-height-regular;
     min-width: $sdxu-button-min-width;

@@ -1,3 +1,7 @@
+@import 'var';
+@import "mixins";
+@import "./BEM/bem";
+
 @font-face {
     font-family: iconfont;
     src: url($sdx-base-iconfont-path + 'iconfont.eot');
@@ -181,6 +185,3 @@
 .iconicon-picture:before {
     content: "\e6f8";
 }
-
-@import 'var';
-@import "mixins";

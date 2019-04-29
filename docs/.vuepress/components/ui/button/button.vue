@@ -31,6 +31,7 @@
                         <SdxuButton type="text" size="regular" block>English</SdxuButton>
                     </template>
                 </SdxuButton>
+                <SdxuButton type="primary" :iconOnly="true">H</SdxuButton>
             </p>
         </div>
     </div>

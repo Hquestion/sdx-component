@@ -8,24 +8,27 @@
                  loading ? `is-loading`: '',
                  invert ? 'is-invert' : '',
                  shadow ? 'is-shadow' : '',
-                 block ? 'is-block': ''
+                 block ? 'is-block': '',
+                 iconOnly ? 'is-icon': ''
         ]"
         @click="handleClick"
         @mouseover="handleMouseOver"
         @mouseout="handleMouseOut"
     >
         <i
-            :class="['sdxu-button__icon iconfont', iconShown]"
+            :class="['sdxu-button__icon sdx-icon', iconShown]"
             v-if="iconShown"
         />
-        <slot />
+        <span class="sdxu-button__main">
+            <slot />
+        </span>
         <span
-            class="sdxu-button__icon-dropdown"
-            v-if="$slots.dropdown"
+            class="sdxu-button__icon--dropdown"
+            v-if="$slots.dropdown && type !== 'icon'"
             :class="[dropdownVisible ? 'is-reverse' : '']"
         >
             <i
-                class="iconfont iconicon-caret-bottom"
+                class="sdx-icon iconicon-caret-bottom"
             />
         </span>
         <el-collapse-transition>
@@ -84,6 +87,10 @@ export default {
         icon: {
             type: String,
             default: ''
+        },
+        iconOnly: {
+            type: Boolean,
+            default: false
         },
         loading: {
             type: Boolean,

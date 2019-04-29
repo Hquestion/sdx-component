@@ -16,13 +16,25 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     cursor: pointer;
     box-sizing: border-box;
     position: relative;
+    font-size: 0;
+    @include element('main') {
+        font-size: 14px;
+    }
     @include modifier('regular') {
         height: $sdxu-button-height-regular;
         line-height: $sdxu-button-height-regular;
+        @include state('icon') {
+            width: $sdxu-button-height-regular;
+            height: $sdxu-button-height-regular;
+        }
     }
     @include modifier('small') {
         height: $sdxu-button-height-small;
         line-height: $sdxu-button-height-small;
+        @include state('icon') {
+            width: $sdxu-button-height-small;
+            height: $sdxu-button-height-small;
+        }
     }
     @include modifier('primary') {
         background: $sdx-primary-color;
@@ -108,18 +120,21 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
     }
     @include element('icon') {
-        font-size: 14px;
+        font-size: 14px !important;
         margin-right: 10px;
         box-sizing: border-box;
     }
-    @include element('icon-dropdown') {
-        font-size: 14px;
+    @include modifier('icon-dropdown') {
+        font-size: 12px !important;
         margin-left: 10px;
         box-sizing: border-box;
         display: inline-block;
         transition: transform ease-in-out 0.2s;
         @include state('reverse') {
             transform: rotate(180deg);
+        }
+        & .iconfont {
+            font-size: 12px !important;
         }
     }
     @include element('dropdown') {

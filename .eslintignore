@@ -3,3 +3,4 @@ node_modules/*
 .commitlintrc.js
 .eslintrc.js
 packages/**/lib/**/*.js
+packages/**/src/**/iconfont.js

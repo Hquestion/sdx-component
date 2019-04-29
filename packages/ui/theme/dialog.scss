@@ -1,0 +1,33 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import '~element-ui/packages/theme-chalk/src/base';
+@import '~element-ui/packages/theme-chalk/src/dialog';
+
+@include block('dialog', 'component') {
+    @include modifier('small') {
+        .el-dialog {
+            width: 460px;
+        }
+    }
+    @include modifier('normal') {
+        .el-dialog {
+            width: 600px;
+        }
+    }
+    .el-dialog__headerbtn {
+        top: -18px;
+        right: -18px;
+        background: $sdx-primary-color;
+        height: 40px;
+        width: 40px;
+        font-size: 25px;
+        border-radius: 50%;
+        .el-dialog__close {
+            color: #fff;
+        }
+    }
+    .el-dialog__header {
+        color: $sdx-primary-color;
+        font-size: 16px;
+    }
+}

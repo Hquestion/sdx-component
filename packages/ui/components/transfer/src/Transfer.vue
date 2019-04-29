@@ -1,14 +1,14 @@
 <template>
     <div class="sdxu-transfer">
-        <div class="sdxu-transfer__tree">
+        <div class="sdxu-transfer__left">
             <el-input
                 size="small"
-                placeholder="请输入"
+                :placeholder="placeholder"
                 suffix-icon="el-icon-search"
                 v-model="filterText"
             />
             <el-scrollbar
-                class="sdxu-transfer-scrollbar"
+                class="sdxu-transfer__scrollbar"
                 wrap-class="sdxu-transfer__wrap" 
             >
                 <el-tree
@@ -24,24 +24,28 @@
                 />
             </el-scrollbar>
             <div class="sdxu-transfer__moveall">
-                <span @click="moveAllTag">
+                <SdxuButton
+                    type="default"
+                    size="regular"
+                    :plain="true"
+                    @click="moveAllTag"
+                >
                     移动全部
-                </span>
+                </SdxuButton>
             </div>
         </div>
         <div class="sdxu-transfer__moveicon">
-            <span @click="movetag">
+            <SdxuButton
+                type="default"
+                size="regular"
+                :plain="true"
+                @click="movetag"
+            >
                 =
-            </span>
+            </SdxuButton>
         </div>
-        <div class="sdxu-transfer__tag">
-            <el-input
-                size="small"
-                placeholder="请输入"
-                suffix-icon="el-icon-search"
-                v-model="filterTag"
-            />
-            <div class="sdxu-transfer__tagitem">
+        <div class="sdxu-transfer__right">
+            <div class="sdxu-transfer__tag">
                 <el-tag
                     v-for="tag in tags"
                     :key="tag.id"
@@ -52,17 +56,29 @@
                     {{ tag.name }}
                 </el-tag>
             </div>
+            <div class="sdxu-transfer__moveall">
+                <SdxuButton
+                    type="default"
+                    size="regular"
+                    :plain="true"
+                    @click="moveAllTag"
+                >
+                    删除全部
+                </SdxuButton>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import {Tree,Input, Tag, Scrollbar} from 'element-ui';
+import Button from '@sdx/ui/components/button';
 export default {
     name: 'SdxuTransfer',
-    data() {
-        return {
-            data: [{
+    props: {
+        data: {
+            type: Array,
+            default: [{
                 id: 1,
                 label: '一级 1',
                 children: [{
@@ -89,20 +105,38 @@ export default {
                     id: 8,
                     label: '二级 3-2'
                 }]
-            }],
+            }, {
+                id: 4,
+                label: '一级 3',
+                children: [{
+                    id: 9,
+                    label: '二级 3-1'
+                }, {
+                    id: 10,
+                    label: '二级 3-2'
+                }]
+            }]
+        },
+        placeholder: {
+            type: String,
+            default: ''
+        }
+    },
+    data() {
+        return {
             filterText: '',
-            filterTag: '',
             tags: [],
             currentData: [],
             defaultKeys: [],
-            saveTags: ''
+         
         };
     },
     components: {
         [Tree.name]: Tree,
         [Input.name]: Input,
         [Tag.name]: Tag,
-        [Scrollbar.name]: Scrollbar
+        [Scrollbar.name]: Scrollbar,
+        [Button.name]: Button
     },
     methods: {
         filterNode(value, data) {
@@ -132,7 +166,6 @@ export default {
         },
         handleClose(tag) {
             this.tags.splice(this.tags.indexOf(tag), 1);
-            this.saveTags = JSON.stringify(this.tags);
         },
         moveAllTag() {
             let [tags, keys] = [[], []];
@@ -153,17 +186,13 @@ export default {
             }
             this.defaultKeys = keys;
             this.tags = tags;
-            this.saveTags = JSON.stringify(tags);
         }
     },
     watch: {
         filterText(val) {
             this.$refs.tree.filter(val);
-        },
-        filterTag(val) {
-            let tag = JSON.parse(this.saveTags).filter(item => item.name.includes(val));
-            this.tags = tag;
         }
+    
     },
 };
 </script>

@@ -4,102 +4,88 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/tree';
 @import '~element-ui/packages/theme-chalk/src/input';
 @import '~element-ui/packages/theme-chalk/src/tag';
-
+@import '~element-ui/packages/theme-chalk/src/scrollbar';
 
 @include block('transfer', 'component') {
     display: flex;
     justify-content: space-between;
-    width: 446px;
+    width: 600px;
     .boxStyle {
-        width: 210px;
-        height: 270px;
+        width: $sdxu-transfer-default-width;
+        height: $sdxu-transfer-default-height;
         border: 1px solid $sdxu-button-default-border-color;
     }
     .el-input--small {
-        margin: 16px;
-        width: 179px;
+        margin: $sdxu-transfer-margin-small;
+        width: $sdxu-transfer-width-input;
     }
-    .el-scrollbar {
-        height: 170px;
-    }    
+    @include element('scrollbar') {
+        height: $sdxu-transfer-height-tree;
+        overflow: hidden;
+    }  
     @include element('wrap') {
-        overflow-y: auto;
-        width: 210px;
-        border: none;
+        height: $sdxu-transfer-height-tree;
+        overflow-x: hidden;
+        
     }    
-    @include element('tree') {
+    @include element('left') {
             @extend .boxStyle;
             .el-tree {
-                height: 170px;
-                // overflow-y: scroll;
+                color: $sdx-text-regular-color;
                 padding-left: 4px;
             }
     }
     @include element('moveall') {
-        height: 36px;
-        color: #909399;
+        height: $sdxu-transfer-height-moveicon;
         font-size:$sdx-content-font-size;
-        line-height: 36px;
+        line-height: $sdxu-transfer-height-moveicon;
         border-top: 1px solid $sdxu-button-default-border-color;
         width: 100%;
+        display: flex;
+        flex-direction: row-reverse;
     }
     @include element('moveicon') {
-        height: 270px;
-        line-height: 270px;   
+        height: $sdxu-transfer-default-height;
+        line-height: $sdxu-transfer-default-height;   
         span {
             cursor:pointer;
             float: right;
-            padding-right: 16px;
+            padding-right: $sdxu-transfer-margin-small;
         }   
     }
-
-    @include element('tag') {
+    @include element('right') {
         @extend .boxStyle;
-        .el-tag{
-            margin: 4px;
-            color: #616266;
+        box-sizing: border-box;
+    }
+    @include element('tag') {
+        padding: $sdxu-transfer-margin-small;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: baseline;
+        align-content: flex-start;
+        height: 260px;
+        .el-tag{   
+            margin: 0 $sdxu-transfer-margin-tag $sdxu-transfer-margin-tag 0;
+            color: $sdx-text-regular-color;
+            border: none;
+            border-radius: $sdx-border-radius;
+        }
+        & /deep/ .el-tag {
+            @include state('group') {
+                background: $sdxu-transfer-background-taggroup;
+                
+            }
+            @include state('user') {
+                background: $sdxu-transfer-background-taguser;
+            }
         }
         .el-tag .el-icon-close {
-            color: #616266;
+            color: $sdx-text-regular-color;
             font-weight: 700;
         }
         .el-tag .el-icon-close:hover {
-            color: #616266;
+            color: $sdx-text-regular-color;
             background: none;
         }
     }
-    @include element('tagitem') {
-        display: flex;
-        justify-content: space-between;
-        width: 186px;
-        flex-wrap: wrap;
-        padding: 13px;
-        padding-top: 0;
-        font-size: 13px;
-        font-weight: 700;
-        & /deep/ .el-tag {
-            @include state('group') {
-                background: #E3FFF8;
-                opacity: 0.8;
-            }
-            @include state('user') {
-                background: #D5E2FF;
-            }
-        }
-        
-    }
-    // ::-webkit-scrollbar {/*滚动条整体样式*/
-    //     width: 4px;     /*高宽分别对应横竖滚动条的尺寸*/
-    //     height: 4px;
-    // }
-    // ::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-    //     border-radius: 2px;
-    //     // -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    //     background: #E4E7ED;
-    // }
-    // ::-webkit-scrollbar-track {/*滚动条里面轨道*/
-    //     // -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    //     // background: rgba(209,212,222,0.1);
-    //     border-radius: 4px;
-    // }
 }

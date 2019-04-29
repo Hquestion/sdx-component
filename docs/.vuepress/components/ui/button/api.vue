@@ -68,6 +68,12 @@
                         optionValue: '—',
                         defaultValue: '',
                     }, {
+                        params: 'iconOnly',
+                        describe: '仅图标按钮',
+                        type: 'boolean',
+                        optionValue: '—',
+                        defaultValue: 'false',
+                    }, {
                         params: 'trigger',
                         describe: '下拉框展示的触发方式',
                         type: 'string',
@@ -79,6 +85,12 @@
                         type: 'String',
                         optionValue: '—',
                         defaultValue: '100%， 与按钮宽度相同',
+                    }, {
+                        params: 'placement',
+                        describe: '下拉框与按钮的对齐方式',
+                        type: 'String',
+                        optionValue: 'left/ right',
+                        defaultValue: 'left， 与按钮左对齐',
                     }
                 ],
                 eventData: [

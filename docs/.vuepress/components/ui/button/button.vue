@@ -31,7 +31,13 @@
                         <SdxuButton type="text" size="regular" block>English</SdxuButton>
                     </template>
                 </SdxuButton>
-                <SdxuButton type="primary" :iconOnly="true">H</SdxuButton>
+                <SdxuButton type="primary" :iconOnly="true" placement="right">
+                    H
+                    <template slot="dropdown">
+                        <SdxuButton type="primary" size="regular" block>中文</SdxuButton>
+                        <SdxuButton type="text" size="regular" block>English</SdxuButton>
+                    </template>
+                </SdxuButton>
             </p>
         </div>
     </div>

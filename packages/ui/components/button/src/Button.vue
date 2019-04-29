@@ -24,7 +24,7 @@
         </span>
         <span
             class="sdxu-button__icon--dropdown"
-            v-if="$slots.dropdown && type !== 'icon'"
+            v-if="$slots.dropdown && !iconOnly"
             :class="[dropdownVisible ? 'is-reverse' : '']"
         >
             <i
@@ -35,7 +35,10 @@
             <div
                 class="sdxu-button__dropdown"
                 :style="{width: `calc(${dropdownWidth} + 20px)`}"
-                :class="{'is-hover': trigger==='hover'}"
+                :class="[
+                    trigger==='hover' ? 'is-hover' : '',
+                    placement === 'right' ? 'sdxu-button__dropdown--place-right' : 'sdxu-button__dropdown--place-left'
+                ]"
                 v-if="$slots.dropdown"
                 v-show="dropdownVisible"
             >
@@ -107,6 +110,10 @@ export default {
         dropdownWidth: {
             type: String,
             default: '100px'
+        },
+        placement: {
+            type: String,
+            default: 'left'
         }
     },
     computed: {

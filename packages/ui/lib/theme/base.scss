@@ -4,8 +4,4 @@
 // 如果没有自定义的，保持空文件即可
 @import './common/var';
 
-@import '~sass-bem-constructor/dist/sass-bem-constructor';
-// 设置命名空间为 sdxu
-$bem-block-namespaces: (
-    'component': 'sdxu'
-);
+$bem-namespace: 'sdxu';

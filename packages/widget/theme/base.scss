@@ -1,8 +1,4 @@
 @import "~@sdx/utils/lib/theme-common/base";
 @import './common/var';
 
-@import '~sass-bem-constructor/dist/sass-bem-constructor';
-// 设置命名空间为 sdxu
-$bem-block-namespaces: (
-    'component': 'sdxw'
-);
+$bem-namespace: 'sdxw'

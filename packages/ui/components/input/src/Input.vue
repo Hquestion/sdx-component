@@ -15,7 +15,7 @@
             <template #suffix>
                 <i
                     v-if="passwordVisibleness"
-                    class="iconfont sdxu-input__icon"
+                    class="sdx-icon sdxu-input__icon"
                     :class="pwdSuffixIcon"
                     @click="showPwd = !showPwd"
                 />
@@ -90,7 +90,7 @@ export default {
             
             // 添加搜索框
             if (this.searchable) {
-                customAttr['suffix-icon'] = 'iconfont iconicon-search';
+                customAttr['suffix-icon'] = 'sdx-icon iconicon-search';
             }
             if (this.$attrs.type === 'password') {
                 customAttr['suffix-icon'] = '';
@@ -145,11 +145,6 @@ export default {
                 return 'is-strong';
             }
         }
-    },
-    mounted() {
-        window.console.error(this);
-        // console.error(this.$refs);
-        // this.$refs.input.$slots = this.$slots;
     }
 };
 </script>

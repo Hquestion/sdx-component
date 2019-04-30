@@ -30,7 +30,7 @@
         </el-table-column>
       </el-table>
       <el-table
-        v-else
+        v-else-if="type==='event'"
         :data="apiData"
         :border="false"
         style="width: 100%">
@@ -47,6 +47,21 @@
           prop="cbparams"
           label="回调参数">
         </el-table-column>
+      </el-table>
+      <el-table
+          v-else-if="type==='slot'"
+          :data="apiData"
+          :border="false"
+          style="width: 100%">
+          <el-table-column
+              prop="params"
+              label="事件名称"
+          >
+          </el-table-column>
+          <el-table-column
+              prop="describe"
+              label="说明">
+          </el-table-column>
       </el-table>
   </div>
 </template>

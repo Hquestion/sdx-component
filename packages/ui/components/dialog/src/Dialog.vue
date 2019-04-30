@@ -36,7 +36,6 @@
                 <SdxuButton
                     type="default"
                     size="small"
-                    style="margin-right: 20px"
                     @click="cancel"
                 >
                     取消

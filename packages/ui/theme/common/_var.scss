@@ -8,9 +8,9 @@ $sdxu-button-default-border-color: #E4E7Ed !default;
 
 // sdxu-pagination
 // 当前激活pager背景色
-$sdxu-pagination-active-background-color: #4781F8 !default;
+$sdxu-pagination-active-background-color: $sdx-primary-color !default;
 // pager字体颜色
-$sdxu-pagination-text-color: #4781F8 !default;
+$sdxu-pagination-text-color: $sdx-primary-color !default;
 // 非激活pager背景
 $sdxu-pagination-background: rgba(88,147,240,0.10) !default;
 // pager之间间距

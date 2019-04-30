@@ -33,7 +33,6 @@
     },
     "peerDependencies": {
         "element-ui": "^2.7.2",
-        "sass-bem-constructor": "^1.1.0",
         "vue": "^2.6.10"
     },
     "dependencies": {

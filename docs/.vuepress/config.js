@@ -21,7 +21,8 @@ module.exports = {
                     children: [
                         'ui/button',
                         'ui/dialog',
-                        'ui/pagination'
+                        'ui/pagination',
+                        'ui/tab-radio'
                     ]
                 },
                 {

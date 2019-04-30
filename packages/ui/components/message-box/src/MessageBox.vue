@@ -1,38 +1,45 @@
 <template>
-    <div
-        class="sdxu-message-box"
-        v-show="visible"
-    >
-        <div class="sdxu-message-box__header">
-            <i
-                class="sdx-icon"
-                :class="[statusIconMap[status]]"
-            />
-            <span class="sdxu-message-box__header__title">{{ title }}</span>
+    <transition name="sdxu-msgbox-fade">
+        <div
+            class="sdxu-message-box__wrap"
+            v-show="visible"
+        >
+            <transition name="sdxu-msgbox-jump">
+                <div class="sdxu-message-box" v-show="visible">
+                    <div class="sdxu-message-box__header">
+                        <i
+                            class="sdx-icon"
+                            :class="[statusIconMap[status]]"
+                        />
+                        <span class="sdxu-message-box__header__title">{{ title }}</span>
+                    </div>
+                    <div class="sdxu-message-box__main">
+                        {{ content }}
+                    </div>
+                    <div class="sdxu-message-box__footer">
+                        <SdxuButton
+                            type="default"
+                            @click="handleCancel"
+                            v-if="type==='confirm'"
+                        >
+                            取消
+                        </SdxuButton>
+                        <SdxuButton
+                            type="primary"
+                            @click="handleConfirm"
+                        >
+                            确定
+                        </SdxuButton>
+                    </div>
+                </div>
+            </transition>
         </div>
-        <div class="sdxu-message-box__main">
-            {{ content }}
-        </div>
-        <div class="sdxu-message-box__footer">
-            <SdxuButton
-                type="default"
-                @click="handleCancel"
-                v-if="type==='confirm'"
-            >
-                取消
-            </SdxuButton>
-            <SdxuButton
-                type="primary"
-                @click="handleConfirm"
-            >
-                确定
-            </SdxuButton>
-        </div>
-    </div>
+    </transition>
 </template>
 
 <script>
 import Button from '@sdx/ui/components/button';
+let scrollTop = 0;
 export default {
     name: 'SdxuMessageBox',
     data() {
@@ -68,13 +75,23 @@ export default {
         visible: {
             type: Boolean,
             default: false
+        },
+        lock: {
+            type: [Boolean, String, Object],
+            default: true
+        },
+        hideOnRouting: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {
         handleCancel() {
-
+            this.$emit('cancel');
         },
-        handleConfirm() {}
+        handleConfirm() {
+            this.$emit('confirm');
+        }
     }
 };
 </script>

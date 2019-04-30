@@ -20,7 +20,8 @@ module.exports = {
                     collapsable: true,
                     children: [
                         'ui/button',
-                        'ui/dialog'
+                        'ui/dialog',
+                        'ui/messagebox'
                     ]
                 },
                 {

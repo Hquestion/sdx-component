@@ -5,13 +5,19 @@
             v-show="visible"
         >
             <transition name="sdxu-msgbox-jump">
-                <div class="sdxu-message-box" v-show="visible">
+                <div
+                    class="sdxu-message-box"
+                    :class="[
+                        `sdxu-message-box--${status}`
+                    ]"
+                    v-show="visible"
+                >
                     <div class="sdxu-message-box__header">
                         <i
                             class="sdx-icon"
                             :class="[statusIconMap[status]]"
                         />
-                        <span class="sdxu-message-box__header__title">{{ title }}</span>
+                        <span>{{ title }}</span>
                     </div>
                     <div class="sdxu-message-box__main">
                         {{ content }}

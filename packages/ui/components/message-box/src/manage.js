@@ -7,6 +7,7 @@ let instance = null;
 let vm;
 
 function MessageBox(opt) {
+    let _resolve, _reject;
     let {
         title = t('ui.messageBox.pormpt'),
         content = '',
@@ -30,17 +31,21 @@ function MessageBox(opt) {
     }, 0);
     vm.$on('cancel', () => {
         MessageBox.close();
-        return Promise.reject('cancel');
+        _reject('cancel');
     });
     vm.$on('confirm', () => {
         MessageBox.close();
-        return Promise.resolve('confirm');
+        _resolve('confirm');
     });
     if (hideOnRouting) {
         vm.routeUnwatch = vm.$watch('$route', () => {
             MessageBox.close();
         });
     }
+    return new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+    });
 }
 
 MessageBox.close = () => {
@@ -56,7 +61,7 @@ MessageBox.close = () => {
     }, 300);
 };
 
-['alert, confirm'].forEach(type => {
+['alert', 'confirm'].forEach(type => {
     MessageBox[type] = opt => MessageBox({ ...opt, type });
     ['error', 'info', 'success', 'warning'].forEach(status => {
         MessageBox[type][status] = opt => MessageBox({...opt, type, status});

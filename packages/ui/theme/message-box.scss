@@ -25,11 +25,41 @@ $sdxu-status-icon-size: 24px !default;
     transform: translate3d(0, -50%, 0);
     border-radius: $sdx-border-radius;
     box-shadow: 0 0 17px 0 rgba(0,0,0,0.25);
+    @include modifier('error') {
+        @include element('header') {
+            i {
+                color: $sdx-danger-color;
+            }
+        }
+    }
+    @include modifier('success') {
+        @include element('header') {
+            i {
+                color: $sdx-success-color;
+            }
+        }
+    }
+    @include modifier('warning') {
+        @include element('header') {
+            i {
+                color: $sdx-warning-color;
+            }
+        }
+    }
+    @include modifier('info') {
+        @include element('header') {
+            i {
+                color: $sdx-info-color;
+            }
+        }
+    }
     @include element('header') {
         line-height: 1;
+        font-size: 0;
         i {
             font-size: $sdxu-status-icon-size;
             margin-right: 12px;
+            color: $sdx-danger-color;
         }
         span {
             font-size: 20px;

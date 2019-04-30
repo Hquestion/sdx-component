@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import ElementUI from 'element-ui';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -12,6 +13,7 @@ import '@sdx/ui/theme/index.scss';
 Vue.use(febAlive, { router, keyName: 'feb'});
 Vue.use(Button);
 Vue.use(Dialog);
+Vue.use(ElementUI);
 
 Vue.config.productionTip = false;
 

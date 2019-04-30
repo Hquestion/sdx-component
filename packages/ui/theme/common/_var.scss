@@ -3,3 +3,21 @@ $sdxu-button-padding: $sdx-padding !default;
 $sdxu-button-height-regular: $sdx-form-element-height-regular !default;
 $sdxu-button-height-small: $sdx-form-element-height-small !default;
 $sdxu-button-default-border-color: #E4E7Ed !default;
+
+// input
+$sdxu-input-border-default: 1px solid $sdx-border-color !default;
+$sdxu-input-border-success: 1px solid $sdx-success-color !default;
+$sdxu-input-border-error: 1px solid $sdx-danger-color !default;
+$sdxu-input-border-focus: 1px solid $sdx-primary-color !default;
+$sdxu-input-height-small: $sdx-form-element-height-regular !default;
+$sdxu-input-height-regular: $sdx-form-element-height-large !default;
+$sdxu-input-border-radius: $sdx-border-radius !default;
+$sdxu-input-icon-size: 14px !default;
+$sdxu-input-font-size: 14px !default;
+$sdxu-input-placeholder: $sdx-info-color !default;
+$sdxu-input-password-strength-height: 5px !default;
+$sdxu-input-strength-color-weak: $sdx-danger-color !default;
+$sdxu-input-strength-color-normal: $sdx-warning-color !default;
+$sdxu-input-strength-color-strong: $sdx-success-color !default;
+$sdxu-input-strength-color-none: $sdx-none-color !default;
+$sdxu-icon-hover: $sdx-primary-hover-color !default;

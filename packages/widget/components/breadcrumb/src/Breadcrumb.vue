@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { Breadcrumb } from 'element-ui';
+import { Breadcrumb, BreadcrumbItem } from 'element-ui';
 export default {
     name: 'SdxwBreadcrumb',
     data() {
@@ -26,7 +26,8 @@ export default {
         };
     },
     components: {
-        [Breadcrumb.name]: Breadcrumb
+        [Breadcrumb.name]: Breadcrumb,
+        [BreadcrumbItem.name]: BreadcrumbItem
     },
     props: {
         seperator: {
@@ -42,6 +43,7 @@ export default {
         $route: {
             handler(nVal) {
                 this.breadcrumbs = [];
+                console.log('nVal.matched', nVal.matched);
                 nVal.matched.forEach(route => {
                     if (route.meta && route.meta.breadcrumb) {
                         this.breadcrumbs.push(route);

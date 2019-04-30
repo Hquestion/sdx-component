@@ -8,23 +8,59 @@
                  loading ? `is-loading`: '',
                  invert ? 'is-invert' : '',
                  shadow ? 'is-shadow' : '',
-                 block ? 'is-block': ''
+                 block ? 'is-block': '',
+                 iconOnly ? 'is-icon': ''
         ]"
         @click="handleClick"
+        @mouseover="handleMouseOver"
+        @mouseout="handleMouseOut"
     >
         <i
-            :class="['sdxu-button__icon iconfont', iconShown]"
+            :class="['sdxu-button__icon sdx-icon', iconShown]"
             v-if="iconShown"
         />
-        <slot />
+        <span class="sdxu-button__main">
+            <slot />
+        </span>
+        <span
+            class="sdxu-button__icon--dropdown"
+            v-if="$slots.dropdown && !iconOnly"
+            :class="[dropdownVisible ? 'is-reverse' : '']"
+        >
+            <i
+                class="sdx-icon iconicon-caret-bottom"
+            />
+        </span>
+        <el-collapse-transition>
+            <div
+                class="sdxu-button__dropdown"
+                :style="{width: `calc(${dropdownWidth} + 20px)`}"
+                :class="[
+                    trigger==='hover' ? 'is-hover' : '',
+                    placement === 'right' ? 'sdxu-button__dropdown--place-right' : 'sdxu-button__dropdown--place-left'
+                ]"
+                v-if="$slots.dropdown"
+                v-show="dropdownVisible"
+            >
+                <div class="sdxu-button__dropdown--main">
+                    <slot name="dropdown" />
+                </div>
+            </div>
+        </el-collapse-transition>
     </div>
 </template>
 
 <script>
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 export default {
     name: 'SdxuButton',
     data() {
-        return {};
+        return {
+            dropdownVisible: false
+        };
+    },
+    components: {
+        [CollapseTransition.name]: CollapseTransition
     },
     props: {
         size: {
@@ -33,7 +69,7 @@ export default {
         },
         type: {
             type: String,
-            default: 'primary' // primary, success, warning, error, default
+            default: 'primary' // primary, success, warning, error, default, text
         },
         invert: {
             type: Boolean,
@@ -55,6 +91,10 @@ export default {
             type: String,
             default: ''
         },
+        iconOnly: {
+            type: Boolean,
+            default: false
+        },
         loading: {
             type: Boolean,
             default: false
@@ -62,6 +102,18 @@ export default {
         block: {
             type: Boolean,
             default: false
+        },
+        trigger: {
+            type: String,
+            default: 'hover'
+        },
+        dropdownWidth: {
+            type: String,
+            default: '100px'
+        },
+        placement: {
+            type: String,
+            default: 'left'
         }
     },
     computed: {
@@ -75,8 +127,37 @@ export default {
     },
     methods: {
         handleClick() {
-            this.$emit('click');
+            if (this.trigger === 'click') {
+                this.dropdownVisible = true;
+            } else {
+                this.$emit('click');
+            }
+        },
+        handleMouseOver() {
+            if (this.trigger === 'hover') {
+                this.dropdownVisible = true;
+            } else {
+                this.$emit('mosueover');
+            }
+        },
+        handleMouseOut() {
+            if (this.trigger === 'hover') {
+                this.dropdownVisible = false;
+            } else {
+                this.$emit('mosueout');
+            }
+        },
+        hideDropdown(e) {
+            if (!this.$el.contains(e.target)) {
+                this.dropdownVisible = false;
+            }
         }
+    },
+    mounted() {
+        document.addEventListener('click', this.hideDropdown);
+    },
+    beforeDestroy() {
+        document.removeEventListener('click', this.hideDropdown);
     }
 };
 </script>

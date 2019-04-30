@@ -1,3 +1,7 @@
+// 引入element动画样式库
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import '~element-ui/packages/theme-chalk/src/base';
+
 @include block('button') {
     display: inline-block;
     height: $sdxu-button-height-regular;
@@ -11,13 +15,30 @@
     border: 1px solid $sdx-primary-color;
     cursor: pointer;
     box-sizing: border-box;
+    position: relative;
+    font-size: 0;
+    @include element('main') {
+        font-size: 14px;
+    }
     @include modifier('regular') {
         height: $sdxu-button-height-regular;
         line-height: $sdxu-button-height-regular;
+        @include state('icon') {
+            width: $sdxu-button-height-regular;
+            height: $sdxu-button-height-regular;
+            min-width: $sdxu-button-height-regular;
+            padding: 0;
+        }
     }
     @include modifier('small') {
         height: $sdxu-button-height-small;
         line-height: $sdxu-button-height-small;
+        @include state('icon') {
+            width: $sdxu-button-height-small;
+            height: $sdxu-button-height-small;
+            min-width: $sdxu-button-height-small;
+            padding: 0;
+        }
     }
     @include modifier('primary') {
         background: $sdx-primary-color;
@@ -73,6 +94,21 @@
             opacity: 0.4;
         }
     }
+    @include modifier('text') {
+        background: transparent;
+        color: $sdx-text-regular-color;
+        border: none;
+        padding: 0;
+        &:hover {
+            color: $sdx-primary-color;
+            border: none;
+        }
+        @include state('disabled') {
+            cursor: not-allowed;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+    }
     @include state('loading') {
         cursor: default;
         pointer-events: none;
@@ -83,10 +119,64 @@
     }
     @include state('block') {
         display: block;
+        & + .sdxu-button {
+            margin-left: 0;
+        }
     }
     @include element('icon') {
-        font-size: 14px;
+        font-size: 14px !important;
         margin-right: 10px;
         box-sizing: border-box;
+        @include modifier('dropdown') {
+            font-size: 12px !important;
+            margin-left: 10px;
+            box-sizing: border-box;
+            display: inline-block;
+            transition: transform ease-in-out 0.2s;
+            @include state('reverse') {
+                transform: rotate(180deg);
+            }
+            & .sdx-icon {
+                font-size: 12px !important;
+            }
+        }
+    }
+    @include element('dropdown') {
+        position: absolute;
+        top: calc(100% - 5px);
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+        z-index: 3;
+        @include state('hover') {
+            padding: 10px !important;
+        }
+        @include modifier('place-left') {
+            left: -10px;
+        }
+        @include modifier('place-right') {
+            right: -10px;
+        }
+        @include modifier('main') {
+            width: 100%;
+            height: auto;
+            background: #fff;
+            z-index: 3;
+            //border: 1px solid $sdx-border-color;
+            box-sizing: border-box;
+            box-shadow: 1px 1px 8px 1px rgba(87,127,255,0.17);
+            & /deep/ .sdxu-button {
+                display: block;
+                border: none;
+                border-radius: 0;
+                border-top: 1px solid $sdx-border-color;
+                &:first-child {
+                    border-top: none;
+                }
+            }
+        }
+    }
+    & + .sdxu-button {
+        margin-left: $sdx-margin;
     }
 }

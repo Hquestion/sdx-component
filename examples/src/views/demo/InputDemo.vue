@@ -12,7 +12,7 @@
             </template>
         </sdxu-input>
         <sdxu-input
-            placeholder="search：regluar"
+            placeholder="search：regular"
             :searchable="true"
             @blur="handleBlur"
             v-model="value"
@@ -23,7 +23,7 @@
         </sdxu-input>
         <sdxu-input
             placeholder="textarea"
-            size="regluar"
+            size="regular"
             @blur="handleBlur"
             v-model="value"
             type="textarea"

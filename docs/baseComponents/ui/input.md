@@ -68,11 +68,11 @@ Vue.use(SdxUI);
 // 边框颜色：默认
 $sdxu-input-border-default: 1px solid $sdx-border-color !default;
 // 边框颜色：校验成功
-$sdxu-input-border-success: 1px solid $sdx-success-color !default;
+$sdxu-input-border-color-success: $sdx-success-color !default;
 // 边框颜色：校验失败
-$sdxu-input-border-error: 1px solid $sdx-danger-color !default;
+$sdxu-input-border-color-error: $sdx-danger-color !default;
 // 边框颜色：focus
-$sdxu-input-border-focus: 1px solid $sdx-primary-color !default;
+$sdxu-input-border-color-focus: $sdx-primary-color !default;
 // 输入框高度：小尺寸
 $sdxu-input-height-small: $sdx-form-element-height-regular !default;
 // 输入框高度：常规尺寸

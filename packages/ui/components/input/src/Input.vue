@@ -70,9 +70,9 @@ export default {
         },
         size: {
             type: String,
-            default: 'regluar',
+            default: 'regular',
             validator: function (value) {
-                return ['regluar', 'small'].includes(value);
+                return ['regular', 'small'].includes(value);
             }
         }
     },

@@ -1,6 +1,6 @@
 @import 'button';
 
-@include block('message-box') {
+@include block('message-box', $bem-namespace-ui) {
     @include element('wrap') {
         position: fixed;
         left: 0;

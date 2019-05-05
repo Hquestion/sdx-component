@@ -1,4 +1,4 @@
-@include block('tab-radio') {
+@include block('tab-radio', $bem-namespace-ui) {
     display: inline-block;
     height: $sdxu-tab-radio-height;
     line-height: $sdxu-tab-radio-height;
@@ -28,7 +28,7 @@
     }
 }
 
-@include block('tab-radio-group') {
+@include block('tab-radio-group', $bem-namespace-ui) {
     font-size: 0;
     display: inline-flex;
     align-items: center;

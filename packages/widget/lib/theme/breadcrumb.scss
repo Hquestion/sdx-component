@@ -1,6 +1,22 @@
-.bread-crumb-container {
-  height: 50px;
-  padding-left: 10px;
-  display: flex;
-  align-items: center;
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import '~element-ui/packages/theme-chalk/src/base';
+@import '~element-ui/packages/theme-chalk/src/breadcrumb';
+@import '~element-ui/packages/theme-chalk/src/breadcrumb-item';
+
+@include block('breadcrumb', $bem-namespace-widget) {
+    .el-breadcrumb__item:last-child .el-breadcrumb__inner,
+    .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover,
+    .el-breadcrumb__item:last-child .el-breadcrumb__inner a,
+    .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover {
+        color: $sdxw-breadcrumb-current-text-color
+    }
+    .el-breadcrumb__inner.is-link,
+    .el-breadcrumb__inner a {
+        color: $sdxw-breadcrumb-previous-text-color;
+    }
+    .el-breadcrumb__separator {
+        color: $sdxw-breadcrumb-seperator-color;
+        margin: 0 $sdxw-breadcrumb-seperator-margin;
+    }
 }

@@ -1,8 +1,4 @@
-$sdxu-tab-radio-height: $sdx-form-element-height-regular !default;
-$sdxu-tab-radio-height-small: $sdx-form-element-height-small !default;
-$sdx-tab-radio-padding: 14px !default;
-
-@include block('tab-radio') {
+@include block('tab-radio', $bem-namespace-ui) {
     display: inline-block;
     height: $sdxu-tab-radio-height;
     line-height: $sdxu-tab-radio-height;
@@ -32,7 +28,7 @@ $sdx-tab-radio-padding: 14px !default;
     }
 }
 
-@include block('tab-radio-group') {
+@include block('tab-radio-group', $bem-namespace-ui) {
     font-size: 0;
     display: inline-flex;
     align-items: center;

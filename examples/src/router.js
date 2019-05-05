@@ -7,6 +7,7 @@ import A from './views/cache/a';
 import B from './views/cache/b';
 import C from './views/cache/c';
 import Table from './views/cache/table';
+import RoleManage from './views/cache/roleManage';
 import DialogTest from './views/ui/dialogTest.vue';
 import Demo from './views/demo';
 import InputDemo from './views/demo/InputDemo';
@@ -53,6 +54,10 @@ export default new Router({
             {
                 path: 'table',
                 component: Table,
+            },
+            {
+                path: 'roleManage',
+                component: RoleManage,
             }
             ]
         },

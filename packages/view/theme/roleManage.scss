@@ -1,0 +1,10 @@
+@include block('role-manage',$bem-namespace-view) {
+    @include element('header') {
+        display: flex;
+    }
+    @include element('title') {
+        font-size: $sdx-h2-font-size;
+        color: $sdx-text-regular-color;
+    }
+}
+

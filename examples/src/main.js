@@ -13,6 +13,7 @@ import Pagination from '@sdx/ui/components/pagination';
 import Breadcrumb from '@sdx/widget/components/breadcrumb';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';
+import '@sdx/view/theme/index.scss';
 Vue.use(febAlive, { router, keyName: 'feb'});
 Vue.use(Button);
 Vue.use(Dialog);

@@ -23,7 +23,8 @@ module.exports = {
                         'ui/dialog',
                         'ui/pagination',
                         'ui/table',
-                        'ui/tab-radio'
+                        'ui/tab-radio',
+                        'ui/messagebox'
                     ]
                 },
                 {

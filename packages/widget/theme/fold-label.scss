@@ -1,4 +1,4 @@
-@include block('fold-label') {
+@include block('fold-label', $bem-namespace-widget) {
     font-size: $sdxw-foldlabel-fontsize;
     min-width: $sdxw-foldlabel-height;
     box-sizing: border-box;
@@ -37,7 +37,7 @@
     }
 }
 
-@include block('fold-label-group') {
+@include block('fold-label-group', $bem-namespace-widget) {
     display: inline-flex;
     justify-content: flex-start;
     align-items: center;

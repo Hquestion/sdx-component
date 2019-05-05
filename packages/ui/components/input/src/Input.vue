@@ -118,7 +118,7 @@ export default {
 
         },
         pwdSuffixIcon() {
-            return this.showPwd ? 'iconicon-remove' : 'iconicon-circle-plus';
+            return this.showPwd ? 'iconicon-eye-close' : 'iconicon-eye-open';
         },
         pwdLevel() {
             let level = 0;

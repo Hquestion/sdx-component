@@ -53,7 +53,6 @@
             type="password"
             :password-strength="true"
             :password-visibleness="true"
-            clearable
         >
             <template #prefix>
                 <i class="sdxu-input__icon el-icon-date" />

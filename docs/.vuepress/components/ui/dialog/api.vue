@@ -1,6 +1,7 @@
 <template>
     <div class="api">
         <CommonApi :apiData="attrData" title="Attributes"/>
+        <CommonApi :apiData="slotData" title="Slots" type="slot"/>
         <CommonApi :apiData="eventData" title="Events" type="event"/>
     </div>
 </template>
@@ -134,6 +135,20 @@
                         params: 'cancel',
                         describe: 'Dialog 取消的回调',
                         cbparams: '—',
+                    }
+                ],
+                slotData: [
+                    {
+                        params: '—',
+                        describe: 'Dialog 的内容'
+                    },
+                    {
+                        params: 'title',
+                        describe: 'Dialog 标题区的内容'
+                    },
+                    {
+                        params: 'footer',
+                        describe: 'Dialog 按钮操作区的内容'
                     }
                 ]
             }

@@ -3,7 +3,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/base';
 @import '~element-ui/packages/theme-chalk/src/table';
 
-@include block('table') {
+@include block('table', $bem-namespace-ui) {
     .el-table td {
         border-bottom: none;
         color: $sdx-text-regular-color;

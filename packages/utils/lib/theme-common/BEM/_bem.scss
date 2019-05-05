@@ -3,8 +3,8 @@
  */
 @import "function";
 
-@mixin block($block) {
-    $sdxB: $bem-namespace+'-'+$block !global;
+@mixin block($block, $namespace) {
+    $sdxB: $namespace+'-'+$block !global;
 
     .#{$sdxB} {
         @content;

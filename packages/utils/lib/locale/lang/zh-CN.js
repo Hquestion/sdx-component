@@ -8,7 +8,10 @@ var _default = {
   ui: {
     button: {
       ok: '确定'
-    }
+    },
+      messageBox: {
+        prompt: '提示'
+      }
   }
 };
 exports["default"] = _default;

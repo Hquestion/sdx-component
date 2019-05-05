@@ -1,0 +1,135 @@
+@import 'button';
+
+@include block('message-box') {
+    @include element('wrap') {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        right: 0;
+        z-index: 3000;
+        background: rgba(0,0,0,.55);
+    }
+    width: $sdxu-messagebox-width;
+    text-align: center;
+    box-sizing: border-box;
+    padding: $sdxu-messagebox-padding;
+    background: #fff;
+    position: absolute;
+    left: calc(50% - 230px);
+    top: 50%;
+    transform: translate3d(0, -50%, 0);
+    border-radius: $sdx-border-radius;
+    box-shadow: 0 0 17px 0 rgba(0,0,0,0.25);
+    @include modifier('error') {
+        @include element('header') {
+            i {
+                color: $sdx-danger-color;
+            }
+        }
+    }
+    @include modifier('success') {
+        @include element('header') {
+            i {
+                color: $sdx-success-color;
+            }
+        }
+    }
+    @include modifier('warning') {
+        @include element('header') {
+            i {
+                color: $sdx-warning-color;
+            }
+        }
+    }
+    @include modifier('info') {
+        @include element('header') {
+            i {
+                color: $sdx-info-color;
+            }
+        }
+    }
+    @include element('header') {
+        line-height: 1;
+        font-size: 0;
+        i {
+            font-size: $sdxu-status-icon-size;
+            margin-right: 12px;
+            color: $sdx-danger-color;
+        }
+        span {
+            font-size: 20px;
+            color: $sdx-text-primary-color;
+        }
+    }
+    @include element('main') {
+        margin-top: $sdx-margin;
+        line-height: 20px;
+        font-size: 14px;
+        color: $sdx-text-regular-color;
+    }
+    @include element('footer') {
+        margin-top: $sdxu-messagebox-padding;
+        text-align: center;
+    }
+}
+
+.sdxu-msgbox-fade-enter-active {
+    animation: sdxu-msgbox-fade-in .3s;
+}
+
+.sdxu-msgbox-fade-leave-active {
+    animation: sdxu-msgbox-fade-out .3s;
+}
+
+.sdxu-msgbox-jump-enter-active {
+    animation: sdxu-msgbox-jump-in .3s;
+}
+
+.sdxu-msgbox-jump-leave-active {
+    animation: sdxu-msgbox-jump-out .3s;
+}
+
+@keyframes sdxu-msgbox-fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes sdxu-msgbox-jump-in {
+    0% {
+        top: 0;
+        transform: translate3d(0, 0, 0);
+    }
+    70% {
+        top: 50%;
+        transform: translate3d(0, -40%, 0);
+    }
+    100% {
+        top: 50%;
+        transform: translate3d(0, -50%, 0);
+    }
+}
+
+@keyframes sdxu-msgbox-fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes sdxu-msgbox-jump-out {
+    0% {
+        top: 50%;
+        transform: translate3d(0, -50%, 0);
+    }
+    100% {
+        top: 0;
+        transform: translate3d(0, -50%, 0);
+    }
+}

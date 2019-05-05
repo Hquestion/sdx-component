@@ -6,5 +6,6 @@ module.exports = {
     dialog: './components/dialog/index.js',
     pagination: './components/pagination/index.js',
     'tab-radio': './components/tab-radio/index.js',
-    input: './components/input/index.js'
+    input: './components/input/index.js',
+    'message-box': './components/message-box/index.js'
 };

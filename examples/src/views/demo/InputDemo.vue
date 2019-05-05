@@ -12,6 +12,18 @@
             </template>
         </sdxu-input>
         <sdxu-input
+            placeholder="maxlength"
+            size="small"
+            @blur="handleBlur"
+            v-model="value"
+            maxlength="10"
+            show-word-limit
+        >
+            <!-- <template #prefix>
+                <i class="sdxu-input__icon el-icon-date" />
+            </template> -->
+        </sdxu-input>
+        <sdxu-input
             placeholder="search：regular"
             :searchable="true"
             @blur="handleBlur"
@@ -41,11 +53,13 @@
             type="password"
             :password-strength="true"
             :password-visibleness="true"
+            clearable
         >
             <template #prefix>
                 <i class="sdxu-input__icon el-icon-date" />
             </template>
         </sdxu-input>
+
         <el-input
             placeholder="element ui： password"
             :searchable="true"
@@ -53,6 +67,17 @@
             @blur="handleBlur"
             v-model="value"
             type="password"
+            show-password
+        >
+            <template #prefix>
+                <i class="sdxu-input__icon el-icon-date" />
+            </template>
+        </el-input>
+        <el-input
+            placeholder="element ui： maxlength"
+            size="small"
+            @blur="handleBlur"
+            v-model="value"
         >
             <template #prefix>
                 <i class="sdxu-input__icon el-icon-date" />

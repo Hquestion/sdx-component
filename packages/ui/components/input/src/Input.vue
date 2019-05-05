@@ -14,7 +14,7 @@
             </template>
             <template #suffix>
                 <i
-                    v-if="passwordVisibleness"
+                    v-if="passwordVisibleness && !isDisabled"
                     class="sdx-icon sdxu-input__icon"
                     :class="pwdSuffixIcon"
                     @click="showPwd = !showPwd"
@@ -85,7 +85,8 @@ export default {
         attrs() {
             // 处理$attrs
             const customAttr = {
-                size: '' // 忽略element中size
+                size: '', // 忽略element中size,
+                'show-password': false // 忽略element中的show-password
             };
             
             // 添加搜索框
@@ -121,16 +122,23 @@ export default {
         },
         pwdLevel() {
             let level = 0;
-            if (this.$attrs.value.match(/[0-9]/g)) {
+            const value = this.$attrs.value.trim();
+            if (value.match(/[0-9]/g)) {
                 level++;
             }
-            if (this.$attrs.value.match(/[A-z]/g)) {
+            if (value.match(/[A-z]/g)) {
                 level++;
             }
-            if (this.$attrs.value.match(/[^0-9A-z\s]/g)) {
+            if (value.match(/[^0-9A-z\s]/g)) {
                 level++;
+            }
+            if (value.length < 6 && value.length > 0) {
+                level = 1;
             }
             return level;
+        },
+        isDisabled() {
+            return this.$attrs.hasOwnProperty('disabled') && this.$attrs.disabled !== false;
         }
     },
     methods: {

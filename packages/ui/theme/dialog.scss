@@ -2,32 +2,26 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @import '~element-ui/packages/theme-chalk/src/base';
 @import '~element-ui/packages/theme-chalk/src/dialog';
+@import './button.scss';
 
 @include block('dialog') {
     @include modifier('small') {
         .el-dialog {
-            width: 460px;
+            width: $sdxu-dialog-small-size-width;
         }
     }
     @include modifier('normal') {
         .el-dialog {
-            width: 600px;
+            width: $sdxu-dialog-normal-size-width;
         }
     }
     .el-dialog__headerbtn {
-        top: -18px;
-        right: -18px;
-        background: $sdx-primary-color;
-        height: 40px;
-        width: 40px;
-        font-size: 25px;
-        border-radius: 50%;
         .el-dialog__close {
-            color: #fff;
+            color: $sdx-primary-color;
         }
     }
     .el-dialog__header {
-        color: $sdx-primary-color;
-        font-size: 16px;
+        color: $sdxu-dialog-header-text-color;
+        font-size: $sdxu-dialog-header-text-size;
     }
 }

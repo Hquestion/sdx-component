@@ -14,6 +14,12 @@
             <router-link to="/dialogTest">
                 对话框测试页面
             </router-link>>
+            <router-link to="/paginationTest">
+                分页测试页面
+            </router-link>>
+            <router-link to="/breadcrumbTest">
+                面包屑测试页面
+            </router-link>>
         </div>
         <p class="page-link">
             <button @click="toFeb">

@@ -36,7 +36,6 @@
                 <SdxuButton
                     type="default"
                     size="small"
-                    style="margin-right: 20px"
                     @click="cancel"
                 >
                     取消
@@ -150,10 +149,12 @@ export default {
         },
         confirm() {
             this.dialogVisible = false;
+            this.$emit('update:visible', false);
             this.$emit('confirm');
         },
         cancel() {
             this.dialogVisible = false;
+            this.$emit('update:visible', false);
             this.$emit('cancel');
         }
     }

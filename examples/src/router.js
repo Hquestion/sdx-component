@@ -8,6 +8,8 @@ import B from './views/cache/b';
 import C from './views/cache/c';
 import Table from './views/cache/table';
 import DialogTest from './views/ui/dialogTest.vue';
+import Demo from './views/demo';
+import InputDemo from './views/demo/InputDemo';
 import PaginationTest from './views/ui/paginationTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 febAlive.resetHistory();
@@ -102,6 +104,17 @@ export default new Router({
                     }
                 }
             ]
-        }
+        }, {
+            path: '/demo',
+            name: 'demo',
+            component: Demo,
+            children: [{
+                path: 'input',
+                component: InputDemo,
+                meta: {
+                    name: 'input'
+                }
+            }]
+        },
     ]
 });

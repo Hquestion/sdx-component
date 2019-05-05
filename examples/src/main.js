@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import ElementUI from 'element-ui';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -15,6 +16,7 @@ import '@sdx/widget/theme/index.scss';
 Vue.use(febAlive, { router, keyName: 'feb'});
 Vue.use(Button);
 Vue.use(Dialog);
+Vue.use(ElementUI);
 Vue.use(Breadcrumb);
 Vue.use(Pagination);
 

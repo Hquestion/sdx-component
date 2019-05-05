@@ -1,6 +1,6 @@
 .sdx-icon {
   font-family: "sdx-icon" !important;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -190,3 +190,14 @@
   content: "\e6fc";
 }
 
+.iconicon-eye-open:before {
+  content: "\e72f";
+}
+
+.iconicon-eye-close:before {
+  content: "\e731";
+}
+
+.iconicon-password:before {
+  content: "\e732";
+}

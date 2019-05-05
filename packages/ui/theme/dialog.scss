@@ -16,15 +16,8 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
     }
     .el-dialog__headerbtn {
-        top: -18px;
-        right: -18px;
-        background: $sdx-primary-color;
-        height: 40px;
-        width: 40px;
-        font-size: 25px;
-        border-radius: 50%;
         .el-dialog__close {
-            color: #fff;
+            color: $sdx-primary-color;
         }
     }
     .el-dialog__header {

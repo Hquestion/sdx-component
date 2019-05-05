@@ -5,6 +5,12 @@ $sdxu-button-height-regular: $sdx-form-element-height-regular !default;
 $sdxu-button-height-small: $sdx-form-element-height-small !default;
 $sdxu-button-default-border-color: #E4E7Ed !default;
 
+// sdxu-pagination
+$sdxu-pagination-active-background-color: $sdx-primary-color !default; // 当前激活pager背景色
+$sdxu-pagination-text-color: $sdx-primary-color !default;   // pager字体颜色
+$sdxu-pagination-background: rgba(88,147,240,0.10) !default;  // 非激活pager背景
+$sdxu-pagination-pager-space: 3px !default;  // pager之间间距
+
 // sdxu-dialog
 $sdxu-dialog-small-size-width: 460px !default;
 $sdxu-dialog-normal-size-width: 600px !default;

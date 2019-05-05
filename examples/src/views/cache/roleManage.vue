@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="table">
         <RoleManage />
     </div>
 </template>
@@ -20,6 +20,10 @@ export default {
 };
 </script>
 
-<style>
-
+<style rel="stylesheet/scss" lang="scss" scoped>
+.table {
+    background: #fafbfc;
+    height: 100vh;
+    width: 100%;
+}
 </style>

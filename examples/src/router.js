@@ -6,6 +6,7 @@ import Cache from './views/cache/index';
 import A from './views/cache/a';
 import B from './views/cache/b';
 import C from './views/cache/c';
+import Table from './views/cache/table';
 import DialogTest from './views/ui/dialogTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 febAlive.resetHistory();
@@ -45,6 +46,10 @@ export default new Router({
                 meta: {
                     name: 'c'
                 }
+            },
+            {
+                path: 'table',
+                component: Table,
             }
             ]
         },

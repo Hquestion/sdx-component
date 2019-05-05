@@ -43,7 +43,6 @@ export default {
         $route: {
             handler(nVal) {
                 this.breadcrumbs = [];
-                console.log('nVal.matched', nVal.matched);
                 nVal.matched.forEach(route => {
                     if (route.meta && route.meta.breadcrumb) {
                         this.breadcrumbs.push(route);

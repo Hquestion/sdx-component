@@ -9,11 +9,16 @@ import {Button} from '@sdx/ui';
 import enMsg from  '@sdx/utils/lib/locale/lang/en';
 import febAlive from 'feb-alive';
 import Dialog from '@sdx/ui/components/dialog';
+import Pagination from '@sdx/ui/components/pagination';
+import Breadcrumb from '@sdx/widget/components/breadcrumb';
 import '@sdx/ui/theme/index.scss';
+import '@sdx/widget/theme/index.scss';
 Vue.use(febAlive, { router, keyName: 'feb'});
 Vue.use(Button);
 Vue.use(Dialog);
 Vue.use(ElementUI);
+Vue.use(Breadcrumb);
+Vue.use(Pagination);
 
 Vue.config.productionTip = false;
 

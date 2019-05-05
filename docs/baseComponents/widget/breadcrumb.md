@@ -8,7 +8,7 @@
 <widget-breadcrumb-index></widget-breadcrumb-index>
   <highlight-code slot="codeText" lang="vue">
     <template>
-      <bread-crumb></bread-crumb>
+      <sdxw-breadcrumb></sdxw-breadcrumb>
     </template>
   </highlight-code>
   </Common-BasicUsage>
@@ -16,9 +16,28 @@
 ## Usage
 
 ```js
+import Vue from 'vue';
 import { Breadcrumb } from '@sdx/widget';
 
-Vue.use(Breadcrumb)
+Vue.use(Breadcrumb);
+
+// 也可以全量引入使用
+import SdxWidget from '@sdx/widget';
+
+Vue.use(SdxWidget);
+```
+
+同时，还需引入scss文件:
+
+```scss
+
+// 全量加载直接引用index.scss文件即可
+@import '~@sdx/widget/lib/theme/index.scss';
+
+// 按需加载时，需要引用两个文件：
+@import '~@sdx/widget/lib/theme/base.scss';
+@import '~@sdx/widget/lib/theme/breadcrumb.scss';
+
 ```
 
 ::: tip 
@@ -61,6 +80,22 @@ Vue.use(Breadcrumb)
     ```
         
 :::
+
+## SCSS定制
+
+可以通过变量修改默认的scss样式。
+
+```scss
+
+// 面包屑可跳转层级字体颜色
+$sdxw-breadcrumb-previous-text-color: $sdx-primary-color !default;
+// 当前层级字体颜色
+$sdxw-breadcrumb-current-text-color: #00002A !default;
+// 分隔符颜色
+$sdxw-breadcrumb-seperator-color: $sdx-primary-color !default;
+// 分隔符margin
+$sdxw-breadcrumb-seperator-margin: 4px !default;
+```
 
 ## API
 

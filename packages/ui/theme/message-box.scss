@@ -1,7 +1,3 @@
-$sdxu-messagebox-width: 460px !default;
-$sdxu-messagebox-padding: 40px !default;
-$sdxu-status-icon-size: 24px !default;
-
 @import 'button';
 
 @include block('message-box') {

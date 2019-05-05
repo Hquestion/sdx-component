@@ -95,6 +95,21 @@ Vue.use(SdxUI);
 ```
 <br>
 
+## SCSS定制
+
+可以通过变量修改默认的scss样式。
+
+```scss
+// small size对话框宽度
+$sdxu-dialog-small-size-width: 460px !default;
+// normal size对话框宽度
+$sdxu-dialog-normal-size-width: 600px !default;
+// header字体颜色
+$sdxu-dialog-header-text-color: $sdx-primary-color !default;
+// header字体大小
+$sdxu-dialog-header-text-size: 16px !default;
+```
+
 ## API
 
 <ui-dialog-api slot="api" />

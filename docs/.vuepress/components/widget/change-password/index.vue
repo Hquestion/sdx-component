@@ -1,38 +1,36 @@
 <template>
-    <div class="dialog-test">
-        <button @click="changePwd">
+   <div class="breadcrumb-container">
+       <button @click="changePwd">
             修改密码
         </button>
         <sdxw-change-password
             :visible.sync="dialogVisible"
         />
-    </div>
+   </div>
 </template>
 
 <script>
+import SdxwChangePassword from '@sdx/widget/components/changePassword';
 export default {
-    name: '',
+  name: '',
     data() {
         return {
             dialogVisible: false
         };
     },
-    components: {},
+    components: {
+        SdxwChangePassword
+    },
     methods: {
         changePwd() {
             this.dialogVisible = true;
         }
     }
-};
+}
 </script>
 
-<style scoped lang="scss">
-.dialog-test {
-    height: 400px;
-    width: 100%;
-    border: 1px solid red;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+<style lang="scss">
+.breadcrumb-container {
+
 }
 </style>

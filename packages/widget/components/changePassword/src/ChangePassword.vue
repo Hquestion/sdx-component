@@ -8,7 +8,6 @@
             slot="title"
             class="sdxw-change-password__title"
         >
-            <!-- <i class="sdx-icon iconicon-password icon" /> -->
             <svg
                 class="icon"
                 aria-hidden="true"
@@ -18,46 +17,72 @@
             <span>修改密码</span>
         </div>
         <el-form
-            label-width="100px"
+            label-width="110px"
+            label-position="left"
             :model="changePwdForm"
             ref="changePwdForm"
             :rules="changePwdFormRule"
         >
             <el-form-item
-                label="旧密码"
+                label="旧密码："
                 prop="oldPasswd"
             >
-                <el-input
+                <sdxu-input
                     v-model="changePwdForm.oldPasswd"
                     type="password"
+                    password-visibleness
                 />
             </el-form-item>
             <el-form-item
-                label="新密码"
+                label="新密码："
                 prop="newPasswd"
             >
-                <el-input
+                <sdxu-input
                     v-model="changePwdForm.newPasswd"
                     type="password"
+                    password-visibleness
+                    password-strength
                 />
             </el-form-item>
             <el-form-item
-                label="重复新密码"
+                label="确认新密码："
                 prop="repeatNewPasswd"
             >
-                <el-input
+                <sdxu-input
                     v-model="changePwdForm.repeatNewPasswd"
                     type="password"
+                    password-visibleness
                 />
             </el-form-item>
         </el-form>
+        <div
+            slot="footer"
+        >
+            <SdxuButton
+                type="default"
+                size="small"
+                @click="cancel"
+            >
+                取消
+            </SdxuButton>
+            <SdxuButton
+                type="primary"
+                size="small"
+                @click="confirm"
+            >
+                确认
+            </SdxuButton>
+        </div>
     </sdxu-dialog>
 </template>
 
 <script>
 import Dialog from '@sdx/ui/components/dialog';
+import Input from '@sdx/ui/components/input';
+import Button from '@sdx/ui/components/button';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
-import { Form, FormItem } from 'element-ui';
+import { Form, FormItem, Message } from 'element-ui';
+import httpService from '@sdx/utils/src/http-service';
 export default {
     name: 'SdxwChangePassword',
     data() {
@@ -105,12 +130,18 @@ export default {
     components: {
         [Dialog.name]: Dialog,
         [Form.name]: Form,
-        [FormItem.name]: FormItem
+        [FormItem.name]: FormItem,
+        [Input.name]: Input,
+        [Button.name]: Button
     },
     props: {
         visible: {
             type: Boolean,
             default: false
+        },
+        handler: {
+            type: Function,
+            default: undefined
         }
     },
     watch: {
@@ -120,6 +151,12 @@ export default {
     },
     methods: {
         dialogClose() {
+            this.$refs.changePwdForm.clearValidate();
+            this.changePwdForm = {
+                oldPasswd: '',
+                newPasswd: '',
+                repeatNewPasswd: ''
+            };
             this.$emit('update:visible', false);
             this.$emit('close');
         },
@@ -128,8 +165,43 @@ export default {
             if (value && reg.test(value)) {
                 callback();
             } else {
-                callback(new Error('密码需要同时包含数字和字母'));
+                callback(new Error('密码由字母、数字及特殊符号（除空格）组成且至少包含2种'));
             }
+        },
+        cancel() {
+            this.dialogVisible = false;
+        },
+        confirm() {
+            this.$refs.changePwdForm.validate(valid => {
+                if (!valid) {
+                    Message.error('请输入必填信息');
+                } else {
+                    if (
+                        this.changePwdForm.newPasswd !== this.changePwdForm.repeatNewPasswd
+                    ) {
+                        Message.error('请确保两次输入的密码一致。');
+                        return;
+                    }
+                    const params = {
+                        oldPasswd: this.changePwdForm.oldPasswd,
+                        newPasswd: this.changePwdForm.newPasswd
+                    };
+                    if (this.handler) {
+                        this.handler(params);
+                    } else {
+                        httpService.post('/mock/user/changePwd', params).then(() => {
+                            Message({
+                                message: '密码修改成功！',
+                                type: 'success'
+                            });
+                            this.$emit('on-success');
+                            this.dialogVisible = false;
+                        }).catch(() => {
+                            this.$emit('on-error');
+                        });
+                    }
+                }
+            });
         }
     }
 };

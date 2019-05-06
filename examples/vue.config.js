@@ -19,6 +19,13 @@ module.exports = {
     },
     devServer: {
         writeToDisk: false,
-        port: 3300
+        port: 3300,
+        proxy: {
+            '/mock': {
+                target: 'http://localhost:3000',
+                ws: true,
+                changeOrigin: true
+            }
+        },
     }
 };

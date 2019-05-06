@@ -30,7 +30,17 @@ function put (url, data, config) {
     });
 }
 
-function remove (url, data, config) {
+function remove (url, params, config) {
+    if (!url) return;
+    return axios({
+        method: 'delete',
+        url,
+        params,
+        ...config
+    });
+}
+
+function patch (url, data, config) {
     if (!url) return;
     return axios({
         method: 'delete',
@@ -50,5 +60,6 @@ export default {
     put,
     post,
     remove,
+    patch,
     register
 };

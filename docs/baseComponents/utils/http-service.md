@@ -31,6 +31,9 @@ httpService.put(url, params, config);
 // delete请求
 httpService.remove(url, params, config);
 
+// patch请求
+httpService.patch(url, params, config);
+
 ```
 
 ::: tip 请求默认配置
@@ -216,6 +219,7 @@ httpService.remove(url, params, config);
 | --- | --- | --- | --- |
 | register | 注册函数, 用来提供默认配置, mock请求转发url列表, 请求header中携带token以及错误处理 | configs: 该方法接收一个对象, 对象里可以有如下属性(皆为可选)<br>configs.errorHandler: [请求错误处理方法](https://www.npmjs.com/package/babel-plugin-component-customize)<br>configs.config: 见上<br>configs.mockUrlList: 需要转发请求至mock的url列表 | --- |
 | get | get请求 | url: 请求地址<br>data: 请求参数<br>config(可选): 配置项,见上 | Promise |
+| patch | patch请求 | url: 请求地址<br>params: 请求参数<br>config(可选): 配置项,见上 | Promise |
 | post | post请求 | url: 请求地址<br>params: 请求参数<br>config(可选): 配置项,见上 | Promise |
 | put | put请求 | url: 请求地址<br>params: 请求参数<br>config(可选): 配置项,见上 | Promise |
-| remove | delete请求 | url: 请求地址<br>params: 请求参数<br>config(可选): 配置项,见上 | Promise |
+| remove | delete请求 | url: 请求地址<br>params: 请求参数<br>config(可选): 配置项,见上 | Promise

@@ -4,7 +4,7 @@
             <SdxuInput
                 size="small"
                 :placeholder="placeholder"
-                suffix-icon="el-icon-search"
+                :searchable="true"
                 v-model="filterText"
             />
             <el-scrollbar

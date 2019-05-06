@@ -12,12 +12,10 @@
                 wrap-class="sdxu-transfer__wrap" 
             >
                 <el-tree
-                    class="sdxu-transfer__eltree"
                     :data="data"
                     show-checkbox
                     node-key="id"
                     ref="tree"
-                    highlight-current
                     :filter-node-method="filterNode"
                     check-on-click-node
                     :default-checked-keys="defaultKeys"
@@ -61,7 +59,7 @@
                     type="default"
                     size="regular"
                     :plain="true"
-                    @click="moveAllTag"
+                    @click="removeAllTag"
                 >
                     删除全部
                 </SdxuButton>
@@ -186,6 +184,9 @@ export default {
             }
             this.defaultKeys = keys;
             this.tags = tags;
+        },
+        removeAllTag() {
+            this.tags= [];
         }
     },
     watch: {

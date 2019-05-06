@@ -6,6 +6,7 @@ import TabRadio from './components/tab-radio';
 import Input from './components/input';
 import AutoComplete from './components/autocomplete';
 
+import Table from './components/table';
 import { registerI18n } from "@sdx/utils/lib/locale";
 
 const IluvatarUI = {
@@ -15,7 +16,8 @@ const IluvatarUI = {
     Pagination,
     TabRadio,
     Input,
-    AutoComplete
+    AutoComplete,
+    Table
 };
 
 IluvatarUI.install = (vue, { i18n } = {}) => {
@@ -27,6 +29,7 @@ IluvatarUI.install = (vue, { i18n } = {}) => {
     Input.install(vue);
     AutoComplete.install(vue);
 
+    Table.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

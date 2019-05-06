@@ -7,5 +7,6 @@ module.exports = {
     pagination: './components/pagination/index.js',
     'tab-radio': './components/tab-radio/index.js',
     input: './components/input/index.js',
-    'auto-complete': './components/autocomplete/index.js'
+    'auto-complete': './components/autocomplete/index.js',
+    table: './components/table/index.js',
 };

@@ -6,14 +6,15 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/tag';
 @import '~element-ui/packages/theme-chalk/src/scrollbar';
 
-@include block('transfer') {
+@include block('transfer', $bem-namespace-ui) {
     display: flex;
     justify-content: space-between;
-    width: 600px;
+    width: $sdxu-transfer-width;
     .boxStyle {
         width: $sdxu-transfer-default-width;
         height: $sdxu-transfer-default-height;
         border: 1px solid $sdxu-button-default-border-color;
+        box-sizing: border-box;
     }
     .el-input--small {
         margin: $sdxu-transfer-margin-small;
@@ -26,8 +27,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     @include element('wrap') {
         height: $sdxu-transfer-height-tree;
         overflow-x: hidden;
-        
     }    
+    .el-scrollbar__wrap {
+        height: 108%;
+    }
     @include element('left') {
             @extend .boxStyle;
             .el-tree {
@@ -53,15 +56,21 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     @include element('moveicon') {
         height: $sdxu-transfer-default-height;
         line-height: $sdxu-transfer-default-height;   
-        span {
+        i {
             cursor:pointer;
-            float: right;
-            padding-right: $sdxu-transfer-margin-small;
+            border-radius: 100%;
+            @include state('highlight') {
+                background: $sdx-primary-color;
+                color: #fff;
+            }
+            @include state('normal') {
+                background: $sdxu-transfer-background-icon-move;
+                color: $sdxu-transfer-color-icon-move;
+            }
         }   
     }
     @include element('right') {
         @extend .boxStyle;
-        box-sizing: border-box;
     }
     @include element('tag') {
         padding: $sdxu-transfer-margin-small;

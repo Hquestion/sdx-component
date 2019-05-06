@@ -25,7 +25,8 @@ module.exports = {
                         'ui/table',
                         'ui/tab-radio',
                         'ui/input',
-                        'ui/messagebox'
+                        'ui/messagebox',
+                        'ui/transfer'
                     ]
                 },
                 {

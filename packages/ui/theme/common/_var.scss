@@ -6,9 +6,10 @@ $sdxu-button-height-small: $sdx-form-element-height-small !default;
 $sdxu-button-default-border-color: #E4E7Ed !default;
 
 // 穿梭框
+$sdxu-transfer-width: 440px !default;
 $sdxu-transfer-default-width: 210px !default;
 $sdxu-transfer-default-height: 330px !default;
-$sdxu-transfer-height-tree: 232px !default;
+$sdxu-transfer-height-tree: 228px !default;
 $sdxu-transfer-width-input: 179px !default;
 $sdxu-transfer-margin-small: 16px !default;
 $sdxu-transfer-height-moveicon: 36px !default;
@@ -17,6 +18,8 @@ $sdxu-transfer-margin-tag: 10px !default;
 $sdxu-transfer-background-taguser: #F4F7FD !default;
 $sdxu-transfer-background-taggroup: rgba(213,229,255,0.75) !default;
 $sdxu-transfer-background-tree:  #F7F9FD !default;
+$sdxu-transfer-background-icon-move: #f2f6fc !default;
+$sdxu-transfer-color-icon-move: #C0C4CC !default;
 // input
 $sdxu-input-border-default: 1px solid $sdx-border-color !default;
 $sdxu-input-border-color-success: $sdx-success-color !default;

@@ -19,6 +19,7 @@
                     :filter-node-method="filterNode"
                     check-on-click-node
                     :default-checked-keys="defaultKeys"
+                    @check="checkChange"
                 />
             </el-scrollbar>
             <div class="sdxu-transfer__moveall">
@@ -33,14 +34,10 @@
             </div>
         </div>
         <div class="sdxu-transfer__moveicon">
-            <SdxuButton
-                type="default"
-                size="regular"
-                :plain="true"
+            <i
                 @click="movetag"
-            >
-                =
-            </SdxuButton>
+                :class="['sdx-icon', 'iconicon-jiantou',hightIcon ? 'is-highlight' : 'is-normal']"
+            />
         </div>
         <div class="sdxu-transfer__right">
             <div class="sdxu-transfer__tag">
@@ -76,57 +73,25 @@ export default {
     props: {
         data: {
             type: Array,
-            default: [{
-                id: 1,
-                label: '一级 1',
-                children: [{
-                    id: 4,
-                    label: '二级 1-1',
-                }]
-            }, {
-                id: 2,
-                label: '一级 2',
-                children: [{
-                    id: 5,
-                    label: '二级 2-1'
-                }, {
-                    id: 6,
-                    label: '二级 2-2'
-                }]
-            }, {
-                id: 3,
-                label: '一级 3',
-                children: [{
-                    id: 7,
-                    label: '二级 3-1'
-                }, {
-                    id: 8,
-                    label: '二级 3-2'
-                }]
-            }, {
-                id: 4,
-                label: '一级 3',
-                children: [{
-                    id: 9,
-                    label: '二级 3-1'
-                }, {
-                    id: 10,
-                    label: '二级 3-2'
-                }]
-            }]
+            default:() => []
         },
         placeholder: {
             type: String,
             default: ''
+        },
+        tags: {
+            type: Array,
+            default:() => []
+        },
+        defaultKeys: {
+            type: Array,
+            default:() => []
         }
     },
     data() {
         return {
             filterText: '',
-            tags: [],
-            currentData: [],
-            defaultKeys: [],
-         
+            checkedTags: [],
         };
     },
     components: {
@@ -136,12 +101,23 @@ export default {
         [Scrollbar.name]: Scrollbar,
         [Button.name]: Button
     },
+    computed: {
+        hightIcon() {
+            let hightIcon = false;
+            if(this.tags.sort().toString() == this.checkedTags.sort().toString()) {
+                hightIcon =  false;
+            } else {
+                hightIcon = true;
+            }
+            return hightIcon;
+        }
+    },
     methods: {
         filterNode(value, data) {
             if (!value) return true;
             return data.label.indexOf(value) !== -1;
         },
-        movetag() {
+        getTags() {
             let [checkedNodes ,childrenKeys, moveNodes, tags]= [this.$refs.tree.getCheckedNodes(),[], [], []];  
             for(let i =0; i< checkedNodes.length; i ++) {
                 if(checkedNodes[i].children ) {
@@ -160,10 +136,22 @@ export default {
                     }
                 );
             }
-            this.tags = tags;
+            return tags;
+        },
+        movetag() {
+            this.$emit('update:tags',this.getTags());
         },
         handleClose(tag) {
-            this.tags.splice(this.tags.indexOf(tag), 1);
+            let [tags,keys]= [this.tags, []];
+            tags.splice(this.tags.indexOf(tag), 1);
+            this.$emit('update:tags',tags);
+
+            for(let i =0; i<tags.length; i++) {
+                keys.push(tags[i].id);
+            }
+            this.$refs.tree.setCheckedKeys(keys);
+            this.$emit('update:defaultKeys',keys);
+            this.checkedTags = this.getTags();
         },
         moveAllTag() {
             let [tags, keys] = [[], []];
@@ -182,12 +170,21 @@ export default {
                     }
                 }
             }
-            this.defaultKeys = keys;
-            this.tags = tags;
+            this.checkedTags = this.getTags();
+            this.$emit('update:defaultKeys',keys);
+            this.$emit('update:tags',tags);
         },
-        removeAllTag() {
-            this.tags= [];
+        checkChange(data, obj) {
+            this.checkedTags = this.getTags();
+            this.$emit('update:defaultKeys',obj.checkedKeys);
+        },
+        removeAllTag() {  
+            this.$emit('update:tags',[]);
+            this.$refs.tree.setCheckedKeys([]);
         }
+    },
+    mounted() {
+        this.checkedTags = this.getTags();
     },
     watch: {
         filterText(val) {

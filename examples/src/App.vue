@@ -20,7 +20,10 @@
                 分页测试页面
             </router-link>>
             <router-link to="/breadcrumbTest">
-                面包屑测试页面
+                面包屑测试页面 |
+            </router-link>
+            <router-link to="/userInfoTest">
+                用户信息详情
             </router-link>
         </div>
         <p class="page-link">

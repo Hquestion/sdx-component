@@ -11,6 +11,7 @@ import DialogTest from './views/ui/dialogTest.vue';
 import Demo from './views/demo';
 import InputDemo from './views/demo/InputDemo';
 import PaginationTest from './views/ui/paginationTest.vue';
+import UserInfoTest from './views/widget/userInfoTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 febAlive.resetHistory();
 Vue.use(Router);
@@ -79,6 +80,14 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: PaginationTest
+        },
+        {
+            path: '/userInfoTest',
+            name: '用户信息',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: UserInfoTest
         },
         {
             path: '/breadcrumbTest',

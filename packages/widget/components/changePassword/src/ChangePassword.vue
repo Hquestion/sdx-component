@@ -82,7 +82,7 @@ import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 import { Form, FormItem, Message } from 'element-ui';
-import httpService from '@sdx/utils/src/http-service';
+import { userApi } from '@sdx/utils/src/api';
 export default {
     name: 'SdxwChangePassword',
     data() {
@@ -189,7 +189,7 @@ export default {
                     if (this.handler) {
                         this.handler(params);
                     } else {
-                        httpService.post('/mock/user/changePwd', params).then(() => {
+                        userApi.changePassword(params).then(() => {
                             Message({
                                 message: '密码修改成功！',
                                 type: 'success'

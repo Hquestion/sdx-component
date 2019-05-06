@@ -13,6 +13,7 @@ import Demo from './views/demo';
 import InputDemo from './views/demo/InputDemo';
 import PaginationTest from './views/ui/paginationTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
+import ChangePwdTest from './views/widget/changePwdTest.vue';
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -83,6 +84,14 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: PaginationTest
+        },
+        {
+            path: '/changePwdTest',
+            name: '修改密码',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: ChangePwdTest
         },
         {
             path: '/breadcrumbTest',

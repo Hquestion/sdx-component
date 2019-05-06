@@ -2,5 +2,6 @@
 
 module.exports = {
     breadcrumb: './components/breadcrumb/index.js',
+    changePassword: './components/changePassword/index.js',
     'fold-label': './components/fold-label/index.js'
 };

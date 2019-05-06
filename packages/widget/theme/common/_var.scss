@@ -1,14 +1,10 @@
 $ilv-primary-color: #fa8373 !default;
 
 //breadcrumb
-// 面包屑可跳转层级字体颜色
-$sdxw-breadcrumb-previous-text-color: $sdx-primary-color !default;
-// 当前层级字体颜色
-$sdxw-breadcrumb-current-text-color: #00002A !default;
-// 分隔符颜色
-$sdxw-breadcrumb-seperator-color: $sdx-primary-color !default;
-// 分隔符margin
-$sdxw-breadcrumb-seperator-margin: 4px !default;
+$sdxw-breadcrumb-previous-text-color: $sdx-primary-color !default;  // 面包屑可跳转层级字体颜色
+$sdxw-breadcrumb-current-text-color: #00002A !default;  // 当前层级字体颜色
+$sdxw-breadcrumb-seperator-color: $sdx-primary-color !default;  // 分隔符颜色
+$sdxw-breadcrumb-seperator-margin: 4px !default;  // 分隔符margin
 
 // fold-label
 $sdxw-foldlabel-height: 22px !default;

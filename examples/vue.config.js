@@ -19,6 +19,13 @@ module.exports = {
     },
     devServer: {
         writeToDisk: false,
-        port: 3300
+        port: 3300,
+        proxy: {
+            '/api/v1': {
+                target: 'http://10.115.1.130:3000',
+                ws: true,
+                changeOrigin: true
+            }
+        },
     }
 };

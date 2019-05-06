@@ -44,6 +44,7 @@ module.exports = {
                     title: '工具集',
                     collapsable: true,
                     children: [
+                        'utils/api',
                         'utils/error-handler',
                         'utils/http-service',
                         'utils/国际化'

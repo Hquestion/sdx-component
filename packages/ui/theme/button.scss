@@ -99,6 +99,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         color: $sdx-text-regular-color;
         border: none;
         padding: 0;
+        min-width: 0;
         &:hover {
             color: $sdx-primary-color;
             border: none;
@@ -136,8 +137,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             @include state('reverse') {
                 transform: rotate(180deg);
             }
-            & .sdx-icon {
+            .sdx-icon {
                 font-size: 12px !important;
+                color: #C8CFD9;
             }
         }
     }

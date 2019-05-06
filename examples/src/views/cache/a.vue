@@ -21,6 +21,9 @@
             </button>
         </p>
         <p class="page-link">
+            <button @click="$router.push('/Cache/comp')">
+                前往组件页面
+            </button>
             <button @click="$router.push('/Cache/table')">
                 前往table页面
             </button>

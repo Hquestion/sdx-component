@@ -6,11 +6,12 @@ import Pagination from './components/pagination';
 import TabRadio from './components/tab-radio';
 import Input from './components/input';
 import AutoComplete from './components/autocomplete';
+import MessageBox from './components/message-box';
 
 import Table from './components/table';
 import { registerI18n } from "@sdx/utils/lib/locale";
 
-const IluvatarUI = {
+const SdxUI = {
     Button,
     Radio,
     Transfer,
@@ -18,11 +19,12 @@ const IluvatarUI = {
     Pagination,
     TabRadio,
     Input,
+    MessageBox,
     AutoComplete,
     Table
 };
 
-IluvatarUI.install = (vue, { i18n } = {}) => {
+SdxUI.install = (vue, { i18n } = {}) => {
     Button.install(vue);
     Radio.install(vue);
     Transfer.install(vue);
@@ -30,6 +32,7 @@ IluvatarUI.install = (vue, { i18n } = {}) => {
     Pagination.install(vue);
     TabRadio.install(vue);
     Input.install(vue);
+    MessageBox.install(vue);
     AutoComplete.install(vue);
 
     Table.install(vue);
@@ -37,4 +40,4 @@ IluvatarUI.install = (vue, { i18n } = {}) => {
     registerI18n(i18n);
 };
 
-export default IluvatarUI;
+export default SdxUI;

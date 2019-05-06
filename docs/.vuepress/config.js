@@ -33,7 +33,8 @@ module.exports = {
                     title: '业务控件',
                     collapsable: true,
                     children: [
-                        'widget/breadcrumb'
+                        'widget/breadcrumb',
+                        'widget/fold-label'
                     ]
                 },
                 {

@@ -1,5 +1,54 @@
+// sdxu-button
 $sdxu-button-min-width: 95px !default;
 $sdxu-button-padding: $sdx-padding !default;
 $sdxu-button-height-regular: $sdx-form-element-height-regular !default;
 $sdxu-button-height-small: $sdx-form-element-height-small !default;
 $sdxu-button-default-border-color: #E4E7Ed !default;
+
+// input
+$sdxu-input-border-default: 1px solid $sdx-border-color !default;
+$sdxu-input-border-color-success: $sdx-success-color !default;
+$sdxu-input-border-color-error: $sdx-danger-color !default;
+$sdxu-input-border-color-focus: $sdx-primary-color !default;
+$sdxu-input-height-small: $sdx-form-element-height-regular !default;
+$sdxu-input-height-regular: $sdx-form-element-height-large !default;
+$sdxu-input-border-radius: $sdx-border-radius !default;
+$sdxu-input-placeholder: $sdx-info-color !default;
+$sdxu-input-password-strength-height: 5px !default;
+$sdxu-input-strength-color-weak: $sdx-danger-color !default;
+$sdxu-input-strength-color-normal: $sdx-warning-color !default;
+$sdxu-input-strength-color-strong: $sdx-success-color !default;
+$sdxu-input-strength-color-none: $sdx-none-color !default;
+$sdxu-icon-hover: $sdx-primary-hover-color !default;
+// sdxu-pagination
+$sdxu-pagination-active-background-color: $sdx-primary-color !default; // 当前激活pager背景色
+$sdxu-pagination-text-color: $sdx-primary-color !default;   // pager字体颜色
+$sdxu-pagination-background: rgba(88,147,240,0.10) !default;  // 非激活pager背景
+$sdxu-pagination-pager-space: 3px !default;  // pager之间间距
+
+// sdxu-dialog
+$sdxu-dialog-small-size-width: 460px !default;
+$sdxu-dialog-normal-size-width: 600px !default;
+$sdxu-dialog-header-text-color: $sdx-primary-color !default;
+$sdxu-dialog-header-text-size: 16px !default;
+
+
+// table 样式
+$sdxu-table-head-color: #262B3E !default;
+$sdxu-table-header-height: 52px !default;
+$sdxu-table-td-height: 52px !default;
+$sdxu-table-cell-background:  #F7FAFF !default;
+$sdxu-table-header-background: #fff !default;
+$sdxu-table-header-fontsize: 14px !default;
+$sdxu-table-td-fontsize: 14px !default;
+$sdxu-table-table-margincolor: #fff !default;
+
+// sdxu-tab-radio
+$sdxu-tab-radio-height: $sdx-form-element-height-regular !default;
+$sdxu-tab-radio-height-small: $sdx-form-element-height-small !default;
+$sdx-tab-radio-padding: 14px !default;
+
+// message-box
+$sdxu-messagebox-width: 460px !default;
+$sdxu-messagebox-padding: 40px !default;
+$sdxu-status-icon-size: 24px !default;

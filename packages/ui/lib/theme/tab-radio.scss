@@ -1,0 +1,52 @@
+@include block('tab-radio', $bem-namespace-ui) {
+    display: inline-block;
+    height: $sdxu-tab-radio-height;
+    line-height: $sdxu-tab-radio-height;
+    padding: 0 $sdx-tab-radio-padding;
+    text-align: center;
+    cursor: pointer;
+    color: $sdx-text-regular-color;
+    border-radius: $sdx-border-radius;
+    border: 1px solid $sdx-border-color;
+    font-size: 14px;
+    box-sizing: border-box;
+    @include modifier('small') {
+        height: $sdxu-tab-radio-height-small;
+        line-height: $sdxu-tab-radio-height-small;
+    }
+    &:hover {
+        color: $sdx-primary-color;
+        border: 1px solid rgba($sdx-primary-color, .6);
+    }
+    @include state('active') {
+        color: $sdx-primary-color;
+        border: 1px solid rgba($sdx-primary-color, .6) !important;
+        background: rgba($sdx-primary-color, 0.15);
+        & + .sdxu-tab-radio {
+            border-left: none;
+        }
+    }
+}
+
+@include block('tab-radio-group', $bem-namespace-ui) {
+    font-size: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    & /deep/ .sdxu-tab-radio {
+        border-right: none;
+        &:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        & + .sdxu-tab-radio {
+            border-radius: 0;
+        }
+        &:last-child {
+            border-right: 1px solid $sdx-border-color;
+            border-top-right-radius: $sdx-border-radius;
+            border-bottom-right-radius: $sdx-border-radius;
+        }
+    }
+}

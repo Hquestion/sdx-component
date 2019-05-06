@@ -1,19 +1,27 @@
 <template>
     <div id="app">
         <div id="nav">
-            <!--             <router-link to="/">
+            <router-link to="/">
                 Home
             </router-link> |
             <router-link to="/about">
                 About
-            </router-link>
-            <IlvButton @click="setlang">
+            </router-link> |
+            <!-- <IlvButton @click="setlang">
                 你好，点我
-            </IlvButton>
-            <IlvButton /> -->
+            </IlvButton> -->
             <router-link to="/dialogTest">
                 对话框测试页面
+            </router-link> |
+            <router-link to="/demo/input">
+                input测试
+            </router-link>
+            <router-link to="/paginationTest">
+                分页测试页面
             </router-link>>
+            <router-link to="/breadcrumbTest">
+                面包屑测试页面
+            </router-link>
         </div>
         <p class="page-link">
             <button @click="toFeb">

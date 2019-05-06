@@ -7,7 +7,12 @@ import A from './views/cache/a';
 import B from './views/cache/b';
 import C from './views/cache/c';
 import Comp from './views/cache/comp';
+import Table from './views/cache/table';
 import DialogTest from './views/ui/dialogTest.vue';
+import Demo from './views/demo';
+import InputDemo from './views/demo/InputDemo';
+import PaginationTest from './views/ui/paginationTest.vue';
+import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -16,7 +21,10 @@ export default new Router({
         {
             path: '/',
             name: 'home',
-            component: Home
+            component: Home,
+            meta: {
+                breadcrumb: '首页'
+            }
         },
         {
             path: '/Cache',
@@ -45,6 +53,10 @@ export default new Router({
             },{
                 path: 'comp',
                 component: Comp
+            },
+            {
+                path: 'table',
+                component: Table,
             }
             ]
         },
@@ -63,6 +75,50 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: DialogTest
-        }
+        },
+        {
+            path: '/paginationTest',
+            name: '分页',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: PaginationTest
+        },
+        {
+            path: '/breadcrumbTest',
+            name: '面包屑',
+            component: BreadcrumbTest,
+            meta: {
+                breadcrumb: '活动管理'
+            },
+            children: [
+                {
+                    path: 'b',
+                    component: B,
+                    name: '活动列表',
+                    meta: {
+                        breadcrumb: '活动列表'
+                    }
+                },
+                {
+                    path: 'c',
+                    component: C,
+                    meta: {
+                        breadcrumb: '活动详情'
+                    }
+                }
+            ]
+        }, {
+            path: '/demo',
+            name: 'demo',
+            component: Demo,
+            children: [{
+                path: 'input',
+                component: InputDemo,
+                meta: {
+                    name: 'input'
+                }
+            }]
+        },
     ]
 });

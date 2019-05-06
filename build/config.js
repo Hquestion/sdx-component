@@ -23,11 +23,36 @@ mixinsList.forEach(item => {
     });
 });
 
-externals = [Object.assign({
-    vue: 'vue',
-    'element-ui': 'element-ui',
-    'axios': 'axios'
-}, externals), nodeExternals()];
+externals = [
+    Object.assign({
+        vue: 'vue',
+        'element-ui': 'element-ui',
+        'axios': 'axios'
+    }, externals),
+    nodeExternals(),
+    /^element-ui/,
+    /^~element-ui/,
+    function(context, request, callback){
+        if (/^@sdx\/ui\/components\/(.*)?/.test(request)) {
+            const macthed = request.match(/^@sdx\/ui\/components\/(.*)?/)[1];
+            return callback(null, 'commonjs ' + `@sdx/ui/lib/${macthed}`);
+        }
+        if (/^@sdx\/widget\/components\/(.*)?/.test(request)) {
+            const macthed = request.match(/^@sdx\/widget\/components\/(.*)?/)[1];
+            return callback(null, 'commonjs ' + `@sdx/widget/lib/${macthed}`);
+        }
+        if (/^@sdx\/view\/components\/(.*)?/.test(request)) {
+            const macthed = request.match(/^@sdx\/view\/components\/(.*)?/)[1];
+            return callback(null, 'commonjs ' + `@sdx/view/lib/${macthed}`);
+        }
+        if (/^@sdx\/utils\/src\/(.*)?/.test(request)) {
+            const macthed = request.match(/^@sdx\/utils\/src\/(.*)?/)[1];
+            return callback(null, 'commonjs ' + `@sdx/utils/lib/${macthed}`);
+        }
+        callback();
+    }
+
+];
 
 exports.externals = externals;
 

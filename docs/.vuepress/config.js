@@ -20,7 +20,12 @@ module.exports = {
                     collapsable: true,
                     children: [
                         'ui/button',
-                        'ui/dialog'
+                        'ui/dialog',
+                        'ui/pagination',
+                        'ui/table',
+                        'ui/tab-radio',
+                        'ui/input',
+                        'ui/messagebox'
                     ]
                 },
                 {

@@ -136,8 +136,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             @include state('reverse') {
                 transform: rotate(180deg);
             }
-            & .sdx-icon {
+            .sdx-icon {
                 font-size: 12px !important;
+                color: #C8CFD9;
             }
         }
     }

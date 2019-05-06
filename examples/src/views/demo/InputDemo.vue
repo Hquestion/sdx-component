@@ -204,23 +204,4 @@ export default {
 </script>
 
 <style>
-/* .my-autocomplete {
-  li {
-    line-height: normal;
-    padding: 7px;
-
-    .name {
-      text-overflow: ellipsis;
-      overflow: hidden;
-    }
-    .addr {
-      font-size: 12px;
-      color: #b4b4b4;
-    }
-
-    .highlighted .addr {
-      color: #ddd;
-    }
-  }
-} */
 </style>

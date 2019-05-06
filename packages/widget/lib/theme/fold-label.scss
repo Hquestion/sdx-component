@@ -1,0 +1,59 @@
+@include block('fold-label', $bem-namespace-widget) {
+    font-size: $sdxw-foldlabel-fontsize;
+    min-width: $sdxw-foldlabel-height;
+    box-sizing: border-box;
+    padding: $sdxw-foldlabel-padding-v $sdxw-foldlabel-padding-h;
+    text-align: center;
+    line-height: 1;
+    color: $sdx-primary-color;
+    background: $sdxw-foldlabel-primary-bg;
+    border-radius: $sdxw-foldlabel-height;
+    display: inline-block;
+    flex:1;
+    transition: all ease-in-out .2s;
+    height: $sdxw-foldlabel-height;
+    overflow: hidden;
+    cursor: default;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+    @include modifier('primary') {
+        color: $sdx-primary-color;
+        background: #E9EFFE;
+        &.highlight {
+            background: $sdx-primary-color;
+            color: #fff;
+        }
+    }
+    @include modifier('default') {
+        color: $sdx-text-regular-color;
+        background: rgba($sdx-primary-color, 0.12);
+    }
+    @include state('fold') {
+        flex: 0;
+        padding: $sdxw-foldlabel-padding-v 0;
+    }
+    @include state('ellipse') {
+        flex: 0;
+    }
+}
+
+@include block('fold-label-group', $bem-namespace-widget) {
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    transform: translate(-$sdxw-foldlabel-left-margin, -$sdxw-foldlabel-top-margin);
+    font-size: 0;
+    & /deep/ .sdxw-fold-label {
+        margin-left: $sdxw-foldlabel-left-margin;
+        margin-top: $sdxw-foldlabel-top-margin;
+    }
+    @include modifier('inline') {
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    @include modifier('list') {
+        display: block;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}

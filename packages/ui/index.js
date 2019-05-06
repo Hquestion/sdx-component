@@ -1,5 +1,6 @@
 import Button from './components/button';
 import Radio from './components/radio';
+import Transfer from './components/transfer';
 import Dialog from './components/dialog';
 import Pagination from './components/pagination';
 import TabRadio from './components/tab-radio';
@@ -10,6 +11,7 @@ import { registerI18n } from "@sdx/utils/lib/locale";
 const IluvatarUI = {
     Button,
     Radio,
+    Transfer,
     Dialog,
     Pagination,
     TabRadio,
@@ -20,6 +22,7 @@ const IluvatarUI = {
 IluvatarUI.install = (vue, { i18n } = {}) => {
     Button.install(vue);
     Radio.install(vue);
+    Transfer.install(vue);
     Dialog.install(vue);
     Pagination.install(vue);
     TabRadio.install(vue);

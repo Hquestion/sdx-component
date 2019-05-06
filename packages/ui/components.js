@@ -3,6 +3,7 @@
 module.exports = {
     button: './components/button/index.js',
     radio: './components/radio/index.js',
+    transfer: './components/transfer/index.js',
     dialog: './components/dialog/index.js',
     pagination: './components/pagination/index.js',
     'tab-radio': './components/tab-radio/index.js',

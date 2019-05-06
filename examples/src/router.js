@@ -6,6 +6,7 @@ import Cache from './views/cache/index';
 import A from './views/cache/a';
 import B from './views/cache/b';
 import C from './views/cache/c';
+import Comp from './views/cache/comp';
 import Table from './views/cache/table';
 import DialogTest from './views/ui/dialogTest.vue';
 import Demo from './views/demo';
@@ -49,6 +50,9 @@ export default new Router({
                 meta: {
                     name: 'c'
                 }
+            },{
+                path: 'comp',
+                component: Comp
             },
             {
                 path: 'table',

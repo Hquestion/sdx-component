@@ -51,6 +51,7 @@
     </sdxu-dialog>
 </template>
 <script>
+import SdxuDialog from '@sdx/ui/components/dialog';
 import locale from '@sdx/utils/src/mixins/locale';
 export default {
     data () {
@@ -71,11 +72,6 @@ export default {
     watch: {
         visible (nVal) {
             this.dialogVisible = nVal;
-        },
-        id (nVal) {
-            if(nVal){
-                this.getUserInfo();
-            }
         }
     },
     methods:{
@@ -84,8 +80,8 @@ export default {
             this.$emit('close');
         }
     },
-    mounted(){
-       
+    components:{
+        SdxuDialog
     }
 }
 </script>

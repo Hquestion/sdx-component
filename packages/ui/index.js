@@ -4,7 +4,7 @@ import Dialog from './components/dialog';
 import Pagination from './components/pagination';
 import TabRadio from './components/tab-radio';
 import Input from './components/input';
-
+import Table from './components/table';
 import { registerI18n } from "@sdx/utils/lib/locale";
 
 const IluvatarUI = {
@@ -13,7 +13,8 @@ const IluvatarUI = {
     Dialog,
     Pagination,
     TabRadio,
-    Input
+    Input,
+    Table
 };
 
 IluvatarUI.install = (vue, { i18n } = {}) => {
@@ -23,7 +24,7 @@ IluvatarUI.install = (vue, { i18n } = {}) => {
     Pagination.install(vue);
     TabRadio.install(vue);
     Input.install(vue);
-
+    Table.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

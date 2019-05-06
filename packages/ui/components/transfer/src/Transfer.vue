@@ -1,7 +1,7 @@
 <template>
     <div class="sdxu-transfer">
         <div class="sdxu-transfer__left">
-            <el-input
+            <SdxuInput
                 size="small"
                 :placeholder="placeholder"
                 suffix-icon="el-icon-search"
@@ -66,8 +66,9 @@
 </template>
 
 <script>
-import {Tree,Input, Tag, Scrollbar} from 'element-ui';
+import {Tree, Tag, Scrollbar} from 'element-ui';
 import Button from '@sdx/ui/components/button';
+import Input from '@sdx/ui/components/input';
 export default {
     name: 'SdxuTransfer',
     props: {
@@ -99,12 +100,19 @@ export default {
         [Input.name]: Input,
         [Tag.name]: Tag,
         [Scrollbar.name]: Scrollbar,
-        [Button.name]: Button
+        [Button.name]: Button,
+        [Input.name]: Input
     },
     computed: {
         hightIcon() {
-            let hightIcon = false;
-            if(this.tags.sort().toString() == this.checkedTags.sort().toString()) {
+            let [hightIcon, tagsKey, checkKeys] = [false, [],[]];
+            for (let i = 0; i< this.tags.length; i++) {
+                tagsKey.push(this.tags[i].id);
+            }
+            for (let i = 0; i< this.checkedTags.length; i++) {
+                checkKeys.push(this.checkedTags[i].id);
+            }
+            if(tagsKey.sort().toString() == checkKeys.sort().toString()) {
                 hightIcon =  false;
             } else {
                 hightIcon = true;
@@ -178,8 +186,10 @@ export default {
             this.checkedTags = this.getTags();
             this.$emit('update:defaultKeys',obj.checkedKeys);
         },
-        removeAllTag() {  
+        removeAllTag() { 
+            this.checkedTags = []; 
             this.$emit('update:tags',[]);
+            this.$emit('update:defaultKeys',[]);
             this.$refs.tree.setCheckedKeys([]);
         }
     },
@@ -195,6 +205,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
 
-</style>

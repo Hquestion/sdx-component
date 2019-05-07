@@ -11,6 +11,7 @@ import febAlive from 'feb-alive';
 import Dialog from '@sdx/ui/components/dialog';
 import Pagination from '@sdx/ui/components/pagination';
 import Breadcrumb from '@sdx/widget/components/breadcrumb';
+import ChangePassword from '@sdx/widget/components/changePassword';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';
 import '@sdx/view/theme/index.scss';
@@ -20,6 +21,7 @@ Vue.use(Dialog);
 Vue.use(ElementUI);
 Vue.use(Breadcrumb);
 Vue.use(Pagination);
+Vue.use(ChangePassword);
 
 Vue.config.productionTip = false;
 

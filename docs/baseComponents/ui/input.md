@@ -25,6 +25,28 @@
             <div>
                 <SdxuInput v-model="value" type="password" :password-visibleness="true"></SdxuInput>
             </div>
+            <div>
+                <SdxuAutoComplete 
+                    popper-class="my-autocomplete"
+                    v-model="state"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入内容"
+                    @select="handleSelect"
+                    :trigger-on-focus="true"
+                >
+                    <i
+                        class="el-icon-edit el-input__icon"
+                        slot="suffix"
+                        @click="handleIconClick"
+                    />
+                    <template slot-scope="{ item }">
+                        <div class="name" v-text="item.value">
+                        </div>
+                        <span class="addr" v-text="item.address">
+                        </span>
+                    </template>
+                </SdxuAutoComplete>
+            </div>
         </div>
     </template>
   </highlight-code>

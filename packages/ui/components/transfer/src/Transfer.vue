@@ -14,7 +14,7 @@
                 <el-tree
                     :data="data"
                     show-checkbox
-                    node-key="id"
+                    :node-key="treeNodeKey"
                     ref="tree"
                     :filter-node-method="filterNode"
                     check-on-click-node
@@ -43,7 +43,7 @@
             <div class="sdxu-transfer__tag">
                 <el-tag
                     v-for="tag in tags"
-                    :key="tag.id"
+                    :key="tag[treeNodeKey]"
                     closable
                     @close="handleClose(tag)"
                     :class="tag.is_group ? 'is-group' : 'is-user'"
@@ -87,6 +87,10 @@ export default {
         defaultKeys: {
             type: Array,
             default:() => []
+        },
+        treeNodeKey: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -107,10 +111,10 @@ export default {
         hightIcon() {
             let [hightIcon, tagsKey, checkKeys] = [false, [],[]];
             for (let i = 0; i< this.tags.length; i++) {
-                tagsKey.push(this.tags[i].id);
+                tagsKey.push(this.tags[i][this.treeNodeKey]);
             }
             for (let i = 0; i< this.checkedTags.length; i++) {
-                checkKeys.push(this.checkedTags[i].id);
+                checkKeys.push(this.checkedTags[i][this.treeNodeKey]);
             }
             if(tagsKey.sort().toString() == checkKeys.sort().toString()) {
                 hightIcon =  false;
@@ -130,16 +134,16 @@ export default {
             for(let i =0; i< checkedNodes.length; i ++) {
                 if(checkedNodes[i].children ) {
                     for (let j =0; j< checkedNodes[i].children.length; j ++) {
-                        childrenKeys.push(checkedNodes[i].children[j].id);
+                        childrenKeys.push(checkedNodes[i].children[j][this.treeNodeKey]);
                     }
                 }
             }
-            moveNodes = checkedNodes.filter(v => !childrenKeys.includes(v.id));
+            moveNodes = checkedNodes.filter(v => !childrenKeys.includes(v[this.treeNodeKey]));
             for (let i =0; i < moveNodes.length ; i++ ) {
                 tags.push(
                     {
                         name: moveNodes[i].label,
-                        id: moveNodes[i].id,
+                        [this.treeNodeKey]: moveNodes[i][this.treeNodeKey],
                         is_group: moveNodes[i].children ? true : false
                     }
                 );
@@ -155,7 +159,7 @@ export default {
             this.$emit('update:tags',tags);
 
             for(let i =0; i<tags.length; i++) {
-                keys.push(tags[i].id);
+                keys.push(tags[i][this.treeNodeKey]);
             }
             this.$refs.tree.setCheckedKeys(keys);
             this.$emit('update:defaultKeys',keys);
@@ -167,14 +171,14 @@ export default {
                 tags.push(
                     {
                         name: this.data[i].label,
-                        id: this.data[i].id,
+                        [this.treeNodeKey]: this.data[i][this.treeNodeKey],
                         is_group:  true 
                     }
                 );
-                keys.push(this.data[i].id);
+                keys.push(this.data[i][this.treeNodeKey]);
                 if (this.data[i].children) {
                     for(let i =0; i < this.data[i].children.length ; i++) {
-                        keys.push(this.data[i].children[i].id);
+                        keys.push(this.data[i].children[i][this.treeNodeKey]);
                     }
                 }
             }

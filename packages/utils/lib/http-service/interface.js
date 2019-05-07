@@ -40,7 +40,16 @@ function put(url, data, config) {
   }, config));
 }
 
-function remove(url, data, config) {
+function remove(url, params, config) {
+  if (!url) return;
+  return (0, _api["default"])(_objectSpread({
+    method: 'delete',
+    url: url,
+    params: params
+  }, config));
+}
+
+function patch(url, data, config) {
   if (!url) return;
   return (0, _api["default"])(_objectSpread({
     method: 'delete',
@@ -62,6 +71,7 @@ var _default = {
   put: put,
   post: post,
   remove: remove,
+  patch: patch,
   register: register
 };
 exports["default"] = _default;

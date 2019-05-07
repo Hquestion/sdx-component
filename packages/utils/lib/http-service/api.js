@@ -32,7 +32,11 @@ function $axios(options) {
 
       instance.interceptors.request.use(function (config) {
         if (axiosConfig.tokenKey) {
-          config.headers[axiosConfig.tokenKey] = axiosConfig.tokenValue;
+          if (typeof axiosConfig.tokenValue === 'function') {
+            config.headers[axiosConfig.tokenKey] = axiosConfig.tokenValue();
+          } else {
+            config.headers[axiosConfig.tokenKey] = axiosConfig.tokenValue;
+          }
         }
 
         if (process.env.NODE_ENV === 'development') {
@@ -85,8 +89,8 @@ function $axios(options) {
 }
 
 $axios.register = function (handler, config, mock) {
-  errorHandler = handler;
+  errorHandler = handler || errorHandler;
   Object.assign(axiosConfig, config);
-  mockUrlList = mock;
+  mockUrlList = mock || mockUrlList;
   needUpdate = true;
 };

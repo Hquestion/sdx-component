@@ -9,12 +9,13 @@
     "prestart": "npm install"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "core-js": "^2.6.5",
+    "feb-alive": "^1.0.7",
     "vue": "^2.6.10",
     "vue-i18n": "^8.0.0",
     "vue-router": "^3.0.1",
-    "vuex": "^3.0.1",
-    "feb-alive": "^1.0.7"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.1.1",

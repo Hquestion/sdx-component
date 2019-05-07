@@ -99,6 +99,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         color: $sdx-text-regular-color;
         border: none;
         padding: 0;
+        min-width: 0;
         &:hover {
             color: $sdx-primary-color;
             border: none;
@@ -115,7 +116,24 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         opacity: 0.8;
     }
     @include state('shadow') {
-        box-shadow: 1px 1px 10px 1px rgba(87,127,255,0.17);
+        //box-shadow: 1px 1px 10px 1px rgba(87,127,255,0.17);
+        border: none;
+        &:hover {
+            border: none;
+        }
+        &:after {
+            content: '\20';
+            left: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 2px;
+            z-index: -1;
+            background: rgba(87, 127, 255, 0.17);
+            filter: blur(2px);
+            display: inline-block;
+            box-sizing: border-box;
+        }
     }
     @include state('block') {
         display: block;
@@ -136,8 +154,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             @include state('reverse') {
                 transform: rotate(180deg);
             }
-            & .sdx-icon {
+            .sdx-icon {
                 font-size: 12px !important;
+                color: #C8CFD9;
             }
         }
     }

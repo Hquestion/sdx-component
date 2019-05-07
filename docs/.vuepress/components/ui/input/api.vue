@@ -15,7 +15,7 @@
                 attrData: [
                     {
                         params: 'size',
-                        describe: '尺寸',
+                        describe: '尺寸（element中size类型失效）',
                         type: 'string',
                         optionValue: 'regular / small ',
                         defaultValue: 'regular',
@@ -27,7 +27,7 @@
                         defaultValue: 'false',
                     }, {
                         params: 'passwordVisibleness',
-                        describe: '密码可见性图标',
+                        describe: '密码可见性图标（element中show-password属性失效）',
                         type: 'boolean',
                         optionValue: 'true / false ',
                         defaultValue: 'false',

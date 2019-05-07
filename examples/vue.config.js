@@ -19,6 +19,16 @@ module.exports = {
     },
     devServer: {
         writeToDisk: false,
-        port: 3300
+        port: 3300,
+        proxy: {
+            '/api': {
+                target: 'https://easy-mock.com',
+                ws: true,
+                changeOrigin: true,
+                pathRewrite: {
+                    '/api': '/mock/5cd04685adb0973be6a3d969/api'
+                }
+            }
+        },
     }
 };

@@ -3,10 +3,12 @@
 module.exports = {
     button: './components/button/index.js',
     radio: './components/radio/index.js',
+    transfer: './components/transfer/index.js',
     dialog: './components/dialog/index.js',
     pagination: './components/pagination/index.js',
     'tab-radio': './components/tab-radio/index.js',
     input: './components/input/index.js',
     'auto-complete': './components/autocomplete/index.js',
     table: './components/table/index.js',
+    'message-box': './components/message-box/index.js'
 };

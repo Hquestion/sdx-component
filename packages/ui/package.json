@@ -14,7 +14,8 @@
         "test": "__tests__"
     },
     "files": [
-        "lib"
+        "lib",
+        "theme"
     ],
     "publishConfig": {
         "registry": "http://192.168.20.38:4873/"

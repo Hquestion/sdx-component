@@ -63,6 +63,13 @@ module.exports = {
             alias: {
                 '@sdx': path.resolve(__dirname, '../../packages')
             }
-        }
+        },
+        // hack: 引入iconfont时报错，在构建文档时，不打包iconfont，通过script脚本引入
+        externals: [
+            {
+                '@sdx/utils/src/theme-common/iconfont/iconfont.js': 'element-ui',
+                '@sdx/utils/src/theme-common/iconfont/iconfont': 'element-ui'
+            }
+        ]
     }
 };

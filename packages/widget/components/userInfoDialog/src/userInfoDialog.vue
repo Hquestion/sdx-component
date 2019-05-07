@@ -1,7 +1,7 @@
 <template>
     <sdxu-dialog
         class="sdxw-userInfo"
-        size='small'
+        size="small"
         :visible.sync="dialogVisible"
         @close="dialogClose"
         no-footer
@@ -13,7 +13,7 @@
             <div class="sdxw-userInfo__item">
                 <span class="sdxw-userInfo__item--title">
                     {{t('widget.userInfo.username')}}：
-                </span> 
+                </span>
                 <span class="sdxw-userInfo__item--data">
                     {{userInfoData.userName}}
                 </span>
@@ -39,8 +39,8 @@
                     {{t('widget.userInfo.groups')}}：
                 </span>
                 <div class="sdxw-userInfo__item--group">
-                    <span 
-                        v-for="item in userInfoData.group" 
+                    <span
+                        v-for="item in userInfoData.group"
                         :key="item"
                     >
                         {{item}}
@@ -54,10 +54,11 @@
 import SdxuDialog from '@sdx/ui/components/dialog';
 import locale from '@sdx/utils/src/mixins/locale';
 export default {
+    name: 'SdxwUserInfoDialog',
     data () {
         return {
             dialogVisible: this.visible
-        }
+        };
     },
     mixins:[locale],
     props:{
@@ -76,12 +77,12 @@ export default {
     },
     methods:{
         dialogClose() {
-            this.$emit('update:visible', false); 
+            this.$emit('update:visible', false);
             this.$emit('close');
         }
     },
     components:{
         SdxuDialog
     }
-}
+};
 </script>

@@ -2,19 +2,22 @@
 import Breadcrumb from './components/breadcrumb';
 import FoldLabel from './components/fold-label';
 import ChangePassword from './components/changePassword';
+import UserInfoDialog from './components/userInfoDialog';
 
 import { registerI18n } from "@sdx/utils/lib/locale";
 
 const SdxWidget = {
     Breadcrumb,
     FoldLabel,
-    ChangePassword
+    ChangePassword,
+    UserInfoDialog
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
     Breadcrumb.install(vue);
     FoldLabel.install(vue);
     ChangePassword.install(vue);
+    UserInfoDialog.install(vue);
 
     // 通用服务注入i18n服务
     registerI18n(i18n);

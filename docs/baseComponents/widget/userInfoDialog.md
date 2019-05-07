@@ -1,23 +1,40 @@
 # UserInfoDialog 用户信息
 ---
-用户信息查看详情，支持传入用户信息（直接渲染）展示用户信息页面
+用户信息查看详情，支持传入用户信息（直接渲染）或通过传入用户id（调接口获取数据）展示用户信息页面；分为两种主题，一种是用户管理里面的查看用户详情，另一种是dashboard中用户信息的查看。
 
 ## Example
 
-<Common-BasicUsage>
-<widget-userInfoDialog-index></widget-userInfoDialog-index>
+
+
+<!-- <widget-userInfoDialog-dashboardUserInfo></widget-userInfoDialog-dashboardUserInfo> -->
+#### 直接渲染代码如下：
+
   <highlight-code slot="codeText" lang="vue">
         <template>
             <sdxw-userInfoDialog 
                 :visible.sync="dialogVisible"
                 :userInfoData="userInfoData"
+                :theme="theme"
             />
         </template>
   </highlight-code>
-</Common-BasicUsage>
+
+<!-- <widget-userInfoDialog-userManageInfo></widget-userInfoDialog-userManageInfo> -->
+#### 传入ID代码如下：
+
+  <highlight-code slot="codeText" lang="vue">
+        <template>
+            <sdxw-userInfoDialog 
+                :visible.sync="dialogVisible"
+                :theme="theme"
+                :id="id"
+            />
+        </template>
+  </highlight-code>
+
 
 ::: tip 
-dialog弹框引用的是基础业务组件中的dialog对话框
+dialog弹框引用的是基础业务组件中的dialog对话框,两种主题的theme值分别为"dashboard"和"user".
 :::
 
 ## Usage
@@ -33,7 +50,7 @@ import { UserInfoDialog } from '@sdx/widget';
 Vue.use(UserInfoDialog);
 
 // 也可以全量引入使用
-import UserInfoDialog from '@sdx/UserInfoDialog';
+import UserInfoDialog from '@sdx/widget';
 
 Vue.use(UserInfoDialog);
 ```

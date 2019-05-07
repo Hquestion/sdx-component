@@ -2,13 +2,38 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @import '~element-ui/packages/theme-chalk/src/base';
 
-@include block('userInfo',$bem-namespace-widget) {
+@include block('userinfo',$bem-namespace-widget) {
+    @include element('title'){
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .icon{
+            width:52px;
+            height: 52px;
+            margin-top: 10px;
+        }
+        span{
+            margin-top: 18px;
+            color: #262B3E;
+        }
+    }
+    @include element('dashborad'){
+        @include element('item'){
+            line-height: 44px!important;
+            @include modifier('fullname') {
+                border: 1px solid #E4E7ED;
+                width: 314px;
+                padding: 0 10px;
+                height: 40px;
+                box-sizing: border-box;
+                font-weight: 100!important;
+            }
+        }
+    }
     @include element('content'){
         padding: 0 20px;
         @include element('item'){
             display: flex;
-            align-items: center;
-            height: 38px;
             line-height: 38px;
             color: $sdxw-userInfoDialog-text-color;
             @include modifier('title') {
@@ -17,6 +42,17 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             }
             @include modifier('data') {
                 font-weight: bold;
+            }
+            @include modifier('role') {
+                span{
+                    display: inline-block;
+                    margin-right: 10px;
+                    background:  rgba(71,129,248,0.12);
+                    border-radius: 14px;
+                    padding: 0px 10px;
+                    text-align: center;
+                    line-height: 28px;
+                }
             }
             @include modifier('group') {
                 span{

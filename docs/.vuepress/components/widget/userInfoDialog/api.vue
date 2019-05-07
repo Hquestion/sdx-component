@@ -24,6 +24,20 @@
                         type: 'Object',
                         optionValue: '—',
                         defaultValue: '—'
+                    },
+                    {
+                        params: 'theme',
+                        describe: '主题',
+                        type: 'String',
+                        optionValue: 'dashboard , user',
+                        defaultValue: '—'
+                    },
+                     {
+                        params: 'id',
+                        describe: '用户ID',
+                        type: 'String',
+                        optionValue: '-',
+                        defaultValue: '—'
                     }
                 ]
             }

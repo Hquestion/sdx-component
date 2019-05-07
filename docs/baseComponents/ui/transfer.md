@@ -14,6 +14,7 @@
             :data="data"
             :tags.sync="tags"
             :default-keys.sync="defaultKeys"
+            :tree-node-key="treeNodeKey"
         />
       </div>
     </template>

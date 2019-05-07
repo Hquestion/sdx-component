@@ -1,10 +1,10 @@
 <template>
-    <div class="sdxv-role-manage">
-        <div class="sdxv-role-manage__header">
-            <div class="sdxv-role-manage__title">
-                角色
+    <div class="sdxv-authorize-manage">
+        <div class="sdxv-authorize-manage__header">
+            <div class="sdxv-authorize-manage__title">
+                授权管理
             </div>
-            <div class="sdxv-role-manage__handle">
+            <div class="sdxv-authorize-manage__handle">
                 <SdxuInput
                     v-model="value"
                     :searchable="true"
@@ -14,7 +14,7 @@
                     type="primary"
                     :icon-only="true"
                     placement="right"
-                    @click="addRole"
+                    @click="addAuthorize"
                 >
                     <i
                         class="sdx-icon iconicon-plus"
@@ -57,9 +57,30 @@
             @cancel="dialogCancel"
         >
             <div slot="title">
-                新建角色
+                新建授权
             </div>
-            <div>我是内容</div>
+            <div>
+                <el-form
+                    label-position="right"
+                    label-width="80px"
+                    @submit.native.prevent
+                    ref="user"
+                >
+                    <el-form-item
+                        label="授权对象"
+                    >
+                        <el-select
+                            size="small"
+                            placeholder="请选择"
+                        />
+                    </el-form-item>
+                    <el-form-item
+                        label="权限设置"
+                    >
+                        <SdxuTransfer />
+                    </el-form-item>
+                </el-form>
+            </div>
         </sdxu-dialog>
     </div>
 </template>
@@ -70,6 +91,8 @@ import SdxuButton from '@sdx/ui/components/button';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
+import SdxuTransfer from '@sdx/ui/components/transfer';
+import {Form, FormItem, Select} from 'element-ui';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -77,7 +100,11 @@ export default {
         SdxuButton,
         SdxuTable,
         SdxuPagination,
-        SdxuDialog
+        SdxuDialog,
+        [Form.name]: Form,
+        [FormItem.name]: FormItem,
+        SdxuTransfer,
+        [Select.name]: Select,
     },
     data() {
         return {
@@ -120,7 +147,7 @@ export default {
         currentChange() {
             console.log(123);
         },
-        addRole() {
+        addAuthorize() {
             this.dialogVisible = true;
         },
         dialogConfirm() {

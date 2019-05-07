@@ -9,6 +9,7 @@ import C from './views/cache/c';
 import Comp from './views/cache/comp';
 import Table from './views/cache/table';
 import RoleManage from './views/cache/roleManage';
+import AuthorizeManage from './views/cache/authorizeManage';
 import DialogTest from './views/ui/dialogTest.vue';
 import Demo from './views/demo';
 import InputDemo from './views/demo/InputDemo';
@@ -64,6 +65,10 @@ export default new Router({
             {
                 path: 'roleManage',
                 component: RoleManage,
+            },
+            {
+                path: 'authorizeManage',
+                component: AuthorizeManage,
             }
             ]
         },

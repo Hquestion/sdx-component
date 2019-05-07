@@ -206,7 +206,7 @@ httpService.patch(url, params, config);
         // 设置请求需要携带的token, 将放在请求的header中
         // 注意该配置只能在register函数中使用
         tokenKey: '',
-        tokenValue: ''
+        tokenValue: '' // 可为字符串或者function
     }
 ```
 :::

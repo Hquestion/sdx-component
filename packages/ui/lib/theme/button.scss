@@ -28,6 +28,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             height: $sdxu-button-height-regular;
             min-width: $sdxu-button-height-regular;
             padding: 0;
+            @include element('icon') {
+                margin-right: 0;
+            }
         }
     }
     @include modifier('small') {
@@ -38,6 +41,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             height: $sdxu-button-height-small;
             min-width: $sdxu-button-height-small;
             padding: 0;
+            @include element('icon') {
+                margin-right: 0;
+            }
         }
     }
     @include modifier('primary') {
@@ -189,8 +195,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 border: none;
                 border-radius: 0;
                 border-top: 1px solid $sdx-border-color;
+                text-align: left;
+                padding: 0 20px;
                 &:first-child {
                     border-top: none;
+                }
+                &:hover {
+                    color: #fff;
+                    background: $sdx-primary-color;
                 }
             }
         }

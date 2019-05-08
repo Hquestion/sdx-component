@@ -13,7 +13,7 @@
         <SdxuTable   
             :data="tableData"
             :highlight-key="key"
-            :params="params">
+            >
              <el-table-column type="expand">
                 <template slot-scope="props">
                     <span>{{ }}</span>

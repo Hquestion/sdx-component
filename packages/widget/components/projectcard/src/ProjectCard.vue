@@ -14,7 +14,7 @@
         <main class="sdxw-project-card__main">
             <div class="sdxw-project-card__info">
                 <i class="sdx-icon iconicon-user" />
-                <span>{{ meta.creator }}</span>
+                <span>{{ meta.owner }}</span>
             </div>
             <div class="sdxw-project-card__info">
                 <i class="sdx-icon iconicon-time" />
@@ -25,7 +25,7 @@
             <div
                 v-if="operateType === 'template'"
                 class="sdxw-project-card__footer--select"
-                @click="$emit('operate', {id: meta.id, type: 'template'})"
+                @click="$emit('operate', {id: meta.uuid, type: 'template'})"
             >
                 <i class="sdx-icon iconicon-detail" />
                 <slot name="operationName">
@@ -35,7 +35,7 @@
             <div
                 v-else-if="operateType === 'project'"
                 class="sdxw-project-card__footer--select"
-                @click="$emit('operate', {id: meta.id, type: 'project'})"
+                @click="$emit('operate', {id: meta.uuid, type: 'project'})"
             >
                 <i class="sdx-icon iconicon-detail" />
                 <slot name="operationName">
@@ -50,19 +50,19 @@
                     v-if="viewAble"
                     class="sdx-icon iconicon-detail"
                     title="查看详情"
-                    @click="$emit('operate', {id: meta.id, type: 'detail'})"
+                    @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
                 />
                 <i
                     v-if="editAble"
                     class="sdx-icon iconicon-edit1"
                     title="编辑"
-                    @click="$emit('operate', {id: meta.id, type: 'edit'})"
+                    @click="$emit('operate', {id: meta.uuid, type: 'edit'})"
                 />
                 <i
                     v-if="deleteAble"
                     class="sdx-icon iconicon-delete1"
                     title="删除"
-                    @click="$emit('operate', {id: meta.id, type: 'delete'})"
+                    @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
                 />
             </div>
         </footer>
@@ -72,7 +72,7 @@
             :style="{display: showMask ? 'inherit' : 'none'}"
         >
             <span class="sdxw-project-card__mask--text">
-                {{ meta.decription }}
+                {{ meta.description }}
             </span>
         </div>
     </div>

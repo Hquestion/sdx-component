@@ -3,7 +3,8 @@
         <el-table 
             :data="data"
             :row-class-name="tableRowClassName"
-            v-bind="params"
+            v-bind="$attrs"
+            v-on="$listeners"
             style="width: 100%"
         >
             <slot />
@@ -29,12 +30,6 @@ export default {
         highlightKey: {
             type: String,
             default: ''
-        },
-        params: {
-            type: Object,
-            default() {
-                return {};
-            }
         }
     },
     methods: {

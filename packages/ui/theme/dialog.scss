@@ -15,13 +15,38 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             width: $sdxu-dialog-normal-size-width;
         }
     }
+    @include modifier('large') {
+        .el-dialog {
+            width: $sdxu-dialog-large-size-width;
+        }
+    }
     .el-dialog__headerbtn {
         .el-dialog__close {
-            color: $sdx-primary-color;
+            color: #C0C4CC;
         }
     }
     .el-dialog__header {
         color: $sdxu-dialog-header-text-color;
         font-size: $sdxu-dialog-header-text-size;
+        padding: 20px;
+        position: relative;
+    }
+    .el-dialog__body {
+        padding: 20px 40px;
+    }
+
+    @include element('icon') {
+        width: 60px;
+        height: 60px;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+        position: absolute;
+        top: -30px;
+        left: calc(50% - 30px);
+    }
+
+    @include element('title-with-top-margin') {
+        margin-top: 30px;
     }
 }

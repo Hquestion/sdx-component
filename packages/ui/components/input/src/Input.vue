@@ -91,7 +91,7 @@ export default {
             
             // 添加搜索框
             if (this.searchable) {
-                customAttr['suffix-icon'] = 'sdx-icon iconicon-search';
+                customAttr['suffix-icon'] = 'sdx-icon iconicon-search sdxu-input__icon';
             }
             if (this.$attrs.type === 'password') {
                 customAttr['suffix-icon'] = '';

@@ -4,8 +4,8 @@ import ProjectCardList from './src/ProjectCardList';
 const Card = { ProjectCard, ProjectCardList };
 
 Card.install = vue => {
-    vue.components(ProjectCard.name, ProjectCard);
-    vue.components(ProjectCardList.name, ProjectCardList);
+    vue.component(ProjectCard.name, ProjectCard);
+    vue.component(ProjectCardList.name, ProjectCardList);
 };
 
 export default Card;

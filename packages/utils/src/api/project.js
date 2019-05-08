@@ -1,4 +1,4 @@
-import httpService from '@sdx/utils/src/http-service';
+import httpService from '../http-service';
 
 const projectApi = 'api/v1/projects/';
 

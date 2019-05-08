@@ -2,7 +2,7 @@
     <div class="sdxv-role-manage">
         <div class="sdxv-role-manage__header">
             <div class="sdxv-role-manage__title">
-                角色
+                <span>角色</span>
             </div>
             <div class="sdxv-role-manage__handle">
                 <SdxuInput
@@ -12,13 +12,14 @@
                 />
                 <SdxuButton
                     type="primary"
-                    :icon-only="true"
+                    size="small"
                     placement="right"
                     @click="addRole"
                 >
                     <i
                         class="sdx-icon iconicon-plus"
                     />
+                    新建角色
                 </sdxubutton>
             </div>
         </div>

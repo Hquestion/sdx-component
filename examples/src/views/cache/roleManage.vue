@@ -6,7 +6,7 @@
 
 <script>
 // import { RoleManage } from '@sdx/view';
-import RoleManage from '@sdx/view/components/roleManage';
+import RoleManage from '@sdx/view/components/role-manage';
 export default {
     data () {
         return {

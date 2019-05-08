@@ -8,11 +8,26 @@
             color: $sdx-text-regular-color;
             height: $sdxu-role-title-height;
             line-height: $sdxu-role-title-height;
+            span {
+                padding-left: $sdxu-mark-icon-padding;
+            }
+            &::after{
+                content: "";
+                width: $sdxu-mark-icon-width;
+                height: $sdxu-mark-icon-height;
+                background: $sdxu-mark-icon-color;
+                display: block;
+                position: relative;
+                bottom: $sdxu-mark-icon-bottom;
+            }
         }
         @include element('handle') {
             display: flex; 
             .sdxu-button {
                 margin-left: $sdxu-role-margin-size;
+                i {
+                    font-size: $sdxu-role-icon-size;
+                }
             }
         }
     }

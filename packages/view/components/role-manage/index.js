@@ -1,4 +1,4 @@
-import RoleManage from './src/index';
+import RoleManage from './src/Index';
 
 // 路由配置
 

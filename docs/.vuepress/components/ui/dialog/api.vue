@@ -23,7 +23,7 @@
                         params: 'size',
                         describe: '尺寸',
                         type: 'string',
-                        optionValue: 'normal / small ',
+                        optionValue: 'large / normal / small ',
                         defaultValue: 'normal',
                     }, {
                         params: 'title',
@@ -100,6 +100,12 @@
                     }, {
                         params: 'no-footer',
                         describe: '是否完全隐藏footer',
+                        type: 'boolean',
+                        optionValue: '—',
+                        defaultValue: 'false',
+                    }, {
+                        params: 'title-icon',
+                        describe: '对话框title显示的icon',
                         type: 'boolean',
                         optionValue: '—',
                         defaultValue: 'false',

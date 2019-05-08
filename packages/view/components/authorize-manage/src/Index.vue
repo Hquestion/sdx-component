@@ -12,13 +12,14 @@
                 />
                 <SdxuButton
                     type="primary"
-                    :icon-only="true"
                     placement="right"
                     @click="addAuthorize"
+                    size="small"
                 >
                     <i
                         class="sdx-icon iconicon-plus"
                     />
+                    新建授权
                 </sdxubutton>
             </div>
         </div>
@@ -67,6 +68,7 @@
                     ref="user"
                 >
                     <el-form-item
+                        prop="name"
                         label="授权对象"
                     >
                         <el-select
@@ -93,7 +95,7 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuTransfer from '@sdx/ui/components/transfer';
 import {Form, FormItem, Select} from 'element-ui';
-import {manageApi} from '@sdx/utils/src/api/index';
+import {getPermissionsList} from '@sdx/utils/src/api/manage';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -110,34 +112,10 @@ export default {
     data() {
         return {
             value: '',
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄',
-                key: '11',      
-                desc: ' 那 v 啊女啊 v 那 v 啊美女 v 女你说的 v 你是女 in 在 v 你是 v 好似 u 凤凰文化'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄',
-                key: '12',
-                desc: ' 中均居本佛为国内外 i 我无关无关无关无关无关发刚拿上 v 女你说的 v 你是女 in 在 v 你是 v 好似 u 凤凰文化'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄',
-                key: '14',
-                desc: ' 关无关无高考文科贡嘎山的噶多少个民生凋敝民生凋敝没舍得不舍得把 v 说关无关无关发刚拿上 v 女你说的 v 你是女 in 在 v 你是 v 好似 u 凤凰文化'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄',
-                key: '15',
-                desc: ' 中均居本佛为国内外 iv 你是女 in 在 v 你是 v 好似 u 凤凰文化'
-            }],
+            tableData: [],
             current: 1,
             pageSize: 10,
-            total: 12,
+            total: 0,
             dialogVisible: false
         };
     },
@@ -145,8 +123,10 @@ export default {
        
     },
     created() {
-        manageApi.getPermissionsList()
+        getPermissionsList()
             .then(data => {
+                this.tableData = data.permissions;
+                this.total = data.total;
                 console.log(data, 88);
             });
     },

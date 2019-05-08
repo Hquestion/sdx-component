@@ -4,55 +4,55 @@ const rolesApi = 'api/v1/roles/';
 const permissionsApi = 'api/v1/permissions/';
 
 // 角色
-function getRolesList(params) {
+export function getRolesList(params) {
     return httpService.get(rolesApi, params);
 }
-function createRoles(params) {
+export function createRoles(params) {
     return httpService.post(rolesApi, params);
 }
 
-function updateRoles(uuid) {
+export function updateRoles(uuid) {
     return httpService.put(rolesApi + uuid);
 }
 
-function getRolesDetail(uuid) {
+export function getRolesDetail(uuid) {
     return httpService.get(rolesApi + uuid);
 }
 
-function removeRoles(uuid) {
+export function removeRoles(uuid) {
     return httpService.remove(rolesApi + uuid);
 }
 
 // 授权
-function getPermissionsList(params) {
+export function getPermissionsList(params) {
     return httpService.get(permissionsApi, params);
 }
-function createPermissions(params) {
+export function createPermissions(params) {
     return httpService.post(permissionsApi, params);
 }
 
-function updatePermissions(uuid) {
+export function updatePermissions(uuid) {
     return httpService.put(permissionsApi + uuid);
 }
 
-function getPermissionsDetail(uuid) {
+export function getPermissionsDetail(uuid) {
     return httpService.get(permissionsApi + uuid);
 }
 
 
-function removePermissions(uuid) {
+export function removePermissions(uuid) {
     return httpService.remove(permissionsApi + uuid);
 }
 
-export default {
-    getRolesList,
-    createRoles,
-    updateRoles,
-    getRolesDetail,
-    removeRoles,
-    getPermissionsList,
-    createPermissions,
-    updatePermissions,
-    getPermissionsDetail,
-    removePermissions
-};
+// export default {
+//     getRolesList,
+//     createRoles,
+//     updateRoles,
+//     getRolesDetail,
+//     removeRoles,
+//     getPermissionsList,
+//     createPermissions,
+//     updatePermissions,
+//     getPermissionsDetail,
+//     removePermissions
+// };

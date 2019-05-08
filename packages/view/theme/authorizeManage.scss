@@ -13,6 +13,9 @@
             display: flex; 
             .sdxu-button {
                 margin-left: $sdxu-role-margin-size;
+                i {
+                    font-size: 12px;
+                }
             }
         }
     }

@@ -61,14 +61,11 @@ Vue.use(SdxUI);
 
 ```scss
 
-// 当前激活pager背景色
-$sdxu-pagination-active-background-color: #4781F8 !default;
-// pager字体颜色
-$sdxu-pagination-text-color: #4781F8 !default;
-// 非激活pager背景
-$sdxu-pagination-background: rgba(88,147,240,0.10) !default;
-// pager之间间距
-$sdxu-pagination-pager-space: 3px !default;
+$sdxu-pagination-active-background-color: $sdx-primary-color !default; // 当前激活pager背景色
+$sdxu-pagination-text-color: rgba(96,98,102,1) !default;   // 非激活pager字体颜色
+$sdxu-pagination-background: #fff !default;  // 非激活pager背景
+$sdxu-pagination-pager-space: 3px !default;  // pager之间间距
+$sdxu-pagination-pager-border: 1px solid rgba(217,217,217,1) !default;  // pager边框
 ```
 
 ## API

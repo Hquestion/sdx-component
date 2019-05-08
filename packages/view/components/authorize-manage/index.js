@@ -1,4 +1,4 @@
-import AuthorizeManage from './src/index';
+import AuthorizeManage from './src/Index';
 
 // 路由配置
 

@@ -93,6 +93,7 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuTransfer from '@sdx/ui/components/transfer';
 import {Form, FormItem, Select} from 'element-ui';
+import {manageApi} from '@sdx/utils/src/api/index';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -136,18 +137,25 @@ export default {
             }],
             current: 1,
             pageSize: 10,
-            total: 123,
+            total: 12,
             dialogVisible: false
         };
     },
     props: {
        
     },
+    created() {
+        manageApi.getPermissionsList()
+            .then(data => {
+                console.log(data, 88);
+            });
+    },
     methods: {
         currentChange() {
             console.log(123);
         },
         addAuthorize() {
+            console.log(123);
             this.dialogVisible = true;
         },
         dialogConfirm() {

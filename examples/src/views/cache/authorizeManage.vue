@@ -5,8 +5,8 @@
 </template>
 
 <script>
-// import { RoleManage } from '@sdx/view';
-import AuthorizeManage from '@sdx/view/components/authorizeManage';
+
+import AuthorizeManage from '@sdx/view/components/authorize-manage';
 export default {
     data () {
         return {

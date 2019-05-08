@@ -8,11 +8,11 @@
 <widget-projectcard-index></widget-projectcard-index>
   <highlight-code slot="codeText" lang="vue">
     <template>
-      <div class="sdx-projectcard">
-          <SdxwProjectCardList>
-              <SdxwProjectCard @operate="handleOperate"  v-for="(meta, i) in list" :key="i" :meta="meta" :operateType="i === 3 ? 'project' : i === 4 ? 'template' : 'rud'"></SdxwProjectCard>
-          </SdxwProjectCardList>
-      </div>
+        <div class="sdx-projectcard">
+            <SdxwProjectCardList>
+                <SdxwProjectCard @operate="handleOperate"  v-for="(meta, i) in list" :key="i" :meta="meta" :operateType="i === 3 ? 'project' : i === 4 ? 'template' : 'rud'"></SdxwProjectCard>
+            </SdxwProjectCardList>
+        </div>
     </template>
 
     <script>
@@ -23,50 +23,50 @@
         data() {
             return {
                 list: [{
-                    id: 1,
-                    name: '我是对方公司等多个',
-                    creator: '张三',
+                    uuid: 1,
+                    name: '我是标题',
+                    owner: '张三',
                     createdAt: '2019-01-02 12:12:12',
                     isTemplate: false,
                     users: [],
                     groups: [],
-                    decription: '大方的说法是噶几首歌历史价格都是浪费国家都是浪费国家是的连接管理等十几个垃圾死了房间了房间爱上了房间爱上了房间辣是否'
+                    description: '我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情'
                 }, {
-                    id: 2,
-                    name: '我是对方公司等多个环节法规以及一颗为瑞特水电费第三方瑞',
-                    creator: '张三',
+                    uuid: 2,
+                    name: '我是标题我是标题我是标题我是标题我是标题我是标题',
+                    owner: '张三',
                     createdAt: '2019-01-02 12:12:12',
                     isTemplate: true,
                     users: [],
                     groups: [],
-                    decription: '大方的说法是噶几首歌历史价格都是浪费国家都是浪费国家是的连接管理等十几个了；按键高平市附近阿婆房间哦啊是金佛帕金森福利卡健身房垃圾死了房间了房间爱上了房间爱上了房间辣是否'
+                    description: '我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情'
                 }, {
-                    id: 3,
-                    name: '我是对方公司等多个环节法规以及一颗为瑞特水电费第三方瑞特人意识到规范地方名称',
-                    creator: '张三',
+                    uuid: 3,
+                    name: '我是标题我是标题我是详情我是详情我是标题我是标题我是标题我是标题我是标题我是标题我是标题我是标题',
+                    owner: '张三',
                     createdAt: '2019-01-02 12:12:12',
                     isTemplate: false,
                     users: ['dfdf'],
                     groups: [],
-                    decription: '大方的说法是噶几首歌历史价格都是浪费国家都是浪费国家是的连接管理等十几个了；按键高平市附近阿婆房间哦啊是金佛帕金森福利卡健身房垃圾死了房间了房间爱上了房间爱上了房间辣是否'
+                    description: '我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情'
                 }, {
-                    id: 4,
-                    name: '我是对方公司等多个环节法规以及一颗为瑞特水电费第三方瑞特人意识到规范地方名称',
-                    creator: '张三',
+                    uuid: 4,
+                    name: '我是标题',
+                    owner: '张三',
                     createdAt: '2019-01-02 12:12:12',
                     isTemplate: false,
                     users: ['dfdf'],
                     groups: [],
-                    decription: '大方的说法是噶几首歌历史价格都是浪费国家都是浪费国家是的连接管理等十几个了；按键高平市附近阿婆房间哦啊是金佛帕金森福利卡健身房垃圾死了房间了房间爱上了房间爱上了房间辣是否'
+                    description: '我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情'
                 }, {
-                    id: 5,
-                    name: '我是对方公司等多个环节法规以及一颗为瑞特水电费第三方瑞特人意识到规范地方名称',
-                    creator: '张三',
+                    uuid: 5,
+                    name: '我是标题',
+                    owner: '张三',
                     createdAt: '2019-01-02 12:12:12',
                     isTemplate: false,
                     users: ['dfdf'],
                     groups: [],
-                    decription: '大方的说法是噶几首歌历史价格都是浪费国家都是浪费国家是的连接管理等十几个了；按键高平市附近阿婆房间哦啊是金佛帕金森福利卡健身房垃圾死了房间了房间爱上了房间爱上了房间辣是否'
+                    description: '我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情我是详情'
                 }]
             };
         },
@@ -87,6 +87,7 @@
             background: #f7f7f7;
         }
     </style>
+
   </highlight-code>
 </Common-BasicUsage>
 

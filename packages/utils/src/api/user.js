@@ -1,4 +1,4 @@
-import httpService from '@sdx/utils/src/http-service';
+import httpService from '../http-service';
 
 const changePasswordApi = 'api/v1/user/changePassword'; // 目前后端暂时不能确定, 之后需要再做修改
 

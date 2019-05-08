@@ -20,3 +20,23 @@ $sdxw-foldlabel-fontsize: 12px !default;
 $sdxw-userInfoDialog-text-color:#616266;
 
 $sdxw-userInfoDialog-text-bg-color:#f2f6fcdb;
+
+// project-card
+$sdxw-project-card-width: 280px !default;
+$sdxw-project-card-height: 184px !default;
+$sdxw-project-card-box-shadow: 0 0 22px 0 rgba(206,213,221,0.27) !default;
+$sdxw-project-card-background: #FFF !default;
+$sdxw-project-card-template-color: $sdx-success-color !default;
+$sdxw-project-card-cooperation-color: $sdx-warning-color !default;
+$sdxw-project-card-self-color: $sdx-primary-color !default;
+$sdxw-project-card-self-detail: linear-gradient(180deg,rgba(94,104,251,0.9) 0%,rgba(61,118,239,1) 100%) !default;
+$sdxw-project-card-cooperation-detail: linear-gradient(180deg,rgba(253,158,43,0.9) 0%,rgba(255,136,43,1) 100%) !default;
+$sdxw-project-card-template-detail: linear-gradient(180deg,rgba(38,200,169,0.9) 0%,rgba(20,184,154,1) 100%) !default;
+$sdxw-project-card-operation-base-color: #C0C4CC !default;
+$sdxw-project-card-operation-hover-color: $sdx-primary-hover-color !default;
+$sdxw-project-card-name-show-line-count: 2 !default;
+$sdxw-project-card-mask-text-show-line-count: 4 !default;
+$sdxw-project-card-font-size: $sdx-content-font-size !default;
+$sdxw-project-card-operate-icon-size: 16px !default;
+$sdxw-project-card-type-icon-size: 32px !default;
+$sdxw-project-card-mask-height: 128px !default;

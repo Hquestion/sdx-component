@@ -34,6 +34,7 @@ module.exports = {
                     collapsable: true,
                     children: [
                         'widget/breadcrumb',
+                        'widget/projectcard',
                         'widget/userInfoDialog',
                         'widget/changePassword',
                         'widget/fold-label'

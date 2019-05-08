@@ -1,0 +1,143 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@include block('project-card', $bem-namespace-widget) {
+    position: relative;
+    box-sizing: border-box;
+    padding: $sdx-padding;
+    width: $sdxw-project-card-width;
+    height: $sdxw-project-card-height;
+    background: $sdxw-project-card-background;
+    box-shadow: $sdxw-project-card-box-shadow;
+    border-radius: $sdx-border-radius;
+    font-size: $sdxw-project-card-font-size;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+
+    @include element('header') {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: $sdxw-project-card-type-icon-size;
+        @include modifier('icon') {
+            margin-right: 12px;
+            border-radius: 4px;
+            &.sdx-icon {
+                color: #fff;
+                font-size: $sdxw-project-card-type-icon-size;
+            }
+            @include state('self') {
+                background-color: $sdxw-project-card-self-color;
+            }
+            @include state('cooperation') {
+                background-color: $sdxw-project-card-cooperation-color;
+            }
+            @include state('template') {
+                background-color: $sdxw-project-card-template-color;
+            }
+        }
+        @include modifier('name') {
+            height: $sdxw-project-card-type-icon-size;
+            font-weight: bold;
+            letter-spacing: 0;
+            color: #262B3E;
+            line-height: $sdxw-project-card-type-icon-size / 2;
+            @include text-truncation($sdxw-project-card-name-show-line-count);
+        }
+    }
+    
+    @include element('main') {
+        padding: 24px 0 30px;
+        height: 40px;
+    }
+
+    @include element('info') {
+        display: flex;
+        color: #606266;
+        margin-bottom: 10px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+        & > i {
+            background: rgba(192,196,204,0.2);
+            margin-right: 10px;
+            border-radius: 8px;
+            font-size: $sdxw-project-card-operate-icon-size;
+        }
+        & > span {
+            line-height: $sdxw-project-card-operate-icon-size;
+            font-size: $sdxw-project-card-font-size;
+        }
+    }
+
+    @include element('footer') {
+        i {
+            color: $sdxw-project-card-operation-base-color;
+            font-size: $sdxw-project-card-operate-icon-size;
+        }
+        @include modifier('select') {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            &:hover {
+                color: $sdxw-project-card-operation-hover-color;
+                i {
+                    color: $sdxw-project-card-operation-hover-color;
+                }
+            }
+            i {
+                margin-right: 6px;
+            }
+        }
+
+        @include modifier('operation') {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            i {
+                cursor: pointer;
+                &:hover {
+                    color: $sdxw-project-card-operation-hover-color;
+                }
+            }
+        }
+    }
+
+    @include element('mask') {
+        position: absolute;
+        top: 0;
+        left: 0;
+        box-sizing: border-box;
+        border-radius: $sdx-border-radius $sdx-border-radius 0px 0px;
+        padding: $sdx-padding;
+        height: $sdxw-project-card-mask-height;
+        @include modifier('text') {
+            height: $sdxw-project-card-mask-text-show-line-count * 21px;
+            line-height: 21px;
+            color: #fff;
+            @include text-truncation($sdxw-project-card-mask-text-show-line-count);
+        }
+
+        @include state('self') {
+            background: $sdxw-project-card-self-detail;
+        }
+        @include state('cooperation') {
+            background: $sdxw-project-card-cooperation-detail;
+        }
+        @include state('template') {
+            background: $sdxw-project-card-template-detail;
+        }
+    }
+}
+
+@include block('project-card-list', $bem-namespace-widget) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: -$sdx-margin / 2;
+    & /deep/ .sdxw-project-card {
+        margin: $sdx-margin / 2;
+    }
+}

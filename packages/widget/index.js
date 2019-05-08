@@ -5,7 +5,7 @@ import ChangePassword from './components/changePassword';
 import UserInfoDialog from './components/userInfoDialog';
 import ProjectCard from './components/projectcard';
 
-import { registerI18n } from "@sdx/utils/lib/locale";
+import { registerI18n } from "@sdx/utils/src/locale";
 
 const SdxWidget = {
     Breadcrumb,

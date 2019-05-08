@@ -9,7 +9,7 @@ import AutoComplete from './components/autocomplete';
 import MessageBox from './components/message-box';
 
 import Table from './components/table';
-import { registerI18n } from "@sdx/utils/lib/locale";
+import { registerI18n } from "@sdx/utils/src/locale";
 
 const SdxUI = {
     Button,

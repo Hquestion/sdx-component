@@ -7,27 +7,28 @@
             <router-link to="/about">
                 About
             </router-link> |
-            <!-- <IlvButton @click="setlang">
-                你好，点我
-            </IlvButton> -->
             <router-link to="/dialogTest">
                 对话框测试页面
             </router-link> |
             <router-link to="/demo/input">
                 input测试
-            </router-link>
+            </router-link> |
             <router-link to="/paginationTest">
                 分页测试页面
-            </router-link>>
+            </router-link> |
             <router-link to="/breadcrumbTest">
-                面包屑测试页面 |
-            </router-link>
+                面包屑测试页面
+            </router-link> |
             <router-link to="/userInfoTest">
                 用户信息详情
-            </router-link>
+            </router-link> |
             <router-link to="/changePwdTest">
                 修改密码测试页面
-            </router-link>
+            </router-link> |
+            <br>
+            <router-link to="/projectManageTest">
+                项目管理测试页面
+            </router-link> |
         </div>
         <p class="page-link">
             <button @click="toFeb">

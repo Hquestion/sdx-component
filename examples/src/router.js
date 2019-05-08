@@ -15,6 +15,7 @@ import PaginationTest from './views/ui/paginationTest.vue';
 import UserInfoTest from './views/widget/userInfoTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
+import projectManageTest from './views/view/projectManageTest.vue';
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -137,6 +138,11 @@ export default new Router({
                     name: 'input'
                 }
             }]
+        },
+        {
+            path: '/projectManageTest',
+            name: '项目管理测试',
+            component: projectManageTest
         },
     ]
 });

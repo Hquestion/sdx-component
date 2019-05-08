@@ -3,7 +3,7 @@
         <Table
             :data="tableData"
             :highlight-key="'12'"
-            :params="params"
+            @row-click="rowclick"
         >
             <el-table-column type="expand">
                 <template slot-scope="props">
@@ -60,6 +60,11 @@ export default {
             params: {
             }
         };
+    },
+    methods: {
+        rowclick() {
+            console.log(88);
+        }
     },
     components: {
         Table,

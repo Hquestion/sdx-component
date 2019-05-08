@@ -2,78 +2,16 @@
     <div>
         <sdxu-dialog
             class="sdxw-userinfo"
+            :class="[`sdxw-userinfo__${theme}`]"
             size='small'
-            v-if="theme == 'user'"
             :visible.sync="dialogVisible"
             @close="dialogClose"
             no-footer
         >
-            <div slot="title">
+            <div  v-if="theme == 'user'" slot="title" :class="`sdxw-userinfo__user--title`">
                 {{t('widget.userInfo.title')}} 
             </div>
-            <div class="sdxw-userinfo__content">
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.username')}}：
-                    </span> 
-                    <span class="sdxw-userinfo__item--data">
-                        {{users.userName}}
-                    </span>
-                </div>
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.fullname')}}：
-                    </span>
-                    <span class="sdxw-userinfo__item--data">
-                        {{users.fullName}}
-                    </span>
-                </div>
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.password')}}：
-                    </span>
-                    <span class="sdxw-userinfo__item--data">
-                        {{users.password}}
-                    </span>
-                </div>
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.role')}}：
-                    </span>
-                    <div class="sdxw-userinfo__item--role">
-                        <span 
-                            v-for="item in users.roles" 
-                            :key="item"
-                        >
-                            {{item}}
-                        </span>
-                    </div>
-                </div>
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.groups')}}：
-                    </span>
-                    <div class="sdxw-userinfo__item--group">
-                        <span 
-                            v-for="item in users.group" 
-                            :key="item"
-                        >
-                            {{item}}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </sdxu-dialog>
-
-        <sdxu-dialog
-            class="sdxw-userinfo sdxw-userinfo__dashborad"
-            size='small'
-            v-if="theme == 'dashboard'"
-            :visible.sync="dialogVisible"
-            @close="dialogClose"
-            no-footer
-        >
-            <div slot="title" class="sdxw-userinfo__title">
+            <div v-if="theme == 'dashboard'" slot="title" :class="`sdxw-userinfo__dashboard--title`">
                 <svg
                     class="icon"
                     aria-hidden="true"
@@ -91,51 +29,63 @@
                         {{users.userName}}
                     </span>
                 </div>
-                <div class="sdxw-userinfo__item">
+                <div class="sdxw-userinfo__item" :class="[`sdxw-userinfo__item--${theme}fullname`]">
                     <span class="sdxw-userinfo__item--title">
                         {{t('widget.userInfo.fullname')}}：
                     </span>
-                    <span class="sdxw-userinfo__item--data sdxw-userinfo__item--fullname">
+                    <span  v-if="theme == 'user'" class="sdxw-userinfo__item--data">
                         {{users.fullName}}
+                    </span>
+                    <input v-if="theme == 'dashboard'" type="text" id="" v-model="users.fullName">
+                </div>
+                <div v-if="theme == 'user'" class="sdxw-userinfo__item">
+                    <span class="sdxw-userinfo__item--title">
+                        {{t('widget.userInfo.password')}}：
+                    </span>
+                    <span class="sdxw-userinfo__item--data">
+                        {{users.password}}
                     </span>
                 </div>
                 <div class="sdxw-userinfo__item">
                     <span class="sdxw-userinfo__item--title">
                         {{t('widget.userInfo.role')}}：
                     </span>
-                    <span class="sdxw-userinfo__item--data">
-                        {{users.role}}
-                    </span>
+                    <div class="sdxw-userinfo__item--role">
+                        <SdxwFoldLabelGroup 
+                            :list="users.roles" 
+                            type="default"
+                        >
+                        </SdxwFoldLabelGroup>
+                    </div>
                 </div>
                 <div class="sdxw-userinfo__item">
                     <span class="sdxw-userinfo__item--title">
                         {{t('widget.userInfo.groups')}}：
                     </span>
                     <div class="sdxw-userinfo__item--group">
-                        <span 
-                            v-for="item in users.group" 
-                            :key="item"
+                        <SdxwFoldLabelGroup 
+                            :list="users.group" 
+                            type="default"
                         >
-                            {{item}}
-                        </span>
+                        </SdxwFoldLabelGroup>
                     </div>
                 </div>
             </div>
         </sdxu-dialog>
-
     </div>
 </template>
 <script>
+import { userApi } from '@sdx/utils/src/api';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import locale from '@sdx/utils/src/mixins/locale';
 import httpService from '@sdx/utils/src/http-service';
-import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
+import SdxwFoldLabelGroup from '@sdx/widget/components/fold-label/src/FoldLabelGroup';
 export default {
     name:'SdxwUserInfoDialog',
     data () {
         return {
             dialogVisible: this.visible,
-            users:this.userInfoData
+            users:this.userInfoData,
         }
     },
     mixins:[locale],
@@ -151,7 +101,6 @@ export default {
                     userName:'',
                     fullName:'',
                     password:'',
-                    role:'',
                     roles:[],
                     group:[]
                 }
@@ -184,15 +133,18 @@ export default {
         },
         getData(){
             if(this.id){
-                httpService.get('https://easy-mock.com/mock/5cd04685adb0973be6a3d969/api/v1/users/:uuid')
-                .then(res=>{
-                    this.users = res;
-                });
+                userApi.getUserDetail(this.id)
+                    .then(( res ) => {
+                        this.users = res;    
+                    }).catch(() => {
+                    
+                    });
             }
         }
     },
     components:{
-        SdxuDialog
+        SdxuDialog,
+        SdxwFoldLabelGroup
     }
 }
 </script>

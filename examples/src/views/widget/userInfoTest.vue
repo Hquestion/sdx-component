@@ -19,7 +19,7 @@ export default {
         return {
             dialogVisible: false,
             userInfoData:{},
-            theme:'dashboard',  //dashboardUserInfo   userManageInfo
+            theme:'dashboard',  //dashboard user
             id:''
         }
     },

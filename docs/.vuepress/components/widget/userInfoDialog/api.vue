@@ -22,14 +22,14 @@
                         params: 'userInfoData',
                         describe: '用户信息',
                         type: 'Object',
-                        optionValue: '—',
+                        optionValue: 'username, fullname, password, roles, group',
                         defaultValue: '—'
                     },
                     {
                         params: 'theme',
-                        describe: '主题',
+                        describe: '主题区分在dashboard和用户管理处的查看详情弹窗',
                         type: 'String',
-                        optionValue: 'dashboard , user',
+                        optionValue: 'dashboard / user',
                         defaultValue: '—'
                     },
                      {

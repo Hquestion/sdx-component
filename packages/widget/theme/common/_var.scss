@@ -17,11 +17,17 @@ $sdxw-foldlabel-fontsize: 12px !default;
 
 
 // 用户信息dialog
+$sdxw-userInfoDialog-title-color:#262B3E;
 $sdxw-userInfoDialog-text-color:#616266;
-
 $sdxw-userInfoDialog-text-bg-color:#f2f6fcdb;
-
-
+$sdxw-userInfoDialog-avatar-width:52px;
+$sdxw-userInfoDialog-margin:10px;
+$sdxw-userInfoDialog-padding:0 10px;
+$sdxw-userInfoDialog-content-padding:0 20px;
+$sdxw-userInfoDialog-label-width:64px;
+$sdxw-userInfoDialog-item-height:40px;
+$sdxw-userInfoDialog-input-width:314px;
+$sdxw-userInfoDialog-min-height:44px;
 // project-card
 $sdxw-project-card-width: 280px !default;
 $sdxw-project-card-height: 184px !default;

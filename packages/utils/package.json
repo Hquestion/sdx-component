@@ -36,6 +36,7 @@
     ]
   },
   "devDependencies": {
+    "axios": "^0.18.0",
     "gulp": "^4.0.1"
   },
   "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"

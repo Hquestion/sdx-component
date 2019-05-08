@@ -1,8 +1,8 @@
 // sdxu-button
-$sdxu-button-min-width: 95px !default;
+$sdxu-button-min-width: 0px !default;
 $sdxu-button-padding: $sdx-padding !default;
-$sdxu-button-height-regular: $sdx-form-element-height-regular !default;
-$sdxu-button-height-small: $sdx-form-element-height-small !default;
+$sdxu-button-height-regular: $sdx-form-element-height-large !default;
+$sdxu-button-height-small: $sdx-form-element-height-regular !default;
 $sdxu-button-default-border-color: #E4E7Ed !default;
 
 // 穿梭框
@@ -64,6 +64,7 @@ $sdxu-tab-radio-height-small: $sdx-form-element-height-small !default;
 $sdx-tab-radio-padding: 14px !default;
 
 // message-box
-$sdxu-messagebox-width: 460px !default;
-$sdxu-messagebox-padding: 40px !default;
+$sdxu-messagebox-width: 600px !default;
+$sdxu-messagebox-padding: 74px 20px 20px 40px !default;
 $sdxu-status-icon-size: 24px !default;
+$sdx-status-icon-margin-right: 15px !default;

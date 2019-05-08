@@ -21,10 +21,13 @@ module.exports = {
         writeToDisk: false,
         port: 3300,
         proxy: {
-            '/api/v1': {
-                target: 'http://10.115.1.130:3000',
+            '/api': {
+                target: 'https://easy-mock.com',
                 ws: true,
-                changeOrigin: true
+                changeOrigin: true,
+                pathRewrite: {
+                    '/api': '/mock/5cd04685adb0973be6a3d969/api'
+                }
             }
         },
     }

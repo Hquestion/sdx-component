@@ -23,7 +23,11 @@ export default function $axios(options) {
             instance.interceptors.request.use(
                 config => {
                     if (axiosConfig.tokenKey) {
-                        config.headers[axiosConfig.tokenKey] = axiosConfig.tokenValue;
+                        if (typeof axiosConfig.tokenValue === 'function') {
+                            config.headers[axiosConfig.tokenKey] = axiosConfig.tokenValue();
+                        } else {
+                            config.headers[axiosConfig.tokenKey] = axiosConfig.tokenValue;
+                        }
                     }
                     if (process.env.NODE_ENV === 'development') {
                         let needMock = mockUrlList && mockUrlList.some(url => {
@@ -86,8 +90,8 @@ export default function $axios(options) {
 }
 
 $axios.register = (handler, config, mock) => {
-    errorHandler = handler;
+    errorHandler = handler || errorHandler;
     Object.assign(axiosConfig, config);
-    mockUrlList = mock;
+    mockUrlList = mock || mockUrlList;
     needUpdate = true;
 };

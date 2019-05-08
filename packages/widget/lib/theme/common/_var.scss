@@ -1,14 +1,10 @@
 $ilv-primary-color: #fa8373 !default;
 
 //breadcrumb
-// 面包屑可跳转层级字体颜色
-$sdxw-breadcrumb-previous-text-color: $sdx-primary-color !default;
-// 当前层级字体颜色
-$sdxw-breadcrumb-current-text-color: #00002A !default;
-// 分隔符颜色
-$sdxw-breadcrumb-seperator-color: $sdx-primary-color !default;
-// 分隔符margin
-$sdxw-breadcrumb-seperator-margin: 4px !default;
+$sdxw-breadcrumb-previous-text-color: $sdx-primary-color !default;  // 面包屑可跳转层级字体颜色
+$sdxw-breadcrumb-current-text-color: #00002A !default;  // 当前层级字体颜色
+$sdxw-breadcrumb-seperator-color: $sdx-primary-color !default;  // 分隔符颜色
+$sdxw-breadcrumb-seperator-margin: 4px !default;  // 分隔符margin
 
 // fold-label
 $sdxw-foldlabel-height: 22px !default;
@@ -18,3 +14,29 @@ $sdxw-foldlabel-primary-bg: #E9EFFE !default;
 $sdxw-foldlabel-top-margin: 10px !default;
 $sdxw-foldlabel-left-margin: 6px !default;
 $sdxw-foldlabel-fontsize: 12px !default;
+
+
+// 用户信息dialog
+$sdxw-userInfoDialog-text-color:#616266;
+
+$sdxw-userInfoDialog-text-bg-color:#f2f6fcdb;
+
+// project-card
+$sdxw-project-card-width: 280px !default;
+$sdxw-project-card-height: 184px !default;
+$sdxw-project-card-box-shadow: 0 0 22px 0 rgba(206,213,221,0.27) !default;
+$sdxw-project-card-background: #FFF !default;
+$sdxw-project-card-template-color: $sdx-success-color !default;
+$sdxw-project-card-cooperation-color: $sdx-warning-color !default;
+$sdxw-project-card-self-color: $sdx-primary-color !default;
+$sdxw-project-card-self-detail: linear-gradient(180deg,rgba(94,104,251,0.9) 0%,rgba(61,118,239,1) 100%) !default;
+$sdxw-project-card-cooperation-detail: linear-gradient(180deg,rgba(253,158,43,0.9) 0%,rgba(255,136,43,1) 100%) !default;
+$sdxw-project-card-template-detail: linear-gradient(180deg,rgba(38,200,169,0.9) 0%,rgba(20,184,154,1) 100%) !default;
+$sdxw-project-card-operation-base-color: #C0C4CC !default;
+$sdxw-project-card-operation-hover-color: $sdx-primary-hover-color !default;
+$sdxw-project-card-name-show-line-count: 2 !default;
+$sdxw-project-card-mask-text-show-line-count: 4 !default;
+$sdxw-project-card-font-size: $sdx-content-font-size !default;
+$sdxw-project-card-operate-icon-size: 16px !default;
+$sdxw-project-card-type-icon-size: 32px !default;
+$sdxw-project-card-mask-height: 128px !default;

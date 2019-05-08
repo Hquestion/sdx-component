@@ -1,0 +1,18 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+$--color-primary: $sdx-primary-color !default;
+$--slider-main-background-color: $sdx-primary-color !default;
+$--slider-runway-background-color: $sdx-none-color !default;
+$--slider-button-size: 8px !default;
+
+@import "~element-ui/packages/theme-chalk/src/base.scss";
+@import "~element-ui/packages/theme-chalk/src/slider.scss";
+
+.el-slider__button {
+    width: 8px;
+    height: 8px;
+    border: 4px solid #fff;
+    background: $sdx-primary-color;
+    box-shadow:0 0 4px 0 rgba($sdx-primary-color,0.3);
+}
+

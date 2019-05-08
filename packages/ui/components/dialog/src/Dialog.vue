@@ -8,7 +8,7 @@
         :modal="modal"
         :modal-append-to-body="modalAppendToBody"
         :append-to-body="appendToBody"
-        :lock-scroll="locakScroll"
+        :lock-scroll="lockScroll"
         :custom-class="customClass"
         :close-on-click-modal="closeOnClickModal"
         :close-on-press-escape="closeOnPressEscape"
@@ -102,9 +102,9 @@ export default {
         },
         appendToBody: {
             type: Boolean,
-            default: false
+            default: true
         },
-        locakScroll: {
+        lockScroll: {
             type: Boolean,
             default: true
         },

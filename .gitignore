@@ -4,3 +4,7 @@ node_modules/
 .DS_Store
 *.zip
 dist/
+packages/ui/lib/
+packages/view/lib/
+packages/utils/lib/
+packages/widget/lib/

@@ -1,7 +1,7 @@
 // todo: color value
 $sdx-primary-color: #4781F8 !default;
 $sdx-warning-color: #FF882B !default;
-$sdx-success-color: #46D5B1 !default;
+$sdx-success-color: #26C8A9 !default;
 $sdx-danger-color: #FF5E5E !default;
 $sdx-info-color: #909399 !default;
 $sdx-disable-color: #C0CDE6 !default;
@@ -19,13 +19,16 @@ $sdx-none-color: #EBEEF5 !default;
 
 // todo: layout
 $sdx-padding: 20px !default;
+$sdx-padding-large: 40px !default;
 $sdx-margin: 20px !default;
 
 // todo: size
 $sdx-form-element-height-small: 32px !default;
 $sdx-form-element-height-regular: 36px !default;
 $sdx-form-element-height-large: 40px !default;
+
 $sdx-border-radius: 2px !default;
+$sdx-border-radius-large: 4px !default;
 
 // font size
 $sdx-h1-font-size: 18px !default;

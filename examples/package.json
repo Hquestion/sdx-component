@@ -9,7 +9,6 @@
     "prestart": "npm install"
   },
   "dependencies": {
-    "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "feb-alive": "^1.0.7",
     "vue": "^2.6.10",
@@ -20,6 +19,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.1.1",
     "@vue/cli-service": "^3.1.1",
+    "axios": "^0.18.0",
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-component-customize": "^1.1.1",
     "postcss-loader": "^3.0.0",

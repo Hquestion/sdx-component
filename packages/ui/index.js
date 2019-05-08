@@ -7,7 +7,7 @@ import TabRadio from './components/tab-radio';
 import Input from './components/input';
 import AutoComplete from './components/autocomplete';
 import MessageBox from './components/message-box';
-
+import ContentPanel from './components/content-panel';
 import Table from './components/table';
 import { registerI18n } from "@sdx/utils/src/locale";
 
@@ -21,7 +21,8 @@ const SdxUI = {
     Input,
     MessageBox,
     AutoComplete,
-    Table
+    Table,
+    ContentPanel
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -34,8 +35,8 @@ SdxUI.install = (vue, { i18n } = {}) => {
     Input.install(vue);
     MessageBox.install(vue);
     AutoComplete.install(vue);
-
     Table.install(vue);
+    ContentPanel.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

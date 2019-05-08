@@ -11,7 +11,7 @@
                  block ? 'is-block': '',
                  iconOnly ? 'is-icon': ''
         ]"
-        @click="handleClick"
+        @click.stop="handleClick"
         @mouseover="handleMouseOver"
         @mouseout="handleMouseOut"
     >
@@ -52,13 +52,16 @@
 
 <script>
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+import emitter from '@sdx/utils/src/mixins/emitter';
 export default {
     name: 'SdxuButton',
+    componentName: 'SdxuButton',
     data() {
         return {
             dropdownVisible: false
         };
     },
+    mixins: [emitter],
     components: {
         [CollapseTransition.name]: CollapseTransition
     },
@@ -109,7 +112,7 @@ export default {
         },
         dropdownWidth: {
             type: String,
-            default: '100px'
+            default: '100%'
         },
         placement: {
             type: String,
@@ -132,6 +135,7 @@ export default {
             } else {
                 this.$emit('click');
             }
+            this.dispatch('SdxuButton', 'sdxu.button.hideDropdown');
         },
         handleMouseOver() {
             if (this.trigger === 'hover') {
@@ -155,9 +159,13 @@ export default {
     },
     mounted() {
         document.addEventListener('click', this.hideDropdown);
+        this.$on('sdxu.button.hideDropdown', () => {
+            this.dropdownVisible = false;
+        });
     },
     beforeDestroy() {
         document.removeEventListener('click', this.hideDropdown);
+        this.$off('sdxu.button.hideDropdown');
     }
 };
 </script>

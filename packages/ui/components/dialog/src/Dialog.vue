@@ -8,13 +8,13 @@
         :modal="modal"
         :modal-append-to-body="modalAppendToBody"
         :append-to-body="appendToBody"
-        :lock-scroll="locakScroll"
+        :lock-scroll="lockScroll"
         :custom-class="customClass"
         :close-on-click-modal="closeOnClickModal"
         :close-on-press-escape="closeOnPressEscape"
         :show-close="showClose"
         :before-close="beforeClose"
-        center
+        :center="!!titleIcon"
         @close="dialogClose"
         @closed="dialogClosed"
         @open="dialogOpen"
@@ -23,9 +23,22 @@
         <div
             slot="title"
         >
-            <slot name="title">
-                {{ title }}
-            </slot>
+            <svg
+                class="sdxu-dialog__icon"
+                aria-hidden="true"
+                v-if="titleIcon"
+            >
+                <use :xlink:href="`#${titleIcon}`" />
+            </svg>
+            <div
+                :class="titleIcon ? 'sdxu-dialog__title-with-top-margin' : ''"
+            >
+                <slot
+                    name="title"
+                >
+                    {{ title }}
+                </slot>
+            </div>
         </div>
         <div><slot /></div>
         <div
@@ -55,6 +68,7 @@
 <script>
 import { Dialog } from 'element-ui';
 import Button from '@sdx/ui/components/button';
+import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 export default {
     name: 'SdxuDialog',
     data() {
@@ -102,9 +116,9 @@ export default {
         },
         appendToBody: {
             type: Boolean,
-            default: false
+            default: true
         },
-        locakScroll: {
+        lockScroll: {
             type: Boolean,
             default: true
         },
@@ -131,6 +145,10 @@ export default {
         noFooter: {
             type: Boolean,
             default: false
+        },
+        titleIcon: {
+            type: String,
+            default: ''
         }
     },
     methods: {

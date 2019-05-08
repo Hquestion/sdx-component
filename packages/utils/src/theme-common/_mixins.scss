@@ -10,9 +10,10 @@
     @else {
         // 仅支持webkit内核浏览器
         display: -webkit-box;
-        word-break: $word-break;
-        -webkit-line-clamp: $line-clamp;
+        /* autoprefixer: off */
         -webkit-box-orient: vertical;
+        /* autoprefixer: on */
+        -webkit-line-clamp: $line-clamp;
     }
 }
 

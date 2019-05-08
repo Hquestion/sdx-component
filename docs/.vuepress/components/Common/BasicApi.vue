@@ -63,6 +63,29 @@
               label="说明">
           </el-table-column>
       </el-table>
+      <el-table
+          v-else-if="type==='method'"
+          :data="apiData"
+          :border="false"
+          style="width: 100%">
+          <el-table-column
+              prop="name"
+              label="方法名"
+          >
+          </el-table-column>
+          <el-table-column
+              prop="description"
+              label="功能">
+          </el-table-column>
+          <el-table-column
+              label="参数">
+              <template slot-scope="scope">
+              <div v-html="scope.row.params"
+              >
+              </div>
+            </template>
+          </el-table-column>
+      </el-table>
   </div>
 </template>
 

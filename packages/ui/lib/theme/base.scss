@@ -1,7 +1,0 @@
-@import "~@sdx/utils/lib/theme-common/base";
-
-// 引用var是为了修改theme-common中的变量或定义一些跟本库相关的变量等，
-// 如果没有自定义的，保持空文件即可
-@import './common/var';
-
-$bem-namespace-ui: 'sdxu';

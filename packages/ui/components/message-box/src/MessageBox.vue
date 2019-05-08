@@ -12,6 +12,9 @@
                     ]"
                     v-show="visible"
                 >
+                    <div class="sdxu-message-box__icon-close" @click="close">
+                        <i class="sdx-icon iconicon-check"></i>
+                    </div>
                     <div class="sdxu-message-box__header">
                         <i
                             class="sdx-icon"
@@ -97,6 +100,9 @@ export default {
         },
         handleConfirm() {
             this.$emit('confirm');
+        },
+        close() {
+            this.$emit('close');
         }
     }
 };

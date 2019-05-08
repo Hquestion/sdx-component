@@ -25,7 +25,8 @@ module.exports = {
                         'ui/table',
                         'ui/tab-radio',
                         'ui/input',
-                        'ui/messagebox'
+                        'ui/messagebox',
+                        'ui/transfer'
                     ]
                 },
                 {
@@ -33,7 +34,10 @@ module.exports = {
                     collapsable: true,
                     children: [
                         'widget/breadcrumb',
-                        'widget/userInfoDialog'
+                        'widget/projectcard',
+                        'widget/userInfoDialog',
+                        'widget/changePassword',
+                        'widget/fold-label'
                     ]
                 },
                 {
@@ -45,6 +49,7 @@ module.exports = {
                     title: '工具集',
                     collapsable: true,
                     children: [
+                        'utils/api',
                         'utils/error-handler',
                         'utils/http-service',
                         'utils/国际化'
@@ -59,6 +64,13 @@ module.exports = {
             alias: {
                 '@sdx': path.resolve(__dirname, '../../packages')
             }
-        }
+        },
+        // hack: 引入iconfont时报错，在构建文档时，不打包iconfont，通过script脚本引入
+        externals: [
+            {
+                '@sdx/utils/src/theme-common/iconfont/iconfont.js': 'element-ui',
+                '@sdx/utils/src/theme-common/iconfont/iconfont': 'element-ui'
+            }
+        ]
     }
 };

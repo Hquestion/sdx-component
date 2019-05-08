@@ -37,6 +37,9 @@ function MessageBox(opt) {
         MessageBox.close();
         _resolve('confirm');
     });
+    vm.$on('close', () => {
+        MessageBox.close();
+    });
     if (hideOnRouting) {
         vm.routeUnwatch = vm.$watch('$route', () => {
             MessageBox.close();
@@ -53,6 +56,7 @@ MessageBox.close = () => {
     setTimeout(() => {
         vm.$off('cancel');
         vm.$off('confirm');
+        vm.$off('close');
         vm.routeUnwatch();
         vm.$el.remove();
         vm = null;

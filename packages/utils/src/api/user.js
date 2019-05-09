@@ -42,3 +42,10 @@ export function getUserDetail(uuid) {
         });
     });
 }
+
+export default {
+    changePassword,
+    getRoleDetail,
+    getGroupDetail,
+    getUserDetail
+};

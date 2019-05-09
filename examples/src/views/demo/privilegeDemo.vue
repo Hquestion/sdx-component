@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Privilege from '@sdx/view/components/privilege';
+import Privilege from '@sdx/view/components/privilege/src/Privilege';
 
 export default {
     name: 'PrivilegeDemo',

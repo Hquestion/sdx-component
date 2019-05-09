@@ -2,19 +2,19 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @include block('privilege', $bem-namespace-view) {
     background: #F7F7F7;
-    padding: 0 $sdx-padding $sdx-padding;
-    @include element('title') {
-        display: flex;
-        align-items: center;
-        height:46px;
+    padding: $sdx-padding $sdx-padding;
+    // @include element('title') {
+    //     display: flex;
+    //     align-items: center;
+    //     height:46px;
 
-        @include modifier('text') {
-            line-height: 14px;
-            font-size:14px;
-            font-weight:500;
-            color:#303133;
-        }
-    }
+    //     @include modifier('text') {
+    //         line-height: 14px;
+    //         font-size:14px;
+    //         font-weight:500;
+    //         color:#303133;
+    //     }
+    // }
 
     @include element('container') {
         display: flex;

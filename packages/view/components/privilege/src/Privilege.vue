@@ -1,10 +1,10 @@
 <template>
     <div class="sdxv-privilege">
-        <div class="sdxv-privilege__title">
+        <!-- <div class="sdxv-privilege__title">
             <span class="sdxv-privilege__title--text">
                 权限
             </span>
-        </div>
+        </div> -->
         <div class="sdxv-privilege__container">
             <!-- <div class="sdxv-privilege__container--bar">
                 <sdxu-tab-radio-group v-model="activeTab">

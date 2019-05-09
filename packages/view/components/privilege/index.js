@@ -1,7 +1,22 @@
-import Privilege from './src/Privilege';
+import SdxvPrivilege from './src/Privilege';
 
-Privilege.install = vue => {
-    vue.component(Privilege.name, Privilege);
+const routeCfg = [{
+    path: '/sdxv-privilege',
+    name: 'SdxvPrivilege',
+    component: SdxvPrivilege,
+    meta: {
+
+    }
+}];
+
+
+const register = (router, parentPath) => {
+    return router.addRoutes(routeCfg, parentPath);
 };
 
-export default Privilege;
+const viewRouter = {
+    routes: routeCfg,
+    register
+};
+
+export default { SdxvPrivilege, viewRouter };

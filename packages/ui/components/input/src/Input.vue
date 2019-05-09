@@ -1,7 +1,10 @@
 <template>
     <div
         class="sdxu-input"
-        :class="'sdxu-input--' + size"
+        :class="[
+            'sdxu-input--' + size,
+            inline ? 'is-inline': ''
+        ]"
     >
         <el-input
             v-bind="attrs"
@@ -81,6 +84,10 @@ export default {
             validator: function (value) {
                 return ['regular', 'small'].includes(value);
             }
+        },
+        inline: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

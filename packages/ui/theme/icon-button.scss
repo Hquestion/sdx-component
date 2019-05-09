@@ -1,0 +1,30 @@
+@include block('icon-button', $bem-namespace-ui) {
+    color: $sdx-text-holder-color;
+    font-size: $sdx-h2-font-size;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    & + .sdxu-icon-button {
+        margin-left: $sdx-margin;
+    }
+    @include modifier('small') {
+        font-size: $sdx-help-font-size;
+    }
+    @include modifier('regular') {
+        font-size: $sdx-content-font-size;
+    }
+    @include modifier('large') {
+        font-size: $sdx-h2-font-size;
+    }
+    &:hover {
+        color: $sdx-primary-color;
+    }
+    @include state('active') {
+        color: $sdx-primary-color;
+    }
+    @include state('disable') {
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+}

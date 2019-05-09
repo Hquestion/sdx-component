@@ -34,6 +34,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
    
     @include element('left') {
             @extend .boxStyle;
+            position: relative;
             .el-tree {
                 color: $sdx-text-regular-color;
                 padding-left: 4px;
@@ -58,6 +59,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         width: 100%;
         display: flex;
         flex-direction: row-reverse;
+        position: absolute;
+        left: 0;
+        bottom: 0;
     }
     @include element('moveicon') {
         height: $sdxu-transfer-default-height;
@@ -77,6 +81,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
     @include element('right') {
         @extend .boxStyle;
+        position: relative;
     }
     @include element('tag') {
         padding: $sdxu-transfer-margin-small;

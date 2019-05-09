@@ -1,112 +1,113 @@
 <template>
     <div class="sdxv-authorize-manage">
-        <div class="sdxv-authorize-manage__header">
-            <div class="sdxv-authorize-manage__title">
-                <span>授权管理</span>
-            </div>
-            <div class="sdxv-authorize-manage__handle">
-                <SdxuInput
-                    v-model="searchRoles.name"
-                    :searchable="true"
-                    size="small"
-                    type="search"
-                    @search="searchName"
-                    @keyup.native.enter="searchName"
-                />
-                <SdxuButton
-                    type="primary"
-                    placement="right"
-                    @click="addAuthorize"
-                    size="small"
-                >
-                    <i
-                        class="sdx-icon iconicon-plus"
+        <SdxuContentPanel
+            title="授权管理"
+        >
+            <div class="sdxv-authorize-manage__header">
+                <div class="sdxv-authorize-manage__handle">
+                    <SdxuInput
+                        v-model="searchRoles.name"
+                        :searchable="true"
+                        size="small"
+                        type="search"
+                        @search="searchName"
+                        @keyup.native.enter="searchName"
                     />
-                    新建授权
-                </sdxubutton>
-            </div>
-        </div>
-        <div class="sdxv-role-manage__table">
-            <SdxuTable
-                :data="tableData"  
-            >
-                <el-table-column
-                    prop="name"
-                    label="授权对象"
-                />
-                <el-table-column
-                    prop="description"
-                    label="对象类别"
-                />
-                <el-table-column
-                    prop="address"
-                    label="权限"
-                />
-                <el-table-column
-                    style="width: 15%"
-                    label="操作"
-                >
-                    <template
-                        slot-scope="scope"
-                        class="icon"
+                    <SdxuButton
+                        type="primary"
+                        placement="right"
+                        @click="addAuthorize"
+                        size="small"
                     >
                         <i
-                            class="sdx-icon iconicon-edit1 icon"
-                            @click="editRole(scope.row.uuid)"
+                            class="sdx-icon iconicon-plus"
                         />
-                        <i
-                            class="sdx-icon iconicon-delete1 icon"
-                            @click="removeRole(scope.row.uuid, scope.row.name)"
-                        />
-                    </template>
-                </el-table-column>
-            </SdxuTable>
-            <sdxu-pagination
-                :current-page.sync="current"
-                :page-size="pageSize"
-                :total="total"
-                @current-change="currentChange"
-            />
-        </div>
-        <sdxu-dialog
-            :visible.sync="dialogVisible"
-            @confirm="dialogConfirm"
-            @cancel="dialogCancel"
-            class="sdxv-authorize-model"
-        >
-            <div slot="title">
-                新建授权
+                        新建授权
+                    </sdxubutton>
+                </div>
             </div>
-            <div>
-                <el-form
-                    label-position="right"
-                    label-width="80px"
-                    @submit.native.prevent
-                    ref="user"
+            <div class="sdxv-role-manage__table">
+                <SdxuTable
+                    :data="tableData"  
                 >
-                    <el-form-item
+                    <el-table-column
                         prop="name"
                         label="授权对象"
+                    />
+                    <el-table-column
+                        prop="description"
+                        label="对象类别"
+                    />
+                    <el-table-column
+                        prop="address"
+                        label="权限"
+                    />
+                    <el-table-column
+                        style="width: 15%"
+                        label="操作"
                     >
-                        <el-select
-                            class="select"
-                            size="small"
-                            placeholder="请选择"
-                        />
-                    </el-form-item>
-                    <el-form-item
-                        label="权限设置"
-                    >
-                        <SdxuTransfer 
-                            :data="data"
-                            :tags.sync="tags"
-                            :default-keys.sync="defaultKeys"
-                            :tree-node-key="treeNodeKey"
-                        />
-                    </el-form-item>
-                </el-form>
+                        <template
+                            slot-scope="scope"
+                            class="icon"
+                        >
+                            <i
+                                class="sdx-icon iconicon-edit1 icon"
+                                @click="editRole(scope.row.uuid)"
+                            />
+                            <i
+                                class="sdx-icon iconicon-delete1 icon"
+                                @click="removeRole(scope.row.uuid, scope.row.name)"
+                            />
+                        </template>
+                    </el-table-column>
+                </SdxuTable>
+                <sdxu-pagination
+                    :current-page.sync="current"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="currentChange"
+                />
             </div>
-        </sdxu-dialog>
+            <sdxu-dialog
+                :visible.sync="dialogVisible"
+                @confirm="dialogConfirm"
+                @cancel="dialogCancel"
+                class="sdxv-authorize-model"
+            >
+                <div slot="title">
+                    新建授权
+                </div>
+                <div>
+                    <el-form
+                        label-position="right"
+                        label-width="80px"
+                        @submit.native.prevent
+                        ref="user"
+                    >
+                        <el-form-item
+                            prop="name"
+                            label="授权对象"
+                        >
+                            <el-select
+                                class="select"
+                                size="small"
+                                placeholder="请选择"
+                            />
+                        </el-form-item>
+                        <el-form-item
+                            label="权限设置"
+                        >
+                            <SdxuTransfer 
+                                :data="data"
+                                :tags.sync="tags"
+                                :default-keys.sync="defaultKeys"
+                                :tree-node-key="treeNodeKey"
+                            />
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </sdxu-dialog>
+        </SdxuContentPanel>
     </div>
 </template>
 
@@ -120,6 +121,7 @@ import SdxuTransfer from '@sdx/ui/components/transfer';
 import {Form, FormItem, Select} from 'element-ui';
 import {getPermissionsList} from '@sdx/utils/src/api/manage';
 import MessageBox from '@sdx/ui/components/message-box';
+import ContentPanel from '@sdx/ui/components/content-panel';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -132,6 +134,7 @@ export default {
         [FormItem.name]: FormItem,
         SdxuTransfer,
         [Select.name]: Select,
+        [ContentPanel.name]: ContentPanel,
     },
     data() {
         return {

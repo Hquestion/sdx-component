@@ -1,146 +1,147 @@
 <template>
     <div class="sdxv-role-manage">
-        <div class="sdxv-role-manage__header">
-            <div class="sdxv-role-manage__title">
-                <span>角色</span>
-            </div>
-            <div class="sdxv-role-manage__handle">
-                <SdxuInput
-                    v-model="searchRoles.name"
-                    :searchable="true"
-                    type="search"
-                    size="small"
-                    @search="searchName"
-                    @keyup.native.enter="searchName"
-                />
-                <SdxuButton
-                    type="primary"
-                    size="small"
-                    placement="right"
-                    @click="addRole"
-                >
-                    <i
-                        class="sdx-icon iconicon-plus"
-                    />
-                    新建角色
-                </sdxubutton>
-            </div>
-        </div>
-        <div class="sdxv-role-manage__table">
-            <SdxuTable
-                :data="tableData"  
-            >
-                <el-table-column
-                    prop="name"
-                    label="角色名"
-                />
-                <el-table-column
-                    prop="description"
-                    label="角色说明"
-                />
-                <el-table-column
-                    prop="domain"
-                    label="系统类别"
-                />
-                <el-table-column
-                    prop="createdAt"
-                    label="创建时间"
-                />
-                <el-table-column
-                    style="width: 15%"
-                    label="操作"
-                >
-                    <template
-                        slot-scope="scope"
-                        class="icon"
-                    >
-                        <i
-                            class="sdx-icon iconicon-edit1 icon"
-                            @click="editRole(scope.row.uuid)"
-                        />
-                        <i
-                            class="sdx-icon iconicon-delete1 icon"
-                            @click="removeRole(scope.row.uuid, scope.row.name)"
-                        />
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    type="expand"
-                >
-                    <template slot-scope="props">
-                        <div class="expand">
-                            <span>角色说明:</span>
-                            <span>{{ props.row.description }}</span>
-                        </div>
-                    </template>
-                </el-table-column>
-            </SdxuTable>
-            <div class="sdxv-role-manage__pagination">
-                <sdxu-pagination
-                    :current-page.sync="current"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="currentChange"
-                />
-            </div>
-        </div>
-        <sdxu-dialog
-            :visible.sync="dialogVisible"
-            @open="resetForm()"
+        <SdxuContentPanel
+            title="角色"
         >
-            <div slot="title">
-                {{ id ? '编辑角色': '新建角色' }}
+            <div class="sdxv-role-manage__header">
+                <div class="sdxv-role-manage__handle">
+                    <SdxuInput
+                        v-model="searchRoles.name"
+                        :searchable="true"
+                        type="search"
+                        size="small"
+                        @search="searchName"
+                        @keyup.native.enter="searchName"
+                    />
+                    <SdxuButton
+                        type="primary"
+                        size="small"
+                        placement="right"
+                        @click="addRole"
+                    >
+                        <i
+                            class="sdx-icon iconicon-plus"
+                        />
+                        新建角色
+                    </sdxubutton>
+                </div>
             </div>
-            <div>
-                <el-form
-                    label-width="100px"
-                    :model="roleObj"
-                    ref="currentRole"
-                    :rules="rules"
-                    @submit.native.prevent
+            <div class="sdxv-role-manage__table">
+                <SdxuTable
+                    :data="tableData"  
                 >
-                    <el-form-item
-                        label="角色名:"
+                    <el-table-column
                         prop="name"
-                    >
-                        <el-input v-model="roleObj.name" />
-                    </el-form-item>
-                    <el-form-item
-                        label="角色说明:"
+                        label="角色名"
+                    />
+                    <el-table-column
                         prop="description"
-                    >
-                        <el-input
-                            type="textarea"
-                            v-model="roleObj.description"
-                        />
-                    </el-form-item>
-                    <el-form-item
-                        label="系统类别:"
+                        label="角色说明"
+                    />
+                    <el-table-column
                         prop="domain"
+                        label="系统类别"
+                    />
+                    <el-table-column
+                        prop="createdAt"
+                        label="创建时间"
+                    />
+                    <el-table-column
+                        style="width: 15%"
+                        label="操作"
                     >
-                        <el-input
-                            v-model="roleObj.domain"
-                        />
-                    </el-form-item>
-                </el-form>
+                        <template
+                            slot-scope="scope"
+                            class="icon"
+                        >
+                            <i
+                                class="sdx-icon iconicon-edit1 icon"
+                                @click="editRole(scope.row.uuid)"
+                            />
+                            <i
+                                class="sdx-icon iconicon-delete1 icon"
+                                @click="removeRole(scope.row.uuid, scope.row.name)"
+                            />
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        type="expand"
+                    >
+                        <template slot-scope="props">
+                            <div class="expand">
+                                <span>角色说明:</span>
+                                <span>{{ props.row.description }}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </SdxuTable>
+                <div class="sdxv-role-manage__pagination">
+                    <sdxu-pagination
+                        :current-page.sync="current"
+                        :page-size="pageSize"
+                        :total="total"
+                        @current-change="currentChange"
+                    />
+                </div>
             </div>
-            <div slot="footer">
-                <SdxuButton
-                    type="default"
-                    size="small"
-                    @click="dialogCancel"
-                >
-                    取消
-                </sdxubutton>
-                <SdxuButton
-                    type="primary"
-                    size="small"
-                    @click="dialogConfirm"
-                >
-                    确定
-                </sdxubutton>
-            </div>
-        </sdxu-dialog>
+            <sdxu-dialog
+                :visible.sync="dialogVisible"
+                @open="resetForm()"
+            >
+                <div slot="title">
+                    {{ id ? '编辑角色': '新建角色' }}
+                </div>
+                <div>
+                    <el-form
+                        label-width="100px"
+                        :model="roleObj"
+                        ref="currentRole"
+                        :rules="rules"
+                        @submit.native.prevent
+                    >
+                        <el-form-item
+                            label="角色名:"
+                            prop="name"
+                        >
+                            <el-input v-model="roleObj.name" />
+                        </el-form-item>
+                        <el-form-item
+                            label="角色说明:"
+                            prop="description"
+                        >
+                            <el-input
+                                type="textarea"
+                                v-model="roleObj.description"
+                            />
+                        </el-form-item>
+                        <el-form-item
+                            label="系统类别:"
+                            prop="domain"
+                        >
+                            <el-input
+                                v-model="roleObj.domain"
+                            />
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div slot="footer">
+                    <SdxuButton
+                        type="default"
+                        size="small"
+                        @click="dialogCancel"
+                    >
+                        取消
+                    </sdxubutton>
+                    <SdxuButton
+                        type="primary"
+                        size="small"
+                        @click="dialogConfirm"
+                    >
+                        确定
+                    </sdxubutton>
+                </div>
+            </sdxu-dialog>
+        </SdxuContentPanel>
     </div>
 </template>
 
@@ -151,6 +152,7 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import MessageBox from '@sdx/ui/components/message-box';
+import ContentPanel from '@sdx/ui/components/content-panel';
 import {Form, FormItem}  from 'element-ui';
 import {getRolesList, createRoles, updateRoles, getRolesDetail, removeRoles} from '@sdx/utils/src/api/rolemange';
 export default {
@@ -163,7 +165,7 @@ export default {
         SdxuDialog,
         [Form.name]:Form,
         [FormItem.name]:FormItem,
-
+        [ContentPanel.name]: ContentPanel,
     },
     data() {
         return {

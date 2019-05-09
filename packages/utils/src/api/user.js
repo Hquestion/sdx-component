@@ -14,8 +14,8 @@ export function getGroupDetail(uuid) {
     return httpService.get(`/api/v1/groups/${uuid}`);
 }
 
-export function getGroupList(params) {
-    return httpService.get(`/api/v1/groups`, params);
+export function getUserList(params) {
+    return httpService.get(`/api/v1/users`, params);
 }
 
 export function getUserDetail(uuid) {

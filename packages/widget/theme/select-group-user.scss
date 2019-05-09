@@ -1,0 +1,5 @@
+@import '~@sdx/ui/theme/base';
+@import '~@sdx/ui/theme/transfer';
+
+@include block('select-group-user', $bem-namespace-widget) {
+}

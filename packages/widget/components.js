@@ -5,5 +5,6 @@ module.exports = {
     'change-password': './components/changePassword/index.js',
     'fold-label': './components/fold-label/index.js',
     'user-info-dialog': './components/userInfoDialog/index.js',
-    projectcard: './components/projectcard/index.js'
+    projectcard: './components/projectcard/index.js',
+    'select-group-user': './components/projectcard/index.js'
 };

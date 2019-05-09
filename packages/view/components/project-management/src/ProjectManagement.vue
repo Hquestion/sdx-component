@@ -1,45 +1,15 @@
 <template>
-    <div class="sdxv-project-management">
+    <sdxu-content-panel
+        class="sdxv-project-management"
+        title="项目列表"
+    >
         <div class="sdxv-project-management__header">
             <div class="sdxv-project-management__header--left">
-                项目列表
-            </div>
-            <div class="sdxv-project-management__header--right">
-                <sdxu-input
-                    v-model="searchName"
-                    searchable
-                    type="search"
-                    size="small"
-                    placeholder="请输入项目名"
-                    style="margin-right: 10px;"
-                    @search="searchProject"
-                />
-                <el-select
-                    v-model="sort"
-                    placeholder="请选择排序方式"
-                    size="medium"
-                    style="margin-right: 10px;"
-                >
-                    <el-option
-                        label="按创建时间排序"
-                        value="created_time"
-                    />
-                    <el-option
-                        label="按创建人排序"
-                        value="created_by"
-                    />
-                    <el-option
-                        label="按项目类型排序"
-                        value="project_type"
-                    />
-                </el-select>
                 <sdxu-button
-                    icon-only
                     placement="right"
-                    dropdown-width="120px"
-                    style="width: 120px;"
+                    size="small"
+                    icon="iconicon-plus"
                 >
-                    <i class="sdx-icon iconicon-plus" />
                     新建项目
                     <template slot="dropdown">
                         <SdxuButton
@@ -68,6 +38,35 @@
                         </SdxuButton>
                     </template>
                 </sdxu-button>
+            </div>
+            <div class="sdxv-project-management__header--right">
+                <sdxu-input
+                    v-model="searchName"
+                    searchable
+                    type="search"
+                    size="small"
+                    placeholder="请输入项目名"
+                    style="margin-right: 10px;"
+                    @search="searchProject"
+                />
+                <el-select
+                    v-model="sort"
+                    placeholder="请选择排序方式"
+                    size="medium"
+                >
+                    <el-option
+                        label="按创建时间排序"
+                        value="created_time"
+                    />
+                    <el-option
+                        label="按创建人排序"
+                        value="created_by"
+                    />
+                    <el-option
+                        label="按项目类型排序"
+                        value="project_type"
+                    />
+                </el-select>
             </div>
         </div>
         <div
@@ -98,7 +97,7 @@
             :data="editingProject"
             :create-type="createType"
         />
-    </div>
+    </sdxu-content-panel>
 </template>
 
 <script>
@@ -106,6 +105,7 @@ import Input from "@sdx/ui/components/input";
 import Button from "@sdx/ui/components/button";
 import CreateProject from './CreateProject';
 import Pagination from "@sdx/ui/components/pagination";
+import ContentPanel from "@sdx/ui/components/content-panel";
 import ProjectCard from '@sdx/widget/components/projectcard/src/ProjectCard';
 import ProjectCardList from '@sdx/widget/components/projectcard/src/ProjectCardList';
 import MessageBox from '@sdx/ui/components/message-box';
@@ -134,7 +134,8 @@ export default {
         [Pagination.name]: Pagination,
         [CreateProject.name]: CreateProject,
         [ProjectCard.name]: ProjectCard,
-        [ProjectCardList.name]: ProjectCardList
+        [ProjectCardList.name]: ProjectCardList,
+        [ContentPanel.name]: ContentPanel
     },
     created() {
         this.initList();

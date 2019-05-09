@@ -50,15 +50,11 @@
             </el-form-item>
             <el-form-item
                 label="协作者/组："
-                prop="member"
                 v-show="!projectForm.isTemplate"
             >
-                <SdxuTransfer
-                    v-model="member"
-                    :data="memberSource"
-                    :tags.sync="tags"
-                    :default-keys.sync="defaultKeys"
-                    :tree-node-key="treeNodeKey"
+                <sdxw-select-group-user
+                    :tags.sync="userGroupTags"
+                    :default-keys="defaultUserGroupKeys"
                 />
             </el-form-item>
         </el-form>
@@ -132,6 +128,7 @@ import Button from '@sdx/ui/components/button';
 import TabRadio from '@sdx/ui/components/tab-radio';
 import ProjectCard from '@sdx/widget/components/projectcard/src/ProjectCard';
 import ProjectCardList from '@sdx/widget/components/projectcard/src/ProjectCardList';
+import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Switch, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
 import { updateProject, getProjectList, createProject } from "@sdx/utils/src/api/project";
@@ -157,7 +154,9 @@ export default {
             loading: false,
             projectType: 'private',
             totalProjects: [],
-            searchName: ''
+            searchName: '',
+            userGroupTags: [],
+            defaultUserGroupKeys: []
         };
     },
     components: {
@@ -172,7 +171,8 @@ export default {
         [ProjectCardList.name]: ProjectCardList,
         [Scrollbar.name]: Scrollbar,
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
-        [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem
+        [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
+        [SelectGroupUser.name]: SelectGroupUser
     },
     props: {
         visible: {
@@ -205,6 +205,14 @@ export default {
         console.log('created', this.createType);
         if (this.isEditing) {
             Object.assign(this.projectForm, this.data);
+            /* console.log('this.data', this.data);
+            this.data.users.forEach(user => {
+                this.userGroupTags.push({
+                    is_group: false,
+                    uuid: user.uuid,
+                    name: user.fullName
+                });
+            }); */
             this.title = "编辑项目";
         } else if (this.createType === 'template') {
             this.getProjectList('template');
@@ -256,6 +264,18 @@ export default {
                 if (!valid) {
                     Message.error('请输入必填信息');
                 } else {
+                    console.log('this.tags', this.userGroupTags);
+                    this.projectForm.users = [];
+                    this.projectForm.groups = [];
+                    if (!this.projectForm.isTemplate) {
+                        this.userGroupTags.forEach(item => {
+                            if (item.is_group) {
+                                this.projectForm.groups.push(item.uuid);
+                            } else {
+                                this.projectForm.users.push(item.uuid.split('/')[1]);
+                            }
+                        });
+                    }
                     if (this.isEditing) {
                         updateProject(this.projectForm.uuid, this.projectForm).then(() => {
                             Message({

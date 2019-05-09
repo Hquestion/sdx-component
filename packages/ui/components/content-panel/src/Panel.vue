@@ -1,17 +1,17 @@
 <template>
-    <div class="sdxu-contnet-panel">
-        <div class="sdxu-contnet-panel__header">
-            <div class="sdxu-contnet-panel__title">
+    <div class="sdxu-content-panel">
+        <div class="sdxu-content-panel__header">
+            <div class="sdxu-content-panel__title">
                 <span>{{ title }}</span>
-                <span class="sdxu-contnet-panel__subtitle">{{ subtitle }}</span>
+                <span class="sdxu-content-panel__subtitle">{{ subtitle }}</span>
             </div>
-            <div class="sdxu-contnet-panel__right">
+            <div class="sdxu-content-panel__right">
                 <slot name="right" />
             </div>
         </div>
-        <div class="sdxu-contnet-panel__main">
+        <div class="sdxu-content-panel__main">
             <slot>
-                <div class="sdxu-contnet-panel__main__empty">
+                <div class="sdxu-content-panel__empty">
                     暂无内容
                 </div>
             </slot>

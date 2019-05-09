@@ -1,7 +1,3 @@
-$sdxu-placehilder-height-regular: 20px !default;
-$sdxu-placehilder-height-small: 10px !default;
-$sdxu-placehilder-height-large: 40px !default;
-
 @include block('placeholder-block', $bem-namespace-ui) {
     background: #fafbfc;
     height: $sdxu-placehilder-height-regular;

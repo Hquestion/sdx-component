@@ -1,12 +1,4 @@
-$sdx-content-panel-padding: 20px 20px 40px !default;
-$sdx-content-panel-bg: #fff !default;
-$sdx-content-panel-title-margin-left: 12px !default;
-$sdx-content-panel-title-width: 3px !default;
-$sdx-content-panel-title-height: 16px !default;
-$sdx-content-panel-main-min-height: 50px !default;
-$sdx-content-panel-subtitle-margin-left: 10px !default;
-
-@include block('contnet-panel', $bem-namespace-ui) {
+@include block('content-panel', $bem-namespace-ui) {
     border-radius: $sdx-border-radius;
     background: $sdx-content-panel-bg;
     padding: $sdx-content-panel-padding;

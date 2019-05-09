@@ -1,5 +1,5 @@
 <template>
-    <div class="rule-form">
+    <div class="rule-form" :class="[`rule-form--${mode}`]">
         <el-form
             :model="params"
             :label-position="labelPosition"
@@ -238,6 +238,18 @@ export default {
         }
         & /deep/ .input-readonly {
             margin: 0 5px;
+        }
+        &.rule-form--v {
+            & /deep/ .sdxu-input {
+                margin: 0 5px;
+                input {
+                    width: 100px;
+                }
+            }
+            & /deep/ .el-select {
+                margin: 0 5px;
+                width: 100px;
+            }
         }
     }
 </style>

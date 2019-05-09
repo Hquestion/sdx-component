@@ -14,6 +14,10 @@ export function getGroupDetail(uuid) {
     return httpService.get(`/api/v1/groups/${uuid}`);
 }
 
+export function getUserSimpleInfo(uuid) {
+    return httpService.get(`/api/v1/users/${uuid}`);
+}
+
 export function getUserDetail(uuid) {
     return httpService.get(`/api/v1/users/${uuid}`).then(res => {
         const { roles, groups } = res;

@@ -1,4 +1,5 @@
 import httpService from '@sdx/utils/lib/http-service';
+import { getUserSimpleInfo } from "@sdx/utils/lib/api/user";
 
 export function getResourceTmplList(start = 1, count = -1, templateType) {
     return httpService.get('/api/v1/resource_templates', {
@@ -13,13 +14,35 @@ export function deleteResourceTmpl(uuid) {
 }
 
 export function getResourceConfigDetail(uuid) {
-    return httpService.get(`/api/v1/resource_configs`, {
+    return httpService.get(`/api/v1/resource_config`, {
         uuid
+    });
+}
+
+export function getResourceConfigs(start = 1, count = -1, parameterType = 'USER') {
+    return httpService.get('/api/v1/resource_configs', {
+        start,
+        count,
+        parameterType
+    }).then(res => {
+        const { items } = res;
+        const userInfoDeferArr = items.map(item => getUserSimpleInfo(item.user_Id));
+        return new Promise((resolve, reject) => {
+            Promise.all(userInfoDeferArr).then(resp => {
+                items.forEach((item, index) => {
+                    item.userName = resp[index].fullName;
+                });
+                resolve(res);
+            }, () => {
+                resolve(res);
+            });
+        });
     });
 }
 
 export default {
     getResourceTmplList,
     deleteResourceTmpl,
-    getResourceConfigDetail
+    getResourceConfigDetail,
+    getResourceConfigs
 };

@@ -11,8 +11,8 @@ export function createRoles(params) {
     return httpService.post(rolesApi, params);
 }
 
-export function updateRoles(uuid) {
-    return httpService.put(rolesApi + uuid);
+export function updateRoles(uuid, params) {
+    return httpService.put(rolesApi + uuid, params);
 }
 
 export function getRolesDetail(uuid) {

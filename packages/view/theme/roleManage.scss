@@ -39,6 +39,19 @@
         .el-pagination  {
             padding:  $sdx-padding
         }
+        .expand {
+            display: flex;
+            span:first-child {
+                min-width: 70px;
+                font-weight:bold;
+                color:rgba(144,147,153,1);
+            }
+        }
+        .icon {
+            font-size: 14px; 
+            color: #C0C4CC;
+            margin-right: 20px;
+        }
     }
 }
 

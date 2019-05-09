@@ -22,7 +22,42 @@
                         params: 'userInfoData',
                         describe: '用户信息',
                         type: 'Object',
-                        optionValue: 'username:String, fullname:String, password:String, roles:Array, group:Array',
+                        optionValue: '—',
+                        defaultValue: '—'
+                    },
+                    {
+                        params: 'username',
+                        describe: '用户名（userInfoData中的属性）',
+                        type: 'String',
+                        optionValue: '—',
+                        defaultValue: '—'
+                    },
+                    {
+                        params: 'fullName',
+                        describe: '显示名（userInfoData中的属性）',
+                        type: 'String',
+                        optionValue: '—',
+                        defaultValue: '—'
+                    },
+                    {
+                        params: 'password',
+                        describe: '密码（userInfoData中的属性）',
+                        type: 'String',
+                        optionValue: '—',
+                        defaultValue: '—'
+                    },
+                    {
+                        params: 'roles',
+                        describe: '角色（userInfoData中的属性）',
+                        type: 'Array',
+                        optionValue: '—',
+                        defaultValue: '—'
+                    },
+                    {
+                        params: 'group',
+                        describe: '用户组（userInfoData中的属性）',
+                        type: 'Array',
+                        optionValue: '—',
                         defaultValue: '—'
                     },
                     {
@@ -36,7 +71,7 @@
                         params: 'id',
                         describe: '用户ID',
                         type: 'String',
-                        optionValue: '-',
+                        optionValue: '—',
                         defaultValue: '—'
                     }
                 ]

@@ -30,7 +30,7 @@ export default {
             if(theme == 'dashboard'){
                 this.getUserInfo();
             }else if(theme == 'user'){
-                this.id = '123';
+                this.id = '4bad15f8-29fd-4f8b-a19c-e1873dbd7706';
             }
         },
         getUserInfo(){

@@ -5,10 +5,8 @@
 ## Example
 
 
-
-<!-- <widget-userInfoDialog-dashboardUserInfo></widget-userInfoDialog-dashboardUserInfo> -->
 #### 直接渲染代码如下：
-
+<Common-BasicUsage>
   <highlight-code slot="codeText" lang="vue">
         <template>
             <sdxw-userInfoDialog 
@@ -18,10 +16,14 @@
             />
         </template>
   </highlight-code>
+  </Common-BasicUsage>
+
+
+ 
 
 <!-- <widget-userInfoDialog-userManageInfo></widget-userInfoDialog-userManageInfo> -->
 #### 传入ID代码如下：
-
+<Common-BasicUsage>
   <highlight-code slot="codeText" lang="vue">
         <template>
             <sdxw-userInfoDialog 
@@ -31,10 +33,12 @@
             />
         </template>
   </highlight-code>
+  </Common-BasicUsage>
+  
 
 
 ::: tip 
-dialog弹框引用的是基础业务组件中的dialog对话框,两种主题的theme值分别为"dashboard"和"user".
+dialog弹框引用的是基础业务组件中的dialog对话框,两种主题的theme值分别为"dashboard"和"user",dashboard主题中显示名鼠标滑过显示input框可进行信息的修改。
 :::
 
 ## Usage

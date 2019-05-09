@@ -26,7 +26,7 @@
                         {{t('widget.userInfo.username')}}：
                     </span> 
                     <span class="sdxw-userinfo__item--data">
-                        {{users.userName}}
+                        {{users.username}}
                     </span>
                 </div>
                 <div class="sdxw-userinfo__item" :class="[`sdxw-userinfo__item--${theme}fullname`]">
@@ -36,7 +36,15 @@
                     <span  v-if="theme == 'user'" class="sdxw-userinfo__item--data">
                         {{users.fullName}}
                     </span>
-                    <input v-if="theme == 'dashboard'" type="text" id="" v-model="users.fullName">
+                    <input 
+                        :class="[showInput == true? 'sdxw-userinfo__item--input' : '']"
+                        @mouseover="showFullNameInput"
+                        @mouseout="hideFullNameInput" 
+                        @keydown.enter="changeFullName"
+                        v-if="theme == 'dashboard'" 
+                        id="fullName"
+                        type="text"
+                        v-model="users.fullName">
                 </div>
                 <div v-if="theme == 'user'" class="sdxw-userinfo__item">
                     <span class="sdxw-userinfo__item--title">
@@ -75,7 +83,12 @@
     </div>
 </template>
 <script>
-import { userApi } from '@sdx/utils/src/api';
+import { 
+    getUserDetail ,
+    getGroupDetail,
+    getRoleDetail,
+    changeUserInfo
+} from '@sdx/utils/src/api/user';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import locale from '@sdx/utils/src/mixins/locale';
 import httpService from '@sdx/utils/src/http-service';
@@ -84,8 +97,9 @@ export default {
     name:'SdxwUserInfoDialog',
     data () {
         return {
+            showInput:false,
             dialogVisible: this.visible,
-            users:this.userInfoData,
+            users:this.userInfoData
         }
     },
     mixins:[locale],
@@ -98,7 +112,7 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    userName:'',
+                    username:'',
                     fullName:'',
                     password:'',
                     roles:[],
@@ -131,14 +145,37 @@ export default {
             this.$emit('update:visible', false); 
             this.$emit('close');
         },
-        getData(){
-            if(this.id){
-                userApi.getUserDetail(this.id)
-                    .then(( res ) => {
-                        this.users = res;    
-                    }).catch(() => {
-                    
+        //显示fullName input框
+        showFullNameInput() {
+            this.showInput = true;
+            document.getElementById("fullName").focus();
+        },
+        //隐藏fullName input框
+        hideFullNameInput() {
+            this.showInput = false;
+            document.getElementById("fullName").blur();
+        },
+        //修改fullName的值 
+        changeFullName() {
+            if(this.users.fullName!=''){
+                changeUserInfo(this.users)
+                    .then((res) => {
+                        this.$message({
+                            message: '显示名修改成功',
+                            type: 'success'
+                        });
+                        this.dialogVisible = false;
                     });
+            }
+        },
+        getData() {
+            if(this.id){
+                getUserDetail(this.id)
+                    .then(( res ) => {
+                        this.users = res; 
+                        this.users.group = res.groupNames;
+                        this.users.roles = res.roleNames;
+                    })
             }
         }
     },

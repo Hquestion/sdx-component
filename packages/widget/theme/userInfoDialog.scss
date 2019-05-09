@@ -37,9 +37,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             @include modifier('data') {
                 font-weight: bold;
             }
+            @include modifier('input') {
+                border: 1px solid $sdxw-userInfoDialog-border-color!important;
+                padding-left: $sdxw-userInfoDialog-margin!important;
+            }
             @include modifier('dashboardfullname') {
                 input {
-                    border: 1px solid #E4E7ED;
+                    cursor: pointer;
+                    border: 1px solid #fff;
                     width: $sdxw-userInfoDialog-input-width;
                     padding: $sdxw-userInfoDialog-padding;
                     height: $sdxw-userInfoDialog-item-height;
@@ -47,6 +52,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                     font-weight: 100!important;
                     margin-top: -$sdxw-userInfoDialog-margin;
                     line-height: $sdxw-userInfoDialog-item-height;
+                    padding-left: 0;
                 }
             }
         }

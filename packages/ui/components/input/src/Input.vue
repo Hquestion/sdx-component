@@ -1,7 +1,10 @@
 <template>
     <div
         class="sdxu-input"
-        :class="'sdxu-input--' + size"
+        :class="[
+            'sdxu-input--' + size,
+            inline ? 'is-inline': ''
+        ]"
     >
         <el-input
             v-bind="attrs"
@@ -74,6 +77,10 @@ export default {
             validator: function (value) {
                 return ['regular', 'small'].includes(value);
             }
+        },
+        inline: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -88,7 +95,7 @@ export default {
                 size: '', // 忽略element中size,
                 'show-password': false // 忽略element中的show-password
             };
-            
+
             // 添加搜索框
             if (this.searchable) {
                 customAttr['suffix-icon'] = 'sdx-icon iconicon-search sdxu-input__icon';

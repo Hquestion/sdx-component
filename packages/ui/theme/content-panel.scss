@@ -4,6 +4,7 @@ $sdx-content-panel-title-margin-left: 12px !default;
 $sdx-content-panel-title-width: 3px !default;
 $sdx-content-panel-title-height: 16px !default;
 $sdx-content-panel-main-min-height: 50px !default;
+$sdx-content-panel-subtitle-margin-left: 10px !default;
 
 @include block('contnet-panel', $bem-namespace-ui) {
     border-radius: $sdx-border-radius;
@@ -29,6 +30,12 @@ $sdx-content-panel-main-min-height: 50px !default;
             vertical-align: middle;
             margin-right: $sdx-content-panel-title-margin-left;
         }
+    }
+    @include element('subtitle') {
+        font-size: $sdx-help-font-size;
+        color: $sdx-text-minor-color;
+        letter-spacing: 0;
+        margin-left: $sdx-content-panel-subtitle-margin-left;
     }
     @include element('main') {
         margin-top: $sdx-margin;

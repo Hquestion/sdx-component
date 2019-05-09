@@ -19,7 +19,7 @@
                         defaultValue: '--',
                     },
                     {
-                        params: 'params',
+                        params: '',
                         describe: 'element-ui table组件属性和事件',
                         type: 'Object',
                         optionValue: '--',

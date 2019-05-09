@@ -4,23 +4,27 @@
             <SdxuInput
                 size="small"
                 :placeholder="placeholder"
-                :searchable="true"
+                type="search"
                 v-model="filterText"
             />
             <el-scrollbar
                 class="sdxu-transfer__scrollbar"
                 wrap-class="sdxu-transfer__wrap" 
             >
-                <el-tree
-                    :data="data"
-                    show-checkbox
-                    :node-key="treeNodeKey"
-                    ref="tree"
-                    :filter-node-method="filterNode"
-                    check-on-click-node
-                    :default-checked-keys="defaultKeys"
-                    @check="checkChange"
-                />
+                <div
+                    class="sdxu-transfer__tree"
+                >
+                    <el-tree
+                        :data="data"
+                        show-checkbox
+                        :node-key="treeNodeKey"
+                        ref="tree"
+                        :filter-node-method="filterNode"
+                        check-on-click-node
+                        :default-checked-keys="defaultKeys"
+                        @check="checkChange"
+                    />
+                </div>
             </el-scrollbar>
             <div class="sdxu-transfer__moveall">
                 <SdxuButton
@@ -97,6 +101,7 @@ export default {
         return {
             filterText: '',
             checkedTags: [],
+            is_moveall: false
         };
     },
     components: {
@@ -116,7 +121,9 @@ export default {
             for (let i = 0; i< this.checkedTags.length; i++) {
                 checkKeys.push(this.checkedTags[i][this.treeNodeKey]);
             }
-            if(tagsKey.sort().toString() == checkKeys.sort().toString()) {
+            if(this.is_moveall) {
+                hightIcon =  false;
+            }else if(tagsKey.sort().toString() == checkKeys.sort().toString()) {
                 hightIcon =  false;
             } else {
                 hightIcon = true;
@@ -166,6 +173,7 @@ export default {
             this.checkedTags = this.getTags();
         },
         moveAllTag() {
+            this.checkedTags = this.getTags();
             let [tags, keys] = [[], []];
             for (let i =0; i < this.data.length; i ++) {
                 tags.push(
@@ -182,11 +190,12 @@ export default {
                     }
                 }
             }
-            this.checkedTags = this.getTags();
+            this.is_moveall = true;
             this.$emit('update:defaultKeys',keys);
             this.$emit('update:tags',tags);
         },
         checkChange(data, obj) {
+            this.is_moveall = false;
             this.checkedTags = this.getTags();
             this.$emit('update:defaultKeys',obj.checkedKeys);
         },
@@ -204,7 +213,6 @@ export default {
         filterText(val) {
             this.$refs.tree.filter(val);
         }
-    
     },
 };
 </script>

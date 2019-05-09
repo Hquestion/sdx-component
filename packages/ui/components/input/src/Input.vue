@@ -18,9 +18,16 @@
             <template #suffix>
                 <i
                     v-if="passwordVisibleness && !isDisabled"
-                    class="sdx-icon sdxu-input__icon"
-                    :class="pwdSuffixIcon"
+                    class="sdx-icon sdxu-input__icon is-clickable"
+                    :class="{'iconicon-eye-close': showPwd,
+                             'iconicon-eye-open': showPwd}"
                     @click="showPwd = !showPwd"
+                />
+                <i
+                    v-else-if="isSearchType"
+                    class="sdx-icon sdxu-input__icon iconicon-search"
+                    :class="{'is-clickable': searchable}"
+                    @click="searchable ? $emit('search') : null"
                 />
                 <slot
                     v-else
@@ -95,14 +102,11 @@ export default {
                 size: '', // 忽略element中size,
                 'show-password': false // 忽略element中的show-password
             };
-
-            // 添加搜索框
-            if (this.searchable) {
-                customAttr['suffix-icon'] = 'sdx-icon iconicon-search sdxu-input__icon';
-            }
             if (this.$attrs.type === 'password') {
                 customAttr['suffix-icon'] = '';
                 customAttr['type'] = this.showPwd ? 'text' : 'password';
+            } else if (this.$attrs.type === 'search') {
+                customAttr['suffix-icon'] = '';
             }
             return Object.assign({}, this.$attrs, customAttr);
         },
@@ -115,6 +119,9 @@ export default {
         isPwdType() {
             return this.$attrs.type === 'password';
         },
+        isSearchType() {
+            return this.$attrs.type === 'search';
+        },
         modelVaule: {
             get() {
                 return this.$attrs.value;
@@ -123,9 +130,6 @@ export default {
                 this.$emit('input', nval);
             }
 
-        },
-        pwdSuffixIcon() {
-            return this.showPwd ? 'iconicon-eye-close' : 'iconicon-eye-open';
         },
         pwdLevel() {
             let level = 0;

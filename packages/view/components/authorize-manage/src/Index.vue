@@ -47,26 +47,28 @@
                         label="操作"
                     >
                         <template
-                            slot-scope="scope"
+                            slot-scope=""
                             class="icon"
                         >
                             <i
                                 class="sdx-icon iconicon-edit1 icon"
-                                @click="editRole(scope.row.uuid)"
+                                @click="editRole()"
                             />
                             <i
                                 class="sdx-icon iconicon-delete1 icon"
-                                @click="removeRole(scope.row.uuid, scope.row.name)"
+                                @click="removeRole()"
                             />
                         </template>
                     </el-table-column>
                 </SdxuTable>
-                <sdxu-pagination
-                    :current-page.sync="current"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="currentChange"
-                />
+                <div class="sdxv-role-manage__pagination">
+                    <sdxu-pagination
+                        :current-page.sync="current"
+                        :page-size="pageSize"
+                        :total="total"
+                        @current-change="currentChange"
+                    />
+                </div>
             </div>
             <sdxu-dialog
                 :visible.sync="dialogVisible"
@@ -182,14 +184,14 @@ export default {
                 .then(data => {
                     this.tableData = data.permissions;
                     this.total = data.total;
-                    console.log(data, 88);
+                   
                 });
         },
         currentChange() {
-            console.log(123);
+           
         },
         addAuthorize() {
-            console.log(123);
+           
             this.dialogVisible = true;
         },
         dialogConfirm() {
@@ -205,21 +207,21 @@ export default {
             });
             this.roleList();
         },
-        editRole(id) {
+        editRole() {
             
             this.dialogVisible = true;
                 
         },
-        removeRole(id, name) {
+        removeRole() {
             MessageBox.confirm({
-                title: `确定删除授权${name}吗？`,
+                title: `确定删除授权吗？`,
                 content: '删除后不可恢复哦',
                 type: 'alert'
             }).then(() => {
-                removeRoles(id)
-                    .then(() => {
-                        this.roleList();
-                    });
+                // removeRoles(id)
+                //     .then(() => {
+                //         this.roleList();
+                //     });
             }, () => {
                 
             });

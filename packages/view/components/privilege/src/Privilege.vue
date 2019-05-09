@@ -1,12 +1,7 @@
 <template>
-    <div class="sdxv-privilege">
-        <!-- <div class="sdxv-privilege__title">
-            <span class="sdxv-privilege__title--text">
-                权限
-            </span>
-        </div> -->
-        <div class="sdxv-privilege__container">
-            <!-- <div class="sdxv-privilege__container--bar">
+    <sdxu-content-panel>
+        <div class="sdxv-privilege">
+            <!-- <div class="sdxv-privilege__--bar">
                 <sdxu-tab-radio-group v-model="activeTab">
                     <sdxu-tab-radio-item name="system">
                         系统基础权限
@@ -16,20 +11,19 @@
                     </sdxu-tab-radio-item>
                 </sdxu-tab-radio-group>
             </div> -->
-            <div class="sdxv-privilege__container--table">
-                <transition name="fade">
-                    <privilege-system v-if="activeTab === 'system'" />
-                    <privilege-custom v-else />
-                </transition>
-            </div>
+            <transition name="fade">
+                <privilege-system v-if="activeTab === 'system'" />
+                <privilege-custom v-else />
+            </transition>
         </div>
-    </div>
+    </sdxu-content-panel>
 </template>
 
 <script>
 // import { TabRadioItem as SdxuTabRadioItem, TabRadioGroup as SdxuTabRadioGroup } from '@sdx/ui/components/tab-radio';
 // import SdxuTabRadioItem from '@sdx/ui/components/tab-radio/src/TabRadio';
 // import SdxuTabRadioGroup from '@sdx/ui/components/tab-radio/src/TabRadioGroup';
+import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import PrivilegeCustom from './PrivilegeCustom';
 import PrivilegeSystem from './PrivilegeSystem';
 
@@ -40,7 +34,8 @@ export default {
         // SdxuTabRadioItem,
         // SdxuTabRadioGroup,
         PrivilegeCustom,
-        PrivilegeSystem
+        PrivilegeSystem,
+        SdxuContentPanel
     },
     data() {
         return {

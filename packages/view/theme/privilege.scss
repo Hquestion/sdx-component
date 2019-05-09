@@ -1,31 +1,12 @@
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @include block('privilege', $bem-namespace-view) {
-    background: #F7F7F7;
-    padding: $sdx-padding $sdx-padding;
-    // @include element('title') {
-    //     display: flex;
-    //     align-items: center;
-    //     height:46px;
+    display: flex;
+    flex-flow: column nowrap;
+    align-content: flex-start;
 
-    //     @include modifier('text') {
-    //         line-height: 14px;
-    //         font-size:14px;
-    //         font-weight:500;
-    //         color:#303133;
-    //     }
-    // }
-
-    @include element('container') {
-        display: flex;
-        flex-flow: column nowrap;
-        align-content: flex-start;
-        background: #fff;
-        padding: 30px $sdx-padding $sdx-padding;
-
-        @include modifier('bar') {
-            margin-bottom: $sdx-margin;
-        }
+    @include element('bar') {
+        margin-bottom: $sdx-margin;
     }
 }
 

@@ -1,0 +1,98 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@include block('privilege', $bem-namespace-view) {
+    background: #F7F7F7;
+    padding: 0 $sdx-padding $sdx-padding;
+    @include element('title') {
+        display: flex;
+        align-items: center;
+        height:46px;
+
+        @include modifier('text') {
+            line-height: 14px;
+            font-size:14px;
+            font-weight:500;
+            color:#303133;
+        }
+    }
+
+    @include element('container') {
+        display: flex;
+        flex-flow: column nowrap;
+        align-content: flex-start;
+        background: #fff;
+        padding: 30px $sdx-padding $sdx-padding;
+
+        @include modifier('bar') {
+            margin-bottom: $sdx-margin;
+        }
+    }
+}
+
+@include block('privilege-system', $bem-namespace-view) {
+    display: flex;
+    flex-flow: column nowrap;
+
+    @include element('search') {
+        align-self: flex-end;
+        width: 224px;
+    }
+
+    @include element('table') {
+        margin: $sdx-margin 0;
+        font-size:14px;
+        color:rgba(96,98,102,1);
+        line-height:14px;
+        @include modifier('tag') {
+            height:22px;
+            background:rgba(242,246,252,1);
+            border-radius:14px;
+            padding: 0 12px;
+            font-size:12px;
+            color:rgba(70,129,248,1);
+            line-height:22px;
+        }
+    }
+
+    @include element('expand') {
+        @include modifier('label') {
+            font-weight:bold;
+            color:rgba(144,147,153,1);
+            line-height:21px;
+            margin-right: $sdx-margin;
+        }
+        @include modifier('detail') {
+            line-height:24px;
+        }
+    }
+
+    @include element('pagination') {
+        align-self: flex-end;
+    }
+}
+
+@include block('privilege-custom', $bem-namespace-view) {
+    display: flex;
+    flex-flow: column nowrap;
+
+    @include element('bar') {
+        display: flex;
+        justify-content: space-between;
+
+        @include modifier('button') {
+            
+        }
+
+        @include modifier('input') {
+            width: 224px;
+        }
+    }
+
+    @include element('table') {
+        margin: $sdx-margin 0;
+    }
+
+    @include element('pagination') {
+        align-self: flex-end;
+    }
+}

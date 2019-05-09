@@ -34,6 +34,11 @@
             </button>
         </p>
         <p class="page-link">
+            <button @click="$router.push('/Cache/authorizeManage')">
+                前往权限管理页面
+            </button>
+        </p>
+        <p class="page-link">
             <button @click="toBack">
                 返回
             </button>

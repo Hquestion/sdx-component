@@ -1,0 +1,13 @@
+@include block('placeholder-block', $bem-namespace-ui) {
+    background: #fafbfc;
+    height: $sdxu-placehilder-height-regular;
+    @include modifier('regular') {
+        height: $sdxu-placehilder-height-regular;
+    }
+    @include modifier('small') {
+        height: $sdxu-placehilder-height-small;
+    }
+    @include modifier('large') {
+        height: $sdxu-placehilder-height-large;
+    }
+}

@@ -4,6 +4,7 @@
             :data="data"
             :tags.sync="tags"
             :default-keys.sync="defaultKeys"
+            :tree-node-key="treeNodeKey"
         />
     </div>
 </template>
@@ -14,45 +15,46 @@ export default {
     data () {
         return {
             data:[{
-                id: 1,
+                unid: 1,
                 label: '一级 1',
                 children: [{
-                    id: 4,
+                    unid: 4,
                     label: '二级 1-1',
                 }]
             }, {
-                id: 2,
+                unid: 2,
                 label: '一级 2',
                 children: [{
-                    id: 5,
+                    unid: 5,
                     label: '二级 2-1'
                 }, {
-                    id: 6,
+                    unid: 6,
                     label: '二级 2-2'
                 }]
             }, {
-                id: 3,
+                unid: 3,
                 label: '一级 3',
                 children: [{
-                    id: 7,
+                    unid: 7,
                     label: '二级 3-1'
                 }, {
-                    id: 8,
+                    unid: 8,
                     label: '二级 3-2'
                 }]
             }, {
-                id: 41,
+                unid: 41,
                 label: '一级 4',
                 children: [{
-                    id: 92,
+                    unid: 92,
                     label: '二级 4-1'
                 }, {
-                    id: 14,
+                    unid: 14,
                     label: '二级 4-2'
                 }]
             }], 
             tags: [],
-            defaultKeys: [14]
+            defaultKeys: [14],
+            treeNodeKey: 'unid'
         };
     },
     components:{

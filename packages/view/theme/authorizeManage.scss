@@ -1,8 +1,4 @@
 @include block('authorize-manage',$bem-namespace-view) {
-    background: $sdxu-role-table-background;
-    box-shadow: 0 0 22px 0 $sdxu-role-table-shadow;
-    border-radius: $sdx-border-radius;
-    padding: $sdxu-role-padding-top $sdx-padding;
     @include element('header') {
         margin-bottom: $sdxu-role-margin-size;
         @include element('title') {

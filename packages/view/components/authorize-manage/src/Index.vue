@@ -5,14 +5,6 @@
         >
             <div class="sdxv-authorize-manage__header">
                 <div class="sdxv-authorize-manage__handle">
-                    <SdxuInput
-                        v-model="searchRoles.name"
-                        :searchable="true"
-                        size="small"
-                        type="search"
-                        @search="searchName"
-                        @keyup.native.enter="searchName"
-                    />
                     <SdxuButton
                         type="primary"
                         placement="right"
@@ -24,6 +16,14 @@
                         />
                         新建授权
                     </sdxubutton>
+                    <SdxuInput
+                        v-model="searchRoles.name"
+                        :searchable="true"
+                        size="small"
+                        type="search"
+                        @search="searchName"
+                        @keyup.native.enter="searchName"
+                    />
                 </div>
             </div>
             <div class="sdxv-role-manage__table">

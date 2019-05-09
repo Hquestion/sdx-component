@@ -5,14 +5,6 @@
         >
             <div class="sdxv-role-manage__header">
                 <div class="sdxv-role-manage__handle">
-                    <SdxuInput
-                        v-model="searchRoles.name"
-                        :searchable="true"
-                        type="search"
-                        size="small"
-                        @search="searchName"
-                        @keyup.native.enter="searchName"
-                    />
                     <SdxuButton
                         type="primary"
                         size="small"
@@ -24,6 +16,14 @@
                         />
                         新建角色
                     </sdxubutton>
+                    <SdxuInput
+                        v-model="searchRoles.name"
+                        :searchable="true"
+                        type="search"
+                        size="small"
+                        @search="searchName"
+                        @keyup.native.enter="searchName"
+                    />
                 </div>
             </div>
             <div class="sdxv-role-manage__table">

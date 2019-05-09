@@ -1,8 +1,8 @@
 <template>
     <div class="api">
         <CommonApi :apiData="attrData" title="Attributes"/>
-        <!-- <CommonApi :apiData="slotData" title="Slots" type="slot"/>
-        <CommonApi :apiData="eventData" title="Events" type="event"/> -->
+        <!-- <CommonApi :apiData="slotData" title="Slots" type="slot"/>-->
+        <CommonApi :apiData="eventData" title="Events" type="event"/> 
     </div>
 </template>
 
@@ -14,6 +14,13 @@
             return {
                 attrData: [
                     {
+                        params: 'type',
+                        describe: '类型，新增“search”为一个搜索框,其他类型不变',
+                        type: 'string',
+                        optionValue: 'search / (other)',
+                        defaultValue: 'text'
+                    },
+                    {
                         params: 'size',
                         describe: '尺寸（element中size类型失效）',
                         type: 'string',
@@ -21,7 +28,7 @@
                         defaultValue: 'regular',
                     }, {
                         params: 'searchable',
-                        describe: '搜索图标',
+                        describe: '搜索图标是否可以点击',
                         type: 'boolean',
                         optionValue: 'true / false ',
                         defaultValue: 'false',
@@ -39,13 +46,13 @@
                         defaultValue: 'false',
                     }
                 ],
-                // eventData: [
-                //     {
-                //         params: 'click',
-                //         describe: '鼠标点击事件',
-                //         cbparams: '—',
-                //     }
-                // ],
+                eventData: [
+                    {
+                        params: 'search',
+                        describe: '点击图标搜索事件',
+                        cbparams: '—',
+                    }
+                ],
                 // slotData: [
                 //     {
                 //         params: 'default',

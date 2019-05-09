@@ -22,7 +22,7 @@
                         params: 'userInfoData',
                         describe: '用户信息',
                         type: 'Object',
-                        optionValue: 'username, fullname, password, roles, group',
+                        optionValue: 'username:String, fullname:String, password:String, roles:Array, group:Array',
                         defaultValue: '—'
                     },
                     {

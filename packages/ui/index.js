@@ -9,6 +9,9 @@ import AutoComplete from './components/autocomplete';
 import MessageBox from './components/message-box';
 import ContentPanel from './components/content-panel';
 import Table from './components/table';
+import PlaceholderBlock from './components/placeholder-block';
+import IconButton from './components/icon-button';
+
 import { registerI18n } from "@sdx/utils/src/locale";
 
 const SdxUI = {
@@ -22,7 +25,9 @@ const SdxUI = {
     MessageBox,
     AutoComplete,
     Table,
-    ContentPanel
+    ContentPanel,
+    PlaceholderBlock,
+    IconButton
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -37,6 +42,8 @@ SdxUI.install = (vue, { i18n } = {}) => {
     AutoComplete.install(vue);
     Table.install(vue);
     ContentPanel.install(vue);
+    PlaceholderBlock.install(vue);
+    IconButton.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

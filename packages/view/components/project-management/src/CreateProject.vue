@@ -2,53 +2,108 @@
     <sdxu-dialog
         :visible.sync="dialogVisible"
         @close="dialogClose"
+        :close-on-click-modal="false"
         class="sdxv-create-project"
+        size="large"
+        :no-footer="createType !== 'empty'"
     >
         <div
             slot="title"
-            class="sdxw-change-password__title"
         >
-            <span>新建项目</span>
+            <span>{{ title }}</span>
         </div>
         <el-form
             label-width="110px"
             label-position="left"
-            :model="changePwdForm"
-            ref="changePwdForm"
-            :rules="changePwdFormRule"
+            :model="projectForm"
+            ref="projectForm"
+            :rules="projectFormRule"
+            v-if="createType === 'empty'"
         >
             <el-form-item
-                label="旧密码："
-                prop="oldPasswd"
+                label="项目名称："
+                prop="name"
             >
                 <sdxu-input
-                    v-model="changePwdForm.oldPasswd"
-                    type="password"
-                    password-visibleness
+                    v-model="projectForm.name"
+                    placeholder="请输入项目名称"
                 />
             </el-form-item>
             <el-form-item
-                label="新密码："
-                prop="newPasswd"
+                label="项目描述："
+                prop="description"
             >
                 <sdxu-input
-                    v-model="changePwdForm.newPasswd"
-                    type="password"
-                    password-visibleness
-                    password-strength
+                    v-model="projectForm.description"
+                    placeholder="请输入项目描述"
+                    type="textarea"
+                    :rows="3"
                 />
             </el-form-item>
             <el-form-item
-                label="确认新密码："
-                prop="repeatNewPasswd"
+                label="设为模板："
+                v-if="isAdmin"
             >
-                <sdxu-input
-                    v-model="changePwdForm.repeatNewPasswd"
-                    type="password"
-                    password-visibleness
+                <el-switch
+                    v-model="projectForm.isTemplate"
+                />
+            </el-form-item>
+            <el-form-item
+                label="协作者/组："
+                prop="member"
+                v-show="!projectForm.isTemplate"
+            >
+                <SdxuTransfer
+                    v-model="member"
+                    :data="memberSource"
+                    :tags.sync="tags"
+                    :default-keys.sync="defaultKeys"
+                    :tree-node-key="treeNodeKey"
                 />
             </el-form-item>
         </el-form>
+        <el-scrollbar
+            :native="false"
+            wrap-class="sdxv-create-project__wrap"
+            v-if="createType !== 'empty'"
+        >
+            <div
+                class="sdxv-create-project__filter"
+                v-if="createType === 'project'"
+            >
+                <SdxuTabRadioGroup
+                    v-model="projectType"
+                    @switch="switchProjectType"
+                >
+                    <SdxuTabRadioItem name="private">
+                        自建项目
+                    </SdxuTabRadioItem>
+                    <SdxuTabRadioItem name="public">
+                        其他项目
+                    </SdxuTabRadioItem>
+                </SdxuTabRadioGroup>
+                <sdxu-input
+                    v-model="searchName"
+                    searchable
+                    type="search"
+                    size="small"
+                    placeholder="请输入项目名"
+                    @search="filterProjects"
+                />
+            </div>
+            <sdxw-project-card-list
+                v-loading="loading"
+                class="sdxv-create-project__template-list"
+            >
+                <sdxw-project-card
+                    @operate="handleOperate"
+                    v-for="(item, index) in projectList"
+                    :key="index"
+                    :meta="item"
+                    :operate-type="createType"
+                />
+            </sdxw-project-card-list>
+        </el-scrollbar>
         <div
             slot="footer"
         >
@@ -74,75 +129,63 @@
 import Dialog from '@sdx/ui/components/dialog';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
-import { Form, FormItem, Message } from 'element-ui';
-import { userApi } from '@sdx/utils/src/api';
+import TabRadio from '@sdx/ui/components/tab-radio';
+import ProjectCard from '@sdx/widget/components/projectcard/src/ProjectCard';
+import ProjectCardList from '@sdx/widget/components/projectcard/src/ProjectCardList';
+import { Form, FormItem, Message, Switch, Scrollbar } from 'element-ui';
+import Transfer from '@sdx/ui/components/transfer';
+import { updateProject, getProjectList, createProject } from "@sdx/utils/src/api/project";
 export default {
     name: 'SdxvCreateProject',
     data() {
         return {
             dialogVisible: this.visible,
-            changePwdForm: {
-                oldPasswd: '',
-                newPasswd: '',
-                repeatNewPasswd: ''
+            projectForm: {
+                name: '',
+                description: '',
+                member: '',
+                isTemplate: false
             },
-            changePwdFormRule: {
-                oldPasswd: [
-                    { required: true, message: '请输入旧密码', trigger: 'blur' },
-                    {
-                        min: 6,
-                        max: 20,
-                        message: '密码长度在 6 到 20 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: this.validatePwd, trigger: 'blur' }
-                ],
-                newPasswd: [
-                    { required: true, message: '请输入新密码', trigger: 'blur' },
-                    {
-                        min: 6,
-                        max: 20,
-                        message: '密码长度在 6 到 20 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: this.validatePwd, trigger: 'blur' }
-                ],
-                repeatNewPasswd: [
-                    { required: true, message: '请确认新密码', trigger: 'blur' },
-                    {
-                        min: 6,
-                        max: 20,
-                        message: '密码长度在 6 到 20 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: this.validatePwd, trigger: 'blur' }
+            projectFormRule: {
+                name: [
+                    { required: true, message: '请输入项目名称', trigger: 'blur' }
                 ]
             },
+            title: '新建项目',
+            needRefresh: false,
+            projectList: [],
+            loading: false,
+            projectType: 'private',
+            totalProjects: [],
+            searchName: ''
         };
     },
     components: {
         [Dialog.name]: Dialog,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
+        [Switch.name]: Switch,
         [Input.name]: Input,
-        [Button.name]: Button
+        [Button.name]: Button,
+        [Transfer.name]: Transfer,
+        [ProjectCard.name]: ProjectCard,
+        [ProjectCardList.name]: ProjectCardList,
+        [Scrollbar.name]: Scrollbar,
+        [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
+        [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem
     },
     props: {
         visible: {
             type: Boolean,
             default: false
         },
-        handler: {
-            type: Function,
-            default: undefined
-        },
-        project: {
+        data: {
             type: Object,
             default: null
         },
         createType: {
             type: String,
-            default: ''
+            default: 'empty'
         }
     },
     watch: {
@@ -150,62 +193,106 @@ export default {
             this.dialogVisible = nVal;
         }
     },
+    computed: {
+        isEditing() {
+            return !!this.data;
+        },
+        isAdmin() {
+            return true;
+        }
+    },
     created() {
-        console.log('created');
+        console.log('created', this.createType);
+        if (this.isEditing) {
+            Object.assign(this.projectForm, this.data);
+            this.title = "编辑项目";
+        } else if (this.createType === 'template') {
+            this.getProjectList('template');
+        } else if (this.createType === 'project') {
+            this.getProjectList(this.projectType);
+        }
     },
     methods: {
-        dialogClose() {
-            this.$refs.changePwdForm.clearValidate();
-            this.changePwdForm = {
-                oldPasswd: '',
-                newPasswd: '',
-                repeatNewPasswd: ''
-            };
-            this.$emit('update:visible', false);
-            this.$emit('close');
+        filterProjects() {
+            this.projectList = [...this.totalProjects.filter(item => item.name.indexOf(this.searchName) > -1)];
         },
-        validatePwd(rule, value, callback) {
-            const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![\x21-\x2f\x3a-\x40\x5b-\x60\x7B-\x7F]+$)[a-zA-Z0-9\x21-\x2f\x3a-\x40\x5b-\x60\x7B-\x7F]{6,20}$/;
-            if (value && reg.test(value)) {
-                callback();
-            } else {
-                callback(new Error('密码由字母、数字及特殊符号（除空格）组成且至少包含2种'));
+        switchProjectType(type) {
+            this.projectType = type;
+            this.searchName = '';
+            this.getProjectList(this.projectType);
+        },
+        handleOperate(operation) {
+            console.log('operation', operation);
+            if (operation && operation.type && operation.id) {
+                const params = {
+                    uuid: operation.id
+                };
+                createProject(params).then(() => {
+                    Message({
+                        message: '创建成功',
+                        type: 'success'
+                    });
+                    this.needRefresh = true;
+                    this.dialogVisible = false;
+                });
             }
         },
-        cancel() {
-            this.dialogVisible = false;
+        getProjectList(type, name) {
+            const params = {
+                name: name || '',
+                start: 1,
+                count: 1000,
+                type
+            };
+            getProjectList(params).then(res => {
+                this.projectList = res.data.items;
+                console.log('this.projectList', this.projectList);
+                this.loading = false;
+                this.totalProjects = this.createType === 'project' ? [...this.projectList] : '';
+            });
         },
         confirm() {
-            this.$refs.changePwdForm.validate(valid => {
+            this.$refs.projectForm.validate(valid => {
                 if (!valid) {
                     Message.error('请输入必填信息');
                 } else {
-                    if (
-                        this.changePwdForm.newPasswd !== this.changePwdForm.repeatNewPasswd
-                    ) {
-                        Message.error('请确保两次输入的密码一致。');
-                        return;
-                    }
-                    const params = {
-                        oldPasswd: this.changePwdForm.oldPasswd,
-                        newPasswd: this.changePwdForm.newPasswd
-                    };
-                    if (this.handler) {
-                        this.handler(params);
-                    } else {
-                        userApi.changePassword(params).then(() => {
+                    if (this.isEditing) {
+                        updateProject(this.projectForm.uuid, this.projectForm).then(() => {
                             Message({
-                                message: '密码修改成功！',
+                                message: '更新成功',
                                 type: 'success'
                             });
-                            this.$emit('on-success');
+                            this.needRefresh = true;
                             this.dialogVisible = false;
-                        }).catch(() => {
-                            this.$emit('on-error');
-                        });
+                        }).catch(() => {});
+                    } else {
+                        createProject(this.projectForm).then(() => {
+                            Message({
+                                message: '创建成功',
+                                type: 'success'
+                            });
+                            this.needRefresh = true;
+                            this.dialogVisible = false;
+                        }).catch(() => {});
                     }
                 }
             });
+
+        },
+        dialogClose() {
+            if (this.createType === 'empty') {
+                this.$refs.projectForm.clearValidate();
+                this.projectForm = {
+                    name: '',
+                    description: '',
+                    member: ''
+                };
+            }
+            this.$emit('update:visible', false);
+            this.$emit('close', this.needRefresh);
+        },
+        cancel() {
+            this.dialogVisible = false;
         }
     }
 };

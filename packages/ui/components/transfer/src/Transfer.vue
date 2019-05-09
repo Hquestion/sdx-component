@@ -11,16 +11,20 @@
                 class="sdxu-transfer__scrollbar"
                 wrap-class="sdxu-transfer__wrap" 
             >
-                <el-tree
-                    :data="data"
-                    show-checkbox
-                    :node-key="treeNodeKey"
-                    ref="tree"
-                    :filter-node-method="filterNode"
-                    check-on-click-node
-                    :default-checked-keys="defaultKeys"
-                    @check="checkChange"
-                />
+                <div
+                    class="sdxu-transfer__tree"
+                >
+                    <el-tree
+                        :data="data"
+                        show-checkbox
+                        :node-key="treeNodeKey"
+                        ref="tree"
+                        :filter-node-method="filterNode"
+                        check-on-click-node
+                        :default-checked-keys="defaultKeys"
+                        @check="checkChange"
+                    />
+                </div>
             </el-scrollbar>
             <div class="sdxu-transfer__moveall">
                 <SdxuButton

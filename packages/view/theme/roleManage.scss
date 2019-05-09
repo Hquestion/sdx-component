@@ -1,13 +1,17 @@
 @include block('role-manage',$bem-namespace-view) {
+    background: $sdxu-role-table-background;
+    box-shadow: 0 0 22px 0 $sdxu-role-table-shadow;
+    border-radius: $sdx-border-radius;
+    padding: $sdxu-role-padding-top $sdx-padding;
     @include element('header') {
-        display: flex;
         margin-bottom: $sdxu-role-margin-size;
-        justify-content: space-between;
         @include element('title') {
             font-size: $sdx-h2-font-size;
-            color: $sdx-text-regular-color;
+            color: #303133;
             height: $sdxu-role-title-height;
             line-height: $sdxu-role-title-height;
+            text-align: left;
+            margin-bottom: 12px;
             span {
                 padding-left: $sdxu-mark-icon-padding;
             }
@@ -23,6 +27,7 @@
         }
         @include element('handle') {
             display: flex; 
+            justify-content: space-between;
             .sdxu-button {
                 margin-left: $sdxu-role-margin-size;
                 i {
@@ -32,10 +37,6 @@
         }
     }
     @include element('table') {
-        background: $sdxu-role-table-background;
-        box-shadow: 0 0 22px 0 $sdxu-role-table-shadow;
-        border-radius: $sdx-border-radius;
-        padding: $sdxu-role-padding-top $sdx-padding;
         .el-pagination  {
             padding:  $sdx-padding
         }
@@ -51,6 +52,12 @@
             font-size: 14px; 
             color: #C0C4CC;
             margin-right: 20px;
+        }
+    }
+    @include element('pagination') {
+        text-align: right;
+        .el-pagination {
+            padding-right: 0px;
         }
     }
 }

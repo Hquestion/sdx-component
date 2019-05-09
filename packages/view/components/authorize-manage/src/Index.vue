@@ -2,13 +2,16 @@
     <div class="sdxv-authorize-manage">
         <div class="sdxv-authorize-manage__header">
             <div class="sdxv-authorize-manage__title">
-                授权管理
+                <span>授权管理</span>
             </div>
             <div class="sdxv-authorize-manage__handle">
                 <SdxuInput
-                    v-model="value"
+                    v-model="searchRoles.name"
                     :searchable="true"
                     size="small"
+                    type="search"
+                    @search="searchName"
+                    @keyup.native.enter="searchName"
                 />
                 <SdxuButton
                     type="primary"
@@ -28,20 +31,33 @@
                 :data="tableData"  
             >
                 <el-table-column
-                    prop="date"
-                    label="日期"
+                    prop="name"
+                    label="授权对象"
                 />
                 <el-table-column
-                    prop="name"
-                    label="姓名"
+                    prop="description"
+                    label="对象类别"
                 />
                 <el-table-column
                     prop="address"
-                    label="地址"
+                    label="权限"
                 />
-                <el-table-column type="expand">
-                    <template slot-scope="props">
-                        <span>{{ props.row.desc }}</span>
+                <el-table-column
+                    style="width: 15%"
+                    label="操作"
+                >
+                    <template
+                        slot-scope="scope"
+                        class="icon"
+                    >
+                        <i
+                            class="sdx-icon iconicon-edit1 icon"
+                            @click="editRole(scope.row.uuid)"
+                        />
+                        <i
+                            class="sdx-icon iconicon-delete1 icon"
+                            @click="removeRole(scope.row.uuid, scope.row.name)"
+                        />
                     </template>
                 </el-table-column>
             </SdxuTable>
@@ -56,6 +72,7 @@
             :visible.sync="dialogVisible"
             @confirm="dialogConfirm"
             @cancel="dialogCancel"
+            class="sdxv-authorize-model"
         >
             <div slot="title">
                 新建授权
@@ -72,6 +89,7 @@
                         label="授权对象"
                     >
                         <el-select
+                            class="select"
                             size="small"
                             placeholder="请选择"
                         />
@@ -79,7 +97,12 @@
                     <el-form-item
                         label="权限设置"
                     >
-                        <SdxuTransfer />
+                        <SdxuTransfer 
+                            :data="data"
+                            :tags.sync="tags"
+                            :default-keys.sync="defaultKeys"
+                            :tree-node-key="treeNodeKey"
+                        />
                     </el-form-item>
                 </el-form>
             </div>
@@ -96,6 +119,7 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuTransfer from '@sdx/ui/components/transfer';
 import {Form, FormItem, Select} from 'element-ui';
 import {getPermissionsList} from '@sdx/utils/src/api/manage';
+import MessageBox from '@sdx/ui/components/message-box';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -111,26 +135,53 @@ export default {
     },
     data() {
         return {
-            value: '',
+            searchRoles: {
+                name: '',
+                start: 1,
+                count: 10,
+            },
             tableData: [],
             current: 1,
             pageSize: 10,
             total: 0,
-            dialogVisible: false
+            dialogVisible: false,
+            data:[{
+                unid: 1,
+                label: '一级 1',
+              
+            }, {
+                unid: 2,
+                label: '一级 2',
+                
+            }, {
+                unid: 3,
+                label: '一级 3',
+               
+            }, {
+                unid: 41,
+                label: '一级 4',
+               
+            }], 
+            tags: [],
+            defaultKeys: [],
+            treeNodeKey: 'unid'
         };
     },
     props: {
        
     },
     created() {
-        getPermissionsList()
-            .then(data => {
-                this.tableData = data.permissions;
-                this.total = data.total;
-                console.log(data, 88);
-            });
+        this.authorizeList();
     },
     methods: {
+        authorizeList() {
+            getPermissionsList(this.searchRoles)
+                .then(data => {
+                    this.tableData = data.permissions;
+                    this.total = data.total;
+                    console.log(data, 88);
+                });
+        },
         currentChange() {
             console.log(123);
         },
@@ -143,7 +194,36 @@ export default {
         },
         dialogCancel() {
 
+        },
+        searchName() {
+            this.searchRoles = Object.assign({}, this.searchRoles, {
+                name: this.searchRoles.name,
+                start:  1
+            });
+            this.roleList();
+        },
+        editRole(id) {
+            
+            this.dialogVisible = true;
+                
+        },
+        removeRole(id, name) {
+            MessageBox.confirm({
+                title: `确定删除授权${name}吗？`,
+                content: '删除后不可恢复哦',
+                type: 'alert'
+            }).then(() => {
+                removeRoles(id)
+                    .then(() => {
+                        this.roleList();
+                    });
+            }, () => {
+                
+            });
+           
         }
     }
 };
 </script>
+
+

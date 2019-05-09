@@ -1,35 +1,70 @@
 @include block('authorize-manage',$bem-namespace-view) {
+    background: $sdxu-role-table-background;
+    box-shadow: 0 0 22px 0 $sdxu-role-table-shadow;
+    border-radius: $sdx-border-radius;
+    padding: $sdxu-role-padding-top $sdx-padding;
     @include element('header') {
-        display: flex;
         margin-bottom: $sdxu-role-margin-size;
-        justify-content: space-between;
         @include element('title') {
             font-size: $sdx-h2-font-size;
-            color: $sdx-text-regular-color;
+            color: #303133;
             height: $sdxu-role-title-height;
             line-height: $sdxu-role-title-height;
+            text-align: left;
+            margin-bottom: 12px;
+            span {
+                padding-left: $sdxu-mark-icon-padding;
+            }
+            &::after{
+                content: "";
+                width: $sdxu-mark-icon-width;
+                height: $sdxu-mark-icon-height;
+                background: $sdxu-mark-icon-color;
+                display: block;
+                position: relative;
+                bottom: $sdxu-mark-icon-bottom;
+            }
         }
         @include element('handle') {
             display: flex; 
+            justify-content: space-between;
             .sdxu-button {
                 margin-left: $sdxu-role-margin-size;
                 i {
-                    font-size: 12px;
+                    font-size: $sdxu-role-icon-size;
                 }
             }
         }
     }
     @include element('table') {
-        background: $sdxu-role-table-background;
-        box-shadow: 0 0 22px 0 $sdxu-role-table-shadow;
-        border-radius: $sdx-border-radius;
-        padding: $sdxu-role-padding-top $sdx-padding;
         .el-pagination  {
             padding:  $sdx-padding
         }
+        .expand {
+            display: flex;
+            span:first-child {
+                min-width: 70px;
+                font-weight:bold;
+                color:rgba(144,147,153,1);
+            }
+        }
+        .icon {
+            font-size: 14px; 
+            color: #C0C4CC;
+            margin-right: 20px;
+        }
     }
-    & /deep/ .el-select {
+    @include element('pagination') {
+        text-align: right;
+        .el-pagination {
+            padding-right: 0px;
+        }
+    }
+    
+}
+@include block('authorize-model',$bem-namespace-view) {
+    .el-select {
         width: 100%;
     }
-}
+  }
 

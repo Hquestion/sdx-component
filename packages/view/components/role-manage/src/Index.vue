@@ -8,7 +8,10 @@
                 <SdxuInput
                     v-model="searchRoles.name"
                     :searchable="true"
+                    type="search"
                     size="small"
+                    @search="searchName"
+                    @keyup.native.enter="searchName"
                 />
                 <SdxuButton
                     type="primary"
@@ -57,7 +60,7 @@
                         />
                         <i
                             class="sdx-icon iconicon-delete1 icon"
-                            @click="removeRole(scope.row.uuid)"
+                            @click="removeRole(scope.row.uuid, scope.row.name)"
                         />
                     </template>
                 </el-table-column>
@@ -72,12 +75,14 @@
                     </template>
                 </el-table-column>
             </SdxuTable>
-            <sdxu-pagination
-                :current-page.sync="current"
-                :page-size="pageSize"
-                :total="total"
-                @current-change="currentChange"
-            />
+            <div class="sdxv-role-manage__pagination">
+                <sdxu-pagination
+                    :current-page.sync="current"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="currentChange"
+                />
+            </div>
         </div>
         <sdxu-dialog
             :visible.sync="dialogVisible"
@@ -145,6 +150,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
+import MessageBox from '@sdx/ui/components/message-box';
 import {Form, FormItem}  from 'element-ui';
 import {getRolesList, createRoles, updateRoles, getRolesDetail, removeRoles} from '@sdx/utils/src/api/rolemange';
 export default {
@@ -226,7 +232,7 @@ export default {
             getRolesList(this.searchRoles)
                 .then(data =>{
                     this.tableData = data.roles;
-                    this.total = 123; //data.total
+                    this.total = data.total;
                 });
         },
         addRole() {
@@ -276,11 +282,27 @@ export default {
                     this.dialogVisible = true;
                 });
         },
-        removeRole(id) {
-            removeRoles(id)
-                .then(() => {
-                    this.roleList();
-                });
+        searchName() {
+            this.searchRoles = Object.assign({}, this.searchRoles, {
+                name: this.searchRoles.name,
+                start:  1
+            });
+            this.roleList();
+        },
+        removeRole(id, name) {
+            MessageBox.confirm({
+                title: `确定删除角色${name}吗？`,
+                content: '此操作会同时删除与此角色关联的授权项',
+                type: 'alert'
+            }).then(() => {
+                removeRoles(id)
+                    .then(() => {
+                        this.roleList();
+                    });
+            }, () => {
+                
+            });
+           
         }
     }
 };

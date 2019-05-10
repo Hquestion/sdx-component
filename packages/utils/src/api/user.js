@@ -71,6 +71,3 @@ export function getGroups() {
     return httpService.get('/api/v1/groups/');
 }
 
-export function getRolesList() {
-    return httpService.get('/api/v1/roles/');
-}

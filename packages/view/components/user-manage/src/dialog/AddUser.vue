@@ -104,7 +104,8 @@
 <script>
 import { nameValidate } from '../validate';
 import SdxuInput from '@sdx/ui/components/input';
-import { addUser , getRolesList} from '@sdx/utils/src/api/user';
+import { addUser } from '@sdx/utils/src/api/user';
+import { getRolesList} from '@sdx/utils/src/api/rolemange';
 export default {
     props: {
         

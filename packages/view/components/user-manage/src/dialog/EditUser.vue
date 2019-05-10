@@ -87,7 +87,8 @@
 <script>
 import { nameValidate, cNameValidate } from '../validate';
 import SdxuInput from '@sdx/ui/components/input';
-import { getUserDetail , updataUser , getRolesList} from '@sdx/utils/src/api/user';
+import { getUserDetail , updataUser } from '@sdx/utils/src/api/user';
+import { getRolesList} from '@sdx/utils/src/api/rolemange';
 export default {
     name:'EditUser',
     data () {

@@ -39,6 +39,10 @@ export function addUser() {
     return httpService.post(`/api/v1/users`);
 }
 
+export function changeUserInfo(params) {
+    return httpService.put('/api/v1/user',params);
+}
+
 export function getUserDetail(uuid) {
     return httpService.get(`/api/v1/users/${uuid}`).then(res => {
         const { roles, groups } = res;

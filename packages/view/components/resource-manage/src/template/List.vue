@@ -12,10 +12,16 @@
             >
                 新建模板
                 <template slot="dropdown">
-                    <SdxuButton type="text">
+                    <SdxuButton
+                        type="text"
+                        @click="createGPUTplVisible=true"
+                    >
                         CPU/内存模板
                     </SdxuButton>
-                    <SdxuButton type="text">
+                    <SdxuButton
+                        type="text"
+                        @click="createGPUTplVisible=true"
+                    >
                         GPU模板
                     </SdxuButton>
                 </template>
@@ -29,27 +35,35 @@
                 :count="item.count"
             />
         </div>
+        <CreateCpuTemplate :visible.sync="createGPUTplVisible" />
+        <CreateGpuTemplate :visible.sync="createCPUTplVisible" />
     </SdxuContentPanel>
 </template>
 
 <script>
 import ContentPanel from '@sdx/ui/components/content-panel';
 import Button from '@sdx/ui/components/button';
-import ResourceCard from "./ResourceCard";
+import ResourceCard from './ResourceCard';
+import CreateGpuTemplate from './CreateGpuTemplate';
+import CreateCpuTemplate from './CreateCPUAndMemoryTemplate';
 
-import { getResourceTmplList } from "@sdx/utils/src/api/resource";
+import { getResourceTmplList } from '@sdx/utils/src/api/resource';
 
 export default {
     name: 'List',
     data() {
         return {
-            templateList: []
+            templateList: [],
+            createGPUTplVisible: false,
+            createCPUTplVisible: false
         };
     },
     components: {
         ResourceCard,
         [ContentPanel.name]: ContentPanel,
-        [Button.name]: Button
+        [Button.name]: Button,
+        CreateGpuTemplate,
+        CreateCpuTemplate
     },
     methods: {
         init() {

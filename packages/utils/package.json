@@ -11,7 +11,8 @@
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "lib",
+      "src"
   ],
   "publishConfig": {
     "registry": "http://192.168.20.38:4873/"
@@ -27,8 +28,8 @@
     "build": "babel src --out-dir lib && gulp copy"
   },
   "peerDependencies": {
-    "axios": "^0.18.0",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "axios": "^0.18.0" 
   },
   "babel": {
     "presets": [

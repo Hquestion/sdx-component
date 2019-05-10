@@ -2,17 +2,19 @@
 import Breadcrumb from './components/breadcrumb';
 import FoldLabel from './components/fold-label';
 import ChangePassword from './components/changePassword';
-import UserInfoDialog from './components/userInfoDialog';
+import UserInfoDialog from './components/userinfo-dialog';
 import ProjectCard from './components/projectcard';
+import SelectGroupUser from './components/select-group-user';
 
-import { registerI18n } from "@sdx/utils/src/locale";
+import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
     Breadcrumb,
     FoldLabel,
     ProjectCard,
     ChangePassword,
-    UserInfoDialog
+    UserInfoDialog,
+    SelectGroupUser
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -21,6 +23,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     ChangePassword.install(vue);
     UserInfoDialog.install(vue);
     ProjectCard.install(vue);
+    SelectGroupUser.install(vue);
 
     // 通用服务注入i18n服务
     registerI18n(i18n);

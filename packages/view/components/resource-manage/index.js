@@ -6,7 +6,7 @@ const routeCfg = [
         name: 'SdxvResourceManage',
         component: ResourceManage,
         meta: {
-            breadcrumbName: '资源管理',
+            breadcrumb: '资源管理',
             system: 'manage'
         }
     }

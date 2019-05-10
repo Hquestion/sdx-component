@@ -46,7 +46,10 @@ module.exports = {
                     children: [
                         'view/rolemanage',
                         'view/authorizemanage',
-                        'view/usermanage'
+                        'view/usermanage',
+                        'view/resource-manage',
+                        'view/privilege',
+                        'view/project-management'
                     ]
                 },
                 {

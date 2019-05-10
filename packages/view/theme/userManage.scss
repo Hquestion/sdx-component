@@ -1,3 +1,4 @@
+@import "~element-ui/packages/theme-chalk/src/radio.scss";
 @include block('user-manage',$bem-namespace-view) {
     position: relative;
     padding: 20px;

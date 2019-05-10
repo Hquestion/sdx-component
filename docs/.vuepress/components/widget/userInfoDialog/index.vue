@@ -3,7 +3,7 @@
         <a @click.prevent="open">
             点击打开用户详情
         </a>
-        <sdxw-userInfoDialog 
+        <sdxw-userInfoDialog
             :visible.sync="dialogVisible"
             :userInfoData="userInfoData"
         />
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import SdxwUserInfoDialog from '@sdx/widget/components/userInfoDialog'
+import SdxwUserInfoDialog from '@sdx/widget/components/userinfo-dialog'
 import SdxuButton from '@sdx/ui/components/button'
 export default {
     data () {

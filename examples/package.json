@@ -9,6 +9,7 @@
     "prestart": "npm install"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "feb-alive": "^1.0.7",
     "vue": "^2.6.10",

@@ -2,10 +2,10 @@
 import Breadcrumb from './components/breadcrumb';
 import FoldLabel from './components/fold-label';
 import ChangePassword from './components/changePassword';
-import UserInfoDialog from './components/userInfoDialog';
+import UserInfoDialog from './components/userinfo-dialog';
 import ProjectCard from './components/projectcard';
 
-import { registerI18n } from "@sdx/utils/src/locale";
+import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
     Breadcrumb,

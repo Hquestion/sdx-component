@@ -10,7 +10,8 @@ export default {
             username:'username',
             fullname:'fullname',
             password:'password',
-            groups:'groups'
+            groups:'groups',
+            role:'role'
         }
     }
 };

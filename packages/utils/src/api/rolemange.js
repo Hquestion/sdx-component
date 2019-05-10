@@ -1,6 +1,6 @@
-import httpService from '@sdx/utils/src/http-service';
+import httpService from '../http-service';
 
-const rolesApi = 'api/v1/roles/';
+const rolesApi = '/api/v1/roles/';
 
 
 // 角色

@@ -1,6 +1,6 @@
 import httpService from '../http-service';
 
-const projectApi = 'api/v1/projects/';
+const projectApi = '/api/v1/projects/';
 
 export function getProjectList(params) {
     return httpService.get(projectApi, params);

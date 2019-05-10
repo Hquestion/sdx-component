@@ -1,7 +1,7 @@
-import httpService from '@sdx/utils/src/http-service';
+import httpService from '../http-service';
 
-const rolesApi = 'api/v1/roles/';
-const permissionsApi = 'api/v1/permissions/';
+const rolesApi = '/api/v1/roles/';
+const permissionsApi = '/api/v1/permissions/';
 
 // 角色
 export function getRolesList(params) {

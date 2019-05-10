@@ -1,6 +1,6 @@
 <template>
     <div>
-        <sdxw-userInfoDialog 
+        <sdxw-userInfoDialog
             @close="close"
             :visible.sync="userInfoVisible"
             :theme="theme"
@@ -19,7 +19,7 @@ export default {
             userInfoVisible:true,
             theme:'user',
             id:''
-        }
+        };
     },
     methods: {
         close() {
@@ -28,10 +28,10 @@ export default {
         _getUserDetail() {
             getUserDetail(this.id)
                 .then(( res ) => {
-                    this.users = res; 
+                    this.users = res;
                     this.users.group = res.groupNames;
                     this.users.roles = res.roleNames;
-                })
+                });
         }
     },
     mounted() {
@@ -41,10 +41,10 @@ export default {
     components: {
         SdxwUserInfoDialog
     }
-}
+};
 </script>
 
 <style lang='scss' scoped>
 
- 
+
 </style>

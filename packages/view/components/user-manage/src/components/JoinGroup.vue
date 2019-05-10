@@ -1,10 +1,12 @@
 <template>
     <div>
-         <sdxu-dialog
-            :visible.sync="groupVisible" 
+        <sdxu-dialog
+            :visible.sync="groupVisible"
             @close="close"
         >
-            <div slot="title">加入组设置</div>
+            <div slot="title">
+                加入组设置
+            </div>
             <div class="join-group">
                 <p>用户组：</p>
                 <SdxuTransfer
@@ -15,8 +17,18 @@
                 />
             </div>
             <div slot="footer">
-                <sdxu-button type="default" @click="close">取 消</sdxu-button>
-                <sdxu-button type="primary" @click="confirm">确定</sdxu-button>
+                <sdxu-button
+                    type="default"
+                    @click="close"
+                >
+                    取 消
+                </sdxu-button>
+                <sdxu-button
+                    type="primary"
+                    @click="confirm"
+                >
+                    确定
+                </sdxu-button>
             </div>
         </sdxu-dialog>
     </div>
@@ -30,11 +42,11 @@ export default {
     data () {
         return {
             groupVisible:true,
-            data:[], 
+            data:[],
             tags: [],
             defaultKeys: [14],
             treeNodeKey: 'unid'
-        }
+        };
     },
     methods:{
         _getGroups(){
@@ -45,8 +57,8 @@ export default {
                             unid:parseInt(index+1),
                             label:item.name
                         });
-                    })
-                })
+                    });
+                });
         },
         close() {
             this.$emit('cancelJoinGroupDialog',false);
@@ -68,13 +80,13 @@ export default {
     },
     watch :{
         groupVisible(nVal) {
-            
+
         }
     },
     mounted() {
         this._getGroups();
     }
-}
+};
 </script>
 
 <style lang='scss' scoped>

@@ -2,10 +2,12 @@
     <!-- 新增用户 -->
     <div class="sdxv-user-manage__userform">
         <sdxu-dialog
-            :visible.sync="addUserVisible" 
+            :visible.sync="addUserVisible"
             @close="close"
         >
-            <div slot="title">新建用户</div>
+            <div slot="title">
+                新建用户
+            </div>
             <el-form
                 :model="user"
                 label-width="100px"
@@ -41,37 +43,40 @@
                             v-model="user.password"
                             password-visibleness
                             placeholder="请输入密码"
-
                         >
-                            <i class="sdx-icon iconicon-eye-open"></i>
+                            <i class="sdx-icon iconicon-eye-open" />
                         </sdxu-input>
                     </el-form-item>
                     <el-form-item
                         label="角色："
                         prop="role"
                     >
-                        <el-select 
+                        <el-select
                             class="sdxv-user-manage__userform--select"
-                            v-model="user.role" 
-                            multiple 
+                            v-model="user.role"
+                            multiple
                             placeholder="请选择用户角色"
                         >
                             <el-option
                                 v-for="item in user.roles"
                                 :key="item"
                                 :label="item"
-                                :value="item">
-                            </el-option>
+                                :value="item"
+                            />
                         </el-select>
                     </el-form-item>
                     <el-form-item
                         label="激活："
                     >
-                        <el-radio-group 
+                        <el-radio-group
                             v-model="user.isActive"
                         >
-                            <el-radio label="true">是</el-radio>
-                            <el-radio label="false">否</el-radio>
+                            <el-radio label="true">
+                                是
+                            </el-radio>
+                            <el-radio label="false">
+                                否
+                            </el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item
@@ -94,8 +99,18 @@
                 </div>
             </el-form>
             <div slot="footer">
-                <sdxu-button type="default" @click="close">取 消</sdxu-button>
-                <sdxu-button type="primary" @click="confirm">确定</sdxu-button>
+                <sdxu-button
+                    type="default"
+                    @click="close"
+                >
+                    取 消
+                </sdxu-button>
+                <sdxu-button
+                    type="primary"
+                    @click="confirm"
+                >
+                    确定
+                </sdxu-button>
             </div>
         </sdxu-dialog>
     </div>
@@ -108,7 +123,7 @@ import { addUser } from '@sdx/utils/src/api/user';
 import { getRolesList} from '@sdx/utils/src/api/rolemange';
 export default {
     props: {
-        
+
     },
     data () {
         return {
@@ -136,10 +151,9 @@ export default {
                 timeGroups:[],
                 roles:[],
                 role:[],
-                expire_at:'',
-                timeGroups:[]
+                expire_at:''
             }
-        }
+        };
     },
     watch:{
         userDetail(nVal) {
@@ -171,9 +185,9 @@ export default {
             getRolesList()
                 .then( res=>{
                     this.user.roles = res.roles.map( (item)=>{
-                        return item.name
+                        return item.name;
                     });
-                })
+                });
         }
     },
     components: {
@@ -182,7 +196,7 @@ export default {
     mounted() {
         this._getRolesList();
     }
-}
+};
 </script>
 
 <style lang='scss' scoped>

@@ -1,49 +1,45 @@
 <template>
-    <div 
-        class="sdxv-user-manage"
-    >
-        <div 
-            class="sdxv-user-manage__title"
-        >
+    <div class="sdxv-user-manage">
+        <div class="sdxv-user-manage__title">
             <span class="sdxv-user-manage__title--head">角色</span>
             <div class="sdxv-user-manage__title--operate">
-                <SdxuButton 
+                <SdxuButton
                     @click="handleAddUser"
                     type="primary"
                 >
-                    <i class="sdx-icon iconicon-plus"></i>
+                    <i class="sdx-icon iconicon-plus" />
                     新建角色
                 </SdxuButton>
-                <SdxuInput 
+                <SdxuInput
                     @search="search(this.searchKey)"
-                    class="sdxv-user-manage__title--search" 
-                    v-model="searchKey" 
-                    :searchable="true" 
+                    class="sdxv-user-manage__title--search"
+                    v-model="searchKey"
+                    :searchable="true"
                     size="small"
                     type="search"
-                    searchable
                     placeholder="请输入用户名"
-                ></SdxuInput>
+                />
             </div>
         </div>
-        <sdxu-table 
-            class="sdxv-user-manage__table"  
+        <sdxu-table
+            class="sdxv-user-manage__table"
             borer
             :data="tableData"
             :highlight-key="key"
-            :params="params">
+            :params="params"
+        >
             <el-table-column
                 prop="username"
                 label="用户名"
             >
-            <template slot-scope="scope">
-                <span 
-                    class="sdxv-user-manage__table--username"
-                    @click="openDetails(scope.row)"
-                >
-                    {{ scope.row.username }}
-                </span>
-            </template>
+                <template slot-scope="scope">
+                    <span
+                        class="sdxv-user-manage__table--username"
+                        @click="openDetails(scope.row)"
+                    >
+                        {{ scope.row.username }}
+                    </span>
+                </template>
             </el-table-column>
             <el-table-column
                 prop="fullName"
@@ -53,13 +49,13 @@
                 prop="roles"
                 label="角色"
             >
-            <template slot-scope="scope">
-                <SdxwFoldLabelGroup 
-                    :list="scope.row.roles" 
-                    mode="inline" 
-                    type="default"
-                ></SdxwFoldLabelGroup>
-            </template>
+                <template slot-scope="scope">
+                    <SdxwFoldLabelGroup
+                        :list="scope.row.roles"
+                        mode="inline"
+                        type="default"
+                    />
+                </template>
             </el-table-column>
             <el-table-column
                 prop="createdAt"
@@ -69,9 +65,18 @@
                 label="操作"
             >
                 <template slot-scope="scope">
-                    <sdxu-icon-button @click="handleJoinGroup(scope.row)" class="sdx-icon iconicon-zu2" />
-                    <sdxu-icon-button @click="handleEditUser(scope.row)" class="sdx-icon iconicon-edit1" />
-                    <sdxu-icon-button @click="handleDeleteUser(scope.row)" class="sdx-icon iconicon-delete" />
+                    <sdxu-icon-button
+                        @click="handleJoinGroup(scope.row)"
+                        class="sdx-icon iconicon-zu2"
+                    />
+                    <sdxu-icon-button
+                        @click="handleEditUser(scope.row)"
+                        class="sdx-icon iconicon-edit1"
+                    />
+                    <sdxu-icon-button
+                        @click="handleDeleteUser(scope.row)"
+                        class="sdx-icon iconicon-delete"
+                    />
                 </template>
             </el-table-column>
         </sdxu-table>
@@ -83,20 +88,32 @@
             :current-page.sync="current"
             :page-size="pageSize"
             :total="total"
-            @current-change="currentChange" 
+            @current-change="currentChange"
         />
         <!-- 用户详情 -->
-        
 
-        <UserDetail @cancelUserDetailDialog="cancelUserDetailDialog" v-if="userDetailVisible"/>
-        <AddUser @cancelAddUserDialog="cancelAddUserDialog" v-if="addUserVisible"/>
-        <EditUser @cancelEditUserDialog="cancelEditUserDialog" v-if="editUserVisible"/>
-        <JoinGroup @cancelJoinGroupDialog="cancelJoinGroupDialog" v-if="JoinGroupVisible"/>
+
+        <UserDetail
+            @cancelUserDetailDialog="cancelUserDetailDialog"
+            v-if="userDetailVisible"
+        />
+        <AddUser
+            @cancelAddUserDialog="cancelAddUserDialog"
+            v-if="addUserVisible"
+        />
+        <EditUser
+            @cancelEditUserDialog="cancelEditUserDialog"
+            v-if="editUserVisible"
+        />
+        <JoinGroup
+            @cancelJoinGroupDialog="cancelJoinGroupDialog"
+            v-if="JoinGroupVisible"
+        />
     </div>
 </template>
 
 <script>
-import { 
+import {
     getUserList,
     deleteUser,
     getUserDetail
@@ -105,8 +122,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuTable from '@sdx/ui/components/table';
 import MessageBox from '@sdx/ui/components/message-box';
-import httpService from '@sdx/utils/src/http-service';
-import SdxwFoldLabelGroup from '@sdx/widget/components/fold-label/src/FoldLabelGroup';
+import FoldLabel from '@sdx/widget/components/fold-label';
 import AddUser from './components/AddUser';
 import EditUser from './components/EditUser';
 import JoinGroup from './components/JoinGroup';
@@ -130,7 +146,7 @@ export default {
             current:1,
             pageSize:10,
             total:50
-        }
+        };
     },
     methods:{
         //关闭新建用户弹框
@@ -178,28 +194,28 @@ export default {
                     this.$emit('on-error');
                 });
             }, () => {
-               
+
             });
         },
         getUsers(){
             getUserList()
                 .then(( res ) => {
                     res.users.forEach((item)=>{
-                        this.total = 40;    
+                        this.total = 40;
                         this.tableData.push({
                             username:item.username,
                             fullName:item.fullName,
                             uuid:item.uuid,
                             roles:[],
                             createdAt:item.createdAt
-                        }) 
+                        });
                     });
                     res.users.forEach((item,index)=>{
                         getUserDetail(item.uuid)
                             .then( res => {
                                 this.tableData[index].roles = res.roleNames;
                             });
-                    })
+                    });
                 }).catch(() => {
                     this.$emit('on-error');
                 });
@@ -215,13 +231,14 @@ export default {
         },
     },
     watch: {
-        
+
     },
     mounted(){
         this.getUsers();
     },
     components: {
-        SdxwFoldLabelGroup,
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         SdxuInput,
         SdxuTable,
         MessageBox,
@@ -231,7 +248,7 @@ export default {
         UserDetail,
         SdxuIconButton
     }
-}
+};
 </script>
 <style lang='scss' scoped>
 

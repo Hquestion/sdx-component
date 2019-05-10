@@ -1,6 +1,6 @@
 import httpService from '../http-service';
 
-const permissionsBaseUrl = 'api/v1/permissions/';
+const permissionsBaseUrl = '/api/v1/permissions/';
 
 export function createPermission(params) {
     return httpService.post(permissionsBaseUrl, params);

@@ -8,7 +8,7 @@ const routeCfg = [
         name: 'SdxvAuthorizeManage',
         component: AuthorizeManage,
         meta: {
-            breadcrumbName: '授权管理',
+            breadcrumb: '授权',
             system: 'manage'
         }
     }

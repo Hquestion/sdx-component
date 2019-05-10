@@ -9,11 +9,12 @@ export default {
     },
     widget: {
         userInfo:{
-            title:'用户详情',
+            title:'用户信息',
             username:'用户名',
             fullname:'显示名',
             password:'密码',
-            groups:'加入组'
+            groups:'加入组',
+            role:'角色'
         }
     }
 };

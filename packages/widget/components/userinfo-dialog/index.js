@@ -1,4 +1,4 @@
-import UserInfoDialog from './src/userInfoDialog';
+import UserInfoDialog from './src/UserInfoDialog';
 
 UserInfoDialog.install = vue => {
     vue.component(UserInfoDialog.name, UserInfoDialog);

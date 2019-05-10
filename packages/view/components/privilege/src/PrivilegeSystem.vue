@@ -73,7 +73,6 @@
 </template>
 
 <script>
-// import { SdxuTable, SdxuPagination, SdxuInput } from '@sdx/ui';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuInput from '@sdx/ui/components/input';
@@ -89,7 +88,7 @@ export default {
     },
     data() {
         return {
-            pageSize: 1,
+            pageSize: 10,
             page: 1,
             total: 100,
             data: [],
@@ -116,7 +115,7 @@ export default {
             });
         },
         splitKey(key, i) {
-            const list = key.split(":");
+            const list = key.split(':');
             return list[i];
         }, 
         handleChangePage(page) {

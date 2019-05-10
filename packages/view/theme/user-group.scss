@@ -1,0 +1,16 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@include block('user-group', $bem-namespace-view) {
+    display: flex;
+    flex-flow: column nowrap;
+    align-content: flex-start;
+
+    @include element('bar') {
+        margin-bottom: $sdx-margin;
+        display: flex;
+        justify-content: space-between;
+        @include modifier('input') {
+            width: 224px;
+        }
+    }
+}

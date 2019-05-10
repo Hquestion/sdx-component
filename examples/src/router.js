@@ -19,6 +19,7 @@ import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
 import projectManageTest from './views/view/projectManageTest.vue';
 import PrivilegeDemo from './views/demo/privilegeDemo';
+import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
 febAlive.resetHistory();
 Vue.use(Router);
@@ -160,6 +161,9 @@ export default new Router({
             }, {
                 path: 'privilege',
                 component: PrivilegeDemo
+            }, {
+                path: 'user-group',
+                component: UserGroupDemo
             }]
         },
         {

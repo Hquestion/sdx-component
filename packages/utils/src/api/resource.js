@@ -18,8 +18,13 @@ export function getResourceConfigDetail(uuid) {
     });
 }
 
+export function createResourceTmpl(params) {
+    return httpService.post('/api/v1/resource_templates', params);
+}
+
 export default {
     getResourceTmplList,
     deleteResourceTmpl,
-    getResourceConfigDetail
+    getResourceConfigDetail,
+    createResourceTmpl
 };

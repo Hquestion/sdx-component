@@ -44,15 +44,3 @@ export function removePermissions(uuid) {
     return httpService.remove(permissionsApi + uuid);
 }
 
-// export default {
-//     getRolesList,
-//     createRoles,
-//     updateRoles,
-//     getRolesDetail,
-//     removeRoles,
-//     getPermissionsList,
-//     createPermissions,
-//     updatePermissions,
-//     getPermissionsDetail,
-//     removePermissions
-// };

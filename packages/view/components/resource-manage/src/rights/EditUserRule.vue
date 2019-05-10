@@ -21,6 +21,7 @@
                         <SdxuInput
                             v-model="params.user.userName"
                             v-if="!meta"
+                            placeholder="请选择用户"
                         />
                         <SdxuUserAvatar
                             :name="params.user.userName"
@@ -50,13 +51,16 @@ import SdxuDialog from "@sdx/ui/components/dialog/src/Dialog";
 import SdxuInput from "@sdx/ui/components/input/src/Input";
 import SdxuUserAvatar from '@sdx/ui/components/user-avatar';
 import RuleForm from "../rule/RuleForm";
+import { Form, FormItem } from 'element-ui';
 export default {
     name: 'EditUserRule',
     components: {
         RuleForm,
         SdxuInput,
         SdxuDialog,
-        SdxuUserAvatar
+        SdxuUserAvatar,
+        [Form.name]: Form,
+        [FormItem.name]: FormItem
     },
     data() {
         return {
@@ -90,12 +94,28 @@ export default {
             }
         },
         title() {
-            return this.meta ? '编辑用户特权' : '新增用户特权';
+            return this.meta ? (this.readonly ? '查看用户特权' : '编辑用户特权') : '新增用户特权';
         }
     },
     methods: {
         handleConfirm() {},
         handleCancel() {}
+    },
+    watch: {
+        meta: {
+            immediate: true,
+            deep: true,
+            handler(val) {
+                if (val) {
+                    this.params.user = {
+                        userId: val.user_id,
+                        userName: val.userName
+                    };
+                } else {
+                    this.params.user = {};
+                }
+            }
+        }
     }
 };
 </script>

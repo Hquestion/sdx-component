@@ -8,7 +8,10 @@
                 <use xlink:href="#iconicon-UserInfo" />
             </svg>
         </div>
-        <div class="sdxu-user-avatar__name">
+        <div
+            class="sdxu-user-avatar__name"
+            v-if="name"
+        >
             {{ name }}
         </div>
     </div>

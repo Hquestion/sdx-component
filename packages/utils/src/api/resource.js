@@ -27,7 +27,7 @@ export function getResourceConfigs(start = 1, count = -1, parameterType = 'USER'
     }).then(res => {
         const { items } = res;
         const userInfoDeferArr = items.map(item => getUserSimpleInfo(item.user_Id));
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             Promise.all(userInfoDeferArr).then(resp => {
                 items.forEach((item, index) => {
                     item.userName = resp[index].fullName;

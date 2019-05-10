@@ -57,6 +57,7 @@
                             type="default"
                             icon="iconicon-plus"
                             size="small"
+                            @click="addRights"
                         >
                             新建特权
                         </SdxuButton>
@@ -107,8 +108,8 @@ export default {
         [Empty.name]: Empty
     },
     methods: {
-        view(item) {
-            this.userRightsDetail = item;
+        view({row}) {
+            this.userRightsDetail = row;
             this.editVisible = true;
             this.isView = true;
         },
@@ -117,12 +118,12 @@ export default {
             this.editVisible = true;
             this.isView = false;
         },
-        edit(item) {
-            this.userRightsDetail = item;
+        edit({row}) {
+            this.userRightsDetail = row;
             this.editVisible = true;
             this.isView = false;
         },
-        del(item) {
+        del({row}) {
             MessageBox.confirm.error({
                 title: '确定要删除次用户特权吗？',
                 content: '删除后不可恢复'

@@ -25,10 +25,12 @@
             <router-link to="/changePwdTest">
                 修改密码测试页面
             </router-link> |
-            <br>
             <router-link to="/projectManageTest">
                 项目管理测试页面
             </router-link> |
+            <router-link to="/userManage">
+                用户管理
+            </router-link>
         </div>
         <p class="page-link">
             <button @click="toFeb">

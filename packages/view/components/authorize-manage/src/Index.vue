@@ -5,14 +5,6 @@
         >
             <div class="sdxv-authorize-manage__header">
                 <div class="sdxv-authorize-manage__handle">
-                    <SdxuInput
-                        v-model="searchRoles.name"
-                        :searchable="true"
-                        size="small"
-                        type="search"
-                        @search="searchName"
-                        @keyup.native.enter="searchName"
-                    />
                     <SdxuButton
                         type="primary"
                         placement="right"
@@ -24,6 +16,25 @@
                         />
                         新建授权
                     </sdxubutton>
+                    <SdxuTabRadioGroup v-model="activeTab">
+                        <SdxuTabRadioItem name="1">
+                            用户授权列表
+                        </SdxuTabRadioItem>
+                        <SdxuTabRadioItem name="2">
+                            用户组授权列表
+                        </SdxuTabRadioItem>
+                        <SdxuTabRadioItem name="3">
+                            角色授权列表
+                        </SdxuTabRadioItem>
+                    </SdxuTabRadioGroup>
+                    <SdxuInput
+                        v-model="searchRoles.name"
+                        :searchable="true"
+                        size="small"
+                        type="search"
+                        @search="searchName"
+                        @keyup.native.enter="searchName"
+                    />
                 </div>
             </div>
             <div class="sdxv-role-manage__table">
@@ -47,26 +58,28 @@
                         label="操作"
                     >
                         <template
-                            slot-scope="scope"
+                            slot-scope=""
                             class="icon"
                         >
                             <i
                                 class="sdx-icon iconicon-edit1 icon"
-                                @click="editRole(scope.row.uuid)"
+                                @click="editRole()"
                             />
                             <i
                                 class="sdx-icon iconicon-delete1 icon"
-                                @click="removeRole(scope.row.uuid, scope.row.name)"
+                                @click="removeRole()"
                             />
                         </template>
                     </el-table-column>
                 </SdxuTable>
-                <sdxu-pagination
-                    :current-page.sync="current"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="currentChange"
-                />
+                <div class="sdxv-role-manage__pagination">
+                    <sdxu-pagination
+                        :current-page.sync="current"
+                        :page-size="pageSize"
+                        :total="total"
+                        @current-change="currentChange"
+                    />
+                </div>
             </div>
             <sdxu-dialog
                 :visible.sync="dialogVisible"
@@ -89,10 +102,27 @@
                             label="授权对象"
                         >
                             <el-select
-                                class="select"
-                                size="small"
-                                placeholder="请选择"
-                            />
+                                v-model="objValue"
+                                multiple
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入关键词"
+                            >
+                                <el-option
+                                    v-for="optItem in options"
+                                    :key="optItem.label"
+                                    :label="optItem.label"
+                                    :value="optItem.label"
+                                >
+                                    <span style="float: left;  color: #606266">
+                                        {{ optItem.label }}
+                                    </span>
+                                    <span style="float: right; color: #4781F8; margin-right: 20px">
+                                        {{ optItem.value }}
+                                    </span>
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item
                             label="权限设置"
@@ -122,6 +152,8 @@ import {Form, FormItem, Select} from 'element-ui';
 import {getPermissionsList} from '@sdx/utils/src/api/manage';
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
+import SdxuTabRadioItem from '@sdx/ui/components/tab-radio/src/TabRadio';
+import SdxuTabRadioGroup from '@sdx/ui/components/tab-radio/src/TabRadioGroup';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -135,6 +167,8 @@ export default {
         SdxuTransfer,
         [Select.name]: Select,
         [ContentPanel.name]: ContentPanel,
+        SdxuTabRadioGroup,
+        SdxuTabRadioItem
     },
     data() {
         return {
@@ -167,7 +201,14 @@ export default {
             }], 
             tags: [],
             defaultKeys: [],
-            treeNodeKey: 'unid'
+            treeNodeKey: 'unid',
+            activeTab: '1',
+            objValue: [],
+            options: [
+                {label: '角色1', value: 1},
+                {label: '群组', value: 2},
+                {label: '授权', value: 3}
+            ]
         };
     },
     props: {
@@ -182,14 +223,14 @@ export default {
                 .then(data => {
                     this.tableData = data.permissions;
                     this.total = data.total;
-                    console.log(data, 88);
+                   
                 });
         },
         currentChange() {
-            console.log(123);
+           
         },
         addAuthorize() {
-            console.log(123);
+           
             this.dialogVisible = true;
         },
         dialogConfirm() {
@@ -205,21 +246,21 @@ export default {
             });
             this.roleList();
         },
-        editRole(id) {
+        editRole() {
             
             this.dialogVisible = true;
                 
         },
-        removeRole(id, name) {
+        removeRole() {
             MessageBox.confirm({
-                title: `确定删除授权${name}吗？`,
+                title: `确定删除授权吗？`,
                 content: '删除后不可恢复哦',
                 type: 'alert'
             }).then(() => {
-                removeRoles(id)
-                    .then(() => {
-                        this.roleList();
-                    });
+                // removeRoles(id)
+                //     .then(() => {
+                //         this.roleList();
+                //     });
             }, () => {
                 
             });

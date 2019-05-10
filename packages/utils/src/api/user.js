@@ -18,6 +18,27 @@ export function getUserList(params) {
     return httpService.get(`/api/v1/users`, params);
 }
 
+/**
+ * 删除用户
+ */
+export function deleteUser(uuid) {
+    return httpService.delete(`/api/v1/user/${uuid}`);
+}
+
+/**
+ * 修改用户
+ */
+export function updataUser(params) {
+    return httpService.patch('/api/v1/users/${uuid}',params);
+}
+
+/**
+ * 创建用户
+ */
+export function addUser() {
+    return httpService.post(`/api/v1/users`);
+}
+
 export function changeUserInfo(params) {
     return httpService.put('/api/v1/user',params);
 }
@@ -47,9 +68,10 @@ export function getUserDetail(uuid) {
     });
 }
 
-export default {
-    changePassword,
-    getRoleDetail,
-    getGroupDetail,
-    getUserDetail
-};
+export function updataGroups(params) {
+    return httpService.patch('/api/v1/groups',params);
+}
+export function getGroups() {
+    return httpService.get('/api/v1/groups/');
+}
+

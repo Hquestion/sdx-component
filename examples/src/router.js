@@ -18,6 +18,7 @@ import UserInfoTest from './views/widget/userInfoTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
 import projectManageTest from './views/view/projectManageTest.vue';
+import UserManageTest from './views/widget/userTest.vue';
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -104,6 +105,14 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: UserInfoTest
+        },
+        {
+            path: '/userManage',
+            name: '用户管理',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: UserManageTest
         },
         {
             path: '/changePwdTest',

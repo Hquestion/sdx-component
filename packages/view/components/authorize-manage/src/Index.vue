@@ -16,19 +16,19 @@
                         />
                         新建授权
                     </sdxubutton>
-                    <SdxuTabRadioGroup v-model="activeTab">
-                        <SdxuTabRadioItem name="1">
+                    <SdxuTabRadioGroup v-model="searchPermissions.objectType">
+                        <SdxuTabRadioItem name="user">
                             用户授权列表
                         </SdxuTabRadioItem>
-                        <SdxuTabRadioItem name="2">
+                        <SdxuTabRadioItem name="group">
                             用户组授权列表
                         </SdxuTabRadioItem>
-                        <SdxuTabRadioItem name="3">
+                        <SdxuTabRadioItem name="role">
                             角色授权列表
                         </SdxuTabRadioItem>
                     </SdxuTabRadioGroup>
                     <SdxuInput
-                        v-model="searchRoles.name"
+                        v-model="searchPermissions.name"
                         :searchable="true"
                         size="small"
                         type="search"
@@ -149,7 +149,7 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuTransfer from '@sdx/ui/components/transfer';
 import {Form, FormItem, Select} from 'element-ui';
-import {getPermissionsList} from '@sdx/utils/src/api/manage';
+import {getPermissionsList, createPermissions, updatePermissions,getPermissionsDetail ,removePermissions} from '@sdx/utils/src/api/manage';
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import SdxuTabRadioItem from '@sdx/ui/components/tab-radio/src/TabRadio';
@@ -172,10 +172,11 @@ export default {
     },
     data() {
         return {
-            searchRoles: {
+            searchPermissions: {
                 name: '',
                 start: 1,
                 count: 10,
+                objectType: 'user'
             },
             tableData: [],
             current: 1,
@@ -202,7 +203,6 @@ export default {
             tags: [],
             defaultKeys: [],
             treeNodeKey: 'unid',
-            activeTab: '1',
             objValue: [],
             options: [
                 {label: '角色1', value: 1},
@@ -219,7 +219,7 @@ export default {
     },
     methods: {
         authorizeList() {
-            getPermissionsList(this.searchRoles)
+            getPermissionsList(this.searchPermissions)
                 .then(data => {
                     this.tableData = data.permissions;
                     this.total = data.total;
@@ -240,8 +240,8 @@ export default {
 
         },
         searchName() {
-            this.searchRoles = Object.assign({}, this.searchRoles, {
-                name: this.searchRoles.name,
+            this.searchPermissions = Object.assign({}, this.searchPermissions, {
+                name: this.searchPermissions.name,
                 start:  1
             });
             this.roleList();

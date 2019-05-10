@@ -149,6 +149,10 @@ export default {
         titleIcon: {
             type: String,
             default: ''
+        },
+        confirmHandler: {
+            type: Function,
+            default: undefined
         }
     },
     methods: {
@@ -166,9 +170,17 @@ export default {
             this.$emit('opened');
         },
         confirm() {
-            this.dialogVisible = false;
-            this.$emit('update:visible', false);
-            this.$emit('confirm');
+            if (this.confirmHandler && typeof this.confirmHandler === 'function') {
+                this.confirmHandler().then(() => {
+                    this.dialogVisible = false;
+                    this.$emit('update:visible', false);
+                    this.$emit('confirm');
+                });
+            } else {
+                this.dialogVisible = false;
+                this.$emit('update:visible', false);
+                this.$emit('confirm');
+            }
         },
         cancel() {
             this.dialogVisible = false;

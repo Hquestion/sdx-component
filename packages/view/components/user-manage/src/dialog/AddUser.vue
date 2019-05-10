@@ -180,8 +180,6 @@ export default {
     },
     mounted() {
         this._getRolesList();
-       // this._getGroups();
-        //this.user = this.userDetail;
     }
 }
 </script>

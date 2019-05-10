@@ -11,7 +11,7 @@
 
 <script>
 import { getUserDetail } from '@sdx/utils/src/api/user';
-import SdxwUserInfoDialog from '@sdx/widget/components/userInfoDialog';
+import SdxwUserInfoDialog from '@sdx/widget/components/userinfo-dialog';
 export default {
     name:'UserDetail',
     data () {

@@ -2,31 +2,57 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @import '~element-ui/packages/theme-chalk/src/base';
 
-@include block('userInfo',$bem-namespace-widget) {
+@include block('userinfo',$bem-namespace-widget) {
+    @include element('dashboard'){
+        @include modifier('title'){
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .icon{
+                width:$sdxw-userInfoDialog-avatar-width;
+                height: $sdxw-userInfoDialog-avatar-width;
+                margin-top: -45px;
+            }
+            span{
+                margin-top: 18px;
+                color: $sdxw-userInfoDialog-title-color;
+            }
+        } 
+    }
     @include element('content'){
-        padding: 0 20px;
+        padding: $sdxw-userInfoDialog-content-padding;
         @include element('item'){
             display: flex;
-            align-items: center;
-            height: 38px;
-            line-height: 38px;
+            min-height: $sdxw-userInfoDialog-min-height;
             color: $sdxw-userInfoDialog-text-color;
+            .sdxw-fold-label-group {
+                width: auto!important;
+            }
             @include modifier('title') {
                 display: block;
-                width: 70px;
+                min-width: $sdxw-userInfoDialog-label-width;
+                margin-right: $sdxw-userInfoDialog-margin;
+                text-align: right;
             }
             @include modifier('data') {
                 font-weight: bold;
             }
-            @include modifier('group') {
-                span{
-                    display: inline-block;
-                    margin-right: 10px;
-                    background: $sdxw-userInfoDialog-text-bg-color;
-                    border-radius: 14px;
-                    padding: 0px 10px;
-                    text-align: center;
-                    line-height: 28px;
+            @include modifier('input') {
+                border: 1px solid $sdxw-userInfoDialog-border-color!important;
+                padding-left: $sdxw-userInfoDialog-margin!important;
+            }
+            @include modifier('dashboardfullname') {
+                input {
+                    cursor: pointer;
+                    border: 1px solid #fff;
+                    width: $sdxw-userInfoDialog-input-width;
+                    padding: $sdxw-userInfoDialog-padding;
+                    height: $sdxw-userInfoDialog-item-height;
+                    box-sizing: border-box;
+                    font-weight: 100!important;
+                    margin-top: -$sdxw-userInfoDialog-margin;
+                    line-height: $sdxw-userInfoDialog-item-height;
+                    padding-left: 0;
                 }
             }
         }

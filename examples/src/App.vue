@@ -21,7 +21,7 @@
             </router-link> |
             <router-link to="/paginationTest">
                 分页测试页面
-            </router-link>>
+            </router-link>
             <router-link to="/breadcrumbTest">
                 面包屑测试页面 |
             </router-link>
@@ -29,7 +29,10 @@
                 用户信息详情
             </router-link>
             <router-link to="/changePwdTest">
-                修改密码测试页面
+                修改密码测试页面 |
+            </router-link>
+            <router-link to="/userManage">
+                用户管理
             </router-link>
         </div>
         <p class="page-link">

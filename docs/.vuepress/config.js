@@ -43,7 +43,11 @@ module.exports = {
                 {
                     title: '业务系统',
                     collapsable: true,
-                    children: []
+                    children: [
+                        'view/rolemanage',
+                        'view/authorizemanage',
+                        'view/usermanage'
+                    ]
                 },
                 {
                     title: '工具集',

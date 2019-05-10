@@ -152,8 +152,8 @@ import {Form, FormItem, Select} from 'element-ui';
 import {getPermissionsList, createPermissions, updatePermissions,getPermissionsDetail ,removePermissions} from '@sdx/utils/src/api/manage';
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
-import SdxuTabRadioItem from '@sdx/ui/components/tab-radio/src/TabRadio';
-import SdxuTabRadioGroup from '@sdx/ui/components/tab-radio/src/TabRadioGroup';
+import TabRadio from '@sdx/ui/components/tab-radio';
+
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -167,8 +167,8 @@ export default {
         SdxuTransfer,
         [Select.name]: Select,
         [ContentPanel.name]: ContentPanel,
-        SdxuTabRadioGroup,
-        SdxuTabRadioItem
+        [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
+        [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
     },
     data() {
         return {

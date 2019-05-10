@@ -40,6 +40,8 @@
 import SdxuDialog from '@sdx/ui/components/dialog';
 import { createResourceTmpl } from '@sdx/utils/src/api/resource';
 
+import { InputNumber, Form, FormItem } from 'element-ui';
+
 export default {
     name: 'CreateCPUAndMemoryTemplate',
     props: {
@@ -49,7 +51,10 @@ export default {
         }
     },
     components: {
-        SdxuDialog
+        SdxuDialog,
+        [InputNumber.name]: InputNumber,
+        [Form.name]: Form,
+        [FormItem.name]: FormItem,
     },
     data() {
         return {

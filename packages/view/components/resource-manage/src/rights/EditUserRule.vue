@@ -47,10 +47,10 @@
 </template>
 
 <script>
-import SdxuDialog from "@sdx/ui/components/dialog/src/Dialog";
-import SdxuInput from "@sdx/ui/components/input/src/Input";
+import SdxuDialog from '@sdx/ui/components/dialog';
+import SdxuInput from '@sdx/ui/components/input';
 import SdxuUserAvatar from '@sdx/ui/components/user-avatar';
-import RuleForm from "../rule/RuleForm";
+import RuleForm from '../rule/RuleForm';
 import { Form, FormItem } from 'element-ui';
 export default {
     name: 'EditUserRule',

@@ -1,5 +1,8 @@
 <template>
-    <div class="rule-form" :class="[`rule-form--${mode}`]">
+    <div
+        class="rule-form"
+        :class="[`rule-form--${mode}`]"
+    >
         <el-form
             :model="params"
             :label-position="labelPosition"
@@ -127,10 +130,10 @@
 
 <script>
 import SdxuInput from '@sdx/ui/components/input';
-import InputReadonly from "./InputReadonly";
+import InputReadonly from './InputReadonly';
 
-import { deepCopy } from "@sdx/utils/src/helper/tool";
-import {getResourceConfigDetail, getResourceTmplList} from "@sdx/utils/src/api/resource";
+import { deepCopy } from '@sdx/utils/src/helper/tool';
+import {getResourceConfigDetail, getResourceTmplList} from '@sdx/utils/src/api/resource';
 import { Select, Form, FormItem } from 'element-ui';
 
 export default {

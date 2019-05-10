@@ -28,6 +28,7 @@ module.exports = {
         "semi": ["error", "always"],
         "indent": ["error", 4],
         "vue/html-indent": ["error", 4],
-        "no-unused-vars": 1
+        "no-unused-vars": 1,
+        "quotes": ['error', 'single'],
     }
 };

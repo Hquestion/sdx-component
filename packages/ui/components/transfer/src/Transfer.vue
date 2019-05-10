@@ -137,7 +137,6 @@ export default {
             return data.label.indexOf(value) !== -1;
         },
         getTags() {
-            console.log('this.default', this.defaultKeys);
             let [checkedNodes ,childrenKeys, moveNodes, tags]= [this.$refs.tree.getCheckedNodes(),[], [], []];
             for(let i =0; i< checkedNodes.length; i ++) {
                 if(checkedNodes[i].children ) {

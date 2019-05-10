@@ -159,13 +159,11 @@ export default {
             };
             getProjectList(params).then(res => {
                 this.projectList = res.data.items;
-                console.log('this.projectList', this.projectList);
                 this.total = res.data.total;
                 this.loading = false;
             });
         },
         handleOperate(operation) {
-            console.log(operation);
             if (operation && operation.type) {
                 switch(operation.type) {
                 case 'delete':

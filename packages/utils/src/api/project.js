@@ -21,3 +21,11 @@ export function updateProject(uuid, params) {
 export function removeProject(uuid) {
     return httpService.remove(projectApi + uuid);
 }
+
+export default {
+    getProjectList,
+    getProjectDetail,
+    createProject,
+    updateProject,
+    removeProject
+};

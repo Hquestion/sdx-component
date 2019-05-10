@@ -127,7 +127,6 @@ import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import TabRadio from '@sdx/ui/components/tab-radio';
 import Project from '@sdx/widget/components/projectcard';
-// import ProjectCardList from '@sdx/widget/components/projectcard';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Switch, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
@@ -202,7 +201,6 @@ export default {
         }
     },
     created() {
-        console.log('created', this.createType);
         if (this.isEditing) {
             Object.assign(this.projectForm, this.data);
             this.data.users.forEach(user => {
@@ -230,7 +228,6 @@ export default {
             this.getProjectList(this.projectType);
         },
         handleOperate(operation) {
-            console.log('operation', operation);
             if (operation && operation.type && operation.id) {
                 const params = {
                     uuid: operation.id
@@ -254,7 +251,6 @@ export default {
             };
             getProjectList(params).then(res => {
                 this.projectList = res.data.items;
-                console.log('this.projectList', this.projectList);
                 this.loading = false;
                 this.totalProjects = this.createType === 'project' ? [...this.projectList] : '';
             });
@@ -264,7 +260,6 @@ export default {
                 if (!valid) {
                     Message.error('请输入必填信息');
                 } else {
-                    console.log('this.tags', this.userGroupTags);
                     this.projectForm.users = [];
                     this.projectForm.groups = [];
                     if (!this.projectForm.isTemplate) {

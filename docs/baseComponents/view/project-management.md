@@ -13,7 +13,7 @@
 ## Usage
 
 ```js
-import ProjectManagement from '@sdx/view/components/project-management';
+import ProjectManagement from '@sdx/view/lib/project-management';
 
 ProjectManagement.viewRouter.register(router, '/');
 ```

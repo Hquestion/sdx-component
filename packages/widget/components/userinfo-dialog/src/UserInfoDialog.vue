@@ -46,14 +46,6 @@
                         type="text"
                         v-model="users.fullName">
                 </div>
-                <div v-if="theme == 'user'" class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.password')}}：
-                    </span>
-                    <span class="sdxw-userinfo__item--data">
-                        {{users.password}}
-                    </span>
-                </div>
                 <div class="sdxw-userinfo__item">
                     <span class="sdxw-userinfo__item--title">
                         {{t('widget.userInfo.role')}}：
@@ -114,7 +106,6 @@ export default {
                 return {
                     username:'',
                     fullName:'',
-                    password:'',
                     roles:[],
                     group:[]
                 }

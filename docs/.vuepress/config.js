@@ -47,7 +47,8 @@ module.exports = {
                         'view/rolemanage',
                         'view/authorizemanage',
                         'view/usermanage',
-                        'view/privilege'
+                        'view/privilege',
+                        'view/project-management'
                     ]
                 },
                 {

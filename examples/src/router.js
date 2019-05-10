@@ -17,6 +17,7 @@ import PaginationTest from './views/ui/paginationTest.vue';
 import UserInfoTest from './views/widget/userInfoTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
+import projectManageTest from './views/view/projectManageTest.vue';
 import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserManageTest from './views/widget/userTest.vue';
 febAlive.resetHistory();
@@ -113,7 +114,7 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: UserManageTest
-        }, 
+        },
         {
             path: '/changePwdTest',
             name: '修改密码',
@@ -160,6 +161,11 @@ export default new Router({
                 path: 'privilege',
                 component: PrivilegeDemo
             }]
+        },
+        {
+            path: '/projectManageTest',
+            name: '项目管理测试',
+            component: projectManageTest
         },
     ]
 });

@@ -46,10 +46,6 @@
                         label="授权对象"
                     />
                     <el-table-column
-                        prop="description"
-                        label="对象类别"
-                    />
-                    <el-table-column
                         prop="address"
                         label="权限"
                     />

@@ -2,9 +2,9 @@
 
 module.exports = {
     breadcrumb: './components/breadcrumb/index.js',
+    'user-info-dialog': './components/userinfo-dialog/index.js',
     'change-password': './components/changePassword/index.js',
     'fold-label': './components/fold-label/index.js',
-    'user-info-dialog': './components/userInfoDialog/index.js',
     projectcard: './components/projectcard/index.js',
     'select-group-user': './components/projectcard/index.js'
 };

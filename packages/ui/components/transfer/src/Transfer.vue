@@ -9,7 +9,7 @@
             />
             <el-scrollbar
                 class="sdxu-transfer__scrollbar"
-                wrap-class="sdxu-transfer__wrap" 
+                wrap-class="sdxu-transfer__wrap"
             >
                 <div
                     class="sdxu-transfer__tree"
@@ -137,7 +137,8 @@ export default {
             return data.label.indexOf(value) !== -1;
         },
         getTags() {
-            let [checkedNodes ,childrenKeys, moveNodes, tags]= [this.$refs.tree.getCheckedNodes(),[], [], []];  
+            console.log('this.default', this.defaultKeys);
+            let [checkedNodes ,childrenKeys, moveNodes, tags]= [this.$refs.tree.getCheckedNodes(),[], [], []];
             for(let i =0; i< checkedNodes.length; i ++) {
                 if(checkedNodes[i].children ) {
                     for (let j =0; j< checkedNodes[i].children.length; j ++) {
@@ -147,6 +148,7 @@ export default {
             }
             moveNodes = checkedNodes.filter(v => !childrenKeys.includes(v[this.treeNodeKey]));
             for (let i =0; i < moveNodes.length ; i++ ) {
+                if (tags.find(item => item.name === moveNodes[i].label)) continue;
                 tags.push(
                     {
                         name: moveNodes[i].label,
@@ -180,7 +182,7 @@ export default {
                     {
                         name: this.data[i].label,
                         [this.treeNodeKey]: this.data[i][this.treeNodeKey],
-                        is_group:  true 
+                        is_group:  true
                     }
                 );
                 keys.push(this.data[i][this.treeNodeKey]);
@@ -199,8 +201,8 @@ export default {
             this.checkedTags = this.getTags();
             this.$emit('update:defaultKeys',obj.checkedKeys);
         },
-        removeAllTag() { 
-            this.checkedTags = []; 
+        removeAllTag() {
+            this.checkedTags = [];
             this.$emit('update:tags',[]);
             this.$emit('update:defaultKeys',[]);
             this.$refs.tree.setCheckedKeys([]);
@@ -212,6 +214,15 @@ export default {
     watch: {
         filterText(val) {
             this.$refs.tree.filter(val);
+        },
+        data: {
+            handler() {
+                this.$nextTick(() => {
+                    this.$refs.tree.setCheckedKeys(this.defaultKeys);
+                    this.movetag();
+                });
+            },
+            immediate: true
         }
     },
 };

@@ -54,7 +54,7 @@
             >
                 <sdxw-select-group-user
                     :tags.sync="userGroupTags"
-                    :default-keys="defaultUserGroupKeys"
+                    :default-checked-keys="defaultUserGroupKeys"
                 />
             </el-form-item>
         </el-form>
@@ -126,8 +126,8 @@ import Dialog from '@sdx/ui/components/dialog';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import TabRadio from '@sdx/ui/components/tab-radio';
-import ProjectCard from '@sdx/widget/components/projectcard/src/ProjectCard';
-import ProjectCardList from '@sdx/widget/components/projectcard/src/ProjectCardList';
+import Project from '@sdx/widget/components/projectcard';
+// import ProjectCardList from '@sdx/widget/components/projectcard';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Switch, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
@@ -167,8 +167,8 @@ export default {
         [Input.name]: Input,
         [Button.name]: Button,
         [Transfer.name]: Transfer,
-        [ProjectCard.name]: ProjectCard,
-        [ProjectCardList.name]: ProjectCardList,
+        [Project.ProjectCard.name]: Project.ProjectCard,
+        [Project.ProjectCardList.name]: Project.ProjectCardList,
         [Scrollbar.name]: Scrollbar,
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
@@ -205,14 +205,14 @@ export default {
         console.log('created', this.createType);
         if (this.isEditing) {
             Object.assign(this.projectForm, this.data);
-            /* console.log('this.data', this.data);
             this.data.users.forEach(user => {
-                this.userGroupTags.push({
-                    is_group: false,
-                    uuid: user.uuid,
-                    name: user.fullName
+                this.data.groups.forEach(group => {
+                    if (this.defaultUserGroupKeys.indexOf(group) === -1) {
+                        this.defaultUserGroupKeys.push(group);
+                    }
+                    this.defaultUserGroupKeys.push(group + '/' + user);
                 });
-            }); */
+            });
             this.title = "编辑项目";
         } else if (this.createType === 'template') {
             this.getProjectList('template');

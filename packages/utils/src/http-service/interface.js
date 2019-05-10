@@ -43,7 +43,7 @@ function remove (url, params, config) {
 function patch (url, data, config) {
     if (!url) return;
     return axios({
-        method: 'delete',
+        method: 'patch',
         url,
         data,
         ...config

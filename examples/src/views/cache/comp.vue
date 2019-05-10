@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Transfer
+        <SdxuTransfer
             :data="data"
             :tags.sync="tags"
             :default-keys.sync="defaultKeys"
@@ -51,14 +51,14 @@ export default {
                     unid: 14,
                     label: '二级 4-2'
                 }]
-            }], 
+            }],
             tags: [],
             defaultKeys: [14],
             treeNodeKey: 'unid'
         };
     },
     components:{
-        Transfer
+        [Transfer.name]: Transfer
     }
 };
 </script>

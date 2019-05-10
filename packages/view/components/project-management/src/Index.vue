@@ -53,6 +53,7 @@
                     v-model="sort"
                     placeholder="请选择排序方式"
                     size="medium"
+                    @change="sortChange"
                 >
                     <el-option
                         label="按创建时间排序"
@@ -106,8 +107,7 @@ import Button from "@sdx/ui/components/button";
 import CreateProject from './CreateProject';
 import Pagination from "@sdx/ui/components/pagination";
 import ContentPanel from "@sdx/ui/components/content-panel";
-import ProjectCard from '@sdx/widget/components/projectcard/src/ProjectCard';
-import ProjectCardList from '@sdx/widget/components/projectcard/src/ProjectCardList';
+import Project from '@sdx/widget/components/projectcard';
 import MessageBox from '@sdx/ui/components/message-box';
 import { Select, Message } from "element-ui";
 import { getProjectList, removeProject } from "@sdx/utils/src/api/project";
@@ -133,14 +133,18 @@ export default {
         [Input.name]: Input,
         [Pagination.name]: Pagination,
         [CreateProject.name]: CreateProject,
-        [ProjectCard.name]: ProjectCard,
-        [ProjectCardList.name]: ProjectCardList,
+        [Project.ProjectCard.name]: Project.ProjectCard,
+        [Project.ProjectCardList.name]: Project.ProjectCardList,
         [ContentPanel.name]: ContentPanel
     },
     created() {
         this.initList();
     },
     methods: {
+        sortChange(sort) {
+            this.sort = sort;
+            this.initList();
+        },
         searchProject() {
             this.initList();
         },
@@ -202,40 +206,6 @@ export default {
             this.current = val;
             this.initList();
         }
-        /* confirm() {
-            this.$refs.changePwdForm.validate(valid => {
-                if (!valid) {
-                    Message.error("请输入必填信息");
-                } else {
-                    if (
-                        this.changePwdForm.newPasswd !== this.changePwdForm.repeatNewPasswd
-                    ) {
-                        Message.error("请确保两次输入的密码一致。");
-                        return;
-                    }
-                    const params = {
-                        oldPasswd: this.changePwdForm.oldPasswd,
-                        newPasswd: this.changePwdForm.newPasswd
-                    };
-                    if (this.handler) {
-                        this.handler(params);
-                    } else {
-                        userApi
-                            .changePassword(params)
-                            .then(() => {
-                                Message({
-                                    message: "密码修改成功！",
-                                    type: "success"
-                                });
-                                this.$emit("on-success");
-                            })
-                            .catch(() => {
-                                this.$emit("on-error");
-                            });
-                    }
-                }
-            });
-        } */
     }
 };
 </script>

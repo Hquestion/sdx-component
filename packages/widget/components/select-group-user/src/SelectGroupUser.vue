@@ -18,7 +18,7 @@ export default {
             treeNodeKey: 'uuid',
             treeData: [],
             tmpTags: this.tags,
-            tmpDefaultKeys: this.defaultKeys
+            tmpDefaultKeys: this.defaultCheckedKeys
         };
     },
     watch: {
@@ -27,6 +27,15 @@ export default {
                 this.$emit('update:tags', nVal);
             },
             deep: true
+        },
+        tags(nVal) {
+            this.tmpTags = nVal;
+        },
+        defaultCheckedKeys: {
+            handler(nVal) {
+                this.tmpDefaultKeys = nVal;
+            },
+            immediate: true
         }
     },
     components: {
@@ -64,7 +73,7 @@ export default {
             type: Array,
             default: () => []
         },
-        defaultKeys: {
+        defaultCheckedKeys: {
             type: Array,
             default: () => []
         }

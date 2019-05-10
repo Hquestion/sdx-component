@@ -1,4 +1,4 @@
-import ProjectManagement from './src/ProjectManagement.vue';
+import ProjectManagement from './src/Index.vue';
 
 ProjectManagement.install = vue => {
     vue.component(ProjectManagement.name, ProjectManagement);
@@ -6,8 +6,8 @@ ProjectManagement.install = vue => {
 
 const routeCfg = [
     {
-        path: 'project-management',
-        name: 'ProjectManagement',
+        path: '/sdxv-project-manage',
+        name: 'SdxvProjectManagement',
         component: ProjectManagement,
     }
 ];

@@ -16,6 +16,17 @@
                         />
                         新建授权
                     </sdxubutton>
+                    <SdxuTabRadioGroup v-model="activeTab">
+                        <SdxuTabRadioItem name="1">
+                            用户授权列表
+                        </SdxuTabRadioItem>
+                        <SdxuTabRadioItem name="2">
+                            用户组授权列表
+                        </SdxuTabRadioItem>
+                        <SdxuTabRadioItem name="3">
+                            角色授权列表
+                        </SdxuTabRadioItem>
+                    </SdxuTabRadioGroup>
                     <SdxuInput
                         v-model="searchRoles.name"
                         :searchable="true"
@@ -91,10 +102,27 @@
                             label="授权对象"
                         >
                             <el-select
-                                class="select"
-                                size="small"
-                                placeholder="请选择"
-                            />
+                                v-model="objValue"
+                                multiple
+                                filterable
+                                remote
+                                reserve-keyword
+                                placeholder="请输入关键词"
+                            >
+                                <el-option
+                                    v-for="optItem in options"
+                                    :key="optItem.label"
+                                    :label="optItem.label"
+                                    :value="optItem.label"
+                                >
+                                    <span style="float: left;  color: #606266">
+                                        {{ optItem.label }}
+                                    </span>
+                                    <span style="float: right; color: #4781F8; margin-right: 20px">
+                                        {{ optItem.value }}
+                                    </span>
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                         <el-form-item
                             label="权限设置"
@@ -124,6 +152,8 @@ import {Form, FormItem, Select} from 'element-ui';
 import {getPermissionsList} from '@sdx/utils/src/api/manage';
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
+import SdxuTabRadioItem from '@sdx/ui/components/tab-radio/src/TabRadio';
+import SdxuTabRadioGroup from '@sdx/ui/components/tab-radio/src/TabRadioGroup';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -137,6 +167,8 @@ export default {
         SdxuTransfer,
         [Select.name]: Select,
         [ContentPanel.name]: ContentPanel,
+        SdxuTabRadioGroup,
+        SdxuTabRadioItem
     },
     data() {
         return {
@@ -169,7 +201,14 @@ export default {
             }], 
             tags: [],
             defaultKeys: [],
-            treeNodeKey: 'unid'
+            treeNodeKey: 'unid',
+            activeTab: '1',
+            objValue: [],
+            options: [
+                {label: '角色1', value: 1},
+                {label: '群组', value: 2},
+                {label: '授权', value: 3}
+            ]
         };
     },
     props: {

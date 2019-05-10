@@ -20,9 +20,7 @@
 </template>
 
 <script>
-// import { TabRadioItem as SdxuTabRadioItem, TabRadioGroup as SdxuTabRadioGroup } from '@sdx/ui/components/tab-radio';
-// import SdxuTabRadioItem from '@sdx/ui/components/tab-radio/src/TabRadio';
-// import SdxuTabRadioGroup from '@sdx/ui/components/tab-radio/src/TabRadioGroup';
+// import TabRadio from '@sdx/ui/components/tab-radio';
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import PrivilegeCustom from './PrivilegeCustom';
 import PrivilegeSystem from './PrivilegeSystem';
@@ -31,8 +29,8 @@ import PrivilegeSystem from './PrivilegeSystem';
 export default {
     name: 'SdxvPrivilege',
     components: {
-        // SdxuTabRadioItem,
-        // SdxuTabRadioGroup,
+        // [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
+        // [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         PrivilegeCustom,
         PrivilegeSystem,
         SdxuContentPanel

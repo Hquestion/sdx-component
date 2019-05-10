@@ -1,5 +1,4 @@
-// import httpService from '../http-service';
-import httpService from '@sdx/utils/lib/http-service';
+import httpService from '../http-service';
 
 const permissionsBaseUrl = 'api/v1/permissions/';
 

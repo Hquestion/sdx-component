@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import { Form, FormItem, Select, Option } from 'element-ui';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuInput from '@sdx/ui/components/input';
 

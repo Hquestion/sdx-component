@@ -100,7 +100,6 @@
 </template>
 
 <script>
-// import { SdxuTable, SdxuPagination, SdxuInput, SdxuButton } from '@sdx/ui';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuInput from '@sdx/ui/components/input';

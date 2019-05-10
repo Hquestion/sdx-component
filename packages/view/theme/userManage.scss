@@ -33,9 +33,8 @@
     }
     @include element('table') {
         margin-top: 20px;
-        .sdx-icon{
-            color: #C0C4CC;
-            margin-right: 20px;
+        .sdxw-fold-label-group{
+            width: auto!important;
         }
         @include modifier('username') {
             cursor: pointer;

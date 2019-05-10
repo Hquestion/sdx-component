@@ -148,6 +148,7 @@ export default {
             getUserDetail(this.$route.query.uuid)
                 .then( res => {
                     this.user = res;
+                    this.user.role = res.roleNames;
                 })
         },
         _getRolesList() {
@@ -156,7 +157,6 @@ export default {
                     this.roles = res.roles.map( (item)=>{
                         return item.name
                     });
-                    console.log('123',this.roles);
                 })
         }
     },

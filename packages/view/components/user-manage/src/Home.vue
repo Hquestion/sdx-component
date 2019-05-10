@@ -53,11 +53,13 @@
                 prop="roles"
                 label="角色"
             >
+            <template slot-scope="scope">
                 <SdxwFoldLabelGroup 
-                    :list="tableData.roles" 
+                    :list="scope.row.roles" 
                     mode="inline" 
                     type="default"
                 ></SdxwFoldLabelGroup>
+            </template>
             </el-table-column>
             <el-table-column
                 prop="createdAt"
@@ -67,9 +69,9 @@
                 label="操作"
             >
                 <template slot-scope="scope">
-                    <i @click="handleJoinGroup(scope.row)" class="sdx-icon iconicon-zu2"></i>
-                    <i @click="handleEditUser(scope.row)" class="sdx-icon iconicon-edit1"></i>
-                    <i @click="handleDeleteUser(scope.row)" class="sdx-icon iconicon-delete"></i>
+                    <sdxu-icon-button @click="handleJoinGroup(scope.row)" class="sdx-icon iconicon-zu2" />
+                    <sdxu-icon-button @click="handleEditUser(scope.row)" class="sdx-icon iconicon-edit1" />
+                    <sdxu-icon-button @click="handleDeleteUser(scope.row)" class="sdx-icon iconicon-delete" />
                 </template>
             </el-table-column>
         </sdxu-table>
@@ -96,17 +98,19 @@
 <script>
 import { 
     getUserList,
-    deleteUser
+    deleteUser,
+    getUserDetail
 } from '@sdx/utils/src/api/user';
 import SdxuInput from '@sdx/ui/components/input';
+import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuTable from '@sdx/ui/components/table';
 import MessageBox from '@sdx/ui/components/message-box';
 import httpService from '@sdx/utils/src/http-service';
 import SdxwFoldLabelGroup from '@sdx/widget/components/fold-label/src/FoldLabelGroup';
-import AddUser from './dialog/AddUser';
-import EditUser from './dialog/EditUser';
-import JoinGroup from './dialog/JoinGroup';
-import UserDetail from './dialog/UserDetail';
+import AddUser from './components/AddUser';
+import EditUser from './components/EditUser';
+import JoinGroup from './components/JoinGroup';
+import UserDetail from './components/UserDetail';
 export default {
     name:'SdxvUserManage',
     data () {
@@ -120,13 +124,7 @@ export default {
             editUserVisible:false,
             userInfoData:{}, //用户详情
             searchKey:'',
-            tableData:[{
-                username:"",
-                fullName:'',
-                roles:['teacher','student'],
-                createdAt:"",
-                group:[]
-            }],
+            tableData:[],
             key:'',
             params:{},
             current:1,
@@ -186,8 +184,22 @@ export default {
         getUsers(){
             getUserList()
                 .then(( res ) => {
-                    this.tableData = res.users;    
-                    this.total = res.total;    
+                    res.users.forEach((item)=>{
+                        this.total = 40;    
+                        this.tableData.push({
+                            username:item.username,
+                            fullName:item.fullName,
+                            uuid:item.uuid,
+                            roles:[],
+                            createdAt:item.createdAt
+                        }) 
+                    });
+                    res.users.forEach((item,index)=>{
+                        getUserDetail(item.uuid)
+                            .then( res => {
+                                this.tableData[index].roles = res.roleNames;
+                            });
+                    })
                 }).catch(() => {
                     this.$emit('on-error');
                 });
@@ -216,7 +228,8 @@ export default {
         AddUser,
         EditUser,
         JoinGroup,
-        UserDetail
+        UserDetail,
+        SdxuIconButton
     }
 }
 </script>

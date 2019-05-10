@@ -1,0 +1,59 @@
+@include block('user-manage',$bem-namespace-view) {
+    position: relative;
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+    @include element('title') {
+        @include modifier('operate') {
+            display: flex;
+            justify-content: space-between;
+        }
+        @include modifier('head') {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            color: #303133;
+            font-weight: bold;
+            font-size: 18px;
+            &::before{
+                content: "";
+                width: 3px;
+                height: 18px;
+                background: #4781F8;
+                display: inline-block;
+                margin-right: 12px;
+            }
+        }
+        @include modifier('operate') {
+            display: flex;
+            .iconicon-plus{
+                font-size: 14px;
+            }
+        }
+    }
+    @include element('table') {
+        margin-top: 20px;
+        .sdx-icon{
+            color: #C0C4CC;
+            margin-right: 20px;
+        }
+        @include modifier('username') {
+            cursor: pointer;
+        }
+    }
+    @include element('pagination') {
+        position: absolute;
+        bottom: 38px;
+        right: 20px;
+    }
+    // userform
+    @include element('userform') {
+        @include modifier('select') {
+            width: 100%;
+        }
+        @include modifier('operate') {
+            text-align: right;
+        }
+    }
+    
+}

@@ -3,79 +3,95 @@
         <sdxu-dialog
             class="sdxw-userinfo"
             :class="[`sdxw-userinfo__${theme}`]"
-            size='small'
+            size="small"
             :visible.sync="dialogVisible"
             @close="dialogClose"
             no-footer
         >
-            <div  v-if="theme == 'user'" slot="title" :class="`sdxw-userinfo__user--title`">
-                {{t('widget.userInfo.title')}} 
+            <div
+                v-if="theme == 'user'"
+                slot="title"
+                :class="`sdxw-userinfo__user--title`"
+            >
+                {{ t('widget.userInfo.title') }}
             </div>
-            <div v-if="theme == 'dashboard'" slot="title" :class="`sdxw-userinfo__dashboard--title`">
+            <div
+                v-if="theme == 'dashboard'"
+                slot="title"
+                :class="`sdxw-userinfo__dashboard--title`"
+            >
                 <svg
                     class="icon"
                     aria-hidden="true"
                 >
                     <use xlink:href="#iconicon-UserInfo" />
                 </svg>
-                <span>{{t('widget.userInfo.title')}} </span>
+                <span>{{ t('widget.userInfo.title') }} </span>
             </div>
             <div class="sdxw-userinfo__content">
                 <div class="sdxw-userinfo__item">
                     <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.username')}}：
-                    </span> 
+                        {{ t('widget.userInfo.username') }}：
+                    </span>
                     <span class="sdxw-userinfo__item--data">
-                        {{users.username}}
+                        {{ users.username }}
                     </span>
                 </div>
-                <div class="sdxw-userinfo__item" :class="[`sdxw-userinfo__item--${theme}fullname`]">
+                <div
+                    class="sdxw-userinfo__item"
+                    :class="[`sdxw-userinfo__item--${theme}fullname`]"
+                >
                     <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.fullname')}}：
+                        {{ t('widget.userInfo.fullname') }}：
                     </span>
-                    <span  v-if="theme == 'user'" class="sdxw-userinfo__item--data">
-                        {{users.fullName}}
+                    <span
+                        v-if="theme == 'user'"
+                        class="sdxw-userinfo__item--data"
+                    >
+                        {{ users.fullName }}
                     </span>
-                    <input 
+                    <input
                         :class="[showInput == true? 'sdxw-userinfo__item--input' : '']"
                         @mouseover="showFullNameInput"
-                        @mouseout="hideFullNameInput" 
+                        @mouseout="hideFullNameInput"
                         @keydown.enter="changeFullName"
-                        v-if="theme == 'dashboard'" 
+                        v-if="theme == 'dashboard'"
                         id="fullName"
                         type="text"
-                        v-model="users.fullName">
+                        v-model="users.fullName"
+                    >
                 </div>
-                <div v-if="theme == 'user'" class="sdxw-userinfo__item">
+                <div
+                    v-if="theme == 'user'"
+                    class="sdxw-userinfo__item"
+                >
                     <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.password')}}：
+                        {{ t('widget.userInfo.password') }}：
                     </span>
                     <span class="sdxw-userinfo__item--data">
-                        {{users.password}}
+                        {{ users.password }}
                     </span>
                 </div>
                 <div class="sdxw-userinfo__item">
                     <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.role')}}：
+                        {{ t('widget.userInfo.role') }}：
                     </span>
                     <div class="sdxw-userinfo__item--role">
-                        <SdxwFoldLabelGroup 
-                            :list="users.roles" 
+                        <SdxwFoldLabelGroup
+                            :list="users.roles"
                             type="default"
-                        >
-                        </SdxwFoldLabelGroup>
+                        />
                     </div>
                 </div>
                 <div class="sdxw-userinfo__item">
                     <span class="sdxw-userinfo__item--title">
-                        {{t('widget.userInfo.groups')}}：
+                        {{ t('widget.userInfo.groups') }}：
                     </span>
                     <div class="sdxw-userinfo__item--group">
-                        <SdxwFoldLabelGroup 
-                            :list="users.group" 
+                        <SdxwFoldLabelGroup
+                            :list="users.group"
                             type="default"
-                        >
-                        </SdxwFoldLabelGroup>
+                        />
                     </div>
                 </div>
             </div>
@@ -83,7 +99,7 @@
     </div>
 </template>
 <script>
-import { 
+import {
     getUserDetail ,
     getGroupDetail,
     getRoleDetail,
@@ -92,7 +108,7 @@ import {
 import SdxuDialog from '@sdx/ui/components/dialog';
 import locale from '@sdx/utils/src/mixins/locale';
 import httpService from '@sdx/utils/src/http-service';
-import SdxwFoldLabelGroup from '@sdx/widget/components/fold-label/src/FoldLabelGroup';
+import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 export default {
     name:'SdxwUserInfoDialog',
     data () {
@@ -100,7 +116,7 @@ export default {
             showInput:false,
             dialogVisible: this.visible,
             users:this.userInfoData
-        }
+        };
     },
     mixins:[locale],
     props:{
@@ -117,7 +133,7 @@ export default {
                     password:'',
                     roles:[],
                     group:[]
-                }
+                };
             }
         },
         theme:{
@@ -142,7 +158,7 @@ export default {
     },
     methods:{
         dialogClose() {
-            this.$emit('update:visible', false); 
+            this.$emit('update:visible', false);
             this.$emit('close');
         },
         //显示fullName input框
@@ -155,7 +171,7 @@ export default {
             this.showInput = false;
             document.getElementById("fullName").blur();
         },
-        //修改fullName的值 
+        //修改fullName的值
         changeFullName() {
             if(this.users.fullName!=''){
                 changeUserInfo(this.users)
@@ -172,16 +188,16 @@ export default {
             if(this.id){
                 getUserDetail(this.id)
                     .then(( res ) => {
-                        this.users = res; 
+                        this.users = res;
                         this.users.group = res.groupNames;
                         this.users.roles = res.roleNames;
-                    })
+                    });
             }
         }
     },
     components:{
         SdxuDialog,
-        SdxwFoldLabelGroup
+        [SdxwFoldLabel.FoldLabelGroup.name]: SdxwFoldLabel.FoldLabelGroup
     }
-}
+};
 </script>

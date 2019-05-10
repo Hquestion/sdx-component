@@ -1,7 +1,13 @@
 <template>
     <div class="sdxu-content-panel">
-        <div class="sdxu-content-panel__header">
-            <div class="sdxu-content-panel__title">
+        <div
+            class="sdxu-content-panel__header"
+            v-if="title || $slots.right"
+        >
+            <div
+                class="sdxu-content-panel__title"
+                v-if="title"
+            >
                 <span>{{ title }}</span>
                 <span class="sdxu-content-panel__subtitle">{{ subtitle }}</span>
             </div>

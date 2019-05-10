@@ -1,39 +1,34 @@
 <template>
     <sdxu-dialog
         :visible.sync="dialogVisible"
-        title="新建GPU模板"
+        title="新建CPU / 内存模板"
         size="small"
         @confirm="handleConfirm"
         @cancel="handleCancel"
-        class="sdxv-gpu-template"
+        class="sdxv-cpu-template"
     >
         <el-form
             :model="formData"
             ref="form"
             label-width="90px"
-            :rules="rules"
         >
             <el-form-item
-                label="GPU型号 :"
-                prop="label"
-                required
-            >
-                <el-select v-model="formData.name">
-                    <el-option
-                        v-for="(item, i) in GPUList"
-                        :key="i"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
-            </el-form-item>
-            <el-form-item
-                label="GPU(块) :"
-                prop="count"
+                label="CPU(核) :"
+                prop="cpu"
                 required
             >
                 <el-input-number
-                    v-model="formData.count"
+                    v-model="formData.cpu"
+                    :min="1"
+                />
+            </el-form-item>
+            <el-form-item
+                label="内存(GB) :"
+                prop="memory"
+                required
+            >
+                <el-input-number
+                    v-model="formData.memory"
                     :min="1"
                 />
             </el-form-item>
@@ -48,7 +43,7 @@ import { createResourceTmpl } from '@sdx/utils/src/api/resource';
 import { InputNumber, Form, FormItem } from 'element-ui';
 
 export default {
-    name: 'CreateGPUTemplate',
+    name: 'CreateCPUAndMemoryTemplate',
     props: {
         visible: {
             type: Boolean,
@@ -64,14 +59,8 @@ export default {
     data() {
         return {
             formData: {
-                label: '',
-                count: 1
-            },
-            GPUList: [],
-            rules: {
-                label: [{
-                    validator: this.validateLabel, trigger: 'change'
-                }]
+                cpu: 1,
+                memory: 1
             }
         };
     },
@@ -89,7 +78,7 @@ export default {
         handleConfirm() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    const params = Object.assign({}, this.formData, { templateType: 'GPU'});
+                    const params = Object.assign({}, this.formData, { templateType: 'CPU'});
                     createResourceTmpl(params).then(data => {
                         this.$refs.form.resetFields();
                         this.dialogVisible = false;
@@ -102,31 +91,14 @@ export default {
         handleCancel() {
             this.$refs.form.resetFields();
             this.dialogVisible = false;
-        },
-        fetchGpuList() {
-            // todo:
-        },
-        validateLabel(rule, value, callback) {
-            if (value === '') {
-                callback(new Error('请选择型号'));
-            } else {
-                callback();
-            }
         }
-    },
-    created() {
-        this.fetchGpuList();
     }
 };
 </script>
 
 <style lang="scss">
-.sdxv-gpu-template {
+.sdxv-cpu-template {
     .el-input-number {
-        width: 250px;
-    }
-
-    .el-select {
         width: 250px;
     }
 }

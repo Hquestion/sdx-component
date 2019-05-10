@@ -11,8 +11,9 @@ import ContentPanel from './components/content-panel';
 import Table from './components/table';
 import PlaceholderBlock from './components/placeholder-block';
 import IconButton from './components/icon-button';
+import Empty from './components/empty';
 
-import { registerI18n } from "@sdx/utils/src/locale";
+import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxUI = {
     Button,
@@ -27,7 +28,8 @@ const SdxUI = {
     Table,
     ContentPanel,
     PlaceholderBlock,
-    IconButton
+    IconButton,
+    Empty
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -44,6 +46,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     ContentPanel.install(vue);
     PlaceholderBlock.install(vue);
     IconButton.install(vue);
+    Empty.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

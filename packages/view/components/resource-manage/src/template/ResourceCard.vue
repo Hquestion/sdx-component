@@ -4,7 +4,8 @@
         :class="{'is-gpu': isGPU, 'is-cpu': isCPU}"
     >
         <div class="icon">
-            <i class="iconfont iconicon-xiezuo" />
+            <i v-if="isCPU" class="sdx-icon iconicon-cpu-dashboard" />
+            <i v-if="isGPU" class="sdx-icon iconicon-GPU-dashboard" />
         </div>
         <div class="detail">
             <div

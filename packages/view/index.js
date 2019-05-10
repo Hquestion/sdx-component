@@ -2,7 +2,7 @@
 import ProjectManagement from './components/project-management';
 import UserManage from './components/resource-manage/index.js';
 
-import { registerI18n } from "@sdx/utils/src/locale";
+import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxView = {
     ProjectManagement,

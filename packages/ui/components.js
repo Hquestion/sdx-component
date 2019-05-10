@@ -13,5 +13,6 @@ module.exports = {
     'message-box': './components/message-box/index.js',
     'content-panel': './components/content-panel/index.js',
     'placeholder-block': './components/placeholder-block/index.js',
-    'icon-button': './components/icon-button/index.js'
+    'icon-button': './components/icon-button/index.js',
+    'empty': './components/empty/index.js'
 };

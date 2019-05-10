@@ -11,7 +11,8 @@
     "test": "__tests__"
   },
   "files": [
-    "lib"
+    "lib",
+      "src"
   ],
   "publishConfig": {
     "registry": "http://192.168.20.38:4873/"

@@ -15,7 +15,7 @@ export function getGroupDetail(uuid) {
 }
 
 export function getUserList(params) {
-    return httpService.get(`/api/v1/users`, params);
+    return httpService.get('/api/v1/users', params);
 }
 
 /**
@@ -36,11 +36,15 @@ export function updataUser(params) {
  * 创建用户
  */
 export function addUser() {
-    return httpService.post(`/api/v1/users`);
+    return httpService.post('/api/v1/users');
 }
 
 export function changeUserInfo(params) {
-    return httpService.put('/api/v1/user',params);
+    return httpService.put('/api/v1/user', params);
+}
+
+export function getUserSimpleInfo(uuid) {
+    return httpService.get(`/api/v1/users/${uuid}`);
 }
 
 export function getUserDetail(uuid) {
@@ -75,3 +79,17 @@ export function getGroups() {
     return httpService.get('/api/v1/groups/');
 }
 
+export default {
+    changePassword,
+    getRoleDetail,
+    getGroupDetail,
+    getUserDetail,
+    getUserList,
+    deleteUser,
+    updataUser,
+    addUser,
+    changeUserInfo,
+    getUserSimpleInfo,
+    updataGroups,
+    getGroups
+};

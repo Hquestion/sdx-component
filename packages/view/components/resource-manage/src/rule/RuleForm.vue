@@ -1,5 +1,8 @@
 <template>
-    <div class="rule-form">
+    <div
+        class="rule-form"
+        :class="[`rule-form--${mode}`]"
+    >
         <el-form
             :model="params"
             :label-position="labelPosition"
@@ -19,7 +22,7 @@
                 />
                 <InputReadonly
                     v-else
-                    size="small"
+                    size="regular"
                 >
                     {{ params.maxConcurrentTasks }}
                 </InputReadonly>
@@ -44,7 +47,7 @@
                 </ElSelect>
                 <InputReadonly
                     v-else
-                    size="small"
+                    size="regular"
                 >
                     {{ params.heavyTaskArr[0] | cpuTplFriendly }}
                 </InputReadonly>
@@ -58,7 +61,7 @@
                 />
                 <InputReadonly
                     v-else
-                    size="small"
+                    size="regular"
                 >
                     {{ params.heavyTaskArr[1] }}
                 </InputReadonly>
@@ -77,7 +80,7 @@
                 />
                 <InputReadonly
                     v-else
-                    size="small"
+                    size="regular"
                 >
                     {{ params.maxGpus }}
                 </InputReadonly>
@@ -95,7 +98,7 @@
                     v-model="params.maxGpuTime"
                 />
                 <InputReadonly
-                    size="small"
+                    size="regular"
                     v-else
                 >
                     {{ params.maxGpuTime | secToHour }}
@@ -114,7 +117,7 @@
                     v-model="params.maxCpuTime"
                 />
                 <InputReadonly
-                    size="small"
+                    size="regular"
                     v-else
                 >
                     {{ params.maxCpuTime | secToDay }}
@@ -127,11 +130,11 @@
 
 <script>
 import SdxuInput from '@sdx/ui/components/input';
-import InputReadonly from "./InputReadonly";
+import InputReadonly from './InputReadonly';
 
-import { deepCopy } from "@sdx/utils/src/helper/tool";
-import {getResourceConfigDetail, getResourceTmplList} from "@sdx/utils/src/api/resource";
-import { Select } from 'element-ui';
+import { deepCopy } from '@sdx/utils/src/helper/tool';
+import {getResourceConfigDetail, getResourceTmplList} from '@sdx/utils/src/api/resource';
+import { Select, Form, FormItem } from 'element-ui';
 
 export default {
     name: 'RuleForm',
@@ -151,7 +154,9 @@ export default {
     components: {
         InputReadonly,
         SdxuInput,
-        [Select.name]: Select
+        [Select.name]: Select,
+        [Form.name]: Form,
+        [FormItem.name]: FormItem
     },
     props: {
         readonly: {
@@ -238,6 +243,18 @@ export default {
         }
         & /deep/ .input-readonly {
             margin: 0 5px;
+        }
+        &.rule-form--v {
+            & /deep/ .sdxu-input {
+                margin: 0 5px;
+                input {
+                    width: 100px;
+                }
+            }
+            & /deep/ .el-select {
+                margin: 0 5px;
+                width: 100px;
+            }
         }
     }
 </style>

@@ -6,7 +6,7 @@ import UserInfoDialog from './components/userinfo-dialog';
 import ProjectCard from './components/projectcard';
 import SelectGroupUser from './components/select-group-user';
 
-import { registerI18n } from "@sdx/utils/src/locale";
+import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
     Breadcrumb,

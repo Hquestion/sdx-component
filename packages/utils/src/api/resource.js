@@ -19,6 +19,10 @@ export function getResourceConfigDetail(uuid) {
     });
 }
 
+export function createResourceTmpl(params) {
+    return httpService.post('/api/v1/resource_templates', params);
+}
+
 export function getResourceConfigs(start = 1, count = -1, parameterType = 'USER') {
     return httpService.get('/api/v1/resource_configs', {
         start,
@@ -44,5 +48,6 @@ export default {
     getResourceTmplList,
     deleteResourceTmpl,
     getResourceConfigDetail,
+    createResourceTmpl,
     getResourceConfigs
 };

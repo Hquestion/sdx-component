@@ -17,6 +17,7 @@ import PaginationTest from './views/ui/paginationTest.vue';
 import UserInfoTest from './views/widget/userInfoTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
+import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserManageTest from './views/widget/userTest.vue';
 febAlive.resetHistory();
 Vue.use(Router);
@@ -155,6 +156,9 @@ export default new Router({
                 meta: {
                     name: 'input'
                 }
+            }, {
+                path: 'privilege',
+                component: PrivilegeDemo
             }]
         },
     ]

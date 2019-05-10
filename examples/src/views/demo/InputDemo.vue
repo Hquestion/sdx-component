@@ -2,6 +2,7 @@
     <div class="sdx-demo">
         <sdxu-input
             placeholder="search： small"
+            type="search"
             :searchable="true"
             size="small"
             @blur="handleBlur"
@@ -13,6 +14,7 @@
         </sdxu-input>
         <sdxu-input
             placeholder="maxlength"
+            type="search"
             size="small"
             @blur="handleBlur"
             v-model="value"
@@ -25,6 +27,7 @@
         </sdxu-input>
         <sdxu-input
             placeholder="search：regular"
+            type="search"
             :searchable="true"
             @blur="handleBlur"
             v-model="value"
@@ -58,6 +61,11 @@
                 <i class="sdxu-input__icon el-icon-date" />
             </template>
         </sdxu-input>
+
+        <sdxu-input
+            type="textarea"
+            v-model="value"
+        />
 
         <el-input
             placeholder="element ui： password"

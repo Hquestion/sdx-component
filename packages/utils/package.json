@@ -27,8 +27,8 @@
     "build": "babel src --out-dir lib && gulp copy"
   },
   "peerDependencies": {
-    "axios": "^0.18.0",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "axios": "^0.18.0" 
   },
   "babel": {
     "presets": [

@@ -2,10 +2,12 @@
     <!-- 新增用户 -->
     <div class="sdxv-user-manage__userform">
         <sdxu-dialog
-            :visible.sync="visible" 
+            :visible.sync="visible"
             @close="close"
         >
-            <div slot="title">编辑用户</div>
+            <div slot="title">
+                编辑用户
+            </div>
             <el-form
                 :model="user"
                 label-width="100px"
@@ -18,7 +20,7 @@
                         label="用户名："
                         prop="username"
                     >
-                        <span/>{{user.username}}</span>
+                        <span>{{ user.username }}</span>
                     </el-form-item>
                     <el-form-item
                         label="显示名："
@@ -33,28 +35,32 @@
                         label="角色："
                         prop="role"
                     >
-                        <el-select 
+                        <el-select
                             class="sdxv-user-manage__userform--select"
-                            v-model="user.role" 
-                            multiple 
+                            v-model="user.role"
+                            multiple
                             placeholder="请选择用户角色"
                         >
                             <el-option
-                            v-for="item in roles"
-                            :key="item"
-                            :label="item"
-                            :value="item">
-                            </el-option>
+                                v-for="item in roles"
+                                :key="item"
+                                :label="item"
+                                :value="item"
+                            />
                         </el-select>
                     </el-form-item>
                     <el-form-item
                         label="激活："
                     >
-                        <el-radio-group 
+                        <el-radio-group
                             v-model="user.isActive"
                         >
-                            <el-radio label="true">是</el-radio>
-                            <el-radio label="false">否</el-radio>
+                            <el-radio label="true">
+                                是
+                            </el-radio>
+                            <el-radio label="false">
+                                否
+                            </el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item
@@ -78,8 +84,18 @@
             </el-form>
         </sdxu-dialog>
         <div slot="footer">
-            <sdxu-button type="default" @click="close">取 消</sdxu-button>
-            <sdxu-button type="primary" @click="confirm">确定</sdxu-button>
+            <sdxu-button
+                type="default"
+                @click="close"
+            >
+                取 消
+            </sdxu-button>
+            <sdxu-button
+                type="primary"
+                @click="confirm"
+            >
+                确定
+            </sdxu-button>
         </div>
     </div>
 </template>
@@ -116,7 +132,7 @@ export default {
                 timeGroups:[]
             },
             roles:[]
-        }
+        };
     },
     watch:{
         userDetail(nVal) {
@@ -149,15 +165,15 @@ export default {
                 .then( res => {
                     this.user = res;
                     this.user.role = res.roleNames;
-                })
+                });
         },
         _getRolesList() {
             getRolesList()
                 .then( res=>{
                     this.roles = res.roles.map( (item)=>{
-                        return item.name
+                        return item.name;
                     });
-                })
+                });
         }
     },
     components: {
@@ -167,7 +183,7 @@ export default {
         this._getGroups();
         this._getRolesList();
     }
-}
+};
 </script>
 
 <style lang='scss' scoped>

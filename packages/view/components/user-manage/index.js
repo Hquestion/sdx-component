@@ -6,7 +6,7 @@ const routeCfg = [
         name: 'SdxvUserManage',
         component: UserManage,
         meta: {
-            breadcrumbName: '用户',
+            breadcrumb: '用户',
             system: 'manage'
         }
     }

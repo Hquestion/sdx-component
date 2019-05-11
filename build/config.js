@@ -29,7 +29,6 @@ externals = [
         'element-ui': 'element-ui',
         'axios': 'axios'
     }, externals),
-    nodeExternals(),
     /^element-ui/,
     /^~element-ui/,
     function(context, request, callback){
@@ -50,8 +49,8 @@ externals = [
             return callback(null, 'commonjs ' + `@sdx/utils/lib/${macthed}`);
         }
         callback();
-    }
-
+    },
+    nodeExternals()
 ];
 
 exports.externals = externals;

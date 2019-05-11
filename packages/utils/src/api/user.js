@@ -1,6 +1,6 @@
 import httpService from '../http-service';
 
-const changePasswordApi = 'api/v1/user/changePassword'; // 目前后端暂时不能确定, 之后需要再做修改
+const changePasswordApi = '/api/v1/user/changePassword'; // 目前后端暂时不能确定, 之后需要再做修改
 
 export function changePassword(params) {
     return httpService.post(changePasswordApi, params);

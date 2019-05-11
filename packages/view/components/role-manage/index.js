@@ -8,7 +8,7 @@ const routeCfg = [
         name: 'SdxvRoleManage',
         component: RoleManage,
         meta: {
-            breadcrumbName: '角色管理',
+            breadcrumb: '角色',
             system: 'manage'
         }
     }

@@ -9,6 +9,9 @@ const routeCfg = [
         path: '/sdxv-project-manage',
         name: 'SdxvProjectManagement',
         component: ProjectManagement,
+        meta: {
+            breadcrumb: '项目'
+        }
     }
 ];
 

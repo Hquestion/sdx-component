@@ -48,7 +48,6 @@
 
 <script>
 import Button from '@sdx/ui/components/button';
-let scrollTop = 0;
 export default {
     name: 'SdxuMessageBox',
     data() {

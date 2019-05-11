@@ -2,27 +2,29 @@
     <SdxuDialog
         class="create-user-group"
         :visible.sync="groupVisible"
+        @open="onOpen"
     >
         <div slot="title">
             {{ title }}
         </div>
         <el-form
+            ref="form"
             :model="params"
             label-width="80px"
             label-position="right"
         >
             <el-form-item
                 label="用户组名"
-                prop="groupName"
+                prop="name"
                 required
             >
                 <SdxuInput
                     placeholder="请输入组名"
-                    v-model="params.groupName"
+                    v-model="params.name"
                 />
             </el-form-item>
             <el-form-item
-                label="用户组名"
+                label="角色"
                 prop="roles"
                 required
             >
@@ -56,7 +58,7 @@ export default {
         return {
             params: {
                 uuid: '',
-                groupName: '',
+                name: '',
                 roles: []
             },
             roleList: []
@@ -90,13 +92,26 @@ export default {
             getRolesList().then(res => {
                 this.roleList = res.roles;
             });
+        },
+        onOpen() {
+            this.$nextTick(() => {
+                this.$refs.form.clearValidate();
+            });
         }
     },
     watch: {
         meta: {
             immediate: true,
             handler(val) {
-                val && (this.params = val);
+                if (val) {
+                    this.params = Object.assign(this.params, val);
+                } else {
+                    this.params = {
+                        uuid: '',
+                        name: '',
+                        roles: []
+                    };
+                }
             }
         }
     },

@@ -7,7 +7,7 @@
                 <sdxu-button
                     icon="sdx-icon iconicon-plus"
                     size="small"
-                    @click="createVisible = true"
+                    @click="createGroup"
                 >
                     新建用户组
                 </sdxu-button>
@@ -52,7 +52,7 @@
                         <div class="sdxv-user-group__table--operation">
                             <i
                                 class="sdx-icon iconicon-edit1"
-                                @click="handleEdit(row.uuid)"
+                                @click="handleEdit(row)"
                                 title="编辑"
                             />
                             <i
@@ -84,7 +84,10 @@
                 />
             </div>
         </div>
-        <CreateUserGroup :visible.sync="createVisible" />
+        <CreateUserGroup
+            :visible.sync="createVisible"
+            :meta="groupMeta"
+        />
     </sdxu-panel>
 </template>
 
@@ -121,7 +124,8 @@ export default {
             name: '',
             createVisible: false,
             editVisible: false,
-            deleteVisible: false
+            deleteVisible: false,
+            groupMeta: undefined
         };
     },
     computed: {
@@ -149,8 +153,13 @@ export default {
             this.page = page;
             this.fetchData();
         },
-        handleEdit(uuid) {
-
+        createGroup() {
+            this.groupMeta = undefined;
+            this.createVisible = true;
+        },
+        handleEdit(row) {
+            this.groupMeta = row;
+            this.createVisible = true;
         },
         handleDelete(row) {
             SdxuMessageBox.confirm({

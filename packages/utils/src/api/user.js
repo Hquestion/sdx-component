@@ -75,8 +75,8 @@ export function getUserDetail(uuid) {
 export function updataGroups(params) {
     return httpService.patch('/api/v1/groups',params);
 }
-export function getGroups() {
-    return httpService.get('/api/v1/groups/');
+export function getGroups(params) {
+    return httpService.get('/api/v1/groups/', params);
 }
 
 export default {

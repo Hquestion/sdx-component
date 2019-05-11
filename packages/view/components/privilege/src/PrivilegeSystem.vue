@@ -22,13 +22,10 @@
                 label="标签"
             >
                 <template #default="{ row }">
-                    <div>
-                        <span
-                            class="sdxv-privilege-system__table--tag"
-                            v-for="(v, i) in row.tags"
-                            :key="i"
-                        >{{ v }}</span>
-                    </div>
+                    <sdxw-fold-label-group
+                        :list="row.tags"
+                        mode="inline"
+                    />
                 </template>
             </el-table-column>
             <el-table-column
@@ -76,6 +73,7 @@
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuInput from '@sdx/ui/components/input';
+import FoldLabel from '@sdx/widget/components/fold-label';
 
 import { getPermissionList } from '@sdx/utils/src/api/permissions';
 
@@ -84,7 +82,9 @@ export default {
     components: {
         SdxuTable,
         SdxuPagination,
-        SdxuInput
+        SdxuInput,
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup
     },
     data() {
         return {

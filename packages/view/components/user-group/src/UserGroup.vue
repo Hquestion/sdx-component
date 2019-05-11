@@ -1,81 +1,89 @@
 <template>
     <sdxu-panel
         title="用户组"
-        class="sdxv-user-group"
     >
-        <div class="sdxv-user-group__bar">
-            <sdxu-button
-                icon="sdx-icon iconicon-plus"
-                size="small"
-                @click="createVisible = true"
+        <div class="sdxv-user-group">
+            <div class="sdxv-user-group__bar">
+                <sdxu-button
+                    icon="sdx-icon iconicon-plus"
+                    size="small"
+                    @click="createVisible = true"
+                >
+                    新建用户组
+                </sdxu-button>
+                <sdxu-input
+                    class="sdxv-user-group__bar--input"
+                    type="search"
+                    :searchable="true"
+                    placeholder="请输入权限名"
+                    @keydown.native.enter="handleSearch"
+                    @search="handleSearch"
+                    size="small"
+                    v-model="name"
+                />
+            </div>
+            <sdxu-table
+                :data="groups"
+                class="sdxv-user-group__table"
+                :default-sort="{prop: 'createAt', order: 'descending'}"
             >
-                新建用户组
-            </sdxu-button>
-            <sdxu-input
-                class="sdxv-user-group__bar--input"
-                type="search"
-                :searchable="true"
-                placeholder="请输入权限名"
-                @keydown.native.enter="handleSearch"
-                @search="handleSearch"
-                size="small"
-                v-model="name"
-            />
-        </div>
-        <sdxu-table
-            :data="groups"
-            class="sdxv-user-group__table"
-            :default-sort="{prop: 'createAt', order: 'descending'}"
-        >
-            <el-table-column
-                label="用户组名"
-                prop="name"
-            />
-            <el-table-column
-                label="角色"
-            >
-                <template #default="{ row }">
-                    <div>
-                        <span
-                            class="sdxv-user-group__table--role"
-                            v-for="(item, i) in row.roles"
-                            :key="i"
+                <el-table-column
+                    label="用户组名"
+                    prop="name"
+                />
+                <el-table-column
+                    label="角色"
+                >
+                    <template #default="{ row }">
+                        <sdxw-fold-label-group
+                            :list="row.roles"
+                            mode="inline"
+                            type="default"
                         />
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                label="创建时间"
-                prop="createAt"
-                sortable
-            />
-            <el-table-column label="操作">
-                <template #default="{ row }">
-                    <i
-                        icon="sdx-icon iconicon-edit1"
-                        @click="handleEdit(row.uuid)"
-                    />
-                    <i
-                        icon="sdx-icon iconicon-delete1"
-                        @click="handleDelete(row)"
-                    />
-                </template>
-            </el-table-column>
-            <el-table-column type="expand">
-                <template #default="{ row }">
-                    <div>
-                        <span>组员:</span>
-                        <span>div</span>
-                    </div>
-                </template>
-            </el-table-column>
-        </sdxu-table>
-        <sdxu-pagination
-            :current-page.sync="page"
-            :page-size="pageSize"
-            :total="total"
-            @current-change="handleChangePage"
-        />
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="创建时间"
+                    prop="createdAt"
+                    sortable
+                />
+                <el-table-column label="操作">
+                    <template #default="{ row }">
+                        <div class="sdxv-user-group__table--operation">
+                            <i
+                                class="sdx-icon iconicon-edit1"
+                                @click="handleEdit(row.uuid)"
+                                title="编辑"
+                            />
+                            <i
+                                class="sdx-icon iconicon-delete1"
+                                @click="handleDelete(row)"
+                                title="删除"
+                            />
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column type="expand">
+                    <template #default="{ row }">
+                        <div class="sdxv-user-group__table--expand">
+                            <span class="sdxv-user-group__table--expand-label">组员:</span>
+                            <sdxw-fold-label-group
+                                :list="row.roles"
+                                type="default"
+                            />
+                        </div>
+                    </template>
+                </el-table-column>
+            </sdxu-table>
+            <div class="sdxv-user-group__pagination">
+                <sdxu-pagination
+                    :current-page.sync="page"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="handleChangePage"
+                />
+            </div>
+        </div>
         <CreateUserGroup :visible.sync="createVisible" />
     </sdxu-panel>
 </template>
@@ -87,6 +95,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuMessageBox from '@sdx/ui/components/message-box';
 import SdxuInput from '@sdx/ui/components/input';
+import FoldLabel from '@sdx/widget/components/fold-label';
 
 import { getGroups } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
@@ -99,7 +108,9 @@ export default {
         SdxuTable,
         SdxuButton,
         SdxuPagination,
-        SdxuInput
+        SdxuInput,
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup
     },
     data() {
         return {

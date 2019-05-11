@@ -3,7 +3,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @include block('user-group', $bem-namespace-view) {
     display: flex;
     flex-flow: column nowrap;
-    align-content: flex-start;
 
     @include element('bar') {
         margin-bottom: $sdx-margin;
@@ -12,5 +11,38 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include modifier('input') {
             width: 224px;
         }
+    }
+
+    @include element('table') {
+        @include modifier('operation') {
+            i {
+                color:rgba(192,196,204,1);
+                cursor: pointer;
+                & + i {
+                    margin-left: 30px;
+                }
+            }
+        }
+
+        @include modifier('expand') {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        @include modifier('expand-label') {
+            width: 36px;
+            margin-right: 20px;
+        }
+    }
+
+    @include element('pagination') {
+        align-self: flex-end;
+        margin-top: $sdx-margin;
+    }
+}
+
+.sdxw-fold-label {
+    span {
+        word-break: keep-all;
     }
 }

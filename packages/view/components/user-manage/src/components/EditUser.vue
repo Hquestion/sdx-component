@@ -82,21 +82,21 @@
                     </el-form-item>
                 </div>
             </el-form>
+            <div slot="footer">
+                <sdxu-button
+                    type="default"
+                    @click="close"
+                >
+                    取 消
+                </sdxu-button>
+                <sdxu-button
+                    type="primary"
+                    @click="confirm"
+                >
+                    确定
+                </sdxu-button>
+            </div>
         </sdxu-dialog>
-        <div slot="footer">
-            <sdxu-button
-                type="default"
-                @click="close"
-            >
-                取 消
-            </sdxu-button>
-            <sdxu-button
-                type="primary"
-                @click="confirm"
-            >
-                确定
-            </sdxu-button>
-        </div>
     </div>
 </template>
 
@@ -128,8 +128,7 @@ export default {
                 isActive:false,
                 timeGroups:[],
                 role:[],
-                expire_at:'',
-                timeGroups:[]
+                expire_at:''
             },
             roles:[]
         };

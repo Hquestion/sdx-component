@@ -29,7 +29,7 @@
         >
             <el-table-column
                 label="用户组名"
-                prop="name" 
+                prop="name"
             />
             <el-table-column
                 label="角色"
@@ -76,6 +76,7 @@
             :total="total"
             @current-change="handleChangePage"
         />
+        <CreateUserGroup :visible.sync="createVisible" />
     </sdxu-panel>
 </template>
 
@@ -88,10 +89,12 @@ import SdxuMessageBox from '@sdx/ui/components/message-box';
 import SdxuInput from '@sdx/ui/components/input';
 
 import { getGroups } from '@sdx/utils/src/api/user';
+import CreateUserGroup from './CreateUserGroup';
 
 export default {
     name: 'SdxvUserGroup',
     components: {
+        CreateUserGroup,
         SdxuPanel,
         SdxuTable,
         SdxuButton,
@@ -101,7 +104,7 @@ export default {
     data() {
         return {
             pageSize: 10,
-            page: 1, 
+            page: 1,
             total: 100,
             groups: [],
             name: '',

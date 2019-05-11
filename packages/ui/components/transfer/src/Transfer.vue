@@ -137,7 +137,7 @@ export default {
             return data.label.indexOf(value) !== -1;
         },
         getTags() {
-            let [checkedNodes ,childrenKeys, moveNodes, tags]= [this.$refs.tree.getCheckedNodes(),[], [], []];
+            let [checkedNodes ,childrenKeys, moveNodes, tags]= [this.$refs.tree && this.$refs.tree.getCheckedNodes() || [],[], [], []];
             for(let i =0; i< checkedNodes.length; i ++) {
                 if(checkedNodes[i].children ) {
                     for (let j =0; j< checkedNodes[i].children.length; j ++) {
@@ -169,7 +169,7 @@ export default {
             for(let i =0; i<tags.length; i++) {
                 keys.push(tags[i][this.treeNodeKey]);
             }
-            this.$refs.tree.setCheckedKeys(keys);
+            this.$refs.tree && this.$refs.tree.setCheckedKeys(keys);
             this.$emit('update:defaultKeys',keys);
             this.checkedTags = this.getTags();
         },
@@ -204,7 +204,7 @@ export default {
             this.checkedTags = [];
             this.$emit('update:tags',[]);
             this.$emit('update:defaultKeys',[]);
-            this.$refs.tree.setCheckedKeys([]);
+            this.$refs.tree && this.$refs.tree.setCheckedKeys([]);
         }
     },
     mounted() {
@@ -217,7 +217,7 @@ export default {
         data: {
             handler() {
                 this.$nextTick(() => {
-                    this.$refs.tree.setCheckedKeys(this.defaultKeys);
+                    this.$refs.tree && this.$refs.tree.setCheckedKeys(this.defaultKeys);
                     this.movetag();
                 });
             },

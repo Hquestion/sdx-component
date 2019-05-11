@@ -1,98 +1,114 @@
 <template>
-    <div 
-        class="sdxv-user-manage"
-    >
+    <sdxu-content-panel title="角色">
         <div 
-            class="sdxv-user-manage__title"
+            class="sdxv-user-manage"
         >
-            <span class="sdxv-user-manage__title--head">角色</span>
-            <div class="sdxv-user-manage__title--operate">
-                <SdxuButton 
-                    @click="handleAddUser"
-                    type="primary"
-                >
-                    <i class="sdx-icon iconicon-plus"></i>
-                    新建角色
-                </SdxuButton>
-                <SdxuInput 
-                    @search="search(this.searchKey)"
-                    class="sdxv-user-manage__title--search" 
-                    v-model="searchKey" 
-                    :searchable="true" 
-                    size="small"
-                    type="search"
-                    searchable
-                    placeholder="请输入用户名"
-                ></SdxuInput>
+            <div 
+                class="sdxv-user-manage__title"
+            >
+                <div class="sdxv-user-manage__title--operate">
+                    <SdxuButton 
+                        @click="handleAddUser"
+                        type="primary"
+                        icon="sdx-icon iconicon-plus"
+                        size="small"
+                    >
+                        新建角色
+                    </SdxuButton>
+                    <SdxuInput 
+                        @search="search(this.searchKey)"
+                        class="sdxv-user-manage__title--search" 
+                        v-model="searchKey" 
+                        :searchable="true" 
+                        size="small"
+                        type="search"
+                        placeholder="请输入用户名"
+                    />
+                </div>
             </div>
-        </div>
-        <sdxu-table 
-            class="sdxv-user-manage__table"  
-            borer
-            :data="tableData"
-            :highlight-key="key"
-            :params="params">
-            <el-table-column
-                prop="username"
-                label="用户名"
+            <sdxu-table 
+                class="sdxv-user-manage__table"  
+                borer
+                :data="tableData"
+                :highlight-key="key"
+                :params="params"
             >
-            <template slot-scope="scope">
-                <span 
-                    class="sdxv-user-manage__table--username"
-                    @click="openDetails(scope.row)"
+                <el-table-column
+                    prop="name"
+                    label="用户名"
+                />
+                <el-table-column
+                    prop="fullName"
+                    label="显示名"
+                />
+                <el-table-column
+                    prop="roles"
+                    label="角色"
                 >
-                    {{ scope.row.username }}
-                </span>
-            </template>
-            </el-table-column>
-            <el-table-column
-                prop="fullName"
-                label="显示名"
-            />
-            <el-table-column
-                prop="roles"
-                label="角色"
-            >
-            <template slot-scope="scope">
-                <SdxwFoldLabelGroup 
-                    :list="scope.row.roles" 
-                    mode="inline" 
-                    type="default"
-                ></SdxwFoldLabelGroup>
-            </template>
-            </el-table-column>
-            <el-table-column
-                prop="createdAt"
-                label="创建时间"
-            />
-            <el-table-column
-                label="操作"
-            >
-                <template slot-scope="scope">
-                    <sdxu-icon-button @click="handleJoinGroup(scope.row)" class="sdx-icon iconicon-zu2" />
-                    <sdxu-icon-button @click="handleEditUser(scope.row)" class="sdx-icon iconicon-edit1" />
-                    <sdxu-icon-button @click="handleDeleteUser(scope.row)" class="sdx-icon iconicon-delete" />
-                </template>
-            </el-table-column>
-        </sdxu-table>
+                    <template slot-scope="scope">
+                        <SdxwFoldLabelGroup 
+                            :list="scope.row.roles" 
+                            mode="inline" 
+                            type="default"
+                        />
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="createdAt"
+                    label="创建时间"
+                    sortable
+                />
+                <el-table-column
+                    label="操作"
+                >
+                    <template slot-scope="scope">
+                        <sdxu-icon-button
+                            @click="handleJoinGroup(scope.row)"
+                            class="sdx-icon iconicon-zu2"
+                        />
+                        <sdxu-icon-button
+                            @click="handleEditUser(scope.row)"
+                            class="sdx-icon iconicon-edit1"
+                        />
+                        <sdxu-icon-button
+                            @click="handleDeleteUser(scope.row)"
+                            class="sdx-icon iconicon-delete"
+                        />
+                    </template>
+                </el-table-column>
+            </sdxu-table>
 
-        <!-- 分页 -->
-        <sdxu-pagination
-            v-if="total!=0"
-            class="sdxv-user-manage__pagination"
-            :current-page.sync="current"
-            :page-size="pageSize"
-            :total="total"
-            @current-change="currentChange" 
-        />
-        <!-- 用户详情 -->
-        
-
-        <UserDetail @cancelUserDetailDialog="cancelUserDetailDialog" v-if="userDetailVisible"/>
-        <AddUser @cancelAddUserDialog="cancelAddUserDialog" v-if="addUserVisible"/>
-        <EditUser @cancelEditUserDialog="cancelEditUserDialog" v-if="editUserVisible"/>
-        <JoinGroup @cancelJoinGroupDialog="cancelJoinGroupDialog" v-if="JoinGroupVisible"/>
-    </div>
+            <!-- 分页 -->
+            <div 
+                class="sdxv-user-manage__pagination"
+            >
+                <sdxu-pagination
+                    v-if="total!=0"
+                    :current-page.sync="current"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="currentChange" 
+                />
+            </div>
+            <!-- 用户详情 -->
+            <UserDetail
+                @cancelUserDetailDialog="cancelUserDetailDialog"
+                v-if="userDetailVisible"
+            />
+            <AddUser
+                @cancelAddUserDialog="cancelAddUserDialog"
+                v-if="addUserVisible"
+            />
+            <EditUser
+                @cancelEditUserDialog="cancelEditUserDialog"
+                v-if="editUserVisible"
+            />
+            <JoinGroup
+                @cancelJoinGroupDialog="cancelJoinGroupDialog"
+                v-if="JoinGroupVisible"
+            />
+        </div>
+    </sdxu-content-panel>
 </template>
 
 <script>
@@ -105,12 +121,12 @@ import SdxuInput from '@sdx/ui/components/input';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuTable from '@sdx/ui/components/table';
 import MessageBox from '@sdx/ui/components/message-box';
-import httpService from '@sdx/utils/src/http-service';
 import SdxwFoldLabelGroup from '@sdx/widget/components/fold-label/src/FoldLabelGroup';
 import AddUser from './components/AddUser';
 import EditUser from './components/EditUser';
 import JoinGroup from './components/JoinGroup';
 import UserDetail from './components/UserDetail';
+import SdxuContentPanel from '@sdx/ui/components/content-panel';
 export default {
     name:'SdxvUserManage',
     data () {
@@ -130,7 +146,7 @@ export default {
             current:1,
             pageSize:10,
             total:50
-        }
+        };
     },
     methods:{
         //关闭新建用户弹框
@@ -184,22 +200,24 @@ export default {
         getUsers(){
             getUserList()
                 .then(( res ) => {
-                    res.users.forEach((item)=>{
-                        this.total = 40;    
-                        this.tableData.push({
-                            username:item.username,
-                            fullName:item.fullName,
-                            uuid:item.uuid,
-                            roles:[],
-                            createdAt:item.createdAt
-                        }) 
-                    });
-                    res.users.forEach((item,index)=>{
-                        getUserDetail(item.uuid)
-                            .then( res => {
-                                this.tableData[index].roles = res.roleNames;
-                            });
-                    })
+                    // res.users.forEach((item)=>{
+                    //     this.total = 40;    
+                    //     this.tableData.push({
+                    //         username:item.username,
+                    //         fullName:item.fullName,
+                    //         uuid:item.uuid,
+                    //         roles:[],
+                    //         createdAt:item.createdAt
+                    //     }); 
+                    // });
+                    // res.users.forEach((item,index)=>{
+                    //     getUserDetail(item.uuid)
+                    //         .then( res => {
+                    //             this.tableData[index].roles = res.roleNames;
+                    //         });
+                    // });
+                    this.total = res.total;
+                    this.tableData = res.users;
                 }).catch(() => {
                     this.$emit('on-error');
                 });
@@ -224,14 +242,14 @@ export default {
         SdxwFoldLabelGroup,
         SdxuInput,
         SdxuTable,
-        MessageBox,
+        SdxuContentPanel,
         AddUser,
         EditUser,
         JoinGroup,
         UserDetail,
         SdxuIconButton
     }
-}
+};
 </script>
 <style lang='scss' scoped>
 

@@ -1,0 +1,40 @@
+@include block('content-panel', $bem-namespace-ui) {
+    border-radius: $sdx-border-radius;
+    background: $sdx-content-panel-bg;
+    padding: $sdx-content-panel-padding;
+    box-shadow:0px 0px 22px 0px rgba(206,213,221,0.27);
+    @include element('header') {
+        height: $sdx-form-element-height-regular;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    @include element('title') {
+        font-size: $sdx-h2-font-size;
+        font-weight: 500;
+        color: $sdx-text-primary-color;
+        &:before{
+            content: '\20';
+            display: inline-block;
+            width: $sdx-content-panel-title-width;
+            height: $sdx-content-panel-title-height;
+            background: $sdx-primary-color;
+            vertical-align: middle;
+            margin-right: $sdx-content-panel-title-margin-left;
+        }
+    }
+    @include element('subtitle') {
+        font-size: $sdx-help-font-size;
+        color: $sdx-text-minor-color;
+        letter-spacing: 0;
+        margin-left: $sdx-content-panel-subtitle-margin-left;
+    }
+    @include element('main') {
+        margin-top: $sdx-margin;
+        min-height: $sdx-content-panel-main-min-height;
+        @include element('empty') {
+            line-height: $sdx-content-panel-main-min-height;
+            text-align: center;
+        }
+    }
+}

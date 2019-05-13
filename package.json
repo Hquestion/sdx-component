@@ -23,7 +23,7 @@
         "build:widget": "lerna run build --scope=@sdx/widget",
         "build:view": "lerna run build --scope=@sdx/view",
         "build:utils": "lerna run build --scope=@sdx/utils",
-        "build": "npm run build:ui && npm run build:widget && npm run build:utils",
+        "build": "npm run build:ui && npm run build:widget && npm run build:utils && npm run build:view",
         "dev": "cd examples && npm run serve",
         "doc:dev": "vuepress dev docs",
         "doc:build": "vuepress build docs",
@@ -77,6 +77,7 @@
         "webpack-node-externals": "^1.7.2"
     },
     "dependencies": {
+        "axios": "^0.18.0",
         "core-js": "2.5.7",
         "element-ui": "^2.3.7",
         "highlight.js": "^9.12.0",

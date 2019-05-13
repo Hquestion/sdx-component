@@ -1,0 +1,19 @@
+@import '~element-ui/packages/theme-chalk/src/select.scss';
+
+.el-select {
+    .el-input__inner {
+        border-radius: 2px;
+        border-color: $sdx-border-color;
+        &:focus {
+            border-color: $sdx-primary-color;
+        }
+        &::placeholder {
+            color: $sdx-text-holder-color;
+        }
+    }
+    .el-input {
+        &.is-focus .el-input__inner {
+            border-color: $sdx-primary-color;
+        }
+    }
+}

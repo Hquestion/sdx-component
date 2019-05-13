@@ -12,8 +12,10 @@ import Dialog from '@sdx/ui/components/dialog';
 import Pagination from '@sdx/ui/components/pagination';
 import Breadcrumb from '@sdx/widget/components/breadcrumb';
 import ChangePassword from '@sdx/widget/components/changePassword';
+import Project from '@sdx/view/components/project-management';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';
+import '@sdx/view/theme/index.scss';
 Vue.use(febAlive, { router, keyName: 'feb'});
 Vue.use(Button);
 Vue.use(Dialog);
@@ -21,6 +23,11 @@ Vue.use(ElementUI);
 Vue.use(Breadcrumb);
 Vue.use(Pagination);
 Vue.use(ChangePassword);
+
+// 项目管理
+Vue.use(Project.ProjectManagement);
+Project.viewRouter.register(router, '/projectManageTest');
+
 
 Vue.config.productionTip = false;
 

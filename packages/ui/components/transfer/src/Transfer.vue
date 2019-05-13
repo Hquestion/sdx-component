@@ -4,23 +4,27 @@
             <SdxuInput
                 size="small"
                 :placeholder="placeholder"
-                :searchable="true"
+                type="search"
                 v-model="filterText"
             />
             <el-scrollbar
                 class="sdxu-transfer__scrollbar"
-                wrap-class="sdxu-transfer__wrap" 
+                wrap-class="sdxu-transfer__wrap"
             >
-                <el-tree
-                    :data="data"
-                    show-checkbox
-                    :node-key="treeNodeKey"
-                    ref="tree"
-                    :filter-node-method="filterNode"
-                    check-on-click-node
-                    :default-checked-keys="defaultKeys"
-                    @check="checkChange"
-                />
+                <div
+                    class="sdxu-transfer__tree"
+                >
+                    <el-tree
+                        :data="data"
+                        show-checkbox
+                        :node-key="treeNodeKey"
+                        ref="tree"
+                        :filter-node-method="filterNode"
+                        check-on-click-node
+                        :default-checked-keys="defaultKeys"
+                        @check="checkChange"
+                    />
+                </div>
             </el-scrollbar>
             <div class="sdxu-transfer__moveall">
                 <SdxuButton
@@ -97,6 +101,7 @@ export default {
         return {
             filterText: '',
             checkedTags: [],
+            is_moveall: false
         };
     },
     components: {
@@ -116,7 +121,9 @@ export default {
             for (let i = 0; i< this.checkedTags.length; i++) {
                 checkKeys.push(this.checkedTags[i][this.treeNodeKey]);
             }
-            if(tagsKey.sort().toString() == checkKeys.sort().toString()) {
+            if(this.is_moveall) {
+                hightIcon =  false;
+            }else if(tagsKey.sort().toString() == checkKeys.sort().toString()) {
                 hightIcon =  false;
             } else {
                 hightIcon = true;
@@ -130,7 +137,7 @@ export default {
             return data.label.indexOf(value) !== -1;
         },
         getTags() {
-            let [checkedNodes ,childrenKeys, moveNodes, tags]= [this.$refs.tree.getCheckedNodes(),[], [], []];  
+            let [checkedNodes ,childrenKeys, moveNodes, tags]= [this.$refs.tree && this.$refs.tree.getCheckedNodes() || [],[], [], []];
             for(let i =0; i< checkedNodes.length; i ++) {
                 if(checkedNodes[i].children ) {
                     for (let j =0; j< checkedNodes[i].children.length; j ++) {
@@ -140,6 +147,7 @@ export default {
             }
             moveNodes = checkedNodes.filter(v => !childrenKeys.includes(v[this.treeNodeKey]));
             for (let i =0; i < moveNodes.length ; i++ ) {
+                if (tags.find(item => item.name === moveNodes[i].label)) continue;
                 tags.push(
                     {
                         name: moveNodes[i].label,
@@ -161,18 +169,19 @@ export default {
             for(let i =0; i<tags.length; i++) {
                 keys.push(tags[i][this.treeNodeKey]);
             }
-            this.$refs.tree.setCheckedKeys(keys);
+            this.$refs.tree && this.$refs.tree.setCheckedKeys(keys);
             this.$emit('update:defaultKeys',keys);
             this.checkedTags = this.getTags();
         },
         moveAllTag() {
+            this.checkedTags = this.getTags();
             let [tags, keys] = [[], []];
             for (let i =0; i < this.data.length; i ++) {
                 tags.push(
                     {
                         name: this.data[i].label,
                         [this.treeNodeKey]: this.data[i][this.treeNodeKey],
-                        is_group:  true 
+                        is_group:  true
                     }
                 );
                 keys.push(this.data[i][this.treeNodeKey]);
@@ -182,19 +191,20 @@ export default {
                     }
                 }
             }
-            this.checkedTags = this.getTags();
+            this.is_moveall = true;
             this.$emit('update:defaultKeys',keys);
             this.$emit('update:tags',tags);
         },
         checkChange(data, obj) {
+            this.is_moveall = false;
             this.checkedTags = this.getTags();
             this.$emit('update:defaultKeys',obj.checkedKeys);
         },
-        removeAllTag() { 
-            this.checkedTags = []; 
+        removeAllTag() {
+            this.checkedTags = [];
             this.$emit('update:tags',[]);
             this.$emit('update:defaultKeys',[]);
-            this.$refs.tree.setCheckedKeys([]);
+            this.$refs.tree && this.$refs.tree.setCheckedKeys([]);
         }
     },
     mounted() {
@@ -203,8 +213,16 @@ export default {
     watch: {
         filterText(val) {
             this.$refs.tree.filter(val);
+        },
+        data: {
+            handler() {
+                this.$nextTick(() => {
+                    this.$refs.tree && this.$refs.tree.setCheckedKeys(this.defaultKeys);
+                    this.movetag();
+                });
+            },
+            immediate: true
         }
-    
     },
 };
 </script>

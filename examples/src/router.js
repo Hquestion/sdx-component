@@ -8,6 +8,8 @@ import B from './views/cache/b';
 import C from './views/cache/c';
 import Comp from './views/cache/comp';
 import Table from './views/cache/table';
+import RoleManage from './views/cache/roleManage';
+import AuthorizeManage from './views/cache/authorizeManage';
 import DialogTest from './views/ui/dialogTest.vue';
 import Demo from './views/demo';
 import InputDemo from './views/demo/InputDemo';
@@ -15,6 +17,10 @@ import PaginationTest from './views/ui/paginationTest.vue';
 import UserInfoTest from './views/widget/userInfoTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
+import projectManageTest from './views/view/projectManageTest.vue';
+import PrivilegeDemo from './views/demo/privilegeDemo';
+import UserGroupDemo from './views/demo/userGroupDemo';
+import UserManageTest from './views/widget/userTest.vue';
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -59,6 +65,14 @@ export default new Router({
             {
                 path: 'table',
                 component: Table,
+            },
+            {
+                path: 'roleManage',
+                component: RoleManage,
+            },
+            {
+                path: 'authorizeManage',
+                component: AuthorizeManage,
             }
             ]
         },
@@ -93,6 +107,14 @@ export default new Router({
             // this generates a separate chunk (about.[hash].js) for this route
             // which is lazy-loaded when the route is visited.
             component: UserInfoTest
+        },
+        {
+            path: '/userManage',
+            name: '用户管理',
+            // route level code-splitting
+            // this generates a separate chunk (about.[hash].js) for this route
+            // which is lazy-loaded when the route is visited.
+            component: UserManageTest
         },
         {
             path: '/changePwdTest',
@@ -136,7 +158,18 @@ export default new Router({
                 meta: {
                     name: 'input'
                 }
+            }, {
+                path: 'privilege',
+                component: PrivilegeDemo
+            }, {
+                path: 'user-group',
+                component: UserGroupDemo
             }]
+        },
+        {
+            path: '/projectManageTest',
+            name: '项目管理测试',
+            component: projectManageTest
         },
     ]
 });

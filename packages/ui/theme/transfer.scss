@@ -26,16 +26,19 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }  
     @include element('wrap') {
         height: $sdxu-transfer-height-tree;
-        overflow-x: hidden;
+        overflow-x: scroll;
     }    
     .el-scrollbar__wrap {
-        height: 108%;
+        height: $sdxu-transfer-height-wrap;
     }
+   
     @include element('left') {
             @extend .boxStyle;
+            position: relative;
             .el-tree {
                 color: $sdx-text-regular-color;
                 padding-left: 4px;
+                width: 100%;
             }
             .el-tree-node__content:hover {
                 background: $sdxu-transfer-background-tree;
@@ -43,6 +46,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             .el-tree-node:focus  > .el-tree-node__content {
                 background-color: #fff;
             }
+    }
+    @include element('tree') {
+        display: flex;
+        flex-direction: row；
     }
     @include element('moveall') {
         height: $sdxu-transfer-height-moveicon;
@@ -52,6 +59,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         width: 100%;
         display: flex;
         flex-direction: row-reverse;
+        position: absolute;
+        left: 0;
+        bottom: 0;
     }
     @include element('moveicon') {
         height: $sdxu-transfer-default-height;
@@ -71,6 +81,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
     @include element('right') {
         @extend .boxStyle;
+        position: relative;
     }
     @include element('tag') {
         padding: $sdxu-transfer-margin-small;

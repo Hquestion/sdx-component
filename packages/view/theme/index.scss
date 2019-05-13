@@ -1,1 +1,8 @@
 @import "base";
+@import "resource-manage";
+@import "privilege";
+@import "./project-management/index.scss";
+@import "user-manage";
+@import "roleManage";
+@import "authorizeManage";
+@import "user-group";

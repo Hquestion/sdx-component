@@ -1,10 +1,10 @@
 <template>
     <div class="sdxui-input">
         <div>
-            <SdxuInput placeholder="请输入关键字" v-model="value" :searchable="true" size="small"></SdxuInput>
+            <SdxuInput placeholder="请输入关键字" v-model="value" type="search" size="small"></SdxuInput>
         </div>
         <div>
-            <SdxuInput placeholder="请输入关键字" v-model="value" :searchable="true" size="regular"></SdxuInput>
+            <SdxuInput placeholder="请输入关键字" v-model="value" type="search" @search="handleSearch" :searchable="true" size="regular"></SdxuInput>
         </div>
         <div>
             <SdxuInput placeholder="请输入密码" v-model="value" type="password"></SdxuInput>
@@ -125,6 +125,9 @@ export default {
         },
         handleIconClick(ev) {
             console.log(ev);
+        },
+        handleSearch() {
+            console.log('search')
         }
     },
     mounted() {

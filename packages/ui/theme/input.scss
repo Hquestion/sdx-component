@@ -2,7 +2,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/input.scss";
 
 @include block('input', $bem-namespace-ui) {
-    .el-input__inner, 
+    .el-input__inner,
     .el-textarea__inner {
         border: $sdxu-input-border-default;
         border-radius: $sdxu-input-border-radius;
@@ -13,24 +13,34 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             color: $sdxu-input-placeholder;
         }
     }
-    .el-form-item.is-error .el-input__inner, 
-    .el-form-item.is-error .el-input__inner:focus, 
-    .el-form-item.is-error .el-textarea__inner, 
+    .el-input__inner[type=number] {
+        padding: 0;
+        text-indent: 10px;
+    }
+    .el-form-item.is-error .el-input__inner,
+    .el-form-item.is-error .el-input__inner:focus,
+    .el-form-item.is-error .el-textarea__inner,
     .el-form-item.is-error .el-textarea__inner:focus {
         border-color: $sdxu-input-border-color-error;
     }
-    .el-form-item.is-success .el-input__inner, 
-    .el-form-item.is-success .el-input__inner:focus, 
-    .el-form-item.is-success .el-textarea__inner, 
+    .el-form-item.is-success .el-input__inner,
+    .el-form-item.is-success .el-input__inner:focus,
+    .el-form-item.is-success .el-textarea__inner,
     .el-form-item.is-success .el-textarea__inner:focus {
         border-color: $sdxu-input-border-color-success;
     }
 
     @include element('icon') {
-        cursor: pointer;
-        &:hover {
-            color: $sdxu-icon-hover;
+        @include state('clickable') {
+            cursor: pointer;
+            &:hover {
+                color: $sdxu-icon-hover;
+            }
         }
+    }
+
+    @include state('inline') {
+        display: inline-block;
     }
 
     @include modifier('small') {

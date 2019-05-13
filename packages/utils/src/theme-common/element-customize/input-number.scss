@@ -1,0 +1,38 @@
+.el-input-number {
+    .el-input-number__increase {
+        background:#f2f6fc;
+        border-radius:0px $sdx-border-radius $sdx-border-radius 0px ;
+        border-left: 1px solid #e4e7ed;
+        &:hover {
+            color: $sdx-primary-color;
+            &:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled) {
+                border-color: $sdx-primary-color;
+            }
+        }
+        &.is-disabled {
+            &:hover {
+                color: $sdx-disable-color;
+            }
+        }
+    }
+    .el-input-number__decrease {
+        background:#f2f6fc;
+        border-radius:$sdx-border-radius 0px 0px $sdx-border-radius;
+        border-right: 1px solid #e4e7ed;
+        &:hover {
+            color: $sdx-primary-color;
+            &:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled) {
+                border-color: $sdx-primary-color;
+            }
+        }
+        &.is-disabled {
+            &:hover {
+                color: $sdx-disable-color;
+            }
+        }
+    }
+    .el-input__inner {
+        border-radius: $sdx-border-radius;
+        border:1px solid #e4e7ed;
+    }
+}

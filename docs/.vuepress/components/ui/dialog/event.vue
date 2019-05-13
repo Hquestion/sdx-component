@@ -3,7 +3,7 @@
         <a @click.prevent="showDialog">
             监听默认按钮点击
         </a>
-        <sdxu-dialog
+        <SdxuDialog
             :visible.sync="dialogVisible"
             @confirm="confirmClicked"
             @cancel="cancelClicked"
@@ -12,7 +12,7 @@
                 我是标题
             </div>
             <div>我是内容</div>
-        </sdxu-dialog>
+        </SdxuDialog>
     </div>
 </template>
 

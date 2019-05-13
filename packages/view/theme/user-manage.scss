@@ -1,0 +1,36 @@
+@import "~element-ui/packages/theme-chalk/src/radio.scss";
+@include block('user-manage',$bem-namespace-view) {
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+    box-sizing: border-box;
+    @include element('title') {
+        @include modifier('operate') {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+    @include element('table') {
+        margin-top: 20px;
+        .sdxw-fold-label-group{
+            width: auto!important;
+        }
+        @include modifier('username') {
+            cursor: pointer;
+        }
+    }
+    @include element('pagination') {
+        margin-top: $sdx-margin;
+        align-self: flex-end;
+    }
+    // userform
+    @include element('userform') {
+        @include modifier('select') {
+            width: 100%;
+        }
+        @include modifier('operate') {
+            text-align: right;
+        }
+    }
+    
+}

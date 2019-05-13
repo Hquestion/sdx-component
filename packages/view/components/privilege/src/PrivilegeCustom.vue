@@ -12,7 +12,7 @@
             </sdxu-button>
             <sdxu-input
                 class="sdxv-privilege-custom__bar--input"
-                type="seach"
+                type="search"
                 :searchable="true"
                 placeholder="请输入权限名"
                 @keydown.native.enter="handleSearch"
@@ -127,7 +127,7 @@ export default {
             // todo:
         },
         splitKey(key, i) {
-            const list = key.split(":");
+            const list = key.split(':');
             return list[i];
         },
         handleSearch() {

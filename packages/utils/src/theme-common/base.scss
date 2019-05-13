@@ -4,9 +4,9 @@
 @import "./iconfont/iconfont.scss";
 
   @font-face {font-family: "sdx-icon";
-    src: url($sdx-base-iconfont-path + 'iconfont.eot?t=1557229771796'); /* IE9 */
-    src: url($sdx-base-iconfont-path + 'iconfont.eot?t=1557229771796#iefix') format('embedded-opentype'), /* IE6-IE8 */
-    url($sdx-base-iconfont-path + 'iconfont.woff?t=1557229771796') format('woff'),
-    url($sdx-base-iconfont-path + 'iconfont.ttf?t=1557229771796') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-    url($sdx-base-iconfont-path + 'iconfont.svg?t=1557229771796#sdx-icon') format('svg'); /* iOS 4.1- */
+    src: url($sdx-base-iconfont-path + 'iconfont.eot'); /* IE9 */
+    src: url($sdx-base-iconfont-path + 'iconfont.eot') format('embedded-opentype'), /* IE6-IE8 */
+    url($sdx-base-iconfont-path + 'iconfont.woff') format('woff'),
+    url($sdx-base-iconfont-path + 'iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url($sdx-base-iconfont-path + 'iconfont.svg') format('svg'); /* iOS 4.1- */
   }

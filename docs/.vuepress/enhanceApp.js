@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';
 import '@sdx/view/theme/index.scss';
+// import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 
 import '../.vuepress/public/css/index.css'
 

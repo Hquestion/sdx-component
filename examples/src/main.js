@@ -11,7 +11,7 @@ import febAlive from 'feb-alive';
 import Dialog from '@sdx/ui/components/dialog';
 import Pagination from '@sdx/ui/components/pagination';
 import Breadcrumb from '@sdx/widget/components/breadcrumb';
-import ChangePassword from '@sdx/widget/components/changePassword';
+import ChangePassword from '@sdx/widget/components/change-password';
 import Project from '@sdx/view/components/project-management';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';

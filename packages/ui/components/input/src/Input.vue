@@ -11,6 +11,8 @@
             v-on="listeners"
             v-model="modelVaule"
             ref="input"
+            @keydown.native.enter="searchable ? $emit('search') : null"
+            @blur="searchable ? $emit('search') : null"
         >
             <template #prefix>
                 <slot name="prefix" />

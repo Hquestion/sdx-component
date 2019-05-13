@@ -114,7 +114,7 @@ $sdxu-input-strength-color-strong: $sdx-success-color !default;
 // 密码强度颜色：占位
 $sdxu-input-strength-color-none: $sdx-none-color !default;
 // 输入框图标悬浮颜色
-$sdxu-icon-hover: $sdx-primary-hover-color !default;
+$sdxu-icon-hover: $sdx-primary-color !default;
 
 ```
 

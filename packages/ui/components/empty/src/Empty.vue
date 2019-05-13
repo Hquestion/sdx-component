@@ -1,7 +1,7 @@
 <template>
     <div class="sdxu-empty">
         <div>
-            <i class="sdx-icon iconicon-warning sdxu-empty__icon"></i>
+            <i class="sdx-icon sdx-icon-warning sdxu-empty__icon"></i>
         </div>
         <div class="sdxu-empty__desc">
             <slot>暂无内容</slot>

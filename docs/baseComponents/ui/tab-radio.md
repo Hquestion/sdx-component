@@ -1,4 +1,4 @@
-# tab-radio radio型tab组件
+# TabRadio radio型tab组件
 ---
 
 radio型tab组件

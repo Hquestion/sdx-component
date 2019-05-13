@@ -106,9 +106,9 @@
                     }, {
                         params: 'title-icon',
                         describe: '对话框title显示的icon',
-                        type: 'boolean',
+                        type: 'string',
                         optionValue: '—',
-                        defaultValue: 'false',
+                        defaultValue: '—',
                     }
                 ],
                 eventData: [

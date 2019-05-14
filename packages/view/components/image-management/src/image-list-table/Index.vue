@@ -10,29 +10,39 @@
             <el-table-column
                 prop="name"
                 label="镜像名称"
+                key="name"
             />
             <el-table-column
                 prop="version"
+                key="version"
                 label="版本号"
             />
             <el-table-column
                 prop="sourceType"
+                key="sourceType"
                 label="镜像来源"
+                v-if="imageKind === 'all'"
             />
             <el-table-column
                 prop="imageType"
+                key="imageType"
                 label="镜像种类"
             />
             <el-table-column
                 prop="buildType"
+                key="buildType"
                 label="构建方式"
+                v-if="imageKind !== 'basic'"
             />
             <el-table-column
                 prop="owner"
+                key="owner"
                 label="创建人"
+                v-if="imageKind === 'all' || imageKind === 'otherShare'"
             />
             <el-table-column
                 prop="createdAt"
+                key="createdAt"
                 label="创建时间"
             />
             <el-table-column
@@ -66,6 +76,12 @@ export default {
             loading: false
         };
     },
+    props: {
+        imageKind: {
+            type: String,
+            default: 'all'
+        }
+    },
     components: {
         [Table.name]: Table,
         [Pagination.name]: Pagination
@@ -74,8 +90,9 @@ export default {
         this.initImageList();
     },
     methods: {
-        initImageList() {
+        initImageList(reset) {
             this.loading = true;
+            if (reset) this.current = 1;
             const params = {
                 name: this.searchName,
                 imageType: this.imageType,

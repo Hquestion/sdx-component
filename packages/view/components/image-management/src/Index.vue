@@ -27,7 +27,7 @@
                 <el-menu
                     default-active="1"
                     mode="horizontal"
-                    @select="handleSelect"
+                    @select="handleMenuSelect"
                     background-color="#fff"
                 >
                     <el-menu-item index="1">
@@ -149,7 +149,8 @@ export default {
             searchName: '',
             source: 'all',
             imageType: 'all',
-            buildMethod: 'all'
+            buildMethod: 'all',
+            projectType: 'image'
         };
     },
     components: {
@@ -175,6 +176,12 @@ export default {
         },
         buildMethodChange() {
             console.log('22222');
+        },
+        switchProjectType() {
+            console.log('22222');
+        },
+        handleMenuSelect() {
+            console.log('3333');
         }
     }
 };

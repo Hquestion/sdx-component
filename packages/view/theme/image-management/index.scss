@@ -6,16 +6,17 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/select';
 @import '~@sdx/ui/theme/base';
 @import '~@sdx/ui/theme/dialog';
+@import '~@sdx/ui/theme/table';
 @import '~@sdx/ui/theme/pagination';
 @import '~@sdx/ui/theme/button';
-@import '~@sdx/ui/theme/content-panel';  // check
-@import '~@sdx/ui/theme/tab-radio';   // check
-@import '~@sdx/ui/theme/input';  // check
+@import '~@sdx/ui/theme/content-panel';
+@import '~@sdx/ui/theme/tab-radio';
+@import '~@sdx/ui/theme/input';
 @import '~@sdx/ui/theme/transfer';
 @import '~@sdx/ui/theme/message-box.scss';
 @import '~@sdx/widget/theme/base';
-@import '~@sdx/widget/theme/projectcard';
 @import '~@sdx/widget/theme/select-group-user';
+@import './image-list-table.scss';
 
 @include block('image-management', $bem-namespace-view) {
     @include element('header') {

@@ -18,6 +18,7 @@ import UserInfoTest from './views/widget/userInfoTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
 import projectManageTest from './views/view/projectManageTest.vue';
+import imageManageTest from './views/view/imageManageTest.vue';
 import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
@@ -171,5 +172,10 @@ export default new Router({
             name: '项目管理测试',
             component: projectManageTest
         },
+        {
+            path: '/imageManageTest',
+            name: '镜像管理测试',
+            component: imageManageTest
+        }
     ]
 });

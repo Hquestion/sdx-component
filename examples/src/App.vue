@@ -36,7 +36,10 @@
             </router-link> |
             <router-link to="/userManage">
                 用户管理
-            </router-link>
+            </router-link> |
+            <router-link to="/imageManageTest">
+                镜像管理测试
+            </router-link> |
         </div>
         <p class="page-link">
             <button @click="toFeb">

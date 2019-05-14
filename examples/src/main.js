@@ -30,8 +30,8 @@ Vue.use(Project.ProjectManagement);
 Project.viewRouter.register(router, '/projectManageTest');
 
 // 镜像管理
-Vue.use(Image.ImageManagement);
-Image.viewRouter.register(router, '/imageManageTest');
+// Vue.use(Image.ImageManageIndex);
+// Image.viewRouter.register(router, '/imageManageTest');
 
 
 Vue.config.productionTip = false;

@@ -1,7 +1,7 @@
 // 这里会暴露所有组件
 import Breadcrumb from './components/breadcrumb';
 import FoldLabel from './components/fold-label';
-import ChangePassword from './components/changePassword';
+import ChangePassword from './components/change-password';
 import UserInfoDialog from './components/userinfo-dialog';
 import ProjectCard from './components/projectcard';
 import SelectGroupUser from './components/select-group-user';

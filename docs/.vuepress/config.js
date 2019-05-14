@@ -26,7 +26,12 @@ module.exports = {
                         'ui/tab-radio',
                         'ui/input',
                         'ui/messagebox',
-                        'ui/transfer'
+                        'ui/transfer',
+                        'ui/content-panel',
+                        'ui/iconbutton',
+                        'ui/empty',
+                        'ui/placeholder',
+                        'ui/user-avatar'
                     ]
                 },
                 {

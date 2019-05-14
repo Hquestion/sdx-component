@@ -3,17 +3,11 @@
         :visible.sync="dialogVisible"
         @close="dialogClose"
         class="sdxw-change-password"
+        title-icon="sdx-icon-password"
     >
         <div
             slot="title"
-            class="sdxw-change-password__title"
         >
-            <svg
-                class="icon"
-                aria-hidden="true"
-            >
-                <use xlink:href="#iconicon-password" />
-            </svg>
             <span>修改密码</span>
         </div>
         <el-form

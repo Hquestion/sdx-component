@@ -22,6 +22,14 @@
             vertical-align: middle;
             margin-right: $sdx-content-panel-title-margin-left;
         }
+        @include state('slot') {
+            font-size: inherit;
+            font-weight: inherit;
+            color: inherit;
+            &:before {
+                display: none;
+            }
+        }
     }
     @include element('subtitle') {
         font-size: $sdx-help-font-size;

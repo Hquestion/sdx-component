@@ -22,7 +22,7 @@
                 基于文件构建
             </SdxuButton>
         </div>
-        <div>
+        <div v-if="projectType === 'image'">
             <div class="sdxv-image-management__nav-menu">
                 <el-menu
                     default-active="1"
@@ -128,8 +128,17 @@
                 </SdxuButton>
             </div>
         </div>
-        <div class="sdxv-image-management__list">
+        <div
+            class="sdxv-image-management__list"
+            v-if="projectType === 'image'"
+        >
             <image-list-table />
+        </div>
+        <div
+            class="sdxv-image-management__list"
+            v-if="projectType === 'task'"
+        >
+            <image-task-table />
         </div>
     </sdxu-content-panel>
 </template>
@@ -141,6 +150,7 @@ import ContentPanel from '@sdx/ui/components/content-panel';
 import Button from '@sdx/ui/components/button';
 import { Menu, MenuItem, Select } from 'element-ui';
 import Input from '@sdx/ui/components/input';
+import ImageTaskTable from './image-task-table/Index';
 export default {
     name: 'SdxvImageManage',
     data() {
@@ -149,7 +159,8 @@ export default {
             searchName: '',
             source: 'all',
             imageType: 'all',
-            buildMethod: 'all'
+            buildMethod: 'all',
+            projectType: 'image'
         };
     },
     components: {
@@ -161,7 +172,8 @@ export default {
         [MenuItem.name]: MenuItem,
         [Input.name]: Input,
         ImageListTable,
-        [ContentPanel.name]: ContentPanel
+        [ContentPanel.name]: ContentPanel,
+        ImageTaskTable
     },
     methods: {
         searchImage() {

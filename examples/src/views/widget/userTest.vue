@@ -1,19 +1,22 @@
 <template>
     <div class="userManage">
         <UserManage />
+        <UserPicker v-model="data"></UserPicker>
     </div>
 </template>
 
 <script>
-import UserManage from '@sdx/view/components/user-manage/src/Home'
+import UserManage from '@sdx/view/components/user-manage/src/Home';
+import UserPicker from '@sdx/widget/components/user-picker';
 export default {
     data () {
         return {
-
-        }
+            data: {}
+        };
     },
     components: {
-        UserManage
+        UserManage,
+        UserPicker
     }
 }
 </script>

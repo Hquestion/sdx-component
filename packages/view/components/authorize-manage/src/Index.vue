@@ -12,7 +12,7 @@
                         size="small"
                     >
                         <i
-                            class="sdx-icon iconicon-plus"
+                            class="sdx-icon sdx-icon-plus"
                         />
                         新建授权
                     </sdxubutton>
@@ -39,7 +39,7 @@
             </div>
             <div class="sdxv-role-manage__table">
                 <SdxuTable
-                    :data="tableData"  
+                    :data="tableData"
                 >
                     <el-table-column
                         prop="name"
@@ -58,11 +58,11 @@
                             class="icon"
                         >
                             <i
-                                class="sdx-icon iconicon-edit1 icon"
+                                class="sdx-icon sdx-icon-edit icon"
                                 @click="editRole()"
                             />
                             <i
-                                class="sdx-icon iconicon-delete1 icon"
+                                class="sdx-icon sdx-icon-delete1 icon"
                                 @click="removeRole()"
                             />
                         </template>
@@ -123,7 +123,7 @@
                         <el-form-item
                             label="权限设置"
                         >
-                            <SdxuTransfer 
+                            <SdxuTransfer
                                 :data="data"
                                 :tags.sync="tags"
                                 :default-keys.sync="defaultKeys"
@@ -182,20 +182,20 @@ export default {
             data:[{
                 unid: 1,
                 label: '一级 1',
-              
+
             }, {
                 unid: 2,
                 label: '一级 2',
-                
+
             }, {
                 unid: 3,
                 label: '一级 3',
-               
+
             }, {
                 unid: 41,
                 label: '一级 4',
-               
-            }], 
+
+            }],
             tags: [],
             defaultKeys: [],
             treeNodeKey: 'unid',
@@ -208,7 +208,7 @@ export default {
         };
     },
     props: {
-       
+
     },
     created() {
         this.authorizeList();
@@ -219,14 +219,14 @@ export default {
                 .then(data => {
                     this.tableData = data.permissions;
                     this.total = data.total;
-                   
+
                 });
         },
         currentChange() {
-           
+
         },
         addAuthorize() {
-           
+
             this.dialogVisible = true;
         },
         dialogConfirm() {
@@ -243,9 +243,9 @@ export default {
             this.roleList();
         },
         editRole() {
-            
+
             this.dialogVisible = true;
-                
+
         },
         removeRole() {
             MessageBox.confirm({
@@ -258,9 +258,9 @@ export default {
                 //         this.roleList();
                 //     });
             }, () => {
-                
+
             });
-           
+
         }
     }
 };

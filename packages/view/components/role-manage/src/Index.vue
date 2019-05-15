@@ -12,7 +12,7 @@
                         @click="addRole"
                     >
                         <i
-                            class="sdx-icon iconicon-plus"
+                            class="sdx-icon sdx-icon-plus"
                         />
                         新建角色
                     </sdxubutton>
@@ -28,7 +28,7 @@
             </div>
             <div class="sdxv-role-manage__table">
                 <SdxuTable
-                    :data="tableData"  
+                    :data="tableData"
                 >
                     <el-table-column
                         prop="name"
@@ -55,11 +55,11 @@
                             class="icon"
                         >
                             <i
-                                class="sdx-icon iconicon-edit1 icon"
+                                class="sdx-icon sdx-icon-edit icon"
                                 @click="editRole(scope.row.uuid)"
                             />
                             <i
-                                class="sdx-icon iconicon-delete1 icon"
+                                class="sdx-icon sdx-icon-delete1 icon"
                                 @click="removeRole(scope.row.uuid, scope.row.name)"
                             />
                         </template>
@@ -218,7 +218,7 @@ export default {
         };
     },
     props: {
-     
+
     },
     created() {
         this.roleList();
@@ -239,7 +239,7 @@ export default {
         },
         addRole() {
             this.id = '';
-            this.roleObj={ 
+            this.roleObj={
                 name: '',
                 permissions: [],
                 domain: '',
@@ -302,9 +302,9 @@ export default {
                         this.roleList();
                     });
             }, () => {
-                
+
             });
-           
+
         }
     }
 };

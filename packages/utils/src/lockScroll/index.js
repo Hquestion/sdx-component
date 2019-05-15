@@ -1,4 +1,4 @@
-import { getBodyScrollTop, getNodeScrollTop } from "@sdx/utils/src/helper/dom";
+import { getBodyScrollTop, getNodeScrollTop } from '@sdx/utils/src/helper/dom';
 
 let scrollTop = 0;
 

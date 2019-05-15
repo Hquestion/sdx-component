@@ -28,12 +28,55 @@
         color: $sdx-text-regular-color;
         background: rgba($sdx-primary-color, 0.12);
     }
+    @include modifier('create') {
+        color: $sdx-status-create;
+        background: rgba($sdx-status-create, 0.1);
+    }
+    @include modifier('processing') {
+        color: $sdx-status-processing;
+        background: rgba($sdx-status-processing, 0.1);
+    }
+    @include modifier('running') {
+        color: $sdx-status-running;
+        background: rgba($sdx-status-running, 0.1);
+    }
+    @include modifier('finish') {
+        color: $sdx-status-finish;
+        background: rgba($sdx-status-finish, 0.1);
+    }
+    @include modifier('dying') {
+        color: $sdx-status-dying;
+        background: rgba($sdx-status-dying, 0.1);
+    }
+    @include modifier('die') {
+        color: $sdx-status-die;
+        background: rgba($sdx-status-die, 0.1);
+    }
+    @include modifier('exception') {
+        color: $sdx-status-exception;
+        background: rgba($sdx-status-exception, 0.1);
+    }
+    @include modifier('error') {
+        color: $sdx-status-error;
+        background: rgba($sdx-status-error, 0.1);
+    }
     @include state('fold') {
         flex: 0;
         padding: $sdxw-foldlabel-padding-v 0;
     }
     @include state('ellipse') {
         flex: 0;
+    }
+    @include state('plain') {
+        background: none;
+    }
+    @include element('loading-icon') {
+        font-size: $sdxw-foldlabel-fontsize;
+        margin-right: 4px;
+    }
+    @include element('warning-icon') {
+        font-size: $sdxw-foldlabel-fontsize;
+        margin-right: 0;
     }
 }
 

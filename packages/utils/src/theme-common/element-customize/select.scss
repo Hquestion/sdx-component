@@ -2,7 +2,7 @@
 
 .el-select {
     .el-input__inner {
-        border-radius: 2px;
+        border-radius: $sdx-border-radius;
         border-color: $sdx-border-color;
         &:focus {
             border-color: $sdx-primary-color;

@@ -8,7 +8,7 @@
                 <sdxu-button
                     placement="right"
                     size="small"
-                    icon="iconicon-plus"
+                    icon="sdx-icon-plus"
                 >
                     新建项目
                     <template slot="dropdown">

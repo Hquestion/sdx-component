@@ -21,13 +21,13 @@
                 <i
                     v-if="passwordVisibleness && !isDisabled"
                     class="sdx-icon sdxu-input__icon is-clickable"
-                    :class="{'iconicon-eye-close': showPwd,
-                             'iconicon-eye-open': showPwd}"
+                    :class="{'sdx-icon-eye-close': showPwd,
+                             'sdx-icon-eye-open': showPwd}"
                     @click="showPwd = !showPwd"
                 />
                 <i
                     v-else-if="isSearchType"
-                    class="sdx-icon sdxu-input__icon iconicon-search"
+                    class="sdx-icon sdxu-input__icon sdx-icon-search"
                     :class="{'is-clickable': searchable}"
                     @click="searchable ? $emit('search') : null"
                 />

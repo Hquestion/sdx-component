@@ -2,6 +2,7 @@
 @import "mixins";
 @import "./BEM/bem";
 @import "./iconfont/iconfont.scss";
+@import "./element-customize/index";
 
   @font-face {font-family: "sdx-icon";
     src: url($sdx-base-iconfont-path + 'iconfont.eot'); /* IE9 */
@@ -10,3 +11,17 @@
     url($sdx-base-iconfont-path + 'iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
     url($sdx-base-iconfont-path + 'iconfont.svg') format('svg'); /* iOS 4.1- */
   }
+
+.sdx-icon-loading {
+    animation: rotating 2s linear infinite;
+    display: inline-block;
+}
+
+@keyframes rotating {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(1turn);
+    }
+}

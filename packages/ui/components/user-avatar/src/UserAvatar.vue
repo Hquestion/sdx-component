@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 export default {
     name: 'SdxuUserAvatar',
     data() {
@@ -29,6 +28,9 @@ export default {
             type: String,
             default: ''
         }
+    },
+    mounted() {
+        import('@sdx/utils/src/theme-common/iconfont/iconfont.js');
     }
 };
 </script>

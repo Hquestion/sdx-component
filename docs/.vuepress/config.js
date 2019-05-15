@@ -1,4 +1,7 @@
+const webpack = require('webpack') ;
 const path = require('path');
+
+console.log(process.env.NODE_ENV);
 
 module.exports = {
     title: 'SDX Component', // 设置网站标题
@@ -90,7 +93,13 @@ module.exports = {
                     }
                 }
             }
-        }
+        },
+        plugins: [
+            new webpack.IgnorePlugin({
+                resourceRegExp: /\/iconfont\/iconfont.js/,
+                contextRegExp: /^@sdx/
+            })
+        ]
     },
     chainWebpack: config => {
         config.module

@@ -14,8 +14,10 @@
     height: $sdxw-foldlabel-height;
     overflow: hidden;
     cursor: default;
-    word-break: keep-all;
     text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: nowrap;
+    max-width: 100%;
     @include modifier('primary') {
         color: $sdx-primary-color;
         background: #E9EFFE;
@@ -69,6 +71,7 @@
     }
     @include state('plain') {
         background: none;
+        padding: 0;
     }
     @include element('loading-icon') {
         font-size: $sdxw-foldlabel-fontsize;

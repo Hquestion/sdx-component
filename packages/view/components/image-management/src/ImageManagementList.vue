@@ -28,22 +28,22 @@
                 <el-menu
                     default-active="1"
                     mode="horizontal"
-                    @select="handleMenuSelect"
+                    @select="selectImageKind"
                     background-color="#fff"
                 >
-                    <el-menu-item index="1">
+                    <el-menu-item index="all">
                         全部
                     </el-menu-item>
-                    <el-menu-item index="2">
+                    <el-menu-item index="basic">
                         基础镜像
                     </el-menu-item>
-                    <el-menu-item index="3">
+                    <el-menu-item index="private">
                         私有镜像
                     </el-menu-item>
-                    <el-menu-item index="4">
+                    <el-menu-item index="myShare">
                         我的共享
                     </el-menu-item>
-                    <el-menu-item index="5">
+                    <el-menu-item index="otherShare">
                         他人共享
                     </el-menu-item>
                 </el-menu>
@@ -133,7 +133,10 @@
             class="sdxv-image-management__list"
             v-if="projectType === 'image'"
         >
-            <image-list-table />
+            <image-list-table
+                ref="imageListTable"
+                :image-kind="imageKind"
+            />
         </div>
         <div
             class="sdxv-image-management__list"
@@ -156,12 +159,12 @@ export default {
     name: 'SdxvImageManage',
     data() {
         return {
-            listType: 'image',
             searchName: '',
             source: 'all',
             imageType: 'all',
             buildMethod: 'all',
-            projectType: 'image'
+            projectType: 'image',
+            imageKind: 'all'
         };
     },
     components: {
@@ -192,11 +195,22 @@ export default {
         switchProjectType() {
             console.log('22222');
         },
-        handleMenuSelect() {
-            console.log('3333');
+        selectImageKind(key) {
+            this.reset();
+            this.imageKind = key;
+            this.updateTable();
         },
         goFileBuild() {
             this.$router.push({ name: 'filebuild'});
+        },
+        reset() {
+            this.searchName = '';
+            this.source = 'all';
+            this.imageType = 'all';
+            this.buildMethod = 'all';
+        },
+        updateTable() {
+            this.$refs.imageListTable.initImageList(true);
         }
     }
 };

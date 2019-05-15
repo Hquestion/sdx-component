@@ -1,3 +1,5 @@
+@import '~@sdx/ui/theme/icon-button';
+
 @include block('image-list', $bem-namespace-view) {
     @include element('table') {
         margin: 20px 0;

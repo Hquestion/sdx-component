@@ -4,7 +4,7 @@
             <sdxu-button
                 class="sdxv-privilege-custom__bar--button"
                 type="primary"
-                icon="sdx-icon iconicon-plus"
+                icon="sdx-icon sdx-icon-plus"
                 size="small"
                 @click="handleCreate"
             >
@@ -70,12 +70,12 @@
             >
                 <template #default="{ row }">
                     <i
-                        class="sdx-icon iconicon-edit1"
+                        class="sdx-icon sdx-icon-edit"
                         title="编辑"
                         @click="handleEdit(row.uuid)"
                     />
                     <i
-                        class="sdx-icon iconicon-delete1"
+                        class="sdx-icon sdx-icon-delete1"
                         title="删除"
                         @click="handleDelete(row)"
                     />
@@ -93,7 +93,7 @@
                 :current-page.sync="page"
                 :page-size="pageSize"
                 :total="total"
-                @current-change="handleChangePage" 
+                @current-change="handleChangePage"
             />
         </div>
     </div>

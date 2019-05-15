@@ -9,7 +9,7 @@
             slot="right"
         >
             <sdxu-icon-button
-                class="iconfont iconicon-edit"
+                class="iconfont sdx-icon-edit"
                 :active="!isReadonly"
                 @click="handleEdit"
             />

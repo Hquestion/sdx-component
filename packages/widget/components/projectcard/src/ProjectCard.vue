@@ -13,11 +13,11 @@
         </header>
         <main class="sdxw-project-card__main">
             <div class="sdxw-project-card__info">
-                <i class="sdx-icon iconicon-user" />
+                <i class="sdx-icon sdx-icon-user" />
                 <span>{{ meta.owner }}</span>
             </div>
             <div class="sdxw-project-card__info">
-                <i class="sdx-icon iconicon-time" />
+                <i class="sdx-icon sdx-icon-time" />
                 <span>{{ meta.createdAt }}</span>
             </div>
         </main>
@@ -27,7 +27,7 @@
                 class="sdxw-project-card__footer--select"
                 @click="$emit('operate', {id: meta.uuid, type: 'template'})"
             >
-                <i class="sdx-icon iconicon-detail" />
+                <i class="sdx-icon sdx-icon-detail" />
                 <slot name="operationName">
                     <span>选择模板</span>
                 </slot>
@@ -37,7 +37,7 @@
                 class="sdxw-project-card__footer--select"
                 @click="$emit('operate', {id: meta.uuid, type: 'project'})"
             >
-                <i class="sdx-icon iconicon-detail" />
+                <i class="sdx-icon sdx-icon-detail" />
                 <slot name="operationName">
                     <span>选择项目</span>
                 </slot>
@@ -48,19 +48,19 @@
             >
                 <i
                     v-if="viewAble"
-                    class="sdx-icon iconicon-detail"
+                    class="sdx-icon sdx-icon-detail"
                     title="查看详情"
                     @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
                 />
                 <i
                     v-if="editAble"
-                    class="sdx-icon iconicon-edit1"
+                    class="sdx-icon sdx-icon-edit"
                     title="编辑"
                     @click="$emit('operate', {id: meta.uuid, type: 'edit'})"
                 />
                 <i
                     v-if="deleteAble"
-                    class="sdx-icon iconicon-delete1"
+                    class="sdx-icon sdx-icon-delete1"
                     title="删除"
                     @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
                 />
@@ -116,13 +116,13 @@ export default {
             const type = {};
             if (this.meta.isTemplate) {
                 type.state = 'is-template';
-                type.icon = 'iconicon-muban1';
+                type.icon = 'sdx-icon-muban1';
             } else if ((Array.isArray(this.meta.users) && this.meta.users.length > 0) || (Array.isArray(this.meta.groups) && this.meta.groups.length > 0)) {
                 type.state = 'is-cooperation';
-                type.icon = 'iconicon-xiezuo1';
+                type.icon = 'sdx-icon-xiezuo1';
             } else {
                 type.state = 'is-self';
-                type.icon = 'iconicon-zijian1';
+                type.icon = 'sdx-icon-zijian1';
             }
             return type;
         }

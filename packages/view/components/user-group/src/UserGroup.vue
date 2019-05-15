@@ -5,7 +5,7 @@
         <div class="sdxv-user-group">
             <div class="sdxv-user-group__bar">
                 <sdxu-button
-                    icon="sdx-icon iconicon-plus"
+                    icon="sdx-icon sdx-icon-plus"
                     size="small"
                     @click="createGroup"
                 >
@@ -51,12 +51,12 @@
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--operation">
                             <i
-                                class="sdx-icon iconicon-edit1"
+                                class="sdx-icon sdx-icon-edit"
                                 @click="handleEdit(row)"
                                 title="编辑"
                             />
                             <i
-                                class="sdx-icon iconicon-delete1"
+                                class="sdx-icon sdx-icon-delete1"
                                 @click="handleDelete(row)"
                                 title="删除"
                             />

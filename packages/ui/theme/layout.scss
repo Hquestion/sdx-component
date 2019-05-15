@@ -1,0 +1,23 @@
+@include block('layout', $bem-namespace-ui) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    @include modifier('center') {
+        justify-content: center;
+    }
+    @include modifier('left') {
+        justify-content: flex-start;
+    }
+    @include modifier('right') {
+        justify-content: flex-end;
+    }
+    @include modifier('v-center') {
+        align-items: center;
+    }
+    @include modifier('v-top') {
+        align-items: flex-start;
+    }
+    @include modifier('v-bottom') {
+        align-items: flex-end;
+    }
+}

@@ -69,7 +69,7 @@ export default {
     computed: {
         iconShown() {
             if (this.loading) {
-                return 'iconicon-success';
+                return 'sdx-icon-success';
             } else {
                 return this.icon;
             }

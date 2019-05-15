@@ -4,8 +4,8 @@
         :class="{'is-gpu': isGPU, 'is-cpu': isCPU}"
     >
         <div class="icon">
-            <i v-if="isCPU" class="sdx-icon iconicon-cpu-dashboard" />
-            <i v-if="isGPU" class="sdx-icon iconicon-GPU-dashboard" />
+            <i v-if="isCPU" class="sdx-icon sdx-cpu-dashboard" />
+            <i v-if="isGPU" class="sdx-icon sdx-icon-GPU-dashboard" />
         </div>
         <div class="detail">
             <div
@@ -23,7 +23,7 @@
         </div>
         <IconButton
             class="delete"
-            icon="iconfont iconicon-delete"
+            icon="iconfont sdx-icon-delete"
             @click.stop="handleDelete"
         />
     </div>

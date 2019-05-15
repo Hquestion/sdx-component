@@ -21,7 +21,7 @@
                         params: 'type',
                         describe: '标签展示风格',
                         type: 'string',
-                        optionValue: 'primary / default',
+                        optionValue: 'primary / default/ create / processing / running / finish / dying / die / exception / error',
                         defaultValue: 'primary',
                     }, {
                         params: 'fold',
@@ -35,6 +35,18 @@
                         type: 'boolean',
                         optionValue: '—',
                         defaultValue: 'false',
+                    }, {
+                        params: 'plain',
+                        describe: '是否简洁模式（无背景）',
+                        type: 'boolean',
+                        optionValue: '—',
+                        defaultValue: 'false',
+                    }, {
+                        params: 'status',
+                        describe: '状态，用于展示不同的图标，默认无图标',
+                        type: 'boolean',
+                        optionValue: 'loading / warning',
+                        defaultValue: '',
                     }
                 ]
             }

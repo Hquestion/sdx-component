@@ -5,7 +5,7 @@
                 class="sdxu-user-avatar__svg"
                 aria-hidden="true"
             >
-                <use xlink:href="#iconicon-UserInfo" />
+                <use xlink:href="#sdx-icon-UserInfo" />
             </svg>
         </div>
         <div
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 export default {
     name: 'SdxuUserAvatar',
     data() {

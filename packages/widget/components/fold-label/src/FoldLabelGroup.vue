@@ -1,22 +1,27 @@
 <template>
-    <div class="sdxw-fold-label-group" :class="[
-        `sdxw-fold-label-group--${mode}`
-    ]">
-        <sdxw-fold-label
-            v-for="(item, index) in visibleList"
-            :key="index"
-            :label="item"
-            :index="index"
-            :type="type"
-            :fold="isFold(index)"
-            :ellipse="isEllipse(index)"
-        />
+    <div
+        class="sdxw-fold-label-group"
+        :class="[
+            `sdxw-fold-label-group--${mode}`
+        ]"
+    >
+        <slot>
+            <sdxw-fold-label
+                v-for="(item, index) in visibleList"
+                :key="index"
+                :label="item"
+                :index="index"
+                :type="type"
+                :fold="isFold(index)"
+                :ellipse="isEllipse(index)"
+            />
+        </slot>
     </div>
 </template>
 
 <script>
 import SdxwFoldLabel from './FoldLabel';
-import { getParentNode } from "@sdx/utils/src/helper/dom";
+import { getParentNode } from '@sdx/utils/src/helper/dom';
 
 export default {
     name: 'SdxwFoldLabelGroup',
@@ -80,6 +85,7 @@ export default {
     },
     mounted() {
         this.$nextTick(() => {
+            if (this.mode === 'list') return;
             const width = this.$el.offsetWidth;
             const pWidth = getParentNode(this.$el).offsetWidth;
             this.$el.style.width = `${Math.min(width, pWidth)}px`;

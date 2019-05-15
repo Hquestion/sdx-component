@@ -2,14 +2,17 @@
     <div class="sdxu-content-panel">
         <div
             class="sdxu-content-panel__header"
-            v-if="title || $slots.right"
+            v-if="title || $slots.right || $slots.title"
         >
             <div
                 class="sdxu-content-panel__title"
-                v-if="title"
+                :class="{'is-slot': $slots.title}"
+                v-if="title || $slots.title"
             >
-                <span>{{ title }}</span>
-                <span class="sdxu-content-panel__subtitle">{{ subtitle }}</span>
+                <slot name="title">
+                    <span>{{ title }}</span>
+                    <span class="sdxu-content-panel__subtitle">{{ subtitle }}</span>
+                </slot>
             </div>
             <div class="sdxu-content-panel__right">
                 <slot name="right" />

@@ -24,7 +24,7 @@
                     class="icon"
                     aria-hidden="true"
                 >
-                    <use xlink:href="#iconicon-UserInfo" />
+                    <use xlink:href="#sdx-icon-UserInfo" />
                 </svg>
                 <span>{{ t('widget.userInfo.title') }} </span>
             </div>

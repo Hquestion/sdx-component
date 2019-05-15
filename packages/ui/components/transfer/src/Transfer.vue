@@ -40,7 +40,7 @@
         <div class="sdxu-transfer__moveicon">
             <i
                 @click="movetag"
-                :class="['sdx-icon', 'iconicon-jiantou',hightIcon ? 'is-highlight' : 'is-normal']"
+                :class="['sdx-icon', 'sdx-icon-jiantou',hightIcon ? 'is-highlight' : 'is-normal']"
             />
         </div>
         <div class="sdxu-transfer__right">

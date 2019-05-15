@@ -26,7 +26,13 @@ module.exports = {
                         'ui/tab-radio',
                         'ui/input',
                         'ui/messagebox',
-                        'ui/transfer'
+                        'ui/transfer',
+                        'ui/content-panel',
+                        'ui/iconbutton',
+                        'ui/empty',
+                        'ui/placeholder',
+                        'ui/user-avatar',
+                        'ui/layout'
                     ]
                 },
                 {
@@ -37,7 +43,8 @@ module.exports = {
                         'widget/projectcard',
                         'widget/userInfoDialog',
                         'widget/changePassword',
-                        'widget/fold-label'
+                        'widget/fold-label',
+                        'widget/user-picker'
                     ]
                 },
                 {
@@ -70,6 +77,18 @@ module.exports = {
         resolve: {
             alias: {
                 '@sdx': path.resolve(__dirname, '../../packages')
+            }
+        },
+        devServer: {
+            proxy: {
+                '/api': {
+                    target: 'https://easy-mock.com',
+                    ws: true,
+                    changeOrigin: true,
+                    pathRewrite: {
+                        '/mock': '/mock/5cd04685adb0973be6a3d969/api/'
+                    }
+                }
             }
         }
     },

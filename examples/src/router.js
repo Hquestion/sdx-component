@@ -18,13 +18,16 @@ import UserInfoTest from './views/widget/userInfoTest.vue';
 import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
 import projectManageTest from './views/view/projectManageTest.vue';
+import imageManageTest from './views/view/imageManageTest.vue';
 import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
+import ImageManage from '@sdx/view/components/image-management';
+
 febAlive.resetHistory();
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
     routes: [
         {
             path: '/',
@@ -73,6 +76,11 @@ export default new Router({
             {
                 path: 'authorizeManage',
                 component: AuthorizeManage,
+            },
+            {
+                path: 'imageManageTest',
+                name: '镜像管理测试',
+                component: ImageManage
             }
             ]
         },
@@ -171,5 +179,14 @@ export default new Router({
             name: '项目管理测试',
             component: projectManageTest
         },
+        {
+            path: '/imageManageTest',
+            name: '镜像管理测试',
+            component: imageManageTest
+        }
     ]
 });
+
+ImageManage.viewRouter.register(router, '/');
+
+export default router;

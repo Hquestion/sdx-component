@@ -1,7 +1,5 @@
 <template>
-    <sdxu-content-panel
-        class="sdxv-image-management"
-    >
+    <sdxu-content-panel class="sdxv-image-management">
         <div class="sdxv-image-management__header">
             <SdxuTabRadioGroup
                 v-model="projectType"
@@ -58,7 +56,7 @@
                     @search="searchImage"
                 />
                 <div>
-                    <span>镜像来源: </span>
+                    <span>镜像来源:</span>
                     <el-select
                         v-model="source"
                         size="medium"
@@ -79,7 +77,7 @@
                     </el-select>
                 </div>
                 <div>
-                    <span>镜像种类: </span>
+                    <span>镜像种类:</span>
                     <el-select
                         v-model="imageType"
                         size="medium"
@@ -100,7 +98,7 @@
                     </el-select>
                 </div>
                 <div>
-                    <span>构建方式: </span>
+                    <span>构建方式:</span>
                     <el-select
                         v-model="buildMethod"
                         size="medium"
@@ -201,7 +199,7 @@ export default {
             this.updateTable();
         },
         goFileBuild() {
-            this.$router.push({ name: 'filebuild'});
+            this.$router.push({ name: 'filebuild' });
         },
         reset() {
             this.searchName = '';

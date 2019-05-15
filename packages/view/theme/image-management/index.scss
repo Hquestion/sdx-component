@@ -17,6 +17,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~@sdx/widget/theme/base';
 @import '~@sdx/widget/theme/select-group-user';
 @import './image-list-table.scss';
+@import './image-file-build.scss';
 
 @include block('image-management', $bem-namespace-view) {
     @include element('header') {

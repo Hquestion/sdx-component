@@ -28,7 +28,7 @@
             :class="[dropdownVisible ? 'is-reverse' : '']"
         >
             <i
-                class="sdx-icon iconicon-caret-bottom"
+                class="sdx-icon sdx-icon-caret-bottom"
             />
         </span>
         <el-collapse-transition>
@@ -122,7 +122,7 @@ export default {
     computed: {
         iconShown() {
             if (this.loading) {
-                return 'iconicon-success';
+                return 'sdx-icon-loading';
             } else {
                 return this.icon;
             }

@@ -43,5 +43,9 @@ export default {
     getImageList,
     getImageTaskList,
     removeImageTask,
-    removeImage
+    removeImage,
+    buildTar,
+    buildImagefile,
+    getPackagesByUuid,
+    getImage
 };

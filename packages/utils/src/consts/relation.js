@@ -36,3 +36,12 @@ export const DOCKER_IMAGE_KIND_LIST = [{
     label: 'OTHERS',
     value: 'OTHERS'
 }];
+
+// 构建任务列表状态映射表
+export const imageTaskLabel = {
+    BUILDING : 'create',
+    BUILDED :'processing',
+    UPLOADING :'running',
+    FAILED : 'warning',
+    FINISHED : 'finish'
+};

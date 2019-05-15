@@ -1,5 +1,5 @@
 <template>
-    <div class="">
+    <div class="sdxv-image-task">
         <SdxuTable
             :data="tableData"  
         >
@@ -26,7 +26,15 @@
                 <template
                     slot-scope="scope"
                 >
-                    {{ scope.row.content }}
+                    <SdxwFoldLabelGroup mode="list">
+                        <SdxwFoldLabel
+                            :plain="true"
+                            :type="imageTaskLabel[scope.row.state.label]"
+                            :status="scope.row.state.needPull ? 'loading' : ''"
+                        >
+                            {{ scope.row.state.content }}
+                        </SdxwFoldLabel>
+                    </SdxwFoldLabelGroup>
                 </template>
             </el-table-column>
             <el-table-column
@@ -60,6 +68,14 @@
                 </template>
             </el-table-column>
         </SdxuTable>
+        <div class="pagination">
+            <sdxu-pagination
+                :current-page.sync="current"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="currentChange"
+            />
+        </div>
     </div>
 </template>
 
@@ -68,12 +84,14 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import {getImageTaskList, removeImageTask} from '@sdx/utils/src/api/image';
 import MessageBox from '@sdx/ui/components/message-box';
+import SdxuPagination from '@sdx/ui/components/pagination';
+import FoldLabel from '@sdx/widget/components/fold-label';
+import {imageTaskLabel} from '@sdx/utils/src/consts/relation';
 export default {
     name: '',
     data() {
         return {
             tableData: [],
-            total: 0,
             searchTask: {
                 imageType: '',
                 name: '',
@@ -86,11 +104,18 @@ export default {
                 order: 'desc',
                 orderBy: 'createdAt'
             },
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            imageTaskLabel
         };
     },
     components: {
         SdxuTable,
-        SdxuIconButton
+        SdxuIconButton,
+        SdxuPagination,
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
     },
     methods: {
         taskList() {
@@ -109,9 +134,14 @@ export default {
                 .then(()=> {
                     this.taskList();
                 });
-        });
-            
-        }
+        });    
+        },
+        currentChange() {
+            this.searchTask = Object.assign({}, this.searchTask, {
+                start: (this.current - 1) * 10 + 1
+            });
+            this.taskList();
+        },
     },
     created() {
         this.taskList();

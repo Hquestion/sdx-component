@@ -41,24 +41,22 @@
                     slot-scope="scope"
                     class="icon"
                 >
-                    <i
-                        class="sdx-icon iconicon-edit1 icon"
-                        @click="editRole(scope.row.uuid)"
+                    <SdxuIconButton
+                        icon="sdx-icon sdx-baobijiao"
+                        title="比较"
+                        v-if="scope.row.operations.includes('diff')"
                     />
-                    <i
-                        class="sdx-icon iconicon-delete1 icon"
-                        @click="removeRole(scope.row.uuid, scope.row.name)"
+                    <SdxuIconButton
+                        icon="sdx-icon sdx-chakanrizhi"
+                        title="查看日志"
+                        v-if="scope.row.operations.includes('log')"
                     />
-                </template>
-            </el-table-column>
-            <el-table-column
-                type="expand"
-            >
-                <template slot-scope="props">
-                    <div class="expand">
-                        <span>角色说明:</span>
-                        <span>{{ props.row.description }}</span>
-                    </div>
+                    <SdxuIconButton
+                        icon="sdx-icon sdx-icon-delete"
+                        title="删除"
+                        v-if="scope.row.operations.includes('remove')"
+                        @click="deleteImageTask(scope.row.uuid)"
+                    />
                 </template>
             </el-table-column>
         </SdxuTable>
@@ -67,16 +65,56 @@
 
 <script>
 import SdxuTable from '@sdx/ui/components/table';
+import SdxuIconButton from '@sdx/ui/components/icon-button';
+import {getImageTaskList, removeImageTask} from '@sdx/utils/src/api/image';
+import MessageBox from '@sdx/ui/components/message-box';
 export default {
     name: '',
     data() {
-        return {};
+        return {
+            tableData: [],
+            total: 0,
+            searchTask: {
+                imageType: '',
+                name: '',
+                version: '',
+                projectName: '',
+                state: '',
+                buildType: '',
+                start: 1,
+                count: 10,
+                order: 'desc',
+                orderBy: 'createdAt'
+            },
+        };
     },
     components: {
-        SdxuTable
+        SdxuTable,
+        SdxuIconButton
+    },
+    methods: {
+        taskList() {
+            getImageTaskList(this.searchTask)
+                .then(data =>{
+                    this.tableData = data.data;
+                    this.total = data.total;
+                });
+        },
+        deleteImageTask(id) {MessageBox.confirm.error({
+            title: '确定要删除选中的镜像任务吗？',
+            content: '确定删除后不可恢复哦',
+            type: 'alert'
+        }).then(() => {
+            removeImageTask(id)
+                .then(()=> {
+                    this.taskList();
+                });
+        });
+            
+        }
     },
     created() {
-        
+        this.taskList();
     }
 };
 </script>

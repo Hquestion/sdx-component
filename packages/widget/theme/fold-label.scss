@@ -18,6 +18,10 @@
     word-break: break-all;
     white-space: nowrap;
     max-width: 100%;
+    &:after {
+        content: '\20';
+        display: table;
+    }
     @include modifier('primary') {
         color: $sdx-primary-color;
         background: #E9EFFE;
@@ -71,15 +75,22 @@
     }
     @include state('plain') {
         background: none;
-        padding: 0;
+        padding: $sdxw-foldlabel-padding-v 0;
+        border-radius: 0;
     }
     @include element('loading-icon') {
         font-size: $sdxw-foldlabel-fontsize;
         margin-right: 4px;
+        vertical-align: middle;
     }
     @include element('warning-icon') {
         font-size: $sdxw-foldlabel-fontsize;
         margin-right: 0;
+        vertical-align: middle;
+    }
+    @include element('main') {
+        display: inline-block;
+        vertical-align: middle;
     }
 }
 

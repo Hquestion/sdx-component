@@ -18,13 +18,15 @@
             class="sdx-icon sdx-icon-gantanhao sdxw-fold-label__warning-icon"
             v-if="status ==='warning'"
         />
-        <slot>
-            <i
-                v-if="ellipse"
-                class="sdx-icon sdx-icon-more"
-            />
-            <span v-else>{{ labelShown }}</span>
-        </slot>
+        <span class="sdxw-fold-label__main">
+            <slot>
+                <i
+                    v-if="ellipse"
+                    class="sdx-icon sdx-icon-more"
+                />
+                <span v-else>{{ labelShown }}</span>
+            </slot>
+        </span>
     </div>
 </template>
 

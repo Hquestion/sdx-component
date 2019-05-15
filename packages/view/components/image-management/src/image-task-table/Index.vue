@@ -26,15 +26,13 @@
                 <template
                     slot-scope="scope"
                 >
-                    <SdxwFoldLabelGroup mode="list">
-                        <SdxwFoldLabel
-                            :plain="true"
-                            :type="imageTaskLabel[scope.row.state.label]"
-                            :status="scope.row.state.needPull ? 'loading' : ''"
-                        >
-                            {{ scope.row.state.content }}
-                        </SdxwFoldLabel>
-                    </SdxwFoldLabelGroup>
+                    <SdxwFoldLabel
+                        :plain="true"
+                        :type="imageTaskLabel[scope.row.state.label]"
+                        :status="scope.row.state.needPull ? 'loading' : ''"
+                    >
+                        {{ scope.row.state.content }}
+                    </SdxwFoldLabel>
                 </template>
             </el-table-column>
             <el-table-column
@@ -115,7 +113,6 @@ export default {
         SdxuIconButton,
         SdxuPagination,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
-        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
     },
     methods: {
         taskList() {

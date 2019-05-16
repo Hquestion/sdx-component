@@ -24,7 +24,7 @@
         <div v-if="projectType === 'image'">
             <div class="sdxv-image-management__nav-menu">
                 <el-menu
-                    default-active="1"
+                    default-active="all"
                     mode="horizontal"
                     @select="selectImageKind"
                     background-color="#fff"
@@ -64,7 +64,7 @@
                     >
                         <el-option
                             label="全部"
-                            value="all"
+                            value=""
                         />
                         <el-option
                             label="按创建人排序"
@@ -85,7 +85,7 @@
                     >
                         <el-option
                             label="全部"
-                            value="all"
+                            value=""
                         />
                         <el-option
                             label="按创建人排序"
@@ -100,13 +100,13 @@
                 <div>
                     <span>构建方式:</span>
                     <el-select
-                        v-model="buildMethod"
+                        v-model="buildType"
                         size="medium"
-                        @change="buildMethodChange"
+                        @change="buildTypeChange"
                     >
                         <el-option
                             label="全部"
-                            value="all"
+                            value=""
                         />
                         <el-option
                             label="按创建人排序"
@@ -134,6 +134,13 @@
             <image-list-table
                 ref="imageListTable"
                 :image-kind="imageKind"
+                :name="searchName"
+                :image-type="imageType"
+                :share-type="shareType"
+                :build-type="buildType"
+                :task-type="taskType"
+                :is-owner="isOwner"
+                @selection-change="selectionChange"
             />
         </div>
         <div
@@ -158,11 +165,14 @@ export default {
     data() {
         return {
             searchName: '',
-            source: 'all',
-            imageType: 'all',
-            buildMethod: 'all',
+            source: '',
+            imageType: '',
+            buildType: '',
+            shareType: '',
             projectType: 'image',
-            imageKind: 'all'
+            imageKind: 'all',
+            selectedImages: [],
+            isOwner: ''
         };
     },
     components: {
@@ -178,6 +188,9 @@ export default {
         ImageTaskTable
     },
     methods: {
+        selectionChange(selection) {
+            this.selectedImages = selection;
+        },
         searchImage() {
             console.log('111111111111');
         },
@@ -187,7 +200,7 @@ export default {
         imageTypeChange() {
             console.log('22222222');
         },
-        buildMethodChange() {
+        buildTypeChange() {
             console.log('22222');
         },
         switchProjectType() {
@@ -196,16 +209,39 @@ export default {
         selectImageKind(key) {
             this.reset();
             this.imageKind = key;
-            this.updateTable();
+            switch (key) {
+            case 'basic':
+                this.buildType = 'BASIC';
+                break;
+            case 'private':
+                this.shareType = 'PRIVATE';
+                break;
+            case 'myShare':
+                this.shareType = 'PUBLIC';
+                this.isOwner = 'true';
+                break;
+            case 'otherShare':
+                this.shareType = 'PUBLIC';
+                this.isOwner = 'false';
+                break;
+            default:
+                break;
+            }
+            this.$nextTick(() => {
+                this.updateTable();
+            });
         },
         goFileBuild() {
             this.$router.push({ name: 'filebuild' });
         },
         reset() {
             this.searchName = '';
-            this.source = 'all';
-            this.imageType = 'all';
-            this.buildMethod = 'all';
+            this.source = '';
+            this.imageType = '';
+            this.shareType = '';
+            this.isOwner = '';
+            this.buildType = '';
+            this.selectedImages = [];
         },
         updateTable() {
             this.$refs.imageListTable.initImageList(true);

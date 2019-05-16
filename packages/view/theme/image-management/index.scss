@@ -20,7 +20,8 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import './image-build-basic.scss';
 @import './modified-package-list.scss';
 @import './package-list.scss';
-
+@import './image-file-build.scss';
+@import './image-task-list.scss';
 @include block('image-management', $bem-namespace-view) {
     @include element('header') {
         display: flex;

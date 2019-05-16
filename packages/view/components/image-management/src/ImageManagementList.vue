@@ -64,7 +64,7 @@
                     >
                         <el-option
                             label="全部"
-                            value="all"
+                            value=""
                         />
                         <el-option
                             label="按创建人排序"
@@ -85,7 +85,7 @@
                     >
                         <el-option
                             label="全部"
-                            value="all"
+                            value=""
                         />
                         <el-option
                             label="按创建人排序"
@@ -106,7 +106,7 @@
                     >
                         <el-option
                             label="全部"
-                            value="all"
+                            value=""
                         />
                         <el-option
                             label="按创建人排序"
@@ -134,6 +134,12 @@
             <image-list-table
                 ref="imageListTable"
                 :image-kind="imageKind"
+                :name="searchName"
+                :image-type="imageType"
+                :share-type="shareType"
+                :build-type="buildType"
+                :task-type="taskType"
+                :is-owner="isOwner"
                 @selection-change="selectionChange"
             />
         </div>
@@ -159,9 +165,9 @@ export default {
     data() {
         return {
             searchName: '',
-            source: 'all',
-            imageType: 'all',
-            buildType: 'all',
+            source: '',
+            imageType: '',
+            buildType: '',
             shareType: '',
             projectType: 'image',
             imageKind: 'all',
@@ -221,18 +227,20 @@ export default {
             default:
                 break;
             }
-            this.updateTable();
+            this.$nextTick(() => {
+                this.updateTable();
+            });
         },
         goFileBuild() {
             this.$router.push({ name: 'filebuild' });
         },
         reset() {
             this.searchName = '';
-            this.source = 'all';
-            this.imageType = 'all';
+            this.source = '';
+            this.imageType = '';
             this.shareType = '';
             this.isOwner = '';
-            this.buildType = 'all';
+            this.buildType = '';
             this.selectedImages = [];
         },
         updateTable() {

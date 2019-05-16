@@ -160,6 +160,30 @@ export default {
         imageKind: {
             type: String,
             default: 'all'
+        },
+        name: {
+            type: String,
+            default: ''
+        },
+        imageType: {
+            type: String,
+            default: ''
+        },
+        shareType: {
+            type: String,
+            default: ''
+        },
+        buildType: {
+            type: String,
+            default: ''
+        },
+        taskType: {
+            type: String,
+            default: ''
+        },
+        isOwner: {
+            type: String,
+            default: ''
         }
     },
     components: {
@@ -200,13 +224,14 @@ export default {
             this.loading = true;
             if (reset) this.current = 1;
             const params = {
-                name: this.searchName,
+                name: this.name,
                 imageType: this.imageType,
                 shareType: this.shareType,
                 buildType: this.buildType,
                 taskType: this.taskType,
                 start: this.current,
-                count: this.pageSize
+                count: this.pageSize,
+                isOwner: this.isOwner
             };
             getImageList(params).then((res) => {
                 console.log('res', res);

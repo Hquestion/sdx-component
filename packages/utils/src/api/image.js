@@ -25,6 +25,10 @@ export function getImageList(params) {
     return httpService.get(imageApi, params);
 }
 
+export function updateImage(uuid, params) {
+    return httpService.patch(imageApi + uuid, params);
+}
+
 export function removeImage(uuid) {
     return httpService.remove(imageApi + uuid);
 }

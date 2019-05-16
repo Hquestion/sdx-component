@@ -23,6 +23,7 @@ import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
 import ImageManage from '@sdx/view/components/image-management';
+import BuildImageBasicDemo from './views/demo/buildImageBasicDemo';
 
 febAlive.resetHistory();
 Vue.use(Router);
@@ -172,6 +173,9 @@ const router = new Router({
             }, {
                 path: 'user-group',
                 component: UserGroupDemo
+            }, {
+                path: 'buildImageBasic',
+                component: BuildImageBasicDemo
             }]
         },
         {

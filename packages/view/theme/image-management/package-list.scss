@@ -1,0 +1,57 @@
+@include block('package-list', $bem-namespace-view) {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+
+    @include element('bar') {
+        display: flex;
+        
+        @include modifier('search') {
+            flex: auto;
+            margin-right: $sdx-margin;
+        }
+
+        @include modifier('source') {
+            display: flex;
+            flex: auto;
+            margin-right: $sdx-margin;
+            & > span {
+                flex: none;
+                margin-right: 10px;
+            }
+            .el-select {
+                flex: auto;
+            }
+        }
+
+        @include modifier('button') {
+            flex: none;
+        }
+    }
+
+    @include element('table') {
+        border: 1px solid #E4E7ED;
+        border-bottom: 0;
+        margin-top: $sdx-margin;
+        .el-table th.is-leaf {
+            background:#F2F6FC;
+        }
+    }
+
+    @include element('pagination') {
+        align-self: flex-end;
+        margin-top: $sdx-margin;
+    }
+}
+
+@include block('package-upgrade-dialog', $bem-namespace-view) {
+    @include element('form') {
+        @include modifier('item') {
+            display: flex;
+            align-items: center;
+            .sdxu-input {
+                width: 300px;
+            }
+        }
+    }
+}

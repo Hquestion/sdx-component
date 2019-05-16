@@ -19,6 +19,9 @@
             <router-link to="/demo/user-group">
                 user-group测试
             </router-link> |
+            <router-link to="/demo/buildImageBasic">
+                基于文件构建
+            </router-link> |
             <router-link to="/paginationTest">
                 分页测试页面
             </router-link> |

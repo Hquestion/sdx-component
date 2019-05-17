@@ -115,8 +115,8 @@ export default {
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
     },
     methods: {
-        taskList() {
-            getImageTaskList(this.searchTask)
+        taskList(params) {
+            getImageTaskList()
                 .then(data =>{
                     this.tableData = data.data;
                     this.total = data.total;
@@ -137,7 +137,22 @@ export default {
             this.searchTask = Object.assign({}, this.searchTask, {
                 start: (this.current - 1) * 10 + 1
             });
-            this.taskList();
+            this.taskList(this.searchTask);
+        },
+        initImageTaskList(reset) {
+            this.loading = true;
+            if (reset) this.current = 1;
+            const params = {
+                name: this.name,
+                imageType: this.imageType,
+                shareType: this.shareType,
+                buildType: this.buildType,
+                taskType: this.taskType,
+                start: this.current,
+                count: this.pageSize
+            };
+           
+           
         },
     },
     created() {

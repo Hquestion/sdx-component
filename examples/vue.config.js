@@ -28,6 +28,11 @@ module.exports = {
                 pathRewrite: {
                     '/api': '/mock/5cd04685adb0973be6a3d969/api'
                 }
+            },
+            '/v2': {
+                target: 'http://10.115.1.130',
+                ws: true,
+                changeOrigin: true,
             }
         },
     }

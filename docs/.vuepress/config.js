@@ -35,7 +35,8 @@ module.exports = {
                         'ui/empty',
                         'ui/placeholder',
                         'ui/user-avatar',
-                        'ui/layout'
+                        'ui/layout',
+                        'ui/scroll'
                     ]
                 },
                 {
@@ -47,7 +48,8 @@ module.exports = {
                         'widget/userInfoDialog',
                         'widget/changePassword',
                         'widget/fold-label',
-                        'widget/user-picker'
+                        'widget/user-picker',
+                        'widget/fileselect'
                     ]
                 },
                 {

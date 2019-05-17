@@ -47,84 +47,57 @@
                 </el-menu>
             </div>
             <div class="sdxv-image-management__filter">
-                <sdxu-input
-                    v-model="searchName"
-                    searchable
-                    type="search"
-                    size="small"
-                    placeholder="请输入文件名"
-                    @search="searchImage"
-                />
-                <div>
-                    <span>镜像来源:</span>
-                    <el-select
-                        v-model="source"
-                        size="medium"
-                        @change="sourceChange"
-                    >
-                        <el-option
-                            label="全部"
-                            value=""
-                        />
-                        <el-option
-                            label="按创建人排序"
-                            value="created_by"
-                        />
-                        <el-option
-                            label="按项目类型排序"
-                            value="project_type"
-                        />
-                    </el-select>
-                </div>
-                <div>
-                    <span>镜像种类:</span>
-                    <el-select
-                        v-model="imageType"
-                        size="medium"
-                        @change="imageTypeChange"
-                    >
-                        <el-option
-                            label="全部"
-                            value=""
-                        />
-                        <el-option
-                            label="按创建人排序"
-                            value="created_by"
-                        />
-                        <el-option
-                            label="按项目类型排序"
-                            value="project_type"
-                        />
-                    </el-select>
-                </div>
-                <div>
-                    <span>构建方式:</span>
-                    <el-select
-                        v-model="buildType"
-                        size="medium"
-                        @change="buildTypeChange"
-                    >
-                        <el-option
-                            label="全部"
-                            value=""
-                        />
-                        <el-option
-                            label="按创建人排序"
-                            value="created_by"
-                        />
-                        <el-option
-                            label="按项目类型排序"
-                            value="project_type"
-                        />
-                    </el-select>
-                </div>
-                <SdxuButton
-                    icon="sdx-icon-plus"
-                    size="small"
-                    invert
+                <sdxw-search-layout
+                    @search="search"
+                    @reset="reset"
+                    style="width: 100%"
                 >
-                    重置查询
-                </SdxuButton>
+                    <sdxw-search-item>
+                        <sdxu-input
+                            v-model="searchName"
+                            type="search"
+                            size="small"
+                            placeholder="请输入镜像名"
+                        />
+                    </sdxw-search-item>
+                    <sdxw-search-item lable="镜像种类:">
+                        <el-select
+                            v-model="imageType"
+                            size="medium"
+                        >
+                            <el-option
+                                label="全部"
+                                value=""
+                            />
+                            <el-option
+                                v-for="(item, index) in imageTypes"
+                                :key="index"
+                                :value="item"
+                                :label="item"
+                            />
+                        </el-select>
+                    </sdxw-search-item>
+                    <sdxw-search-item
+                        lable="构建方式:"
+                        v-if="imageKind !== 'basic'"
+                    >
+                        <el-select
+                            v-model="buildType"
+                            size="medium"
+                        >
+                            <el-option
+                                label="全部"
+                                value=""
+                            />
+                            <el-option
+                                v-for="(item, index) in buildTypes"
+                                :key="index"
+                                :value="item.value"
+                                :label="item.label"
+                            />
+                        </el-select>
+                    </sdxw-search-item>
+                </sdxw-search-layout>
             </div>
         </div>
         <div
@@ -140,7 +113,6 @@
                 :build-type="buildType"
                 :task-type="taskType"
                 :is-owner="isOwner"
-                @selection-change="selectionChange"
             />
         </div>
         <div
@@ -160,19 +132,54 @@ import Button from '@sdx/ui/components/button';
 import { Menu, MenuItem, Select } from 'element-ui';
 import Input from '@sdx/ui/components/input';
 import ImageTaskTable from './image-task-table/Index';
+import SearchLayout from '@sdx/widget/components/search-layout';
 export default {
     name: 'SdxvImageManage',
     data() {
         return {
             searchName: '',
-            source: '',
             imageType: '',
             buildType: '',
             shareType: '',
             projectType: 'image',
             imageKind: 'all',
-            selectedImages: [],
-            isOwner: ''
+            isOwner: '',
+            taskType: '',
+            imageTypes: [
+                'JUPYTER',
+                'PYTHON',
+                'SPARK',
+                'TENSORFLOW',
+                'TENSORFLOW_SERVING',
+                'SPARK_SERVING',
+                'PMML_SERVING',
+                'CONTAINER_DEV',
+                'OTHER' ,
+                'H2O',
+                'NVIDIA_DIGITS'
+            ],
+            buildTypes: [
+                {
+                    label: '基础镜像',
+                    value: 'BASIC'
+                },
+                {
+                    label: '在线构建',
+                    value: 'ONLINE'
+                },
+                {
+                    label: '基于tar构建',
+                    value: 'TAR'
+                },
+                {
+                    label: '基于DockerFile构建',
+                    value: 'DOCKERFILE'
+                },
+                {
+                    label: '任务转存',
+                    value: 'TASK'
+                }
+            ]
         };
     },
     components: {
@@ -185,29 +192,26 @@ export default {
         [Input.name]: Input,
         ImageListTable,
         [ContentPanel.name]: ContentPanel,
-        ImageTaskTable
+        ImageTaskTable,
+        [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem
     },
     methods: {
-        selectionChange(selection) {
-            this.selectedImages = selection;
+        search() {
+            this.$nextTick(() => {
+                this.updateTable();
+            });
         },
-        searchImage() {
-            console.log('111111111111');
-        },
-        sourceChange() {
-            console.log('222222222');
-        },
-        imageTypeChange() {
-            console.log('22222222');
-        },
-        buildTypeChange() {
-            console.log('22222');
+        reset() {
+            this.resetFilters();
+            this.$nextTick(() => {
+                this.updateTable();
+            });
         },
         switchProjectType() {
-            console.log('22222');
         },
         selectImageKind(key) {
-            this.reset();
+            this.resetVariables();
             this.imageKind = key;
             switch (key) {
             case 'basic':
@@ -234,14 +238,17 @@ export default {
         goFileBuild() {
             this.$router.push({ name: 'filebuild' });
         },
-        reset() {
+        resetFilters() {
             this.searchName = '';
-            this.source = '';
+            this.imageType = '';
+            this.buildType = '';
+        },
+        resetVariables() {
+            this.searchName = '';
             this.imageType = '';
             this.shareType = '';
             this.isOwner = '';
             this.buildType = '';
-            this.selectedImages = [];
         },
         updateTable() {
             this.$refs.imageListTable.initImageList(true);

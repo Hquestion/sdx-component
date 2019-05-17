@@ -3,6 +3,33 @@
         class="sdxv-image-list"
         v-loading="loading"
     >
+        <div>
+            <SdxuButton
+                type="primary"
+                size="small"
+                @click="share"
+                v-if="imageKind === 'private'"
+            >
+                全部共享
+            </SdxuButton>
+            <SdxuButton
+                type="primary"
+                invert
+                size="small"
+                @click="remove"
+                v-if="imageKind === 'private'"
+            >
+                删除
+            </SdxuButton>
+            <SdxuButton
+                type="primary"
+                size="small"
+                @click="cancelShare"
+                v-if="imageKind === 'myShare'"
+            >
+                取消共享
+            </SdxuButton>
+        </div>
         <sdxu-table
             :data="imageList"
             class="sdxv-image-list__table"
@@ -22,12 +49,6 @@
                 prop="version"
                 key="version"
                 label="版本号"
-            />
-            <el-table-column
-                prop="sourceType"
-                key="sourceType"
-                label="镜像来源"
-                v-if="imageKind === 'all'"
             />
             <el-table-column
                 prop="imageType"
@@ -105,6 +126,7 @@
             >
                 <el-form-item
                     label="共享至全局："
+                    v-if="isAdmin"
                 >
                     <el-switch
                         v-model="shareForm.shareType"
@@ -129,6 +151,7 @@
 <script>
 import Table from '@sdx/ui/components/table';
 import Dialog from '@sdx/ui/components/dialog';
+import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { getImageList, removeImage, updateImage } from '@sdx/utils/src/api/image';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
@@ -191,12 +214,27 @@ export default {
         [Pagination.name]: Pagination,
         SdxuIconButton,
         [Dialog.name]: Dialog,
-        [SelectGroupUser.name]: SelectGroupUser
+        [SelectGroupUser.name]: SelectGroupUser,
+        [Button.name]: Button
     },
     created() {
         this.initImageList();
     },
+    computed: {
+        isAdmin() {
+            return true; // TODO: 判断用户是否是管理员用户
+        }
+    },
     methods: {
+        share() {
+
+        },
+        remove() {
+
+        },
+        cancelShare() {
+
+        },
         selectionChange(selection) {
             this.$emit('selection-change', selection);
         },
@@ -230,11 +268,16 @@ export default {
                 buildType: this.buildType,
                 taskType: this.taskType,
                 start: this.current,
-                count: this.pageSize,
-                isOwner: this.isOwner
+                count: this.pageSize
             };
+            if (this.isOwner) {
+                if (this.isOwner === 'true') {
+                    params.ownerId = '';  // TODO: 有用户ID时传入用户ID
+                } else {
+                    params.excludeOwnerId = ''; // TODO: 有用户ID时传入用户ID
+                }
+            }
             getImageList(params).then((res) => {
-                console.log('res', res);
                 this.imageList = res.data;
                 this.total = res.total;
                 this.loading = false;
@@ -254,7 +297,6 @@ export default {
                     this.dialogTitle = '共享设置';
                     this.editingImage = row;
                     Object.assign(this.shareForm, row);
-                    console.log('this.shareForm', this.shareForm);
                     row.users.forEach(user => {
                         row.groups.forEach(group => {
                             if (this.defaultUserGroupKeys.indexOf(group) === -1) {

@@ -22,6 +22,7 @@ import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
 import SearchLayout from './views/cache/search.vue';
+import Task from './views/cache/task.vue';
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -78,6 +79,10 @@ export default new Router({
             {
                 path: 'search',
                 component: SearchLayout,
+            },
+            {
+                path: 'task',
+                component: Task,
             }
             ]
         },

@@ -44,6 +44,11 @@
             </button>
         </p>
         <p class="page-link">
+            <button @click="$router.push('/Cache/task')">
+                任务
+            </button>
+        </p>
+        <p class="page-link">
             <button @click="toBack">
                 返回
             </button>

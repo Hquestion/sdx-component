@@ -15,6 +15,7 @@ import Empty from './components/empty';
 import UserAvatar from './components/user-avatar';
 import Scroll from './components/scroll';
 import Upload from './components/upload';
+import Layout from './components/layout';
 
 import { registerI18n } from '@sdx/utils/src/locale';
 
@@ -35,7 +36,8 @@ const SdxUI = {
     Empty,
     UserAvatar,
     Scroll,
-    Upload
+    Upload,
+    Layout
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -56,6 +58,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     UserAvatar.install(vue);
     Scroll.install(vue);
     Upload.install(vue);
+    Layout.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

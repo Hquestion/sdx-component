@@ -39,6 +39,11 @@
             </button>
         </p>
         <p class="page-link">
+            <button @click="$router.push('/Cache/search')">
+                search布局
+            </button>
+        </p>
+        <p class="page-link">
             <button @click="toBack">
                 返回
             </button>
@@ -55,7 +60,7 @@ export default {
     },
     methods: {
         toBPage() {
-            this.$router.push(`/Cache/b`);
+            this.$router.push('/Cache/b');
         },
         toBack() {
             this.$router.back();

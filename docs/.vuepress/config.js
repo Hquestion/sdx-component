@@ -49,6 +49,7 @@ module.exports = {
                         'widget/changePassword',
                         'widget/fold-label',
                         'widget/user-picker',
+                        'widget/search-layout',
                         'widget/fileselect'
                     ]
                 },

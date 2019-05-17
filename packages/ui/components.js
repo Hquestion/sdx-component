@@ -17,5 +17,6 @@ module.exports = {
     'empty': './components/empty/index.js',
     'user-avatar': './components/user-avatar/index.js',
     'scroll': './components/scroll/index.js',
-    'upload': './components/upload/index.js'
+    'upload': './components/upload/index.js',
+    layout: './components/layout/index.js'
 };

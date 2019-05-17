@@ -25,6 +25,7 @@ import UserManageTest from './views/widget/userTest.vue';
 import ImageManage from '@sdx/view/components/image-management';
 import BuildImageBasicDemo from './views/demo/buildImageBasicDemo';
 
+import SearchLayout from './views/cache/search.vue';
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -79,9 +80,15 @@ const router = new Router({
                 component: AuthorizeManage,
             },
             {
+
                 path: 'imageManageTest',
                 name: '镜像管理测试',
                 component: ImageManage
+            },
+            {
+                path: 'search',
+                component: SearchLayout,
+
             }
             ]
         },

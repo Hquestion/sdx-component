@@ -34,6 +34,11 @@ export function buildImagefile(params) {
     return httpService.post(`${imageTaskApi}build-imagefile/`, params);
 }
 
+// 获取构建日志
+export function getImageBuildLog(uuid) {
+    return httpService.get(`${imageTaskApi + uuid}/log/`);
+}
+
 export function getImageList(params) {
     return httpService.get(imageApi, params);
 }

@@ -13,6 +13,7 @@
 
         @include modifier('source') {
             display: flex;
+            align-items: center;
             flex: auto;
             margin-right: $sdx-margin;
             & > span {

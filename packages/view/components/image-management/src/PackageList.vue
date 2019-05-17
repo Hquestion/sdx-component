@@ -4,8 +4,6 @@
             <sdxu-input
                 class="sdxv-package-list__bar--search"
                 type="search"
-                :searchable="true"
-                @search="handleSearch"
                 @input="emitResultCount=false"
                 placeholder="请输入包名称搜索"
                 v-model="packageName"
@@ -26,7 +24,7 @@
             </div>
             <sdxu-button
                 class="sdxv-package-list__bar--button"
-                @click="handleReset"
+                @click="handleSearch"
                 type="primary"
                 size="small"
             >

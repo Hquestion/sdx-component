@@ -42,6 +42,9 @@
             <button @click="$router.push('/sdxv-image-manage')">
                 前往镜像管理测试
             </button>
+            <button @click="$router.push('/Cache/search')">
+                search布局
+            </button>
         </p>
         <p class="page-link">
             <button @click="toBack">

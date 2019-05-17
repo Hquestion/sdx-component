@@ -1,27 +1,34 @@
 $ilv-primary-color: #fa8373 !default;
 
 //breadcrumb
-$sdxw-breadcrumb-previous-text-color: $sdx-primary-color !default;  // 面包屑可跳转层级字体颜色
-$sdxw-breadcrumb-current-text-color: #00002A !default;  // 当前层级字体颜色
-$sdxw-breadcrumb-seperator-color: $sdx-primary-color !default;  // 分隔符颜色
+$sdxw-breadcrumb-previous-text-color: #606266 !default;  // 面包屑可跳转层级字体颜色
+$sdxw-breadcrumb-current-text-color: #303133 !default;  // 当前层级字体颜色
+$sdxw-breadcrumb-seperator-color: #606266 !default;  // 分隔符颜色
 $sdxw-breadcrumb-seperator-margin: 4px !default;  // 分隔符margin
 
 // fold-label
-$sdxw-foldlabel-height: 22px !default;
+$sdxw-foldlabel-height: 24px !default;
 $sdxw-foldlabel-padding-h: 8px !default;
 $sdxw-foldlabel-padding-v: 5px !default;
 $sdxw-foldlabel-primary-bg: #E9EFFE !default;
 $sdxw-foldlabel-top-margin: 10px !default;
 $sdxw-foldlabel-left-margin: 6px !default;
-$sdxw-foldlabel-fontsize: 12px !default;
+$sdxw-foldlabel-fontsize: 14px !default;
 
 
 // 用户信息dialog
+$sdxw-userInfoDialog-title-color:#262B3E;
 $sdxw-userInfoDialog-text-color:#616266;
-
 $sdxw-userInfoDialog-text-bg-color:#f2f6fcdb;
-
-
+$sdxw-userInfoDialog-avatar-width:52px;
+$sdxw-userInfoDialog-margin:10px;
+$sdxw-userInfoDialog-padding:0 10px;
+$sdxw-userInfoDialog-content-padding:0 20px;
+$sdxw-userInfoDialog-label-width:64px;
+$sdxw-userInfoDialog-item-height:40px;
+$sdxw-userInfoDialog-input-width:314px;
+$sdxw-userInfoDialog-min-height:44px;
+$sdxw-userInfoDialog-border-color:#E4E7ED;
 // project-card
 $sdxw-project-card-width: 280px !default;
 $sdxw-project-card-height: 184px !default;
@@ -34,10 +41,14 @@ $sdxw-project-card-self-detail: linear-gradient(180deg,rgba(94,104,251,0.9) 0%,r
 $sdxw-project-card-cooperation-detail: linear-gradient(180deg,rgba(253,158,43,0.9) 0%,rgba(255,136,43,1) 100%) !default;
 $sdxw-project-card-template-detail: linear-gradient(180deg,rgba(38,200,169,0.9) 0%,rgba(20,184,154,1) 100%) !default;
 $sdxw-project-card-operation-base-color: #C0C4CC !default;
-$sdxw-project-card-operation-hover-color: $sdx-primary-hover-color !default;
+$sdxw-project-card-operation-hover-color: $sdx-primary-color !default;
 $sdxw-project-card-name-show-line-count: 2 !default;
 $sdxw-project-card-mask-text-show-line-count: 4 !default;
 $sdxw-project-card-font-size: $sdx-content-font-size !default;
 $sdxw-project-card-operate-icon-size: 16px !default;
 $sdxw-project-card-type-icon-size: 32px !default;
 $sdxw-project-card-mask-height: 128px !default;
+
+// searchLayout
+$sdxw-search-background: rgba(245,245,245,1) !default;
+$sdxw-search-padding-right: 100px !default;

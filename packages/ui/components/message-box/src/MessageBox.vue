@@ -13,7 +13,7 @@
                     v-show="visible"
                 >
                     <div class="sdxu-message-box__icon-close" @click="close">
-                        <i class="sdx-icon iconicon-check"></i>
+                        <i class="sdx-icon sdx-icon-check"></i>
                     </div>
                     <div class="sdxu-message-box__header">
                         <i
@@ -48,16 +48,15 @@
 
 <script>
 import Button from '@sdx/ui/components/button';
-let scrollTop = 0;
 export default {
     name: 'SdxuMessageBox',
     data() {
         return {
             statusIconMap: {
-                error: 'iconicon-error',
-                success: 'iconicon-success',
-                info: 'iconicon-info',
-                warning: 'iconicon-warning'
+                error: 'sdx-icon-error',
+                success: 'sdx-icon-success',
+                info: 'sdx-icon-info',
+                warning: 'sdx-icon-warning'
             }
         };
     },

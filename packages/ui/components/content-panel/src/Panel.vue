@@ -1,16 +1,26 @@
 <template>
-    <div class="sdxu-contnet-panel">
-        <div class="sdxu-panel__header">
-            <div class="sdxu-panel__title">
-                {{title}}
+    <div class="sdxu-content-panel">
+        <div
+            class="sdxu-content-panel__header"
+            v-if="title || $slots.right || $slots.title"
+        >
+            <div
+                class="sdxu-content-panel__title"
+                :class="{'is-slot': $slots.title}"
+                v-if="title || $slots.title"
+            >
+                <slot name="title">
+                    <span>{{ title }}</span>
+                    <span class="sdxu-content-panel__subtitle">{{ subtitle }}</span>
+                </slot>
             </div>
-            <div class="sdxu-panel__right">
-                <slot name="right"></slot>
+            <div class="sdxu-content-panel__right">
+                <slot name="right" />
             </div>
         </div>
-        <div class="sdxu-panel__main">
+        <div class="sdxu-content-panel__main">
             <slot>
-                <div class="sdxu-panel__main__empty">
+                <div class="sdxu-content-panel__empty">
                     暂无内容
                 </div>
             </slot>
@@ -28,9 +38,13 @@ export default {
         title: {
             type: String,
             default: ''
+        },
+        subtitle: {
+            type: String,
+            default: ''
         }
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

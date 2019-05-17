@@ -3,7 +3,8 @@
         <a @click.prevent="showDialog">
             点击打开small size并且自定义footer的Dialog
         </a>
-        <sdxu-dialog
+        <ClientOnly>
+        <SdxuDialog
             :visible.sync="dialogVisible"
             size='small'
         >
@@ -14,7 +15,8 @@
             <div slot="footer">
                 我是footer
             </div>
-        </sdxu-dialog>
+        </SdxuDialog>
+        </ClientOnly>
     </div>
 </template>
 

@@ -1,4 +1,7 @@
+const webpack = require('webpack') ;
 const path = require('path');
+
+console.log(process.env.NODE_ENV);
 
 module.exports = {
     title: 'SDX Component', // 设置网站标题
@@ -26,7 +29,13 @@ module.exports = {
                         'ui/tab-radio',
                         'ui/input',
                         'ui/messagebox',
-                        'ui/transfer'
+                        'ui/transfer',
+                        'ui/content-panel',
+                        'ui/iconbutton',
+                        'ui/empty',
+                        'ui/placeholder',
+                        'ui/user-avatar',
+                        'ui/layout'
                     ]
                 },
                 {
@@ -37,13 +46,22 @@ module.exports = {
                         'widget/projectcard',
                         'widget/userInfoDialog',
                         'widget/changePassword',
-                        'widget/fold-label'
+                        'widget/fold-label',
+                        'widget/user-picker',
+                        'widget/search-layout'
                     ]
                 },
                 {
                     title: '业务系统',
                     collapsable: true,
-                    children: []
+                    children: [
+                        'view/rolemanage',
+                        'view/authorizemanage',
+                        'view/usermanage',
+                        'view/resource-manage',
+                        'view/privilege',
+                        'view/project-management'
+                    ]
                 },
                 {
                     title: '工具集',
@@ -65,12 +83,33 @@ module.exports = {
                 '@sdx': path.resolve(__dirname, '../../packages')
             }
         },
-        // hack: 引入iconfont时报错，在构建文档时，不打包iconfont，通过script脚本引入
-        externals: [
-            {
-                '@sdx/utils/src/theme-common/iconfont/iconfont.js': 'element-ui',
-                '@sdx/utils/src/theme-common/iconfont/iconfont': 'element-ui'
+        devServer: {
+            proxy: {
+                '/api': {
+                    target: 'https://easy-mock.com',
+                    ws: true,
+                    changeOrigin: true,
+                    pathRewrite: {
+                        '/mock': '/mock/5cd04685adb0973be6a3d969/api/'
+                    }
+                }
             }
+        },
+        plugins: [
+            new webpack.IgnorePlugin({
+                resourceRegExp: /\/iconfont\/iconfont.js/,
+                contextRegExp: /^@sdx/
+            })
         ]
+    },
+    chainWebpack: config => {
+        config.module
+            .rule('js')
+            .exclude
+            .add(
+                path.resolve(__dirname, '../../packages/utils/src/theme-common/iconfont/iconfont.js')
+            )
+            .add(/node_modules/)
+            .end()
     }
 };

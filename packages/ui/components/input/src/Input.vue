@@ -1,13 +1,18 @@
 <template>
     <div
         class="sdxu-input"
-        :class="'sdxu-input--' + size"
+        :class="[
+            'sdxu-input--' + size,
+            inline ? 'is-inline': ''
+        ]"
     >
         <el-input
             v-bind="attrs"
             v-on="listeners"
             v-model="modelVaule"
             ref="input"
+            @keydown.native.enter="searchable ? $emit('search') : null"
+            @blur="searchable ? $emit('search') : null"
         >
             <template #prefix>
                 <slot name="prefix" />
@@ -16,13 +21,13 @@
                 <i
                     v-if="passwordVisibleness && !isDisabled"
                     class="sdx-icon sdxu-input__icon is-clickable"
-                    :class="{'iconicon-eye-close': showPwd,
-                             'iconicon-eye-open': showPwd}"
+                    :class="{'sdx-icon-eye-close': showPwd,
+                             'sdx-icon-eye-open': showPwd}"
                     @click="showPwd = !showPwd"
                 />
                 <i
                     v-else-if="isSearchType"
-                    class="sdx-icon sdxu-input__icon iconicon-search"
+                    class="sdx-icon sdxu-input__icon sdx-icon-search"
                     :class="{'is-clickable': searchable}"
                     @click="searchable ? $emit('search') : null"
                 />
@@ -81,6 +86,10 @@ export default {
             validator: function (value) {
                 return ['regular', 'small'].includes(value);
             }
+        },
+        inline: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

@@ -102,7 +102,7 @@ Vue.use(SdxUI);
 ```scss
 $sdxu-dialog-small-size-width: 460px !default;
 $sdxu-dialog-normal-size-width: 600px !default;
-$sdxu-dialog-large-size-width: 660px !default;
+$sdxu-dialog-large-size-width: 680px !default;
 $sdxu-dialog-header-text-color: #303133 !default;
 $sdxu-dialog-header-text-size: 18px !default;
 ```

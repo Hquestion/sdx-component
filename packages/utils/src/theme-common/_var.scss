@@ -6,9 +6,19 @@ $sdx-danger-color: #FF5E5E !default;
 $sdx-info-color: #909399 !default;
 $sdx-disable-color: #C0CDE6 !default;
 
+$sdx-status-create: $sdx-success-color !default; // 新生
+$sdx-status-dying: $sdx-warning-color !default; // 死亡的路上
+$sdx-status-error: $sdx-danger-color !default; // 失败
+$sdx-status-processing: #0CB5E4 !default; // 处理中，积极的状态
+$sdx-status-running: $sdx-primary-color !default; // 正常运行中
+$sdx-status-finish: #01A3FF !default; // 积极结束
+$sdx-status-exception: #EB9A0A !default; // 异常
+$sdx-status-die: #FF6C29 !default; // 死了
+
+
 $sdx-primary-hover-color: #2D6CEE !default;
 
-$sdx-text-primary-color: #223244 !default;
+$sdx-text-primary-color: #303133 !default;
 $sdx-text-regular-color: #606266 !default;
 $sdx-text-minor-color: #909399 !default;
 $sdx-text-holder-color: #C0C4CB !default;

@@ -147,7 +147,7 @@ $sdxw-project-card-template-detail: linear-gradient(180deg,rgba(38,200,169,0.9) 
 // 操作按钮基色
 $sdxw-project-card-operation-base-color: #C0C4CC !default;
 // 操作按钮鼠标悬停颜色
-$sdxw-project-card-operation-hover-color: $sdx-primary-hover-color !default;
+$sdxw-project-card-operation-hover-color: $sdx-primary-color !default;
 // 卡片标题显示行数
 $sdxw-project-card-name-show-line-count: 2 !default;
 // 卡片遮罩描述文字显示行数

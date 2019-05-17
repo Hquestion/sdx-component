@@ -25,7 +25,7 @@
         "test": "echo \"Error: run tests from root\" && exit 1",
         "build:component": "webpack --config ./build/webpack.component.js",
         "build:lib": "webpack --config ./build/webpack.common.js",
-        "build": "npm run build:lib && npm run build:component",
+        "build": "npm run build:component",
         "test:unit": "jest --passWithNoTests --no-cache",
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
@@ -34,7 +34,10 @@
     },
     "peerDependencies": {
         "element-ui": "^2.7.2",
-        "vue": "^2.6.10"
+        "vue": "^2.6.10",
+        "@sdx/utils": "^1.0.2",
+        "@sdx/ui": "^1.0.2",
+        "@sdx/widget": "^1.0.2"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

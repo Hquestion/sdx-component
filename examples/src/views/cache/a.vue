@@ -29,6 +29,21 @@
             </button>
         </p>
         <p class="page-link">
+            <button @click="$router.push('/Cache/roleManage')">
+                前往角色管理页面
+            </button>
+        </p>
+        <p class="page-link">
+            <button @click="$router.push('/Cache/authorizeManage')">
+                前往权限管理页面
+            </button>
+        </p>
+        <p class="page-link">
+            <button @click="$router.push('/Cache/search')">
+                search布局
+            </button>
+        </p>
+        <p class="page-link">
             <button @click="toBack">
                 返回
             </button>
@@ -45,7 +60,7 @@ export default {
     },
     methods: {
         toBPage() {
-            this.$router.push(`/Cache/b`);
+            this.$router.push('/Cache/b');
         },
         toBack() {
             this.$router.back();

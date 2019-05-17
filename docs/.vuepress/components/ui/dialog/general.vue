@@ -3,14 +3,16 @@
         <a @click.prevent="showDialog">
             点击打开Dialog
         </a>
-        <sdxu-dialog
-            :visible.sync="dialogVisible"
-        >
-            <div slot="title">
-                我是标题
-            </div>
-            <div>我是内容</div>
-        </sdxu-dialog>
+        <ClientOnly>
+            <SdxuDialog
+                :visible.sync="dialogVisible"
+            >
+                <div slot="title">
+                    我是标题
+                </div>
+                <div>我是内容</div>
+            </SdxuDialog>
+        </ClientOnly>
     </div>
 </template>
 

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import MessageBoxConstruct from './MessageBox';
 import {t} from '@sdx/utils/src/locale';
-import {lock, unlock} from "@sdx/utils/src/lockScroll";
+import {lock, unlock} from '@sdx/utils/src/lockScroll';
 
 let instance = null;
 let vm;
@@ -17,7 +17,7 @@ function MessageBox(opt) {
     } = opt;
     if (!instance) {
         const _Construct = Vue.extend(MessageBoxConstruct);
-        instance =new _Construct(opt = {});
+        instance = new _Construct(opt = {});
     }
     instance.title = title;
     instance.content = content;

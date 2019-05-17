@@ -1,0 +1,14 @@
+@include block('create-project', $bem-namespace-view) {
+    @include element('wrap') {
+        height: 50vh;
+    }
+    @include element('filter') {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 10px 10px 0;
+    }
+    .el-scrollbar__view {
+        margin: 0 10px;
+    }
+}

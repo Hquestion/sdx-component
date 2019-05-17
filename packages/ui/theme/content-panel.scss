@@ -1,11 +1,4 @@
-$sdx-content-panel-padding: 20px 20px 40px !default;
-$sdx-content-panel-bg: #fff !default;
-$sdx-content-panel-title-margin-left: 12px !default;
-$sdx-content-panel-title-width: 3px !default;
-$sdx-content-panel-title-height: 16px !default;
-$sdx-content-panel-main-min-height: 50px !default;
-
-@include block('contnet-panel', $bem-namespace-ui) {
+@include block('content-panel', $bem-namespace-ui) {
     border-radius: $sdx-border-radius;
     background: $sdx-content-panel-bg;
     padding: $sdx-content-panel-padding;
@@ -29,6 +22,20 @@ $sdx-content-panel-main-min-height: 50px !default;
             vertical-align: middle;
             margin-right: $sdx-content-panel-title-margin-left;
         }
+        @include state('slot') {
+            font-size: inherit;
+            font-weight: inherit;
+            color: inherit;
+            &:before {
+                display: none;
+            }
+        }
+    }
+    @include element('subtitle') {
+        font-size: $sdx-help-font-size;
+        color: $sdx-text-minor-color;
+        letter-spacing: 0;
+        margin-left: $sdx-content-panel-subtitle-margin-left;
     }
     @include element('main') {
         margin-top: $sdx-margin;

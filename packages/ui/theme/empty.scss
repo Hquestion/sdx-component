@@ -1,0 +1,14 @@
+@include block('empty', $bem-namespace-ui) {
+    padding-top: $sdx-padding;
+    text-align: center;
+    @include element('icon') {
+        &.sdx-icon {
+            font-size: 60px;
+        }
+    }
+    @include element('desc') {
+        font-size: $sdx-help-font-size;
+        color: $sdx-text-regular-color;
+        margin-top: $sdx-margin;
+    }
+}

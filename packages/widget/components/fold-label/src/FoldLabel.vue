@@ -6,14 +6,27 @@
         :class="[
             fold ? 'is-fold' : '',
             ellipse ? 'is-ellipse': '',
+            plain ? 'is-plain': '',
             `sdxw-fold-label--${type}`
         ]"
     >
         <i
-            v-if="ellipse"
-            class="sdx-icon iconicon-more"
+            class="sdx-icon sdx-icon-loading sdxw-fold-label__loading-icon"
+            v-if="status ==='loading'"
         />
-        <span v-else>{{ labelShown }}</span>
+        <i
+            class="sdx-icon sdx-icon-gantanhao sdxw-fold-label__warning-icon"
+            v-if="status ==='warning'"
+        />
+        <span class="sdxw-fold-label__main">
+            <slot>
+                <i
+                    v-if="ellipse"
+                    class="sdx-icon sdx-icon-more"
+                />
+                <span v-else>{{ labelShown }}</span>
+            </slot>
+        </span>
     </div>
 </template>
 
@@ -31,7 +44,7 @@ export default {
         },
         type: {
             type: String,
-            default: 'primary' // primary, default
+            default: 'primary' // primary, default, create, processing, running, finish, dying, die, exception, error
         },
         fold: {
             type: Boolean,
@@ -41,9 +54,17 @@ export default {
             type: Boolean,
             default: false
         },
+        plain: {
+            type: Boolean,
+            default: false
+        },
         index: {
             type: Number,
             default: 0
+        },
+        status: {
+            type: String,
+            default: '' // loading, warning
         }
     },
     computed: {

@@ -33,7 +33,8 @@ export default {
             } else {
                 this.active.name = children[0] && children[0].name;
             }
-            let widthList = children.map(item => item.$el.offsetWidth);
+            // 因有一边没有边框，这里需+2px hack,确保文字不会溢出
+            let widthList = children.map(item => item.$el.offsetWidth + 2);
             const maxWidth = Math.max(...widthList);
             children.forEach(item => {
                 item.$el.style.width = `${maxWidth}px`;

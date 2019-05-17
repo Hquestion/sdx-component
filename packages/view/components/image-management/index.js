@@ -1,5 +1,6 @@
 import ImageManagementList from './src/ImageManagementList.vue';
 import ImageFileBuild from './src/image-file-build/Index.vue';
+import ImageBasicBuild from './src/image-build-basic/index.vue';
 import ImageManagement from './src/Index.vue';
 
 const routeCfg = [
@@ -23,6 +24,14 @@ const routeCfg = [
                 component:  ImageFileBuild,
                 meta: {
                     breadcrumb: '基于文件构建',
+                }
+            },
+            {
+                path: 'basicbuild',
+                name:'basicbuild',
+                component:  ImageBasicBuild,
+                meta: {
+                    breadcrumb: '基于此构建',
                 }
             }]
     }

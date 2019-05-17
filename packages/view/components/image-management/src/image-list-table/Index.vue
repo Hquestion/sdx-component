@@ -145,6 +145,11 @@
                 </el-form-item>
             </el-form>
         </sdxu-dialog>
+        <SdxvPackageDetailDialog
+            :visible.sync="detailDialogVisible"
+            :basic-image-name="imageName"
+            :image-id="imageId"
+        />
     </div>
 </template>
 
@@ -157,6 +162,7 @@ import { getImageList, removeImage, updateImage, updateGroupImages } from '@sdx/
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
+import ImageDetail from './PackageDetailDialog';
 import { Message } from 'element-ui';
 export default {
     name: 'ImageListTable',
@@ -177,7 +183,10 @@ export default {
             userGroupTags: [],
             defaultUserGroupKeys: [],
             editingImage: null,
-            selectedImages: []
+            selectedImages: [],
+            detailDialogVisible: false,
+            imageName: '',
+            imageId: ''
         };
     },
     props: {
@@ -216,7 +225,8 @@ export default {
         SdxuIconButton,
         [Dialog.name]: Dialog,
         [SelectGroupUser.name]: SelectGroupUser,
-        [Button.name]: Button
+        [Button.name]: Button,
+        [ImageDetail.name]: ImageDetail
     },
     created() {
         this.initImageList();
@@ -341,6 +351,9 @@ export default {
             if (type && row.uuid) {
                 switch (type) {
                 case 'detail':
+                    this.imageId = row.uuid;
+                    this.imageName = row.name;
+                    this.detailDialogVisible = true;
                     break;
                 case 'edit':
                     this.dialogVisible = true;
@@ -359,6 +372,7 @@ export default {
                     });
                     break;
                 case 'extend':
+                    this.$router.push({ name: 'basicbuild' });
                     break;
                 case 'remove':
                     MessageBox({

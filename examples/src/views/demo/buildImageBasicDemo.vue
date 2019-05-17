@@ -29,7 +29,7 @@
 <script>
 import SdxvImageBuildBasic from '@sdx/view/components/image-management/src/image-build-basic';
 import SdxvPackageDetailCompareDialog from '@sdx/view/components/image-management/src/PackageDetailCompareDialog';
-import SdxvPackageDetailDialog from '@sdx/view/components/image-management/src/PackageDetailDialog';
+import SdxvPackageDetailDialog from '@sdx/view/components/image-management/src/image-list-table/PackageDetailDialog';
 import SdxvBuildLogDialog from '@sdx/view/components/image-management/src/BuildLogDialog';
 
 export default {

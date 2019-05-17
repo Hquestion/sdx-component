@@ -14,7 +14,7 @@
 
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
-import SdxvPackageList from './PackageList';
+import SdxvPackageList from '../PackageList';
 
 export default {
     name: 'SdxvPackageDetailDialog',

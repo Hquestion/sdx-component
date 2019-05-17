@@ -47,6 +47,16 @@ export function updateImage(uuid, params) {
     return httpService.patch(imageApi + uuid, params);
 }
 
+// 批量更新共享设置, 当有批量设置接口时可删除    // TODO
+export function updateGroupImages(images, params) {
+    const imageDeferArr = (images || []).map(item => updateImage(item.uuid, params));
+    return new Promise(resolve => {
+        Promise.all(imageDeferArr).then(() => {
+            resolve();
+        });
+    });
+}
+
 export function removeImage(uuid) {
     return httpService.remove(imageApi + uuid);
 }
@@ -69,5 +79,6 @@ export default {
     buildTar,
     buildImagefile,
     getPackagesByUuid,
-    getImage
+    getImage,
+    updateGroupImages
 };

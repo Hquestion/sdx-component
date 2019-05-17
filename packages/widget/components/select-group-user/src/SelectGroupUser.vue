@@ -69,11 +69,11 @@ export default {
         });
     },
     props: {
-        tags: {
+        tags: {                // TODO: 改为根据tags取出users和groups并且向外传递
             type: Array,
             default: () => []
         },
-        defaultCheckedKeys: {
+        defaultCheckedKeys: {  // TODO: 改为传入users和groups 内部判断defaultCheckedKeys
             type: Array,
             default: () => []
         }

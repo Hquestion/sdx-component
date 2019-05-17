@@ -153,7 +153,7 @@ import Table from '@sdx/ui/components/table';
 import Dialog from '@sdx/ui/components/dialog';
 import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
-import { getImageList, removeImage, updateImage } from '@sdx/utils/src/api/image';
+import { getImageList, removeImage, updateImage, updateGroupImages } from '@sdx/utils/src/api/image';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
@@ -176,7 +176,8 @@ export default {
             },
             userGroupTags: [],
             defaultUserGroupKeys: [],
-            editingImage: {}
+            editingImage: null,
+            selectedImages: []
         };
     },
     props: {
@@ -227,16 +228,51 @@ export default {
     },
     methods: {
         share() {
-
+            if (!this.selectedImages.length) {
+                Message({
+                    message: '请先选择需要共享的镜像',
+                    type: 'warning'
+                });
+                return;
+            }
+            this.dialogVisible = true;
+            this.dialogTitle = '共享设置';
+            this.shareForm = {
+                shareType: 'PRIVATE',
+                users: [],
+                groups: []
+            };
         },
         remove() {
-
+            if (!this.selectedImages.length) {
+                Message({
+                    message: '请先选择需要删除的镜像',
+                    type: 'warning'
+                });
+                return;
+            }
+            Message({    // TODO: 换成批量删除接口
+                message: '删除成功',
+                type: 'success'
+            });
+            this.initImageList();
         },
         cancelShare() {
-
+            if (!this.selectedImages.length) {
+                Message({
+                    message: '请先选择需要取消共享的镜像',
+                    type: 'warning'
+                });
+                return;
+            }
+            Message({    // TODO: 换成批量取消共享接口
+                message: '取消共享成功',
+                type: 'success'
+            });
+            this.initImageList();
         },
         selectionChange(selection) {
-            this.$emit('selection-change', selection);
+            this.selectedImages = selection;
         },
         confirmEdit() {
             this.shareForm.users = [];
@@ -250,13 +286,27 @@ export default {
                     }
                 });
             }
-            updateImage(this.editingImage.uuid, this.shareForm).then(() => {
+            if (this.editingImage) {
+                // 编辑镜像
+                updateImage(this.editingImage.uuid, this.shareForm).then(() => {
+                    Message({
+                        message: '设置成功',
+                        type: 'success'
+                    });
+                    this.editingImage = null;
+                    this.initImageList();
+                });
+            } else {
+                // 批量共享设置  TODO 换成批量接口
+                // updateGroupImages(this.selectedImages, this.shareForm).then(() => {
                 Message({
-                    message: '设置成功',
+                    message: '全部共享成功',
                     type: 'success'
                 });
                 this.initImageList();
-            });
+                // });
+            }
+
         },
         initImageList(reset) {
             this.loading = true;
@@ -297,11 +347,13 @@ export default {
                     this.dialogTitle = '共享设置';
                     this.editingImage = row;
                     Object.assign(this.shareForm, row);
+                    row.groups.forEach(group => {
+                        if (this.defaultUserGroupKeys.indexOf(group) === -1) {
+                            this.defaultUserGroupKeys.push(group);
+                        }
+                    });
                     row.users.forEach(user => {
                         row.groups.forEach(group => {
-                            if (this.defaultUserGroupKeys.indexOf(group) === -1) {
-                                this.defaultUserGroupKeys.push(group);
-                            }
                             this.defaultUserGroupKeys.push(group + '/' + user);
                         });
                     });
@@ -318,7 +370,6 @@ export default {
                                 message: '删除成功',
                                 type: 'success'
                             });
-                            this.editingImage = {};
                             this.initImageList();
                         });
                     }).catch(() => {});

@@ -21,8 +21,11 @@
                 基于文件构建
             </SdxuButton>
         </div>
-        <div v-if="projectType === 'image'">
-            <div class="sdxv-image-management__nav-menu">
+        <div>
+            <div
+                class="sdxv-image-management__nav-menu"
+                v-if="projectType === 'image'"
+            >
                 <el-menu
                     default-active="all"
                     mode="horizontal"
@@ -52,12 +55,12 @@
                     @reset="reset"
                     style="width: 100%"
                 >
-                    <sdxw-search-item>
+                    <sdxw-search-item lable="镜像名称:">
                         <sdxu-input
                             v-model="searchName"
                             type="search"
                             size="small"
-                            placeholder="请输入镜像名"
+                            placeholder="请输入镜像名称"
                         />
                     </sdxw-search-item>
                     <sdxw-search-item lable="镜像种类:">
@@ -74,6 +77,26 @@
                                 :key="index"
                                 :value="item"
                                 :label="item"
+                            />
+                        </el-select>
+                    </sdxw-search-item>
+                    <sdxw-search-item
+                        lable="状态:"
+                        v-if="projectType === 'task'"
+                    >
+                        <el-select
+                            v-model="state"
+                            size="medium"
+                        >
+                            <el-option
+                                label="全部"
+                                value=""
+                            />
+                            <el-option
+                                v-for="(item, index) in states"
+                                :key="index"
+                                :value="item.value"
+                                :label="item.label"
                             />
                         </el-select>
                     </sdxw-search-item>
@@ -119,7 +142,13 @@
             class="sdxv-image-management__list"
             v-if="projectType === 'task'"
         >
-            <image-task-table />
+            <image-task-table 
+                ref="imageTaskTable"
+                :name="searchName"
+                :image-type="imageType"
+                :state="state"
+                :build-type="buildType"
+            />
         </div>
     </sdxu-content-panel>
 </template>
@@ -145,6 +174,7 @@ export default {
             imageKind: 'all',
             isOwner: '',
             taskType: '',
+            state: '',
             imageTypes: [
                 'JUPYTER',
                 'PYTHON',
@@ -179,6 +209,32 @@ export default {
                     label: '任务转存',
                     value: 'TASK'
                 }
+            ],
+            states: [
+                {
+                    label: '',
+                    value: '全部'
+                },
+                {
+                    label: '创建中',
+                    value: 'BUILDING'
+                },
+                {
+                    label: '创建完成',
+                    value: 'BUILDED'
+                },
+                {
+                    label: '上传中',
+                    value: 'UPLOADING'
+                },
+                {
+                    label: '失败',
+                    value: 'FAILED'
+                },
+                {
+                    label: '已完成',
+                    value: 'FINISHED'
+                }
             ]
         };
     },
@@ -199,13 +255,21 @@ export default {
     methods: {
         search() {
             this.$nextTick(() => {
-                this.updateTable();
+                if(this.projectType === 'image') {
+                    this.updateTable();
+                } else {
+                    this.updateTaskTable();
+                }
             });
         },
         reset() {
             this.resetFilters();
             this.$nextTick(() => {
-                this.updateTable();
+                if(this.projectType === 'image') {
+                    this.updateTable();
+                } else {
+                    this.updateTaskTable();
+                }
             });
         },
         switchProjectType() {
@@ -249,9 +313,13 @@ export default {
             this.shareType = '';
             this.isOwner = '';
             this.buildType = '';
+            this.state = '';
         },
         updateTable() {
             this.$refs.imageListTable.initImageList(true);
+        },
+        updateTaskTable() {
+            this.$refs.imageTaskTable.initImageTaskList(true);
         }
     }
 };

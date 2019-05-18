@@ -8,7 +8,7 @@ module.exports = {
     pagination: './components/pagination/index.js',
     'tab-radio': './components/tab-radio/index.js',
     input: './components/input/index.js',
-    'auto-complete': './components/autocomplete/index.js',
+    'autocomplete': './components/autocomplete/index.js',
     table: './components/table/index.js',
     'message-box': './components/message-box/index.js',
     'content-panel': './components/content-panel/index.js',

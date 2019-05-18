@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import FileSelect from '@sdx/widget/components/file-select';
+import FileSelect from '../../src/widget/file-select';
 export default {
     name: 'index',
     data() {

@@ -39,4 +39,7 @@
         color: $sdxw-breadcrumb-current-text-color;
         font-size: $sdx-content-font-size;
     }
+    .el-form-item__content {
+        width: $sdxw-search-content-width;
+    }
 }

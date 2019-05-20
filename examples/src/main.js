@@ -25,8 +25,7 @@ Vue.use(Pagination);
 Vue.use(ChangePassword);
 
 // 项目管理
-Vue.use(Project.ProjectManagement);
-Project.viewRouter.register(router, '/projectManageTest');
+Project.viewRouter.register(router, '/');
 
 
 Vue.config.productionTip = false;

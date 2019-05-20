@@ -7,6 +7,7 @@
 
 #### 直接渲染代码如下：
 <Common-BasicUsage>
+<widget-userInfoDialog-index></widget-userInfoDialog-index>
   <highlight-code slot="codeText" lang="vue">
         <template>
             <sdxw-userInfoDialog 
@@ -24,6 +25,7 @@
 <!-- <widget-userInfoDialog-userManageInfo></widget-userInfoDialog-userManageInfo> -->
 #### 传入ID代码如下：
 <Common-BasicUsage>
+<widget-userInfoDialog-index></widget-userInfoDialog-index>
   <highlight-code slot="codeText" lang="vue">
         <template>
             <sdxw-userInfoDialog 

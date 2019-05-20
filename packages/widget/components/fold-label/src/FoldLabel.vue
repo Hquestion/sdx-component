@@ -36,7 +36,7 @@ export default {
     data() {
         return {};
     },
-    inject: ['control'],
+    // inject: ['control'],
     props: {
         label: {
             type: String,
@@ -79,11 +79,13 @@ export default {
     methods: {
         onMouseOver() {
             if (this.ellipse) return;
-            this.control.expand = [this.index];
+            // this.control.expand = [this.index];
+            this.$emit('expand', [this.index]);
         },
         onMouseOut() {
             if (this.ellipse) return;
-            this.control.expand = [0, 1];
+            // this.control.expand = [0, 1];
+            this.$emit('expand', [0, 1]);
         }
     }
 };

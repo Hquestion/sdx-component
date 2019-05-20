@@ -179,7 +179,6 @@ export default {
     methods: {
         fetchBaseImageInfo() {
             getImage(this.imageId).then(data => {
-                console.error(data);
                 this.baseInfo = data;
             });
         },
@@ -208,13 +207,13 @@ export default {
             this.imageInfo[pack.modify.type].splice(pack.modify.index, 1);
         },
         handleCancel() {
-
+            this.$router.go(-1);
         },
         handleSaveAndBuild() {
             this.$refs.form.validate().then(valid => {
                 if (valid) {
                     buildImageBasic(this.imageInfo).then(data => {
-                        console.error(data);
+                        // todo:
                     });
                 } else {
                     return false;

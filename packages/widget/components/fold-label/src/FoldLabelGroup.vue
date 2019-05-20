@@ -14,6 +14,7 @@
                 :type="type"
                 :fold="isFold(index)"
                 :ellipse="isEllipse(index)"
+                @expand="handleExpand"
             />
         </slot>
     </div>
@@ -35,11 +36,11 @@ export default {
     components: {
         SdxwFoldLabel
     },
-    provide(){
-        return {
-            control: this.control
-        };
-    },
+    // provide(){
+    //     return {
+    //         control: this.control
+    //     };
+    // },
     props: {
         list: {
             type: Array,
@@ -81,6 +82,9 @@ export default {
         },
         isFold(index) {
             return this.mode === 'inline' && !this.control.expand.includes(index);
+        },
+        handleExpand(index) {
+            this.control.expand = index;
         }
     },
     mounted() {

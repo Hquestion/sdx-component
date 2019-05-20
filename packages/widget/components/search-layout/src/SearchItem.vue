@@ -1,7 +1,6 @@
 <template>
     <div
         class="sdxw-search-item"
-        :style="`display: ${itemIndex < active.items ? 'inline-block' : 'none'}`"
     >
         <el-form-item
             :label="lable"

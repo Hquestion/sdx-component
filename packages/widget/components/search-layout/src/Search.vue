@@ -98,12 +98,12 @@ export default {
         init() {
             this.elWidthValue = this.$refs.searchlayout && this.$refs.searchlayout.offsetWidth;
             this.searchItemWidth = this.$slots.default[0].elm.clientWidth;
-            if(this.searchItemWidth * (this.$slots.default.length) > this.elWidthValue - 300) {
+            if(this.searchItemWidth * (this.$slots.default.length) > this.elWidthValue - 100) {
                 this.showbtn = true;
             } else {
                 this.showbtn = false;
             }
-            this.active.items = Math.floor((this.elWidthValue - 300) / this.searchItemWidth);
+            this.active.items = Math.floor((this.elWidthValue - 100) / this.searchItemWidth);
         }
     },
     mounted(){
@@ -115,9 +115,10 @@ export default {
             this.init();
         });
         this.$slots.default.forEach((item, index) => {
-            item.componentInstance._data.itemIndex = index;
+            if(item.componentInstance) {
+                item.componentInstance._data.itemIndex = index;
+            }
         });
-        
     }
 };
 </script>

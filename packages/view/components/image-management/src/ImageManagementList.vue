@@ -161,7 +161,7 @@ import Button from '@sdx/ui/components/button';
 import { Menu, MenuItem, Select } from 'element-ui';
 import Input from '@sdx/ui/components/input';
 import ImageTaskTable from './image-task-table/Index';
-import SearchLayout from '@sdx/widget/components/search-layout';
+import SearchLayout from  '@sdx/widget/components/search-layout';
 export default {
     name: 'SdxvImageManage',
     data() {
@@ -212,10 +212,6 @@ export default {
             ],
             states: [
                 {
-                    label: '',
-                    value: '全部'
-                },
-                {
                     label: '创建中',
                     value: 'BUILDING'
                 },
@@ -250,7 +246,7 @@ export default {
         [ContentPanel.name]: ContentPanel,
         ImageTaskTable,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
-        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
     },
     methods: {
         search() {
@@ -306,6 +302,7 @@ export default {
             this.searchName = '';
             this.imageType = '';
             this.buildType = '';
+            this.state = '';
         },
         resetVariables() {
             this.searchName = '';

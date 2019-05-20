@@ -5,6 +5,7 @@ import ChangePassword from './components/change-password';
 import UserInfoDialog from './components/userinfo-dialog';
 import ProjectCard from './components/projectcard';
 import SelectGroupUser from './components/select-group-user';
+import SearchLayout from './components/search-layout';
 
 import { registerI18n } from '@sdx/utils/src/locale';
 
@@ -14,7 +15,8 @@ const SdxWidget = {
     ProjectCard,
     ChangePassword,
     UserInfoDialog,
-    SelectGroupUser
+    SelectGroupUser,
+    SearchLayout
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -24,6 +26,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     UserInfoDialog.install(vue);
     ProjectCard.install(vue);
     SelectGroupUser.install(vue);
+    SearchLayout.install(vue);
 
     // 通用服务注入i18n服务
     registerI18n(i18n);

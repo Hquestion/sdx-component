@@ -1,8 +1,36 @@
-import ImageManagementList from './src/ImageManagementList.vue';
-import ImageFileBuild from './src/image-file-build/Index.vue';
-import ImageBasicBuild from './src/image-build-basic/index.vue';
-import ImageManagement from './src/Index.vue';
+# 镜像管理
+---
 
+镜像管理组件
+
+## Examples
+
+<Common-BasicUsage>
+  <view-image-management-index />
+</Common-BasicUsage>
+
+
+## Usage
+
+```js
+import ImageManagement from '@sdx/view/lib/image-management';
+
+ImageManagement.viewRouter.register(router, '/');
+```
+
+
+## API
+
+
+```js
+
+import ImageManagement from './src/Index';
+
+ImageManagement.install = vue => {
+    vue.component(ImageManagement.name, ImageManagement);
+};
+
+// 路由配置
 const routeCfg = [
     {
         path: 'sdxv-image-manage',
@@ -37,8 +65,9 @@ const routeCfg = [
     }
 ];
 
+// 注册到应用路由的方法
 const register = (router, parentPath) => {
-    return router.addRoutes(viewRouter.routes, parentPath);
+    return router.addRoutes(routeCfg, parentPath);
 };
 
 const viewRouter = {
@@ -46,4 +75,7 @@ const viewRouter = {
     register
 };
 
+// 把组件及路由注册方法暴露，暴露路由配置的目的是为了给外部应用修改配置
 export default { ImageManagement, viewRouter };
+
+```

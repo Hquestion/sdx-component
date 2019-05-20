@@ -60,7 +60,8 @@ module.exports = {
                         'view/usermanage',
                         'view/resource-manage',
                         'view/privilege',
-                        'view/project-management'
+                        'view/project-management',
+                        'view/image-management'
                     ]
                 },
                 {

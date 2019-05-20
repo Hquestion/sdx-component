@@ -91,6 +91,12 @@
                         type: 'String',
                         optionValue: 'left/ right',
                         defaultValue: 'left， 与按钮左对齐',
+                    }, {
+                        params: 'dropdownArrow',
+                        describe: '下拉框图标按钮类型',
+                        type: 'String',
+                        optionValue: 'solid / cover, solid为线框图，cover为面图',
+                        defaultValue: 'solid',
                     }
                 ],
                 eventData: [

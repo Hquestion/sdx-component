@@ -30,6 +30,8 @@
               <SdxwFoldLabel :plain="true" type="error" status="warning">失败</SdxwFoldLabel>
           </SdxwFoldLabelGroup>
       </p>
+      <SdxwFoldLabel :plain="true" type="exception" status="warning">启动异常</SdxwFoldLabel>
+              <SdxwFoldLabel :plain="true" type="error" status="warning">失败</SdxwFoldLabel>
     </template>
   </highlight-code>
   </Common-BasicUsage>

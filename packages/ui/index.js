@@ -13,6 +13,9 @@ import PlaceholderBlock from './components/placeholder-block';
 import IconButton from './components/icon-button';
 import Empty from './components/empty';
 import UserAvatar from './components/user-avatar';
+import Scroll from './components/scroll';
+import Upload from './components/upload';
+import Layout from './components/layout';
 
 import { registerI18n } from '@sdx/utils/src/locale';
 
@@ -31,7 +34,10 @@ const SdxUI = {
     PlaceholderBlock,
     IconButton,
     Empty,
-    UserAvatar
+    UserAvatar,
+    Scroll,
+    Upload,
+    Layout
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -50,6 +56,9 @@ SdxUI.install = (vue, { i18n } = {}) => {
     IconButton.install(vue);
     Empty.install(vue);
     UserAvatar.install(vue);
+    Scroll.install(vue);
+    Upload.install(vue);
+    Layout.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

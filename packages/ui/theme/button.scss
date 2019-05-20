@@ -201,8 +201,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 border-radius: 0;
                 border-top: 1px solid $sdx-border-color;
                 text-align: left;
-                padding: 0 20px;
+                padding: 0;
                 margin-left: 0 !important;
+                text-indent: $sdx-padding;
                 &:first-child {
                     border-top: none;
                 }

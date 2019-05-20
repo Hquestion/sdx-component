@@ -1,0 +1,116 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import '~element-ui/packages/theme-chalk/src/base';
+@import "~element-ui/packages/theme-chalk/src/loading";
+@import "~element-ui/packages/theme-chalk/src/popper";
+@import "~element-ui/packages/theme-chalk/src/popover";
+
+
+@include block('file-select-tree', $bem-namespace-widget) {
+    @include element('main') {
+        & /deep/ .el-tree-node__content {
+            height: $sdx-file-select-node-height;
+        }
+        & /deep/ .el-tree-node__expand-icon {
+            color: $sdx-text-holder-color;
+        }
+    }
+    @include element('node') {
+        font-size: $sdx-file-select-node-font-size;
+    }
+    @include element('node-icon') {
+        width: $sdx-file-select-node-font-size;
+        height: $sdx-file-select-node-font-size;
+        margin-right: $sdx-file-select-node-icon-text-margin;
+    }
+}
+
+
+@include block('file-select-search', $bem-namespace-widget) {
+    height: 100%;
+    overflow: hidden;
+    & /deep/ .el-checkbox {
+        margin-right: 0;
+    }
+    @include element('list') {
+
+    }
+    @include element('item') {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: $sdx-file-select-node-font-size;
+        height: $sdx-file-select-node-height;
+    }
+    @include element('item-checkbox') {
+        width: $sdx-file-select-node-font-size;
+        height: $sdx-file-select-node-font-size;
+    }
+    @include element('item-icon') {
+        width: $sdx-file-select-node-font-size;
+        height: $sdx-file-select-node-font-size;
+        margin-left: $sdx-file-select-node-icon-text-margin;
+    }
+    @include element('item-name') {
+        margin-left: $sdx-file-select-node-icon-text-margin;
+    }
+}
+
+@include block('file-select-main', $bem-namespace-widget) {
+    width: 340px;
+    height: 438px;
+    background: #fff;
+    padding: $sdx-padding;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    box-sizing: border-box;
+    @include element('tip') {
+        margin-top: $sdx-margin / 2;
+        color: $sdx-text-holder-color;
+        font-size: $sdx-help-font-size;
+        i {
+            margin-right: $sdx-file-select-node-icon-text-margin;
+        }
+    }
+    @include element('main') {
+        margin-top: $sdx-margin;
+        flex: 1;
+        overflow: auto;
+    }
+    @include element('footer') {
+        margin-top: $sdx-margin;
+    }
+}
+
+@include block('file-select-pop', $bem-namespace-widget) {
+    @include element('ref') {
+        display: inline-block;
+    }
+    @include element('overlay') {
+        padding: 0;
+    }
+}
+
+@include block('file-select', $bem-namespace-widget) {
+    & /deep/ .sdxw-file-select-pop__ref {
+        display: block;
+    }
+    & /deep/ .el-upload {
+        display: block;
+        text-align: left;
+        span {
+            color: $sdx-text-regular-color;
+        }
+        &:hover {
+            span {
+                color: #fff;
+            }
+        }
+    }
+    @include element('accept-tip') {
+        margin-left: $sdx-file-select-node-icon-text-margin;
+        color: $sdx-text-holder-color;
+        font-size: $sdx-help-font-size;
+    }
+}

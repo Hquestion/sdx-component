@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import SdxuDialog from '@sdx/ui/components/dialog';
+import SdxuDialog from '../../src/ui/Dialog';
 export default {
     data() {
         return {

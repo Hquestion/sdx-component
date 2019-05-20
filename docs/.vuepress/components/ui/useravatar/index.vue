@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import UserAvatar from '@sdx/ui/components/user-avatar';
+import UserAvatar from '../../src/ui/UserAvatar';
 import PlaceholderBlock from '@sdx/ui/components/placeholder-block';
 export default {
     name: 'index',

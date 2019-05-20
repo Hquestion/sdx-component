@@ -54,6 +54,7 @@
                     @search="search"
                     @reset="reset"
                     style="width: 100%"
+                    lable-width="72px"
                 >
                     <sdxw-search-item lable="镜像名称:">
                         <sdxu-input

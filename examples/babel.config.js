@@ -7,8 +7,8 @@ module.exports = {
         [
             'component-customize',
             {
-                "libraryName": "@sdx/ui",
-                "styleCustomize": true
+                'libraryName': '@sdx/ui',
+                'styleCustomize': true
             }
         ]
     ]

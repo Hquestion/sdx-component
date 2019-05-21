@@ -1,0 +1,67 @@
+@import './task-icon.scss';
+@include block('project-detail', $bem-namespace-view) {
+    @include element('create-task') {
+        margin-bottom: 20px;
+        @include modifier('content') {
+            display: flex;
+            align-items: center;
+        }
+    }
+    @include element('task-card') {
+        margin-right: 15px;
+        padding-right: 20px;
+        height: 160px;
+    }
+    @include element('task-card-header') {
+        font-size: 16px;
+        line-height: 16px;
+        padding-left: 15px;
+        height: 16px;
+        font-weight: 500;
+        color:rgba(96,98,102,1);
+        border-left: 3px solid #4781F8;
+        vertical-align: middle;
+    }
+    @include element('task-card-content') {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        padding: 0 10px;
+    }
+    @include element('task') {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-right: 60px;
+        width: 84px;
+        height: 130px;
+        margin-top: 20px;
+        @include modifier('name') {
+            font-size: 14px;
+            margin: 10px 0;
+            color:rgba(38,43,62,1);
+            text-align: center;
+        }
+        @include modifier('button') {
+            color: #4781F8;
+            visibility: hidden;
+        }
+        &:hover {
+            cursor: pointer;
+            .sdxv-project-detail__task--name {
+                color: #4781F8;
+            }
+            .sdxv-project-detail__task--button {
+                visibility: visible;
+            }
+        }
+    }
+    @include element('actions') {
+        display: flex;
+        align-items: center;
+        .sdx-icon {
+            font-size: 14px;
+        }
+    }
+}

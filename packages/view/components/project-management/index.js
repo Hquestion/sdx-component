@@ -1,8 +1,10 @@
 import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
-import ProjectDetail from './src/ProjectDetail.vue';
+
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';
+import ProjectDetail from './src/project-detail/index.vue';
+
 ProjectManagement.install = vue => {
     vue.component(ProjectManagement.name, ProjectManagement);
 };

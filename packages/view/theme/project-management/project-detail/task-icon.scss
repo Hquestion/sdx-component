@@ -1,0 +1,30 @@
+@include block('icon', $bem-namespace-view) {
+    color: white;
+    height: 40px;
+    width: 40px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .sdx-icon {
+        font-size: 32px;
+    }
+    @include modifier('Jupter') {
+        background-color: #FF882B;
+    }
+    @include modifier('Apache_Spark_logo') {
+        background-color: #FF882B;
+    }
+    @include modifier('icon-python') {
+        background-color: #3889C8;
+    }
+    @include modifier('icon-tensorflow') {
+        background-color: #FF882B;
+    }
+    @include modifier('icon-tensorboard') {
+        background-color: #FF882B;
+    }
+    @include modifier('icon-docker') {
+        background-color: #359CEC;
+    }
+}

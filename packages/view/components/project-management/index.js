@@ -1,6 +1,6 @@
 import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
-import ProjectDetail from './src/ProjectDetail.vue';
+import ProjectDetail from './src/project-detail/index.vue';
 
 ProjectManagement.install = vue => {
     vue.component(ProjectManagement.name, ProjectManagement);

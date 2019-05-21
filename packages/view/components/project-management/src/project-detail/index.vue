@@ -79,7 +79,8 @@ export default {
                     tasks: [
                         {
                             name: 'Jupter',
-                            class: 'Jupter'
+                            class: 'Jupter',
+                            type: 'JUPYTER'
                         }
                     ]
                 },
@@ -88,7 +89,8 @@ export default {
                     tasks: [
                         {
                             name: 'ContainerDev',
-                            class: 'icon-docker'
+                            class: 'icon-docker',
+                            type: 'CONTAINER_DEV'
                         }
                     ]
                 },
@@ -97,27 +99,34 @@ export default {
                     tasks: [
                         {
                             name: 'Python',
-                            class: 'icon-python'
+                            class: 'icon-python',
+                            type: 'PYTHON'
                         },
                         {
                             name: 'Spark',
-                            class: 'Apache_Spark_logo'
+                            class: 'Apache_Spark_logo',
+                            type: 'SPARK'
                         },
                         {
                             name: 'TensorFlow单机版',
-                            class: 'icon-tensorflow'
+                            class: 'icon-tensorflow',
+                            type: 'TENSORFLOW'
+
                         },
                         {
                             name: 'TensorFlow分布式',
-                            class: 'icon-tensorflow'
+                            class: 'icon-tensorflow',
+                            type: 'TENSORFLOW_DIST'
                         },
                         {
                             name: 'TensorFlow自动并行',
-                            class: 'icon-tensorflow'
+                            class: 'icon-tensorflow',
+                            type: 'TENSORFLOW_AUTO_DIST'
                         },
                         {
                             name: 'TensorBoard',
-                            class: 'icon-tensorboard'
+                            class: 'icon-tensorboard',
+                            type: 'TENSORBOARD'
                         }
                     ]
                 }
@@ -137,6 +146,9 @@ export default {
         },
         createTask(task) {
             console.log('task', task);
+            this.$router.push(
+                `/sdxv-project-manage/createTask/${task.type}/${this.$route.params.id}`
+            );
         }
     }
 };

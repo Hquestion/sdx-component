@@ -33,7 +33,7 @@ const routeCfg = [
                 }
             },
             {
-                path: 'createTask/:type/:projectId/:cooperate',
+                path: 'createTask/:type/:projectId',
                 component: FormView,
                 meta: {
                     name: '新建任务'

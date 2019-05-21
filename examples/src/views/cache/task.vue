@@ -6,7 +6,7 @@
 
 <script>
 
-import Jupyter from '@sdx/view/components/project-management/src/forms/JupyterForm';
+import Jupyter from '@sdx/view/components/project-management/src/forms/ContainerDevForm';
 
 export default {
     data () {

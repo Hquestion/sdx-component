@@ -1,9 +1,9 @@
 <template>
     <BaseForm
-        :title="'新建Jupyter任务'"
+        :title="'新建TensorBoard任务'"
         class="form-jupyter"
         :label-width="80"
-        icon="sdx-Jupter"
+        icon="sdx-icon-tensorflow"
     >
         <el-form
             label-position="right"
@@ -49,50 +49,19 @@
                 prop="name"
                 label="资源配置:"
             >
-                <!-- <el-select
-                    :searchable="true"
-                    size="small"
-                    placeholder="请选择资源配置"
-                /> -->
-                <div>
-                    <div class="title">
-                        CPU/内存
-                    </div>
-                    <el-select
-                        :searchable="true"
-                        size="small"
-                        placeholder="请选择资源配置"
-                    />
-                </div>
-                <div>
-                    <div class="title">
-                        GPU
-                    </div>
-                    <el-select
-                        :searchable="true"
-                        size="small"
-                        placeholder="请选择资源配置"
-                    />
-                </div>
-            </el-form-item>
-            <el-form-item
-                prop="name"
-                label="数据源:"
-            >
                 <el-select
                     :searchable="true"
                     size="small"
-                    placeholder="请选择数据源"
+                    placeholder="请选择资源配置"
                 />
             </el-form-item>
             <el-form-item
                 prop="name"
-                label="数据集:"
+                label="日志目录:"
             >
-                <el-select
-                    :searchable="true"
-                    size="small"
-                    placeholder="请选择数据集"
+                <SdxwFileSelect
+                    v-model="file"
+                    check-type="folder"
                 />
             </el-form-item>
         </el-form>
@@ -104,23 +73,23 @@
 import BaseForm from './BaseForm';
 import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-
+import FileSelect from '@sdx/widget/components/file-select';
 export default {
-    name: 'JupyterForm',
+    name: 'TensorboardForm',
     components: {
         BaseForm,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
-        
+        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
     },
     props: {
         
     },
     data() {
         return {
-        
+            file: []
         };
     },
     computed: {

@@ -1,9 +1,9 @@
 <template>
     <BaseForm
-        :title="'新建Jupyter任务'"
-        class="form-jupyter"
+        :title="'新建ContainerDev任务'"
+        class="form-containerdev"
         :label-width="80"
-        icon="sdx-Jupter"
+        icon="sdx-icon-docker"
     >
         <el-form
             label-position="right"
@@ -47,36 +47,6 @@
             </el-form-item>
             <el-form-item
                 prop="name"
-                label="资源配置:"
-            >
-                <!-- <el-select
-                    :searchable="true"
-                    size="small"
-                    placeholder="请选择资源配置"
-                /> -->
-                <div>
-                    <div class="title">
-                        CPU/内存
-                    </div>
-                    <el-select
-                        :searchable="true"
-                        size="small"
-                        placeholder="请选择资源配置"
-                    />
-                </div>
-                <div>
-                    <div class="title">
-                        GPU
-                    </div>
-                    <el-select
-                        :searchable="true"
-                        size="small"
-                        placeholder="请选择资源配置"
-                    />
-                </div>
-            </el-form-item>
-            <el-form-item
-                prop="name"
                 label="数据源:"
             >
                 <el-select
@@ -106,14 +76,13 @@ import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 
 export default {
-    name: 'JupyterForm',
+    name: 'ContainerDevForm',
     components: {
         BaseForm,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
-        
     },
     props: {
         

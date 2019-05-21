@@ -1,7 +1,8 @@
 import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
 import ProjectDetail from './src/ProjectDetail.vue';
-
+import FormView from './src/FormView.vue';
+import * as forms from './src/forms';
 ProjectManagement.install = vue => {
     vue.component(ProjectManagement.name, ProjectManagement);
 };
@@ -28,7 +29,19 @@ const routeCfg = [
                 meta: {
                     breadcrumb: '项目详情'
                 }
-            }
+            },
+            {
+                path: 'createTask/:type/:projectId/:cooperate',
+                component: FormView,
+                meta: {
+                    name: '新建任务'
+                },
+                props: ({
+                    params
+                }) => ({
+                    formComp: forms[params.type]
+                })
+            },
         ]
     }
 ];

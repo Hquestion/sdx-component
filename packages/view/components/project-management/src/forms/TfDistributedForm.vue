@@ -1,13 +1,13 @@
 <template>
     <BaseForm
-        :title="'新建Jupyter任务'"
-        class="form-jupyter"
-        :label-width="80"
-        icon="sdx-Jupter"
+        :title="'新建Tensorflow分布式任务'"
+        class="form-tfsingleform"
+        :label-width="160"
+        icon="sdx-icon-tensorboard"
     >
         <el-form
             label-position="right"
-            label-width="80px"
+            label-width="160px"
             slot="form"
             @submit.native.prevent
             ref="user"
@@ -49,50 +49,70 @@
                 prop="name"
                 label="资源配置:"
             >
-                <!-- <el-select
-                    :searchable="true"
-                    size="small"
-                    placeholder="请选择资源配置"
-                /> -->
                 <div>
                     <div class="title">
-                        CPU/内存
+                        参数服务器CPU/内存
                     </div>
                     <el-select
                         :searchable="true"
                         size="small"
-                        placeholder="请选择资源配置"
+                        placeholder="请选择参数服务器CPU/内存"
                     />
                 </div>
                 <div>
                     <div class="title">
-                        GPU
+                        计算节点CPU/内存
                     </div>
                     <el-select
                         :searchable="true"
                         size="small"
-                        placeholder="请选择资源配置"
+                        placeholder="请选择计算节点CPU/内存"
+                    />
+                </div>
+                <div>
+                    <div class="title">
+                        计算节点GPU
+                    </div>
+                    <el-select
+                        :searchable="true"
+                        size="small"
+                        placeholder="请选择计算节点GPU"
                     />
                 </div>
             </el-form-item>
             <el-form-item
                 prop="name"
-                label="数据源:"
+                label="参数服务器实例个数:"
             >
-                <el-select
-                    :searchable="true"
-                    size="small"
-                    placeholder="请选择数据源"
+                <el-input-number
+                  
+                   
+                    label="描述文字"
                 />
             </el-form-item>
             <el-form-item
                 prop="name"
-                label="数据集:"
+                label="计算节点实例个数:"
             >
-                <el-select
+                <el-input-number
+                    label="描述文字"
+                />
+            </el-form-item>
+            <el-form-item
+                prop="name"
+                label="源代码:"
+            >
+                <SdxwFileSelect />
+            </el-form-item>
+            <el-form-item
+                prop="name"
+                label="启动参数:"
+            >
+                <SdxuInput
+                    
                     :searchable="true"
                     size="small"
-                    placeholder="请选择数据集"
+                    placeholder="请输入启动参数"
                 />
             </el-form-item>
         </el-form>
@@ -102,18 +122,19 @@
 <script>
 
 import BaseForm from './BaseForm';
-import {Form, FormItem, Select} from 'element-ui';
+import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-
+import FileSelect from '@sdx/widget/components/file-select';
 export default {
-    name: 'JupyterForm',
+    name: 'TfDistributedForm',
     components: {
         BaseForm,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
         [Select.name]: Select,
+        [InputNumber.name]: InputNumber,
         SdxuInput,
-        
+        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
     },
     props: {
         
@@ -141,7 +162,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .form-jupyter {
-     
+    .form-tfsingleform {
+        .title {
+            color: #909399;
+        }
     }
 </style>

@@ -1,9 +1,9 @@
 <template>
     <BaseForm
-        :title="'新建Jupyter任务'"
-        class="form-jupyter"
+        :title="'新建Tensorflow单机版任务'"
+        class="form-python"
         :label-width="80"
-        icon="sdx-Jupter"
+        icon="sdx-icon-tensorboard"
     >
         <el-form
             label-position="right"
@@ -77,22 +77,19 @@
             </el-form-item>
             <el-form-item
                 prop="name"
-                label="数据源:"
+                label="源代码:"
             >
-                <el-select
-                    :searchable="true"
-                    size="small"
-                    placeholder="请选择数据源"
-                />
+                <SdxwFileSelect />
             </el-form-item>
             <el-form-item
                 prop="name"
-                label="数据集:"
+                label="启动参数:"
             >
-                <el-select
+                <SdxuInput
+                    
                     :searchable="true"
                     size="small"
-                    placeholder="请选择数据集"
+                    placeholder="请输入启动参数"
                 />
             </el-form-item>
         </el-form>
@@ -104,16 +101,16 @@
 import BaseForm from './BaseForm';
 import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-
+import FileSelect from '@sdx/widget/components/file-select';
 export default {
-    name: 'JupyterForm',
+    name: 'TfSingleForm',
     components: {
         BaseForm,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
-        
+        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
     },
     props: {
         
@@ -141,7 +138,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .form-jupyter {
-     
+    .form-python {
+       
     }
 </style>

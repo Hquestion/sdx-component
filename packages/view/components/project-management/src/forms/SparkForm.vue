@@ -1,13 +1,13 @@
 <template>
     <BaseForm
-        :title="'新建Jupyter任务'"
-        class="form-jupyter"
-        :label-width="80"
-        icon="sdx-Jupter"
+        :title="'新建Spark任务'"
+        class="form-spark"
+        :label-width="120"
+        icon="sdx-Apache_Spark_logo"
     >
         <el-form
             label-position="right"
-            label-width="80px"
+            label-width="120px"
             slot="form"
             @submit.native.prevent
             ref="user"
@@ -49,50 +49,61 @@
                 prop="name"
                 label="资源配置:"
             >
-                <!-- <el-select
-                    :searchable="true"
-                    size="small"
-                    placeholder="请选择资源配置"
-                /> -->
                 <div>
                     <div class="title">
-                        CPU/内存
+                        驱动器CPU/内存
                     </div>
                     <el-select
                         :searchable="true"
                         size="small"
-                        placeholder="请选择资源配置"
+                        placeholder="请选择驱动器CPU/内存"
                     />
                 </div>
                 <div>
                     <div class="title">
-                        GPU
+                        执行器CPU/内存
                     </div>
                     <el-select
                         :searchable="true"
                         size="small"
-                        placeholder="请选择资源配置"
+                        placeholder="请选择执行器CPU/内存"
                     />
                 </div>
             </el-form-item>
             <el-form-item
                 prop="name"
-                label="数据源:"
+                label="执行器实例数:"
             >
-                <el-select
-                    :searchable="true"
-                    size="small"
-                    placeholder="请选择数据源"
+                <el-input-number
+                    label="描述文字"
                 />
             </el-form-item>
             <el-form-item
                 prop="name"
-                label="数据集:"
+                label="源代码:"
             >
-                <el-select
+                <SdxwFileSelect />
+            </el-form-item>
+            <el-form-item
+                prop="name"
+                label="主类名称:"
+            >
+                <SdxuInput
+                    
                     :searchable="true"
                     size="small"
-                    placeholder="请选择数据集"
+                    placeholder="请输入主类名称"
+                />
+            </el-form-item>
+            <el-form-item
+                prop="name"
+                label="启动参数:"
+            >
+                <SdxuInput
+                    
+                    :searchable="true"
+                    size="small"
+                    placeholder="请输入启动参数"
                 />
             </el-form-item>
         </el-form>
@@ -102,18 +113,19 @@
 <script>
 
 import BaseForm from './BaseForm';
-import {Form, FormItem, Select} from 'element-ui';
+import {Form, FormItem, Select,InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-
+import FileSelect from '@sdx/widget/components/file-select';
 export default {
-    name: 'JupyterForm',
+    name: 'SparkForm',
     components: {
         BaseForm,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
-        
+        [InputNumber.name]: InputNumber,
+        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
     },
     props: {
         
@@ -141,7 +153,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .form-jupyter {
-     
+    .form-spark {
+      .title {
+            color: #909399;
+        }
     }
 </style>

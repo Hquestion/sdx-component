@@ -5,8 +5,8 @@
             :title="title"
         >
             <!-- 图标插入 -->
-            <div>
-                <i class="sdx-icon sdx-icon-jiantou" />
+            <div :style="`padding-left: ${labelWidth}px; padding-bottom: 20px` ">
+                <i :class="['sdx-icon' ,icon]" />
             </div>
             <slot name="form">
                 <!-- 插入form -->
@@ -48,7 +48,11 @@ export default {
         labelWidth: {
             type: Number,
             default: 80
-        }
+        },
+        icon: {
+            type: String,
+            default: ''
+        },
     },
     components: {
         SdxuButton,
@@ -68,6 +72,34 @@ export default {
     .sdxv-project-task-form {
         .task-from__btn-box {
             padding-top: 16px;
+        }
+        & /deep/  {
+            .el-select {
+                width: 100%;
+                max-width: 560px;
+            }
+            .sdxu-input {
+                max-width: 560px;
+            }
+        }
+        .sdx-icon {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            display: inline-block;
+            text-align: center;
+            border-radius: 2px;
+            color: #fff;
+            font-size: 30px;
+        }
+        .sdx-Jupter, .sdx-Apache_Spark_logo, .sdx-icon-tensorboard, .sdx-icon-tensorflow{
+            background: #FF882B;
+        }
+        .sdx-icon-python {
+            background:#3889C8;
+        }
+        .sdx-icon-docker {
+            background:#359CEC;
         }
     }
 </style>

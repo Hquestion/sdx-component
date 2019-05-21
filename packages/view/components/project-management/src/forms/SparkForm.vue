@@ -154,7 +154,7 @@ export default {
 
 <style lang="scss" scoped>
     .form-spark {
-      .title {
+        .title {
             color: #909399;
         }
     }

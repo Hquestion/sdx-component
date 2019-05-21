@@ -17,7 +17,7 @@
                 label="任务名称:"
             >
                 <SdxuInput
-                    
+                    v-model="params.name"
                     :searchable="true"
                     size="small"
                     placeholder="请输入任务名称"
@@ -104,7 +104,7 @@
 import BaseForm from './BaseForm';
 import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-
+// import { getImageList } from '@sdx/utils/src/api/image';
 export default {
     name: 'JupyterForm',
     components: {
@@ -120,7 +120,20 @@ export default {
     },
     data() {
         return {
-        
+            params: {
+                projectId: '',
+                name: '',
+                description: '',
+                type: '',
+                imageId: '',
+                resource: {
+                    EXECUTOR_CPU_CORES: 0,
+                    EXECUTOR_GPUS: 0,
+                    EXECUTOR_MEMORY_GB: 0
+                },
+                gpu_model: '',
+                datasources: []
+            },
         };
     },
     computed: {
@@ -130,8 +143,17 @@ export default {
       
     },
     methods: {
-     
-
+        imageList() {
+            const params = {
+                imageType: 'JUPYTER',
+                start: 1,
+                count: -1
+            };
+            // getImageList(params)
+            //     .then(data => {
+                
+            //     });
+        }
     },
 
     watch: {
@@ -142,6 +164,8 @@ export default {
 
 <style lang="scss" scoped>
     .form-jupyter {
-     
+        .title {
+            color: #909399;
+        }
     }
 </style>

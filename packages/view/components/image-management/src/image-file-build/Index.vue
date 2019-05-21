@@ -3,7 +3,10 @@
         <SdxuContentPanel
             title="基于文件构建"
         >
-            <el-radio-group v-model="radio">
+            <el-radio-group
+                v-model="radio"
+                @change="radioChange"
+            >
                 <el-radio label="tar">
                     基于tar文件构建
                 </el-radio>
@@ -54,12 +57,27 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    label="文件地址:"
+                    label="文件地址"
                     prop="filePath"
+                    class="iconinfo"
                 >
-                    <SdxuInput
-                        placeholder="请输入镜像版本号"
+                    <el-popover
+                        placement="right"
+                        width="540"
+                        trigger="hover"
+                    >
+                        <Iconinfo />
+                        <i
+                            class="sdx-icon sdx-icon-info"
+                            slot="reference"
+                        >
+                            <span>:</span>
+                        </i>
+                    </el-popover>
+                    <SdxwFileSelect
                         v-model="params.filePath"
+                        :accept="radio === 'DockerFile' ? '': '.tar'"
+                        :check-type="radio === 'DockerFile' ? 'file' : 'all'"
                     />
                 </el-form-item>
             </el-form>
@@ -85,12 +103,14 @@
 
 <script>
 import ContentPanel from '@sdx/ui/components/content-panel';
-import {RadioGroup, Radio}  from 'element-ui';
+import {RadioGroup, Radio, Popover}  from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import {DOCKER_IMAGE_KIND_LIST} from '@sdx/utils/src/consts/relation';
 import {buildTar,buildImagefile} from '@sdx/utils/src/api/image';
 import SdxuButton from '@sdx/ui/components/button';
 import {itemNameValidate100, tagNameValidate} from '@sdx/utils/src/validate/validate';
+import FileSelect from '@sdx/widget/lib/file-select';
+import Iconinfo from './Iconinfo';
 export default { 
     name: '',
     data() {
@@ -100,7 +120,7 @@ export default {
                 name: '',
                 version: '',
                 imageType: 'JUPYTER',
-                filePath: ''
+                filePath: []
             },
             DOCKER_IMAGE_KIND_LIST,
             rules: {
@@ -138,9 +158,7 @@ export default {
                 filePath: [
                     {
                         required: true,
-                        transform(value) {
-                            return value && ('' + value).trim();
-                        },
+                        message: '文件地址不能为空',
                         trigger: 'blur'
                     }
                 ]
@@ -151,10 +169,16 @@ export default {
         [ContentPanel.name]: ContentPanel,
         [RadioGroup.name]: RadioGroup,
         [Radio.name]: Radio,
+        [Popover.name]: Popover,
         SdxuInput,
-        SdxuButton
+        SdxuButton,
+        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
+        Iconinfo
     },
     methods: {
+        radioChange() {
+            this.$refs.form.clearValidate();
+        },
         // 基于 tar 文件新建镜像任务
         imageBuildTar(params) {
             buildTar(params)
@@ -198,4 +222,27 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.sdxv-image-file {
+    .iconinfo {
+        &/deep/ {
+            .el-form-item__label {
+                padding-right: 42px;
+            }
+            .el-form-item__content {
+                position: relative;
+            }
+        }
+        &/deep/ .sdx-icon-info {
+            cursor: pointer;
+            position: absolute;
+            top: 0px;
+            left: -36px;
+            color: #C0C4CC;
+            span {
+                color: #606266;
+                padding-left: 3px;
+            }
+        }
+    }
+}
 </style>

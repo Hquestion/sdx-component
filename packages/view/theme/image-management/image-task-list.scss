@@ -1,0 +1,7 @@
+@include block('image-task', $bem-namespace-view) {
+    .pagination {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 20px;
+    }
+}

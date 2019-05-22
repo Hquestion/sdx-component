@@ -42,10 +42,10 @@
                     size="small"
                     placeholder="请输入任务名"
                     style="margin-right: 10px;"
-                    @search="searchTask"
                 />
                 <sdxu-button
                     size="small"
+                    @click="searchTask"
                 >
                     搜索
                 </sdxu-button>
@@ -57,6 +57,27 @@
                     <i class="sdx-icon sdx-paixu" />
                 </sdxu-button>
             </div>
+            <div
+                class="sdxv-project-detail__content"
+            >
+                <task-card-list v-loading="loading">
+                    <task-card
+                        @operate="handleOperate"
+                        v-for="(item, index) in taskList"
+                        :key="index"
+                        :meta="item"
+                    />
+                </task-card-list>
+            </div>
+            <div class="sdxv-project-detail__footer">
+                <div />
+                <sdxu-pagination
+                    :current-page.sync="current"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="currentChange"
+                />
+            </div>
         </sdxu-content-panel>
     </div>
 </template>
@@ -65,20 +86,30 @@
 import ContentPanel from '@sdx/ui/components/content-panel';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
+import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
+import MessageBox from '@sdx/ui/components/message-box';
+import TaskCard from './TaskCard';
+import TaskCardList from './TaskCardList';
 import TaskIcon from './TaskIcon';
-import { } from '@sdx/utils/src/api/project';
+import { Message } from 'element-ui';
+import { getTaskList, removeTask, startTask, stopTask } from '@sdx/utils/src/api/project';
 export default {
     name: 'SdxvProjectDetail',
     data() {
         return {
             searchName: '',
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            taskList: [],
+            loading: false,
             taskOptions: [
                 {
                     name: '开发工具',
                     tasks: [
                         {
-                            name: 'Jupter',
+                            name: 'Jupyter',
                             class: 'Jupter',
                             type: 'JUPYTER'
                         }
@@ -133,22 +164,100 @@ export default {
             ]
         };
     },
+    created() {
+        this.initList();
+    },
     components: {
         [ContentPanel.name]: ContentPanel,
         [Input.name]: Input,
         [Button.name]: Button,
         [IconButton.name]: IconButton,
-        TaskIcon
+        [Pagination.name]: Pagination,
+        TaskIcon,
+        TaskCard,
+        TaskCardList
     },
     methods: {
         searchTask() {
-            console.log('11111111');
+            this.initList();
         },
         createTask(task) {
-            console.log('task', task);
             this.$router.push(
                 `/sdxv-project-manage/createTask/${task.type}/${this.$route.params.id}`
             );
+        },
+        initList() {
+            this.loading = true;
+            const params = {
+                name: this.searchName,
+                start: this.current,
+                count: this.pageSize,
+                order: 'asc',
+                orderBy: '',
+                projectId: this.$route.params.id
+            };
+            getTaskList(params).then(res => {
+                this.taskList = res.data.items;
+                this.total = res.data.total;
+                this.loading = false;
+            });
+        },
+        currentChange(val) {
+            this.current = val;
+            this.initList();
+        },
+        handleOperate(operation) {
+            console.log('operation', operation);
+            switch(operation.type) {
+            case 'start':
+                MessageBox({
+                    title: '确定运行该任务吗？',
+                    content: ''
+                }).then(() => {
+                    startTask(operation.item.uuid).then(() => {
+                        Message({
+                            message: '运行成功',
+                            type: 'success'
+                        });
+                        this.initList();
+                    });
+                }).catch(() => {});
+                break;
+            case 'kill':
+                MessageBox({
+                    title: '确定停止该任务吗？',
+                    content: ''
+                }).then(() => {
+                    stopTask(operation.item.uuid).then(() => {
+                        Message({
+                            message: '停止成功',
+                            type: 'success'
+                        });
+                        this.initList();
+                    });
+                }).catch(() => {});
+                break;
+            case 'detail':
+                break;
+            case 'edit':
+                break;
+            case 'remove':
+                MessageBox({
+                    title: '确定删除吗？',
+                    content: '删除后将不可恢复'
+                }).then(() => {
+                    removeTask(operation.item.uuid).then(() => {
+                        Message({
+                            message: '删除成功',
+                            type: 'success'
+                        });
+                        this.initList();
+                    });
+                }).catch(() => {});
+                break;
+            default:
+                break;
+            }
         }
     }
 };

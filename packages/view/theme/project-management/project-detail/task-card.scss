@@ -1,0 +1,125 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@include block('task-card', $bem-namespace-view) {
+    position: relative;
+    box-sizing: border-box;
+    padding: $sdx-padding;
+    width: $sdxv-task-card-width;
+    height: $sdxv-task-card-height;
+    background: $sdxv-task-card-background;
+    box-shadow: $sdxv-task-card-box-shadow;
+    border-radius: $sdx-border-radius;
+    font-size: $sdxv-task-card-font-size;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+
+    @include element('header') {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: $sdxv-task-card-type-icon-size;
+        @include modifier('icon') {
+            margin-right: 12px;
+            width: 40px;
+            height: 40px;
+            & .sdx-icon {
+                font-size: $sdxv-task-card-type-icon-size;
+            }
+        }
+        @include modifier('name') {
+            height: $sdxv-task-card-type-icon-size;
+            font-weight: bold;
+            letter-spacing: 0;
+            width: 145px;
+            color: #262B3E;
+            line-height: $sdxv-task-card-type-icon-size / 2;
+            @include text-truncation($sdxv-task-card-name-show-line-count);
+        }
+        @include modifier('status') {
+            width: 72px;
+            margin-left: 6px;
+            text-align: right;
+            @include state('created') {
+                width: 50px;
+                color: #26C8A9;
+            }
+            @include state('abnormal') {
+                width: 100px;
+                color: #EB9A0A;
+            }
+            @include state('running') {
+                color: #4781F8;
+            }
+            @include state('launching') {
+                color: #0CB5E4;
+            }
+            @include state('finished') {
+                color: #01A3FF;
+            }
+            @include state('killed') {
+                color: #FF6C29;
+            }
+            @include state('killing') {
+                color: #FF882B;
+            }
+            @include state('failed') {
+                color: #FF5E5E;
+            }
+        }
+    }
+
+    @include element('main') {
+        padding: 24px 0 30px;
+        height: 40px;
+        box-sizing: content-box;
+    }
+
+    @include element('info') {
+        display: flex;
+        color: #606266;
+        margin-bottom: 10px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+        & > i {
+            background: rgba(192,196,204,0.2);
+            margin-right: 10px;
+            border-radius: 8px;
+            font-size: $sdxv-task-card-operate-icon-size;
+        }
+        & > span {
+            line-height: $sdxv-task-card-operate-icon-size;
+            font-size: $sdxv-task-card-font-size;
+        }
+    }
+
+    @include element('footer') {
+        i {
+            color: $sdxv-task-card-operation-base-color;
+            font-size: $sdxv-task-card-operate-icon-size;
+        }
+        @include modifier('operation') {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            i {
+                cursor: pointer;
+                &:hover {
+                    color: $sdxv-task-card-operation-hover-color;
+                }
+            }
+        }
+    }
+}
+
+@include block('task-card-list', $bem-namespace-view) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: -$sdx-margin / 2;
+    & /deep/ .sdxv-task-card {
+        margin: $sdx-margin / 2;
+    }
+}

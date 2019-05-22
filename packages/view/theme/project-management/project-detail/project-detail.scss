@@ -1,4 +1,5 @@
 @import './task-icon.scss';
+@import './task-card.scss';
 @include block('project-detail', $bem-namespace-view) {
     @include element('create-task') {
         margin-bottom: 20px;
@@ -44,7 +45,7 @@
             text-align: center;
         }
         @include modifier('button') {
-            color: #4781F8;
+            color: #4781F8!important;
             visibility: hidden;
         }
         &:hover {
@@ -63,5 +64,11 @@
         .sdx-icon {
             font-size: 14px;
         }
+    }
+    @include element('footer') {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 0;
     }
 }

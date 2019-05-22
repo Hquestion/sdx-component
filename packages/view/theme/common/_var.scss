@@ -5,11 +5,28 @@ $sdxu-mark-icon-height: 18px !default;
 $sdxu-mark-icon-padding: 12px !default;
 
 // sdxv rolemanage
-$sdxu-role-title-height: 36px !default; 
-$sdxu-role-table-background: #fff !default; 
-$sdxu-role-table-shadow: rgba(206,213,221,0.27) !default; 
-$sdxu-role-margin-size: 14px !default; 
+$sdxu-role-title-height: 36px !default;
+$sdxu-role-table-background: #fff !default;
+$sdxu-role-table-shadow: rgba(206,213,221,0.27) !default;
+$sdxu-role-margin-size: 14px !default;
 $sdxu-role-padding-top: 10px !default;
 $sdxu-role-icon-size: 12px !default;
 $sdxu-mark-icon-bottom: 28px !default;
+
+// task-card
+$sdxv-task-card-width: 280px !default;
+$sdxv-task-card-height: 184px !default;
+$sdxv-task-card-box-shadow: 0 0 22px 0 rgba(206,213,221,0.27) !default;
+$sdxv-task-card-background: #FFF !default;
+$sdxv-task-card-self-detail: linear-gradient(180deg,rgba(94,104,251,0.9) 0%,rgba(61,118,239,1) 100%) !default;
+$sdxv-task-card-cooperation-detail: linear-gradient(180deg,rgba(253,158,43,0.9) 0%,rgba(255,136,43,1) 100%) !default;
+$sdxv-task-card-template-detail: linear-gradient(180deg,rgba(38,200,169,0.9) 0%,rgba(20,184,154,1) 100%) !default;
+$sdxv-task-card-operation-base-color: #C0C4CC !default;
+$sdxv-task-card-operation-hover-color: $sdx-primary-color !default;
+$sdxv-task-card-name-show-line-count: 2 !default;
+$sdxv-task-card-mask-text-show-line-count: 4 !default;
+$sdxv-task-card-font-size: $sdx-content-font-size !default;
+$sdxv-task-card-operate-icon-size: 16px !default;
+$sdxv-task-card-type-icon-size: 32px !default;
+$sdxv-task-card-mask-height: 128px !default;
 

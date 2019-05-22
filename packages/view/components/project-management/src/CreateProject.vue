@@ -203,11 +203,13 @@ export default {
     created() {
         if (this.isEditing) {
             Object.assign(this.projectForm, this.data);
+            this.data.groups.forEach(group => {
+                if (this.defaultUserGroupKeys.indexOf(group) === -1) {
+                    this.defaultUserGroupKeys.push(group);
+                }
+            });
             this.data.users.forEach(user => {
                 this.data.groups.forEach(group => {
-                    if (this.defaultUserGroupKeys.indexOf(group) === -1) {
-                        this.defaultUserGroupKeys.push(group);
-                    }
                     this.defaultUserGroupKeys.push(group + '/' + user);
                 });
             });

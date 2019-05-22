@@ -11,6 +11,7 @@
     }
     @include element('btn') {
         display: inline-block;
+        vertical-align: middle;
     }
     .el-form {
         display: inline-block;
@@ -29,9 +30,16 @@
     height: $sdx-form-element-height-regular;
     line-height: $sdx-form-element-height-regular;
     margin-bottom: $sdx-margin;
+    margin-right: $sdxw-search-item-margin;
+    vertical-align: middle;
+    position: relative;
+    top:$sdxw-search-item-top;
     display: inline-block;
     .el-form-item__label {
         color: $sdxw-breadcrumb-current-text-color;
         font-size: $sdx-content-font-size;
+    }
+    .el-form-item__content {
+        width: $sdxw-search-content-width;
     }
 }

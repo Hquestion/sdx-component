@@ -13,6 +13,7 @@ import Pagination from '@sdx/ui/components/pagination';
 import Breadcrumb from '@sdx/widget/components/breadcrumb';
 import ChangePassword from '@sdx/widget/components/change-password';
 import Project from '@sdx/view/components/project-management';
+import Image from '@sdx/view/components/image-management';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';
 import '@sdx/view/theme/index.scss';
@@ -26,6 +27,10 @@ Vue.use(ChangePassword);
 
 // 项目管理
 Project.viewRouter.register(router, '/');
+
+// 镜像管理
+// Vue.use(Image.ImageManageIndex);
+// Image.viewRouter.register(router, '/imageManageTest');
 
 
 Vue.config.productionTip = false;

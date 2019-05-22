@@ -31,21 +31,20 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             height: $sdxv-task-card-type-icon-size;
             font-weight: bold;
             letter-spacing: 0;
-            width: 145px;
+            width: 110px;
             color: #262B3E;
             line-height: $sdxv-task-card-type-icon-size / 2;
             @include text-truncation($sdxv-task-card-name-show-line-count);
         }
         @include modifier('status') {
-            width: 72px;
+            width: 64px;
             margin-left: 6px;
             text-align: right;
             @include state('created') {
-                width: 50px;
                 color: #26C8A9;
             }
             @include state('abnormal') {
-                width: 100px;
+                width: 78px;
                 color: #EB9A0A;
             }
             @include state('running') {

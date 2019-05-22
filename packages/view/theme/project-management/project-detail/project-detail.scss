@@ -50,11 +50,16 @@
         }
         &:hover {
             cursor: pointer;
+            transform:scale(1.1);
+            transition: all .1s;
             .sdxv-project-detail__task--name {
                 color: #4781F8;
             }
             .sdxv-project-detail__task--button {
                 visibility: visible;
+            }
+            .sdxv-icon {
+                box-shadow: 0px 0px 20px -5px rgba(136,136,136,1);
             }
         }
     }

@@ -12,6 +12,9 @@
         margin-right: 15px;
         padding-right: 20px;
         height: 160px;
+        &:not(:last-child) {
+            border-right: 1px dashed#E4E7ED;
+        }
     }
     @include element('task-card-header') {
         font-size: 16px;
@@ -34,12 +37,12 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        margin-right: 60px;
-        width: 84px;
+        width: 155px;
         height: 130px;
         margin-top: 20px;
         @include modifier('name') {
             font-size: 14px;
+            width: 84px;
             margin: 10px 0;
             color:rgba(38,43,62,1);
             text-align: center;

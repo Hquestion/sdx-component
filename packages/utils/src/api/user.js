@@ -1,5 +1,6 @@
 import httpService from '../http-service';
 import {getRolesList} from './rolemange';
+import { COMPOSE_GATEWAY_BASE, USER_SERVICE_GATEWAY_BASE } from './config';
 
 const changePasswordApi = '/api/v1/user/changePassword'; // 目前后端暂时不能确定, 之后需要再做修改
 
@@ -8,48 +9,48 @@ export function changePassword(params) {
 }
 
 export function getRoleDetail(uuid) {
-    return httpService.get(`/api/v1/roles/${uuid}`);
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}roles/${uuid}/`);
 }
 
 export function getGroupDetail(uuid) {
-    return httpService.get(`/api/v1/groups/${uuid}`);
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}groups/${uuid}/`);
 }
 
 export function getUserList(params) {
-    return httpService.get('/api/v1/users', params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}user-profiles/`, params);
 }
 
 /**
  * 删除用户
  */
 export function deleteUser(uuid) {
-    return httpService.delete(`/api/v1/user/${uuid}`);
+    return httpService.remove(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}`);
 }
 
 /**
  * 修改用户
  */
-export function updataUser(params) {
-    return httpService.patch('/api/v1/users/${uuid}',params);
+export function updataUser(uuid, params) {
+    return httpService.patch(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}`,params);
 }
 
 /**
  * 创建用户
  */
-export function addUser() {
-    return httpService.post('/api/v1/users');
+export function addUser(params) {
+    return httpService.post(`${USER_SERVICE_GATEWAY_BASE}users/`, params);
 }
 
 export function changeUserInfo(params) {
-    return httpService.put('/api/v1/user', params);
+    return httpService.put(`${USER_SERVICE_GATEWAY_BASE}user/`, params);
 }
 
 export function getUserSimpleInfo(uuid) {
-    return httpService.get(`/api/v1/users/${uuid}`);
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}/`);
 }
 
 export function getUserDetail(uuid) {
-    return httpService.get(`/api/v1/users/${uuid}`).then(res => {
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}/`).then(res => {
         const { roles, groups } = res;
         const rolesDeferArr = (roles || []).map(item => getRoleDetail(item));
         const groupsDeferArr = (groups || []).map(item => getGroupDetail(item));
@@ -73,11 +74,20 @@ export function getUserDetail(uuid) {
     });
 }
 
-export function updataGroups(params) {
-    return httpService.patch('/api/v1/groups',params);
+export function createGroup(params) {
+    return httpService.post(`${USER_SERVICE_GATEWAY_BASE}groups/`, params);
 }
+
+export function updateGroups(uuid, params) {
+    return httpService.patch(`${USER_SERVICE_GATEWAY_BASE}groups/${uuid}`,params);
+}
+
+export function deleteGroup(uuid) {
+    return httpService.remove(`${USER_SERVICE_GATEWAY_BASE}groups/${uuid}`);
+}
+
 export function getGroups(params) {
-    return httpService.get('/api/v1/groups/', params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}group-profiles/`, params);
 }
 
 export function getUserRoleGroupByName(name, type) {
@@ -117,7 +127,9 @@ export default {
     addUser,
     changeUserInfo,
     getUserSimpleInfo,
-    updataGroups,
+    updateGroups,
     getGroups,
+    deleteGroup,
+    createGroup,
     getUserRoleGroupByName
 };

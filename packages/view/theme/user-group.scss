@@ -14,19 +14,13 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
 
     @include element('table') {
-        @include modifier('operation') {
-            i {
-                color:rgba(192,196,204,1);
-                cursor: pointer;
-                & + i {
-                    margin-left: 30px;
-                }
-            }
-        }
 
         @include modifier('expand') {
             display: flex;
             align-items: flex-start;
+            & /deep/ .sdxw-fold-label-group--list {
+                transform: translate(-6px, -10px);
+            }
         }
 
         @include modifier('expand-label') {

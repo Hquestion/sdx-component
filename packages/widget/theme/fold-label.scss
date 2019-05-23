@@ -112,5 +112,6 @@
         display: block;
         flex-direction: row;
         flex-wrap: wrap;
+        transform: translate(-$sdxw-foldlabel-left-margin, -$sdxw-foldlabel-top-margin / 2);
     }
 }

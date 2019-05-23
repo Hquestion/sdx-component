@@ -12,8 +12,8 @@
                 <SdxuTransfer
                     :data="data"
                     :tags.sync="tags"
-                    :default-keys.sync="defaultKeys"
-                    :tree-node-key="treeNodeKey"
+                    :default-keys="defaultKeys"
+                    tree-node-key="uuid"
                 />
             </div>
             <div slot="footer">
@@ -36,41 +36,48 @@
 
 <script>
 import SdxuTransfer from '@sdx/ui/components/transfer';
-import { getGroups ,updataGroups } from '@sdx/utils/src/api/user';
+import { getGroups, updataUser } from '@sdx/utils/src/api/user';
 export default {
     name:'JoinGroup',
     data () {
         return {
             groupVisible:true,
             data:[],
-            tags: [],
-            defaultKeys: [14],
-            treeNodeKey: 'unid'
+            tags: []
         };
+    },
+    props: {
+        user: {
+            required: true,
+            type: Object,
+            default: () => ({})
+        }
+    },
+    computed: {
+        defaultKeys() {
+            return this.user.groups.map(item => item.uuid);
+        }
     },
     methods:{
         _getGroups(){
             getGroups()
                 .then(res=>{
-                    res.groups.forEach((item,index)=>{
-                        this.data.push({
-                            unid:parseInt(index+1),
-                            label:item.name
-                        });
-                    });
+                    this.data = res.groups.map(item => ({label: item.name, uuid: item.uuid}));
                 });
         },
         close() {
             this.$emit('cancelJoinGroupDialog',false);
         },
         confirm(){
-            updataGroups(this.$route.query.uuid)
-                .then(res=>{
-                    this.$message({
-                        message: '修改成功',
-                        type: 'success'
-                    });
+            updataUser(this.user.uuid, {
+                groups: this.tags.map(item => item.uuid)
+            }).then(()=>{
+                this.$message({
+                    message: '修改成功',
+                    type: 'success'
                 });
+            });
+            this.$emit('refresh');
             this.close();
         }
 

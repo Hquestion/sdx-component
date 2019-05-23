@@ -1,6 +1,7 @@
 import httpService from '../http-service';
+import { USER_SERVICE_GATEWAY_BASE } from './config';
 
-const rolesApi = '/api/v1/roles/';
+const rolesApi = `${USER_SERVICE_GATEWAY_BASE}roles/`;
 
 
 // 角色

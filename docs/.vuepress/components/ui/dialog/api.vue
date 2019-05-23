@@ -109,6 +109,12 @@
                         type: 'string',
                         optionValue: '—',
                         defaultValue: '—',
+                    }, {
+                        params: 'confirm-handler',
+                        describe: '确认按钮点击回调，需要返回一个Promise, resolve时才会关闭dialog',
+                        type: 'Function',
+                        optionValue: '—',
+                        defaultValue: 'undefined'
                     }
                 ],
                 eventData: [

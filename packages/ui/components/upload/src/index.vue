@@ -155,6 +155,7 @@ export default {
                 try {
                     file.url = URL.createObjectURL(rawFile);
                 } catch (err) {
+                    // eslint-disable-next-line
                     console.error('[Element Error][Upload]', err);
                     return;
                 }
@@ -175,7 +176,7 @@ export default {
             if (file) {
                 file.status = 'success';
                 file.response = res;
-                file.cephName = res.data[0];
+                file.cephName = res.path;
 
                 this.onSuccess(res, file, this.uploadFiles);
                 this.onChange(file, this.uploadFiles);

@@ -123,7 +123,7 @@ export default {
             }
             if(this.is_moveall) {
                 hightIcon =  false;
-            }else if(tagsKey.sort().toString() == checkKeys.sort().toString()) {
+            }else if(tagsKey.sort().toString() === checkKeys.sort().toString()) {
                 hightIcon =  false;
             } else {
                 hightIcon = true;
@@ -215,7 +215,8 @@ export default {
             this.$refs.tree.filter(val);
         },
         data: {
-            handler() {
+            handler(nVal) {
+                if (!nVal || nVal.length === 0) return;
                 this.$nextTick(() => {
                     this.$refs.tree && this.$refs.tree.setCheckedKeys(this.defaultKeys);
                     this.movetag();

@@ -1,0 +1,62 @@
+@include block('image-build-basic', $bem-namespace-view) {
+    .el-form-item:last-child {
+        margin-bottom: 0;
+    }
+
+    @include element('form') {
+        width: 820px;
+    }
+
+    @include element('name') {
+        display: flex;
+        flex-wrap: nowrap;
+
+        @include modifier('prefix') {
+            flex: none;
+            margin-right: 10px;
+        }
+
+        @include modifier('input') {
+            flex: auto;
+        }
+    }
+    
+    @include element('add-package') {
+        border-radius: 2px;
+        background-color: #F2F6FC;
+
+        @include modifier('button') {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px $sdx-padding;
+            cursor: pointer;
+        }
+
+        @include modifier('icon') {
+            color: #4781F8;
+            & > i {
+                font-size: 12px;
+                @include state('reverse') {
+                    animation: arrowtoggle .3s forwards;
+                }
+            }
+        }
+    }
+}
+
+@include block('add-package', $bem-namespace-view) {
+    padding: $sdx-padding;
+    .el-form-item:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@keyframes arrowtoggle {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}

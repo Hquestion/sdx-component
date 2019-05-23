@@ -35,8 +35,9 @@ const routeCfg = [
             {
                 path: 'createTask/:type/:projectId',
                 component: FormView,
+                name: 'CreateTask',
                 meta: {
-                    name: '新建任务'
+                    breadcrumb: '新建任务'
                 },
                 props: ({
                     params
@@ -47,8 +48,9 @@ const routeCfg = [
             {
                 path: 'modifyTask/:type/:taskId/:projectId',
                 component: FormView,
+                name: 'EditTask',
                 meta: {
-                    name: '编辑任务'
+                    breadcrumb: '编辑任务'
                 },
                 props: ({
                     params

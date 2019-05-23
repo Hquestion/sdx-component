@@ -183,7 +183,13 @@ export default {
         },
         createTask(task) {
             this.$router.push(
-                `/sdxv-project-manage/createTask/${task.type}/${this.$route.params.id}`
+                {
+                    name: 'CreateTask',
+                    params: {
+                        type: task.type,
+                        projectId: this.$route.params.id
+                    }
+                }
             );
         },
         initList() {
@@ -240,6 +246,14 @@ export default {
             case 'detail':
                 break;
             case 'edit':
+                this.$router.push({
+                    name: 'EditTask',
+                    params: {
+                        type: operation.item.type,
+                        taskId: operation.item.uuid,
+                        projectId: this.$route.params.id
+                    }
+                });
                 break;
             case 'remove':
                 MessageBox({

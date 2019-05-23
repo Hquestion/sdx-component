@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="'新建Tensorflow自动并行任务'"
+        :title="`${params.uuid ? '编辑':'新建'}Tensorflow自动并行任务`"
         class="form-tfautodistributed"
         :label-width="240"
         icon="sdx-icon-tensorboard"
@@ -56,7 +56,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                prop="resource"
+                prop="resourceConfig"
                 label="资源配置:"
             >
                 <i class="icon">*</i>
@@ -144,7 +144,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import ResourceConfig from './ResourceConfig';
-import { createTask } from '@sdx/utils/src/api/project';
+import { createTask ,updateTask} from '@sdx/utils/src/api/project';
 import { cNameValidate } from '@sdx/utils/src/validate/validate';
 export default {
     name: 'TfAutoDistributedForm',
@@ -159,7 +159,10 @@ export default {
         ResourceConfig
     },
     props: {
-        
+        task: {
+            type: Object,
+            default: null
+        },
     },
     data() {
         const resourceValidate = (rule, value, callback) => {
@@ -191,7 +194,7 @@ export default {
                 description: '',
                 type: 'TENSORFLOW_AUTO_DIST',
                 imageId: '',
-                resource: {
+                resourceConfig: {
                     'TF_EXECUTOR_INSTANCES': 1,
                     'TF_WORKER_CPUS': 0,
                     'TF_PS_CPUS': 0,
@@ -226,7 +229,7 @@ export default {
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
                 ],
-                resource: [
+                resourceConfig: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -281,7 +284,7 @@ export default {
         },
         commit() {
             this.$refs.tfautodistributed.validate().then(() => {
-                this.params.resource = Object.assign({},  this.params.resource , {
+                this.params.resourceConfig = Object.assign({},  this.params.resourceConfig , {
                     'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
                 });
                 createTask(this.params)
@@ -294,56 +297,78 @@ export default {
     },
 
     watch: {
+        task(nval) {
+            this.params = { ...this.params, ...nval };
+            this.cpuMain = {
+                cpu: this.params.resourceConfig.TF_MASTER_CPUS/1000,
+                memory: this.params.resourceConfig.TF_MASTER_MEMORY / (1024*1024*1024),
+                uuid: `${this.params.resourceConfig.TF_MASTER_CPUS/1000}-${this.params.resourceConfig.TF_MASTER_MEMORY / (1024*1024*1024)}`
+            };
+            this.cpuService = {
+                cpu: this.params.resourceConfig.TF_PS_CPUS/1000,
+                memory: this.params.resourceConfig.TF_PS_MEMORY / (1024*1024*1024),
+                uuid: `${this.params.resourceConfig.TF_PS_CPUS/1000}-${this.params.resourceConfig.TF_PS_MEMORY / (1024*1024*1024)}`
+            };
+            this.cpuCompute = {
+                cpu: this.params.resourceConfig.TF_WORKER_CPUS/1000,
+                memory: this.params.resourceConfig.TF_WORKER_MEMORY / (1024*1024*1024),
+                uuid: `${this.params.resourceConfig.TF_WORKER_CPUS/1000}-${this.params.resourceConfig.TF_WORKER_MEMORY / (1024*1024*1024)}`
+            };
+            this.gpuObj = {
+                label:this.params.resourceConfig.GPU_MODEL,
+                count: this.params.resourceConfig.TF_WORKER_GPUS,
+                uuid: `${this.params.resourceConfig.GPU_MODEL}-${this.params.resourceConfig.TF_WORKER_GPUS}`
+            };
+        },
         cpuMain(val) {
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
-                'TF_WORKER_CPUS': this.params.resource.TF_WORKER_CPUS,
-                'TF_PS_CPUS': this.params.resource.TF_PS_CPUS,
+                'TF_WORKER_CPUS': this.params.resourceConfig.TF_WORKER_CPUS,
+                'TF_PS_CPUS': this.params.resourceConfig.TF_PS_CPUS,
                 'TF_MASTER_CPUS':  val.cpu*1000,
-                'TF_WORKER_GPUS':  this.params.resource.TF_WORKER_GPUS,
-                'TF_WORKER_MEMORY': this.params.resource.TF_WORKER_MEMORY,
-                'TF_PS_MEMORY':  this.params.resource.TF_PS_MEMORY,
+                'TF_WORKER_GPUS':  this.params.resourceConfig.TF_WORKER_GPUS,
+                'TF_WORKER_MEMORY': this.params.resourceConfig.TF_WORKER_MEMORY,
+                'TF_PS_MEMORY':  this.params.resourceConfig.TF_PS_MEMORY,
                 'TF_MASTER_MEMORY': val.memory * 1024* 1024*1024,
-                'GPU_MODEL':  this.params.resource.GPU_MODEL,
+                'GPU_MODEL':  this.params.resourceConfig.GPU_MODEL,
             };
         },
         cpuService(val) {
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
-                'TF_WORKER_CPUS': this.params.resource.TF_WORKER_CPUS,
+                'TF_WORKER_CPUS': this.params.resourceConfig.TF_WORKER_CPUS,
                 'TF_PS_CPUS':  val.cpu*1000,
-                'TF_MASTER_CPUS':  this.params.resource.TF_MASTER_CPUS,
-                'TF_WORKER_GPUS':  this.params.resource.TF_WORKER_GPUS,
-                'TF_WORKER_MEMORY': this.params.resource.TF_WORKER_MEMORY,
+                'TF_MASTER_CPUS':  this.params.resourceConfig.TF_MASTER_CPUS,
+                'TF_WORKER_GPUS':  this.params.resourceConfig.TF_WORKER_GPUS,
+                'TF_WORKER_MEMORY': this.params.resourceConfig.TF_WORKER_MEMORY,
                 'TF_PS_MEMORY':  val.memory * 1024* 1024*1024,
-                'TF_MASTER_MEMORY':  this.params.resource.TF_MASTER_MEMORY,
-                'GPU_MODEL':  this.params.resource.GPU_MODEL,
+                'TF_MASTER_MEMORY':  this.params.resourceConfig.TF_MASTER_MEMORY,
+                'GPU_MODEL':  this.params.resourceConfig.GPU_MODEL,
             };
         },
         cpuCompute(val) {
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
                 'TF_WORKER_CPUS': val.cpu*1000,
-                'TF_PS_CPUS': this.params.resource.TF_PS_CPUS,
-                'TF_MASTER_CPUS':  this.params.resource.TF_MASTER_CPUS,
-                'TF_WORKER_GPUS':  this.params.resource.TF_WORKER_GPUS,
+                'TF_PS_CPUS': this.params.resourceConfig.TF_PS_CPUS,
+                'TF_MASTER_CPUS':  this.params.resourceConfig.TF_MASTER_CPUS,
+                'TF_WORKER_GPUS':  this.params.resourceConfig.TF_WORKER_GPUS,
                 'TF_WORKER_MEMORY': val.memory * 1024* 1024*1024,
-                'TF_PS_MEMORY':  this.params.resource.TF_PS_MEMORY,
-                'TF_MASTER_MEMORY':  this.params.resource.TF_MASTER_MEMORY,
-                'GPU_MODEL':  this.params.resource.GPU_MODEL,
+                'TF_PS_MEMORY':  this.params.resourceConfig.TF_PS_MEMORY,
+                'TF_MASTER_MEMORY':  this.params.resourceConfig.TF_MASTER_MEMORY,
+                'GPU_MODEL':  this.params.resourceConfig.GPU_MODEL,
             };
         },
         gpuObj(val) {
-        
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
-                'TF_WORKER_CPUS': this.params.resource.TF_WORKER_CPUS,
-                'TF_PS_CPUS': this.params.resource.TF_PS_CPUS,
-                'TF_MASTER_CPUS':  this.params.resource.TF_MASTER_CPUS,
+                'TF_WORKER_CPUS': this.params.resourceConfig.TF_WORKER_CPUS,
+                'TF_PS_CPUS': this.params.resourceConfig.TF_PS_CPUS,
+                'TF_MASTER_CPUS':  this.params.resourceConfig.TF_MASTER_CPUS,
                 'TF_WORKER_GPUS':  val.count,
-                'TF_WORKER_MEMORY': this.params.resource.TF_WORKER_MEMORY,
-                'TF_PS_MEMORY':  this.params.resource.TF_PS_MEMORY,
-                'TF_MASTER_MEMORY':  this.params.resource.TF_MASTER_MEMORY,
+                'TF_WORKER_MEMORY': this.params.resourceConfig.TF_WORKER_MEMORY,
+                'TF_PS_MEMORY':  this.params.resourceConfig.TF_PS_MEMORY,
+                'TF_MASTER_MEMORY':  this.params.resourceConfig.TF_MASTER_MEMORY,
                 'GPU_MODEL':  val.label
             };
         }
@@ -361,6 +386,9 @@ export default {
             position: absolute;
             top: 2px;
             left: -83px;
+        }
+        .sdxw-file-select {
+            max-width: 560px;
         }
     }
 </style>

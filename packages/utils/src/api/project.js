@@ -45,6 +45,9 @@ export function createTask(params) {
 export function getTaskDetail(uuid) {
     return httpService.get(taskApi + uuid);
 }
+export function updateTask(uuid,params) {
+    return httpService.patch(taskApi + uuid, params);
+}
 export default {
     getProjectList,
     getProjectDetail,
@@ -56,5 +59,6 @@ export default {
     startTask,
     stopTask,
     createTask,
-    getTaskDetail
+    getTaskDetail,
+    updateTask
 };

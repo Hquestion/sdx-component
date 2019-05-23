@@ -142,9 +142,9 @@ export default {
                     value: {
                         cpu: cpu/1000,
                         memory: memory / (1024*1024*1024),
-                        uuid: uuid
+                        uuid: `${cpu/1000}-${ memory / (1024*1024*1024)}`
                     },
-                    uuid: uuid
+                    uuid: `${cpu/1000}-${ memory / (1024*1024*1024)}`
                 };
             });
             return CPU;
@@ -157,9 +157,9 @@ export default {
                     value: {
                         label,
                         count,
-                        uuid
+                        uuid: `${label}-${count}`
                     },
-                    uuid: uuid
+                    uuid: `${label}-${count}`
                 };
             });
             return GPU;
@@ -209,6 +209,9 @@ export default {
                 background: #457FF6;
                 vertical-align: middle;
             }
+        }
+        .sdxw-file-select {
+            max-width: 560px;
         }
     }
 </style>

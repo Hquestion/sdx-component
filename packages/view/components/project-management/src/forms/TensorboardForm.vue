@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="'新建TensorBoard任务'"
+        :title="`${params.uuid ? '编辑':'新建'}TensorBoard任务`"
         class="form-tensorboard"
         :label-width="100"
         icon="sdx-icon-tensorflow"
@@ -86,7 +86,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import ResourceConfig from './ResourceConfig';
-import { createTask } from '@sdx/utils/src/api/project';
+import { createTask, updateTask } from '@sdx/utils/src/api/project';
 import { cNameValidate } from '@sdx/utils/src/validate/validate';
 export default {
     name: 'TensorboardForm',
@@ -100,7 +100,10 @@ export default {
         ResourceConfig
     },
     props: {
-        
+        task: {
+            type: Object,
+            default: null
+        },
     },
     data() {
         const resourceValidate = (rule, value, callback) => {
@@ -184,7 +187,7 @@ export default {
         },
         commit() {
             this.$refs.tensorboard.validate().then(() => {
-                createTask(this.params)
+                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
                     .then (() => {
                         this.$router.go(-1);
                     });
@@ -193,6 +196,14 @@ export default {
     },
 
     watch: {
+        task(nval) {
+            this.params = { ...this.params, ...nval };
+            this.cpuObj = {
+                cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
+                memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),
+                uuid: `${this.params.resourceConfig.EXECUTOR_CPUS/1000}-${this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024)}`
+            };
+        },
         cpuObj(val) {
             this.params.resource = { 
                 'EXECUTOR_INSTANCES': 1,
@@ -216,6 +227,9 @@ export default {
             position: absolute;
             top: 2px;
             left: -83px;
+        }
+        .sdxw-file-select {
+            max-width: 560px;
         }
     }
 </style>

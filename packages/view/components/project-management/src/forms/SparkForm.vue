@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="'新建Spark任务'"
+        :title="`${params.uuid ? '编辑':'新建'}Spark任务`"
         class="form-spark"
         :label-width="120"
         icon="sdx-Apache_Spark_logo"
@@ -56,7 +56,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                prop="resource"
+                prop="resourceConfig"
                 label="资源配置:"
             >
                 <i class="icon">*</i>
@@ -124,7 +124,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import ResourceConfig from './ResourceConfig';
-import { createTask } from '@sdx/utils/src/api/project';
+import { createTask,updateTask} from '@sdx/utils/src/api/project';
 import { cNameValidate } from '@sdx/utils/src/validate/validate';
 export default {
     name: 'SparkForm',
@@ -139,7 +139,10 @@ export default {
         ResourceConfig
     },
     props: {
-        
+        task: {
+            type: Object,
+            default: null
+        },
     },
     data() {
         const resourceValidate = (rule, value, callback) => {
@@ -159,7 +162,7 @@ export default {
                 description: '',
                 type: 'SPARK',
                 imageId: '',
-                resource: {
+                resourceConfig: {
                     'SPARK_DRIVER_CPUS': 0,
                     'SPARK_EXECUTOR_INSTANCES': 1,
                     'SPARK_EXECUTOR_CPUS': 0,
@@ -188,7 +191,7 @@ export default {
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
                 ],
-                resource: [
+                resourceConfig: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -211,7 +214,7 @@ export default {
         };
     },
     computed: {
-      
+       
     },
     created() {
         this.imageList();
@@ -232,7 +235,7 @@ export default {
         },
         commit() {
             this.$refs.spark.validate().then(() => {
-                createTask(this.params)
+                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
                     .then (() => {
                         this.$router.go(-1);
                     });
@@ -242,21 +245,34 @@ export default {
     },
 
     watch: {
+        task(nval) {
+            this.params = { ...this.params, ...nval };
+            this.cpuDriver = {
+                cpu: this.params.resourceConfig.SPARK_DRIVER_CPUS/1000,
+                memory: this.params.resourceConfig.SPARK_DRIVER_MEMORY / (1024*1024*1024),
+                uuid: `${this.params.resourceConfig.SPARK_DRIVER_CPUS/1000}-${this.params.resourceConfig.SPARK_DRIVER_MEMORY / (1024*1024*1024)}`
+            };
+            this.cpuExecute = {
+                cpu: this.params.resourceConfig.SPARK_EXECUTOR_CPUS/1000,
+                memory: this.params.resourceConfig.SPARK_EXECUTOR_MEMORY / (1024*1024*1024),
+                uuid: `${this.params.resourceConfig.SPARK_EXECUTOR_CPUS/1000}-${this.params.resourceConfig.SPARK_EXECUTOR_MEMORY / (1024*1024*1024)}`
+            };
+        },
         cpuDriver(val) {
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'SPARK_DRIVER_CPUS': val.cpu *1000,
                 'SPARK_EXECUTOR_INSTANCES': this.params.instances.SPARK_EXECUTOR_INSTANCES,
-                'SPARK_EXECUTOR_CPUS': this.params.resource.SPARK_EXECUTOR_CPUS,
+                'SPARK_EXECUTOR_CPUS': this.params.resourceConfig.SPARK_EXECUTOR_CPUS,
                 'SPARK_DRIVER_MEMORY': val.memory * 1024* 1024*1024,
-                'SPARK_EXECUTOR_MEMORY': this.params.resource.SPARK_EXECUTOR_MEMORY,
+                'SPARK_EXECUTOR_MEMORY': this.params.resourceConfig.SPARK_EXECUTOR_MEMORY,
             };
         },
         cpuExecute(val) {
-            this.params.resource = { 
-                'SPARK_DRIVER_CPUS': this.params.resource.SPARK_DRIVER_CPUS,
+            this.params.resourceConfig = { 
+                'SPARK_DRIVER_CPUS': this.params.resourceConfig.SPARK_DRIVER_CPUS,
                 'SPARK_EXECUTOR_INSTANCES': this.params.instances.SPARK_EXECUTOR_INSTANCES,
                 'SPARK_EXECUTOR_CPUS': val.cpu *1000,
-                'SPARK_DRIVER_MEMORY': this.params.resource.SPARK_DRIVER_MEMORY,
+                'SPARK_DRIVER_MEMORY': this.params.resourceConfig.SPARK_DRIVER_MEMORY,
                 'SPARK_EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
             };
         }
@@ -274,6 +290,9 @@ export default {
             position: absolute;
             top: 2px;
             left: -83px;
+        }
+        .sdxw-file-select {
+            max-width: 560px;
         }
     }
 </style>

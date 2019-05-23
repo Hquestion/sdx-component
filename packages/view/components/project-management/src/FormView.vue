@@ -45,7 +45,6 @@ export default {
             if (this.taskId) {
                 getTaskDetail(this.taskId)
                     .then(data => {
-                        console.log(data, 777);
                         this.task = data;
                     });
             }
@@ -58,7 +57,7 @@ export default {
       
     },
     created() {
-       
+        this.getTaskInfo();
     },
     beforeDestroy() {
       

@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="'新建ContainerDev任务'"
+        :title="`${params.uuid ? '编辑':'新建'}ContainerDev任务`"
         class="form-containerdev"
         :label-width="100"
         icon="sdx-icon-docker"
@@ -57,7 +57,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                prop="resource"
+                prop="resourceConfig"
                 label="资源配置:"
             > 
                 <i class="icon">*</i>
@@ -107,7 +107,7 @@
 import BaseForm from './BaseForm';
 import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-import {  createTask } from '@sdx/utils/src/api/project';
+import {  createTask, updateTask} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { cNameValidate } from '@sdx/utils/src/validate/validate';
 import ResourceConfig from './ResourceConfig';
@@ -122,7 +122,10 @@ export default {
         ResourceConfig
     },
     props: {
-        
+        task: {
+            type: Object,
+            default: null
+        },
     },
     data() {
         const resourceValidate = (rule, value, callback) => {
@@ -144,12 +147,13 @@ export default {
         };
         return {
             params: {
+                uuid: '',
                 projectId: this.$route.params.projectId,
                 name: '',
                 description: '',
                 type: 'CONTAINER_DEV',
                 imageId: '',
-                resource: {
+                resourceConfig: {
                     'EXECUTOR_INSTANCES': 1,
                     'EXECUTOR_CPUS': 0,
                     'EXECUTOR_GPUS': 0,
@@ -174,7 +178,7 @@ export default {
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
                 ],
-                resource: [
+                resourceConfig: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -217,7 +221,7 @@ export default {
         },
         commit() {
             this.$refs.containerdev.validate().then(() => {
-                createTask(this.params)
+                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
                     .then (() => {
                         this.$router.go(-1);
                     });
@@ -226,21 +230,34 @@ export default {
     },
 
     watch: {
+        task(nval) {
+            this.params = { ...this.params, ...nval };
+            this.cpuObj = {
+                cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
+                memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),
+                uuid: `${this.params.resourceConfig.EXECUTOR_CPUS/1000}-${this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024)}`
+            };
+            this.gpuObj = {
+                label:this.params.resourceConfig.GPU_MODEL,
+                count: this.params.resourceConfig.EXECUTOR_GPUS,
+                uuid: `${this.params.resourceConfig.GPU_MODEL}-${this.params.resourceConfig.EXECUTOR_GPUS}`
+            };
+        },
         cpuObj(val) {
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': val.cpu * 1000,
-                'EXECUTOR_GPUS': this.params.resource.EXECUTOR_GPUS,
+                'EXECUTOR_GPUS': this.params.resourceConfig.EXECUTOR_GPUS,
                 'EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
-                'GPU_MODEL': this.params.resource.GPU_MODEL
+                'GPU_MODEL': this.params.resourceConfig.GPU_MODEL
             };
         },
         gpuObj(val) {
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': this.params.resource.EXECUTOR_CPUS,
+                'EXECUTOR_CPUS': this.params.resourceConfig.EXECUTOR_CPUS,
                 'EXECUTOR_GPUS': val.count,
-                'EXECUTOR_MEMORY': this.params.resource.EXECUTOR_MEMORY,
+                'EXECUTOR_MEMORY': this.params.resourceConfig.EXECUTOR_MEMORY,
                 'GPU_MODEL': val.label
             };
         }
@@ -258,6 +275,9 @@ export default {
             position: absolute;
             top: 2px;
             left: -83px;
+        }
+        .sdxw-file-select {
+            max-width: 560px;
         }
     }
 </style>

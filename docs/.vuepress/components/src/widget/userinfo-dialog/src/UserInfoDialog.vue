@@ -28,62 +28,34 @@
                 </svg>
                 <span>{{ t('widget.userInfo.title') }} </span>
             </div>
-            <div class="sdxw-userinfo__content">
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{ t('widget.userInfo.username') }}：
-                    </span>
-                    <span class="sdxw-userinfo__item--data">
-                        {{ users.userName }}
-                    </span>
-                </div>
-                <div
-                    class="sdxw-userinfo__item"
-                    :class="[`sdxw-userinfo__item--${theme}fullname`]"
-                >
-                    <span class="sdxw-userinfo__item--title">
-                        {{ t('widget.userInfo.fullname') }}：
-                    </span>
-                    <span
-                        v-if="theme == 'user'"
-                        class="sdxw-userinfo__item--data"
-                    >
+            <el-form label-width="80px" class="sdxw-userinfo__content">
+                <el-form-item :label="t('widget.userInfo.username')">
+                    <span>{{ users.userName }}</span>
+                </el-form-item>
+                <el-form-item :label="t('widget.userInfo.fullname')">
+                    <span v-if="theme == 'user'">
                         {{ users.fullName }}
                     </span>
-                    <input
-                        :class="[showInput == true? 'sdxw-userinfo__item--input' : '']"
-                        @mouseover="showFullNameInput"
-                        @mouseout="hideFullNameInput"
-                        @keydown.enter="changeFullName"
+                    <SdxuInput
                         v-if="theme == 'dashboard'"
-                        id="fullName"
                         type="text"
                         v-model="users.fullName"
                     >
-                </div>
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{ t('widget.userInfo.role') }}：
-                    </span>
-                    <div class="sdxw-userinfo__item--role">
-                        <SdxwFoldLabelGroup
-                            :list="users.roleNames"
-                            type="default"
-                        />
-                    </div>
-                </div>
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{ t('widget.userInfo.groups') }}：
-                    </span>
-                    <div class="sdxw-userinfo__item--group">
-                        <SdxwFoldLabelGroup
-                            :list="users.groupNames"
-                            type="default"
-                        />
-                    </div>
-                </div>
-            </div>
+                    </SdxuInput>
+                </el-form-item>
+                <el-form-item :label="t('widget.userInfo.role') ">
+                    <SdxwFoldLabelGroup
+                        :list="users.roleNames"
+                        type="default"
+                    />
+                </el-form-item>
+                <el-form-item :label="t('widget.userInfo.groups')">
+                    <SdxwFoldLabelGroup
+                        :list="users.groupNames"
+                        type="default"
+                    />
+                </el-form-item>
+            </el-form>
         </sdxu-dialog>
     </div>
 </template>
@@ -97,13 +69,14 @@ import {
 import SdxuDialog from '../../../ui/Dialog';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
+import SdxuInput from "@sdx/ui/components/input";
 export default {
     name:'SdxwUserInfoDialog',
     data () {
         return {
             showInput:false,
             dialogVisible: this.visible,
-            users:this.userInfoData
+            users: {}
         };
     },
     mixins:[locale],
@@ -181,6 +154,7 @@ export default {
         }
     },
     components:{
+        SdxuInput,
         SdxuDialog,
         [SdxwFoldLabel.FoldLabelGroup.name]: SdxwFoldLabel.FoldLabelGroup
     }

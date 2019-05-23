@@ -17,6 +17,21 @@ export function clacTextWidth(text) {
     return width;
 }
 
+export function calcNodeWidth(node) {
+    const clone = node.cloneNode(true);
+    let tempPosition = node.style.position;
+    let tempOpacity = node.style.opacity;
+    clone.style.opacity = 0;
+    clone.style.position = 'absolute';
+
+    document.body.appendChild(clone);
+    let width = clone.offsetWidth;
+    clone.remove();
+    node.style.position = tempPosition;
+    node.style.opacity = tempOpacity;
+    return width;
+}
+
 export function getParentNode(node) {
     return node.parentNode;
 }

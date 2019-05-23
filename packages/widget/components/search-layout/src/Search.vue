@@ -57,7 +57,6 @@ import SdxuButton from '@sdx/ui/components/button';
 
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
-import { calcNodeWidth } from '@sdx/utils/src/helper/dom';
 export default {
     name: 'SdxwSearchLayout',
     data() {
@@ -123,18 +122,16 @@ export default {
         }
     },
     mounted(){
-        window.addEventListener('resize', ()=> {
-            this.init();
-        });
+        window.addEventListener('resize', this.init);
         this.$nextTick(()=> {
             this.init();
         });
-        // requestAnimationFrame(() => {
-        //     this.init();
-        // })
         this.$slots.default.forEach((item, index) => {
             item.componentInstance._data.itemIndex = index;
         });
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.init);
     }
 };
 </script>

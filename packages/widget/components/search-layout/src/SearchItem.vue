@@ -5,7 +5,7 @@
     >
         <el-form-item
             :label="lable"
-            v-if="itemIndex < active.items"
+            v-show="itemIndex < active.items"
         >
             <slot />
         </el-form-item>

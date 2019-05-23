@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { Dialog } from 'element-ui';
+import Dialog from 'element-ui/lib/dialog';
 import Button from '@sdx/ui/components/button';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 export default {

@@ -17,43 +17,26 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 margin-top: 18px;
                 color: $sdxw-userInfoDialog-title-color;
             }
-        } 
+        }
     }
-    @include element('content'){
-        padding: $sdxw-userInfoDialog-content-padding;
-        @include element('item'){
-            display: flex;
-            min-height: $sdxw-userInfoDialog-min-height;
-            color: $sdxw-userInfoDialog-text-color;
-            .sdxw-fold-label-group {
-                width: auto!important;
-            }
-            @include modifier('title') {
+    @include element('label-group') {
+        line-height: 1;
+        transform: translate(-6px,-2px) !important;
+    }
+    @include element('full-name-input') {
+        display: none;
+    }
+    @include element('full-name-span') {
+        display: block;
+        height: 36px;
+    }
+    @include element('full-name') {
+        &:hover {
+            .sdxw-userinfo__full-name-input {
                 display: block;
-                min-width: $sdxw-userInfoDialog-label-width;
-                margin-right: $sdxw-userInfoDialog-margin;
-                text-align: right;
             }
-            @include modifier('data') {
-                font-weight: bold;
-            }
-            @include modifier('input') {
-                border: 1px solid $sdxw-userInfoDialog-border-color!important;
-                padding-left: $sdxw-userInfoDialog-margin!important;
-            }
-            @include modifier('dashboardfullname') {
-                input {
-                    cursor: pointer;
-                    border: 1px solid #fff;
-                    width: $sdxw-userInfoDialog-input-width;
-                    padding: $sdxw-userInfoDialog-padding;
-                    height: $sdxw-userInfoDialog-item-height;
-                    box-sizing: border-box;
-                    font-weight: 100!important;
-                    margin-top: -$sdxw-userInfoDialog-margin;
-                    line-height: $sdxw-userInfoDialog-item-height;
-                    padding-left: 0;
-                }
+            .sdxw-userinfo__full-name-span {
+                display: none;
             }
         }
     }

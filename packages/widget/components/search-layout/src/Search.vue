@@ -1,6 +1,10 @@
 <template>
     <div
         class="sdxw-search-layout"
+        :class="[
+            block ? 'sdxw-search-layout--block': '',
+            `sdxw-search-layout--align-${align}`
+        ]"
         ref="searchlayout"
     >
         <!--搜索条件 -->
@@ -23,6 +27,7 @@
                     type="primary"
                     :invert="true"
                     :plain="true"
+                    v-if="$slots.default.length > 2"
                 >
                     重置
                 </sdxubutton>
@@ -30,7 +35,7 @@
         </el-form>
         <div
             class="sdxw-search-layout__show"
-            v-if="showbtn"
+            v-if="minVisible < $slots.default.length"
         >
             <SdxuButton
                 type="primary"
@@ -38,9 +43,9 @@
                 :plain="true"
                 @click="showItem"
             >
-                {{ singlerow ? "收起" : "展开" }}
+                {{ singlerow ? "展开" : "收起" }}
                 <i
-                    :class="['sdx-icon',singlerow ? 'sdx-icon-arrow-up' : 'sdx-icon-arrow-down']"
+                    :class="['sdx-icon',singlerow ? 'sdx-icon-arrow-down' : 'sdx-icon-arrow-up']"
                 />
             </SdxuButton>
         </div>
@@ -50,18 +55,21 @@
 <script>
 import SdxuButton from '@sdx/ui/components/button';
 
-import { Form, FormItem } from 'element-ui';
+import Form from 'element-ui/lib/form';
+import FormItem from 'element-ui/lib/form-item';
+import { calcNodeWidth } from '@sdx/utils/src/helper/dom';
 export default {
     name: 'SdxwSearchLayout',
     data() {
         return {
             elWidthValue: 0,
             searchItemWidth: 0,
-            singlerow: false,
+            singlerow: true,
             showbtn: false,
             active: {
-                items: 0
-            }
+                items: 2
+            },
+            minVisible: 2
         };
     },
     provide() {
@@ -73,6 +81,14 @@ export default {
         lableWidth: {
             type: String,
             default: ''
+        },
+        block: {
+            type: Boolean,
+            default: true
+        },
+        align: {
+            type: String,
+            default: 'left'
         }
     },
     components: {
@@ -90,34 +106,35 @@ export default {
         showItem() {
             this.singlerow = !this.singlerow;
             if(this.singlerow) {
-                this.active.items = 100;
+                this.active.items = this.minVisible;
             } else {
-                this.init();
+                this.active.items = 100;
             }
         },
         init() {
-            this.elWidthValue = this.$refs.searchlayout && this.$refs.searchlayout.offsetWidth;
-            this.searchItemWidth = this.$slots.default[0].elm.clientWidth;
-            if(this.searchItemWidth * (this.$slots.default.length) > this.elWidthValue - 300) {
-                this.showbtn = true;
+            this.elWidthValue = this.$el.offsetWidth;
+            this.searchItemWidth = this.$slots.default[0].elm.offsetWidth;
+            this.minVisible = Math.floor((this.elWidthValue - 300) / this.searchItemWidth);
+            if (this.singlerow) {
+                this.active.items = this.minVisible;
             } else {
-                this.showbtn = false;
+                this.active.items = 100;
             }
-            this.active.items = Math.floor((this.elWidthValue - 300) / this.searchItemWidth);
         }
     },
     mounted(){
-        this.init();
         window.addEventListener('resize', ()=> {
             this.init();
         });
         this.$nextTick(()=> {
             this.init();
         });
+        // requestAnimationFrame(() => {
+        //     this.init();
+        // })
         this.$slots.default.forEach((item, index) => {
             item.componentInstance._data.itemIndex = index;
         });
-        
     }
 };
 </script>

@@ -30,7 +30,8 @@
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "dependencies": {
-        "@sdx/utils": "^1.0.2"
+        "@sdx/utils": "^1.0.2",
+        "moment": "^2.24.0"
     },
     "peerDependencies": {
         "element-ui": "^2.7.2",

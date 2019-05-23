@@ -44,7 +44,7 @@
                             password-visibleness
                             placeholder="请输入密码"
                         >
-                            <i class="sdx-icon iconicon-eye-open" />
+                            <i class="sdx-icon sdx-icon-eye-open" />
                         </sdxu-input>
                     </el-form-item>
                     <el-form-item

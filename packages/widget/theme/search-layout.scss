@@ -1,0 +1,45 @@
+@include block('search-layout', $bem-namespace-widget) {
+    background: $sdxw-search-background;
+    padding: $sdx-padding;
+    padding-bottom: 0;
+    padding-right: $sdxw-search-padding-right;
+    position: relative;
+    @include element('show') {
+        position: absolute;
+        top: $sdx-margin;
+        right: $sdx-margin;
+    }
+    @include element('btn') {
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .el-form {
+        display: inline-block;
+        line-height:$sdx-form-element-height-regular;
+    }
+    
+    .sdxu-button {
+        margin-bottom:$sdx-margin;
+    }
+    .sdx-icon {
+        font-size: $sdx-help-font-size;
+    }
+}
+
+@include block('search-item', $bem-namespace-widget) {
+    height: $sdx-form-element-height-regular;
+    line-height: $sdx-form-element-height-regular;
+    margin-bottom: $sdx-margin;
+    margin-right: $sdxw-search-item-margin;
+    vertical-align: middle;
+    position: relative;
+    top:$sdxw-search-item-top;
+    display: inline-block;
+    .el-form-item__label {
+        color: $sdxw-breadcrumb-current-text-color;
+        font-size: $sdx-content-font-size;
+    }
+    .el-form-item__content {
+        width: $sdxw-search-content-width;
+    }
+}

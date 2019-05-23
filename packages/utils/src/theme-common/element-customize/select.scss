@@ -1,14 +1,15 @@
 @import '~element-ui/packages/theme-chalk/src/select.scss';
 
 .el-select {
+    width: 100%;
     .el-input__inner {
-        border-radius: 2px;
+        border-radius: $sdx-border-radius;
         border-color: $sdx-border-color;
         &:focus {
             border-color: $sdx-primary-color;
         }
         &::placeholder {
-            color: $sdx-text-holder-color;
+            color: $sdx-info-color;
         }
     }
     .el-input {

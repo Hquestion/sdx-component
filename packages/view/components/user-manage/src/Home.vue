@@ -10,7 +10,7 @@
                     <SdxuButton
                         @click="handleAddUser"
                         type="primary"
-                        icon="sdx-icon iconicon-plus"
+                        icon="sdx-icon sdx-icon-plus"
                         size="small"
                     >
                         新建角色
@@ -64,15 +64,15 @@
                     <template slot-scope="scope">
                         <sdxu-icon-button
                             @click="handleJoinGroup(scope.row)"
-                            class="sdx-icon iconicon-zu2"
+                            class="sdx-icon sdx-icon-zu2"
                         />
                         <sdxu-icon-button
                             @click="handleEditUser(scope.row)"
-                            class="sdx-icon iconicon-edit1"
+                            class="sdx-icon sdx-icon-edit"
                         />
                         <sdxu-icon-button
                             @click="handleDeleteUser(scope.row)"
-                            class="sdx-icon iconicon-delete"
+                            class="sdx-icon sdx-icon-delete"
                         />
                     </template>
                 </el-table-column>

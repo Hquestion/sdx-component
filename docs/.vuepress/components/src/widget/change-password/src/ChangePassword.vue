@@ -3,17 +3,11 @@
         :visible.sync="dialogVisible"
         @close="dialogClose"
         class="sdxw-change-password"
+        title-icon="sdx-icon-password"
     >
         <div
             slot="title"
-            class="sdxw-change-password__title"
         >
-            <svg
-                class="icon"
-                aria-hidden="true"
-            >
-                <use xlink:href="#iconicon-password" />
-            </svg>
             <span>修改密码</span>
         </div>
         <el-form
@@ -77,10 +71,9 @@
 </template>
 
 <script>
-import Dialog from '@sdx/ui/components/dialog';
+import Dialog from '../../../ui/Dialog';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
-import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 import { Form, FormItem, Message } from 'element-ui';
 import { userApi } from '@sdx/utils/src/api';
 export default {

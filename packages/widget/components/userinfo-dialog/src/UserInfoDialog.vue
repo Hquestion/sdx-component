@@ -24,7 +24,7 @@
                     class="icon"
                     aria-hidden="true"
                 >
-                    <use xlink:href="#iconicon-UserInfo" />
+                    <use xlink:href="#sdx-icon-UserInfo" />
                 </svg>
                 <span>{{ t('widget.userInfo.title') }} </span>
             </div>
@@ -96,7 +96,6 @@ import {
 } from '@sdx/utils/src/api/user';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import locale from '@sdx/utils/src/mixins/locale';
-import httpService from '@sdx/utils/src/http-service';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 export default {
     name:'SdxwUserInfoDialog',
@@ -152,12 +151,12 @@ export default {
         //显示fullName input框
         showFullNameInput() {
             this.showInput = true;
-            document.getElementById("fullName").focus();
+            document.getElementById('fullName').focus();
         },
         //隐藏fullName input框
         hideFullNameInput() {
             this.showInput = false;
-            document.getElementById("fullName").blur();
+            document.getElementById('fullName').blur();
         },
         //修改fullName的值
         changeFullName() {

@@ -1,8 +1,8 @@
 <template>
     <div>
-        <a @click.prevent="open">
+        <button @click.prevent="open">
             点击打开用户详情
-        </a>
+        </button>
         <sdxw-userInfoDialog
             :visible.sync="dialogVisible"
             :userInfoData="userInfoData"
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import SdxwUserInfoDialog from '@sdx/widget/components/userinfo-dialog'
+import SdxwUserInfoDialog from '../../src/widget/userinfo-dialog'
 import SdxuButton from '@sdx/ui/components/button'
 export default {
     data () {
@@ -20,8 +20,8 @@ export default {
             userInfoData:{
                 userName:'zhang',
                 fullName:'张某',
-                password:'******',
-                group:[
+                roleNames: ['管理员','普通用户'],
+                groupNames:[
                     'group1',
                     'group2',
                     'group3',

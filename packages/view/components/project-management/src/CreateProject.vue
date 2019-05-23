@@ -130,7 +130,7 @@ import Project from '@sdx/widget/components/projectcard';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Switch, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
-import { updateProject, getProjectList, createProject } from "@sdx/utils/src/api/project";
+import { updateProject, getProjectList, createProject } from '@sdx/utils/src/api/project';
 export default {
     name: 'SdxvCreateProject',
     data() {
@@ -203,15 +203,17 @@ export default {
     created() {
         if (this.isEditing) {
             Object.assign(this.projectForm, this.data);
+            this.data.groups.forEach(group => {
+                if (this.defaultUserGroupKeys.indexOf(group) === -1) {
+                    this.defaultUserGroupKeys.push(group);
+                }
+            });
             this.data.users.forEach(user => {
                 this.data.groups.forEach(group => {
-                    if (this.defaultUserGroupKeys.indexOf(group) === -1) {
-                        this.defaultUserGroupKeys.push(group);
-                    }
                     this.defaultUserGroupKeys.push(group + '/' + user);
                 });
             });
-            this.title = "编辑项目";
+            this.title = '编辑项目';
         } else if (this.createType === 'template') {
             this.getProjectList('template');
         } else if (this.createType === 'project') {

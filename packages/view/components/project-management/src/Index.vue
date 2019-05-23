@@ -8,7 +8,7 @@
                 <sdxu-button
                     placement="right"
                     size="small"
-                    icon="iconicon-plus"
+                    icon="sdx-icon-plus"
                 >
                     新建项目
                     <template slot="dropdown">
@@ -102,21 +102,21 @@
 </template>
 
 <script>
-import Input from "@sdx/ui/components/input";
-import Button from "@sdx/ui/components/button";
+import Input from '@sdx/ui/components/input';
+import Button from '@sdx/ui/components/button';
 import CreateProject from './CreateProject';
-import Pagination from "@sdx/ui/components/pagination";
-import ContentPanel from "@sdx/ui/components/content-panel";
+import Pagination from '@sdx/ui/components/pagination';
+import ContentPanel from '@sdx/ui/components/content-panel';
 import Project from '@sdx/widget/components/projectcard';
 import MessageBox from '@sdx/ui/components/message-box';
-import { Select, Message } from "element-ui";
-import { getProjectList, removeProject } from "@sdx/utils/src/api/project";
+import { Select, Message } from 'element-ui';
+import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
 export default {
-    name: "SdxvProjectManagement",
+    name: 'SdxvProjectManagement',
     data() {
         return {
-            searchName: "",
-            sort: "created_time",
+            searchName: '',
+            sort: 'created_time',
             current: 1,
             pageSize: 10,
             total: 0,

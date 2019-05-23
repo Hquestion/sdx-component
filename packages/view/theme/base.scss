@@ -1,4 +1,8 @@
 @import "~@sdx/utils/src/theme-common/base";
 @import './common/var';
 
-$bem-namespace-view: 'sdxv'
+@import "~@sdx/utils/src/theme-common/element-customize/form.scss";
+@import "~@sdx/utils/src/theme-common/element-customize/input-number.scss";
+@import "~@sdx/utils/src/theme-common/element-customize/select.scss";
+
+$bem-namespace-view: 'sdxv';

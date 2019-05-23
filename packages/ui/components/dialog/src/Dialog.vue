@@ -68,7 +68,7 @@
 <script>
 import { Dialog } from 'element-ui';
 import Button from '@sdx/ui/components/button';
-// import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
+import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 export default {
     name: 'SdxuDialog',
     data() {
@@ -187,6 +187,9 @@ export default {
             this.$emit('update:visible', false);
             this.$emit('cancel');
         }
+    },
+    mounted() {
+
     }
 };
 </script>

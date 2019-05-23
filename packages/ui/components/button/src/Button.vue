@@ -11,7 +11,7 @@
                  block ? 'is-block': '',
                  iconOnly ? 'is-icon': ''
         ]"
-        @click.stop="handleClick"
+        @click="handleClick"
         @mouseover="handleMouseOver"
         @mouseout="handleMouseOut"
     >
@@ -28,7 +28,8 @@
             :class="[dropdownVisible ? 'is-reverse' : '']"
         >
             <i
-                class="sdx-icon iconicon-caret-bottom"
+                class="sdx-icon"
+                :class="[dropdownIconMap[dropdownArrow]]"
             />
         </span>
         <el-collapse-transition>
@@ -42,7 +43,7 @@
                 v-if="$slots.dropdown"
                 v-show="dropdownVisible"
             >
-                <div class="sdxu-button__dropdown--main">
+                <div class="sdxu-button__dropdown--main" @click.stop>
                     <slot name="dropdown" />
                 </div>
             </div>
@@ -53,12 +54,17 @@
 <script>
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 import emitter from '@sdx/utils/src/mixins/emitter';
+
 export default {
     name: 'SdxuButton',
     componentName: 'SdxuButton',
     data() {
         return {
-            dropdownVisible: false
+            dropdownVisible: false,
+            dropdownIconMap: {
+                solid: 'sdx-icon-arrow-down',
+                cover: 'sdx-icon-caret-bottom'
+            }
         };
     },
     mixins: [emitter],
@@ -117,12 +123,20 @@ export default {
         placement: {
             type: String,
             default: 'left'
+        },
+        dropdownArrow: {
+            type: String,
+            default: 'solid' // solid,cover
+        },
+        keepDropdownOpen: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
         iconShown() {
             if (this.loading) {
-                return 'iconicon-success';
+                return 'sdx-icon-loading';
             } else {
                 return this.icon;
             }
@@ -131,7 +145,7 @@ export default {
     methods: {
         handleClick() {
             if (this.trigger === 'click') {
-                this.dropdownVisible = true;
+                this.dropdownVisible = !this.dropdownVisible;
             } else {
                 this.$emit('click');
             }
@@ -152,15 +166,24 @@ export default {
             }
         },
         hideDropdown(e) {
-            if (!this.$el.contains(e.target)) {
+            if (!e || !this.$el.contains(e.target)) {
                 this.dropdownVisible = false;
+            }
+        }
+    },
+    watch: {
+        dropdownVisible(val) {
+            if (val) {
+                this.$emit('dropdown-show');
+            } else {
+                this.$emit('dropdown-hide');
             }
         }
     },
     mounted() {
         document.addEventListener('click', this.hideDropdown);
         this.$on('sdxu.button.hideDropdown', () => {
-            this.dropdownVisible = false;
+            !this.keepDropdownOpen && (this.dropdownVisible = false);
         });
     },
     beforeDestroy() {

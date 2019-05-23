@@ -4,7 +4,7 @@
         title="用户特权"
     >
         <SdxuButton
-            icon="iconicon-plus"
+            icon="sdx-icon-plus"
             size="small"
             slot="right"
             v-if="userRightsList.length > 0"
@@ -26,15 +26,15 @@
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <SdxuIconButton
-                                icon="sdx-icon iconicon-eye-open"
+                                icon="sdx-icon sdx-icon-eye-open"
                                 @click="view(scope)"
                             />
                             <SdxuIconButton
-                                icon="sdx-icon iconicon-edit1"
+                                icon="sdx-icon sdx-icon-edit"
                                 @click="edit(scope)"
                             />
                             <SdxuIconButton
-                                icon="sdx-icon iconicon-delete1"
+                                icon="sdx-icon sdx-icon-delete1"
                                 @click="del(scope)"
                             />
                         </template>
@@ -55,7 +55,7 @@
                     <div class="add-btn-block">
                         <SdxuButton
                             type="default"
-                            icon="iconicon-plus"
+                            icon="sdx-icon-plus"
                             size="small"
                             @click="addRights"
                         >

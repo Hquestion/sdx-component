@@ -1,0 +1,18 @@
+@include block('modified-list', $bem-namespace-view) {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+
+    @include element('table') {
+        border: 1px solid #E4E7ED;
+        border-bottom: 0;
+        .el-table th.is-leaf {
+            background:#F2F6FC;
+        }
+    }
+
+    @include element('pagination') {
+        align-self: flex-end;
+        margin-top: $sdx-margin;
+    }
+}

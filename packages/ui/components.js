@@ -8,12 +8,15 @@ module.exports = {
     pagination: './components/pagination/index.js',
     'tab-radio': './components/tab-radio/index.js',
     input: './components/input/index.js',
-    'auto-complete': './components/autocomplete/index.js',
+    'autocomplete': './components/autocomplete/index.js',
     table: './components/table/index.js',
     'message-box': './components/message-box/index.js',
     'content-panel': './components/content-panel/index.js',
     'placeholder-block': './components/placeholder-block/index.js',
     'icon-button': './components/icon-button/index.js',
     'empty': './components/empty/index.js',
-    'user-avatar': './components/user-avatar/index.js'
+    'user-avatar': './components/user-avatar/index.js',
+    'scroll': './components/scroll/index.js',
+    'upload': './components/upload/index.js',
+    layout: './components/layout/index.js'
 };

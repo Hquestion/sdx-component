@@ -19,7 +19,7 @@ export default {
         },
         color: {
             type: String,
-            default: "#FAFBFC"
+            default: '#FAFBFC'
         }
     }
 };

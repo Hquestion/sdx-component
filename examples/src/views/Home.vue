@@ -4,18 +4,28 @@
             alt="Vue logo"
             src="../assets/logo.png"
         >
-        <HelloWorld msg="Welcome to Your Vue.js App" />
+        <SdxFilePop></SdxFilePop>
+        <SdxwFileSelectMain check-type="file" v-model="files" accept="img/png;.py"></SdxwFileSelectMain>
     </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import SdxFilePop from '@sdx/widget/components/file-select/src/FileSelectPop';
+import SdxwFileSelectMain from '@sdx/widget/components/file-select/src/FileSelectMix';
 
 export default {
     name: 'Home',
     components: {
-        HelloWorld
+        SdxFilePop,
+        SdxwFileSelectMain
+    },
+    data() {
+        return {
+            checkedNodes: [],
+            searchCheckedNodes: [],
+            files: []
+        };
     }
 };
 </script>

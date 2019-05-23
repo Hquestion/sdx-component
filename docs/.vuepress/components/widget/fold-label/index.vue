@@ -10,6 +10,20 @@
         <p>
             <SdxwFoldLabelGroup :list="list" mode="inline" type="default"></SdxwFoldLabelGroup>
         </p>
+        <p>
+            <SdxwFoldLabelGroup mode="list">
+                <SdxwFoldLabel :plain="true" type="create">创建</SdxwFoldLabel>
+                <SdxwFoldLabel :plain="true" type="processing" status="loading">启动中</SdxwFoldLabel>
+                <SdxwFoldLabel :plain="true" type="running" status="loading">运行中</SdxwFoldLabel>
+                <SdxwFoldLabel :plain="true" type="finish">已完成</SdxwFoldLabel>
+                <SdxwFoldLabel :plain="true" type="dying" status="loading">终止中</SdxwFoldLabel>
+                <SdxwFoldLabel :plain="true" type="die">已终止</SdxwFoldLabel>
+                <SdxwFoldLabel :plain="true" type="exception" status="warning">启动异常</SdxwFoldLabel>
+                <SdxwFoldLabel :plain="true" type="error" status="warning">失败</SdxwFoldLabel>
+            </SdxwFoldLabelGroup>
+        </p>
+        <SdxwFoldLabel :plain="true" type="exception" status="warning">启动异常</SdxwFoldLabel>
+        <SdxwFoldLabel :plain="true" type="error" status="warning">失败</SdxwFoldLabel>
     </div>
 </template>
 

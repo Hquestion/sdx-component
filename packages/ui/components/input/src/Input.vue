@@ -11,6 +11,8 @@
             v-on="listeners"
             v-model="modelVaule"
             ref="input"
+            @keydown.native.enter="searchable ? $emit('search') : null"
+            @blur="searchable ? $emit('search') : null"
         >
             <template #prefix>
                 <slot name="prefix" />
@@ -19,13 +21,13 @@
                 <i
                     v-if="passwordVisibleness && !isDisabled"
                     class="sdx-icon sdxu-input__icon is-clickable"
-                    :class="{'iconicon-eye-close': showPwd,
-                             'iconicon-eye-open': showPwd}"
+                    :class="{'sdx-icon-eye-close': showPwd,
+                             'sdx-icon-eye-open': showPwd}"
                     @click="showPwd = !showPwd"
                 />
                 <i
                     v-else-if="isSearchType"
-                    class="sdx-icon sdxu-input__icon iconicon-search"
+                    class="sdx-icon sdxu-input__icon sdx-icon-search"
                     :class="{'is-clickable': searchable}"
                     @click="searchable ? $emit('search') : null"
                 />
@@ -62,9 +64,14 @@
 </template>
 
 <script>
+import { Input } from 'element-ui';
+
 export default {
     name: 'SdxuInput',
     inheritAttrs: false,
+    components: {
+        [Input.name]: Input
+    },
     props: {
         searchable: {
             type: Boolean,

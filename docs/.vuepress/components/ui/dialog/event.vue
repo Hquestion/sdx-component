@@ -3,21 +3,23 @@
         <a @click.prevent="showDialog">
             监听默认按钮点击
         </a>
-        <SdxuDialog
-            :visible.sync="dialogVisible"
-            @confirm="confirmClicked"
-            @cancel="cancelClicked"
-        >
-            <div slot="title">
-                我是标题
-            </div>
-            <div>我是内容</div>
-        </SdxuDialog>
+        <ClientOnly>
+            <SdxuDialog
+                :visible.sync="dialogVisible"
+                @confirm="confirmClicked"
+                @cancel="cancelClicked"
+            >
+                <div slot="title">
+                    我是标题
+                </div>
+                <div>我是内容</div>
+            </SdxuDialog>
+        </ClientOnly>
     </div>
 </template>
 
 <script>
-import SdxuDialog from '@sdx/ui/components/dialog';
+import SdxuDialog from '../../src/ui/Dialog';
 export default {
     data() {
         return {

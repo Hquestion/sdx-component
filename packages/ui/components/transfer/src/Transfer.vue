@@ -40,7 +40,7 @@
         <div class="sdxu-transfer__moveicon">
             <i
                 @click="movetag"
-                :class="['sdx-icon', 'iconicon-jiantou',hightIcon ? 'is-highlight' : 'is-normal']"
+                :class="['sdx-icon', 'sdx-icon-jiantou',hightIcon ? 'is-highlight' : 'is-normal']"
             />
         </div>
         <div class="sdxu-transfer__right">
@@ -186,8 +186,8 @@ export default {
                 );
                 keys.push(this.data[i][this.treeNodeKey]);
                 if (this.data[i].children) {
-                    for(let i =0; i < this.data[i].children.length ; i++) {
-                        keys.push(this.data[i].children[i][this.treeNodeKey]);
+                    for(let j =0; j < this.data[i].children.length ; j++) {
+                        keys.push(this.data[i].children[j][this.treeNodeKey]);
                     }
                 }
             }

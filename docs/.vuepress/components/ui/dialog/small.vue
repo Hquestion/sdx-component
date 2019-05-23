@@ -3,6 +3,7 @@
         <a @click.prevent="showDialog">
             点击打开small size并且自定义footer的Dialog
         </a>
+        <ClientOnly>
         <SdxuDialog
             :visible.sync="dialogVisible"
             size='small'
@@ -15,11 +16,12 @@
                 我是footer
             </div>
         </SdxuDialog>
+        </ClientOnly>
     </div>
 </template>
 
 <script>
-import SdxuDialog from '@sdx/ui/components/dialog';
+import SdxuDialog from '../../src/ui/Dialog';
 export default {
     data() {
         return {

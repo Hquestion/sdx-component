@@ -34,6 +34,9 @@
     height: $sdx-form-element-height-regular;
     line-height: $sdx-form-element-height-regular;
     margin-bottom: $sdx-margin;
+    vertical-align: middle;
+    position: relative;
+    top:$sdxw-search-item-top;
     margin-right: $sdx-margin / 2;
     display: inline-block;
     .el-form-item__label {

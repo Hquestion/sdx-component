@@ -45,7 +45,7 @@
 import SdxuDialog from '@sdx/ui/components/dialog';
 import { createResourceTmpl } from '@sdx/utils/src/api/resource';
 
-import { InputNumber, Form, FormItem } from 'element-ui';
+import { InputNumber, Form, FormItem, Select } from 'element-ui';
 
 export default {
     name: 'CreateGPUTemplate',
@@ -60,6 +60,7 @@ export default {
         [InputNumber.name]: InputNumber,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
+        [Select.name]: Select
     },
     data() {
         return {

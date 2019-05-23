@@ -64,9 +64,14 @@
 </template>
 
 <script>
+import { Input } from 'element-ui';
+
 export default {
     name: 'SdxuInput',
     inheritAttrs: false,
+    components: {
+        [Input.name]: Input
+    },
     props: {
         searchable: {
             type: Boolean,

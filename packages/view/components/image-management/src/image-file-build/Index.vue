@@ -109,9 +109,9 @@ import {DOCKER_IMAGE_KIND_LIST} from '@sdx/utils/src/consts/relation';
 import {buildTar,buildImagefile} from '@sdx/utils/src/api/image';
 import SdxuButton from '@sdx/ui/components/button';
 import {itemNameValidate100, tagNameValidate} from '@sdx/utils/src/validate/validate';
-import FileSelect from '@sdx/widget/lib/file-select';
+import FileSelect from '@sdx/widget/components/file-select';
 import Iconinfo from './Iconinfo';
-export default { 
+export default {
     name: '',
     data() {
         return {
@@ -212,11 +212,11 @@ export default {
                         ? this.imageBuildTar(this.params)
                         : this.imageBuildImagefile(this.params);
                 });
-                
+
         }
     },
     created() {
-       
+
     }
 };
 </script>

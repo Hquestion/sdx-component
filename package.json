@@ -19,6 +19,7 @@
         "bootstrap": "npm i && lerna bootstrap --hoist && cd examples && npm i",
         "release": "standard-version",
         "cm": "git-cz",
+        "build:gateway": "lerna run build:gateway --scope=@sdx/utils",
         "build:ui": "lerna run build --scope=@sdx/ui",
         "build:widget": "lerna run build --scope=@sdx/widget",
         "build:view": "lerna run build --scope=@sdx/view",

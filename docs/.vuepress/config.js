@@ -50,7 +50,8 @@ module.exports = {
                         'widget/fold-label',
                         'widget/user-picker',
                         'widget/search-layout',
-                        'widget/fileselect'
+                        'widget/fileselect',
+                        'widget/select-group-user'
                     ]
                 },
                 {

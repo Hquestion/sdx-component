@@ -39,7 +39,12 @@ export function startTask(uuid) {
 export function stopTask(uuid) {
     return httpService.post(taskApi + uuid + '/stop');
 }
-
+export function createTask(params) {
+    return httpService.post(taskApi, params);
+}
+export function getTaskDetail(uuid) {
+    return httpService.get(taskApi + uuid);
+}
 export default {
     getProjectList,
     getProjectDetail,
@@ -49,5 +54,7 @@ export default {
     getTaskList,
     removeTask,
     startTask,
-    stopTask
+    stopTask,
+    createTask,
+    getTaskDetail
 };

@@ -10,8 +10,7 @@
 </template>
 
 <script>
-
-
+import { getTaskDetail } from '@sdx/utils/src/api/project';
 
 export default {
     props: {
@@ -36,14 +35,21 @@ export default {
         taskId() {
             return this.$route.params.taskId;
         },
-
         // 是否需要状态拉取
         needPull() {
             return this.task && this.task.state.need_pull;
         }
     },
     methods: {
-      
+        getTaskInfo() {
+            if (this.taskId) {
+                getTaskDetail(this.taskId)
+                    .then(data => {
+                        console.log(data, 777);
+                        this.task = data;
+                    });
+            }
+        },
     },
     watch: {
        

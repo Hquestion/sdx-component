@@ -28,3 +28,16 @@ export function tagNameValidate(rule, value, callback) {
         );
     }
 }
+
+export function cNameValidate(rule, value, callback) {
+    const reg = /^[a-zA-Z0-9\u4e00-\u9fa5.@\-_]{1,24}$/;
+    if (reg.test(value)) {
+        callback();
+    } else {
+        callback(
+            new Error(
+                '请填写1到24位,汉字、字母、数字、@、-、点、下划线组成的字符串'
+            )
+        );
+    }
+}

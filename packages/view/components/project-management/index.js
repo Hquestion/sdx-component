@@ -44,6 +44,18 @@ const routeCfg = [
                     formComp: forms[params.type]
                 })
             },
+            {
+                path: 'modifyTask/:type/:taskId/:projectId',
+                component: FormView,
+                meta: {
+                    name: '编辑任务'
+                },
+                props: ({
+                    params
+                }) => ({
+                    formComp: forms[params.type]
+                })
+            },
         ]
     }
 ];

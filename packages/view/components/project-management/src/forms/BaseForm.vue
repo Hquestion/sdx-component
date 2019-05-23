@@ -8,7 +8,9 @@
             <div :style="`padding-left: ${labelWidth}px; padding-bottom: 20px` ">
                 <i :class="['sdx-icon' ,icon]" />
             </div>
-            <slot name="form">
+            <slot
+                name="form"
+            >
                 <!-- 插入form -->
             </slot>
             <div
@@ -38,6 +40,7 @@
 
 import SdxuButton from '@sdx/ui/components/button';
 import ContentPanel from '@sdx/ui/components/content-panel';
+
 export default {
     name: 'BaseForm',
     props: {
@@ -54,17 +57,25 @@ export default {
             default: ''
         },
     },
+    data() {
+        return {
+        };
+    },
+   
     components: {
         SdxuButton,
         [ContentPanel.name]: ContentPanel,
     },
     methods: {
         handleCommit() {
-            
+            this.$emit('commit');
         },
         handleCancel() {
             this.$router.go(-1);
-        }
+        },
+    },
+    created() {
+    
     }
 };
 </script>

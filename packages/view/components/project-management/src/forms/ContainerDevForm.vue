@@ -2,65 +2,98 @@
     <BaseForm
         :title="'新建ContainerDev任务'"
         class="form-containerdev"
-        :label-width="80"
+        :label-width="100"
         icon="sdx-icon-docker"
+        @commit="commit"
     >
         <el-form
             label-position="right"
-            label-width="80px"
+            label-width="100px"
             slot="form"
             @submit.native.prevent
-            ref="user"
+            ref="containerdev"
+            :rules="rules"
+            :model="params"
         >
             <el-form-item
                 prop="name"
                 label="任务名称:"
             >
                 <SdxuInput
-                    
+                    v-model="params.name"
                     :searchable="true"
                     size="small"
                     placeholder="请输入任务名称"
                 />
             </el-form-item>
             <el-form-item
-                prop="name"
+                prop="description"
                 label="任务描述:"
             >
                 <SdxuInput
                     type="textarea"
                     :searchable="true"
+                    v-model="params.description"
                     size="small"
                     placeholder="请输入任务描述"
                 />
             </el-form-item>
             <el-form-item
-                prop="name"
+                prop="imageId"
                 label="运行环境:"
             >
                 <el-select
-                    type="textarea"
+                    v-model="params.imageId"
                     :searchable="true"
                     size="small"
                     placeholder="请输入任务描述"
-                />
+                >
+                    <el-option
+                        v-for="item in imageOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                </el-select>
             </el-form-item>
             <el-form-item
-                prop="name"
+                prop="resource"
+                label="资源配置:"
+            > 
+                <i class="icon">*</i>
+                <ResourceConfig
+                    v-if="!isGpuEnt"
+                    v-model="cpuObj"
+                    type="onlycpu"
+                />
+
+                <div v-if="isGpuEnt">
+                    <ResourceConfig
+                        v-model="cpuObj"
+                        type="cpu"
+                    />
+                    <ResourceConfig
+                        v-model="gpuObj"
+                        type="gpu"
+                    /> 
+                </div>
+            </el-form-item>
+            <el-form-item
+                prop="datasources"
                 label="数据源:"
             >
                 <el-select
-                    :searchable="true"
+                    v-model="params.datasources"
                     size="small"
                     placeholder="请选择数据源"
                 />
             </el-form-item>
             <el-form-item
-                prop="name"
+                prop="datasets"
                 label="数据集:"
             >
                 <el-select
-                    :searchable="true"
+                    v-model="params.datasets"
                     size="small"
                     placeholder="请选择数据集"
                 />
@@ -74,7 +107,10 @@
 import BaseForm from './BaseForm';
 import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-
+import {  createTask } from '@sdx/utils/src/api/project';
+import { getImageList } from '@sdx/utils/src/api/image';
+import { cNameValidate } from '@sdx/utils/src/validate/validate';
+import ResourceConfig from './ResourceConfig';
 export default {
     name: 'ContainerDevForm',
     components: {
@@ -83,34 +119,145 @@ export default {
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
+        ResourceConfig
     },
     props: {
         
     },
     data() {
+        const resourceValidate = (rule, value, callback) => {
+            if(this.isGpuEnt) {
+                if(value.EXECUTOR_CPUS === 0) {
+                    callback(new Error('需要配置CPU/内存资源'));
+                } else if (value.EXECUTOR_GPUS === 0) {
+                    callback(new Error('需要配置GPU资源'));
+                } else {
+                    callback();
+                }
+            } else {
+                if(value.EXECUTOR_CPUS === 0) {
+                    callback(new Error('需要配置CPU/内存资源'));
+                } else {
+                    callback();
+                }
+            }
+        };
         return {
-        
+            params: {
+                projectId: this.$route.params.projectId,
+                name: '',
+                description: '',
+                type: 'CONTAINER_DEV',
+                imageId: '',
+                resource: {
+                    'EXECUTOR_INSTANCES': 1,
+                    'EXECUTOR_CPUS': 0,
+                    'EXECUTOR_GPUS': 0,
+                    'EXECUTOR_MEMORY': 0,
+                    'GPU_MODEL': ''
+                },
+                datasources: [],
+                datasets: []
+            },
+            imageOptions: [],
+            cpuObj: {},
+            gpuObj: {},
+            rules:  {
+                name: [
+                    { required: true, message: '请输入任务名称', trigger: 'blur',
+                        transform(value) {
+                            return value && ('' + value).trim();
+                        }
+                    },
+                    { validator: cNameValidate, trigger: 'blur' }
+                ],
+                imageId: [
+                    { required: true, message: '请选择运行环境', trigger: 'change' }
+                ],
+                resource: [
+                    {
+                        validator: resourceValidate,
+                        trigger: 'change'
+                    }
+                ],
+            }
         };
     },
     computed: {
-      
+        isGpuEnt() {
+            let isGpuEnt = false;
+            for(let i=0; i<this.imageOptions.length; i++) {
+                if(this.imageOptions[i].value ===this.params.imageId) {
+                    if(this.imageOptions[i].label.includes('gpu')) {
+                        isGpuEnt =true;
+                    } else {
+                        isGpuEnt = false;
+                    }
+                }
+            }
+            return isGpuEnt;
+        }
     },
     created() {
-      
+        this.imageList();
     },
     methods: {
-     
-
+        imageList() {
+            const params = {
+                imageType: 'CONTAINER_DEV',
+                start: 1,
+                count: -1
+            };
+            getImageList(params)
+                .then(data => {
+                    for(let i=0; i<data.data.length; i++) {
+                        this.imageOptions.push({value: data.data[i].uuid, label:data.data[i].name});
+                    }
+                });
+        },
+        commit() {
+            this.$refs.containerdev.validate().then(() => {
+                createTask(this.params)
+                    .then (() => {
+                        this.$router.go(-1);
+                    });
+            });
+        }
     },
 
     watch: {
-       
+        cpuObj(val) {
+            this.params.resource = { 
+                'EXECUTOR_INSTANCES': 1,
+                'EXECUTOR_CPUS': val.cpu * 1000,
+                'EXECUTOR_GPUS': this.params.resource.EXECUTOR_GPUS,
+                'EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
+                'GPU_MODEL': this.params.resource.GPU_MODEL
+            };
+        },
+        gpuObj(val) {
+            this.params.resource = { 
+                'EXECUTOR_INSTANCES': 1,
+                'EXECUTOR_CPUS': this.params.resource.EXECUTOR_CPUS,
+                'EXECUTOR_GPUS': val.count,
+                'EXECUTOR_MEMORY': this.params.resource.EXECUTOR_MEMORY,
+                'GPU_MODEL': val.label
+            };
+        }
     }
 };
 </script>
 
 <style lang="scss" scoped>
-    .form-jupyter {
-     
+    .form-containerdev {
+        .el-form-item__content {
+            position: relative;
+        }
+        .icon {
+            color: #F56C6C;
+            position: absolute;
+            top: 2px;
+            left: -83px;
+        }
     }
 </style>

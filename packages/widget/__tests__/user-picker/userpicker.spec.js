@@ -1,5 +1,5 @@
 import { shallowMount, mount } from '@vue/test-utils';
-import UserPicker from '../components/user-picker';
+import UserPicker from '../../components/user-picker';
 import ElementUI from 'element-ui';
 import Vue from 'vue';
 Vue.use(ElementUI);

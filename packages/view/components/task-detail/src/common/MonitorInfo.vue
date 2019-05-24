@@ -52,7 +52,8 @@ const CHART_DEFAULT_OPTION = {
             fontSize: 14,
             color: '#333'
         },
-        left: '10px'
+        left: '10px',
+        top: '10px'
     },
     tooltip: {
         trigger: 'axis',

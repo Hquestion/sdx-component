@@ -105,7 +105,7 @@
         <template #data-info>
             <SdxvHasNothing
                 v-if="!task.datasources.length && !task.datasets.length"
-                :tips="暂时还没数据信息哦"
+                tips="暂时还没数据信息哦"
             />
             <SdxvDataInfo
                 v-else
@@ -116,7 +116,7 @@
         <template #log-info>
             <SdxvHasNothing
                 v-if="!task.pods.length"
-                :tips="暂时还没Log日志哦"
+                tips="暂时还没Log日志哦"
             />
             <SdxvLogList
                 v-else
@@ -126,7 +126,7 @@
         <template #realtime-monitor>
             <SdxvHasNothing
                 v-if="!task.pods.length"
-                :tips="暂时还没实时监控哦"
+                tips="暂时还没实时监控哦"
             />
             <SdxvMonitorInfo
                 v-else

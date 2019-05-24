@@ -216,7 +216,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        margin-top: 35px;
+        margin-top: 20px;
 
         @include modifier('item') {
             flex-grow: 1;

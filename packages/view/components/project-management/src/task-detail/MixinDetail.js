@@ -41,7 +41,7 @@ export default {
             let icon = '';
             if ([STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state.name)) {
                 icon = 'loading';
-            } else if (STATE_TYPE.FAILED === this.task.state.name) {
+            } else if ([STATE_TYPE.FAILED, STATE_TYPE.LAUNCH_ABNORMAL].includes(this.task.state.name)) {
                 icon = 'warning';
             }
             return icon;

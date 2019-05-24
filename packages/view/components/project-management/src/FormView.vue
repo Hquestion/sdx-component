@@ -1,6 +1,7 @@
 <template>
     <div class="form">
         <component
+            v-if="taskId && task || projectId"
             :is="formComp"
             :project-id="projectId"
             :kind-single-instance="kindSingleInstance"

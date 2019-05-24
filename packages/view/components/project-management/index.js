@@ -72,10 +72,10 @@ const routeCfg = [
                     formComp: details[params.type]
                 })
             },{
-                path: 'logInfo/:taskId/:method',
+                path: 'logInfo/:method/:podId',
                 component: LogInfo,
                 meta: {
-                    name: '日志详情'
+                    breadcrumb: '日志详情'
                 },
                 props: true
             }

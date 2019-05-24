@@ -19,7 +19,7 @@
                     :plain="true"
                     :invert="true"
                     size="small"
-                    @click="handleGotoLogoPage(item.name, 'head')"
+                    @click="handleGotoLogPage(item.name, 'head')"
                 >
                     head查看
                 </SdxuButton>
@@ -56,6 +56,11 @@ export default {
                 name: 'test3'
             }]
         };
+    },
+    methods: {
+        handleGotoLogPage(podId, method) {
+            this.$router.push(`/sdxv-project-manage/logInfo/${method}/${podId}`);
+        }
     }
 };
 </script>

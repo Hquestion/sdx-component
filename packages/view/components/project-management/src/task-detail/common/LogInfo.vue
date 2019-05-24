@@ -47,7 +47,7 @@ export default {
         [Switch.name]: Switch
     },
     props: {
-        taskId: {
+        podId: {
             type: String,
             default: ''
         },

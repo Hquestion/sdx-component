@@ -34,6 +34,7 @@
             :data="imageList"
             class="sdxv-image-list__table"
             @selection-change="selectionChange"
+            @sort-change="sortChange"
         >
             <el-table-column
                 type="selection"
@@ -71,6 +72,7 @@
                 prop="createdAt"
                 key="createdAt"
                 label="创建时间"
+                sortable="custom"
             />
             <el-table-column
                 label="操作"
@@ -172,6 +174,8 @@ export default {
             total: 1,
             current: 1,
             pageSize: 10,
+            order: '',
+            orderBy: '',
             loading: false,
             dialogVisible: false,
             dialogTitle: '',
@@ -324,7 +328,9 @@ export default {
                 buildType: this.buildType,
                 taskType: this.taskType,
                 start: this.current,
-                count: this.pageSize
+                count: this.pageSize,
+                order: this.order,
+                orderBy: this.orderBy
             };
             if (this.isOwner) {
                 if (this.isOwner === 'true') {
@@ -342,6 +348,13 @@ export default {
         currentChange(nVal) {
             this.current = nVal;
             this.initImageList();
+        },
+        sortChange(sort) {
+            if (sort && sort.prop && sort.order) {
+                this.order = sort.prop;
+                this.orderBy = sort.order === 'ascending' ? 'asc' : 'desc';
+                this.initImageList();
+            }
         },
         handleOperation(row, type) {
             if (type && row.uuid) {

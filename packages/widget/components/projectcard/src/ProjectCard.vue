@@ -60,7 +60,7 @@
                 />
                 <i
                     v-if="deleteAble"
-                    class="sdx-icon sdx-icon-delete1"
+                    class="sdx-icon sdx-icon-delete"
                     title="删除"
                     @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
                 />

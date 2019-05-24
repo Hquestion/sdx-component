@@ -34,7 +34,7 @@
                                 @click="edit(scope)"
                             />
                             <SdxuIconButton
-                                icon="sdx-icon sdx-icon-delete1"
+                                icon="sdx-icon sdx-icon-delete"
                                 @click="del(scope)"
                             />
                         </template>

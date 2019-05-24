@@ -139,8 +139,8 @@
                     v-show="shareForm.shareType !== 'PUBLIC'"
                 >
                     <sdxw-select-group-user
-                        :tags.sync="userGroupTags"
-                        :default-checked-keys="defaultUserGroupKeys"
+                        :users="selectedUsers"
+                        :groups="selectedGroups"
                     />
                 </el-form-item>
             </el-form>
@@ -180,7 +180,8 @@ export default {
                 users: [],
                 groups: []
             },
-            userGroupTags: [],
+            selectedGroups: [],
+            selectedUsers: [],
             defaultUserGroupKeys: [],
             editingImage: null,
             selectedImages: [],
@@ -288,13 +289,8 @@ export default {
             this.shareForm.users = [];
             this.shareForm.groups = [];
             if (this.shareForm.shareType !== 'PUBLIC') {
-                this.userGroupTags.forEach(item => {
-                    if (item.is_group) {
-                        this.shareForm.groups.push(item.uuid);
-                    } else {
-                        this.shareForm.users.push(item.uuid.split('/')[1]);
-                    }
-                });
+                this.shareForm.users = this.selectedUsers;
+                this.shareForm.groups = this.selectedGroups;
             }
             if (this.editingImage) {
                 // 编辑镜像
@@ -360,16 +356,8 @@ export default {
                     this.dialogTitle = '共享设置';
                     this.editingImage = row;
                     Object.assign(this.shareForm, row);
-                    row.groups.forEach(group => {
-                        if (this.defaultUserGroupKeys.indexOf(group) === -1) {
-                            this.defaultUserGroupKeys.push(group);
-                        }
-                    });
-                    row.users.forEach(user => {
-                        row.groups.forEach(group => {
-                            this.defaultUserGroupKeys.push(group + '/' + user);
-                        });
-                    });
+                    this.selectedGroups = row.groups;
+                    this.selectedUsers = row.users;
                     break;
                 case 'extend':
                     this.$router.push({ name: 'basicbuild' });

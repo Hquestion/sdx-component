@@ -114,7 +114,7 @@
                     v-model="params.args"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入创建的参数，～/代表家目录， ./"
+                    placeholder="请输入创建的参数，~/ 代表家目录， ./ 代表代码所在的目录"
                 />
             </el-form-item>
         </el-form>

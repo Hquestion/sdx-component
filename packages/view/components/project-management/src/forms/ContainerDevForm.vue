@@ -79,14 +79,11 @@
                 </div>
             </el-form-item>
             <el-form-item
+                v-if="!cooperation"
                 prop="datasources"
                 label="数据源:"
             >
-                <el-select
-                    v-model="params.datasources"
-                    size="small"
-                    placeholder="请选择数据源"
-                />
+                <data-source-select v-model="params.datasources" />
             </el-form-item>
             <el-form-item
                 prop="datasets"
@@ -96,7 +93,15 @@
                     v-model="params.datasets"
                     size="small"
                     placeholder="请选择数据集"
-                />
+                    multiple
+                >
+                    <el-option
+                        v-for="item in datasetsOptions"
+                        :key="item.label"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                </el-select>
             </el-form-item>
         </el-form>
     </BaseForm>
@@ -107,10 +112,11 @@
 import BaseForm from './BaseForm';
 import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-import {  createTask, updateTask} from '@sdx/utils/src/api/project';
+import {  createTask, updateTask, getDataSet, getProjectDetail} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { cNameValidate } from '@sdx/utils/src/validate/validate';
 import ResourceConfig from './ResourceConfig';
+import DataSourceSelect from './DataSourceSelect';
 export default {
     name: 'ContainerDevForm',
     components: {
@@ -119,7 +125,8 @@ export default {
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
-        ResourceConfig
+        ResourceConfig,
+        DataSourceSelect
     },
     props: {
         task: {
@@ -184,7 +191,9 @@ export default {
                         trigger: 'change'
                     }
                 ],
-            }
+            },
+            datasetsOptions: [],
+            cooperation:true,
         };
     },
     computed: {
@@ -204,8 +213,21 @@ export default {
     },
     created() {
         this.imageList();
+        this.getDataSetList();
+        // 判断是否协作
+        getProjectDetail(this.$route.params.projectId)
+            .then(res => {
+                this.cooperation = res.data.groups.length > 0 ? true : false;
+            });
     },
     methods: {
+        // 数据集列表
+        getDataSetList() {
+            getDataSet({ share_kinds: '1,2,3' })
+                .then(data => {
+                    this.datasetsOptions = data.data.options;
+                });
+        },
         imageList() {
             const params = {
                 imageType: 'CONTAINER_DEV',

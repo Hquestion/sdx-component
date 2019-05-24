@@ -48,6 +48,16 @@ export function getTaskDetail(uuid) {
 export function updateTask(uuid,params) {
     return httpService.patch(taskApi + uuid, params);
 }
+
+// 数据集列表
+export function getDataSet(params) {
+    return httpService.get('/v2/dataset/options/', params);
+}
+// 数据源列表
+export function getTaskDataSource(params) {
+    return httpService.get('/v2/datasource/taskOptions/', params);
+}
+
 export default {
     getProjectList,
     getProjectDetail,
@@ -60,5 +70,7 @@ export default {
     stopTask,
     createTask,
     getTaskDetail,
-    updateTask
+    updateTask,
+    getDataSet,
+    getTaskDataSource
 };

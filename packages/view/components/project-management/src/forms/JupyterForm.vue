@@ -82,11 +82,7 @@
                 prop="datasources"
                 label="数据源:"
             >
-                <el-select
-                    v-model="params.datasources"
-                    size="small"
-                    placeholder="请选择数据源"
-                />
+                <data-source-select v-model="params.datasources" />
             </el-form-item>
             <el-form-item
                 prop="datasets"
@@ -96,7 +92,15 @@
                     v-model="params.datasets"
                     size="small"
                     placeholder="请选择数据集"
-                />
+                    multiple
+                >
+                    <el-option
+                        v-for="item in datasetsOptions"
+                        :key="item.label"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                </el-select>
             </el-form-item>
         </el-form>
     </BaseForm>
@@ -109,8 +113,9 @@ import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import { getImageList } from '@sdx/utils/src/api/image';
 import ResourceConfig from './ResourceConfig';
-import { getProjectDetail, createTask, updateTask } from '@sdx/utils/src/api/project';
+import { getProjectDetail, createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { cNameValidate } from '@sdx/utils/src/validate/validate';
+import DataSourceSelect from './DataSourceSelect';
 export default {
     name: 'JupyterForm',
     components: {
@@ -119,7 +124,8 @@ export default {
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
-        ResourceConfig
+        ResourceConfig,
+        DataSourceSelect
     },
     props: {
         task: {
@@ -166,6 +172,7 @@ export default {
             cpuObj: {},
             gpuObj: {},
             cooperation:true,
+            datasetsOptions: [],
             rules:  {
                 name: [
                     { required: true, message: '请输入任务名称', trigger: 'blur',
@@ -208,8 +215,22 @@ export default {
             .then(res => {
                 this.cooperation = res.data.groups.length > 0 ? true : false;
             });
+        this.getDataSetList();
     },
     methods: {
+        // 数据集列表
+        getDataSetList() {
+            let params = '';
+            if (this.cooperation === false) {
+                params = '1,2,3';
+            } else if (this.cooperation === true) {
+                params = '1,3';
+            }
+            getDataSet({ share_kinds: params })
+                .then(data => {
+                    this.datasetsOptions = data.data.options;
+                });
+        },
         imageList() {
             const params = {
                 imageType: 'JUPYTER',

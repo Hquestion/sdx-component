@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import SdxvLogInfo from '@sdx/view/components/task-detail/src/common/LogInfo';
+import SdxvLogInfo from '@sdx/view/components/project-management/src/task-detail/common/LogInfo';
 
 export default {
     components: {
@@ -11,7 +11,7 @@ export default {
     },
     data() {
         return {
-            
+
         };
     }
 };

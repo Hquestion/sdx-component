@@ -61,6 +61,7 @@ const routeCfg = [
                 })
             }, {
                 path: 'taskInfo/:type/:taskId',
+                name: 'TaskInfo',
                 component: FormView,
                 meta: {
                     breadcrumb: '任务详情'

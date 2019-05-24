@@ -59,7 +59,7 @@
                                 @click="editRole(scope.row.uuid)"
                             />
                             <i
-                                class="sdx-icon sdx-icon-delete1 icon"
+                                class="sdx-icon sdx-icon-delete icon"
                                 @click="removeRole(scope.row.uuid, scope.row.name)"
                             />
                         </template>

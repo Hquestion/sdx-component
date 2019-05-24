@@ -5,6 +5,8 @@ module.exports = {
         'json',
         'vue'
     ],
+    automock: false,
+    browser: true,
     transform: {
         '^.+\\.vue$': 'vue-jest',
         '^.+\\.jsx?$': 'babel-jest'
@@ -16,5 +18,5 @@ module.exports = {
         '^@sdx/utils/(.*)': '<rootDir>/../utils/$1',
         '^@/(.*)$': '<rootDir>/src/$1'
     },
-    transformIgnorePatterns: ['<rootDir>/node_modules/(?!@sdx)']
+    transformIgnorePatterns: ['<rootDir>/node_modules/(?!@sdx)', '<rootDir>/../utils/src/theme-common/iconfont/iconfont.js']
 };

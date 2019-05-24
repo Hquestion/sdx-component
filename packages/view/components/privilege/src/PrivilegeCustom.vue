@@ -75,7 +75,7 @@
                         @click="handleEdit(row.uuid)"
                     />
                     <i
-                        class="sdx-icon sdx-icon-delete1"
+                        class="sdx-icon sdx-icon-delete"
                         title="删除"
                         @click="handleDelete(row)"
                     />

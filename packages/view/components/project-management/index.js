@@ -1,5 +1,6 @@
 import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
+import LogInfo from './src/task-detail/common/LogInfo';
 
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';
@@ -69,7 +70,14 @@ const routeCfg = [
                 }) => ({
                     formComp: details[params.type]
                 })
-            },
+            },{
+                path: 'logInfo/:taskId/:method',
+                component: LogInfo,
+                meta: {
+                    name: '日志详情'
+                },
+                props: true
+            }
         ]
     }
 ];

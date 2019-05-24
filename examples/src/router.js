@@ -27,6 +27,9 @@ import BuildImageBasicDemo from './views/demo/buildImageBasicDemo';
 
 import SearchLayout from './views/cache/search.vue';
 import Task from './views/cache/task.vue';
+import TaskDetailDemo from './views/demo/taskDetailDemo';
+import LogInfoDemo from './views/demo/logInfoDemo';
+
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -185,6 +188,12 @@ const router = new Router({
             }, {
                 path: 'user-group',
                 component: UserGroupDemo
+            }, {
+                path: 'task-detail',
+                component: TaskDetailDemo
+            }, {
+                path: 'task-log',
+                component: LogInfoDemo
             }, {
                 path: 'buildImageBasic',
                 component: BuildImageBasicDemo

@@ -3,6 +3,7 @@ import ProjectList from './src/ProjectList.vue';
 
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';
+import * as details from './src/task-detail';
 import ProjectDetail from './src/project-detail/index.vue';
 
 ProjectManagement.install = vue => {
@@ -56,6 +57,17 @@ const routeCfg = [
                     params
                 }) => ({
                     formComp: forms[params.type]
+                })
+            }, {
+                path: 'taskInfo/:type/:taskId',
+                component: FormView,
+                meta: {
+                    breadcrumb: '任务详情'
+                },
+                props: ({
+                    params
+                }) => ({
+                    formComp: details[params.type]
                 })
             },
         ]

@@ -83,7 +83,7 @@
                     </sdxw-search-item>
                     <sdxw-search-item
                         lable="状态:"
-                        v-if="projectType === 'task'"
+                        v-show="projectType === 'task'"
                     >
                         <el-select
                             v-model="state"
@@ -103,7 +103,7 @@
                     </sdxw-search-item>
                     <sdxw-search-item
                         lable="构建方式:"
-                        v-if="imageKind !== 'basic'"
+                        v-show="imageKind !== 'basic'"
                     >
                         <el-select
                             v-model="buildType"

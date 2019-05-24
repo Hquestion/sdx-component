@@ -1,0 +1,227 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@include block('task-detail', $bem-namespace-view) {
+    font-size: 14px;
+    .sdxu-content-panel + .sdxu-content-panel {
+        margin-top: $sdx-margin;
+    }
+
+    @include element('external') {
+        color: #4781F8;
+        margin-right: 20px;
+        cursor: pointer;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+@include block('info-container', $bem-namespace-view) {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0 $sdx-margin;
+
+    @include element('item') {
+        width: 50%;
+        height: 20px;
+        min-width: 350px;
+        display: flex;
+        padding: 0 $sdx-padding;
+        margin-top: 14px;
+        &:nth-child(1), &:nth-child(2) {
+            margin-top: 0;
+        }
+
+        @include modifier('label') {
+            flex: none;
+            width: 140px;
+            text-align: end;
+        }
+
+        @include modifier('value') {
+            flex: auto;
+        }
+
+        @include state('multi-line') {
+            height: auto;
+        }
+
+        @include state('strip') {
+            height: 40px;
+            margin: 0;
+            align-items: center;
+        }
+    }
+
+    @include state('background') {
+        background-color: #F2F6FC;
+    }
+}
+
+@include block('log-list', $bem-namespace-view) {
+    padding: 0 $sdx-padding;
+
+    @include element('item') {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 52px;
+        margin-top: $sdx-margin;
+        padding: 0 20px;
+        background-color: rgba(#F2F6FC, 0.8);
+    }
+}
+
+@include block('saveas-dialog', $bem-namespace-view) {
+
+    @include element('name') {
+        display: flex;
+
+        @include modifier('prefix') {
+            flex: none;
+            margin-right: 10px;
+        }
+
+        @include modifier('input') {
+            flex: auto;
+        }
+    }
+}
+
+@include block('log-info', $bem-namespace-view) {
+
+    @include element('switch') {
+        display: flex;
+
+        @include modifier('item') {
+            display: flex;
+            align-items: center;
+            margin-right: 40px;
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    @include element('content') {
+        padding: $sdx-padding;
+        background-color: #F4F8FD;
+        text-align: left;
+        word-break: break-word;
+        border-radius:2px;
+        white-space: pre-wrap;
+    }
+
+    @include element('scroll') {
+        height: calc(100vh - 90px - 40px - 40px);
+    }
+}
+
+@include block('data-info', $bem-namespace-view) {
+    padding: 0 $sdx-padding;
+
+    @include element('container') {
+        margin-top: 40px;
+        &:first-child {
+            margin-top: 0;
+        }
+
+        @include modifier('title') {
+            display: block;
+            font-size:14px;
+            color:rgba(48,49,51,1);
+            line-height:20px;
+            margin-bottom: 20px;
+            &:before {
+                content: ' ';
+                display: inline-block;
+                width: 3px;
+                height: 14px;
+                background: #4781F8;
+                vertical-align: middle;
+                margin-right: 12px;
+            }
+        }
+
+        @include modifier('content') {
+            margin: -$sdx-margin / 2;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+        }
+    }
+}
+
+@include block('data-datasource', $bem-namespace-view) {
+    margin: $sdx-margin / 2; // 这里设置margin: 10px;是为了子元素自动排版间隔相同距离，需要外框设置margin: -10px;
+    width: 280px;
+
+    @include element('name') {
+        background-color: #F2F6FC;
+        text-align: center;
+        height: 40px;
+        line-height: 40px;
+        font-weight: 500;
+    }
+
+    @include element('info') {
+        padding: $sdx-padding;
+        background-color: rgba(#F2F6FC, 0.4);
+
+        @include modifier('item') {
+            span:first-child {
+                font-size: 13px;
+                color: #606266;
+            }
+            span:last-child {
+                color: #262B3E;
+                margin-left: $sdx-margin;
+            }
+        }
+    }
+}
+
+@include block('data-dataset', $bem-namespace-view) {
+    margin: $sdx-margin / 2;
+    background-color:  #F2F6FC;
+    width: 280px;
+    display: flex;
+    justify-content: center;
+} 
+
+@include block('has-nothing', $bem-namespace-view) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include element('icon') {
+        width: 12em;
+        height: 12em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+    }
+}
+
+@include block('monitor-info', $bem-namespace-view) {
+    padding: 0 $sdx-padding;
+
+    @include element('select') {
+        .el-select {
+            width: 348px;
+        }
+    }
+
+    @include element('chart') {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 20px;
+
+        @include modifier('item') {
+            flex-grow: 1;
+            height: 460px;
+            width: 500px;
+        }
+    }
+}

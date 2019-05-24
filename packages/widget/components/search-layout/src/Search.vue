@@ -127,7 +127,9 @@ export default {
             this.init();
         });
         this.$slots.default.forEach((item, index) => {
-            item.componentInstance._data.itemIndex = index;
+            if(item.componentInstance && item.componentInstance._data) {
+                item.componentInstance._data.itemIndex = index;
+            } 
         });
     },
     beforeDestroy() {

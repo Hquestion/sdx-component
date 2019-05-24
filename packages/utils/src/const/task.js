@@ -1,0 +1,32 @@
+export const TASK_TYPE = {
+    SPARK: 'SPARK',
+    PYTHON: 'PYTHON',
+    TENSORFLOW: 'TENSORFLOW',
+    TENSORFLOW_DIST: 'TENSORFLOW_DIST',
+    TENSORBOARD: 'TENSORBOARD',
+    JUPYTER: 'JUPYTER',
+    TENSORFLOW_AUTO_DIST: 'TENSORFLOW_AUTO_DIST',
+    TENSORFLOW_SERVING: 'TENSORFLOW_SERVING'
+};
+
+export const STATE_TYPE = {
+    CREATED: 'CREATED',
+    LAUNCHING: 'LAUNCHING',
+    LAUNCH_ABNORMAL: 'LAUNCH_ABNORMAL',
+    RUNNING: 'RUNNING',
+    FINISHED: 'FINISHED',
+    KILLED: 'KILLED',
+    FAILED: 'FAILED',
+    KILLING: 'KILLING'
+};
+
+export const STATE_MAP_FOLD_LABEL_TYPE = {
+    CREATED: 'create',
+    LAUNCHING: 'processing',
+    LAUNCH_ABNORMAL: 'exception',
+    RUNNING: 'running',
+    FINISHED: 'finish',
+    KILLED: 'die',
+    FAILED: 'error',
+    KILLING: 'dying'
+};

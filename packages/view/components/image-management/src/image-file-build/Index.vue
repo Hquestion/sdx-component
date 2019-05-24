@@ -105,10 +105,10 @@
 import ContentPanel from '@sdx/ui/components/content-panel';
 import {RadioGroup, Radio, Popover}  from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-import {DOCKER_IMAGE_KIND_LIST} from '@sdx/utils/src/consts/relation';
+import {DOCKER_IMAGE_KIND_LIST} from '@sdx/utils/src/const/relation';
 import {buildTar,buildImagefile} from '@sdx/utils/src/api/image';
 import SdxuButton from '@sdx/ui/components/button';
-import {itemNameValidate100, tagNameValidate} from '@sdx/utils/src/validate/validate';
+import {itemNameValidate100, tagNameValidate} from '@sdx/utils/src/helper/validate';
 import FileSelect from '@sdx/widget/components/file-select';
 import Iconinfo from './Iconinfo';
 export default {

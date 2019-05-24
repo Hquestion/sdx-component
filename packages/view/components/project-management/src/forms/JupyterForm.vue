@@ -114,7 +114,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import { getImageList } from '@sdx/utils/src/api/image';
 import ResourceConfig from './ResourceConfig';
 import { getProjectDetail, createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
-import { cNameValidate } from '@sdx/utils/src/validate/validate';
+import { cNameValidate } from '@sdx/utils/src/helper/validate';
 import DataSourceSelect from './DataSourceSelect';
 export default {
     name: 'JupyterForm',

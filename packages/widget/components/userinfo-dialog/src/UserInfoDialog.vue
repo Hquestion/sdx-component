@@ -49,7 +49,7 @@
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.role') ">
                     <SdxwFoldLabelGroup
-                        v-if="users.roleNames.length > 0"
+                        v-if="users && users.roleNames && users.roleNames.length > 0"
                         class="sdxw-userinfo__label-group"
                         :list="users.roleNames"
                         type="default"
@@ -58,7 +58,7 @@
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.groups')">
                     <SdxwFoldLabelGroup
-                        v-if="users.groupNames.length > 0"
+                        v-if="users && users.groupNames && users.groupNames.length > 0"
                         class="sdxw-userinfo__label-group"
                         :list="users.groupNames"
                         type="default"

@@ -213,7 +213,7 @@ export default {
             this.initList();
         },
         handleOperate(operation) {
-            console.log('operation', operation);
+            // console.log('operation', operation);
             switch(operation.type) {
             case 'start':
                 MessageBox({

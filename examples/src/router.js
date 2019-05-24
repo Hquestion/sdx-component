@@ -22,6 +22,9 @@ import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
 import SearchLayout from './views/cache/search.vue';
+import TaskDetailDemo from './views/demo/taskDetailDemo';
+import LogInfoDemo from './views/demo/logInfoDemo';
+
 febAlive.resetHistory();
 Vue.use(Router);
 
@@ -169,6 +172,12 @@ export default new Router({
             }, {
                 path: 'user-group',
                 component: UserGroupDemo
+            }, {
+                path: 'task-detail',
+                component: TaskDetailDemo
+            }, {
+                path: 'task-log',
+                component: LogInfoDemo
             }]
         },
         {

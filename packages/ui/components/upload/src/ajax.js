@@ -66,11 +66,7 @@ export default function upload(option) {
             return option.onError(getError(action, option, xhr));
         }
         const xhrBody = getBody(xhr);
-        if (xhrBody.success) {
-            option.onSuccess(xhrBody);
-        } else {
-            return option.onError(getError(action, option, xhr));
-        }
+        option.onSuccess(xhrBody);
     };
 
     xhr.open('post', action, true);

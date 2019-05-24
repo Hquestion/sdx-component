@@ -28,7 +28,10 @@
                 </svg>
                 <span>{{ t('widget.userInfo.title') }} </span>
             </div>
-            <el-form label-width="80px" class="sdxw-userinfo__content">
+            <el-form
+                label-width="80px"
+                class="sdxw-userinfo__content"
+            >
                 <el-form-item :label="t('widget.userInfo.username')">
                     <span>{{ users.username }}</span>
                 </el-form-item>
@@ -36,20 +39,22 @@
                     <span v-if="theme == 'user'">
                         {{ users.fullName }}
                     </span>
-                    <div class="sdxw-userinfo__full-name" v-if="theme == 'dashboard'">
+                    <div
+                        class="sdxw-userinfo__full-name"
+                        v-if="theme == 'dashboard'"
+                    >
                         <span class="sdxw-userinfo__full-name-span">{{ users.fullName }}</span>
                         <SdxuInput
                             class="sdxw-userinfo__full-name-input"
                             type="text"
                             v-model="users.fullName"
                             @change="updateUser"
-                        >
-                        </SdxuInput>
+                        />
                     </div>
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.role') ">
                     <SdxwFoldLabelGroup
-                        v-if="users.roleNames.length > 0"
+                        v-if="users.roleNames && users.roleNames.length > 0"
                         class="sdxw-userinfo__label-group"
                         :list="users.roleNames"
                         type="default"
@@ -58,7 +63,7 @@
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.groups')">
                     <SdxwFoldLabelGroup
-                        v-if="users.groupNames.length > 0"
+                        v-if="users.groupNames && users.groupNames.length > 0"
                         class="sdxw-userinfo__label-group"
                         :list="users.groupNames"
                         type="default"

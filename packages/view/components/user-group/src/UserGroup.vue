@@ -11,16 +11,23 @@
                 >
                     新建用户组
                 </sdxu-button>
-                <sdxu-input
-                    class="sdxv-user-group__bar--input"
-                    type="search"
-                    :searchable="true"
-                    placeholder="请输入权限名"
-                    @keydown.native.enter="handleSearch"
+                <SdxwSearchLayout
                     @search="handleSearch"
-                    size="small"
-                    v-model="name"
-                />
+                    :block="false"
+                    align="right"
+                    style="flex: 1"
+                >
+                    <SdxwSearchItem>
+                        <sdxu-input
+                            class="sdxv-user-group__bar--input"
+                            type="search"
+                            :searchable="true"
+                            placeholder="请输入权限名"
+                            size="small"
+                            v-model="name"
+                        />
+                    </SdxwSearchItem>
+                </SdxwSearchLayout>
             </div>
             <sdxu-table
                 :data="groups"
@@ -36,7 +43,7 @@
                 >
                     <template #default="{ row }">
                         <sdxw-fold-label-group
-                            :list="row.roles"
+                            :list="row.roles.map(item => item.name)"
                             mode="inline"
                             type="default"
                         />
@@ -44,19 +51,19 @@
                 </el-table-column>
                 <el-table-column
                     label="创建时间"
-                    prop="createdAt"
+                    prop="createdAtStr"
                     sortable
                 />
                 <el-table-column label="操作">
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--operation">
-                            <i
-                                class="sdx-icon sdx-icon-edit"
+                            <SdxuIconButton
+                                icon="sdx-icon sdx-icon-edit"
                                 @click="handleEdit(row)"
                                 title="编辑"
                             />
-                            <i
-                                class="sdx-icon sdx-icon-delete1"
+                            <SdxuIconButton
+                                icon="sdx-icon sdx-icon-delete"
                                 @click="handleDelete(row)"
                                 title="删除"
                             />
@@ -68,7 +75,7 @@
                         <div class="sdxv-user-group__table--expand">
                             <span class="sdxv-user-group__table--expand-label">组员:</span>
                             <sdxw-fold-label-group
-                                :list="row.roles"
+                                :list="row.roles.map(item => item.name)"
                                 type="default"
                             />
                         </div>
@@ -87,6 +94,7 @@
         <CreateUserGroup
             :visible.sync="createVisible"
             :meta="groupMeta"
+            @refresh="handleRefresh"
         />
     </sdxu-panel>
 </template>
@@ -99,9 +107,11 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuMessageBox from '@sdx/ui/components/message-box';
 import SdxuInput from '@sdx/ui/components/input';
 import FoldLabel from '@sdx/widget/components/fold-label';
+import SdxuIconButton from '@sdx/ui/components/icon-button';
 
-import { getGroups } from '@sdx/utils/src/api/user';
+import { getGroups, deleteGroup } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
+import moment from 'moment';
 
 export default {
     name: 'SdxvUserGroup',
@@ -113,7 +123,8 @@ export default {
         SdxuPagination,
         SdxuInput,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
-        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
+        SdxuIconButton
     },
     data() {
         return {
@@ -125,33 +136,38 @@ export default {
             createVisible: false,
             editVisible: false,
             deleteVisible: false,
-            groupMeta: undefined
+            groupMeta: undefined,
+            searched: false
         };
     },
     computed: {
         querys() {
-            return {
-                name: this.name,
+            let info = {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             };
+            if (this.searched) {
+                info.name = this.name;
+            }
+            return info;
         }
     },
     methods: {
-        fetchData() {
+        fetchData(currentPage) {
+            currentPage && (this.page = currentPage);
             getGroups(this.querys).then(data => {
-                // todo:
+                data.groups.forEach(item => {
+                    item.createdAtStr = moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss');
+                });
                 this.groups = data.groups;
                 this.total = data.total;
             });
         },
         handleSearch() {
-            this.page = 1;
-            this.fetchData();
+            this.fetchData(1);
         },
         handleChangePage(page) {
-            this.page = page;
-            this.fetchData();
+            this.fetchData(page);
         },
         createGroup() {
             this.groupMeta = undefined;
@@ -167,7 +183,17 @@ export default {
                 content: '用户组确定删除后补课恢复哦'
             }).then(() => {
                 // todo: 请求接口
+                deleteGroup(row.uuid).then(() => {
+                    if (this.groups.length === 1) {
+                        this.fetchData(this.page - 1);
+                    } else {
+                        this.fetchData();
+                    }
+                });
             });
+        },
+        handleRefresh() {
+            this.fetchData();
         }
     },
     created() {

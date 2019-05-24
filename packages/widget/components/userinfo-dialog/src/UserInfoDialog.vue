@@ -28,75 +28,56 @@
                 </svg>
                 <span>{{ t('widget.userInfo.title') }} </span>
             </div>
-            <div class="sdxw-userinfo__content">
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{ t('widget.userInfo.username') }}：
-                    </span>
-                    <span class="sdxw-userinfo__item--data">
-                        {{ users.username }}
-                    </span>
-                </div>
-                <div
-                    class="sdxw-userinfo__item"
-                    :class="[`sdxw-userinfo__item--${theme}fullname`]"
-                >
-                    <span class="sdxw-userinfo__item--title">
-                        {{ t('widget.userInfo.fullname') }}：
-                    </span>
-                    <span
-                        v-if="theme == 'user'"
-                        class="sdxw-userinfo__item--data"
-                    >
+            <el-form label-width="80px" class="sdxw-userinfo__content">
+                <el-form-item :label="t('widget.userInfo.username')">
+                    <span>{{ users.username }}</span>
+                </el-form-item>
+                <el-form-item :label="t('widget.userInfo.fullname')">
+                    <span v-if="theme == 'user'">
                         {{ users.fullName }}
                     </span>
-                    <input
-                        :class="[showInput == true? 'sdxw-userinfo__item--input' : '']"
-                        @mouseover="showFullNameInput"
-                        @mouseout="hideFullNameInput"
-                        @keydown.enter="changeFullName"
-                        v-if="theme == 'dashboard'"
-                        id="fullName"
-                        type="text"
-                        v-model="users.fullName"
-                    >
-                </div>
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{ t('widget.userInfo.role') }}：
-                    </span>
-                    <div class="sdxw-userinfo__item--role">
-                        <SdxwFoldLabelGroup
-                            :list="users.roles"
-                            type="default"
-                        />
+                    <div class="sdxw-userinfo__full-name" v-if="theme == 'dashboard'">
+                        <span class="sdxw-userinfo__full-name-span">{{ users.fullName }}</span>
+                        <SdxuInput
+                            class="sdxw-userinfo__full-name-input"
+                            type="text"
+                            v-model="users.fullName"
+                            @change="updateUser"
+                        >
+                        </SdxuInput>
                     </div>
-                </div>
-                <div class="sdxw-userinfo__item">
-                    <span class="sdxw-userinfo__item--title">
-                        {{ t('widget.userInfo.groups') }}：
-                    </span>
-                    <div class="sdxw-userinfo__item--group">
-                        <SdxwFoldLabelGroup
-                            :list="users.group"
-                            type="default"
-                        />
-                    </div>
-                </div>
-            </div>
+                </el-form-item>
+                <el-form-item :label="t('widget.userInfo.role') ">
+                    <SdxwFoldLabelGroup
+                        v-if="users.roleNames.length > 0"
+                        class="sdxw-userinfo__label-group"
+                        :list="users.roleNames"
+                        type="default"
+                    />
+                    <span v-else>暂无角色</span>
+                </el-form-item>
+                <el-form-item :label="t('widget.userInfo.groups')">
+                    <SdxwFoldLabelGroup
+                        v-if="users.groupNames.length > 0"
+                        class="sdxw-userinfo__label-group"
+                        :list="users.groupNames"
+                        type="default"
+                    />
+                    <span v-else>暂未加入用户组</span>
+                </el-form-item>
+            </el-form>
         </sdxu-dialog>
     </div>
 </template>
 <script>
 import {
     getUserDetail ,
-    getGroupDetail,
-    getRoleDetail,
-    changeUserInfo
+    updataUser
 } from '@sdx/utils/src/api/user';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
+import SdxuInput from '@sdx/ui/components/input';
 export default {
     name:'SdxwUserInfoDialog',
     data () {
@@ -148,27 +129,12 @@ export default {
             this.$emit('update:visible', false);
             this.$emit('close');
         },
-        //显示fullName input框
-        showFullNameInput() {
-            this.showInput = true;
-            document.getElementById('fullName').focus();
-        },
-        //隐藏fullName input框
-        hideFullNameInput() {
-            this.showInput = false;
-            document.getElementById('fullName').blur();
-        },
         //修改fullName的值
-        changeFullName() {
+        updateUser() {
             if(this.users.fullName!=''){
-                changeUserInfo(this.users)
-                    .then((res) => {
-                        this.$message({
-                            message: '显示名修改成功',
-                            type: 'success'
-                        });
-                        this.dialogVisible = false;
-                    });
+                updataUser(this.users.uuid, {
+                    fullName: this.users.fullName
+                });
             }
         },
         getData() {
@@ -183,6 +149,7 @@ export default {
         }
     },
     components:{
+        SdxuInput,
         SdxuDialog,
         [SdxwFoldLabel.FoldLabelGroup.name]: SdxwFoldLabel.FoldLabelGroup
     }

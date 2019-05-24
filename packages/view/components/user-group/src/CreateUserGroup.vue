@@ -3,6 +3,7 @@
         class="create-user-group"
         :visible.sync="groupVisible"
         @open="onOpen"
+        :confirm-handler="handleConfirm"
     >
         <div slot="title">
             {{ title }}
@@ -10,6 +11,7 @@
         <el-form
             ref="form"
             :model="params"
+            :rules="rules"
             label-width="80px"
             label-position="right"
         >
@@ -49,11 +51,24 @@
 <script>
 import SdxuInput from '@sdx/ui/components/input';
 import SdxuDialog from '@sdx/ui/components/dialog';
+import ElSelect from 'element-ui/lib/select';
+import ElForm from 'element-ui/lib/form';
+import ElFormItem from 'element-ui/lib/form-item';
+import ElOption from 'element-ui/lib/option';
 
 import { getRolesList } from '@sdx/utils/src/api/rolemange';
+import { createGroup, updateGroups } from '@sdx/utils/src/api/user';
+
 export default {
     name: 'CreateUserGroup',
-    components: {SdxuDialog, SdxuInput},
+    components: {
+        SdxuDialog,
+        SdxuInput,
+        ElSelect,
+        ElForm,
+        ElFormItem,
+        ElOption
+    },
     data() {
         return {
             params: {
@@ -61,7 +76,23 @@ export default {
                 name: '',
                 roles: []
             },
-            roleList: []
+            roleList: [],
+            rules: {
+                name: [
+                    {
+                        required: true,
+                        message: '请输入用户组名',
+                        trigger: 'blur'
+                    },
+                ],
+                roles: [
+                    {
+                        required: true,
+                        message: '请选择角色',
+                        trigger: 'change'
+                    },
+                ]
+            }
         };
     },
     computed: {
@@ -96,6 +127,36 @@ export default {
         onOpen() {
             this.$nextTick(() => {
                 this.$refs.form.clearValidate();
+            });
+        },
+        clearState() {
+            this.params = {
+                uuid: '',
+                name: '',
+                roles: []
+            };
+        },
+        handleConfirm() {
+            return this.$refs.form.validate().then(() => {
+                let promise;
+                const groupData = {
+                    name: this.params.name,
+                    roles: this.params.roles
+                };
+                if (this.params.uuid) {
+                    promise = updateGroups(this.params.uuid, groupData);
+                } else {
+                    groupData.permissions = [];
+                    promise = createGroup(groupData);
+                }
+                return promise.then(() => {
+                    this.clearState();
+                    this.$message({
+                        message: this.params.uuid ? '修改用户组成功' : '创建用户组成功',
+                        type: 'success'
+                    });
+                    this.$emit('refresh');
+                });
             });
         }
     },

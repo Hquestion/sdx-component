@@ -1,25 +1,30 @@
 @include block('search-layout', $bem-namespace-widget) {
-    background: $sdxw-search-background;
-    padding: $sdx-padding;
-    padding-bottom: 0;
-    padding-right: $sdxw-search-padding-right;
     position: relative;
+    @include modifier('block') {
+        padding: $sdx-padding;
+        padding-bottom: 0;
+        padding-right: 100px;
+        background: $sdxw-search-background;
+    }
+    @include modifier('align-left') {
+        text-align: left;
+    }
+    @include modifier('align-right') {
+        text-align: right;
+    }
     @include element('show') {
         position: absolute;
-        top: $sdx-margin;
-        right: $sdx-margin;
+        top: $sdx-margin / 2;
+        right: 0;
     }
     @include element('btn') {
         display: inline-block;
         vertical-align: middle;
+        margin-bottom: 22px;
     }
     .el-form {
         display: inline-block;
         line-height:$sdx-form-element-height-regular;
-    }
-    
-    .sdxu-button {
-        margin-bottom:$sdx-margin;
     }
     .sdx-icon {
         font-size: $sdx-help-font-size;
@@ -30,16 +35,16 @@
     height: $sdx-form-element-height-regular;
     line-height: $sdx-form-element-height-regular;
     margin-bottom: $sdx-margin;
-    margin-right: $sdxw-search-item-margin;
     vertical-align: middle;
     position: relative;
     top:$sdxw-search-item-top;
+    margin-right: $sdx-margin / 2;
     display: inline-block;
     .el-form-item__label {
         color: $sdxw-breadcrumb-current-text-color;
         font-size: $sdx-content-font-size;
     }
     .el-form-item__content {
-        width: $sdxw-search-content-width;
+        line-height: $sdx-form-element-height-regular;
     }
 }

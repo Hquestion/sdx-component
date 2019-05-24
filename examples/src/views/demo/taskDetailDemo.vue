@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import SdxvJupyterDetail from '@sdx/view/components/task-detail/src/JupyterDetail';
-import SdxvTensorflowDetail from '@sdx/view/components/task-detail/src/TensorflowDetail';
+import SdxvJupyterDetail from '@sdx/view/components/project-management/src/task-detail/JupyterDetail';
+import SdxvTensorflowDetail from '@sdx/view/components/project-management/src/task-detail/TensorflowDetail';
 
 export default {
     components: {

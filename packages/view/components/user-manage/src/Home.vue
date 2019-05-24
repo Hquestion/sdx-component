@@ -127,8 +127,7 @@
 <script>
 import {
     getUserList,
-    deleteUser,
-    getUserDetail
+    deleteUser
 } from '@sdx/utils/src/api/user';
 import SdxuInput from '@sdx/ui/components/input';
 import SdxuIconButton from '@sdx/ui/components/icon-button';

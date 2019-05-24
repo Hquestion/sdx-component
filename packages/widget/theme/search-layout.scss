@@ -20,6 +20,7 @@
     @include element('btn') {
         display: inline-block;
         vertical-align: middle;
+        margin-bottom: 22px;
     }
     .el-form {
         display: inline-block;
@@ -42,5 +43,8 @@
     .el-form-item__label {
         color: $sdxw-breadcrumb-current-text-color;
         font-size: $sdx-content-font-size;
+    }
+    .el-form-item__content {
+        line-height: $sdx-form-element-height-regular;
     }
 }

@@ -14,6 +14,7 @@ import Breadcrumb from '@sdx/widget/components/breadcrumb';
 import ChangePassword from '@sdx/widget/components/change-password';
 import Project from '@sdx/view/components/project-management';
 import Image from '@sdx/view/components/image-management';
+import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';
 import '@sdx/view/theme/index.scss';
@@ -24,6 +25,14 @@ Vue.use(ElementUI);
 Vue.use(Breadcrumb);
 Vue.use(Pagination);
 Vue.use(ChangePassword);
+
+shareCenter.setup({
+    user: {
+        name: 'zhansan',
+        uuid: '222'
+    }
+});
+
 
 // 项目管理
 Project.viewRouter.register(router, '/');

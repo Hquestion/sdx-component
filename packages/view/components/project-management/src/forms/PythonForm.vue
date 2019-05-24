@@ -110,7 +110,7 @@ import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import ResourceConfig from './ResourceConfig';
 import { createTask,updateTask} from '@sdx/utils/src/api/project';
-import { cNameValidate } from '@sdx/utils/src/validate/validate';
+import { cNameValidate } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'PythonForm',
     components: {

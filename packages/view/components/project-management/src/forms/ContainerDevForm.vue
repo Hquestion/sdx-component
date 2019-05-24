@@ -114,7 +114,7 @@ import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import {  createTask, updateTask, getDataSet, getProjectDetail} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
-import { cNameValidate } from '@sdx/utils/src/validate/validate';
+import { cNameValidate } from '@sdx/utils/src/helper/validate';
 import ResourceConfig from './ResourceConfig';
 import DataSourceSelect from './DataSourceSelect';
 export default {

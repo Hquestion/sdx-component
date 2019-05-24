@@ -97,7 +97,7 @@ import {getImageTaskList, removeImageTask} from '@sdx/utils/src/api/image';
 import MessageBox from '@sdx/ui/components/message-box';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import FoldLabel from '@sdx/widget/components/fold-label';
-import {imageTaskLabel} from '@sdx/utils/src/consts/relation';
+import {imageTaskLabel} from '@sdx/utils/src/const/relation';
 import PackageDetailCompareDialog from '../PackageDetailCompareDialog';
 import BuildLogDialog from '../BuildLogDialog';
 export default {

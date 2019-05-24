@@ -1,8 +1,10 @@
 import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
+import LogInfo from './src/task-detail/common/LogInfo';
 
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';
+import * as details from './src/task-detail';
 import ProjectDetail from './src/project-detail/index.vue';
 
 ProjectManagement.install = vue => {
@@ -57,7 +59,26 @@ const routeCfg = [
                 }) => ({
                     formComp: forms[params.type]
                 })
-            },
+            }, {
+                path: 'taskInfo/:type/:taskId',
+                name: 'TaskInfo',
+                component: FormView,
+                meta: {
+                    breadcrumb: '任务详情'
+                },
+                props: ({
+                    params
+                }) => ({
+                    formComp: details[params.type]
+                })
+            },{
+                path: 'logInfo/:taskId/:method',
+                component: LogInfo,
+                meta: {
+                    name: '日志详情'
+                },
+                props: true
+            }
         ]
     }
 ];

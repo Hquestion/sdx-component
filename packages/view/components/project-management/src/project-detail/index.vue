@@ -244,6 +244,13 @@ export default {
                 }).catch(() => {});
                 break;
             case 'detail':
+                this.$router.push({
+                    name: 'TaskInfo',
+                    params: {
+                        type: operation.item.type,
+                        taskId: operation.item.uuid
+                    }
+                });
                 break;
             case 'edit':
                 this.$router.push({

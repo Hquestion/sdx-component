@@ -25,6 +25,9 @@
             <router-link to="/demo/task-log">
                 task-log测试
             </router-link> |
+            <router-link to="/demo/buildImageBasic">
+                基于文件构建
+            </router-link> |
             <router-link to="/paginationTest">
                 分页测试页面
             </router-link> |
@@ -42,7 +45,10 @@
             </router-link> |
             <router-link to="/userManage">
                 用户管理
-            </router-link>
+            </router-link> |
+            <router-link to="/imageManageTest">
+                镜像管理测试
+            </router-link> |
         </div>
         <p class="page-link">
             <button @click="toFeb">

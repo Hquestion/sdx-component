@@ -50,7 +50,8 @@ module.exports = {
                         'widget/fold-label',
                         'widget/user-picker',
                         'widget/search-layout',
-                        'widget/fileselect'
+                        'widget/fileselect',
+                        'widget/select-group-user'
                     ]
                 },
                 {
@@ -62,7 +63,8 @@ module.exports = {
                         'view/usermanage',
                         'view/resource-manage',
                         'view/privilege',
-                        'view/project-management'
+                        'view/project-management',
+                        'view/image-management'
                     ]
                 },
                 {

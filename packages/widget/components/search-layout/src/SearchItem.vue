@@ -1,11 +1,10 @@
 <template>
     <div
         class="sdxw-search-item"
-        :style="`display: ${itemIndex < active.items ? 'inline-block' : 'none'}`"
     >
         <el-form-item
             :label="lable"
-            v-if="itemIndex < active.items"
+            v-show="itemIndex < active.items"
         >
             <slot />
         </el-form-item>

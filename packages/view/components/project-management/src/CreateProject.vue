@@ -53,8 +53,8 @@
                 v-show="!projectForm.isTemplate"
             >
                 <sdxw-select-group-user
-                    :tags.sync="userGroupTags"
-                    :default-checked-keys="defaultUserGroupKeys"
+                    :users.sync="selectedUsers"
+                    :groups.sync="selectedGroups"
                 />
             </el-form-item>
         </el-form>
@@ -130,7 +130,7 @@ import Project from '@sdx/widget/components/projectcard';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Switch, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
-import { updateProject, getProjectList, createProject } from "@sdx/utils/src/api/project";
+import { updateProject, getProjectList, createProject } from '@sdx/utils/src/api/project';
 export default {
     name: 'SdxvCreateProject',
     data() {
@@ -154,8 +154,8 @@ export default {
             projectType: 'private',
             totalProjects: [],
             searchName: '',
-            userGroupTags: [],
-            defaultUserGroupKeys: []
+            selectedUsers: [],
+            selectedGroups: []
         };
     },
     components: {
@@ -203,15 +203,9 @@ export default {
     created() {
         if (this.isEditing) {
             Object.assign(this.projectForm, this.data);
-            this.data.users.forEach(user => {
-                this.data.groups.forEach(group => {
-                    if (this.defaultUserGroupKeys.indexOf(group) === -1) {
-                        this.defaultUserGroupKeys.push(group);
-                    }
-                    this.defaultUserGroupKeys.push(group + '/' + user);
-                });
-            });
-            this.title = "编辑项目";
+            this.selectedGroups = this.data.groups;
+            this.selectedUsers = this.data.users;
+            this.title = '编辑项目';
         } else if (this.createType === 'template') {
             this.getProjectList('template');
         } else if (this.createType === 'project') {
@@ -263,13 +257,8 @@ export default {
                     this.projectForm.users = [];
                     this.projectForm.groups = [];
                     if (!this.projectForm.isTemplate) {
-                        this.userGroupTags.forEach(item => {
-                            if (item.is_group) {
-                                this.projectForm.groups.push(item.uuid);
-                            } else {
-                                this.projectForm.users.push(item.uuid.split('/')[1]);
-                            }
-                        });
+                        this.projectForm.groups = this.selectedGroups;
+                        this.projectForm.users = this.selectedUsers;
                     }
                     if (this.isEditing) {
                         updateProject(this.projectForm.uuid, this.projectForm).then(() => {

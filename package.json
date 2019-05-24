@@ -19,6 +19,7 @@
         "bootstrap": "npm i && lerna bootstrap --hoist && cd examples && npm i",
         "release": "standard-version",
         "cm": "git-cz",
+        "build:gateway": "lerna run build:gateway --scope=@sdx/utils",
         "build:ui": "lerna run build --scope=@sdx/ui",
         "build:widget": "lerna run build --scope=@sdx/widget",
         "build:view": "lerna run build --scope=@sdx/view",
@@ -45,6 +46,7 @@
         "babel-eslint": "^10.0.1",
         "babel-jest": "^24.7.1",
         "babel-loader": "^8.0.5",
+        "babel-plugin-transform-dynamic-import": "^2.1.0",
         "clean-webpack-plugin": "^2.0.1",
         "commitizen": "^3.0.7",
         "copy-webpack-plugin": "^5.0.2",
@@ -79,6 +81,7 @@
         "webpack-node-externals": "^1.7.2"
     },
     "dependencies": {
+        "@babel/polyfill": "^7.4.4",
         "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
         "axios": "^0.18.0",
         "core-js": "2.5.7",

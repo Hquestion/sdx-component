@@ -25,6 +25,7 @@
                             :on-progress="onProgress"
                             :on-success="onSuccess"
                             :on-exceed="onExceed"
+                            :data="uploadParams"
                             :limit="limit"
                             :show-file-list="false"
                             :before-upload="beforeUpload"
@@ -48,6 +49,7 @@
                             :on-error="onDirectoryError"
                             :on-exceed="onExceed"
                             :limit="limit"
+                            :data="uploadParams"
                             :show-file-list="false"
                             :on-progress="onProgress"
                             :on-success="onSuccess"
@@ -95,6 +97,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import Upload from '@sdx/ui/components/upload';
 import SdxwFileSelectPop from './FileSelectPop';
 import emitter from '@sdx/utils/src/mixins/emitter';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'SdxwFileSelect',
     mixins: [emitter],
@@ -177,6 +180,10 @@ export default {
             type: Function,
             default: undefined
         },
+        uploadParams: {
+            type: Object,
+            default: undefined
+        }
     },
     computed: {
         localVisible() {
@@ -335,6 +342,7 @@ export default {
                 }));
             }
             this.cephPaths = cephModel;
+            console.log(getUser());
         });
     },
     watch: {

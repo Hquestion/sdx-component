@@ -58,9 +58,10 @@
 
 // 按需加载的方式引入
 import Vue from 'vue';
-import {Input} from '@sdx/ui';
+import {Input, AutoComplete} from '@sdx/ui';
 
 Vue.use(Input);
+Vue.use(AutoComplete);
 
 // 也可以全量引入使用
 import SdxUI from '@sdx/ui';
@@ -75,9 +76,11 @@ Vue.use(SdxUI);
 // 全量加载直接引用index.scss文件即可
 @import '~@sdx/ui/lib/theme/index.scss';
 
-// 按需加载时，需要引用两个文件：
+// 按需加载时，需要引用以下文件：
 @import '~@sdx/ui/lib/theme/base.scss';
+
 @import '~@sdx/ui/lib/theme/input.scss';
+@import '~@sdx/ui/lib/theme/autocomplete.scss';
 
 ```
 

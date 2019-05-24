@@ -36,17 +36,33 @@ externals = [
             const macthed = request.match(/^@sdx\/ui\/components\/(.*)?/)[1];
             return callback(null, 'commonjs ' + `@sdx/ui/lib/${macthed}`);
         }
+        if (/^@sdx\/ui\/theme\/(.*)?/.test(request)) {
+            const macthed = request.match(/^@sdx\/ui\/theme\/(.*)?/)[1];
+            return callback(null, 'commonjs ' + `@sdx/ui/lib/theme/${macthed}`);
+        }
         if (/^@sdx\/widget\/components\/(.*)?/.test(request)) {
             const macthed = request.match(/^@sdx\/widget\/components\/(.*)?/)[1];
             return callback(null, 'commonjs ' + `@sdx/widget/lib/${macthed}`);
+        }
+        if (/^@sdx\/widget\/theme\/(.*)?/.test(request)) {
+            const macthed = request.match(/^@sdx\/widget\/theme\/(.*)?/)[1];
+            return callback(null, 'commonjs ' + `@sdx/widget/lib/theme/${macthed}`);
         }
         if (/^@sdx\/view\/components\/(.*)?/.test(request)) {
             const macthed = request.match(/^@sdx\/view\/components\/(.*)?/)[1];
             return callback(null, 'commonjs ' + `@sdx/view/lib/${macthed}`);
         }
+        if (/^@sdx\/view\/theme\/(.*)?/.test(request)) {
+            const macthed = request.match(/^@sdx\/view\/theme\/(.*)?/)[1];
+            return callback(null, 'commonjs ' + `@sdx/view/lib/theme/${macthed}`);
+        }
         if (/^@sdx\/utils\/src\/(.*)?/.test(request)) {
             const macthed = request.match(/^@sdx\/utils\/src\/(.*)?/)[1];
             return callback(null, 'commonjs ' + `@sdx/utils/lib/${macthed}`);
+        }
+        if (/^@sdx\/utils\/theme\/(.*)?/.test(request)) {
+            const macthed = request.match(/^@sdx\/utils\/theme\/(.*)?/)[1];
+            return callback(null, 'commonjs ' + `@sdx/utils/lib/theme/${macthed}`);
         }
         callback();
     },

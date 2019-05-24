@@ -1,0 +1,9 @@
+@import '~element-ui/packages/theme-chalk/src/radio.scss';
+
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: $sdx-mark-color !important;
+    background:$sdx-mark-color !important;
+}
+.el-radio__input.is-checked + .el-radio__label {
+    color: $sdx-mark-color !important;
+}

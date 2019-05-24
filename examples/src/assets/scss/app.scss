@@ -1,6 +1,9 @@
 $ilv-primary-color: #f00;
 
 @import "~@sdx/ui/theme/index.scss";
+@import "~@sdx/utils/src/theme-common/element-customize/form.scss";
+@import "~@sdx/utils/src/theme-common/element-customize/input-number.scss";
+@import "~@sdx/utils/src/theme-common/element-customize/select.scss";
 // @import "~@sdx/ui/theme/base";
 // @import "~@sdx/ui/theme/button";
 body {

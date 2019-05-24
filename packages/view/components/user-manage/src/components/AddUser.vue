@@ -49,19 +49,19 @@
                     </el-form-item>
                     <el-form-item
                         label="角色："
-                        prop="role"
+                        prop="roles"
                     >
                         <el-select
                             class="sdxv-user-manage__userform--select"
-                            v-model="user.role"
+                            v-model="user.roles"
                             multiple
                             placeholder="请选择用户角色"
                         >
                             <el-option
-                                v-for="item in user.roles"
-                                :key="item"
-                                :label="item"
-                                :value="item"
+                                v-for="item in roles"
+                                :key="item.uuid"
+                                :label="item.name"
+                                :value="item.uuid"
                             />
                         </el-select>
                     </el-form-item>
@@ -71,10 +71,10 @@
                         <el-radio-group
                             v-model="user.isActive"
                         >
-                            <el-radio label="true">
+                            <el-radio :label="true">
                                 是
                             </el-radio>
-                            <el-radio label="false">
+                            <el-radio :label="false">
                                 否
                             </el-radio>
                         </el-radio-group>
@@ -89,10 +89,10 @@
                             v-model="user.expire_at"
                         >
                             <el-option
-                                v-for="item in user.timeGroups"
-                                :key="item"
-                                :label="item"
-                                :value="item"
+                                v-for="item in EXPIRES_OPTION"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
                             />
                         </el-select>
                     </el-form-item>
@@ -121,6 +121,8 @@ import { nameValidate } from '../validate';
 import SdxuInput from '@sdx/ui/components/input';
 import { addUser } from '@sdx/utils/src/api/user';
 import { getRolesList} from '@sdx/utils/src/api/rolemange';
+import ElSelect from 'element-ui/lib/select';
+import { EXPIRES_OPTION } from '../config';
 export default {
     props: {
 
@@ -128,6 +130,7 @@ export default {
     data () {
         return {
             addUserVisible:true,
+            EXPIRES_OPTION,
             rules: {
                 username: [
                     {required: true,message: '请输入用户名',trigger: 'blur'},
@@ -148,11 +151,10 @@ export default {
                 fullName: '',
                 password: '',
                 isActive:false,
-                timeGroups:[],
                 roles:[],
-                role:[],
-                expire_at:''
-            }
+                expire_at: 365*24*60*60*1000
+            },
+            roles: []
         };
     },
     watch:{
@@ -168,12 +170,22 @@ export default {
         confirm() {
             this.$refs.userForm.validate((valid) => {
                 if (valid) {
-                    addUser()
+                    addUser({
+                        username: this.user.username,
+                        fullName: this.user.fullName,
+                        password: this.user.password,
+                        groups: [],
+                        roles: this.user.roles,
+                        permissions: [],
+                        isActive: this.user.isActive,
+                        expiresAt: new Date(+new Date() + this.user.expire_at).toISOString()
+                    })
                         .then( (res => {
                             this.$message({
                                 message: '创建成功',
                                 type: 'success'
                             });
+                            this.$emit('refresh');
                             this.close();
                         }));
                 } else {
@@ -184,14 +196,15 @@ export default {
         _getRolesList() {
             getRolesList()
                 .then( res=>{
-                    this.user.roles = res.roles.map( (item)=>{
-                        return item.name;
-                    });
+                    this.roles = res.roles;
+                }, () => {
+                    this.roles = [];
                 });
         }
     },
     components: {
-        SdxuInput
+        SdxuInput,
+        ElSelect
     },
     mounted() {
         this._getRolesList();

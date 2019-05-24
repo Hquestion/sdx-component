@@ -66,7 +66,7 @@
                         width="540"
                         trigger="hover"
                     >
-                        <Iconinfo />
+                        <Iconinfo v-if="radio === 'DockerFile'" />
                         <i
                             class="sdx-icon sdx-icon-info"
                             slot="reference"

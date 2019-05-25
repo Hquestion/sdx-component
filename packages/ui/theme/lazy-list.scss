@@ -1,0 +1,20 @@
+@include block('lazy-list', $bem-namespace-ui) {
+    height: 100%;
+    @include element('top-holder') {
+        background: rgba($sdx-none-color, .1);
+    }
+    @include element('bottom-holder') {
+        background: rgba($sdx-none-color, .1);
+        overflow: hidden;
+    }
+    @include element('loading') {
+        text-align: center;
+        line-height: 40px;
+        color: $sdx-text-holder-color;
+        font-size: $sdx-help-font-size;
+        i {
+            font-size: $sdx-content-font-size;
+            margin-right: 10px;
+        }
+    }
+}

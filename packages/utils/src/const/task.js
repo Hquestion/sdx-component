@@ -12,6 +12,7 @@ export const TASK_TYPE = {
 export const STATE_TYPE = {
     CREATED: 'CREATED',
     LAUNCHING: 'LAUNCHING',
+    LAUNCH_ABNORMAL: 'LAUNCH_ABNORMAL',
     RUNNING: 'RUNNING',
     FINISHED: 'FINISHED',
     KILLED: 'KILLED',
@@ -33,6 +34,7 @@ export const STATE_TYPE_LABEL = {
 export const STATE_MAP_FOLD_LABEL_TYPE = {
     CREATED: 'create',
     LAUNCHING: 'processing',
+    LAUNCH_ABNORMAL: 'exception',
     RUNNING: 'running',
     FINISHED: 'finish',
     KILLED: 'die',

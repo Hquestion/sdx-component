@@ -1,6 +1,6 @@
 {
     "name": "@sdx/utils",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "description": "sdx工具类组件库",
     "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
     "homepage": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component#readme",
@@ -30,8 +30,8 @@
         "build:gateway": "webpack --config ./build/webpack.gateway.js"
     },
     "peerDependencies": {
-        "vue": "^2.6.10",
-        "axios": "^0.18.0"
+        "axios": "^0.18.0",
+        "vue": "^2.6.10"
     },
     "babel": {
         "presets": [

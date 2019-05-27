@@ -1,4 +1,4 @@
-import { isUndefined, isNaN } from '@sdx/utils/src/helper/tool';
+import { isUndefined, isNaN } from '../helper/tool';
 
 export function minIndex(list) {
     let min, minIndex;

@@ -1,6 +1,6 @@
 {
     "name": "@sdx/widget",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "description": "控件级业务组件库",
     "keywords": [
         "widget"
@@ -33,13 +33,13 @@
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "dependencies": {
-        "@sdx/utils": "^1.0.2"
+        "@sdx/utils": "^1.0.4"
     },
     "peerDependencies": {
-        "element-ui": "^2.7.2",
-        "vue": "^2.6.10",
+        "@sdx/ui": "^1.0.2",
         "@sdx/utils": "^1.0.2",
-        "@sdx/ui": "^1.0.2"
+        "element-ui": "^2.7.2",
+        "vue": "^2.6.10"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

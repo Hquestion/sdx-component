@@ -1,6 +1,6 @@
 {
     "name": "@sdx/view",
-    "version": "1.0.2",
+    "version": "1.0.4",
     "description": "页面级组件库",
     "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
     "homepage": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component#readme",
@@ -30,15 +30,16 @@
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "dependencies": {
-        "@sdx/utils": "^1.0.2"
+        "@sdx/utils": "^1.0.4"
     },
     "peerDependencies": {
-        "element-ui": "^2.7.2",
-        "vue": "^2.6.10",
-        "@sdx/utils": "^1.0.2",
         "@sdx/ui": "^1.0.2",
+        "@sdx/utils": "^1.0.2",
         "@sdx/widget": "^1.0.2",
-        "moment": "^2.24.0"
+        "echarts": "^4.2.1",
+        "element-ui": "^2.7.2",
+        "moment": "^2.24.0",
+        "vue": "^2.6.10"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

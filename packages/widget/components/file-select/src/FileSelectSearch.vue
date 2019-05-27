@@ -1,26 +1,50 @@
 <template>
     <div class="sdxw-file-select-search">
-        <div class="sdxw-file-select-search__list">
-            <div
-                class="sdxw-file-select-search__item"
-                v-for="item in renderData"
-                :key="item.path"
-            >
+        <!--        <div class="sdxw-file-select-search__list">-->
+        <!--            <div-->
+        <!--                class="sdxw-file-select-search__item"-->
+        <!--                v-for="item in renderData"-->
+        <!--                :key="item.path"-->
+        <!--            >-->
+        <!--                <el-checkbox-->
+        <!--                    class="sdxw-file-select-search__item-checkbox"-->
+        <!--                    :value="isChecked(item)"-->
+        <!--                    @change="(checked) => handleCheckChange(item, checked)"-->
+        <!--                >-->
+        <!--                </el-checkbox>-->
+        <!--                <svg-->
+        <!--                    class="sdxw-file-select-search__item-icon"-->
+        <!--                    aria-hidden="true"-->
+        <!--                >-->
+        <!--                    <use :xlink:href="'#' + getPathIcon(item)" />-->
+        <!--                </svg>-->
+        <!--                <span class="sdxw-file-select-search__item-name">{{ item.name }}</span>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <SdxuLazyList
+            :load="loadData"
+            item-key="path"
+            store-name="xxxx"
+            store-keys="path,name,isFile,userId,createdAt,mineType"
+            :item-height="36"
+            item-class="sdxw-file-select-search__item"
+            ref="fileList"
+        >
+            <template #default="{data}">
                 <el-checkbox
                     class="sdxw-file-select-search__item-checkbox"
-                    :value="isChecked(item)"
-                    @change="(checked) => handleCheckChange(item, checked)"
-                >
-                </el-checkbox>
+                    :value="isChecked(data)"
+                    @change="(checked) => handleCheckChange(data, checked)"
+                />
                 <svg
                     class="sdxw-file-select-search__item-icon"
                     aria-hidden="true"
                 >
-                    <use :xlink:href="'#' + getPathIcon(item)" />
+                    <use :xlink:href="'#' + getPathIcon(data)" />
                 </svg>
-                <span class="sdxw-file-select-search__item-name">{{ item.name }}</span>
-            </div>
-        </div>
+                <span class="sdxw-file-select-search__item-name">{{ data.name }}</span>
+            </template>
+        </SdxuLazyList>
     </div>
 </template>
 
@@ -28,6 +52,7 @@
 import { searchFiles } from '@sdx/utils/src/api/file';
 import { getPathIcon } from './utils';
 import{ Checkbox } from 'element-ui';
+import SdxuLazyList from '@sdx/ui/components/lazy-list';
 
 export default {
     name: 'SdxwFileSelectSearch',
@@ -40,7 +65,8 @@ export default {
         };
     },
     components: {
-        [Checkbox.name]: Checkbox
+        [Checkbox.name]: Checkbox,
+        SdxuLazyList
     },
     props: {
         value: {
@@ -84,12 +110,21 @@ export default {
     },
     methods: {
         refresh(reInit) {
-            // todo 性能优化
+            // 如果重新搜索，调用reset接口即可
             if (reInit) {
                 this.pageIndex = 1;
+                this.$refs.fileList.reset();
             }
             searchFiles({key: this.key}).then(res => {
                 this.renderData = this.renderData.concat(res);
+            });
+        },
+        loadData(pageIndex) {
+            return searchFiles({key: this.key}).then(res => {
+                return {
+                    data: res.children,
+                    total: res.total
+                };
             });
         },
         isChecked(pathInfo) {
@@ -114,6 +149,7 @@ export default {
     },
     mounted() {
         this.refresh();
+        this.$el.querySelector('.sdxu-lazy-list').style.height = this.$el.parentNode.offsetHeight + 'px';
     }
 };
 </script>

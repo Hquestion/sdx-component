@@ -35,8 +35,7 @@ shareCenter.setup({
 
 
 // 项目管理
-Vue.use(Project.ProjectManagement);
-Project.viewRouter.register(router, '/projectManageTest');
+Project.viewRouter.register(router, '/');
 
 // 镜像管理
 // Vue.use(Image.ImageManageIndex);

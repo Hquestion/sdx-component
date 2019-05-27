@@ -11,7 +11,7 @@ export function nameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写4到20位,字母开头,数字、字母、下划线、点组成的字符串'
+                '请填写4到20位，字母开头，数字、字母、下划线、点组成的字符串'
             )
         );
     }
@@ -24,7 +24,7 @@ export function cNameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写1到24位,汉字、字母、数字、@、-、点、下划线组成的字符串'
+                '请填写1到24位，汉字、字母、数字、@、-、点、下划线组成的字符串',
             )
         );
     }
@@ -40,12 +40,41 @@ export function itemNameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写1-24位,小写字母开头,数字、小写字母、点与下划线组成的字符串'
+                '请填写1-24位，小写字母开头，数字、小写字母、点与下划线组成的字符串'
             )
         );
     }
 }
-
+/**
+ * 镜像名称
+ */
+export function imageNameValidate(rule, value, callback) {
+    const reg = /^[a-z][a-z0-9_.-]{0,63}$/;
+    if (reg.test(value)) {
+        callback();
+    } else {
+        callback(
+            new Error(
+                '请填写长度为1-64个字符，小写英文字母开头，允许小写英文字母、数字、"."、"_"或"-"'
+            )
+        );
+    }
+}
+/**
+ * 镜像版本号
+ */
+export function imageVersionValidate(rule, value, callback) {
+    const reg = /^[A-Za-z0-9_.-]{0,63}$/;
+    if (reg.test(value)) {
+        callback();
+    } else {
+        callback(
+            new Error(
+                '请填写长度为1-64个字符，允许英文字母、数字、"."、"_"或"-"'
+            )
+        );
+    }
+}
 /**
  * 名称校验,长度限制100
  */
@@ -56,7 +85,7 @@ export function itemNameValidate100(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写1-100位,小写字母开头,数字、小写字母、点与下划线组成的字符串'
+                '请填写1-100位，小写字母开头，数字、小写字母、点与下划线组成的字符串'
             )
         );
     }
@@ -72,7 +101,7 @@ export function tagNameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写1-10位,字母或数字开头,字母、数字与点组成的字符串'
+                '请填写1-10位，字母或数字开头，字母、数字与点组成的字符串'
             )
         );
     }

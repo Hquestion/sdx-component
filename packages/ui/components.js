@@ -18,5 +18,6 @@ module.exports = {
     'user-avatar': './components/user-avatar/index.js',
     'scroll': './components/scroll/index.js',
     'upload': './components/upload/index.js',
-    layout: './components/layout/index.js'
+    layout: './components/layout/index.js',
+    'lazy-list': './components/lazy-list/index.js'
 };

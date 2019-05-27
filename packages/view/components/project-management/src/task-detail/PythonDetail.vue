@@ -29,7 +29,7 @@
         <template #running-info>
             <SdxvBaseInfoItem
                 label="源代码"
-                :value="task.sourcePath[0]"
+                :value="task.sourcePaths[0]"
             />
             <SdxvBaseInfoItem
                 label="运行环境"

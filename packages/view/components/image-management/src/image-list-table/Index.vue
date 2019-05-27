@@ -34,6 +34,7 @@
             :data="imageList"
             class="sdxv-image-list__table"
             @selection-change="selectionChange"
+            @sort-change="sortChange"
         >
             <el-table-column
                 type="selection"
@@ -71,6 +72,7 @@
                 prop="createdAt"
                 key="createdAt"
                 label="创建时间"
+                sortable="custom"
             />
             <el-table-column
                 label="操作"
@@ -139,8 +141,8 @@
                     v-show="shareForm.shareType !== 'PUBLIC'"
                 >
                     <sdxw-select-group-user
-                        :tags.sync="userGroupTags"
-                        :default-checked-keys="defaultUserGroupKeys"
+                        :users="selectedUsers"
+                        :groups="selectedGroups"
                     />
                 </el-form-item>
             </el-form>
@@ -172,6 +174,8 @@ export default {
             total: 1,
             current: 1,
             pageSize: 10,
+            order: '',
+            orderBy: '',
             loading: false,
             dialogVisible: false,
             dialogTitle: '',
@@ -180,7 +184,8 @@ export default {
                 users: [],
                 groups: []
             },
-            userGroupTags: [],
+            selectedGroups: [],
+            selectedUsers: [],
             defaultUserGroupKeys: [],
             editingImage: null,
             selectedImages: [],
@@ -288,13 +293,8 @@ export default {
             this.shareForm.users = [];
             this.shareForm.groups = [];
             if (this.shareForm.shareType !== 'PUBLIC') {
-                this.userGroupTags.forEach(item => {
-                    if (item.is_group) {
-                        this.shareForm.groups.push(item.uuid);
-                    } else {
-                        this.shareForm.users.push(item.uuid.split('/')[1]);
-                    }
-                });
+                this.shareForm.users = this.selectedUsers;
+                this.shareForm.groups = this.selectedGroups;
             }
             if (this.editingImage) {
                 // 编辑镜像
@@ -328,7 +328,9 @@ export default {
                 buildType: this.buildType,
                 taskType: this.taskType,
                 start: this.current,
-                count: this.pageSize
+                count: this.pageSize,
+                order: this.order,
+                orderBy: this.orderBy
             };
             if (this.isOwner) {
                 if (this.isOwner === 'true') {
@@ -347,6 +349,13 @@ export default {
             this.current = nVal;
             this.initImageList();
         },
+        sortChange(sort) {
+            if (sort && sort.prop && sort.order) {
+                this.order = sort.prop;
+                this.orderBy = sort.order === 'ascending' ? 'asc' : 'desc';
+                this.initImageList();
+            }
+        },
         handleOperation(row, type) {
             if (type && row.uuid) {
                 switch (type) {
@@ -360,16 +369,8 @@ export default {
                     this.dialogTitle = '共享设置';
                     this.editingImage = row;
                     Object.assign(this.shareForm, row);
-                    row.groups.forEach(group => {
-                        if (this.defaultUserGroupKeys.indexOf(group) === -1) {
-                            this.defaultUserGroupKeys.push(group);
-                        }
-                    });
-                    row.users.forEach(user => {
-                        row.groups.forEach(group => {
-                            this.defaultUserGroupKeys.push(group + '/' + user);
-                        });
-                    });
+                    this.selectedGroups = row.groups;
+                    this.selectedUsers = row.users;
                     break;
                 case 'extend':
                     this.$router.push({ name: 'basicbuild' });

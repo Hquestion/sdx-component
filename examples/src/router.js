@@ -26,6 +26,7 @@ import ImageManage from '@sdx/view/components/image-management';
 import BuildImageBasicDemo from './views/demo/buildImageBasicDemo';
 
 import SearchLayout from './views/cache/search.vue';
+import Task from './views/cache/task.vue';
 import TaskDetailDemo from './views/demo/taskDetailDemo';
 import LogInfoDemo from './views/demo/logInfoDemo';
 
@@ -91,6 +92,10 @@ const router = new Router({
             {
                 path: 'search',
                 component: SearchLayout,
+            },
+            {
+                path: 'task',
+                component: Task,
 
             }
             ]

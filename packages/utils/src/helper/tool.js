@@ -13,3 +13,8 @@ export function isString(str) {
 export function isUndefined(v) {
     return typeof v === 'undefined';
 }
+
+export function isObject(value) {
+    const type = typeof value;
+    return value != null && (type === 'object' || type === 'function');
+}

@@ -1,5 +1,6 @@
 <template>
     <vuescroll
+        ref="scroll"
         :ops="ops"
         @handle-scroll="onScroll"
         @handle-resize="onResize"
@@ -59,7 +60,13 @@ export default {
         },
         onScrollEnd(...rest) {
             this.$emit('handle-scroll-complete', ...rest);
+        },
+        getPosition() {
+            return this.$refs.scroll.getPosition();
         }
+    },
+    mounted() {
+        console.log(this.$refs.scroll);
     }
 };
 </script>

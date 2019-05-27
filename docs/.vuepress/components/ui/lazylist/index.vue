@@ -1,11 +1,5 @@
 <template>
-    <div class="home">
-        <img
-            alt="Vue logo"
-            src="../assets/logo.png"
-        >
-        <SdxFilePop></SdxFilePop>
-        <SdxwFileSelectMain check-type="file" v-model="files" accept="img/png;.py"></SdxwFileSelectMain>
+    <div class="index">
         <SdxuLazyList :load="loadData" item-key="uuid" store-name="file" store-keys="uuid,name" :item-height="50" style="height: 400px;">
             <template #default="{data}">
                 <div >{{data.name}}</div>
@@ -15,24 +9,14 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import SdxFilePop from '@sdx/widget/components/file-select/src/FileSelectPop';
-import SdxwFileSelectMain from '@sdx/widget/components/file-select/src/FileSelectMix';
-import SdxuLazyList from '@sdx/ui/components/lazy-list/src/LazyList';
-
+import SdxuLazyList from '@sdx/ui/components/lazy-list';
 export default {
-    name: 'Home',
-    components: {
-        SdxuLazyList,
-        SdxFilePop,
-        SdxwFileSelectMain
-    },
+    name: 'index',
     data() {
-        return {
-            checkedNodes: [],
-            searchCheckedNodes: [],
-            files: []
-        };
+        return {};
+    },
+    components: {
+        SdxuLazyList
     },
     methods: {
         loadData(pageIndex) {
@@ -51,9 +35,15 @@ export default {
                         ],
                         total: 100
                     });
-                }, 3000);
+                }, 1000);
             });
         }
     }
-};
+}
 </script>
+
+<style lang="scss" scoped>
+    .index {
+        width: 100%;
+    }
+</style>

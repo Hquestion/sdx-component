@@ -51,20 +51,19 @@
                     >
                         <sdxu-button
                             size="small"
-                            @click="showAddPackageForm = !showAddPackageForm"
+                            @click.stop="showAddPackageForm = !showAddPackageForm"
                         >
                             新增包
                         </sdxu-button>
                         <div class="sdxv-image-build-basic__add-package--icon">
-                            <span>{{ showAddPackageForm ? "收起" : "展开" }} </span>
+                            <span>{{ showAddPackageForm ? "收起" : "展开" }}</span>
                             <i
-                                class="sdx-icon"
-                                :class="{ 'sdx-icon-arrow-down': !showAddPackageForm,
-                                          'sdx-icon-arrow-up': showAddPackageForm }"
+                                class="sdx-icon sdx-icon-arrow-down"
+                                :class="{ 'is-reverse': showAddPackageForm }"
                             />
                         </div>
                     </div>
-                    <transition name="fade">
+                    <transition name="slide">
                         <sdxv-add-package
                             v-if="showAddPackageForm"
                             :query-count="queryCount"

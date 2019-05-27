@@ -36,11 +36,23 @@
         @include modifier('icon') {
             color: #4781F8;
             & > i {
+                display: inline-block;
                 font-size: 12px;
+                margin-left: 10px;
+                transform: rotate(0deg);
+                transition: transform .3s;
                 @include state('reverse') {
-                    animation: arrowtoggle .3s forwards;
+                    transform: rotate(180deg);
+                    
                 }
             }
+        }
+
+        .slide-enter-active {
+            transition: all .8s ease;
+        }
+        .slide-enter, .slide-leave-to {
+            opacity: 0;
         }
     }
 }
@@ -49,14 +61,5 @@
     padding: $sdx-padding;
     .el-form-item:last-child {
         margin-bottom: 0;
-    }
-}
-
-@keyframes arrowtoggle {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(180deg);
     }
 }

@@ -36,6 +36,7 @@
         "@sdx/ui": "^1.0.2",
         "@sdx/utils": "^1.0.2",
         "@sdx/widget": "^1.0.2",
+        "echarts": "^4.2.1",
         "element-ui": "^2.7.2",
         "moment": "^2.24.0",
         "vue": "^2.6.10"

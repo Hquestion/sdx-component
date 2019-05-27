@@ -21,7 +21,7 @@ export function getFilesList(params) {
 
 export function searchFiles(params) {
     return getFilesList(params).then(res => {
-        return res.children;
+        return res;
     });
 }
 

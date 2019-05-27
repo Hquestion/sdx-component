@@ -342,7 +342,7 @@ export default {
                 }));
             }
             this.cephPaths = cephModel;
-            console.log(getUser());
+            // console.log(getUser());
         });
     },
     watch: {

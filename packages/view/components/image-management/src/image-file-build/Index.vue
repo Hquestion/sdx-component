@@ -57,16 +57,17 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    label="文件地址"
+                    :label="radio === 'DockerFile' ? '文件地址' :'文件地址:' "
                     prop="filePath"
-                    class="iconinfo"
+                    :class="radio === 'DockerFile' ? 'iconinfo' : ''"
                 >
                     <el-popover
                         placement="right"
                         width="540"
                         trigger="hover"
+                        v-if="radio === 'DockerFile'"
                     >
-                        <Iconinfo v-if="radio === 'DockerFile'" />
+                        <Iconinfo />
                         <i
                             class="sdx-icon sdx-icon-info"
                             slot="reference"
@@ -243,6 +244,11 @@ export default {
                 padding-left: 3px;
             }
         }
+        &/deep/ .tartype {
+                color: #606266;
+                padding-left: 3px;
+            }
+        
     }
 }
 </style>

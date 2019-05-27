@@ -79,6 +79,8 @@ export default {
             height: 60vh;
         }
         .sdxv-build-log__content {
+            background: #F7F9FD;
+            padding: 20px;
             white-space: pre-wrap;
             word-break: break-all;
             text-align: left;

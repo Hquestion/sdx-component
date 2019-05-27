@@ -19,6 +19,17 @@ export const STATE_TYPE = {
     KILLING: 'KILLING'
 };
 
+export const STATE_TYPE_LABEL = {
+    CREATED: '创建',
+    LAUNCHING: '启动中',
+    LAUNCH_ABNORMAL: '启动异常',
+    RUNNING: '运行中',
+    FINISHED: '已完成',
+    KILLED: '已终止',
+    FAILED: '失败',
+    KILLING: '终止中'
+};
+
 export const STATE_MAP_FOLD_LABEL_TYPE = {
     CREATED: 'create',
     LAUNCHING: 'processing',

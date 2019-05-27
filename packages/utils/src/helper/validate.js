@@ -45,7 +45,36 @@ export function itemNameValidate(rule, value, callback) {
         );
     }
 }
-
+/**
+ * 镜像名称
+ */
+export function imageNameValidate(rule, value, callback) {
+    const reg = /^[a-z][a-z0-9_.-]{0,63}$/;
+    if (reg.test(value)) {
+        callback();
+    } else {
+        callback(
+            new Error(
+                '请填写长度为1-64个字符，小写英文字母开头，允许小写英文字母、数字、"."、"_"或"-"'
+            )
+        );
+    }
+}
+/**
+ * 镜像版本号
+ */
+export function imageVersionValidate(rule, value, callback) {
+    const reg = /^[A-Za-z0-9_.-]{0,63}$/;
+    if (reg.test(value)) {
+        callback();
+    } else {
+        callback(
+            new Error(
+                '请填写长度为1-64个字符，允许英文字母、数字、"."、"_"或"-"'
+            )
+        );
+    }
+}
 /**
  * 名称校验,长度限制100
  */

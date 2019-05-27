@@ -9,10 +9,10 @@
                 <template #value>
                     <SdxwFoldLabel
                         :plain="true"
-                        :type="STATE_MAP_FOLD_LABEL_TYPE[task.state.name]"
+                        :type="STATE_MAP_FOLD_LABEL_TYPE[task.state]"
                         :status="stateIcon"
                     >
-                        {{ task.state.label }}
+                        {{ STATE_TYPE_LABEL[task.state] }}
                     </SdxwFoldLabel>
                 </template>
             </SdxvBaseInfoItem>

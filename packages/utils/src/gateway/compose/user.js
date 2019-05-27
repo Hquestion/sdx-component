@@ -15,9 +15,16 @@ export function userProfiles(request, session, config) {
         'suppress_parallel_execution': false
     };
     log('[list batch] ' + JSON.stringify(batch));
-    var simpleUserList = TykBatchRequest(JSON.stringify(batch));
+    var simpleUserListBatch = TykBatchRequest(JSON.stringify(batch));
 
     log('[userList batch result no parse] ' + simpleUserList);
+
+    var simpleUserList = simpleUserListBatch[0];
+
+    if (simpleUserList.code < 200 || simpleUserList.code >= 400) {
+        // 请求失败，将body信息作为响应返回
+        return TykJsResponse(new Response(simpleUserList.code, simpleUserList.body), session.meta_data);
+    }
 
     simpleUserList = JSON.parse(JSON.parse(simpleUserList)[0].body);
 
@@ -78,9 +85,12 @@ export function userProfiles(request, session, config) {
 
     // 将用户组/角色/权限的详细信息与UUID建立映射字典表，方便后面匹配
     metaList.forEach((item, index1) => {
-        var result = JSON.parse(item.body);
+        var result = [];
+        if (item.code >= 200 && item.code < 400) {
+            result = JSON.parse(item.body);
+        }
         idOrder[index1].forEach((roleId, index2) => {
-            mapOrder[index1][roleId] = result[bodyKeyOrder[index1]][index2];
+            mapOrder[index1][roleId] = result[bodyKeyOrder[index1]] && result[bodyKeyOrder[index1]][index2];
         });
     });
 
@@ -88,9 +98,9 @@ export function userProfiles(request, session, config) {
 
     // 遍历列表，根据之前建立的映射表，匹配详细信息并替换掉之前的UUID列表
     simpleUserList.users.forEach(item => {
-        item.roles = item.roles.map(role => roleInfoMap[role]);
-        item.groups = item.groups.map(group => groupInfoMap[group]);
-        item.permissions = item.permissions.map(permission => permissionMap[permission]);
+        item.roles = item.roles.map(role => roleInfoMap[role] || {uuid: role});
+        item.groups = item.groups.map(group => groupInfoMap[group] || {uuid: group});
+        item.permissions = item.permissions.map(permission => permissionMap[permission] || {uuid: permission});
     });
 
     // We need to send a string object back to Tyk to embed in the response

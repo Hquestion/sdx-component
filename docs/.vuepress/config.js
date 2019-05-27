@@ -36,7 +36,8 @@ module.exports = {
                         'ui/placeholder',
                         'ui/user-avatar',
                         'ui/layout',
-                        'ui/scroll'
+                        'ui/scroll',
+                        'ui/lazyList'
                     ]
                 },
                 {

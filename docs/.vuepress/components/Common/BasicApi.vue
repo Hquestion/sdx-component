@@ -55,7 +55,7 @@
           style="width: 100%">
           <el-table-column
               prop="params"
-              label="事件名称"
+              label="插槽名称"
           >
           </el-table-column>
           <el-table-column

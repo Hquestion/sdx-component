@@ -17,6 +17,7 @@ import Scroll from './components/scroll';
 import Upload from './components/upload';
 import Layout from './components/layout';
 import LazyList from './components/lazy-list';
+import IconButtonGroup from './components/icon-button-group';
 
 import { registerI18n } from '@sdx/utils/src/locale';
 
@@ -39,7 +40,8 @@ const SdxUI = {
     Scroll,
     Upload,
     Layout,
-    LazyList
+    LazyList,
+    IconButtonGroup
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -62,6 +64,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     Upload.install(vue);
     Layout.install(vue);
     LazyList.install(vue);
+    IconButtonGroup.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

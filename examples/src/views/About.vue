@@ -34,6 +34,7 @@
             <SdxuIconButton
                 icon="sdx-icon sdx-icon-delete"
                 title="删除"
+                @click="onClick(1)"
             />
         </SdxuIconButtonGroup>
     </div>
@@ -45,12 +46,20 @@ import SdxuIconButton from '@sdx/ui/components/icon-button';
 export default {
     name: 'About',
     data() {
-        return {};
+        return {
+            a: 1
+        };
     },
     components: {
         SdxuIconButtonGroup,
         SdxuButton,
         SdxuIconButton
+    },
+    methods: {
+        onClick(a) {
+            alert(a+5);
+            this.a = a + 5;
+        }
     }
 };
 </script>

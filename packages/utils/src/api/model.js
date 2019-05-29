@@ -18,9 +18,14 @@ export function removeModel(uuid) {
     return httpService.remove(modelApi + uuid);
 }
 
+export function updateModel(uuid, params) {
+    return httpService.patch(modelApi + uuid, params);
+}
+
 export default {
     getModelList,
     getLabels,
     createModel,
-    removeModel
+    removeModel,
+    updateModel
 };

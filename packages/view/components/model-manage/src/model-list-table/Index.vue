@@ -153,6 +153,14 @@
                 </el-form-item>
             </el-form>
         </sdxu-dialog>
+        <div>
+            <create-model
+                :visible.sync="createDialogVisible"
+                v-if="createDialogVisible"
+                @close="dialogClose"
+                :editing-model="editingModel"
+            />
+        </div>
     </div>
 </template>
 
@@ -167,6 +175,7 @@ import { getModelList, removeModel, updateModel, updateGroupModels } from '@sdx/
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
+import CreateModel from '../CreateModel';
 import { Message } from 'element-ui';
 export default {
     name: 'ModelListTable',
@@ -190,7 +199,8 @@ export default {
             selectedUsers: [],
             defaultUserGroupKeys: [],
             editingModel: null,
-            selectedModels: []
+            selectedModels: [],
+            createDialogVisible: false
         };
     },
     props: {
@@ -211,7 +221,8 @@ export default {
         [SelectGroupUser.name]: SelectGroupUser,
         [Button.name]: Button,
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
-        SdxuIconButtonGroup
+        SdxuIconButtonGroup,
+        CreateModel
     },
     computed: {
         isAdmin() {
@@ -222,10 +233,13 @@ export default {
         }
     },
     methods: {
+        dialogClose(needRefresh) {
+            if (needRefresh) this.initModelList();
+        },
         share() {
             if (!this.selectedModels.length) {
                 Message({
-                    message: '请先选择需要共享的镜像',
+                    message: '请先选择需要共享的模型',
                     type: 'warning'
                 });
                 return;
@@ -241,7 +255,7 @@ export default {
         remove() {
             if (!this.selectedModels.length) {
                 Message({
-                    message: '请先选择需要删除的镜像',
+                    message: '请先选择需要删除的模型',
                     type: 'warning'
                 });
                 return;
@@ -255,7 +269,7 @@ export default {
         cancelShare() {
             if (!this.selectedModels.length) {
                 Message({
-                    message: '请先选择需要取消共享的镜像',
+                    message: '请先选择需要取消共享的模型',
                     type: 'warning'
                 });
                 return;
@@ -277,7 +291,7 @@ export default {
                 this.shareForm.groups = this.selectedGroups;
             }
             if (this.editingModel) {
-                // 编辑镜像
+                // 编辑模型
                 updateModel(this.editingModel.uuid, this.shareForm).then(() => {
                     Message({
                         message: '设置成功',
@@ -347,6 +361,8 @@ export default {
                     this.selectedUsers = row.users;
                     break;
                 case 'edit':
+                    this.createDialogVisible = true;
+                    this.editingModel = row;
                     break;
                 case 'remove':
                     MessageBox({

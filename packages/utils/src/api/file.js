@@ -1,8 +1,8 @@
-import httpService from '../http-service';
+import httpService from '@sdx/utils/lib/http-service';
 
-export function getFilesList(params) {
+export function getFilesList(params = {}) {
     const {
-        userId,
+        userId = '',
         path = '/',
         start = 1,
         count = -1,

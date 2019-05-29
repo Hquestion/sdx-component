@@ -31,6 +31,7 @@
 
 <script>
 import SdxuIconButton from '@sdx/ui/components/icon-button';
+import debounce from '@sdx/utils/src/helper/debounce';
 const MaxShowCount = 3;
 export default {
     name: 'SdxuIconButtonGroup',
@@ -57,23 +58,37 @@ export default {
         handleClick(item) {
             this.popperVisible = false;
             item.onClick();
+        },
+        init() {
+            if (!this.$slots.default) return;
+            this.allIconButtons = this.$slots.default.filter(item => !!item.componentInstance);
+            if (this.ellipseVisible) {
+                this.allIconButtons.forEach((item, index) => {
+                    item.componentInstance.visible = index < this.visibleCount - 1;
+                });
+                this.hiddenIcons = this.allIconButtons.slice(MaxShowCount - 1).map(item => {
+                    return {
+                        title: item.componentInstance && item.componentInstance.title,
+                        onClick: item.componentInstance.$listeners.click || function() {}
+                    };
+                });
+            } else {
+                this.hiddenIcons = [];
+            }
+        },
+        listenSlotsChange() {
+            const syncFn = debounce(this.init, 300);
+            this.$on('sdxu.change', syncFn);
         }
     },
     mounted() {
-        this.allIconButtons = this.$slots.default.filter(item => !!item.componentInstance);
-        if (this.ellipseVisible) {
-            this.allIconButtons.forEach((item, index) => {
-                item.componentInstance.visible = index < this.visibleCount - 1;
-            });
-            this.hiddenIcons = this.allIconButtons.slice(MaxShowCount - 1).map(item => {
-                return {
-                    title: item.componentInstance && item.componentInstance.title,
-                    onClick: item.componentInstance.$listeners.click || function() {}
-                };
-            });
-        } else {
-            this.hiddenIcons = [];
-        }
+        this.init();
+    },
+    beforeMount() {
+        this.listenSlotsChange();
+    },
+    beforeDestroy() {
+        this.$off('sdxu.change');
     }
 };
 </script>

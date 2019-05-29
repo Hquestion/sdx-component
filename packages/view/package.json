@@ -39,7 +39,8 @@
         "echarts": "^4.2.1",
         "element-ui": "^2.7.2",
         "moment": "^2.24.0",
-        "vue": "^2.6.10"
+        "vue": "^2.6.10",
+        "dexie": "^2.0.4"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

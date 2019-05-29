@@ -93,6 +93,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('file-select', $bem-namespace-widget) {
+    @include state('inline') {
+        display: inline-block;
+    }
     & /deep/ .sdxw-file-select-pop__ref {
         display: block;
     }

@@ -38,7 +38,8 @@ module.exports = {
                         'ui/user-avatar',
                         'ui/layout',
                         'ui/scroll',
-                        'ui/lazyList'
+                        'ui/lazyList',
+                        'ui/radial-progress'
                     ]
                 },
                 {

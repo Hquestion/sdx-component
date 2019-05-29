@@ -83,7 +83,7 @@ import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
 import ElSelect from 'element-ui/lib/select';
-import { getLabels, createModel } from '@sdx/utils/src/api/model';
+import { getLabels, createModel, updateModel } from '@sdx/utils/src/api/model';
 export default {
     name: 'CreateModel',
     data() {
@@ -118,6 +118,10 @@ export default {
         visible: {
             type: Boolean,
             default: false
+        },
+        editingModel: {
+            type: Object,
+            default: null
         }
     },
     watch: {
@@ -137,6 +141,10 @@ export default {
         getLabels().then(res => {
             this.labelOptions = res.items;
         });
+        if (this.editingModel) {
+            this.title = '编辑模型';
+            Object.assign(this.modelInfoForm, this.editingModel);
+        }
     },
     methods: {
         dialogClose() {
@@ -157,14 +165,25 @@ export default {
                 if (!valid) {
                     Message.error('请输入必填信息');
                 } else {
-                    createModel(this.modelInfoForm).then(() => {
-                        Message({
-                            message: '模型创建成功',
-                            type: 'success'
+                    if (this.editingModel) {
+                        updateModel(this.editingModel.uuid, this.modelInfoForm).then(() => {
+                            Message({
+                                message: '更新成功',
+                                type: 'success'
+                            });
+                            this.needRefresh = true;
+                            this.dialogVisible = false;
                         });
-                        this.needRefresh = true;
-                        this.dialogVisible = false;
-                    });
+                    } else {
+                        createModel(this.modelInfoForm).then(() => {
+                            Message({
+                                message: '创建成功',
+                                type: 'success'
+                            });
+                            this.needRefresh = true;
+                            this.dialogVisible = false;
+                        });
+                    }
                 }
             });
         }

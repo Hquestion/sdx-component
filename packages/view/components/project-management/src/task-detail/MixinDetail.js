@@ -7,7 +7,7 @@ import SdxvHasNothing from './common/HasNothing';
 import SdxvMonitorInfo from './common/MonitorInfo';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuButton from '@sdx/ui/components/button';
-import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE } from '@sdx/utils/src/const/task';
+import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL } from '@sdx/utils/src/const/task';
 
 export default {
     props: {
@@ -33,15 +33,16 @@ export default {
     },
     data() {
         this.STATE_TYPE = STATE_TYPE;
+        this.STATE_TYPE_LABEL = STATE_TYPE_LABEL;
         this.STATE_MAP_FOLD_LABEL_TYPE = STATE_MAP_FOLD_LABEL_TYPE;
         return {};
     },
     computed: {
         stateIcon() {
             let icon = '';
-            if ([STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state.name)) {
+            if ([STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state)) {
                 icon = 'loading';
-            } else if ([STATE_TYPE.FAILED, STATE_TYPE.LAUNCH_ABNORMAL].includes(this.task.state.name)) {
+            } else if ([STATE_TYPE.FAILED, STATE_TYPE.LAUNCH_ABNORMAL].includes(this.task.state)) {
                 icon = 'warning';
             }
             return icon;

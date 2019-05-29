@@ -32,6 +32,7 @@ module.exports = {
                         'ui/transfer',
                         'ui/content-panel',
                         'ui/iconbutton',
+                        'ui/iconbutton-group',
                         'ui/empty',
                         'ui/placeholder',
                         'ui/user-avatar',

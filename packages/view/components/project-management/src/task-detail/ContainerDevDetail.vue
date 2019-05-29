@@ -1,7 +1,7 @@
 <template>
     <SdxvDetailContainer>
         <template
-            v-if="task.state.name === STATE_TYPE.RUNNING"
+            v-if="task.state === STATE_TYPE.RUNNING"
             #base-info-right
         >
             <SdxuButton @click="dialogVisible = true">
@@ -22,10 +22,10 @@
                 <template #value>
                     <SdxwFoldLabel
                         :plain="true"
-                        :type="STATE_MAP_FOLD_LABEL_TYPE[task.state.name]"
+                        :type="STATE_MAP_FOLD_LABEL_TYPE[task.state]"
                         :status="stateIcon"
                     >
-                        {{ task.state.label }}
+                        {{ STATE_TYPE_LABEL[task.state] }}
                     </SdxwFoldLabel>
                 </template>
             </SdxvBaseInfoItem>

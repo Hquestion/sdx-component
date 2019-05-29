@@ -1,5 +1,5 @@
 <template>
-    <SdxvTensorflowDetail :task="task" />
+    <SdxvJupyterDetail :task="task" />
 </template>
 
 <script>
@@ -15,10 +15,7 @@ export default {
         return {
             task: {
                 name: 'jupyter',
-                state: {
-                    name: 'RUNNING',
-                    label: '运行中'
-                },
+                state: 'RUNNING',
                 user: {
                     name: 'creator'
                 },
@@ -46,11 +43,11 @@ export default {
                 runningAt: '2019-04-04 12:00:00',
                 stoppedAt: '2019-04-05 12:00:00',
                 externalUrl: 'www.baidu.com',
-                sourcePath: 'system/code',
+                sourcePaths: ['system/code'],
                 args: 'arg1',
                 ip: '127.0.0.1',
                 assignedPort: 3306,
-                outputPath: 'system/output',
+                outputPaths: ['system/output'],
                 datasources: [{
                     name: 'Skytsdb',
                     host: '10.0.0.14',

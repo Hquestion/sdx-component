@@ -6,6 +6,7 @@
             active ? 'is-active' : '',
             disable ? 'is-disable': ''
         ]"
+        v-show="visible"
         :title="title"
         @click.stop="handlerClick"
     >
@@ -17,7 +18,9 @@
 export default {
     name: 'SdxuIconButton',
     data() {
-        return {};
+        return {
+            visible: true
+        };
     },
     props: {
         icon: {

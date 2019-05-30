@@ -12,28 +12,28 @@
             @search="search"
             @reset="reset"
         >
-            <sdxw-search-item lable="镜像名称:">
+            <sdxw-search-item label="镜像名称:">
                 <Input
                     type="search"
                     :searchable="true"
                     size="small"
                 />
             </sdxw-search-item>
-            <sdxw-search-item lable="镜像名称:">
+            <sdxw-search-item label="镜像名称:">
                 <Input
                     type="search"
                     :searchable="true"
                     size="small"
                 />
             </sdxw-search-item>
-            <sdxw-search-item lable="镜像名称:">
+            <sdxw-search-item label="镜像名称:">
                 <Input
                     type="search"
                     :searchable="true"
                     size="small"
                 />
             </sdxw-search-item>
-            <sdxw-search-item lable="镜像名称:">
+            <sdxw-search-item label="镜像名称:">
                 <Input
                     type="search"
                     :searchable="true"
@@ -92,7 +92,10 @@ SearchLayout组件由两部分组成：SearchLayout和SearchItem;
 
 ```scss
 $sdxw-search-background: rgba(245,245,245,1) !default;
-$sdxw-search-padding-right: 100px !default;
+$sdxw-search-padding-right: 280px !default;
+$sdxw-search-item-margin: 10px !default;
+$sdxw-search-item-top: -1px !default;
+$sdxw-search-content-width: 300px !default;
 ```
 
 ## API

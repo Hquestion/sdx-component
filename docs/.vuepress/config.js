@@ -54,7 +54,8 @@ module.exports = {
                         'widget/user-picker',
                         'widget/search-layout',
                         'widget/fileselect',
-                        'widget/select-group-user'
+                        'widget/select-group-user',
+                        'widget/share-setting'
                     ]
                 },
                 {

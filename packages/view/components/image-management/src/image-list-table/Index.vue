@@ -114,39 +114,14 @@
                 @current-change="currentChange"
             />
         </div>
-        <sdxu-dialog
-            :title="dialogTitle"
+        <sdxw-share-setting
             :visible.sync="dialogVisible"
-            @confirm="confirmEdit"
             v-if="dialogVisible"
-        >
-            <el-form
-                label-width="110px"
-                label-position="left"
-                :model="shareForm"
-                v-if="dialogTitle === '共享设置'"
-            >
-                <el-form-item
-                    label="共享至全局："
-                    v-if="isAdmin"
-                >
-                    <el-switch
-                        v-model="shareForm.shareType"
-                        active-value="PUBLIC"
-                        inactive-value="PRIVATE"
-                    />
-                </el-form-item>
-                <el-form-item
-                    label="用户/用户组："
-                    v-show="shareForm.shareType !== 'PUBLIC'"
-                >
-                    <sdxw-select-group-user
-                        :users="selectedUsers"
-                        :groups="selectedGroups"
-                    />
-                </el-form-item>
-            </el-form>
-        </sdxu-dialog>
+            :default-users="shareForm.users"
+            :default-groups="shareForm.groups"
+            :default-share-type="shareForm.shareType"
+            @confirm-edit="confirmEdit"
+        />
         <SdxvPackageDetailDialog
             :visible.sync="detailDialogVisible"
             :basic-image-name="imageName"
@@ -161,11 +136,11 @@ import Dialog from '@sdx/ui/components/dialog';
 import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { getImageList, removeImage, updateImage, updateGroupImages } from '@sdx/utils/src/api/image';
-import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import ImageDetail from './PackageDetailDialog';
 import { Message } from 'element-ui';
+import ShareSetting from '@sdx/widget/components/share-setting';
 export default {
     name: 'ImageListTable',
     data() {
@@ -178,14 +153,11 @@ export default {
             orderBy: '',
             loading: false,
             dialogVisible: false,
-            dialogTitle: '',
             shareForm: {
                 shareType: 'PRIVATE',
                 users: [],
                 groups: []
             },
-            selectedGroups: [],
-            selectedUsers: [],
             defaultUserGroupKeys: [],
             editingImage: null,
             selectedImages: [],
@@ -229,17 +201,12 @@ export default {
         [Pagination.name]: Pagination,
         SdxuIconButton,
         [Dialog.name]: Dialog,
-        [SelectGroupUser.name]: SelectGroupUser,
         [Button.name]: Button,
-        [ImageDetail.name]: ImageDetail
+        [ImageDetail.name]: ImageDetail,
+        [ShareSetting.name]: ShareSetting
     },
     created() {
         this.initImageList();
-    },
-    computed: {
-        isAdmin() {
-            return true; // TODO: 判断用户是否是管理员用户
-        }
     },
     methods: {
         share() {
@@ -251,7 +218,6 @@ export default {
                 return;
             }
             this.dialogVisible = true;
-            this.dialogTitle = '共享设置';
             this.shareForm = {
                 shareType: 'PRIVATE',
                 users: [],
@@ -289,12 +255,13 @@ export default {
         selectionChange(selection) {
             this.selectedImages = selection;
         },
-        confirmEdit() {
+        confirmEdit(users, groups, shareType) {
+            this.shareForm.shareType = shareType;
             this.shareForm.users = [];
             this.shareForm.groups = [];
             if (this.shareForm.shareType !== 'PUBLIC') {
-                this.shareForm.users = this.selectedUsers;
-                this.shareForm.groups = this.selectedGroups;
+                this.shareForm.users = users;
+                this.shareForm.groups = groups;
             }
             if (this.editingImage) {
                 // 编辑镜像
@@ -304,6 +271,7 @@ export default {
                         type: 'success'
                     });
                     this.editingImage = null;
+                    this.dialogVisible = false;
                     this.initImageList();
                 });
             } else {
@@ -314,6 +282,7 @@ export default {
                     type: 'success'
                 });
                 this.initImageList();
+                this.dialogVisible = false;
                 // });
             }
 
@@ -366,11 +335,8 @@ export default {
                     break;
                 case 'edit':
                     this.dialogVisible = true;
-                    this.dialogTitle = '共享设置';
                     this.editingImage = row;
                     Object.assign(this.shareForm, row);
-                    this.selectedGroups = row.groups;
-                    this.selectedUsers = row.users;
                     break;
                 case 'extend':
                     this.$router.push({ name: 'basicbuild' });

@@ -18,6 +18,7 @@ import Upload from './components/upload';
 import Layout from './components/layout';
 import LazyList from './components/lazy-list';
 import IconButtonGroup from './components/icon-button-group';
+import RadialProgress from './components/radial-progress';
 
 import { registerI18n } from '@sdx/utils/src/locale';
 
@@ -65,6 +66,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     Layout.install(vue);
     LazyList.install(vue);
     IconButtonGroup.install(vue);
+    RadialProgress.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

@@ -11,7 +11,7 @@
         :visible.sync="dialogVisible"
         :default-users="shareForm.users"
         :default-groups="shareForm.groups"
-        :share-type="shareForm.shareType"
+        :default-share-type="shareForm.shareType"
         @confirm-edit="confirmEdit"
     />
   </highlight-code>

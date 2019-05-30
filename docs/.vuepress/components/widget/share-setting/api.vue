@@ -31,7 +31,7 @@
                         optionValue: '-',
                         defaultValue: '-',
                     }, {
-                        params: 'share-type',
+                        params: 'default-share-type',
                         describe: '默认是否全局共享, 编辑模式时需传入',
                         type: 'string',
                         optionValue: 'PUBLIC / PRIVATE',

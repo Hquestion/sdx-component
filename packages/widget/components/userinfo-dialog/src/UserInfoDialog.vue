@@ -5,7 +5,6 @@
         <sdxu-dialog
             class="sdxw-userinfo"
             :class="[`sdxw-userinfo__${theme}`]"
-            size="small"
             :visible.sync="dialogVisible"
             @close="dialogClose"
             :no-footer="dashboardBtn || theme !== 'dashboard'"

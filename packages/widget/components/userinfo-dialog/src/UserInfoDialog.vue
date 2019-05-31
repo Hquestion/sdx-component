@@ -11,6 +11,7 @@
             :title="t('widget.userInfo.title')"
             :title-icon="theme == 'dashboard' ? 'sdx-icon-UserInfo' : ''"
             :confirm-handler="confirm"
+            @open="open"
         >
             <el-form
                 label-width="80px"
@@ -72,8 +73,8 @@ export default {
         return {
             showInput:false,
             dialogVisible: this.visible,
-            users:this.userInfoData,
-            dashboardBtn: true
+            dashboardBtn: true,
+            users: {}
         };
     },
     mixins:[locale],
@@ -102,12 +103,15 @@ export default {
             default:''
         }
     },
+    computed: {
+
+    },
     watch: {
         visible (nVal) {
             this.dialogVisible = nVal;
         },
         userInfoData(nVal) {
-            this.users = nVal;
+            this.users = JSON.parse(JSON.stringify(nVal));
         },
         id(nVal) {
             this.getData();
@@ -118,6 +122,7 @@ export default {
             this.$emit('update:visible', false);
             this.$emit('close');
             this.dashboardBtn = true;
+            this.user={};
         },
         getData() {
             if(this.id){
@@ -132,9 +137,6 @@ export default {
         focusBtn() {
             this.dashboardBtn = false;
         },
-        cancel() {
-
-        },
         confirm() {
             if(this.users.fullName!=''){
                 updataUser(this.users.uuid, {
@@ -143,6 +145,9 @@ export default {
                     this.$emit('update:visible', false);
                 });
             }
+        },
+        open() {
+            this.users = JSON.parse(JSON.stringify(this.userInfoData));
         }
     },
     components:{

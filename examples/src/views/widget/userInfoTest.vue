@@ -1,10 +1,28 @@
 <template>
     <div>
-        <SdxuButton @click="open('dashboard')" :loading="false" :plain="true" type="default" :invert="true" :shadow="true">dashboard用户信息(直接渲染)</SdxuButton>
-        <SdxuButton @click="open('user')" :loading="false" :plain="true" type="default" :invert="true" :shadow="true">userManage用户信息（传入ID）</SdxuButton>
+        <SdxuButton
+            @click="open('dashboard')"
+            :loading="false"
+            :plain="true"
+            type="default"
+            :invert="true"
+            :shadow="true"
+        >
+            dashboard用户信息(直接渲染)
+        </SdxuButton>
+        <SdxuButton
+            @click="open('user')"
+            :loading="false"
+            :plain="true"
+            type="default"
+            :invert="true"
+            :shadow="true"
+        >
+            userManage用户信息（传入ID）
+        </SdxuButton>
         <sdxw-userInfoDialog 
             :visible.sync="dialogVisible"
-            :userInfoData="userInfoData"
+            :user-info-data="userInfoData"
             :theme="theme"
             :id="id"
         />
@@ -12,7 +30,7 @@
 </template>
 
 <script>
-import SdxwUserInfoDialog from '@sdx/widget/components/userinfo-dialog'
+import SdxwUserInfoDialog from '@sdx/widget/components/userinfo-dialog';
 import httpService from '@sdx/utils/src/http-service';
 export default {
     data () {
@@ -21,7 +39,7 @@ export default {
             userInfoData:{},
             theme:'dashboard',  //dashboard user
             id:''
-        }
+        };
     },
     methods:{
         open(theme){
@@ -43,5 +61,5 @@ export default {
     components:{
         SdxwUserInfoDialog
     }
-}
+};
 </script>

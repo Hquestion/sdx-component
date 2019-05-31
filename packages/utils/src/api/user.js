@@ -87,7 +87,8 @@ export function deleteGroup(uuid) {
 }
 
 export function getGroups(params) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}group-profiles/`, params);
+    // return httpService.get(`${COMPOSE_GATEWAY_BASE}group-profiles/`, params);
+    return httpService.get('api/v1/groups');
 }
 
 export function getUserRoleGroupByName(name, type) {

@@ -5,10 +5,10 @@ import ImageManagement from './src/Index.vue';
 
 const routeCfg = [
     {
-        path: 'sdxv-image-manage',
+        path: '/sdxv-image-manage',
         name: 'SdxvImageManagement',
         component: ImageManagement,
-        redirect: 'sdxv-image-manage/imageList',
+        redirect: '/sdxv-image-manage/imageList',
         meta: {
             breadcrumb: '镜像管理'
         },

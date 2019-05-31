@@ -10,7 +10,7 @@
             :no-footer="dashboardBtn || theme !== 'dashboard'"
             :title="t('widget.userInfo.title')"
             :title-icon="theme == 'dashboard' ? 'sdx-icon-UserInfo' : ''"
-            :confirm-handler="confirm"
+            @confirm="confirm"
             @open="open"
         >
             <el-form
@@ -141,7 +141,9 @@ export default {
             if(this.users.fullName!=''){
                 updataUser(this.users.uuid, {
                     fullName: this.users.fullName
-                }).then(() => {
+                }).then((data) => {
+                    // 传给业务组件更新vuex
+                    this.$emit('confirmUser', data);
                     this.$emit('update:visible', false);
                 });
             }

@@ -1,3 +1,5 @@
+
+
 <template>
     <div>
         <sdxu-dialog
@@ -6,28 +8,11 @@
             size="small"
             :visible.sync="dialogVisible"
             @close="dialogClose"
-            no-footer
+            :no-footer="dashboardBtn || theme !== 'dashboard'"
+            :title="t('widget.userInfo.title')"
+            :title-icon="theme == 'dashboard' ? 'sdx-icon-UserInfo' : ''"
+            :confirm-handler="confirm"
         >
-            <div
-                v-if="theme == 'user'"
-                slot="title"
-                :class="`sdxw-userinfo__user--title`"
-            >
-                {{ t('widget.userInfo.title') }}
-            </div>
-            <div
-                v-if="theme == 'dashboard'"
-                slot="title"
-                :class="`sdxw-userinfo__dashboard--title`"
-            >
-                <svg
-                    class="icon"
-                    aria-hidden="true"
-                >
-                    <use xlink:href="#sdx-icon-UserInfo" />
-                </svg>
-                <span>{{ t('widget.userInfo.title') }} </span>
-            </div>
             <el-form
                 label-width="80px"
                 class="sdxw-userinfo__content"
@@ -43,12 +28,11 @@
                         class="sdxw-userinfo__full-name"
                         v-if="theme == 'dashboard'"
                     >
-                        <span class="sdxw-userinfo__full-name-span">{{ users.fullName }}</span>
                         <SdxuInput
                             class="sdxw-userinfo__full-name-input"
                             type="text"
                             v-model="users.fullName"
-                            @change="updateUser"
+                            @focus="focusBtn"
                         />
                     </div>
                 </el-form-item>
@@ -89,7 +73,8 @@ export default {
         return {
             showInput:false,
             dialogVisible: this.visible,
-            users:this.userInfoData
+            users:this.userInfoData,
+            dashboardBtn: true
         };
     },
     mixins:[locale],
@@ -133,14 +118,7 @@ export default {
         dialogClose() {
             this.$emit('update:visible', false);
             this.$emit('close');
-        },
-        //修改fullName的值
-        updateUser() {
-            if(this.users.fullName!=''){
-                updataUser(this.users.uuid, {
-                    fullName: this.users.fullName
-                });
-            }
+            this.dashboardBtn = true;
         },
         getData() {
             if(this.id){
@@ -151,6 +129,21 @@ export default {
                         this.users.roles = res.roleNames;
                     });
             }
+        },
+        focusBtn() {
+            this.dashboardBtn = false;
+        },
+        cancel() {
+
+        },
+        confirm() {
+            if(this.users.fullName!=''){
+                updataUser(this.users.uuid, {
+                    fullName: this.users.fullName
+                }).then(() => {
+                    this.$emit('update:visible', false);
+                });
+            }
         }
     },
     components:{
@@ -160,3 +153,5 @@ export default {
     }
 };
 </script>
+
+

@@ -13,9 +13,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~@sdx/ui/theme/transfer';
 @import '~@sdx/ui/theme/message-box.scss';
 @import '~@sdx/widget/theme/base';
-@import '~@sdx/widget/theme/select-group-user';
+@import '~@sdx/widget/theme/share-setting.scss';
 @import '~@sdx/widget/theme/search-layout.scss';
 @import './model-list-table.scss';
+@import './version-list-table.scss';
 @import './create-model.scss';
 @include block('model-management', $bem-namespace-view) {
     @include element('header') {

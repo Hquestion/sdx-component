@@ -120,47 +120,20 @@
                 @current-change="currentChange"
             />
         </div>
-        <sdxu-dialog
-            :title="dialogTitle"
+        <sdxw-share-setting
             :visible.sync="dialogVisible"
-            @confirm="confirmEdit"
             v-if="dialogVisible"
-        >
-            <el-form
-                label-width="110px"
-                label-position="left"
-                :model="shareForm"
-                v-if="dialogTitle === '共享设置'"
-            >
-                <el-form-item
-                    label="共享至全局："
-                    v-if="isAdmin"
-                >
-                    <el-switch
-                        v-model="shareForm.shareType"
-                        active-value="PUBLIC"
-                        inactive-value="PRIVATE"
-                    />
-                </el-form-item>
-                <el-form-item
-                    label="用户/用户组："
-                    v-show="shareForm.shareType !== 'PUBLIC'"
-                >
-                    <sdxw-select-group-user
-                        :users="selectedUsers"
-                        :groups="selectedGroups"
-                    />
-                </el-form-item>
-            </el-form>
-        </sdxu-dialog>
-        <div>
-            <create-model
-                :visible.sync="createDialogVisible"
-                v-if="createDialogVisible"
-                @close="dialogClose"
-                :editing-model="editingModel"
-            />
-        </div>
+            :default-users="shareForm.users"
+            :default-groups="shareForm.groups"
+            :default-share-type="shareForm.shareType"
+            @confirm-edit="confirmEdit"
+        />
+        <create-model
+            :visible.sync="createDialogVisible"
+            v-if="createDialogVisible"
+            @close="dialogClose"
+            :editing-model="editingModel"
+        />
     </div>
 </template>
 
@@ -171,12 +144,12 @@ import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
 import FoldLabel from '@sdx/widget/components/fold-label';
-import { getModelList, removeModel, updateModel, updateGroupModels } from '@sdx/utils/src/api/model';
-import SelectGroupUser from '@sdx/widget/components/select-group-user';
+import { getModelList, removeModel, updateModel } from '@sdx/utils/src/api/model';
 import Pagination from '@sdx/ui/components/pagination';
+import ShareSetting from '@sdx/widget/components/share-setting';
 import MessageBox from '@sdx/ui/components/message-box';
 import CreateModel from '../CreateModel';
-import { Message } from 'element-ui';
+import Message from 'element-ui/lib/message';
 export default {
     name: 'ModelListTable',
     data() {
@@ -189,15 +162,11 @@ export default {
             orderBy: '',
             loading: false,
             dialogVisible: false,
-            dialogTitle: '',
             shareForm: {
                 shareType: 'PRIVATE',
                 users: [],
                 groups: []
             },
-            selectedGroups: [],
-            selectedUsers: [],
-            defaultUserGroupKeys: [],
             editingModel: null,
             selectedModels: [],
             createDialogVisible: false
@@ -218,16 +187,13 @@ export default {
         [Pagination.name]: Pagination,
         SdxuIconButton,
         [Dialog.name]: Dialog,
-        [SelectGroupUser.name]: SelectGroupUser,
         [Button.name]: Button,
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
         SdxuIconButtonGroup,
-        CreateModel
+        CreateModel,
+        [ShareSetting.name]: ShareSetting
     },
     computed: {
-        isAdmin() {
-            return true; // TODO: 判断用户是否是管理员用户
-        },
         userId() {
             return '123'; // TODO: 拿到用户id
         }
@@ -245,7 +211,6 @@ export default {
                 return;
             }
             this.dialogVisible = true;
-            this.dialogTitle = '共享设置';
             this.shareForm = {
                 shareType: 'PRIVATE',
                 users: [],
@@ -283,12 +248,13 @@ export default {
         selectionChange(selection) {
             this.selectedModels = selection;
         },
-        confirmEdit() {
+        confirmEdit(users, groups, shareType) {
+            this.shareForm.shareType = shareType;
             this.shareForm.users = [];
             this.shareForm.groups = [];
             if (this.shareForm.shareType !== 'PUBLIC') {
-                this.shareForm.users = this.selectedUsers;
-                this.shareForm.groups = this.selectedGroups;
+                this.shareForm.users = users;
+                this.shareForm.groups = groups;
             }
             if (this.editingModel) {
                 // 编辑模型
@@ -298,6 +264,7 @@ export default {
                         type: 'success'
                     });
                     this.editingModel = null;
+                    this.dialogVisible = false;
                     this.initModelList();
                 });
             } else {
@@ -308,6 +275,7 @@ export default {
                     type: 'success'
                 });
                 this.initModelList();
+                this.dialogVisible = false;
                 // });
             }
         },
@@ -351,14 +319,17 @@ export default {
             if (type && row.uuid) {
                 switch (type) {
                 case 'detail':
+                    this.$router.push({
+                        name: 'versionList',
+                        params: {
+                            modelId: row.uuid
+                        }
+                    });
                     break;
                 case 'share':
                     this.dialogVisible = true;
-                    this.dialogTitle = '共享设置';
                     this.editingModel = row;
                     Object.assign(this.shareForm, row);
-                    this.selectedGroups = row.groups;
-                    this.selectedUsers = row.users;
                     break;
                 case 'edit':
                     this.createDialogVisible = true;

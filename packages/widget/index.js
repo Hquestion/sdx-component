@@ -25,7 +25,8 @@ const SdxWidget = {
     FileSelect,
     UserPicker,
     ShareSetting,
-    TaskResourceList
+    TaskResourceList,
+    LogDetail
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {

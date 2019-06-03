@@ -10,6 +10,7 @@ import FileSelect from './components/file-select';
 import UserPicker from './components/user-picker';
 import ShareSetting from './components/share-setting';
 import LogDetail from './components/log-detail';
+import TaskResourceList from './components/task-list';
 
 import { registerI18n } from '@sdx/utils/src/locale';
 
@@ -23,7 +24,8 @@ const SdxWidget = {
     SearchLayout,
     FileSelect,
     UserPicker,
-    ShareSetting
+    ShareSetting,
+    TaskResourceList
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -38,6 +40,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     UserPicker.install(vue);
     ShareSetting.install(vue);
     LogDetail.install(vue);
+    TaskResourceList.install(vue);
 
     // 通用服务注入i18n服务
     registerI18n(i18n);

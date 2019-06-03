@@ -12,4 +12,5 @@ module.exports = {
     'user-picker': './components/user-picker/index.js',
     'share-setting': './components/share-setting/index.js',
     'log-detail': './components/log-detail/index.js',
+    'task-resource-list': './components/task-resource-list/index.js'
 };

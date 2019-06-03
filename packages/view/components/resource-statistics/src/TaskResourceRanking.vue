@@ -21,7 +21,7 @@
 
 <script>
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
-import SdxvTaskResourceList from './TaskResourceList';
+import SdxvTaskResourceList from '@sdx/widget/components/task-list';
 
 
 import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE } from '@sdx/utils/src/const/task';

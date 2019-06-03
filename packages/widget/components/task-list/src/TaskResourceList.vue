@@ -223,6 +223,10 @@ export default {
         monitor: {
             type: Boolean,
             default: false
+        },
+        ownerId: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -275,7 +279,8 @@ export default {
             return this.ranking ? ['descending'] : ['descending', 'ascending', null];
         },
         queryParams() {
-            return Object.assign({}, this.params, {
+            let params = this.ownerId ? { ownerId: this.ownerId } : {};
+            return Object.assign({}, params, this.params, {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });

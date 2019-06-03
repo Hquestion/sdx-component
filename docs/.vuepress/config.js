@@ -55,7 +55,8 @@ module.exports = {
                         'widget/search-layout',
                         'widget/fileselect',
                         'widget/select-group-user',
-                        'widget/share-setting'
+                        'widget/share-setting',
+                        'widget/log-detail'
                     ]
                 },
                 {

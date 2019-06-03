@@ -9,6 +9,7 @@ import SearchLayout from './components/search-layout';
 import FileSelect from './components/file-select';
 import UserPicker from './components/user-picker';
 import ShareSetting from './components/share-setting';
+import LogDetail from './components/log-detail';
 
 import { registerI18n } from '@sdx/utils/src/locale';
 
@@ -36,6 +37,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     FileSelect.install(vue);
     UserPicker.install(vue);
     ShareSetting.install(vue);
+    LogDetail.install(vue);
 
     // 通用服务注入i18n服务
     registerI18n(i18n);

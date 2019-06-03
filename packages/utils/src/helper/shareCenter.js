@@ -19,8 +19,13 @@ export function getUser() {
     return typeof user === 'function' ? user() : user;
 }
 
+export function getIsAdmin() {
+    return true;
+}
+
 export default {
     setup,
     getUser,
-    registerUser
+    registerUser,
+    getIsAdmin
 };

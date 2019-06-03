@@ -1,0 +1,8 @@
+@include block('version-list', $bem-namespace-view) {
+    @include element('table') {
+    }
+    @include element('footer') {
+        display: flex;
+        justify-content: space-between;
+    }
+}

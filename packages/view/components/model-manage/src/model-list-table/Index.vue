@@ -1,6 +1,6 @@
 <template>
     <div
-        class="sdxv-image-list"
+        class="sdxv-model-list"
         v-loading="loading"
     >
         <div>
@@ -8,7 +8,7 @@
                 type="primary"
                 size="small"
                 @click="share"
-                v-if="imageKind === 'private'"
+                v-if="modelType === 'PRIVATE'"
             >
                 全部共享
             </SdxuButton>
@@ -17,7 +17,7 @@
                 invert
                 size="small"
                 @click="remove"
-                v-if="imageKind === 'private'"
+                v-if="modelType === 'PRIVATE'"
             >
                 删除
             </SdxuButton>
@@ -25,48 +25,45 @@
                 type="primary"
                 size="small"
                 @click="cancelShare"
-                v-if="imageKind === 'myShare'"
+                v-if="modelType === 'MY_SHARE'"
             >
                 取消共享
             </SdxuButton>
         </div>
         <sdxu-table
-            :data="imageList"
-            class="sdxv-image-list__table"
+            :data="modelList"
+            class="sdxv-model-list__table"
             @selection-change="selectionChange"
             @sort-change="sortChange"
         >
             <el-table-column
                 type="selection"
                 width="55"
-                v-if="imageKind === 'myShare' || imageKind === 'private'"
+                v-if="modelType === 'MY_SHARE' || modelType === 'PRIVATE'"
             />
             <el-table-column
                 prop="name"
-                label="镜像名称"
+                label="模型名称"
                 key="name"
             />
             <el-table-column
-                prop="version"
-                key="version"
-                label="版本号"
+                prop="description"
+                key="description"
+                label="模型描述"
             />
             <el-table-column
-                prop="imageType"
-                key="imageType"
-                label="镜像种类"
-            />
-            <el-table-column
-                prop="buildType"
-                key="buildType"
-                label="构建方式"
-                v-if="imageKind !== 'basic'"
-            />
+                key="labels"
+                label="模型标签"
+            >
+                <template slot-scope="scope">
+                    <SdxwFoldLabelGroup :list="scope.row.labels" />
+                </template>
+            </el-table-column>
             <el-table-column
                 prop="owner"
                 key="owner"
                 label="创建人"
-                v-if="imageKind === 'all' || imageKind === 'otherShare'"
+                v-if="modelType === 'ALL' || modelType === 'OTHER_SHARE'"
             />
             <el-table-column
                 prop="createdAt"
@@ -76,36 +73,45 @@
             />
             <el-table-column
                 label="操作"
+                key="operation"
             >
                 <template slot-scope="scope">
-                    <sdxu-icon-button
-                        @click="handleOperation(scope.row, 'edit')"
-                        icon="sdx-icon sdx-fenxiang"
-                        title="共享设置"
-                        v-if="scope.row.operations.indexOf('edit') > -1"
-                    />
-                    <sdxu-icon-button
-                        @click="handleOperation(scope.row, 'extend')"
-                        icon="sdx-icon sdx-kaobei"
-                        title="基于此创建"
-                        v-if="scope.row.operations.indexOf('extend') > -1"
-                    />
-                    <sdxu-icon-button
-                        @click="handleOperation(scope.row, 'detail')"
-                        icon="sdx-icon sdx-icon-tickets"
-                        title="查看详情"
-                        v-if="scope.row.operations.indexOf('detail') > -1"
-                    />
-                    <sdxu-icon-button
-                        @click="handleOperation(scope.row, 'remove')"
-                        icon="sdx-icon sdx-icon-delete"
-                        title="删除"
-                        v-if="scope.row.operations.indexOf('remove') > -1"
-                    />
+                    <sdxu-icon-button-group>
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'share')"
+                            icon="sdx-icon sdx-fenxiang"
+                            title="共享设置"
+                            v-if="scope.row.showShare"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'detail')"
+                            icon="sdx-icon sdx-icon-tickets"
+                            title="查看详情"
+                            v-if="scope.row.showDetail"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'remove')"
+                            icon="sdx-icon sdx-icon-delete"
+                            title="删除"
+                            v-if="scope.row.showRemove"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'edit')"
+                            icon="sdx-icon sdx-icon-edit"
+                            title="编辑"
+                            v-if="scope.row.showEdit"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'cancelShare')"
+                            icon="sdx-icon sdx-quxiaofenxiang"
+                            title="取消共享"
+                            v-if="scope.row.showCancelShare"
+                        />
+                    </sdxu-icon-button-group>
                 </template>
             </el-table-column>
         </sdxu-table>
-        <div class="sdxv-image-list__footer">
+        <div class="sdxv-model-list__footer">
             <div />
             <sdxu-pagination
                 :current-page.sync="current"
@@ -122,10 +128,11 @@
             :default-share-type="shareForm.shareType"
             @confirm-edit="confirmEdit"
         />
-        <SdxvPackageDetailDialog
-            :visible.sync="detailDialogVisible"
-            :basic-image-name="imageName"
-            :image-id="imageId"
+        <create-model
+            :visible.sync="createDialogVisible"
+            v-if="createDialogVisible"
+            @close="dialogClose"
+            :editing-model="editingModel"
         />
     </div>
 </template>
@@ -135,17 +142,19 @@ import Table from '@sdx/ui/components/table';
 import Dialog from '@sdx/ui/components/dialog';
 import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
-import { getImageList, removeImage, updateImage, updateGroupImages } from '@sdx/utils/src/api/image';
+import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
+import FoldLabel from '@sdx/widget/components/fold-label';
+import { getModelList, removeModel, updateModel } from '@sdx/utils/src/api/model';
 import Pagination from '@sdx/ui/components/pagination';
-import MessageBox from '@sdx/ui/components/message-box';
-import ImageDetail from './PackageDetailDialog';
-import { Message } from 'element-ui';
 import ShareSetting from '@sdx/widget/components/share-setting';
+import MessageBox from '@sdx/ui/components/message-box';
+import CreateModel from '../CreateModel';
+import Message from 'element-ui/lib/message';
 export default {
-    name: 'ImageListTable',
+    name: 'ModelListTable',
     data() {
         return {
-            imageList: [],
+            modelList: [],
             total: 1,
             current: 1,
             pageSize: 10,
@@ -158,39 +167,17 @@ export default {
                 users: [],
                 groups: []
             },
-            editingImage: null,
-            selectedImages: [],
-            detailDialogVisible: false,
-            imageName: '',
-            imageId: ''
+            editingModel: null,
+            selectedModels: [],
+            createDialogVisible: false
         };
     },
     props: {
-        imageKind: {
+        modelType: {
             type: String,
-            default: 'all'
+            default: 'ALL'
         },
         name: {
-            type: String,
-            default: ''
-        },
-        imageType: {
-            type: String,
-            default: ''
-        },
-        shareType: {
-            type: String,
-            default: ''
-        },
-        buildType: {
-            type: String,
-            default: ''
-        },
-        taskType: {
-            type: String,
-            default: ''
-        },
-        isOwner: {
             type: String,
             default: ''
         }
@@ -201,17 +188,24 @@ export default {
         SdxuIconButton,
         [Dialog.name]: Dialog,
         [Button.name]: Button,
-        [ImageDetail.name]: ImageDetail,
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
+        SdxuIconButtonGroup,
+        CreateModel,
         [ShareSetting.name]: ShareSetting
     },
-    created() {
-        this.initImageList();
+    computed: {
+        userId() {
+            return '123'; // TODO: 拿到用户id
+        }
     },
     methods: {
+        dialogClose(needRefresh) {
+            if (needRefresh) this.initModelList();
+        },
         share() {
-            if (!this.selectedImages.length) {
+            if (!this.selectedModels.length) {
                 Message({
-                    message: '请先选择需要共享的镜像',
+                    message: '请先选择需要共享的模型',
                     type: 'warning'
                 });
                 return;
@@ -224,9 +218,9 @@ export default {
             };
         },
         remove() {
-            if (!this.selectedImages.length) {
+            if (!this.selectedModels.length) {
                 Message({
-                    message: '请先选择需要删除的镜像',
+                    message: '请先选择需要删除的模型',
                     type: 'warning'
                 });
                 return;
@@ -235,12 +229,12 @@ export default {
                 message: '删除成功',
                 type: 'success'
             });
-            this.initImageList();
+            this.initModelList();
         },
         cancelShare() {
-            if (!this.selectedImages.length) {
+            if (!this.selectedModels.length) {
                 Message({
-                    message: '请先选择需要取消共享的镜像',
+                    message: '请先选择需要取消共享的模型',
                     type: 'warning'
                 });
                 return;
@@ -249,10 +243,10 @@ export default {
                 message: '取消共享成功',
                 type: 'success'
             });
-            this.initImageList();
+            this.initModelList();
         },
         selectionChange(selection) {
-            this.selectedImages = selection;
+            this.selectedModels = selection;
         },
         confirmEdit(users, groups, shareType) {
             this.shareForm.shareType = shareType;
@@ -262,95 +256,96 @@ export default {
                 this.shareForm.users = users;
                 this.shareForm.groups = groups;
             }
-            if (this.editingImage) {
-                // 编辑镜像
-                updateImage(this.editingImage.uuid, this.shareForm).then(() => {
+            if (this.editingModel) {
+                // 编辑模型
+                updateModel(this.editingModel.uuid, this.shareForm).then(() => {
                     Message({
                         message: '设置成功',
                         type: 'success'
                     });
-                    this.editingImage = null;
+                    this.editingModel = null;
                     this.dialogVisible = false;
-                    this.initImageList();
+                    this.initModelList();
                 });
             } else {
                 // 批量共享设置  TODO 换成批量接口
-                // updateGroupImages(this.selectedImages, this.shareForm).then(() => {
+                // updateGroupModels(this.selectedModels, this.shareForm).then(() => {
                 Message({
                     message: '全部共享成功',
                     type: 'success'
                 });
-                this.initImageList();
+                this.initModelList();
                 this.dialogVisible = false;
                 // });
             }
-
         },
-        initImageList(reset) {
+        initModelList(reset) {
             this.loading = true;
             if (reset) this.current = 1;
             const params = {
                 name: this.name,
-                imageType: this.imageType,
-                shareType: this.shareType,
-                buildType: this.buildType,
-                taskType: this.taskType,
                 start: this.current,
                 count: this.pageSize,
                 order: this.order,
-                orderBy: this.orderBy
+                orderBy: this.orderBy,
+                shareType: this.modelType
             };
-            if (this.isOwner) {
-                if (this.isOwner === 'true') {
-                    params.ownerId = '';  // TODO: 有用户ID时传入用户ID
-                } else {
-                    params.excludeOwnerId = ''; // TODO: 有用户ID时传入用户ID
-                }
-            }
-            getImageList(params).then((res) => {
-                this.imageList = res.data;
+            getModelList(params).then((res) => {
+                console.log('res', res);
+                this.modelList = res.items;
+                this.modelList.forEach(item => {
+                    item.showShare = (this.modelType === 'ALL' && item.creatorId === this.userId) || this.modelType === 'PRIVATE';
+                    item.showEdit = (this.modelType === 'ALL' && item.creatorId === this.userId) || this.modelType === 'PRIVATE';
+                    item.showRemove = (this.modelType === 'ALL' && item.creatorId === this.userId) || this.modelType === 'PRIVATE';
+                    item.showCancelShare = this.modelType === 'MY_SHARE';
+                    item.showDetail = this.modelType !== 'MY_SHARE';
+                });
                 this.total = res.total;
                 this.loading = false;
             });
         },
         currentChange(nVal) {
             this.current = nVal;
-            this.initImageList();
+            this.initModelList();
         },
         sortChange(sort) {
             if (sort && sort.prop && sort.order) {
                 this.order = sort.prop;
                 this.orderBy = sort.order === 'ascending' ? 'asc' : 'desc';
-                this.initImageList();
+                this.initModelList();
             }
         },
         handleOperation(row, type) {
             if (type && row.uuid) {
                 switch (type) {
                 case 'detail':
-                    this.imageId = row.uuid;
-                    this.imageName = row.name;
-                    this.detailDialogVisible = true;
+                    this.$router.push({
+                        name: 'versionList',
+                        params: {
+                            modelId: row.uuid
+                        }
+                    });
                     break;
-                case 'edit':
+                case 'share':
                     this.dialogVisible = true;
-                    this.editingImage = row;
+                    this.editingModel = row;
                     Object.assign(this.shareForm, row);
                     break;
-                case 'extend':
-                    this.$router.push({ name: 'basicbuild' });
+                case 'edit':
+                    this.createDialogVisible = true;
+                    this.editingModel = row;
                     break;
                 case 'remove':
                     MessageBox({
-                        title: '确定要删除选中的镜像吗？',
+                        title: '确定要删除选中的模型吗？',
                         content: '删除后将不可恢复'
                     }).then(() => {
-                        removeImage(row.uuid).then(() => {
+                        removeModel(row.uuid).then(() => {
                             Message({
                                 message: '删除成功',
                                 type: 'success'
                             });
-                            this.initImageList();
+                            this.initModelList();
                         });
                     }).catch(() => {});
                     break;
@@ -358,11 +353,7 @@ export default {
                     break;
                 }
             }
-
         }
     }
 };
 </script>
-
-<style scoped lang="scss">
-</style>

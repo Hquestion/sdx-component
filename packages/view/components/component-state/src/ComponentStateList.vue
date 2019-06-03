@@ -62,6 +62,10 @@
                 @current-change="handlePageChange"
             />
         </div>
+        <SdxvComponentStateLogDialog
+            :visible.sync="logDialogVisible"
+            :pod-id="currentPodId"
+        />
     </div>
 </template>
 
@@ -71,6 +75,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
+import SdxvComponentStateLogDialog from './ComponentStateLogDialog';
 
 import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
@@ -90,7 +95,8 @@ export default {
         SdxuIconButton,
         ElTableColumn,
         ElSelect,
-        ElOption
+        ElOption,
+        SdxvComponentStateLogDialog
     },
     props: {
         type: {
@@ -118,11 +124,12 @@ export default {
             page: 1,
             pageSize: 10,
             componentList: [],
-            dialogVisible: false,
             query: {
                 podName: '',
                 status: ''
-            }
+            },
+            logDialogVisible: false,
+            currentPodId: ''
         };
     },
     computed: {
@@ -149,8 +156,9 @@ export default {
                 this.componentList = data.status_list;
             });
         },
-        handleViewLog() {
-            this.dialogVisible = true;
+        handleViewLog(podId) {
+            this.logDialogVisible = true;
+            this.currentPodId = podId;
         },
         handleSearch() {
             this.query.podName = this.searchName;

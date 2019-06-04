@@ -3,10 +3,15 @@
 import '@babel/polyfill';
 import { v4 as uuid } from 'uuid';
 
+/* Common HTTP constants
+ */
 const AUTHORIZATION_HEADER = 'Authorization';
 const CONTENT_TYPE_HEADER = 'Content-Type';
 const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
 const REQUEST_ID_HEADER = 'X-Request-Id';
+
+/* Internal Constants
+ */
 
 const PASSED_HEADERS = [AUTHORIZATION_HEADER, REQUEST_ID_HEADER];
 
@@ -31,6 +36,9 @@ const METHODS = {
     PUT: 'PUT',
 };
 
+/**
+ * A class to hold the values in the virtual endpoint's "config_data"
+ */
 class Config {
     constructor(config_data) {
         this.data = {};
@@ -50,6 +58,11 @@ class Config {
     }
 }
 
+/**
+ * An error that can be thrown when ctx.sendRequest() fails with a single request.
+ *
+ * This error is automatically handled by the wrapper. The error code and body are returned to the client.
+ */
 class RequestError extends Error {
     constructor(code, body) {
         super();
@@ -59,72 +72,144 @@ class RequestError extends Error {
     }
 }
 
+/**
+ * The context of handling a request.
+ *
+ * This class encapsulates Tyk's JavaScript API, and provides functionality such as logging, sending requests, resolving
+ * UUIDs in a JSON structure, etc.
+ */
 class Context {
+    /**
+     * Construct the context.
+     *
+     * @param request The Tyk request object
+     * @param session The Tyk session object
+     * @param config A {@link Config} object
+     */
     constructor(request, session, config) {
         this.request = request;
         this.session = session;
         this.config = config;
+
+        this._init();
     }
 
-    // Initializer
+    /* Initializer */
 
-    init() {
+    _init() {
         if (this.request.Headers[REQUEST_ID_HEADER] === undefined) {
             this.request.Headers[REQUEST_ID_HEADER] = [uuid()];
         }
     }
 
-    // Logging
+    /* Logging */
 
-    log(level, message) {
-        const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
-        const date = new Date().toISOString();
-        rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
-    }
-
+    /**
+     * Log a message at the debug level.
+     *
+     * @param message The message
+     */
     debug(message) {
-        this.log(LOG_LEVELS.DEBUG, message);
+        this._log(LOG_LEVELS.DEBUG, message);
     }
 
+    /**
+     * Log a message at the info level.
+     *
+     * @param message The message
+     */
     info(message) {
-        this.log(LOG_LEVELS.INFO, message);
+        this._log(LOG_LEVELS.INFO, message);
     }
 
+    /**
+     * Log a message at the warning level.
+     *
+     * @param message The message
+     */
     warning(message) {
-        this.log(LOG_LEVELS.WARNING, message);
+        this._log(LOG_LEVELS.WARNING, message);
     }
 
+    /**
+     * Log a message at the error level.
+     *
+     * @param message The message
+     */
     error(message) {
-        this.log(LOG_LEVELS.ERROR, message);
+        this._log(LOG_LEVELS.ERROR, message);
     }
 
-    // Request
-
-    createDeleteRequest(relativePath, params) {
-        return this._createRequest(METHODS.DELETE, relativePath, params);
+    _log(level, message) {
+        if (level >= this.config.logLevel) {
+            const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
+            const date = new Date().toISOString();
+            rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
+        }
     }
 
-    createGetRequest(relativePath, params) {
-        return this._createRequest(METHODS.GET, relativePath, params);
+    /* Request */
+
+    /**
+     * Create a DELETE request.
+     *
+     * @param url The URL to send the request to, usually starting with 'http://tyk-gateway/'
+     * @param params The URL parameters in a dictionary; if missing, an empty dictionary is used
+     * @returns {{headers: {}, relative_url: *, method: *}} A Tyk request
+     */
+    createDeleteRequest(url, params) {
+        return this._createRequest(METHODS.DELETE, url, params);
     }
 
-    createPatchRequest(relativePath, body) {
-        return this._createRequest(METHODS.PATCH, relativePath, body);
+    /**
+     * Create a GET request.
+     *
+     * @param url The URL to send the request to, usually starting with 'http://tyk-gateway/'
+     * @param params The URL parameters in a dictionary; if missing, an empty dictionary is used
+     * @returns {{headers: {}, relative_url: *, method: *}} A Tyk request
+     */
+    createGetRequest(url, params) {
+        return this._createRequest(METHODS.GET, url, params);
     }
 
-    createPostRequest(relativePath, body) {
-        return this._createRequest(METHODS.POST, relativePath, body);
+    /**
+     * Create a PATCH request.
+     *
+     * @param url The URL to send the request to, usually starting with 'http://tyk-gateway/'
+     * @param body The body to send as a JSON structure; if missing, an empty dictionary is used
+     * @returns {{headers: {}, relative_url: *, method: *}} A Tyk request
+     */
+    createPatchRequest(url, body) {
+        return this._createRequest(METHODS.PATCH, url, body);
     }
 
-    createPutRequest(relativePath, body) {
-        return this._createRequest(METHODS.PUT, relativePath, body);
+    /**
+     * Create a POST request.
+     *
+     * @param url The URL to send the request to, usually starting with 'http://tyk-gateway/'
+     * @param body The body to send as a JSON structure; if missing, an empty dictionary is used
+     * @returns {{headers: {}, relative_url: *, method: *}} A Tyk request
+     */
+    createPostRequest(url, body) {
+        return this._createRequest(METHODS.POST, url, body);
     }
 
-    _createRequest(method, relativePath, data) {
+    /**
+     * Create a PUT request.
+     *
+     * @param url The URL to send the request to (usually starting with 'http://tyk-gateway/')
+     * @param body The body to send as a JSON structure; if missing, an empty dictionary is used
+     * @returns {{headers: {}, relative_url: *, method: *, body: *}} A Tyk request
+     */
+    createPutRequest(url, body) {
+        return this._createRequest(METHODS.PUT, url, body);
+    }
+
+    _createRequest(method, url, data = {}) {
         const req = {
             method,
             headers: {},
-            relative_url: relativePath
+            relative_url: url
         };
 
         PASSED_HEADERS.forEach(key => {
@@ -153,30 +238,79 @@ class Context {
         return req;
     }
 
-    sendRequest(req) {
+
+    /**
+     * Send a request.
+     *
+     * @param request The request to send
+     * @returns {*} A dictionary or an array returned by the backend service, if successful
+     * @throws RequestError When the request fails with HTTP status < 200 or >= 400
+     */
+    sendRequest(request) {
         const batch = {
-            'requests': [req],
+            'requests': [request],
             'suppress_parallel_execution': true
         };
-        const responseData = TykBatchRequest(JSON.stringify(batch));
-        const response = JSON.parse(responseData)[0];
+
+        const response = JSON.parse(TykBatchRequest(JSON.stringify(batch)))[0];
+
+        if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
+            this.debug(`Sent request ${JSON.stringify(request)}. Received response ${JSON.stringify(response)}`);
+        } else {
+            this.info(`Send request ${request.method} ${request.relative_url.split('?')[0]}. Received response ${response.code}`);
+        }
+
         if (response.code < 200 || response.code >= 400) {
             throw new RequestError(response.code, response.body);
         }
+
         return JSON.parse(response.body);
     }
 
-    sendRequests(...reqs) {
+    /**
+     * Send a batch of requests in parallel.
+     *
+     * @param requests A variable number of requests to send
+     * @returns {[]} An array of responses, each corresponding to a request in same order
+     */
+    sendRequests(...requests) {
         const batch = {
-            'requests': reqs,
+            requests,
             'suppress_parallel_execution': false
         };
-        const resp = TykBatchRequest(JSON.stringify(batch));
-        return JSON.parse(resp);
+
+        const responses = JSON.parse(TykBatchRequest(JSON.stringify(batch)));
+
+        const responseMap = {};
+        responses.forEach(response => {
+            responseMap[response.relative_url] = response;
+        });
+        const result = [];
+        requests.forEach(request => {
+            result.push(responseMap[request.relative_url]);
+        });
+
+        if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
+            this.debug(`Sent requests ${JSON.stringify(requests)}. Received responses ${JSON.stringify(responses)}`);
+        } else {
+            const methodAndUrls =
+                requests.map(request => request.method + ' ' + request.relative_url.split('?')[0]).join(', ');
+            const codes = result.map(response => response.code).join(', ');
+            this.info(`Send requests ${methodAndUrls}. Received responses ${codes}`);
+        }
+
+        return result;
     }
 
-    // Response
+    /* Response */
 
+    /**
+     * Create a response to return to Tyk
+     *
+     * @param code The HTTP status
+     * @param result The result as an object
+     * @return TykJsResponse The response
+     */
     createResponse(code, result) {
         const response = {
             Code: code,
@@ -193,9 +327,23 @@ class Context {
         return TykJsResponse(response, this.session.meta_data);
     }
 
-    // Helpers
+    /* Helpers */
 
-    rename(obj, path, name) {
+    /**
+     * Rename keys in the object.
+     *
+     * @param object The object
+     * @param path The path to the keys, with components separated by '.' ('*' as a component refers to all elements in
+     *  an array)
+     * @param name The new name
+     * @return {*} The same object
+     * @example
+     * // Rename the 'uuid' key to 'user'.
+     * rename({uuid: '...', 'accessToken': '...', 'type': 'bearer'}, 'uuid', 'user')
+     * // Rename all 'uuid' keys to 'group_uuid'.
+     * rename({groups: [{uuid: '...'}, {uuid: '...'}]}, 'groups.*.uuid', 'group_uuid')
+     */
+    rename(object, path, name) {
         const parts = path.split('.');
         const oldName = parts.pop();
         const prefix = parts.join('.');
@@ -204,13 +352,57 @@ class Context {
             delete value[oldName];
         };
         if (oldName === path) {
-            renamer('', obj);
+            renamer('', object);
         } else {
-            scanObject(obj, prefix, renamer);
+            scanObject(object, prefix, renamer);
         }
+        return object;
     }
 
-    resolveUuids(obj, ...patterns) {
+    /**
+     * Resolve UUIDs in the object by sending batched requests to backend services
+     *
+     * @param object The object containing the UUIDs
+     * @param patterns A variable number of patterns, each in the form of {path: '', paths: ['', ''], url: '',
+     *  result: ''}, where path is a path to the keys in the object, paths is an array of paths to process at once, url
+     *  is the URL to fetch the data for the UUIDs (usually starting with 'http://tyk-gateway/'), and result is the
+     *  (optional) path to the result data in the response.
+     * @return {*} The same object
+     * @example
+     * // Resolve the UUID in the OAuth token. 'uuid' is a key in the token. The URL leads to a GET request at
+     * // http://tyk-gateway/user-manager/api/v1/users?uuids={uuid}. If successful, the response has a 'users' key that
+     * // contains the user's information. The user's information is retried from the 'users' key and is used to replace
+     * // the 'uuid' key in the token.
+     * resolveUuids(token,
+     *   {
+     *     path: 'uuid',
+     *     url: 'http://tyk-gateway/user-manager/api/v1/users',
+     *     result: 'users'
+     *   }
+     * )
+     * // In the list of users, resolve the roles, groups and permissions of each user. The roles request returns
+     * // {'roles': [...]}, so the first pattern includes {result: 'roles'} to retries to the data. The groups and
+     * // permissions requests are similar, except that the keys in their responses are 'groups' and 'permissions',
+     * // respectively
+     * resolveUuids(users,
+     *   {
+     *     path: '*.roles.*',
+     *     url: 'http://tyk-gateway/user-manager/api/v1/roles',
+     *     result: 'roles'
+     *   },
+     *   {
+     *     path: '*.groups.*',
+     *     url: 'http://tyk-gateway/user-manager/api/v1/groups',
+     *     result: 'groups'
+     *   },
+     *   {
+     *     path: '*.permissions.*',
+     *     url: 'http://tyk-gateway/user-manager/api/v1/permissions',
+     *     result: 'permissions'
+     *   }
+     * )
+     */
+    resolveUuids(object, ...patterns) {
         const requests = [];
         const resultKeys = {};
         patterns.forEach(pattern => {
@@ -226,26 +418,23 @@ class Context {
                 uuids.add(value);
             };
             if (path !== undefined) {
-                scanObject(obj, path, collector);
+                scanObject(object, path, collector);
             }
             if (paths !== undefined) {
-                paths.forEach(path => scanObject(obj, path, collector));
+                paths.forEach(path => scanObject(object, path, collector));
             }
             if (uuids.size > 0) {
                 requests.push(this._createRequest('GET', url, {uuids: [...uuids]}));
             }
         });
         if (requests.length > 0) {
-            const resp = JSON.parse(TykBatchRequest(JSON.stringify({
-                requests,
-                'suppress_parallel_execution': false
-            })));
+            const responses = this.sendRequests(...requests);
 
             const results = {};
-            resp.forEach(result => {
-                if (result.code >= 200 && result.code < 300) {
-                    const url = result.relative_url.split('?')[0];
-                    let body = JSON.parse(result.body);
+            responses.forEach(response => {
+                if (response.code >= 200 && response.code < 300) {
+                    const url = response.relative_url.split('?')[0];
+                    let body = JSON.parse(response.body);
                     if (resultKeys[url] !== undefined) {
                         resultKeys[url].split('.').forEach(key => body = body[key]);
                     }
@@ -256,10 +445,10 @@ class Context {
                             }
                         });
                     } else {
-                        this.error('non-array body from batch get: ' + JSON.stringify(resp));
+                        this.error('non-array body from batch get: ' + JSON.stringify(response));
                     }
                 } else {
-                    this.error('status code ' + result.code + ' from batch get: ' + JSON.stringify(resp));
+                    this.error('status code ' + response.code + ' from batch get: ' + JSON.stringify(response));
                 }
             });
 
@@ -268,13 +457,14 @@ class Context {
                 const paths = pattern.paths;
                 const replacer = (element, value) => results[value];
                 if (path !== undefined) {
-                    scanObject(obj, path, replacer);
+                    scanObject(object, path, replacer);
                 }
                 if (paths !== undefined) {
-                    paths.forEach(path => scanObject(obj, path, replacer));
+                    paths.forEach(path => scanObject(object, path, replacer));
                 }
             });
         }
+        return object;
     }
 }
 
@@ -306,10 +496,15 @@ function scanObject(obj, path, processor, prefix = undefined) {
     }
 }
 
+/**
+ * A wrapper that wraps a handler and returns a Tyk request handler
+ *
+ * @param handler The handler to wrap around, in the form of 'function(ctx, request): TykJsResponse'.
+ * @return {function(*=, *=, *): TykJsResponse}
+ */
 export default function (handler) {
     return function(request, session, config) {
         const ctx = new Context(request, session, new Config(config.config_data));
-        ctx.init();
 
         let responseData;
         try {

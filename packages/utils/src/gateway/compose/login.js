@@ -1,37 +1,27 @@
-import { createRequest, createResponse, init, rename, resolveUuids, sendRequest } from '../utils/request';
-import '@babel/polyfill';
+import wrap from '../wrap';
 
 /* Acquire an OAuth2 token, retrieve the logged-in user, and resolve the roles, groups and permissions of that user.
    Examples:
      POST /fe-compose/api/v1/login {"grantType": "password", "username": "xiaolei", "password": "123456"}
  */
-export function handler(request, session) {
-    init(request);
-
+export let handler = wrap(function(ctx, request) {
     // Acquire OAuth2 token
-    let body = JSON.parse(request.Body);
-    let authResponse = sendRequest(createRequest(
-        request,
-        'POST',
+    const authToken = ctx.sendRequest(ctx.createPostRequest(
         'http://tyk-gateway/user-manager/api/v1/tokens',
-        body));
-    if (authResponse.code < 200 || authResponse.code >= 400) {
-        return createResponse(request, session, authResponse.code, authResponse.body);
-    }
-    let authToken = JSON.parse(authResponse.body);
+        JSON.parse(request.Body)));
 
     // Resolve user entity
-    resolveUuids(request, authToken,
+    ctx.resolveUuids(authToken,
         {
             path: 'uuid',
             url: 'http://tyk-gateway/user-manager/api/v1/users',
             result: 'users'
         }
     );
-    rename(authToken, 'uuid', 'user');
+    ctx.rename(authToken, 'uuid', 'user');
 
     // Resolve roles, groups and permissions in user
-    resolveUuids(request, authToken,
+    ctx.resolveUuids(authToken,
         {
             path: 'user.roles.*',
             url: 'http://tyk-gateway/user-manager/api/v1/roles',
@@ -49,5 +39,5 @@ export function handler(request, session) {
         }
     );
 
-    return createResponse(request, session, 200, authToken);
-}
+    return ctx.createResponse(200, authToken);
+});

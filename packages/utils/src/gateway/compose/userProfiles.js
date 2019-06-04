@@ -1,5 +1,4 @@
-import { createRequest, createResponse, init, sendRequest, resolveUuids } from '../utils/request';
-import '@babel/polyfill';
+import wrap from '../wrap';
 
 /* Get a list of users, and resolve the roles, groups and permissions of each user.
    Examples:
@@ -7,20 +6,12 @@ import '@babel/polyfill';
      GET /fe-compose/api/v1/user-profiles?uuids=0021499d-8c7c-43b9-920b-8da58035b51f
      GET /fe-compose/api/v1/user-profiles?uuids=0021499d-8c7c-43b9-920b-8da58035b51f&uuids=011a2d63-d435-4053-bedf-192bdbc7e6ad
  */
-export function handler(request, session) {
-    init(request);
-
-    let simpleList = sendRequest(createRequest(
-        request,
-        'GET',
+export let handler = wrap(function(ctx, request) {
+    const users = ctx.sendRequest(ctx.createGetRequest(
         'http://tyk-gateway/user-manager/api/v1/users',
-        request.Params));
-    if (simpleList.code < 200 || simpleList.code >= 400) {
-        return createResponse(request, session, simpleList.code, simpleList.body);
-    }
-    let users = JSON.parse(simpleList.body).users;
+        request.Params)).users;
 
-    resolveUuids(request, users,
+    ctx.resolveUuids(users,
         {
             path: '*.roles.*',
             url: 'http://tyk-gateway/user-manager/api/v1/roles',
@@ -38,5 +29,5 @@ export function handler(request, session) {
         }
     );
 
-    return createResponse(request, session, 200, users);
-}
+    return ctx.createResponse(200, users);
+});

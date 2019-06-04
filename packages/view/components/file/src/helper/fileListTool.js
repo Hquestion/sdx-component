@@ -70,18 +70,32 @@ export const ROOT_FILE_BTN_MAP = {
     [rootKinds.PROJECT_SHARE]: [iconButtonTypes.DOWNLOAD, iconButtonTypes.COPY, iconButtonTypes.RENAME, iconButtonTypes.DELETE, iconButtonTypes.PATH]
 };
 
+export const fixedRowsNameMap = {
+    '/fe-fixed-my-share': '我的共享',
+    '/fe-fixed-accepted-share': '收到的共享',
+    '/fe-fixed-project-share': '协作项目文件'
+};
+
+export const fixedRowsKeyMap = {
+    '/fe-fixed-my-share': rootKinds.MY_SHARE,
+    '/fe-fixed-accepted-share': rootKinds.ACCEPTED_SHARE,
+    '/fe-fixed-project-share': rootKinds.PROJECT_SHARE,
+};
+
+export const fixedRows = [
+    {name: fixedRowsNameMap['/fe-fixed-my-share'], isFile: false, path: '/fe-fixed-my-share', fixed: true, key: fixedRowsKeyMap['/fe-fixed-my-share']},
+    {name: fixedRowsNameMap['/fe-fixed-accepted-share'], isFile: false, path: '/fe-fixed-accepted-share', fixed: true, key: fixedRowsKeyMap['/fe-fixed-accepted-share']},
+    {name: fixedRowsNameMap['/fe-fixed-project-share'], isFile: false, path: '/fe-fixed-project-share', fixed: true, key: fixedRowsKeyMap['/fe-fixed-project-share']}
+];
+
 export function getFileBtn(file, rootKind) {
     if (file.fixed) return [];
     if (rootKind) {
         return ROOT_FILE_BTN_MAP[rootKind];
     } else {
         const baseButton = [iconButtonTypes.DOWNLOAD, iconButtonTypes.MOVE, iconButtonTypes.RENAME, iconButtonTypes.DELETE, iconButtonTypes.PATH];
-        if (file.shareId) {
-            baseButton.unshift(iconButtonTypes.CANCEL_SHARE);
-        } else {
-            baseButton.unshift(iconButtonTypes.SHARE);
-        }
-        if (file.fileExtensions === '.zip') {
+        baseButton.unshift(iconButtonTypes.SHARE);
+        if (file.fileExtension === '.zip') {
             baseButton.push(iconButtonTypes.UNZIP);
         }
         return baseButton;
@@ -93,16 +107,45 @@ export function getFileIcon(file) {
         return 'sdx-gongxiangwenjianjia';
     }
     if (file.isFile) {
-        if (file.shareId) {
+        if (file.fileShareDetailId) {
             return 'sdx-yifenxiangwenjian';
         } else {
             return 'sdx-morenwenjian';
         }
     } else {
-        if (file.shareId) {
+        if (file.fileShareDetailId) {
             return 'sdx-yigongxiangwenjianjia';
         } else {
             return 'sdx-wenjianjia';
         }
+    }
+}
+
+export function isDirFixed(path) {
+    return Object.keys(fixedRowsNameMap).includes(path);
+}
+
+export function getDirRootKind(path) {
+    if (path.startsWith('/')) {
+        path = '/' + path.split('/')[1];
+    } else {
+        path = '/' + path.split('/')[0];
+    }
+    if (isDirFixed(path)) {
+        return fixedRowsKeyMap[path];
+    } else {
+        return '';
+    }
+}
+
+export function getPathName(path) {
+    let tempPath;
+    if (!path.startsWith('/')) {
+        tempPath = '/' + path;
+    }
+    if (isDirFixed(tempPath)) {
+        return fixedRowsNameMap[tempPath];
+    } else {
+        return path;
     }
 }

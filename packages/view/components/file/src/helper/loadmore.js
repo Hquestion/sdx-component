@@ -23,7 +23,8 @@ export default {
                         el.$$lastScrollLeft = e.target.scrollLeft;
                         binding.value('horizontal', e.target.scrollLeft);
                     }
-                }, 200);
+                }, 300);
+                selectWrap.removeEventListener('scroll', el.$$scrollcb);
                 selectWrap.addEventListener('scroll', el.$$scrollcb);
             },
             unbind(el) {

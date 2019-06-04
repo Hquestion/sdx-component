@@ -1,6 +1,9 @@
 <template>
     <div class="sdxv-file-table">
-        <div class="sdxv-file-table__checkbar" v-show="fileManager.checked.length > 0">
+        <div
+            class="sdxv-file-table__checkbar"
+            v-show="fileManager.checked.length > 0"
+        >
             <el-checkbox
                 v-model="checked"
                 :indeterminate="isIndeterminate"
@@ -13,17 +16,22 @@
             :dynamic="true"
             :reverse-selection="true"
             :row-key="setRowKey"
-            :data="fileManager.fileList"
+            :data="fileManager.renderFiles"
             @sort-change="handleSortChange"
             :show-header="fileManager.checked.length === 0"
             @select="handleSelect"
             @select-all="handleSelectAll"
             :dynamic-top-height="topHeight"
             :dynamic-bottom-height="bottomHeight"
-            height="calc(100% - 100px)"
+            height="100%"
             v-loadmore="loadMore"
+            v-loading="fileManager.loading"
         >
-            <el-table-column type="selection" />
+            <el-table-column
+                v-if="!fileManager.isProjectRoot()"
+                type="selection"
+                :selectable="canRowCheck"
+            />
             <el-table-column
                 label="文件名"
                 sortable="custom"
@@ -37,7 +45,26 @@
                         >
                             <use :xlink:href="'#' + getFileIcon(row)" />
                         </svg>
-                        <span>{{ row.name }}</span>
+                        <div class="sdxv-file__item-name">
+                            <span v-if="isEditingRow(row)">
+                                <SdxuInput
+                                    v-model="tempRowName"
+                                    :inline="true"
+                                />
+                                <i
+                                    class="sdx-icon sdx-icon-circle-outline accept-icon"
+                                    @click="saveEdit"
+                                />
+                                <i
+                                    class="sdx-icon sdx-icon-remove-outline cancel-icon"
+                                    @click="cancelEdit"
+                                />
+                            </span>
+                            <span
+                                v-else
+                                @click="handlePathNameClick(row)"
+                            >{{ row.name }}</span>
+                        </div>
                     </span>
                 </template>
             </el-table-column>
@@ -45,13 +72,26 @@
                 label="大小"
                 sortable="custom"
                 prop="size"
-            />
+                width="180"
+            >
+                <template #default="{row}">
+                    {{ row.size | byteFormatter }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="更新时间"
                 sortable="custom"
                 prop="updatedAt"
-            />
-            <el-table-column label="操作">
+                width="250"
+            >
+                <template #default="{row}">
+                    {{ row.updatedAt | dateFormatter }}
+                </template>
+            </el-table-column>
+            <el-table-column
+                label="操作"
+                width="180"
+            >
                 <template #default="{row}">
                     <SdxuIconButtonGroup>
                         <SdxuIconButton
@@ -65,6 +105,13 @@
                 </template>
             </el-table-column>
         </SdxuTable>
+        <SdxvFolderSelect
+            :visible.sync="moveVisible"
+            :support-move="supportMove"
+            @move="handleMove"
+            @copy="handleCopy"
+            @cancel="handleCancelMove"
+        />
     </div>
 </template>
 
@@ -73,16 +120,29 @@ import SdxuTable from '@sdx/ui/components/table';
 import ElTableColumn from 'element-ui/lib/table-column';
 import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
+import MessageBox from '@sdx/ui/components/message-box';
+import SdxuInput from '@sdx/ui/components/input';
 
+import { lock, unlock } from '@sdx/utils/src/lockScroll';
+import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+
+import moment from 'moment';
+
+import SdxvFolderSelect from './popup/FolderSelect';
 import { rootKinds, getFileIcon, getFileBtn } from './helper/fileListTool';
 import Loadmore from './helper/loadmore';
-import {isUndefined} from '@sdx/utils/src/helper/tool';
+import checkMixin from './helper/checkMixin';
+import OperationHandlerMixin from './helper/operationHandlerMixin';
+
+const ROW_HEIGHT = 52;
 
 export default {
     name: 'FileTable',
     inject: ['fileManager'],
-    mixins: [Loadmore],
+    mixins: [Loadmore, checkMixin, OperationHandlerMixin, transformFilter],
     components: {
+        SdxvFolderSelect,
+        SdxuInput,
         ElTableColumn,
         SdxuTable,
         SdxuIconButtonGroup,
@@ -90,33 +150,93 @@ export default {
     },
     data() {
         return {
-            topHeight: 0,
-            bottomHeight: 0
+            topCount: 0,
+            containerCount: 0,
+            editingRow: null,
+            tempRowName: '新建文件夹',
+            moveVisible: false
         };
     },
     computed: {
-        checked: {
-            get() {
-                return this.fileManager.checked.length > 0;
-            },
-            set(val) {
-                if (!val) {
-                    if (this.isIndeterminate) {
-                        this.doSelectAll();
-                    } else {
-                        this.doUnselectAll();
-                    }
-                } else {
-                    this.doSelectAll();
-                }
-                this.syncRowCheckStatus();
-            }
+        topHeight() {
+            return this.topCount * ROW_HEIGHT;
         },
-        isIndeterminate() {
-            return this.fileManager.checked.length > 0 && this.fileManager.checked.length < this.fileManager.fileList.length;
+        bottomHeight() {
+            return (this.fileManager.loadedTotal - this.topCount - this.containerCount) * ROW_HEIGHT;
         }
     },
     methods: {
+        init() {
+            this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+        },
+        mkdir(row) {
+            if (this.editingRow) {
+                MessageBox.alert.warning({
+                    title: '请先完成新建或重命名'
+                });
+                return;
+            }
+            const emptyRow = {
+                userId: '',
+                name: '新建文件夹',
+                path: '',
+                filesystem: 'cephfs',
+                isFile: false,
+                mimeType: 'text/directory',
+                fileExtension: '',
+                fileShareDetailId: '',
+                createdAt: moment().toISOString(),
+                updatedAt: moment().toISOString(),
+                size: 0
+            };
+
+            this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+            lock(this.$el.querySelector('.el-table__body-wrapper'));
+            setTimeout(() => {
+                if (this.fileManager.isRoot) {
+                    this.fileManager.renderFiles.splice(this.fileManager.fixedRows.length, 0, emptyRow);
+                } else {
+                    this.fileManager.renderFiles.unshift(emptyRow);
+                }
+                this.editingRow = emptyRow;
+                this.tempRowName = emptyRow.name;
+                setTimeout(() => {
+                    lock(this.$el.querySelector('.el-table__body-wrapper'));
+                }, 0);
+            }, 10);
+        },
+        handlePathNameClick(row) {
+            if (!row.isFile) {
+                unlock(this.$el.querySelector('.el-table__body-wrapper'));
+                this.$router.replace({
+                    name: this.$router.currentRoute.name,
+                    query: {
+                        path: row.path
+                    }
+                });
+            }
+        },
+        isEditingRow(row) {
+            return this.editingRow && (row.path === this.editingRow.path);
+        },
+        saveEdit() {
+            // todo: 保存修改,然后清空editingRow,刷新列表
+            this.doRenameOrMakePath();
+        },
+        cancelEdit() {
+            if (!this.editingRow.path) {
+                if (this.fileManager.isRoot) {
+                    this.fileManager.renderFiles.splice(this.fileManager.fixedRows.length, 1);
+                } else {
+                    this.fileManager.renderFiles.shift();
+                }
+                this.$nextTick(() => {
+                    unlock(this.$el.querySelector('.el-table__body-wrapper'));
+                });
+            }
+            this.editingRow = null;
+            this.tempRowName = '';
+        },
         getFileBtn(file) {
             return getFileBtn(file, this.fileManager.rootKind);
         },
@@ -130,66 +250,58 @@ export default {
         handleFileAction(row, { name }) {
             // eslint-disable-next-line
             console.log(name);
+            return this.OPERATION_MAP[name] && this.OPERATION_MAP[name](row);
         },
-        handleSelect(selection, row) {
-            // eslint-disable-next-line
-            console.log(selection);
-            let checkedIndex = this.fileManager.checkedMap[row.path];
-            if (!isUndefined(checkedIndex) && checkedIndex >= 0) {
-                delete this.fileManager.checkedMap[row.path];
-                this.fileManager.checked.splice(checkedIndex, 1);
-            } else {
-                this.fileManager.checked.push(row);
-                this.fileManager.checkedMap[row.path] = this.fileManager.checked.length - 1;
-            }
-        },
-        handleSelectAll(selection) {
-            if (this.fileManager.isCheckAll) {
-                this.doUnselectAll();
-            } else {
-                this.doSelectAll();
-            }
-        },
-        doSelectAll() {
-            this.fileManager.isCheckAll = true;
-            // 获取所有文件，使用indexedDB时需修改成从indexedDB获取
-            this.fileManager.checked = this.fileManager.fileList.slice(0);
-            this.fileManager.checkedMap = {};
-            this.fileManager.checked.forEach((item, index) => {
-                this.fileManager.checkedMap[item.path] = index;
+        calcViewportVisible() {
+            const target = this.$el.querySelector('.el-table__body-wrapper');
+            const listHeight = ROW_HEIGHT * this.fileManager.loadedTotal;
+            const viewportHeight = target.offsetHeight;
+            const scrollTop = target.scrollTop;
+            let topCount = Math.floor(scrollTop / ROW_HEIGHT);
+            let bottomCount = Math.floor((listHeight - scrollTop - viewportHeight) / ROW_HEIGHT);
+            topCount = topCount - 5 >= 0 ? topCount - 5 : 0;
+            bottomCount = bottomCount - 5 > 0 ? bottomCount - 5 : 0;
+            // 获取当前视口区域的文件列表并渲染
+            const containerCount = this.fileManager.loadedTotal - topCount - bottomCount;
+            this.fileManager.getRenderList(topCount, containerCount).then(res => {
+                this.containerCount = containerCount;
+                this.topCount = topCount;
+                this.fileManager.renderFiles = res.slice();
+            }, () => {
+                this.containerCount = containerCount;
+                this.topCount = topCount;
+                this.fileManager.renderFiles = [];
+            }).then(() => {
+                this.$refs.fileTable.$children[0].doLayout();
+                this.syncRowCheckStatus();
             });
         },
-        doUnselectAll() {
-            this.fileManager.isCheckAll = false;
-
-            this.fileManager.checked = [];
-            this.fileManager.checkedMap = {};
-        },
-        syncRowCheckStatus() {
-            if (this.fileManager.checked.length > 0) {
-                this.fileManager.checked.forEach(item => {
-                    this.$refs.fileTable.$children[0].toggleRowSelection(item, true);
-                });
-            } else {
-                this.$refs.fileTable.$children[0].clearSelection();
-            }
-        },
         loadMore(direction, scrollDistance, isReachBottom) {
-            // console.log(direction, scrollDistance, isReachBottom);
+            let isScrollDown = false;
+            this.currentScrollTop = scrollDistance;
+            isScrollDown = !!(this.lastScrollTop && this.currentScrollTop - this.lastScrollTop > 0);
+            this.lastScrollTop = this.currentScrollTop;
             if (direction === 'vertical') {
-                if (isReachBottom) {
+                if (isReachBottom && isScrollDown) {
                     this.loadNextPage();
                 }
-                let topCount = Math.floor(scrollDistance / this.rowHeight);
-                this.topCount = topCount - 5 > 0 ? topCount - 5 : 0;
+                this.calcViewportVisible();
             }
         },
         loadNextPage() {
-
+            const defer = this.fileManager.loadNextPage();
+            if(defer) {
+                defer.then(() => {
+                    this.checkAndSelectAll();
+                });
+            }
+        },
+        scrollToTop() {
+            this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
         }
     },
     mounted() {
-
+        this.init();
     }
 };
 </script>
@@ -197,13 +309,18 @@ export default {
 <style lang="scss" scoped>
 @import "~@sdx/utils/src/theme-common/var";
 .sdxv-file-table {
-    height: 100%;
+    height: calc(100% - 80px);
+    overflow: hidden;
+    & /deep/ .el-checkbox.is-disabled {
+        display: none;
+    }
     .sdxv-file-table__checkbar {
         padding-left: 10px;
         line-height: 58px;
     }
     .sdxv-file__item {
-        display: inline-block;
+        display: block;
+        overflow: hidden;
         &:hover {
             span {
                 color: $sdx-primary-color;
@@ -215,6 +332,22 @@ export default {
             height: 20px;
             margin-right: 14px;
             vertical-align: middle;
+        }
+        .sdxv-file__item-name {
+            display: inline-block;
+            .sdx-icon {
+                margin-left: $sdx-margin / 2;
+                font-size: $sdx-h1-font-size;
+                display: inline-block;
+                vertical-align: middle;
+                &.accept-icon {
+                    color: $sdx-primary-color;
+                }
+                &.cancel-icon {
+                    color: $sdx-text-holder-color;
+                }
+            }
+
         }
     }
 }

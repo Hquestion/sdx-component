@@ -1,32 +1,59 @@
 <template>
     <div class="sdxv-operation-bar">
         <div class="sdxv-operation-bar__operations">
-            <SdxuButton icon="sdx-icon sdx-icon-plus">
+            <SdxuButton
+                icon="sdx-icon sdx-icon-plus"
+                @click="createFolder"
+                v-if="canMkdir()"
+            >
                 新建文件夹
             </SdxuButton>
             <SdxwFileSelect
                 source="local"
                 :inline="true"
                 :limit="-1"
+                dropdown-width="138px"
+                local-file-label="上传文件"
+                local-folder-label="上传文件夹"
                 style="margin-left: 20px;margin-right: 20px;"
+                v-if="canUpload()"
             >
                 上传
             </SdxwFileSelect>
-            <SdxuButton>
+            <SdxuButton v-if="canDownload()">
                 下载
             </SdxuButton>
-            <SdxuButton>
+            <SdxuButton v-if="canShare()">
                 分享
             </SdxuButton>
-            <SdxuButton type="default">
+            <SdxuButton v-if="canCancelShare()">
+                取消分享
+            </SdxuButton>
+            <SdxuButton
+                type="default"
+                v-if="canCopy()"
+            >
+                复制
+            </SdxuButton>
+            <SdxuButton
+                type="default"
+                v-if="canMove()"
+            >
                 复制/移动
             </SdxuButton>
-            <SdxuButton type="default">
+            <SdxuButton
+                type="default"
+                v-if="canDelete()"
+            >
                 删除
             </SdxuButton>
         </div>
         <div class="sdxv-operation-bar__search">
-            <SdxwSearchLayout @search="handleSearch" :block="false" align="right">
+            <SdxwSearchLayout
+                @search="handleSearch"
+                :block="false"
+                align="right"
+            >
                 <SdxwSearchItem>
                     <SdxuInput
                         type="search"
@@ -45,6 +72,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import SdxwFileSelect from '@sdx/widget/components/file-select';
 import SdxwSearch from '@sdx/widget/components/search-layout';
 import SdxuInput from '@sdx/ui/components/input';
+import batchOperationAuthMixin from './helper/batchOperationAuthMixin';
 
 export default {
     name: 'OperationBar',
@@ -56,12 +84,16 @@ export default {
         [SdxwSearch.SearchItem.name]: SdxwSearch.SearchItem
     },
     inject: ['fileManager'],
+    mixins: [batchOperationAuthMixin],
     data() {
         return {};
     },
     methods: {
         handleSearch() {
 
+        },
+        createFolder() {
+            this.fileManager.$refs.fileTable.mkdir();
         }
     },
     mounted() {

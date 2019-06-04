@@ -9,11 +9,11 @@ export function changePassword(params) {
 }
 
 export function getRoleDetail(uuid) {
-    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}roles/${uuid}/`);
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}roles/${uuid}`);
 }
 
 export function getGroupDetail(uuid) {
-    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}groups/${uuid}/`);
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}groups/${uuid}`);
 }
 
 export function getUserList(params) {
@@ -46,11 +46,11 @@ export function changeUserInfo(params) {
 }
 
 export function getUserSimpleInfo(uuid) {
-    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}/`);
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}`);
 }
 
 export function getUserDetail(uuid) {
-    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}/`).then(res => {
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}`).then(res => {
         const { roles, groups } = res;
         const rolesDeferArr = (roles || []).map(item => getRoleDetail(item));
         const groupsDeferArr = (groups || []).map(item => getGroupDetail(item));

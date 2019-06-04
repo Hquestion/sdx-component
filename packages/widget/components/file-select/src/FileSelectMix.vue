@@ -3,11 +3,14 @@
         <div class="sdxw-file-select__main">
             <SdxuButton
                 trigger="click"
+                :icon="icon"
                 :keep-dropdown-open="true"
                 ref="dropdownMain"
+                :dropdown-width="dropdownWidth"
+                :disabled="disabled"
                 @dropdown-hide="emitBlurOnFormItem"
             >
-                选择文件
+                <slot>选择文件</slot>
                 <template slot="dropdown">
                     <SdxuButton
                         type="text"
@@ -31,7 +34,7 @@
                             :before-upload="beforeUpload"
                             @click.native="$refs.fileSelectPop && $refs.fileSelectPop.close()"
                         >
-                            <span>本地文件</span>
+                            <span>{{ localFileLabel }}</span>
                         </SdxuUpload>
                     </SdxuButton>
                     <SdxuButton
@@ -56,7 +59,7 @@
                             :before-upload="beforeUploadDir"
                             @click.native="$refs.fileSelectPop && $refs.fileSelectPop.close()"
                         >
-                            <span>本地文件夹</span>
+                            <span>{{ localFolderLabel }}</span>
                         </SdxuUpload>
                     </SdxuButton>
                     <SdxuButton
@@ -77,7 +80,7 @@
                             @cancel="handleCancel"
                             @confirm="handleConfirm"
                         >
-                            平台文件
+                            {{ platformFileLabel }}
                         </SdxwFileSelectPop>
                     </SdxuButton>
                 </template>
@@ -146,7 +149,7 @@ export default {
         },
         rootPath: {
             type: String,
-            default: ''
+            default: '/'
         },
         treeOptions: {
             type: Object,
@@ -188,6 +191,30 @@ export default {
         uploadParams: {
             type: Object,
             default: undefined
+        },
+        localFileLabel: {
+            type: String,
+            default: '本地文件'
+        },
+        localFolderLabel: {
+            type: String,
+            default: '本地文件夹'
+        },
+        platformFileLabel: {
+            type: String,
+            default: '平台文件'
+        },
+        icon: {
+            type: String,
+            default: ''
+        },
+        dropdownWidth: {
+            type: String,
+            default: '100%'
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

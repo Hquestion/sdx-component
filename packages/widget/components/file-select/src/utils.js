@@ -16,12 +16,28 @@ export function getPathIcon(path) {
 }
 
 export function renderFileNode(h, node, data) {
+    const newFolder = () => {
+        const save = () => {
+            // todo save
+        };
+        const cancel = () => {
+            window.console.log('cancel');
+        };
+        return (
+            <div class="sdxw-file-select-tree__new-folder">
+                <input vModel={data.name} />
+                <i class="sdx-icon sdx-icon-circle-outline accept-icon" onClick={save}/>
+                <i class="sdx-icon sdx-icon-remove-outline cancel-icon" onClick={cancel}/>
+            </div>
+        );
+    };
     return (
         <span
             class={{
                 'is-folder': !data.isFile,
                 'is-file': !!data.isFile,
-                'sdxw-file-select-tree__node': true
+                'sdxw-file-select-tree__node': true,
+                'sdxw-file-select-tree__new': !data.path
             }}
         >
             <svg
@@ -30,7 +46,7 @@ export function renderFileNode(h, node, data) {
             >
                 <use xlinkHref={'#' + getPathIcon(data)}/>
             </svg>
-            {node.label}
+            {data.path ? node.label : newFolder()}
         </span>
     );
 }

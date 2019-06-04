@@ -7,6 +7,7 @@
             @check-change="handleCheckChange"
             @node-expand="treeShake"
             @node-collapse="treeShake"
+            @current-change="handleCurrentChange"
             class="sdxw-file-select-tree__main"
         />
     </div>
@@ -18,7 +19,7 @@ import { Loading } from 'element-ui';
 import Vue from 'vue';
 import { getFilesList } from '@sdx/utils/src/api/file';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
-import { renderFileNode } from './utils';
+import { getPathIcon } from './utils';
 
 Vue.use(Loading);
 
@@ -48,7 +49,7 @@ export default {
         },
         rootPath: {
             type: String,
-            default: ''
+            default: '/'
         },
         accept: {
             type: String,
@@ -176,10 +177,13 @@ export default {
         },
         // 定制 tree 的渲染函数,为文件夹加上图标
         renderContent(h, { node, data }) {
-            return renderFileNode(h, node, data);
+            return this.renderFileNode(h, node, data);
         },
         treeShake() {
             this.$emit('tree-shake');
+        },
+        handleCurrentChange() {
+            this.$emit('current-change');
         },
         // 暴露给外部使用
         setNodeChecked(key, checked, deep) {
@@ -188,6 +192,41 @@ export default {
         // 暴露给外部使用
         getCheckedNodes() {
             return this.tree.getCheckedNodes();
+        },
+        renderFileNode(h, node, data) {
+            const newFolder = () => {
+                const save = () => {
+                    this.$emit('save', data);
+                };
+                const cancel = () => {
+                    this.$emit('cancel');
+                };
+                return (
+                    <div class="sdxw-file-select-tree__new-folder">
+                        <input vModel={data.name} />
+                        <i class="sdx-icon sdx-icon-circle-outline accept-icon" onClick={save}/>
+                        <i class="sdx-icon sdx-icon-remove-outline cancel-icon" onClick={cancel}/>
+                    </div>
+                );
+            };
+            return (
+                <span
+                    class={{
+                        'is-folder': !data.isFile,
+                        'is-file': !!data.isFile,
+                        'sdxw-file-select-tree__node': true,
+                        'sdxw-file-select-tree__new': !data.path
+                    }}
+                >
+                    <svg
+                        class="sdxw-file-select-tree__node-icon"
+                        aria-hidden="true"
+                    >
+                        <use xlinkHref={'#' + getPathIcon(data)}/>
+                    </svg>
+                    {data.path ? node.label : newFolder()}
+                </span>
+            );
         }
     }
 };

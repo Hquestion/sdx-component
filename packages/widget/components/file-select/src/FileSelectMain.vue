@@ -72,7 +72,7 @@ export default {
         },
         rootPath: {
             type: String,
-            default: ''
+            default: '/'
         },
         accept: {
             type: String,

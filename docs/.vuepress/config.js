@@ -38,7 +38,8 @@ module.exports = {
                         'ui/user-avatar',
                         'ui/layout',
                         'ui/scroll',
-                        'ui/lazyList'
+                        'ui/lazyList',
+                        'ui/radial-progress'
                     ]
                 },
                 {
@@ -53,7 +54,9 @@ module.exports = {
                         'widget/user-picker',
                         'widget/search-layout',
                         'widget/fileselect',
-                        'widget/select-group-user'
+                        'widget/select-group-user',
+                        'widget/share-setting',
+                        'widget/log-detail'
                     ]
                 },
                 {

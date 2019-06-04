@@ -19,6 +19,7 @@ import Layout from './components/layout';
 import LazyList from './components/lazy-list';
 import IconButtonGroup from './components/icon-button-group';
 import RadialProgress from './components/radial-progress';
+import SortSearch from './components/sort-search';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxUI = {
@@ -42,7 +43,8 @@ const SdxUI = {
     Layout,
     LazyList,
     IconButtonGroup,
-    RadialProgress
+    RadialProgress,
+    SortSearch
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -67,6 +69,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     LazyList.install(vue);
     IconButtonGroup.install(vue);
     RadialProgress.install(vue);
+    SortSearch.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

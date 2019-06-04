@@ -45,15 +45,17 @@
         </div>
         <div class="sdxu-transfer__right">
             <div class="sdxu-transfer__tag">
-                <el-tag
-                    v-for="tag in tags"
-                    :key="tag[treeNodeKey]"
-                    closable
-                    @close="handleClose(tag)"
-                    :class="tag.is_group ? 'is-group' : 'is-user'"
-                >
-                    {{ tag.name }}
-                </el-tag>
+                <SdxuScroll>
+                    <el-tag
+                        v-for="tag in tags"
+                        :key="tag[treeNodeKey]"
+                        closable
+                        @close="handleClose(tag)"
+                        :class="tag.is_group ? 'is-group' : 'is-user'"
+                    >
+                        {{ tag.name }}
+                    </el-tag>
+                </SdxuScroll>
             </div>
             <div class="sdxu-transfer__moveall">
                 <SdxuButton
@@ -73,6 +75,7 @@
 import {Tree, Tag, Scrollbar} from 'element-ui';
 import Button from '@sdx/ui/components/button';
 import Input from '@sdx/ui/components/input';
+import SdxuScroll from '@sdx/ui/components/scroll';
 export default {
     name: 'SdxuTransfer',
     props: {
@@ -110,7 +113,8 @@ export default {
         [Tag.name]: Tag,
         [Scrollbar.name]: Scrollbar,
         [Button.name]: Button,
-        [Input.name]: Input
+        [Input.name]: Input,
+        SdxuScroll
     },
     computed: {
         hightIcon() {

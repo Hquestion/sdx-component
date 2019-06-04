@@ -1,0 +1,16 @@
+@include block('sort-search', $bem-namespace-ui) {
+    display: inline-block;
+    i {
+        cursor:pointer;
+        width: $sdx-sort-icon-width;
+        display: inline-block;
+        border-radius: 100%;
+        color: $sdx-sort-icon-color-normal;
+        @include state('active') {
+            color: $sdx-sort-icon-color-active;
+        }
+        @include state('normal') {
+            color: $sdx-sort-icon-color-normal;
+        }
+    } 
+}

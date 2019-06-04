@@ -39,7 +39,8 @@ module.exports = {
                         'ui/layout',
                         'ui/scroll',
                         'ui/lazyList',
-                        'ui/radial-progress'
+                        'ui/radial-progress',
+                        'ui/sort-search'
                     ]
                 },
                 {

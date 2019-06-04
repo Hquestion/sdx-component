@@ -1,6 +1,7 @@
-import httpService from '../http-service';
+// 等调试完改
+import httpService from '@sdx/utils/lib/http-service';
 
-const projectApi = '/api/v1/projects/';
+import { projectApi } from './config';
 
 const taskApi = '/api/v1/tasks/';
 

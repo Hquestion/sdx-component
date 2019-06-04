@@ -10,5 +10,6 @@ module.exports = {
     'file-select': './components/file-select/index.js',
     'search-layout': './components/search-layout/index.js',
     'user-picker': './components/user-picker/index.js',
-    'share-setting': './components/share-setting/index.js'
+    'share-setting': './components/share-setting/index.js',
+    'log-detail': './components/log-detail/index.js',
 };

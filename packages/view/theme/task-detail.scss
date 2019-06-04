@@ -102,19 +102,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             }
         }
     }
-
-    @include element('content') {
-        padding: $sdx-padding;
-        background-color: #F4F8FD;
-        text-align: left;
-        word-break: break-word;
-        border-radius:2px;
-        white-space: pre-wrap;
-    }
-
-    @include element('scroll') {
-        height: calc(100vh - 90px - 40px - 40px);
-    }
 }
 
 @include block('data-info', $bem-namespace-view) {

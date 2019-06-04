@@ -23,7 +23,8 @@ const SdxWidget = {
     SearchLayout,
     FileSelect,
     UserPicker,
-    ShareSetting
+    ShareSetting,
+    LogDetail
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {

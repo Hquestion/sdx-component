@@ -5,7 +5,7 @@
 module.exports = [
     {
         apiId: '/fe-compose/api/v1/login',
-        method: 'GET',
+        method: 'POST',
         functionName: 'login.handler',
         filePath: './compose/login.js'
     },

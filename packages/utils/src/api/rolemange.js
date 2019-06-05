@@ -13,7 +13,7 @@ export function createRoles(params) {
 }
 
 export function updateRoles(uuid, params) {
-    return httpService.put(rolesApi + uuid, params);
+    return httpService.patch(rolesApi + uuid, params);
 }
 
 export function getRolesDetail(uuid) {

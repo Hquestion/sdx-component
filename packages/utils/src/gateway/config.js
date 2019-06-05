@@ -4,15 +4,21 @@
  */
 module.exports = [
     {
+        apiId: '/fe-compose/api/v1/login',
+        method: 'POST',
+        functionName: 'login.handler',
+        filePath: './compose/login.js'
+    },
+    {
         apiId: '/fe-compose/api/v1/user-profiles',
         method: 'GET',
-        functionName: 'user.userProfiles',
-        filePath: './compose/user.js'
+        functionName: 'userProfiles.handler',
+        filePath: './compose/userProfiles.js'
     },
     {
         apiId: '/fe-compose/api/v1/group-profiles',
         method: 'GET',
-        functionName: 'groupList.groupProfiles',
-        filePath: './compose/groupList.js'
+        functionName: 'groupProfiles.handler',
+        filePath: './compose/groupProfiles.js'
     }
 ];

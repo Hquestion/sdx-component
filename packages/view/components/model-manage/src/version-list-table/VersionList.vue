@@ -25,10 +25,20 @@
                 key="name"
             />
             <el-table-column
-                prop="description"
                 key="description"
                 label="版本描述"
-            />
+            >
+                <template slot-scope="scope">
+                    <div
+                        :title="scope.row.description"
+                        style="white-space: nowrap;
+                               overflow: hidden;
+                               text-overflow: ellipsis;"
+                    >
+                        {{ scope.row.description }}
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
                 key="framework"
                 prop="framework"
@@ -119,6 +129,15 @@
                 v-if="createDialogVisible"
                 @close="dialogClose"
                 :editing-version="editingVersion"
+                :is-publishing="isPublishing"
+            />
+        </div>
+        <div>
+            <test-version
+                :visible.sync="testDialogVisible"
+                v-if="testDialogVisible"
+                :version="editingVersion"
+                @close="dialogClose"
             />
         </div>
     </sdxu-content-panel>
@@ -137,6 +156,7 @@ import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import Message from 'element-ui/lib/message';
 import CreateVersion from './CreateVersion';
+import TestVersion from './TestVersion';
 export default {
     name: 'VersionListTable',
     data() {
@@ -149,8 +169,10 @@ export default {
             orderBy: '',
             loading: false,
             createDialogVisible: false,
+            testDialogVisible: false,
             isModelOwner: false,
-            editingVersion: null
+            editingVersion: null,
+            isPublishing: false
         };
     },
     components: {
@@ -162,7 +184,8 @@ export default {
         [Table.name]: Table,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         SdxuIconButton,
-        CreateVersion
+        CreateVersion,
+        TestVersion
     },
     computed: {
         userId() {
@@ -178,10 +201,14 @@ export default {
     methods: {
         dialogClose(needRefresh) {
             this.editingVersion = null;
+            this.isPublishing = false;
             if (needRefresh) this.initVersionList();
         },
         createVersion() {
             this.createDialogVisible = true;
+        },
+        testVersion() {
+            this.testDialogVisible = true;
         },
         currentChange(nVal) {
             this.current = nVal;
@@ -204,14 +231,13 @@ export default {
                 orderBy: this.orderBy
             };
             getVersionList(params).then((res) => {
-                console.log('res', res);
                 this.versionList = res.items;
                 this.versionList.forEach(item => {
                     item.showPublish = this.isModelOwner && (item.state === 'CREATED' || item.state === 'FAILED' || item.state === 'KILLED');
                     item.showShutdown = this.isModelOwner && (item.state === 'RUNNING' || item.state === 'LAUNCHING');
                     item.showEdit = this.isModelOwner && (item.state === 'CREATED' || item.state === 'FAILED' || item.state === 'KILLED');
                     item.showRemove = this.isModelOwner && (item.state === 'CREATED' || item.state === 'FAILED' || item.state === 'KILLED');
-                    item.showTest = this.isModelOwner && (item.state === 'RUNNING');
+                    item.showTest = this.isModelOwner && item.state === 'RUNNING' && item.framework === 'TENSORFLOW';
                     item.label = {};
                     switch(item.state) {
                     case 'CREATED':
@@ -283,9 +309,8 @@ export default {
                     }).catch(() => {});
                     break;
                 case 'test':
-                    this.dialogVisible = true;
+                    this.testDialogVisible = true;
                     this.editingVersion = row;
-                    Object.assign(this.shareForm, row);
                     break;
                 case 'shutdown':
                     MessageBox({
@@ -302,6 +327,9 @@ export default {
                     }).catch(() => {});
                     break;
                 case 'publish':
+                    this.createDialogVisible = true;
+                    this.editingVersion = row;
+                    this.isPublishing = true;
                     break;
                 default:
                     break;

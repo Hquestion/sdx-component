@@ -47,10 +47,20 @@
                 key="name"
             />
             <el-table-column
-                prop="description"
                 key="description"
                 label="模型描述"
-            />
+            >
+                <template slot-scope="scope">
+                    <div
+                        :title="scope.row.description"
+                        style="white-space: nowrap;
+                               overflow: hidden;
+                               text-overflow: ellipsis;"
+                    >
+                        {{ scope.row.description }}
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
                 key="labels"
                 label="模型标签"
@@ -260,7 +270,7 @@ export default {
                 // 编辑模型
                 updateModel(this.editingModel.uuid, this.shareForm).then(() => {
                     Message({
-                        message: '设置成功',
+                        message: '操作成功',
                         type: 'success'
                     });
                     this.editingModel = null;
@@ -291,7 +301,6 @@ export default {
                 shareType: this.modelType
             };
             getModelList(params).then((res) => {
-                console.log('res', res);
                 this.modelList = res.items;
                 this.modelList.forEach(item => {
                     item.showShare = (this.modelType === 'ALL' && item.creatorId === this.userId) || this.modelType === 'PRIVATE';
@@ -347,6 +356,14 @@ export default {
                             });
                             this.initModelList();
                         });
+                    }).catch(() => {});
+                    break;
+                case 'cancelShare':
+                    MessageBox({
+                        title: '确定要取消共享该模型吗？'
+                    }).then(() => {
+                        this.editingModel = row;
+                        this.confirmEdit([], [], 'PRIVATE');
                     }).catch(() => {});
                     break;
                 default:

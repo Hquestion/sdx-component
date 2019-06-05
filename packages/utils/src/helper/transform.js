@@ -1,3 +1,6 @@
+import { isString } from './tool';
+import moment from 'moment';
+
 // 标准时间转换时间距离现在多久
 export function  getDateDiff(dateTimeStamp) {
     let minute = 1000 * 60;
@@ -33,11 +36,12 @@ export function  getDateDiff(dateTimeStamp) {
 }
 
 
-// 时间戳转换标准时间
+// 标准时间转换成想要的formatDate格式
 function padLeftZero(str){
     return ('00'+str).substr(str.length);
 }
 export function formatDate(date,fmt){
+    date = new Date(date);
     let o = {
         'M+' : date.getMonth() +1,                    //月份
         'd+' : date.getDate(),                        //日
@@ -57,4 +61,28 @@ export function formatDate(date,fmt){
         }
     }
     return fmt;
+}
+
+export function  byteFormatter(byte) {
+    if (byte === 0) return '0 B';
+    if (!byte) return '';
+
+    let k = 1024;
+    let sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    let i = Math.floor(Math.log(byte) / Math.log(k));
+
+    return Math.floor(byte / Math.pow(k, i)) + ' ' + sizes[i];
+}
+
+export function dateFormatter(date) {
+    if(!date) return '';
+    if (isString(date)) {
+        return moment(date).format('YYYY-MM-DD HH:mm:ss');
+    } else if (date instanceof Date) {
+        return moment(date).format('YYYY-MM-DD HH:mm:ss');
+    } else if (date instanceof moment) {
+        return date.format('YYYY-MM-DD HH:mm:ss');
+    } else {
+        return date;
+    }
 }

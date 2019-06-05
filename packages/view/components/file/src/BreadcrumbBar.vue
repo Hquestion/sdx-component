@@ -1,7 +1,10 @@
 <template>
     <div class="sdxv-file-breadcrumb-bar">
         <div class="file-breadcrumb">
-            <EllipseBreadcrumb :breadcrumb="list" @nav="handleNav"></EllipseBreadcrumb>
+            <EllipseBreadcrumb
+                :breadcrumb="list"
+                @nav="handleNav"
+            />
         </div>
         <div class="loaded-tip">
             已加载<span>{{ fileManager.loadedTotal }}</span>条，共{{ fileManager.total }}条
@@ -37,6 +40,12 @@ export default {
                 name: '全部文件',
                 path: ''
             });
+            if (this.$route.query.search) {
+                pathObjArr.push({
+                    name: '搜索结果',
+                    path: ''
+                });
+            }
             return pathObjArr;
         },
         handleNav(item) {
@@ -53,13 +62,23 @@ export default {
     mounted() {
         this.list = this.buildBreadcrumb(this.$route.query.path);
     },
-    watch: {
-        $route(val, oldval) {
-            if (val.query.path !==  oldval.query.path) {
+    activated() {
+        this.unwatch = this.$watch('$route', (val, oldval) => {
+            if (val.query.path !==  oldval.query.path || val.query.search !== oldval.query.search) {
                 this.list = this.buildBreadcrumb(val.query.path);
             }
-        }
+        });
+    },
+    deactivated() {
+        this.unwatch && this.unwatch();
     }
+    // watch: {
+    //     $route(val, oldval) {
+    //         if (val.query.path !==  oldval.query.path) {
+    //             this.list = this.buildBreadcrumb(val.query.path);
+    //         }
+    //     }
+    // }
 };
 </script>
 

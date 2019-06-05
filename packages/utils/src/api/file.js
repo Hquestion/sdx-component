@@ -24,8 +24,30 @@ export function getFilesList(params = {}) {
 }
 
 export function searchFiles(params) {
-    return getFilesList(params).then(res => {
-        return res;
+    let userInfo = shareCenter.getUser() || {};
+    const {
+        userId = userInfo.userId,
+        path = '/',
+        start = 1,
+        count = -1,
+        orderBy = 'name',
+        order = 'asc',
+        recursive = 1,
+        keyword = '',
+        filesystem = 'cephfs',
+        showHidden = 0
+    } = params;
+    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/search`, {
+        userId,
+        path,
+        start,
+        count,
+        orderBy,
+        order,
+        recursive,
+        keyword,
+        showHidden,
+        filesystem
     });
 }
 
@@ -64,9 +86,14 @@ export function sharePatch(params) {
 }
 
 export function shareCancel(uuids = []) {
+    isString(uuids) && (uuids = [uuids]);
     return httpService.remove(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
         uuids
     });
+}
+
+export function shareDetail(uuid) {
+    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares/${uuid}`);
 }
 
 export function getMyShare(params) {
@@ -240,5 +267,6 @@ export default {
     getDelTaskList,
     share,
     shareCancel,
-    sharePatch
+    sharePatch,
+    shareDetail
 };

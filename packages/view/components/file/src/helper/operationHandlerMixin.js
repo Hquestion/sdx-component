@@ -6,7 +6,7 @@ import VueClipboard from 'vue-clipboard2';
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
-import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch } from '@sdx/utils/src/api/file';
+import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail } from '@sdx/utils/src/api/file';
 
 export default {
     data() {
@@ -22,7 +22,11 @@ export default {
                 [BTN_NAMES.CANCEL_SHARE]: this.cancelShare,
                 [BTN_NAMES.SHARE]: this.share
             },
-            supportMove: true
+            moveVisible: false,
+            supportMove: true,
+            shareVisible: false,
+            shareUsers: [],
+            shareGroups: []
         };
     },
     methods: {
@@ -153,8 +157,69 @@ export default {
                 Message.error('文件路径拷贝失败');
             });
         },
-        share() {
-            // todo
+        share(row) {
+            this.toShareRow = row;
+            if (row) {
+                // 获取分享详情，初始化shareUsers 和 shareGroups
+                if (row.fileShareDetailId) {
+                    shareDetail(row.fileShareDetailId).then(res => {
+                        this.shareUsers = res.users || [];
+                        this.shareGroups = res.groups || [];
+                        this.shareVisible = true;
+                    });
+                } else {
+                    this.shareUsers = [];
+                    this.shareGroups = [];
+                    this.shareVisible = true;
+                }
+            } else {
+                if (this.fileManager.checked.length > 0) {
+                    this.shareVisible = true;
+                    this.shareUsers = [];
+                    this.shareGroups = [];
+                }
+            }
+        },
+        doShare(users, groups, shareType) {
+            if (this.toShareRow) {
+                if (this.toShareRow.fileShareDetailId) {
+                    return sharePatch({
+                        uuid: this.toShareRow.fileShareDetailId,
+                        isGlobal: shareType === 'PUBLIC',
+                        users,
+                        groups
+                    }).then(res => {
+                        Message.success('分享成功');
+                    });
+                } else {
+                    return share({
+                        path: this.toShareRow.path,
+                        isGlobal: shareType === 'PUBLIC',
+                        users,
+                        groups
+                    }).then(res => {
+                        Message.success('分享成功');
+                        // todo 更新这条记录的shareDetailId
+                    });
+                }
+            } else {
+                // todo 暂不支持?
+            }
+        },
+        cancelShare(row) {
+            MessageBox.confirm.warning({
+                title: '您确定要取消共享选中的文件吗？'
+            }).then(() => {
+                if (row) {
+                    shareCancel(row.fileShareDetailId).then(res => {
+                        // todo 更新这些记录的shareDetailId
+                    });
+                } else {
+                    shareCancel(this.fileManager.checked.map(item => item.fileShareDetailId)).then(res => {
+                        // todo 更新这些记录的shareDetailId
+                    });
+                }
+            });
         }
     }
 };

@@ -16,7 +16,7 @@ import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 
-import { getFilesList } from '@sdx/utils/src/api/file';
+import { getFilesList, searchFiles } from '@sdx/utils/src/api/file';
 import { rootKinds, fixedRows, fixedRowsNameMap, getDirRootKind } from './helper/fileListTool';
 import BreadcrumbBar from './BreadcrumbBar';
 import SdxvFileTask from './popup/FileTask';
@@ -83,7 +83,7 @@ export default {
         isProjectRoot() {
             return this.currentPath === '/fe-fixed-project-share';
         },
-        enterDirectory(dir) {
+        resetFlags() {
             // 重置页码
             this.pageIndex = 1;
             // 重置缓存的fileList
@@ -91,10 +91,14 @@ export default {
             this.fileList = [];
             this.total = 0;
             this.loadedTotal = 0;
-            this.isSearch = false;
             this.checked = [];
             this.checkedMap = {};
             this.isCheckAll = false;
+            this.searchKey = '';
+        },
+        enterDirectory(dir) {
+            this.resetFlags();
+            this.isSearch = false;
             // 更新路径
             this.currentPath = dir;
             this.isRoot = dir === '/';
@@ -102,6 +106,7 @@ export default {
             // 修改为加载中，准备获取数据
             this.loading = true;
             this.db.list.clear();
+            // 滚动到页面顶部
             this.$refs.fileTable.init();
 
             let defer;
@@ -125,7 +130,37 @@ export default {
                 return this.db.list.bulkAdd(fileList).then(() => {
                     this.loadedTotal += fileList.length;
                 }, e => {
-                    window.console.log(e);
+                    window.console.error(e);
+                });
+            }, () => {
+                this.total = 0;
+                this.loading = false;
+            }).then(res => {
+                this.$nextTick(() => {
+                    this.$refs.fileTable.calcViewportVisible();
+                });
+            });
+        },
+        enterSearch(dir, key) {
+            this.resetFlags();
+            this.isSearch = true;
+            this.searchKey = key;
+            this.currentPath = dir;
+            this.isRoot = dir === '/';
+            this.rootKind = '';
+            // 修改为加载中，准备获取数据
+            this.loading = true;
+            this.db.list.clear();
+            // 滚动到页面顶部
+            this.$refs.fileTable.init();
+            return this.loadSearchResult().then(res => {
+                let fileList = res.files;
+                this.total = res.total;
+                this.loading = false;
+                return this.db.list.bulkAdd(fileList).then(() => {
+                    this.loadedTotal += fileList.length;
+                }, e => {
+                    window.console.error(e);
                 });
             }, () => {
                 this.total = 0;
@@ -137,14 +172,25 @@ export default {
             });
         },
         loadNextPage() {
+            if (this.loading) return;
+            if (this.loadedTotal >= this.total) return;
+            this.loading = true;
+            this.pageIndex ++;
             if (this.isSearch) {
                 // 搜所分页
+                return this.loadSearchResult().then(res => {
+                    let fileList = res.files;
+                    this.loading = false;
+                    return this.db.list.bulkAdd(fileList).then(() => {
+                        this.loadedTotal += fileList.length;
+                    }, e => {
+                        window.console.log(e);
+                    });
+                },() => {
+                    this.loading = false;
+                });
             } else {
                 // 根据当前路径分页请求
-                if (this.loading) return;
-                if (this.loadedTotal >= this.total) return;
-                this.loading = true;
-                this.pageIndex ++;
                 return this.loadFileList().then(res => {
                     let fileList = res.children;
                     this.loading = false;
@@ -168,7 +214,14 @@ export default {
             });
         },
         loadSearchResult() {
-
+            return searchFiles({
+                start: (this.pageIndex - 1) * this.pageSize,
+                count: this.pageSize,
+                path: this.currentPath,
+                orderBy: this.orderBy,
+                order: this.order,
+                keyword: this.searchKey
+            });
         },
         async getRenderList(offset, limit) {
             // 获取需要渲染到列表中的数据
@@ -182,16 +235,39 @@ export default {
         });
         this.db = db;
         this.currentPath = this.$route.query.path || '/';
-        this.enterDirectory(this.currentPath);
-    },
-    watch: {
-        $route(val, oldval) {
-            this.currentPath = val.query.path || '/';
-            if (val.query.path !== oldval.query.path) {
-                this.enterDirectory(this.currentPath);
-            }
+        if (this.$route.query.search) {
+            this.enterSearch(this.currentPath, this.$route.query.search);
+        } else {
+            this.enterDirectory(this.currentPath);
         }
+    },
+    activated() {
+        this.unwatch = this.$watch('$route', (val, oldval) => {
+            this.currentPath = val.query.path || '/';
+            if (val.query.search) {
+                this.enterSearch(this.currentPath, val.query.search);
+            } else {
+                if (val.query.path !== oldval.query.path || val.query.search !== oldval.query.search) {
+                    this.enterDirectory(this.currentPath);
+                }
+            }
+        });
+    },
+    deactivated() {
+        this.unwatch && this.unwatch();
     }
+    // watch: {
+    //     $route(val, oldval) {
+    //         this.currentPath = val.query.path || '/';
+    //         if (val.query.search) {
+    //             this.enterSearch(this.currentPath, val.query.search);
+    //         } else {
+    //             if (val.query.path !== oldval.query.path) {
+    //                 this.enterDirectory(this.currentPath);
+    //             }
+    //         }
+    //     }
+    // }
 };
 </script>
 

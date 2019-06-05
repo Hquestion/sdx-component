@@ -20,30 +20,33 @@
             >
                 上传
             </SdxwFileSelect>
-            <SdxuButton v-if="canDownload()">
+            <SdxuButton v-if="canDownload()" @click="handleDownload">
                 下载
             </SdxuButton>
-            <SdxuButton v-if="canShare()">
+            <SdxuButton v-if="canShare()" @click="handleShare">
                 分享
             </SdxuButton>
-            <SdxuButton v-if="canCancelShare()">
+            <SdxuButton v-if="canCancelShare()" @click="handleCancelShare">
                 取消分享
             </SdxuButton>
             <SdxuButton
                 type="default"
                 v-if="canCopy()"
+                @click="handleCopy"
             >
                 复制
             </SdxuButton>
             <SdxuButton
                 type="default"
                 v-if="canMove()"
+                @click="handleMove"
             >
                 复制/移动
             </SdxuButton>
             <SdxuButton
                 type="default"
                 v-if="canDelete()"
+                @click="handleDelete"
             >
                 删除
             </SdxuButton>
@@ -90,10 +93,38 @@ export default {
     },
     methods: {
         handleSearch() {
-
+            if (this.fileManager.searchKey.trim() === '') return;
+            let query = {
+                search: this.fileManager.searchKey
+            };
+            if (this.fileManager.currentPath !== '/') {
+                query.path = this.fileManager.currentPath;
+            }
+            this.$router.push({
+                name: this.$route.name,
+                query
+            });
         },
         createFolder() {
             this.fileManager.$refs.fileTable.mkdir();
+        },
+        handleDownload() {
+            this.fileManager.$refs.fileTable.download();
+        },
+        handleShare() {
+            this.fileManager.$refs.fileTable.share();
+        },
+        handleCancelShare() {
+            this.fileManager.$refs.fileTable.cancelShare();
+        },
+        handleCopy() {
+            this.fileManager.$refs.fileTable.copy();
+        },
+        handleMove() {
+            this.fileManager.$refs.fileTable.moveAndCopy();
+        },
+        handleDelete() {
+            this.fileManager.$refs.fileTable.deleteRow();
         }
     },
     mounted() {

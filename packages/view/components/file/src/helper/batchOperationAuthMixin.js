@@ -7,10 +7,10 @@ export default {
             return this.fileManager.isProjectRoot();
         },
         canMkdir() {
-            return this.fileManager.rootKind !== rootKinds.MY_SHARE && this.fileManager.rootKind !== rootKinds.ACCEPTED_SHARE && !this.isProjectRoot();
+            return !this.fileManager.isSearch && this.fileManager.rootKind !== rootKinds.MY_SHARE && this.fileManager.rootKind !== rootKinds.ACCEPTED_SHARE && !this.isProjectRoot();
         },
         canUpload() {
-            return this.fileManager.rootKind !== rootKinds.MY_SHARE && this.fileManager.rootKind !== rootKinds.ACCEPTED_SHARE && !this.isProjectRoot();
+            return !this.fileManager.isSearch && this.fileManager.rootKind !== rootKinds.MY_SHARE && this.fileManager.rootKind !== rootKinds.ACCEPTED_SHARE && !this.isProjectRoot();
         },
         canShare() {
             if ([rootKinds.MY_SHARE, rootKinds.ACCEPTED_SHARE, rootKinds.PROJECT_SHARE].includes(this.fileManager.rootKind)) {

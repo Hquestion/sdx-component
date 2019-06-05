@@ -69,6 +69,13 @@
                 </template>
             </el-table-column>
             <el-table-column
+                label="所在目录"
+                :sortable="false"
+                prop="path"
+                width="240"
+                v-if="fileManager.isSearch"
+            />
+            <el-table-column
                 label="大小"
                 sortable="custom"
                 prop="size"
@@ -82,7 +89,7 @@
                 label="更新时间"
                 sortable="custom"
                 prop="updatedAt"
-                width="250"
+                width="240"
             >
                 <template #default="{row}">
                     {{ row.updatedAt | dateFormatter }}
@@ -112,6 +119,13 @@
             @copy="handleCopy"
             @cancel="handleCancelMove"
         />
+        <SdxwShareSetting
+            v-if="shareVisible"
+            :visible.sync="shareVisible"
+            :default-users="shareUsers"
+            :default-groups="shareGroups"
+            :handler="doShare"
+        />
     </div>
 </template>
 
@@ -122,6 +136,7 @@ import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import MessageBox from '@sdx/ui/components/message-box';
 import SdxuInput from '@sdx/ui/components/input';
+import SdxwShareSetting from '@sdx/widget/components/share-setting';
 
 import { lock, unlock } from '@sdx/utils/src/lockScroll';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
@@ -141,6 +156,7 @@ export default {
     inject: ['fileManager'],
     mixins: [Loadmore, checkMixin, OperationHandlerMixin, transformFilter],
     components: {
+        SdxwShareSetting,
         SdxvFolderSelect,
         SdxuInput,
         ElTableColumn,
@@ -153,8 +169,7 @@ export default {
             topCount: 0,
             containerCount: 0,
             editingRow: null,
-            tempRowName: '新建文件夹',
-            moveVisible: false
+            tempRowName: '新建文件夹'
         };
     },
     computed: {
@@ -208,8 +223,8 @@ export default {
         handlePathNameClick(row) {
             if (!row.isFile) {
                 unlock(this.$el.querySelector('.el-table__body-wrapper'));
-                this.$router.replace({
-                    name: this.$router.currentRoute.name,
+                this.$router.push({
+                    name: this.$route.name,
                     query: {
                         path: row.path
                     }
@@ -248,8 +263,6 @@ export default {
         },
         handleSortChange() {},
         handleFileAction(row, { name }) {
-            // eslint-disable-next-line
-            console.log(name);
             return this.OPERATION_MAP[name] && this.OPERATION_MAP[name](row);
         },
         calcViewportVisible() {

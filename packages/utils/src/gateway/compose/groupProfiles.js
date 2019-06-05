@@ -8,23 +8,23 @@ import wrap from '../wrap';
  */
 export let handler = wrap(function(ctx, request) {
     const groups = ctx.sendRequest(ctx.createGetRequest(
-        'http://tyk-gateway/user-manager/api/v1/groups',
-        request.Params)).groups;
+        'http://tyk-gateway/user-manager/api/v1/groups/',
+        request.Params));
 
     ctx.resolveUuids(groups,
         {
-            path: '*.users.*',
-            url: 'http://tyk-gateway/user-manager/api/v1/users',
+            path: 'groups.*.users.*',
+            url: 'http://tyk-gateway/user-manager/api/v1/users/',
             result: 'users'
         },
         {
-            path: '*.roles.*',
-            url: 'http://tyk-gateway/user-manager/api/v1/roles',
+            path: 'groups.*.roles.*',
+            url: 'http://tyk-gateway/user-manager/api/v1/roles/',
             result: 'roles'
         },
         {
-            path: '*.permissions.*',
-            url: 'http://tyk-gateway/user-manager/api/v1/permissions',
+            path: 'groups.*.permissions.*',
+            url: 'http://tyk-gateway/user-manager/api/v1/permissions/',
             result: 'permissions'
         }
     );

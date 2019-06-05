@@ -9,21 +9,21 @@ import wrap from '../wrap';
 export let handler = wrap(function(ctx, request) {
     const groups = ctx.sendRequest(ctx.createGetRequest(
         'http://tyk-gateway/user-manager/api/v1/groups/',
-        request.Params)).groups;
+        request.Params));
 
     ctx.resolveUuids(groups,
         {
-            path: '*.users.*',
+            path: 'groups.*.users.*',
             url: 'http://tyk-gateway/user-manager/api/v1/users/',
             result: 'users'
         },
         {
-            path: '*.roles.*',
+            path: 'groups.*.roles.*',
             url: 'http://tyk-gateway/user-manager/api/v1/roles/',
             result: 'roles'
         },
         {
-            path: '*.permissions.*',
+            path: 'groups.*.permissions.*',
             url: 'http://tyk-gateway/user-manager/api/v1/permissions/',
             result: 'permissions'
         }

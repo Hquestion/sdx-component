@@ -17,7 +17,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~@sdx/widget/theme/search-layout.scss';
 @import './model-list-table.scss';
 @import './version-list-table.scss';
+@import './version-detail.scss';
 @import './create-model.scss';
+@import './test-version.scss';
 @include block('model-management', $bem-namespace-view) {
     @include element('header') {
         display: flex;

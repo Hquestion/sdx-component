@@ -17,8 +17,9 @@ const plugins = [
 module.exports = {
     mode: 'production',
     entry: {
-        user: './src/gateway/compose/user.js',
-        groupList: './src/gateway/compose/groupList.js'
+        login: './src/gateway/compose/login.js',
+        userProfiles: './src/gateway/compose/userProfiles.js',
+        groupProfiles: './src/gateway/compose/groupProfiles.js'
     },
     output: {
         filename: '[name].js',

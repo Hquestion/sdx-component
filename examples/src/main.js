@@ -14,6 +14,7 @@ import Breadcrumb from '@sdx/widget/components/breadcrumb';
 import ChangePassword from '@sdx/widget/components/change-password';
 import Project from '@sdx/view/components/project-management';
 import Image from '@sdx/view/components/image-management';
+import Model from '@sdx/view/components/model-manage';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';
@@ -41,6 +42,7 @@ Project.viewRouter.register(router, '/');
 // Vue.use(Image.ImageManageIndex);
 // Image.viewRouter.register(router, '/imageManageTest');
 
+Model.viewRouter.register(router, '/modelManageTest');
 
 Vue.config.productionTip = false;
 

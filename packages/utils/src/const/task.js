@@ -4,6 +4,7 @@ export const TASK_TYPE = {
     TENSORFLOW: 'TENSORFLOW',
     TENSORFLOW_DIST: 'TENSORFLOW_DIST',
     TENSORBOARD: 'TENSORBOARD',
+    CONTAINERDEV: 'CONTAINERDEV',
     JUPYTER: 'JUPYTER',
     TENSORFLOW_AUTO_DIST: 'TENSORFLOW_AUTO_DIST',
     TENSORFLOW_SERVING: 'TENSORFLOW_SERVING'
@@ -61,3 +62,34 @@ export const POD_STATE_TYPE = {
     succeeded: 'succeeded',
     unknown: 'unknown'
 };
+
+export const OPERATION_INFO = {
+    start: {
+        label: '运行',
+        value: 'start',
+        icon: 'sdx-icon sdx-icon-yunxing'
+    },
+    kill: {
+        label: '停止',
+        value: 'kill',
+        icon: 'sdx-icon sdx-tingzhi'
+    },
+    detail: {
+        label: '查看',
+        value: 'detail',
+        icon: 'sdx-icon sdx-icon-yanjing'
+    },
+    edit: {
+        label: '编辑',
+        value: 'edit',
+        icon: 'sdx-icon sdx-icon-edit'
+    },
+    delete: {
+        label: '删除',
+        value: 'delete',
+        icon: 'sdx-icon sdx-icon-delete'
+    }
+};
+
+export const MONITOR_ALLOW_OPERATION = ['start', 'detail', 'kill'];
+export const NON_OWNER_TASK_OPERATION = ['detail'];

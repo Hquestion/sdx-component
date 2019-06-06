@@ -78,7 +78,7 @@
                     <span v-if="monitor">{{ row.project.name }}</span>
                     <span
                         v-else
-                        @click="handleGotoProject(row.project.extralUrl)"
+                        @click="handleGotoProject(row.project)"
                         class="sdxv-task-resource-list__table--project-link"
                     >{{ row.project.name }}</span>
                 </template>
@@ -137,34 +137,11 @@
                 <template #default="{ row }">
                     <SdxuIconButtonGroup>
                         <SdxuIconButton
-                            v-if="hasOperation(row.state, 'kill')"
-                            icon="sdx-icon sdx-tingzhi"
-                            title="停止"
-                            @click="handleKill"
-                        />
-                        <SdxuIconButton
-                            v-if="hasOperation(row.state, 'start')"
-                            icon="sdx-icon sdx-icon-yunxing"
-                            title="运行"
-                            @click="handleRun"
-                        />
-                        <SdxuIconButton
-                            v-if="hasOperation(row.state, 'detail')"
-                            icon="sdx-icon sdx-icon-yanjing"
-                            title="查看"
-                            @click="handleDetail"
-                        />
-                        <SdxuIconButton
-                            v-if="!monitor && hasOperation(row.state, 'edit')"
-                            icon="sdx-icon sdx-icon-edit"
-                            title="编辑"
-                            @click="handleEdit"
-                        />
-                        <SdxuIconButton
-                            v-if="!monitor && hasOperation(row.state, 'remove')"
-                            icon="sdx-icon sdx-icon-delete"
-                            title="删除"
-                            @click="handleDelete"
+                            v-for="(item, i) in getOperationList(row, monitor)"
+                            :key="i"
+                            :icon="item.icon"
+                            :title="item.label"
+                            @click="handleOperation(item.value, row)"
                         />
                     </SdxuIconButtonGroup>
                 </template>
@@ -199,9 +176,11 @@ import ElOption from 'element-ui/lib/option';
 
 import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, STATE_TYPE_OPERATION } from '@sdx/utils/src/const/task';
 import { getTaskList } from '@sdx/utils/src/api/project';
+import taskMixin from '@sdx/utils/src/mixins/task';
 
 export default {
     name: 'SdxvTaskResourceList',
+    mixins: [taskMixin],
     components: {
         SdxuTable,
         SdxuIconButton,
@@ -303,9 +282,6 @@ export default {
             }
             return icon;
         },
-        hasOperation(state, name) {
-            return STATE_TYPE_OPERATION[state].includes(name);
-        },
         handlePageChange(page) {
             this.page = page;
         },
@@ -329,25 +305,11 @@ export default {
         },
         handleGotoProject() {
 
-        },
-        handleKill() {
-
-        },
-        handleRun() {
-
-        },
-        handleDetail() {
-
-        },
-        handleEdit() {
-
-        },
-        handleDelete() {
-
         }
     },
     created() {
         this.fetchData();
+        this.fetchDataMinxin = this.fetchData;
     },
     watch: {
         queryParams() {

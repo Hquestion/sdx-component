@@ -82,12 +82,10 @@ export default {
     methods: {
         fetchData() {
             getTaskList(this.queryParams).then(data => {
-                window.console.error(data);
                 this.userResourceList = data.data.items;
             });
         },
         handleSortChange({prop, order}) {
-            window.console.error(prop, order);
             this.queryParams.order = order === 'ascending' ? 'asc' : 'desc';
             this.queryParams.orderBy = prop || 'CPU';
         },

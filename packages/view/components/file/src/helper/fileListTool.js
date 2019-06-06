@@ -109,6 +109,8 @@ export function getFileIcon(file) {
     if (file.isFile) {
         if (file.fileShareDetailId) {
             return 'sdx-yifenxiangwenjian';
+        } else if (file.fileExtension === '.zip') {
+            return 'sdx-yasuowenjian';
         } else {
             return 'sdx-morenwenjian';
         }

@@ -38,7 +38,10 @@
                 prop="name"
             >
                 <template #default="{row}">
-                    <span class="sdxv-file__item">
+                    <span
+                        class="sdxv-file__item"
+                        :class="{'is-no-zip-file': row.isFile && row.fileExtension !== '.zip'}"
+                    >
                         <svg
                             class="sdxv-file__item-icon"
                             aria-hidden="true"
@@ -60,6 +63,19 @@
                                     @click="cancelEdit"
                                 />
                             </span>
+                            <ElPopover
+                                v-else-if="row.fileExtension === '.zip'"
+                                trigger="click"
+                                @show="handleZipPreviewShown"
+                                placement="right"
+                            >
+                                <div style="max-height: 400px;">
+                                    <ElScrollbar class="sdxv-file__item-name-scroller">
+                                        <SdxwFileSelectTree :checkable="false" :root-path="row.path" :load-fn-wrap="zipPreviewFnWrap"/>
+                                    </ElScrollbar>
+                                </div>
+                                <span slot="reference"> {{ row.name }} </span>
+                            </ElPopover>
                             <span
                                 v-else
                                 @click="handlePathNameClick(row)"
@@ -144,10 +160,12 @@ import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import moment from 'moment';
 
 import SdxvFolderSelect from './popup/FolderSelect';
-import { rootKinds, getFileIcon, getFileBtn } from './helper/fileListTool';
+import { getFileIcon, getFileBtn } from './helper/fileListTool';
+import { zipPreview } from '@sdx/utils/src/api/file';
 import Loadmore from './helper/loadmore';
 import checkMixin from './helper/checkMixin';
 import OperationHandlerMixin from './helper/operationHandlerMixin';
+import FileSelect from '@sdx/widget/components/file-select';
 
 const ROW_HEIGHT = 52;
 
@@ -162,7 +180,8 @@ export default {
         ElTableColumn,
         SdxuTable,
         SdxuIconButtonGroup,
-        SdxuIconButton
+        SdxuIconButton,
+        SdxwFileSelectTree: FileSelect.FileSelectTree
     },
     data() {
         return {
@@ -289,6 +308,12 @@ export default {
                 this.syncRowCheckStatus();
             });
         },
+        handleZipPreviewShown() {
+            // todo 有什么要做优化的吗？没有的话可以删掉
+        },
+        zipPreviewFnWrap(rootPath, nodePath, userId) {
+            return () => zipPreview({ path: rootPath, pathInZip: nodePath, userId }).then(res => res.files);
+        },
         loadMore(direction, scrollDistance, isReachBottom) {
             let isScrollDown = false;
             this.currentScrollTop = scrollDistance;
@@ -340,6 +365,14 @@ export default {
                 cursor: pointer;
             }
         }
+        &.is-no-zip-file {
+            &:hover {
+                span {
+                    color: $sdx-text-regular-color;
+                    cursor: default;
+                }
+            }
+        }
         .sdxv-file__item-icon {
             width: 20px;
             height: 20px;
@@ -360,8 +393,14 @@ export default {
                     color: $sdx-text-holder-color;
                 }
             }
-
         }
     }
 }
+</style>
+<style lang="scss">
+    .sdxv-file__item-name-scroller {
+        & /deep/ .el-scrollbar__wrap {
+            max-height: 400px !important;
+        }
+    }
 </style>

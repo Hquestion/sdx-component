@@ -1,16 +1,17 @@
 export function getPathIcon(path) {
     const DEFAULT_FOLDER_ICON = 'sdx-wenjianjia';
-    const DEFAULT_FILE_ICON = 'sdx-icon-tickets';
+    const DEFAULT_FILE_ICON = 'sdx-morenwenjian';
     let iconClass;
     if (!path.isFile) {
         iconClass = DEFAULT_FOLDER_ICON;
     } else {
-        const fileIconMap = {
-            'image/png': 'sdx-PNG',
-            'text/csv': 'sdx-CSV'
-        };
-        const matchedIcon = path.mimeType && fileIconMap[path.mimeType.toLowerCase()];
-        iconClass = matchedIcon || DEFAULT_FILE_ICON;
+        // const fileIconMap = {
+        //     'image/png': 'sdx-PNG',
+        //     'text/csv': 'sdx-CSV'
+        // };
+        // const matchedIcon = path.mimeType && fileIconMap[path.mimeType.toLowerCase()];
+        // iconClass = matchedIcon || DEFAULT_FILE_ICON;
+        iconClass = DEFAULT_FILE_ICON;
     }
     return iconClass;
 }

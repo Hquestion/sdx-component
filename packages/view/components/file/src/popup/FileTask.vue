@@ -24,10 +24,13 @@
                 <el-tab-pane
                     label="文件复制"
                     name="COPY"
-                />
+                >
+                    <TaskFileCopy />
+                </el-tab-pane>
                 <el-tab-pane
                     label="文件删除"
                     name="DELETE"
+                    v-if="false"
                 />
             </el-tabs>
         </div>
@@ -37,9 +40,12 @@
 <script>
 import SdxvExpandCollapseToggler from './ExpandCollapseToggler';
 import SdxvTaskFileUpload from './TaskFileUpload';
+import MessageBox from '@sdx/ui/components/message-box';
+import TaskFileCopy from './TaskFileCopy';
 export default {
     name: 'SdxvFileTask',
     components: {
+        TaskFileCopy,
         SdxvTaskFileUpload,
         SdxvExpandCollapseToggler
     },
@@ -67,7 +73,12 @@ export default {
     },
     methods: {
         handleHide() {
-            this._visible = false;
+            MessageBox.confirm.wrning({
+                title: '您确定要取消所有未完成的任务吗？'
+            }).then(() => {
+                // todo 取消上传或者取消拷贝任务
+                this._visible = false;
+            });
         }
     },
     watch: {

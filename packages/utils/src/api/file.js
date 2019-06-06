@@ -1,5 +1,5 @@
-import httpService from '@sdx/utils/lib/http-service';
-import shareCenter from '@sdx/utils/lib/helper/shareCenter';
+import httpService from '../http-service';
+import shareCenter from '../helper/shareCenter';
 import { FILE_MANAGE_GATEWAY_BASE } from './config';
 import { isString } from '../helper/tool';
 

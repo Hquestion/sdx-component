@@ -9,5 +9,6 @@ module.exports = {
     'model-manage': './components/model-manage/index.js',
     'authorize-manage': './components/authorize-manage/index.js',
     'user-manage': './components/user-manage/index.js',
-    'user-group': './components/user-group/index.js'
+    'user-group': './components/user-group/index.js',
+    'file': './components/file/index.js'
 };

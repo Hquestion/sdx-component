@@ -70,6 +70,10 @@ export default {
         checkType: {
             type: String,
             default: 'all' // 'file', 'folder'
+        },
+        loadFnWrap: {
+            type: Function,
+            default: undefined
         }
     },
     computed: {
@@ -130,16 +134,24 @@ export default {
         // 获取文件列表
         fetchFiles(node, resolve) {
             this.isTreeLoading = true;
-            let path = '/';
+            let path = this.rootPath;
             if (node.level > 0) {
                 path = node.data.path;
             }
-            return getFilesList({
-                path,
-                userId: this.userId
-            }).then(res => {
+            let promise;
+            if (this.loadFnWrap) {
+                promise = this.loadFnWrap(this.rootPath, node.data.path, this.userId)();
+            } else {
+                promise = getFilesList({
+                    path,
+                    userId: this.userId
+                }).then(res => {
+                    return res.children;
+                });
+            }
+            return promise.then(res => {
                 this.isTreeLoading = false;
-                resolve(res.children);
+                resolve(res);
             });
         },
         // 处理"单文件选择"问题

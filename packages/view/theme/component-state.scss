@@ -1,0 +1,16 @@
+@include block('component-state-list', $bem-namespace-view) {
+    .el-input, .el-select {
+        width: 300px;
+    }
+    @include element('pagination') {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: $sdx-margin;
+    }
+}
+
+@include block('components-state', $bem-namespace-view) {
+    @include element('tab') {
+        margin-bottom: $sdx-margin;
+    }
+}

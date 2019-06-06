@@ -33,12 +33,12 @@ export function removeTask(uuid) {
     return httpService.remove(taskApi + uuid);
 }
 
-export function startTask(uuid) {
-    return httpService.post(taskApi + uuid + '/start');
+export function startTask(uuid, params) {
+    return httpService.post(taskApi + uuid + '/start', params);
 }
 
-export function stopTask(uuid) {
-    return httpService.post(taskApi + uuid + '/stop');
+export function stopTask(uuid, params) {
+    return httpService.post(taskApi + uuid + '/stop', params);
 }
 export function createTask(params) {
     return httpService.post(taskApi, params);

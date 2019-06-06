@@ -4,6 +4,7 @@ export const TASK_TYPE = {
     TENSORFLOW: 'TENSORFLOW',
     TENSORFLOW_DIST: 'TENSORFLOW_DIST',
     TENSORBOARD: 'TENSORBOARD',
+    CONTAINERDEV: 'CONTAINERDEV',
     JUPYTER: 'JUPYTER',
     TENSORFLOW_AUTO_DIST: 'TENSORFLOW_AUTO_DIST',
     TENSORFLOW_SERVING: 'TENSORFLOW_SERVING'
@@ -31,6 +32,18 @@ export const STATE_TYPE_LABEL = {
     KILLING: '终止中'
 };
 
+export const STATE_TYPE_OPERATION = {
+    CREATED: ['start', 'detail', 'edit', 'remove'],
+    LAUNCHING: ['kill', 'detail'],
+    LAUNCH_ABNORMAL: ['start', 'detail', 'edit', 'remove'],
+    RUNNING: ['kill', 'detail'],
+    FINISHED: ['start', 'detail', 'edit', 'remove'],
+    KILLED: ['start', 'detail', 'edit', 'remove'],
+    FAILED: ['start', 'detail', 'edit', 'remove'],
+    KILLING: ['detail']
+
+};
+
 export const STATE_MAP_FOLD_LABEL_TYPE = {
     CREATED: 'create',
     LAUNCHING: 'processing',
@@ -41,3 +54,42 @@ export const STATE_MAP_FOLD_LABEL_TYPE = {
     FAILED: 'error',
     KILLING: 'dying'
 };
+
+export const POD_STATE_TYPE = {
+    failed: 'failed',
+    pending: 'pending',
+    running: 'running',
+    succeeded: 'succeeded',
+    unknown: 'unknown'
+};
+
+export const OPERATION_INFO = {
+    start: {
+        label: '运行',
+        value: 'start',
+        icon: 'sdx-icon sdx-icon-yunxing'
+    },
+    kill: {
+        label: '停止',
+        value: 'kill',
+        icon: 'sdx-icon sdx-tingzhi'
+    },
+    detail: {
+        label: '查看',
+        value: 'detail',
+        icon: 'sdx-icon sdx-icon-yanjing'
+    },
+    edit: {
+        label: '编辑',
+        value: 'edit',
+        icon: 'sdx-icon sdx-icon-edit'
+    },
+    remove: {
+        label: '删除',
+        value: 'remove',
+        icon: 'sdx-icon sdx-icon-delete'
+    }
+};
+
+export const MONITOR_ALLOW_OPERATION = ['start', 'detail', 'kill'];
+export const NON_OWNER_TASK_OPERATION = ['detail'];

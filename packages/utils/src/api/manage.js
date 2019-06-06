@@ -1,7 +1,9 @@
-import httpService from '../http-service';
+// import httpService from '../http-service';
+import httpService from '@sdx/utils/lib/http-service';
+import { COMPOSE_GATEWAY_BASE } from './config';
 
 const rolesApi = '/api/v1/roles/';
-const permissionsApi = '/api/v1/permissions/';
+const permissionsApi = `${COMPOSE_GATEWAY_BASE}user-profiles/`;
 
 // 角色
 export function getRolesList(params) {

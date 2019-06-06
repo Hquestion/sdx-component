@@ -1,22 +1,9 @@
 <template>
     <div class="sdxv-authorize-manage">
-        <SdxuContentPanel
-            title="授权管理"
-        >
+        <SdxuContentPanel>
             <div class="sdxv-authorize-manage__header">
                 <div class="sdxv-authorize-manage__handle">
-                    <SdxuButton
-                        type="primary"
-                        placement="right"
-                        @click="addAuthorize"
-                        size="small"
-                    >
-                        <i
-                            class="sdx-icon sdx-icon-plus"
-                        />
-                        新建授权
-                    </sdxubutton>
-                    <SdxuTabRadioGroup v-model="searchPermissions.objectType">
+                    <SdxuTabRadioGroup v-model="objectType">
                         <SdxuTabRadioItem name="user">
                             用户授权列表
                         </SdxuTabRadioItem>
@@ -27,43 +14,64 @@
                             角色授权列表
                         </SdxuTabRadioItem>
                     </SdxuTabRadioGroup>
-                    <SdxuInput
-                        v-model="searchPermissions.name"
-                        :searchable="true"
+                    <SdxuButton
+                        type="primary"
+                        placement="right"
+                        @click="addAuthorize"
                         size="small"
-                        type="search"
-                        @search="searchName"
-                        @keyup.native.enter="searchName"
-                    />
+                        class="addAuth"
+                    >
+                        <i
+                            class="sdx-icon sdx-icon-plus"
+                        />
+                        新建授权
+                    </sdxubutton>
                 </div>
+                <SdxwSearchLayout
+                    @search="searchName"
+                    align="left"
+                    style="flex: 1"
+                >
+                    <SdxwSearchItem>
+                        <SdxuInput
+                            v-model="searchPermissions.name"
+                            :searchable="false"
+                            size="small"
+                            type="search"
+                        />
+                    </SdxwSearchItem>
+                </SdxwSearchLayout>
             </div>
-            <div class="sdxv-role-manage__table">
+            <div class="sdxv-authorize-manage__table">
                 <SdxuTable
                     :data="tableData"
                 >
                     <el-table-column
-                        prop="name"
+                        prop="fullName"
                         label="授权对象"
                     />
                     <el-table-column
-                        prop="address"
                         label="权限"
-                    />
+                    >
+                        <template slot-scope="scope">
+                            <SdxwFoldLabelGroup :list="scope.row.permissions.map(item => item.name)" />
+                        </template>
+                    </el-table-column>
                     <el-table-column
                         style="width: 15%"
                         label="操作"
                     >
                         <template
-                            slot-scope=""
+                            slot-scope="scope"
                             class="icon"
                         >
                             <i
                                 class="sdx-icon sdx-icon-edit icon"
-                                @click="editRole()"
+                                @click="edit()"
                             />
                             <i
                                 class="sdx-icon sdx-icon-delete icon"
-                                @click="removeRole()"
+                                @click="remove(scope.row.uuid, scope.row.fullname)"
                             />
                         </template>
                     </el-table-column>
@@ -149,7 +157,7 @@ import {getPermissionsList, createPermissions, updatePermissions,getPermissionsD
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import TabRadio from '@sdx/ui/components/tab-radio';
-
+import FoldLabel from '@sdx/widget/components/fold-label';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -165,6 +173,7 @@ export default {
         [ContentPanel.name]: ContentPanel,
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
     },
     data() {
         return {
@@ -172,8 +181,8 @@ export default {
                 name: '',
                 start: 1,
                 count: 10,
-                objectType: 'user'
             },
+            objectType: 'user',
             tableData: [],
             current: 1,
             pageSize: 10,
@@ -217,7 +226,7 @@ export default {
         authorizeList() {
             getPermissionsList(this.searchPermissions)
                 .then(data => {
-                    this.tableData = data.permissions;
+                    this.tableData = data.users;
                     this.total = data.total;
 
                 });
@@ -242,21 +251,21 @@ export default {
             });
             this.roleList();
         },
-        editRole() {
+        edit() {
 
             this.dialogVisible = true;
 
         },
-        removeRole() {
+        remove(id, name) {
             MessageBox.confirm({
-                title: `确定删除授权吗？`,
+                title: `确定删除授权${name}吗？`,
                 content: '删除后不可恢复哦',
                 type: 'alert'
             }).then(() => {
-                // removeRoles(id)
-                //     .then(() => {
-                //         this.roleList();
-                //     });
+                removePermissions(id)
+                    .then(() => {
+                        this.authorizeList();
+                    });
             }, () => {
 
             });

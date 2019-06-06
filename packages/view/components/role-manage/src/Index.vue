@@ -16,22 +16,29 @@
                         />
                         新建角色
                     </sdxubutton>
-                    <SdxuInput
-                        v-model="searchRoles.name"
-                        :searchable="true"
-                        type="search"
-                        size="small"
+                    <SdxwSearchLayout
                         @search="searchName"
-                        @keyup.native.enter="searchName"
-                        placeholder="请输入角色名"
-                    />
+                        :block="false"
+                        align="right"
+                        style="flex: 1"
+                    >
+                        <SdxwSearchItem>
+                            <SdxuInput
+                                v-model="searchRoles.name"
+                                type="search"
+                                size="small"
+                                :searchable="false"
+                                placeholder="请输入角色名"
+                            />
+                        </SdxwSearchItem>
+                    </SdxwSearchLayout>
                 </div>
             </div>
             <div class="sdxv-role-manage__table">
-                <!-- :default-sort="{prop: 'createdAt', order: 'descending'}"
-                @sort-change="handleSortChange" -->
                 <SdxuTable
                     :data="tableData"
+                    :default-sort="{prop: 'createdAt', order: 'descending'}"
+                    @sort-change="handleSortChange"
                 >
                     <el-table-column
                         prop="name"
@@ -189,6 +196,8 @@ export default {
                 name: '',
                 start: 1,
                 count: 10,
+                order: 'desc',
+                orderBy: 'createdAt'
             },
             rules: {
                 name: [
@@ -224,9 +233,9 @@ export default {
     props: {
 
     },
-    // created() {
-    //     this.roleList();
-    // },
+    created() {
+        this.roleList();
+    },
     methods: {
         currentChange() {
             this.searchRoles = Object.assign({}, this.searchRoles, {
@@ -309,6 +318,14 @@ export default {
 
             });
 
+        },
+        handleSortChange({order}) {
+            if (!order) {
+                return;
+            }
+            this.searchRoles.order =
+                    order === 'descending' ? 'desc' : 'asc';
+            this.roleList();
         }
     }
 };

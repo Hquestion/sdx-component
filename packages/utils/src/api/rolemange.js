@@ -2,7 +2,7 @@
 import httpService from '@sdx/utils/lib/http-service';
 import { USER_SERVICE_GATEWAY_BASE } from './config';
 
-const rolesApi = `${USER_SERVICE_GATEWAY_BASE}roles`;
+const rolesApi = `${USER_SERVICE_GATEWAY_BASE}roles/`;
 
 
 // 角色

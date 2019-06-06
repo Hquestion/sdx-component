@@ -23,10 +23,13 @@
                         size="small"
                         @search="searchName"
                         @keyup.native.enter="searchName"
+                        placeholder="请输入角色名"
                     />
                 </div>
             </div>
             <div class="sdxv-role-manage__table">
+                <!-- :default-sort="{prop: 'createdAt', order: 'descending'}"
+                @sort-change="handleSortChange" -->
                 <SdxuTable
                     :data="tableData"
                 >
@@ -45,6 +48,7 @@
                     <el-table-column
                         prop="createdAt"
                         label="创建时间"
+                        sortable
                     />
                     <el-table-column
                         style="width: 15%"
@@ -220,9 +224,9 @@ export default {
     props: {
 
     },
-    // created() {
-    //     this.roleList();
-    // },
+    created() {
+        this.roleList();
+    },
     methods: {
         currentChange() {
             this.searchRoles = Object.assign({}, this.searchRoles, {

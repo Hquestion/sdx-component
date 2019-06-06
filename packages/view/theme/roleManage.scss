@@ -49,6 +49,11 @@
             color: $sdx-text-holder-color;
             margin-right: 20px;
         }
+        td > .cell {
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap
+        }
     }
     @include element('pagination') {
         text-align: right;

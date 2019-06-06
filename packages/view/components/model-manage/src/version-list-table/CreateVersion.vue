@@ -51,16 +51,25 @@
                 label="版本描述："
                 prop="description"
             >
-                <div v-if="isPublishing">
-                    {{ versionInfoForm.description }}
-                </div>
+                <<<<<<< HEAD
                 <sdxu-input
-                    v-else
-                    v-model="versionInfoForm.description"
-                    type="textarea"
-                    placeholder="请输入版本描述，最多可输入256个字符"
-                    :rows="3"
-                />
+                    =="====="
+                    <div
+                    v-if="isPublishing"
+                >
+                    {{ versionInfoForm.description }}
+                    </div>
+                    <sdxu-input
+                        v-else
+                    >
+                        >>>>>> 178e77d31c971548b6fa3ca0b430b90f47291015
+                        v-model="versionInfoForm.description"
+                        type="textarea"
+                        placeholder="请输入版本描述，最多可输入256个字符"
+                        :rows="3"
+                        />
+                    </sdxu-input>
+                </sdxu-input>
             </el-form-item>
             <el-form-item
                 label="发布环境："

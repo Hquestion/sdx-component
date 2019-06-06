@@ -10,5 +10,8 @@ module.exports = {
     'authorize-manage': './components/authorize-manage/index.js',
     'user-manage': './components/user-manage/index.js',
     'user-group': './components/user-group/index.js',
+    'component-state': './components/component-state/index.js',
+    'resource-statistics': './components/resource-statistics/index.js',
+    'task-management': './components/task-management/index.js',
     'file': './components/file/index.js'
 };

@@ -74,5 +74,3 @@ MessageBox.close = () => {
 });
 
 export default MessageBox;
-
-

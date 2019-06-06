@@ -10,7 +10,7 @@
         <!--搜索条件 -->
         <el-form
             :inline="true"
-            :label-width="lableWidth"
+            :label-width="labelWidth"
         >
             <slot />
             <div class="sdxw-search-layout__btn">
@@ -77,7 +77,7 @@ export default {
         };
     },
     props: {
-        lableWidth: {
+        labelWidth: {
             type: String,
             default: ''
         },

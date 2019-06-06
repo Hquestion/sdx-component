@@ -12,6 +12,7 @@
                 v-model="__value"
                 value-key="uuid"
                 :popper-append-to-body="false"
+                :disabled="readOnly"
             >
                 <el-option
                     v-for="(item) in dealCPU(resourceCPU)"
@@ -41,6 +42,7 @@
                 v-model="__value"
                 value-key="uuid"
                 :popper-append-to-body="false"
+                :disabled="readOnly"
             >
                 <el-option
                     v-for="(item) in dealGPU(resourceGPU)"
@@ -67,6 +69,7 @@
                 v-model="__value"
                 value-key="uuid"
                 :popper-append-to-body="false"
+                :disabled="readOnly"
             >
                 <el-option
                     v-for="(item) in dealCPU(resourceCPU)"
@@ -84,14 +87,14 @@
                         </div>
                     </div>
                 </el-option>
-            </el-select> 
+            </el-select>
         </div>
     </div>
 </template>
 
 <script>
 
-import { Select} from 'element-ui';
+import { Select } from 'element-ui';
 import { getResourceTmplList } from '@sdx/utils/src/api/resource';
 
 export default {
@@ -112,6 +115,10 @@ export default {
         gpulabel: {
             type: String,
             default: ' GPU'
+        },
+        readOnly: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -176,7 +183,7 @@ export default {
                     }
                 }
             });
-        
+
     }
 };
 </script>

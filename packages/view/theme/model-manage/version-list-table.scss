@@ -1,5 +1,6 @@
 @include block('version-list', $bem-namespace-view) {
     @include element('table') {
+        margin: 20px 0;
     }
     @include element('footer') {
         display: flex;

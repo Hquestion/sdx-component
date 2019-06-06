@@ -53,10 +53,10 @@ Created by iconfont
     <glyph glyph-name="icon-caret" unicode="&#59093;" d="M512 896l366-438.9H146zM512-128L146 310.9h732z"  horiz-adv-x="1024" />
 
     
-    <glyph glyph-name="icon-caret-right" unicode="&#59094;" d="M853.3 384L170.7 896v-1024z"  horiz-adv-x="1024" />
+    <glyph glyph-name="icon-caret-right" unicode="&#59094;" d="M759.16824293 384L264.83175707 754.78857422v-741.57714844z"  horiz-adv-x="1024" />
 
     
-    <glyph glyph-name="icon-caret-top" unicode="&#59095;" d="M512 725L0 43h1024z"  horiz-adv-x="1024" />
+    <glyph glyph-name="icon-caret-top" unicode="&#59095;" d="M512 630.95098401L141.21142578 137.04901599000004h741.57714844z"  horiz-adv-x="1024" />
 
     
     <glyph glyph-name="icon-circle-plus" unicode="&#59096;" d="M512-32c229.8 0 416 186.2 416 416S741.8 800 512 800 96 613.8 96 384s186.2-416 416-416z m-48 480H192v-96h272v-272h96V352h272v96H560V720h-96v-272z m48-576C229.2-128 0 101.2 0 384S229.2 896 512 896s512-229.2 512-512-229.2-512-512-512z"  horiz-adv-x="1024" />
@@ -65,7 +65,7 @@ Created by iconfont
     <glyph glyph-name="icon--download" unicode="&#59097;" d="M464 230.7L205.5 489.2l-67.9-67.9L511 48l373.4 373.4-67.9 67.9L560 232.8V896h-96v-665.3zM64-128v96h896v-96z"  horiz-adv-x="1024" />
 
     
-    <glyph glyph-name="icon-caret-left" unicode="&#59098;" d="M171 384L853 896v-1024z"  horiz-adv-x="1024" />
+    <glyph glyph-name="icon-caret-left" unicode="&#59098;" d="M265.04901599 384L758.95098401 754.78857422v-741.57714844z"  horiz-adv-x="1024" />
 
     
     <glyph glyph-name="icon-check" unicode="&#59099;" d="M512 483.1L924.9 896l99.1-99.1L611.1 384 1024-28.9l-99.1-99.1L512 284.9 99.1-128 0-28.9 412.9 384 0 796.9 99.1 896 512 483.1z"  horiz-adv-x="1024" />

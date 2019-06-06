@@ -70,7 +70,8 @@ module.exports = {
                         'view/resource-manage',
                         'view/privilege',
                         'view/project-management',
-                        'view/image-management'
+                        'view/image-management',
+                        'view/model-manage',
                     ]
                 },
                 {

@@ -21,7 +21,7 @@ export default {
                 list = list.filter(item => {
                     return MONITOR_ALLOW_OPERATION.includes(item);
                 });
-            } else if (isOwnerTask) {
+            } else if (!isOwnerTask) {
                 list = list.filter(item => {
                     return NON_OWNER_TASK_OPERATION.includes(item);
                 });

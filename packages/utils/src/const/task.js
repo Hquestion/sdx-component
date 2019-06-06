@@ -84,9 +84,9 @@ export const OPERATION_INFO = {
         value: 'edit',
         icon: 'sdx-icon sdx-icon-edit'
     },
-    delete: {
+    remove: {
         label: '删除',
-        value: 'delete',
+        value: 'remove',
         icon: 'sdx-icon sdx-icon-delete'
     }
 };

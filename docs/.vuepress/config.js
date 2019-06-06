@@ -74,7 +74,8 @@ module.exports = {
                         'view/project-management',
                         'view/image-management',
                         'view/component-state',
-                        'view/resource-statistics'
+                        'view/resource-statistics',
+                        'view/task-management'
                     ]
                 },
                 {

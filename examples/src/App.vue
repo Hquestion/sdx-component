@@ -58,6 +58,9 @@
             <router-link to="/imageManageTest">
                 镜像管理测试
             </router-link> |
+            <router-link to="/modelManageTest">
+                模型管理测试
+            </router-link> |
         </div>
         <p class="page-link">
             <button @click="toFeb">

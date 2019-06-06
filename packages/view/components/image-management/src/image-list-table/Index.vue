@@ -158,7 +158,6 @@ export default {
                 users: [],
                 groups: []
             },
-            defaultUserGroupKeys: [],
             editingImage: null,
             selectedImages: [],
             detailDialogVisible: false,

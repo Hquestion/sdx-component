@@ -19,6 +19,7 @@ import BreadcrumbTest from './views/widget/breadcrumbTest.vue';
 import ChangePwdTest from './views/widget/changePwdTest.vue';
 import projectManageTest from './views/view/projectManageTest.vue';
 import imageManageTest from './views/view/imageManageTest.vue';
+import modelManageTest from './views/view/modelManageTest.vue';
 import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
@@ -220,6 +221,11 @@ const router = new Router({
             path: '/imageManageTest',
             name: '镜像管理测试',
             component: imageManageTest
+        },
+        {
+            path: '/modelManageTest',
+            name: '模型管理测试',
+            component: modelManageTest
         }
     ]
 });

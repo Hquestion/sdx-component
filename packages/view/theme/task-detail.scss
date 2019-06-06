@@ -40,6 +40,8 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
         @include modifier('value') {
             flex: auto;
+            display: flex;
+            align-items: center;
         }
 
         @include state('multi-line') {
@@ -174,7 +176,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     width: 280px;
     display: flex;
     justify-content: center;
-} 
+}
 
 @include block('has-nothing', $bem-namespace-view) {
     display: flex;

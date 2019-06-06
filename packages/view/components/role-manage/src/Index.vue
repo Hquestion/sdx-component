@@ -224,9 +224,9 @@ export default {
     props: {
 
     },
-    created() {
-        this.roleList();
-    },
+    // created() {
+    //     this.roleList();
+    // },
     methods: {
         currentChange() {
             this.searchRoles = Object.assign({}, this.searchRoles, {

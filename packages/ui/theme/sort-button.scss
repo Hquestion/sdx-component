@@ -1,4 +1,4 @@
-@include block('sort-search', $bem-namespace-ui) {
+@include block('sort-button', $bem-namespace-ui) {
     display: inline-block;
     i {
         cursor:pointer;

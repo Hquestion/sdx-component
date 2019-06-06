@@ -17,7 +17,7 @@ export function getGroupDetail(uuid) {
 }
 
 export function getUserList(params) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}user-profiles`, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}user-profiles/`, params);
 }
 
 /**
@@ -38,11 +38,11 @@ export function updataUser(uuid, params) {
  * 创建用户
  */
 export function addUser(params) {
-    return httpService.post(`${USER_SERVICE_GATEWAY_BASE}users`, params);
+    return httpService.post(`${USER_SERVICE_GATEWAY_BASE}users/`, params);
 }
 
 export function changeUserInfo(params) {
-    return httpService.put(`${USER_SERVICE_GATEWAY_BASE}user`, params);
+    return httpService.put(`${USER_SERVICE_GATEWAY_BASE}user/`, params);
 }
 
 export function getUserSimpleInfo(uuid) {
@@ -75,7 +75,7 @@ export function getUserDetail(uuid) {
 }
 
 export function createGroup(params) {
-    return httpService.post(`${USER_SERVICE_GATEWAY_BASE}groups`, params);
+    return httpService.post(`${USER_SERVICE_GATEWAY_BASE}groups/`, params);
 }
 
 export function updateGroups(uuid, params) {
@@ -87,7 +87,7 @@ export function deleteGroup(uuid) {
 }
 
 export function getGroups(params) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}group-profiles`, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}group-profiles/`, params);
 }
 
 export function getUserRoleGroupByName(name, type) {

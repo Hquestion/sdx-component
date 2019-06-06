@@ -22,5 +22,5 @@ module.exports = {
     'lazy-list': './components/lazy-list/index.js',
     'icon-button-group': './components/icon-button-group/index.js',
     'radial-progress': './components/radial-progress/index.js',
-    'sort-search': './components/sort-search/index.js',
+    'sort-button': './components/sort-button/index.js',
 };

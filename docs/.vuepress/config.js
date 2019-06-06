@@ -40,7 +40,7 @@ module.exports = {
                         'ui/scroll',
                         'ui/lazyList',
                         'ui/radial-progress',
-                        'ui/sort-search'
+                        'ui/sort-button'
                     ]
                 },
                 {

@@ -1,5 +1,5 @@
 <template>
-    <div class="sdxu-sort-search">
+    <div class="sdxu-sort-button">
         <sdxu-button
             size="small"
             type="default"
@@ -15,7 +15,7 @@
 <script>
 import Button from '@sdx/ui/components/button';
 export default {
-    name: 'SdxuSortSearch',
+    name: 'SdxuSortButton',
     props: {
         title: {
             type: String,

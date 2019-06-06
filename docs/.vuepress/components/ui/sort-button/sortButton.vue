@@ -1,6 +1,6 @@
 <template>
-    <div class="sdxui-sort-search">
-        <SdxuSortSearch
+    <div class="sdxui-sort-button">
+        <SdxuSortButton
             title="按创建时间排序"
             @sortChange="sortChange"
             :order="order"
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import SortSearch from '@sdx/ui/components/sort-search';
+import SortButton from '@sdx/ui/components/sort-button';
 export default {
     name: 'ButtonDemo',
     data() {
@@ -18,7 +18,7 @@ export default {
         };
     },
     components: {
-        [SortSearch.name]:SortSearch
+        [SortButton.name]:SortButton
     },
     methods: {
         sortChange(order) {

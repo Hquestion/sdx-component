@@ -38,7 +38,7 @@
                         </SdxuButton>
                     </template>
                 </sdxu-button>
-                <SdxuSortSearch
+                <SdxuSortButton
                     title="按创建时间排序"
                     @sortChange="sortChange"
                     :order="order"
@@ -92,7 +92,7 @@ import Project from '@sdx/widget/components/projectcard';
 import MessageBox from '@sdx/ui/components/message-box';
 import { Select, Message } from 'element-ui';
 import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
-import SortSearch from '@sdx/ui/components/sort-search';
+import SortButton from '@sdx/ui/components/sort-button';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -117,7 +117,7 @@ export default {
         [Project.ProjectCard.name]: Project.ProjectCard,
         [Project.ProjectCardList.name]: Project.ProjectCardList,
         [ContentPanel.name]: ContentPanel,
-        [SortSearch.name]:SortSearch
+        [SortButton.name]:SortButton
     },
     created() {
         this.initList();

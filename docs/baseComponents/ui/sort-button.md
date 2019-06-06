@@ -1,16 +1,16 @@
-# SortSearch 排序搜索
+# SortButton 排序搜索
 ---
 
-基础sortSearch组件
+基础sortButton组件
 
 ## Examples
 
 <Common-BasicUsage>
-  <ui-sort-search-sortSearch></ui-sort-search-sortSearch>
+  <ui-sort-button-sortButton></ui-sort-button-sortButton>
   <highlight-code slot="codeText" lang="vue">
     <template>
-        <div class="sdxui-sort-search">
-            <SdxuSortSearch
+        <div class="sdxui-sort-button">
+            <SdxuSortButton
                 title="按创建时间排序"
                 @sortChange="sortChange"
                 :order="order"
@@ -26,9 +26,9 @@
 
 // 按需加载的方式引入
 import Vue from 'vue';
-import {SortSearch} from '@sdx/ui';
+import {SortButton} from '@sdx/ui';
 
-Vue.use(SortSearch);
+Vue.use(SortButton);
 
 // 也可以全量引入使用
 import SdxUI from '@sdx/ui';
@@ -45,7 +45,7 @@ Vue.use(SdxUI);
 
 // 按需加载时，需要引用两个文件：
 @import '~@sdx/ui/lib/theme/base.scss';
-@import '~@sdx/ui/lib/theme/sort-search.scss';
+@import '~@sdx/ui/lib/theme/sort-button.scss';
 
 ```
 
@@ -56,7 +56,7 @@ Vue.use(SdxUI);
 
 ```scss
 
-// sort-search
+// sort-button
 $sdx-sort-icon-width: 10px !default;
 $sdx-sort-icon-color-normal: #C8CFD9 !default;
 $sdx-sort-icon-color-active: #457FF6 !default;
@@ -65,4 +65,4 @@ $sdx-sort-icon-color-active: #457FF6 !default;
 
 ## API
 
-<ui-sort-search-api slot="api" />
+<ui-sort-button-api slot="api" />

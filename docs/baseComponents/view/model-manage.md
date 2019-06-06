@@ -33,9 +33,44 @@ ModelManage.install = vue => {
 // 路由配置
 const routeCfg = [
     {
-        path: 'model-manage',
-        name: 'ModelManage',
+        path: '/sdxv-model-manage',
+        name: 'SdxvModelManage',
         component: ModelManage,
+        redirect: '/sdxv-model-manage/modelList',
+        meta: {
+            breadcrumb: '模型'
+        },
+        children: [
+            {
+                path: 'modelList',
+                name:'modelList',
+                component: ModelManageList,
+            },
+            {
+                path: 'versionList',
+                name: 'versionManage',
+                redirect: 'versionList/:modelId',
+                component: VersionManage,
+                meta: {
+                    breadcrumb: '模型版本列表'
+                },
+                children: [
+                    {
+                        path: ':modelId',
+                        name: 'versionList',
+                        component: VersionList
+                    },
+                    {
+                        path: ':modelId/:versionId',
+                        name: 'versionDetail',
+                        component: VersionDetail,
+                        meta: {
+                            breadcrumb: '模型版本详情'
+                        }
+                    }
+                ]
+            }
+        ]
     }
 ];
 

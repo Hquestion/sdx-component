@@ -56,7 +56,10 @@ module.exports = {
                         'widget/fileselect',
                         'widget/select-group-user',
                         'widget/share-setting',
-                        'widget/log-detail'
+                        'widget/log-detail',
+                        'widget/task-list',
+                        'widget/task-start-dialog',
+                        'widget/task-stop-dialog'
                     ]
                 },
                 {
@@ -69,7 +72,9 @@ module.exports = {
                         'view/resource-manage',
                         'view/privilege',
                         'view/project-management',
-                        'view/image-management'
+                        'view/image-management',
+                        'view/component-state',
+                        'view/resource-statistics'
                     ]
                 },
                 {

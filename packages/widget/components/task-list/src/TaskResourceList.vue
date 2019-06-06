@@ -1,6 +1,7 @@
 <template>
-    <div class="sdxv-task-resource-list">
+    <div class="sdxw-task-resource-list">
         <SdxwSearchLayout
+            v-if="!ranking"
             @search="handleSearch"
             @reset="handleReset"
         >
@@ -40,7 +41,7 @@
             </SdxwSearchItem>
         </SdxwSearchLayout>
         <SdxuTable
-            class="sdxv-task-resource-list__table"
+            class="sdxw-task-resource-list__table"
             :data="taskResourceList"
             @sort-change="handleSortChange"
             :default-sort="defaultSort"
@@ -49,16 +50,16 @@
                 prop="name"
                 label="任务名称"
                 fixed
-                width="150px"
+                min-width="150px"
             />
             <el-table-column
                 prop="type"
                 label="任务类型"
-                width="150px"
+                min-width="150px"
             />
             <el-table-column
                 label="任务状态"
-                width="100px"
+                min-width="100px"
             >
                 <template #default="{ row }">
                     <SdxwFoldLabel
@@ -72,14 +73,14 @@
             </el-table-column>
             <el-table-column
                 label="所属项目"
-                width="150px"
+                min-width="150px"
             >
                 <template #default="{ row }">
                     <span v-if="monitor">{{ row.project.name }}</span>
                     <span
                         v-else
                         @click="handleGotoProject(row.project)"
-                        class="sdxv-task-resource-list__table--project-link"
+                        class="sdxw-task-resource-list__table--project-link"
                     >{{ row.project.name }}</span>
                 </template>
             </el-table-column>
@@ -88,7 +89,7 @@
                 label="已使用CPU（核）"
                 sortable="custom"
                 :sort-orders="sortOrders"
-                width="160px"
+                min-width="160px"
             >
                 <template #default="{ row }">
                     {{ row.quota.cpu / 1000 }}
@@ -99,7 +100,7 @@
                 label="已使用内存（GB）"
                 sortable="custom"
                 :sort-orders="sortOrders"
-                width="170px"
+                min-width="170px"
             >
                 <template #default="{ row }">
                     {{ row.quota.memory / (1024 * 1024 * 1024) }}
@@ -110,7 +111,7 @@
                 label="已使用GPU（块）"
                 sortable="custom"
                 :sort-orders="sortOrders"
-                width="160px"
+                min-width="170px"
             >
                 <template #default="{ row }">
                     <span v-if="row.quota.gpu > 0">{{ `${row.quota.gpuModel}:${row.quota.gpu}` }}</span>
@@ -120,19 +121,19 @@
             <el-table-column
                 prop="user.name"
                 label="创建人"
-                width="100px"
+                min-width="100px"
             />
             <el-table-column
                 prop="createdAt"
                 label="创建时间"
                 :sortable="ranking ? false : 'custom'"
                 :sort-orders="sortOrders"
-                width="200px"
+                min-width="200px"
             />
             <el-table-column
                 label="操作"
                 fixed="right"
-                width="120px"
+                min-width="120px"
             >
                 <template #default="{ row }">
                     <SdxuIconButtonGroup>
@@ -149,7 +150,7 @@
         </SdxuTable>
         <div
             v-if="!ranking"
-            class="sdxv-task-resource-list__pagination"
+            class="sdxw-task-resource-list__pagination"
         >
             <SdxuPagination
                 :current-page.sync="page"
@@ -174,12 +175,12 @@ import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
 
-import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, STATE_TYPE_OPERATION } from '@sdx/utils/src/const/task';
+import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE } from '@sdx/utils/src/const/task';
 import { getTaskList } from '@sdx/utils/src/api/project';
 import taskMixin from '@sdx/utils/src/mixins/task';
 
 export default {
-    name: 'SdxvTaskResourceList',
+    name: 'SdxwTaskResourceList',
     mixins: [taskMixin],
     components: {
         SdxuTable,

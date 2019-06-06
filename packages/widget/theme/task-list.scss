@@ -1,10 +1,10 @@
-@include block('task-resource-list', $bem-namespace-view) {
+@include block('task-resource-list', $bem-namespace-widget) {
     .sdxu-input, .el-select {
         width: 300px;
     }
 
     @include element('pagination') {
-        margin-top: 20px;
+        margin-top: $sdx-margin;
         display: flex;
         justify-content: flex-end;
     }

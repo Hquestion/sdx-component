@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="sdxv-project-router">
         <router-view />
     </div>
 </template>

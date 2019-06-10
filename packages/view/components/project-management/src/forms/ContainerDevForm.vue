@@ -282,6 +282,9 @@ export default {
                 'EXECUTOR_MEMORY': this.params.resourceConfig.EXECUTOR_MEMORY,
                 'GPU_MODEL': val.label
             };
+        },
+        'params.imageId'() {
+            this.$refs.containerdev.clearValidate('resourceConfig');
         }
     }
 };

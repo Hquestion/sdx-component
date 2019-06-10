@@ -330,6 +330,9 @@ export default {
                 'TF_PS_MEMORY': this.params.resourceConfig.TF_PS_MEMORY,
                 'GPU_MODEL':  val.label
             };
+        },
+        'params.imageId'() {
+            this.$refs.tfdistributed.clearValidate('resourceConfig');
         }
     }
 };

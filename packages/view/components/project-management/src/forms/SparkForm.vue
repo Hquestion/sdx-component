@@ -275,6 +275,9 @@ export default {
                 'SPARK_DRIVER_MEMORY': this.params.resourceConfig.SPARK_DRIVER_MEMORY,
                 'SPARK_EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
             };
+        },
+        'params.imageId'() {
+            this.$refs.spark.clearValidate('resourceConfig');
         }
     }
 };

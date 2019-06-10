@@ -371,6 +371,9 @@ export default {
                 'TF_MASTER_MEMORY':  this.params.resourceConfig.TF_MASTER_MEMORY,
                 'GPU_MODEL':  val.label
             };
+        },
+        'params.imageId'() {
+            this.$refs.tfautodistributed.clearValidate('resourceConfig');
         }
     }
 };

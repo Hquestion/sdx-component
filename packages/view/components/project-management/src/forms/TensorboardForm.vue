@@ -213,6 +213,9 @@ export default {
                 'GPU_MODEL': ''
             };
         },
+        'params.imageId'() {
+            this.$refs.tensorboard.clearValidate('resourceConfig');
+        }
     }
 };
 </script>

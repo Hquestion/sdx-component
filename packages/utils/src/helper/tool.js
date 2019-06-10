@@ -20,8 +20,8 @@ export function isObject(value) {
 }
 
 export function paginate(pageIndex, pageSize) {
-    return {
+    return ({
         start: (pageIndex - 1) * pageSize + 1,
         count: pageSize
-    };
+    });
 }

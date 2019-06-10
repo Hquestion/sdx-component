@@ -488,7 +488,7 @@ function scanObject(obj, path, processor, prefix = undefined) {
         }
     };
     if (key === '*') {
-        Object.entries(obj).forEach(entry => {
+        obj && Object.entries(obj).forEach(entry => {
             runner(entry[0], entry[1]);
         });
     } else {

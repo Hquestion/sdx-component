@@ -1,0 +1,17 @@
+@include block('task-resource-list', $bem-namespace-widget) {
+    .sdxu-input, .el-select {
+        width: 300px;
+    }
+
+    @include element('pagination') {
+        margin-top: $sdx-margin;
+        display: flex;
+        justify-content: flex-end;
+    }
+    @include element('table') {
+        @include modifier('project-link') {
+            color: #5C89FF;
+            cursor: pointer;
+        }
+    }
+}

@@ -84,12 +84,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         position: relative;
     }
     @include element('tag') {
-        padding: $sdxu-transfer-margin-small;
+        padding: $sdxu-transfer-margin-tag 0 0 $sdxu-transfer-margin-small ;
         display: flex;
         flex-wrap: wrap;
         justify-content: baseline;
         align-content: flex-start;
-        height: 260px;
+        height: $sdxu-transfer-height-tagbox;
         .el-tag{   
             margin: 0 $sdxu-transfer-margin-tag $sdxu-transfer-margin-tag 0;
             color: $sdx-text-regular-color;

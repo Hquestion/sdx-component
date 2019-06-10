@@ -4,28 +4,28 @@
             @search="search"
             @reset="reset"
         >
-            <sdxw-search-item lable="镜像名称1:">
+            <sdxw-search-item label="镜像名称1:">
                 <Input
                     type="search"
                     :searchable="true"
                     size="small"
                 />
             </sdxw-search-item>
-            <sdxw-search-item lable="镜像名称2:">
+            <sdxw-search-item label="镜像名称2:">
                 <Input
                     type="search"
                     :searchable="true"
                     size="small"
                 />
             </sdxw-search-item>
-            <sdxw-search-item lable="镜像名称3:">
+            <sdxw-search-item label="镜像名称3:">
                 <Input
                     type="search"
                     :searchable="true"
                     size="small"
                 />
             </sdxw-search-item>
-            <sdxw-search-item lable="镜像名称4:">
+            <sdxw-search-item label="镜像名称5:">
                 <Input
                     type="search"
                     :searchable="true"

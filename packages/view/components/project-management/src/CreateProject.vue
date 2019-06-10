@@ -250,36 +250,33 @@ export default {
             });
         },
         confirm() {
-            this.$refs.projectForm.validate(valid => {
-                if (!valid) {
-                    Message.error('请输入必填信息');
-                } else {
-                    this.projectForm.users = [];
-                    this.projectForm.groups = [];
-                    if (!this.projectForm.isTemplate) {
-                        this.projectForm.groups = this.selectedGroups;
-                        this.projectForm.users = this.selectedUsers;
-                    }
-                    if (this.isEditing) {
-                        updateProject(this.projectForm.uuid, this.projectForm).then(() => {
-                            Message({
-                                message: '更新成功',
-                                type: 'success'
-                            });
-                            this.needRefresh = true;
-                            this.dialogVisible = false;
-                        }).catch(() => {});
-                    } else {
-                        createProject(this.projectForm).then(() => {
-                            Message({
-                                message: '创建成功',
-                                type: 'success'
-                            });
-                            this.needRefresh = true;
-                            this.dialogVisible = false;
-                        }).catch(() => {});
-                    }
+            this.$refs.projectForm.validate().then(() => {
+                this.projectForm.users = [];
+                this.projectForm.groups = [];
+                if (!this.projectForm.isTemplate) {
+                    this.projectForm.groups = this.selectedGroups;
+                    this.projectForm.users = this.selectedUsers;
                 }
+                if (this.isEditing) {
+                    updateProject(this.projectForm.uuid, this.projectForm).then(() => {
+                        Message({
+                            message: '更新成功',
+                            type: 'success'
+                        });
+                        this.needRefresh = true;
+                        this.dialogVisible = false;
+                    }).catch(() => {});
+                } else {
+                    createProject(this.projectForm).then(() => {
+                        Message({
+                            message: '创建成功',
+                            type: 'success'
+                        });
+                        this.needRefresh = true;
+                        this.dialogVisible = false;
+                    }).catch(() => {});
+                }
+                
             });
 
         },

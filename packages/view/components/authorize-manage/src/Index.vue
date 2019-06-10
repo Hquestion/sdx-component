@@ -249,7 +249,7 @@ export default {
         },
         removeRole() {
             MessageBox.confirm({
-                title: `确定删除授权吗？`,
+                title: '确定删除授权吗？',
                 content: '删除后不可恢复哦',
                 type: 'alert'
             }).then(() => {

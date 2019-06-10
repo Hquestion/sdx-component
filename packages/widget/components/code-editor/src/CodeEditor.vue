@@ -1,6 +1,17 @@
 <template>
-    <SdxuDialog class="sdxw-code-editor" :confirm-handler="handleSave">
-        <codemirror v-model="mirrorCode"></codemirror>
+    <SdxuDialog
+        class="sdxw-code-editor"
+        :confirm-handler="handleSave"
+        size="normal"
+        :visible.sync="_visible"
+        :title="title"
+        confirm-label="保存并发布"
+        @open="syncCode"
+    >
+        <codemirror
+            v-model="mirrorCode"
+            :options="editorOptions"
+        />
     </SdxuDialog>
 </template>
 
@@ -9,11 +20,26 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import { codemirror } from 'vue-codemirror-lite';
 import { isFunction } from '@sdx/utils/src/helper/tool';
 
+require('codemirror/addon/hint/show-hint.js');
+require('codemirror/addon/hint/show-hint.css');
+require('codemirror/mode/r/r.js');
+require('codemirror/mode/python/python.js');
+
 export default {
     name: 'SdxwCodeEditor',
     data() {
         return {
-            mirrorCode: ''
+            mirrorCode: '',
+            editorOptions: {
+                indentUnit: 4,
+                tabSize: 4,
+                lineNumbers: true,
+                lineWrapping: true,
+                spellcheck: true,
+                autocorrect: true,
+                autofocus: true,
+                mode: 'python'
+            }
         };
     },
     components: {
@@ -27,7 +53,7 @@ export default {
         },
         title: {
             type: String,
-            default: ''
+            default: '代码编辑器'
         },
         saveHandler: {
             type: Function,
@@ -38,6 +64,10 @@ export default {
             default: ''
         }
     },
+    model: {
+        prop: 'code',
+        event: 'confirm'
+    },
     computed: {
         _visible: {
             get() {
@@ -46,6 +76,21 @@ export default {
             set(val) {
                 this.$emit('update:visible', val);
             }
+        }
+    },
+    methods: {
+        handleSave() {
+            if (this.saveHandler) {
+                return this.saveHandler().then(() => {
+                    this.$emit('confirm', this.mirrorCode);
+                });
+            } else {
+                this.$emit('confirm', this.mirrorCode);
+                return Promise.resolve();
+            }
+        },
+        syncCode() {
+            this.mirrorCode = this.code;
         }
     },
     watch: {
@@ -69,7 +114,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -66,7 +66,12 @@ externals = [
         }
         callback();
     },
-    nodeExternals()
+    nodeExternals({
+        whitelist: [
+            /^codemirror/,
+            'vue-codemirror-lite'
+        ]
+    })
 ];
 
 exports.externals = externals;

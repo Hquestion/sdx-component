@@ -84,6 +84,7 @@
         "@babel/polyfill": "^7.4.4",
         "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
         "axios": "^0.18.0",
+        "codemirror": "^5.47.0",
         "core-js": "2.5.7",
         "dexie": "^2.0.4",
         "echarts": "^4.2.1",

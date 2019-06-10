@@ -25,6 +25,9 @@ import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
 import ImageManage from '@sdx/view/components/image-management';
 import BuildImageBasicDemo from './views/demo/buildImageBasicDemo';
+import monitorDemo from './views/demo/monitorDemo';
+import taskListDemo from './views/demo/taskListDemo';
+import componentStateDemo from './views/demo/componentStateDemo';
 
 import SearchLayout from './views/cache/search.vue';
 import Task from './views/cache/task.vue';
@@ -198,6 +201,15 @@ const router = new Router({
             }, {
                 path: 'buildImageBasic',
                 component: BuildImageBasicDemo
+            }, {
+                path: 'resource-monitor',
+                component: monitorDemo
+            }, {
+                path: 'all-tasklist',
+                component: taskListDemo
+            }, {
+                path: 'component-state',
+                component: componentStateDemo
             }]
         },
         {

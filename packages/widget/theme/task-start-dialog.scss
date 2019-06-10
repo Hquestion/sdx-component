@@ -1,0 +1,34 @@
+@include block('task-start-dialog', $bem-namespace-widget) {
+    margin-left: $sdx-margin;
+    @include element('tip') {
+        display: flex;
+        align-items: center;
+        line-height: 1;
+        i {
+            font-size: 24px;
+            margin-right: 15px;
+            color: $sdx-warning-color;
+        }
+        span {
+            font-size: 20px;
+            color: $sdx-text-primary-color;
+        }
+    }
+    @include element('radio') {
+        margin-top: $sdx-margin;
+        margin-left: 39px;
+        font-size: 14px;
+        .el-radio {
+            display: flex;
+            .el-radio__label {
+                width: 340px;
+                font-weight: normal;
+                color: $sdx-text-primary-color;
+                @include text-truncation(1);
+            }
+            & + .el-radio {
+                margin-top: 12px;
+            }
+        }
+    }
+}

@@ -40,9 +40,6 @@ export default {
         [Project.ProjectCardList.name]: Project.ProjectCardList,
         [ContentPanel.name]: ContentPanel
     },
-    created() {
-        this.initList();
-    },
     methods: {
         sortChange(sort) {
             this.sort = sort;

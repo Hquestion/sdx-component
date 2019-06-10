@@ -3,7 +3,7 @@
         title="共享设置"
         :visible.sync="dialogVisible"
         @close="dialogClose"
-        @confirm="confirmEdit"
+        :confirm-handler="confirmEdit"
     >
         <el-form
             label-width="110px"
@@ -102,11 +102,10 @@ export default {
         },
         confirmEdit() {
             if (this.handler) {
-                this.handler(this.shareForm.selectedUsers, this.shareForm.selectedGroups, this.shareForm.shareType).then(() => {
-                    this.dialogVisible = false;
-                });
+                return this.handler(this.shareForm.selectedUsers, this.shareForm.selectedGroups, this.shareForm.shareType);
             } else {
                 this.$emit('confirm-edit', this.shareForm.selectedUsers, this.shareForm.selectedGroups, this.shareForm.shareType);
+                return Promise.resolve();
             }
         }
     }

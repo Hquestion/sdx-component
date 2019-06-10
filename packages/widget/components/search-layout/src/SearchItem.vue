@@ -3,7 +3,7 @@
         class="sdxw-search-item"
     >
         <el-form-item
-            :label="lable"
+            :label="label"
             v-show="itemIndex < active.items"
         >
             <slot />
@@ -26,7 +26,7 @@ export default {
         [FormItem.name]: FormItem
     },
     props: {
-        lable: {
+        label: {
             type: String,
             default: ''
         },

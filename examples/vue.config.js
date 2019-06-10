@@ -29,12 +29,12 @@ module.exports = {
                     '/api': '/mock/5cd04685adb0973be6a3d969/api'
                 }
             },
-            '/fe-compose': {
+            '^/image-manager': {
                 target: 'http://10.115.1.130:30080',
                 ws: true,
                 changeOrigin: true,
             },
-            '^/image-manager': {
+            '/fe-compose': {
                 target: 'http://10.115.1.130:30080',
                 ws: true,
                 changeOrigin: true,

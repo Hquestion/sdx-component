@@ -39,7 +39,8 @@ module.exports = {
                         'ui/layout',
                         'ui/scroll',
                         'ui/lazyList',
-                        'ui/radial-progress'
+                        'ui/radial-progress',
+                        'ui/sort-button'
                     ]
                 },
                 {
@@ -56,7 +57,10 @@ module.exports = {
                         'widget/fileselect',
                         'widget/select-group-user',
                         'widget/share-setting',
-                        'widget/log-detail'
+                        'widget/log-detail',
+                        'widget/task-list',
+                        'widget/task-start-dialog',
+                        'widget/task-stop-dialog'
                     ]
                 },
                 {
@@ -70,6 +74,9 @@ module.exports = {
                         'view/privilege',
                         'view/project-management',
                         'view/image-management',
+                        'view/component-state',
+                        'view/resource-statistics',
+                        'view/task-management',
                         'view/model-manage',
                     ]
                 },

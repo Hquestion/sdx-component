@@ -29,3 +29,9 @@ export function removeBlankAttr(object) {
     }
 }
 
+export function paginate(pageIndex, pageSize) {
+    return ({
+        start: (pageIndex - 1) * pageSize + 1,
+        count: pageSize
+    });
+}

@@ -1,8 +1,9 @@
 import { getBodyScrollTop, getNodeScrollTop } from '../helper/dom';
 
 let scrollTop = 0;
+let parentOriginPosition, originOverflow, originTop;
 
-export function lock(target = true) {
+export function lock(target = true, distToTop = 0) {
     if (!target) {
         return;
     }
@@ -23,8 +24,14 @@ export function lock(target = true) {
         }
     } else if (typeof target === 'object' && target instanceof HTMLElement) {
         scrollTop = getNodeScrollTop(target);
-        target.style.top = -1 * scrollTop + 'px';
-        target.style.position = 'fixed';
+        // parentOriginPosition = target.parentNode.style.position;
+        // originOverflow = target.style.overflow;
+        // originTop = target.style.top;
+        // target.parentNode.style.position = 'relative';
+        // target.style.top = distToTop + 'px';
+        // target.firstElementChild.style.transform = `translateY(${-1*scrollTop}px)`;
+        // target.style.position = 'absolute';
+        target.style.overflow = 'hidden';
     }
 }
 
@@ -50,10 +57,11 @@ export function unlock(target) {
         lockEl.style.top = null;
         lockEl.scrollTop = scrollTop;
     } else if (typeof target === 'object' && target instanceof HTMLElement) {
-        target.style.overflow = 'auto';
-        target.style.position = 'static';
-        target.style.top = null;
-        target.scrollTop = scrollTop;
+        target.style.overflow = originOverflow || 'auto';
+        // target.style.position = 'static';
+        // target.style.top = originTop || null;
+        // target.parentNode.style.position = parentOriginPosition;
+        // target.scrollTop = scrollTop;
     }
     scrollTop = 0;
 }

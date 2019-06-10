@@ -69,11 +69,14 @@
                 v-if="imageKind === 'all' || imageKind === 'otherShare'"
             />
             <el-table-column
-                prop="createdAt"
                 key="createdAt"
                 label="创建时间"
                 sortable="custom"
-            />
+            >
+                <template slot-scope="scope">
+                    {{ scope.row.createdAt | dateFormatter }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="操作"
             >
@@ -82,21 +85,25 @@
                         @click="handleOperation(scope.row, 'edit')"
                         icon="sdx-icon sdx-fenxiang"
                         title="共享设置"
+                        v-if="scope.row.operations.indexOf('edit') > -1"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'extend')"
                         icon="sdx-icon sdx-kaobei"
                         title="基于此创建"
+                        v-if="scope.row.operations.indexOf('extend') > -1"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'detail')"
                         icon="sdx-icon sdx-icon-tickets"
                         title="查看详情"
+                        v-if="scope.row.operations.indexOf('detail') > -1"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'remove')"
                         icon="sdx-icon sdx-icon-delete"
                         title="删除"
+                        v-if="scope.row.operations.indexOf('remove') > -1"
                     />
                 </template>
             </el-table-column>
@@ -139,6 +146,7 @@ import MessageBox from '@sdx/ui/components/message-box';
 import ImageDetail from './PackageDetailDialog';
 import { Message } from 'element-ui';
 import ShareSetting from '@sdx/widget/components/share-setting';
+import Filters from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name: 'ImageListTable',
     data() {
@@ -205,6 +213,7 @@ export default {
     created() {
         this.initImageList();
     },
+    mixins: [Filters],
     computed: {
         currentUser() {
             return getUser();

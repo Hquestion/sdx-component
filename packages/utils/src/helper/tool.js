@@ -18,3 +18,7 @@ export function isObject(value) {
     const type = typeof value;
     return value != null && (type === 'object' || type === 'function');
 }
+
+export function isFunction(value) {
+    return typeof value === 'function';
+}

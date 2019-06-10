@@ -132,7 +132,8 @@ import Dialog from '@sdx/ui/components/dialog';
 import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { getImageList, removeImage, updateImage, updateGroupImages } from '@sdx/utils/src/api/image';
-import { removeBlankAttr } from '@sdx/utils/src/helper/tool';
+import { removeBlankAttr, paginate } from '@sdx/utils/src/helper/tool';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import ImageDetail from './PackageDetailDialog';
@@ -203,6 +204,11 @@ export default {
     },
     created() {
         this.initImageList();
+    },
+    computed: {
+        currentUser() {
+            return getUser();
+        }
     },
     methods: {
         share() {
@@ -291,22 +297,25 @@ export default {
                 shareType: this.shareType,
                 buildType: this.buildType,
                 taskType: this.taskType,
-                start: this.current,
-                count: this.pageSize,
+                ...paginate(this.current, this.pageSize),
                 order: this.order,
                 orderBy: this.orderBy
             };
             removeBlankAttr(params);
             if (this.isOwner) {
                 if (this.isOwner === 'true') {
-                    params.ownerId = '';  // TODO: 有用户ID时传入用户ID
+                    params.ownerId = this.currentUser.userId || '';
                 } else {
-                    params.excludeOwnerId = ''; // TODO: 有用户ID时传入用户ID
+                    params.excludeOwnerId = this.currentUser.userId || '';
                 }
             }
             getImageList(params).then((res) => {
                 this.imageList = res.data;
                 this.total = res.total;
+                this.loading = false;
+            }, () => {
+                this.imageList = [];
+                this.total = 0;
                 this.loading = false;
             });
         },
@@ -362,6 +371,3 @@ export default {
     }
 };
 </script>
-
-<style scoped lang="scss">
-</style>

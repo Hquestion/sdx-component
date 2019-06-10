@@ -82,25 +82,21 @@
                         @click="handleOperation(scope.row, 'edit')"
                         icon="sdx-icon sdx-fenxiang"
                         title="共享设置"
-                        v-if="scope.row.operations.indexOf('edit') > -1"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'extend')"
                         icon="sdx-icon sdx-kaobei"
                         title="基于此创建"
-                        v-if="scope.row.operations.indexOf('extend') > -1"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'detail')"
                         icon="sdx-icon sdx-icon-tickets"
                         title="查看详情"
-                        v-if="scope.row.operations.indexOf('detail') > -1"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'remove')"
                         icon="sdx-icon sdx-icon-delete"
                         title="删除"
-                        v-if="scope.row.operations.indexOf('remove') > -1"
                     />
                 </template>
             </el-table-column>
@@ -136,6 +132,7 @@ import Dialog from '@sdx/ui/components/dialog';
 import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { getImageList, removeImage, updateImage, updateGroupImages } from '@sdx/utils/src/api/image';
+import { removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import ImageDetail from './PackageDetailDialog';
@@ -284,7 +281,6 @@ export default {
                 this.dialogVisible = false;
                 // });
             }
-
         },
         initImageList(reset) {
             this.loading = true;
@@ -300,6 +296,7 @@ export default {
                 order: this.order,
                 orderBy: this.orderBy
             };
+            removeBlankAttr(params);
             if (this.isOwner) {
                 if (this.isOwner === 'true') {
                     params.ownerId = '';  // TODO: 有用户ID时传入用户ID
@@ -336,6 +333,8 @@ export default {
                     this.dialogVisible = true;
                     this.editingImage = row;
                     Object.assign(this.shareForm, row);
+                    this.shareForm.users = this.shareForm.users || [];
+                    this.shareForm.groups = this.shareForm.groups || [];
                     break;
                 case 'extend':
                     this.$router.push({ name: 'basicbuild' });

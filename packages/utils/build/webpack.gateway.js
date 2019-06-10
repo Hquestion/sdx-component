@@ -19,7 +19,8 @@ module.exports = {
     entry: {
         login: './src/gateway/compose/login.js',
         userProfiles: './src/gateway/compose/userProfiles.js',
-        groupProfiles: './src/gateway/compose/groupProfiles.js'
+        groupProfiles: './src/gateway/compose/groupProfiles.js',
+        imageProfiles: './src/gateway/compose/imageProfiles.js',
     },
     output: {
         filename: '[name].js',

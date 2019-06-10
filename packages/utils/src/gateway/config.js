@@ -20,5 +20,11 @@ module.exports = [
         method: 'GET',
         functionName: 'groupProfiles.handler',
         filePath: './compose/groupProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/image-profiles',
+        method: 'GET',
+        functionName: 'imageProfiles.handler',
+        filePath: './compose/imageProfiles.js'
     }
 ];

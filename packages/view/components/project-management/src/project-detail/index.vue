@@ -49,35 +49,36 @@
                 >
                     搜索
                 </sdxu-button>
-                <sdxu-button
-                    size="small"
-                    type="default"
-                >
-                    按创建时间升序
-                    <i class="sdx-icon sdx-paixu" />
-                </sdxu-button>
-            </div>
-            <div
-                class="sdxv-project-detail__content"
-            >
-                <task-card-list v-loading="loading">
-                    <task-card
-                        @operate="handleOperate"
-                        v-for="(item, index) in taskList"
-                        :key="index"
-                        :meta="item"
-                    />
-                </task-card-list>
-            </div>
-            <div class="sdxv-project-detail__footer">
-                <div />
-                <sdxu-pagination
-                    :current-page.sync="current"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="currentChange"
+                <SdxuSortButton
+                    title="按创建时间排序"
+                    @sortChange="sortChange"
+                    :order.sync="order"
                 />
             </div>
+            <div v-if="taskList.length">
+                <div
+                    class="sdxv-project-detail__content"
+                >
+                    <task-card-list v-loading="loading">
+                        <task-card
+                            @operate="handleOperate"
+                            v-for="(item, index) in taskList"
+                            :key="index"
+                            :meta="item"
+                        />
+                    </task-card-list>
+                </div>
+                <div class="sdxv-project-detail__footer">
+                    <div />
+                    <sdxu-pagination
+                        :current-page.sync="current"
+                        :page-size="pageSize"
+                        :total="total"
+                        @current-change="currentChange"
+                    />
+                </div>
+            </div>
+            <SdxuEmpty v-else />
         </sdxu-content-panel>
     </div>
 </template>
@@ -88,9 +89,12 @@ import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
+import SortButton from '@sdx/ui/components/sort-button';
 import MessageBox from '@sdx/ui/components/message-box';
+import Empty from '@sdx/ui/components/empty';
 import TaskCard from './TaskCard';
 import TaskCardList from './TaskCardList';
+import { paginate } from '@sdx/utils/src/helper/tool';
 import TaskIcon from './TaskIcon';
 import { Message } from 'element-ui';
 import { getTaskList, removeTask, startTask, stopTask } from '@sdx/utils/src/api/project';
@@ -102,6 +106,8 @@ export default {
             current: 1,
             pageSize: 10,
             total: 0,
+            order: 'desc',
+            orderBy: 'createdAt',
             taskList: [],
             loading: false,
             taskOptions: [
@@ -172,7 +178,9 @@ export default {
         [Input.name]: Input,
         [Button.name]: Button,
         [IconButton.name]: IconButton,
+        [SortButton.name]: SortButton,
         [Pagination.name]: Pagination,
+        [Empty.name]: Empty,
         TaskIcon,
         TaskCard,
         TaskCardList
@@ -196,20 +204,23 @@ export default {
             this.loading = true;
             const params = {
                 name: this.searchName,
-                start: this.current,
-                count: this.pageSize,
-                order: 'asc',
-                orderBy: '',
+                ...paginate(this.current, this.pageSize),
+                order: this.order,
+                orderBy: this.orderBy,
                 projectId: this.$route.params.id
             };
             getTaskList(params).then(res => {
-                this.taskList = res.data.items;
-                this.total = res.data.total;
+                this.taskList = res.items;
+                this.total = res.total;
                 this.loading = false;
             });
         },
         currentChange(val) {
             this.current = val;
+            this.initList();
+        },
+        sortChange(order) {
+            this.order = order;
             this.initList();
         },
         handleOperate(operation) {

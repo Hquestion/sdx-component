@@ -93,6 +93,7 @@ import MessageBox from '@sdx/ui/components/message-box';
 import { Select, Message } from 'element-ui';
 import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
 import SortButton from '@sdx/ui/components/sort-button';
+import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -117,7 +118,9 @@ export default {
         [Project.ProjectCard.name]: Project.ProjectCard,
         [Project.ProjectCardList.name]: Project.ProjectCardList,
         [ContentPanel.name]: ContentPanel,
-        [SortButton.name]:SortButton
+        [SortButton.name]:SortButton,
+        [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
+        [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem
     },
     created() {
         this.initList();

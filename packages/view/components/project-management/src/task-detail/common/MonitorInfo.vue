@@ -42,7 +42,7 @@ import Select from 'element-ui/lib/select';
 import Option from 'element-ui/lib/option';
 
 import echarts from 'echarts';
-import moment from 'moment';
+import { formatDate } from '@sdx/utils/src/helper/transform';
 
 const CHART_DEFAULT_OPTION = {
     // 监t图的基本配置
@@ -1261,7 +1261,7 @@ export default {
         processData() {
             this.hasGpu = +this.chartData.allocatedGpu > 0;
             this.xAxisData = this.chartData.stats.map(item =>
-                moment(+item.timeStamp * 1000).format('YYYY-MM-DD HH:mm:ss')
+                formatDate(item.timeStamp * 1000, 'YYYY-MM-DD HH:mm:ss')
             );
             // 整理 cpu 使用
             this.usedCpuSeriesData = [

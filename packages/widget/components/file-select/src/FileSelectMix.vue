@@ -1,13 +1,16 @@
 <template>
-    <div class="sdxw-file-select">
+    <div class="sdxw-file-select" :class="{'is-inline': inline}">
         <div class="sdxw-file-select__main">
             <SdxuButton
                 trigger="click"
+                :icon="icon"
                 :keep-dropdown-open="true"
                 ref="dropdownMain"
+                :dropdown-width="dropdownWidth"
+                :disabled="disabled"
                 @dropdown-hide="emitBlurOnFormItem"
             >
-                选择文件
+                <slot>选择文件</slot>
                 <template slot="dropdown">
                     <SdxuButton
                         type="text"
@@ -29,9 +32,9 @@
                             :limit="limit"
                             :show-file-list="false"
                             :before-upload="beforeUpload"
-                            @click.native="$refs.fileSelectPop.close()"
+                            @click.native="$refs.fileSelectPop && $refs.fileSelectPop.close()"
                         >
-                            <span>本地文件</span>
+                            <span>{{ localFileLabel }}</span>
                         </SdxuUpload>
                     </SdxuButton>
                     <SdxuButton
@@ -54,8 +57,9 @@
                             :on-progress="onProgress"
                             :on-success="onSuccess"
                             :before-upload="beforeUploadDir"
+                            @click.native="$refs.fileSelectPop && $refs.fileSelectPop.close()"
                         >
-                            <span>本地文件夹</span>
+                            <span>{{ localFolderLabel }}</span>
                         </SdxuUpload>
                     </SdxuButton>
                     <SdxuButton
@@ -76,7 +80,7 @@
                             @cancel="handleCancel"
                             @confirm="handleConfirm"
                         >
-                            平台文件
+                            {{ platformFileLabel }}
                         </SdxwFileSelectPop>
                     </SdxuButton>
                 </template>
@@ -119,6 +123,10 @@ export default {
             type: Array,
             default: () => []
         },
+        inline: {
+            type: Boolean,
+            default: false
+        },
         source: {
             type: String,
             default: 'all' // local: 本地 ceph: ceph系统 all: 所有
@@ -141,7 +149,7 @@ export default {
         },
         rootPath: {
             type: String,
-            default: ''
+            default: '/'
         },
         treeOptions: {
             type: Object,
@@ -183,6 +191,30 @@ export default {
         uploadParams: {
             type: Object,
             default: undefined
+        },
+        localFileLabel: {
+            type: String,
+            default: '本地文件'
+        },
+        localFolderLabel: {
+            type: String,
+            default: '本地文件夹'
+        },
+        platformFileLabel: {
+            type: String,
+            default: '平台文件'
+        },
+        icon: {
+            type: String,
+            default: ''
+        },
+        dropdownWidth: {
+            type: String,
+            default: '100%'
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -201,14 +233,14 @@ export default {
     },
     methods: {
         selectCeph() {
-            this.$refs.fileSelectPop.open();
+            this.$refs.fileSelectPop && this.$refs.fileSelectPop.open();
         },
         handleCancel() {
-            this.$refs.fileSelectPop.close();
+            this.$refs.fileSelectPop && this.$refs.fileSelectPop.close();
         },
         handleConfirm() {
             // todo confirm时保存选中的文件到model上
-            this.$refs.fileSelectPop.close();
+            this.$refs.fileSelectPop && this.$refs.fileSelectPop.close();
             this.$refs.dropdownMain.hideDropdown();
         },
         beforeUpload(file) {

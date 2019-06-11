@@ -1,5 +1,5 @@
 <template>
-    <div class="sdxu-content-panel">
+    <div class="sdxu-content-panel" :class="{'sdxu-content-panel--fullscreen': fullscreen, 'is-header' : title || $slots.right || $slots.title}">
         <div
             class="sdxu-content-panel__header"
             v-if="title || $slots.right || $slots.title"
@@ -42,6 +42,10 @@ export default {
         subtitle: {
             type: String,
             default: ''
+        },
+        fullscreen: {
+            type: Boolean,
+            default: false
         }
     }
 };

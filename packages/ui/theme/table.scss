@@ -4,34 +4,34 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/table';
 
 @include block('table', $bem-namespace-ui) {
-    .el-table td {
+    &.el-table td {
         border-bottom: none;
         border-top: 1px solid $sdxu-table-border-color;
         color: $sdx-text-regular-color;
         height: $sdxu-table-td-height;
         font-size:$sdxu-table-td-fontsize;
     }
-    .el-table {
+    &.el-table {
         border-bottom: 1px solid $sdxu-table-border-color;
-    } 
-    .el-table td {
+    }
+    &.el-table td {
         border-bottom: none;
         border-top: 1px solid $sdxu-table-border-color;
         color: $sdx-text-regular-color;
         height: $sdxu-table-td-height;
         font-size:$sdxu-table-td-fontsize;
     }
-    
-    .el-table th.is-leaf {
+
+    &.el-table th.is-leaf {
         height: $sdxu-table-header-height;
         background: $sdxu-table-header-background;
         font-size: $sdxu-table-header-fontsize;
         border-bottom: none;
     }
-    .el-table::before {
+    &.el-table::before {
         height: 0px;
     }
-    .el-table th > .cell {
+    &.el-table th > .cell {
         font-weight: 700;
         color: $sdxu-table-head-color;
     }
@@ -43,7 +43,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         border-top: 10px solid $sdxu-table-table-margincolor !important;
         border-bottom: 10px solid $sdxu-table-table-margincolor !important;
     }
-    .el-table .highlight-row, .hover-row {
+    &.el-table .highlight-row, .hover-row {
         background: $sdxu-table-cell-background
     }
     .el-table__empty-block {

@@ -1,0 +1,102 @@
+@include block('resource-statistics', $bem-namespace-view) {
+    @include element('item') {
+        margin-bottom: $sdx-margin;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+@include block('task-resource-ranking', $bem-namespace-view) {
+    
+    @include element('more') {
+        font-size: 12px;
+        color: #5C89FF;
+        cursor: pointer;
+        i {
+            font-size: 12px;
+            margin-left: 5px;
+        }
+    }
+}
+
+@include block('platform-resource', $bem-namespace-view) {
+    // padding: $sdx-padding;
+    @include element('title') {
+        font-size: $sdx-h2-font-size;
+        color: $sdx-text-primary-color;
+        font-weight:500;
+        span:before {
+            content: ' ';
+            display: inline-block;
+            width: 3px;
+            height: 16px;
+            background: #4781F8;
+            vertical-align: middle;
+            margin-right: 12px;
+        }
+    }
+    @include element('chart') {
+        margin-top: $sdx-margin;
+        display: flex;
+        justify-content: space-between;
+        @include modifier('item') {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 $sdx-margin;
+            width: 100%;
+            height: 190px;
+            border-radius: 2px;
+            background: #fff;
+            box-shadow: 0px 0px 22px 0px rgba(206, 213, 221, 0.27);
+            &:last-child, &:first-child {
+                margin: 0;
+            }
+        }
+    }
+}
+
+@include block('resource-info', $bem-namespace-view) {
+    width: 100px;
+    color:$sdx-text-primary-color;
+    @include element('title') {
+        font-size:15px;
+        font-weight:bold;
+        @include modifier('unit') {
+            margin-left: 5px;
+            font-size: 10px;
+        }
+    }
+    @include element('content') {
+        margin-top: 30px;
+        @include modifier('item') {
+            font-size: 14px;
+            margin-top: 5px;
+            span:first-child {
+                color:$sdx-text-regular-color;
+                margin-right: $sdx-margin;
+            }
+            span:last-child {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+@include block('resource-chart', $bem-namespace-view) {
+    width: 120px;
+    height: 120px;
+}
+
+@include block('resource-chart', $bem-namespace-view) {
+    @include element('percent') {
+        font-size: 26px;
+        font-weight: bold;
+        color: $sdx-text-primary-color;
+    }
+    @include element('desc') {
+        font-size: 12px;
+        color: $sdx-text-minor-color;
+    }
+}

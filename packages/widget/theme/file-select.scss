@@ -13,9 +13,29 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         & /deep/ .el-tree-node__expand-icon {
             color: $sdx-text-holder-color;
         }
+        & /deep/ .is-current > .el-tree-node__content {
+            color: $sdx-primary-color;
+            background: #F7F9FD;
+        }
     }
     @include element('node') {
         font-size: $sdx-file-select-node-font-size;
+    }
+    @include element('new-folder') {
+        display: inline-block;
+        input {
+            height: 32px;
+            border: 1px solid #dedede;
+            text-indent: 1em;
+        }
+        i {
+            margin-left: $sdx-margin / 2;
+            font-size: 18px;
+            color: $sdx-primary-color;
+            &.cancel-icon {
+                color: $sdx-text-holder-color;
+            }
+        }
     }
     @include element('node-icon') {
         width: $sdx-file-select-node-font-size;
@@ -93,6 +113,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('file-select', $bem-namespace-widget) {
+    @include state('inline') {
+        display: inline-block;
+    }
     & /deep/ .sdxw-file-select-pop__ref {
         display: block;
     }

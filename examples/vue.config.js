@@ -21,13 +21,18 @@ module.exports = {
         writeToDisk: false,
         port: 3300,
         proxy: {
-            '/api': {
+            '^/api': {
                 target: 'https://easy-mock.com',
                 ws: true,
                 changeOrigin: true,
                 pathRewrite: {
                     '/api': '/mock/5cd04685adb0973be6a3d969/api'
                 }
+            },
+            '^/image-manager': {
+                target: 'http://10.115.1.130:30080',
+                ws: true,
+                changeOrigin: true,
             },
             '/fe-compose': {
                 target: 'http://10.115.1.130:30080',

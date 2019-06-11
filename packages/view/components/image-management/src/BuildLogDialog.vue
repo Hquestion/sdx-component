@@ -15,7 +15,6 @@
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxwLogDetail from '@sdx/widget/components/log-detail';
-import { Scrollbar } from 'element-ui';
 
 import { getImageBuildLog } from '@sdx/utils/src/api/image';
 
@@ -23,8 +22,7 @@ export default {
     name: 'SdxvBuildLogDialog',
     components: {
         SdxuDialog,
-        SdxwLogDetail,
-        [Scrollbar.name]: Scrollbar
+        SdxwLogDetail
     },
     props: {
         visible: {

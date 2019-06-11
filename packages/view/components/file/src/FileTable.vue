@@ -157,7 +157,7 @@ import SdxwShareSetting from '@sdx/widget/components/share-setting';
 import { lock, unlock } from '@sdx/utils/src/lockScroll';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import SdxvFolderSelect from './popup/FolderSelect';
 import { getFileIcon, getFileBtn } from './helper/fileListTool';
@@ -219,8 +219,8 @@ export default {
                 mimeType: 'text/directory',
                 fileExtension: '',
                 fileShareDetailId: '',
-                createdAt: moment().toISOString(),
-                updatedAt: moment().toISOString(),
+                createdAt: dayjs().toISOString(),
+                updatedAt: dayjs().toISOString(),
                 size: 0
             };
 

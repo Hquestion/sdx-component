@@ -46,6 +46,10 @@ export default {
         fullscreen: {
             type: Boolean,
             default: false
+        },
+        size: {
+            type: String,
+            default: 'normal' // small, mini
         }
     }
 };

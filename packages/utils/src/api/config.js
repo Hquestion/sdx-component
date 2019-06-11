@@ -10,3 +10,5 @@ export const PROJECT_MANAGE_GATWAY_BASE = '/project-manager/api/v1/';
 
 // 资源
 export const RESOURCE_MANAGE_GATWAY_BASE = '/resource-manager/api/v1/';
+
+

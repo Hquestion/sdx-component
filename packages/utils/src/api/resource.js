@@ -1,14 +1,11 @@
-// 等调试完改
-import httpService from '@sdx/utils/lib/http-service';
+import httpService from '../http-service';
+// import httpService from '@sdx/utils/lib/http-service';
 import { getUserSimpleInfo } from './user';
-
-// 资源网关
 import { RESOURCE_MANAGE_GATWAY_BASE } from './config';
 
-const resourceApi = `${RESOURCE_MANAGE_GATWAY_BASE}resource`;
 
 export function getResourceTmplList(start = 1, count = -1, templateType) {
-    return httpService.get(`${resourceApi}_templates`, {
+    return httpService.get(`${RESOURCE_MANAGE_GATWAY_BASE}resource_templates`, {
         start,
         count,
         templateType
@@ -20,17 +17,17 @@ export function deleteResourceTmpl(uuid) {
 }
 
 export function getResourceConfigDetail(uuid) {
-    return httpService.get(`${resourceApi}_config`, {
+    return httpService.get(`${RESOURCE_MANAGE_GATWAY_BASE}resource_config`, {
         uuid
     });
 }
 
 export function createResourceTmpl(params) {
-    return httpService.post(`${resourceApi}_templates`, params);
+    return httpService.post(`${RESOURCE_MANAGE_GATWAY_BASE}resource_templates`, params);
 }
 
 export function getResourceConfigs(start = 1, count = -1, parameterType = 'USER') {
-    return httpService.get(`${resourceApi}_configs`, {
+    return httpService.get(`${RESOURCE_MANAGE_GATWAY_BASE}/resource_configs`, {
         start,
         count,
         parameterType

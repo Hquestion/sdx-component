@@ -3,7 +3,7 @@
         :visible.sync="dialogVisible"
         title="新建GPU模板"
         size="small"
-        @confirm="handleConfirm"
+        :confirm-handler="handleConfirm"
         @cancel="handleCancel"
         class="sdxv-gpu-template"
     >
@@ -88,16 +88,13 @@ export default {
     },
     methods: {
         handleConfirm() {
-            this.$refs.form.validate(valid => {
-                if (valid) {
-                    const params = Object.assign({}, this.formData, { templateType: 'GPU'});
-                    createResourceTmpl(params).then(data => {
-                        this.$refs.form.resetFields();
-                        this.dialogVisible = false;
-                    });
-                } else {
-                    return false;
-                }
+            return this.$refs.form.validate().then(() => {
+                const params = Object.assign({}, this.formData, { templateType: 'GPU'});
+                return createResourceTmpl(params).then(() => {
+                    this.$refs.form.resetFields();
+                    this.$emit('refresh');
+                    this.dialogVisible = false;
+                });
             });
         },
         handleCancel() {

@@ -27,7 +27,10 @@ externals = [
     Object.assign({
         vue: 'vue',
         'element-ui': 'element-ui',
-        'axios': 'axios'
+        'axios': 'axios',
+        'echarts': 'echarts',
+        'dexie': 'dexie',
+        'dayjs': 'dayjs'
     }, externals),
     /^element-ui/,
     /^~element-ui/,

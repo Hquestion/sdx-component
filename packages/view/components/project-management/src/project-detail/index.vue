@@ -92,7 +92,7 @@ import MessageBox from '@sdx/ui/components/message-box';
 import TaskCard from './TaskCard';
 import TaskCardList from './TaskCardList';
 import TaskIcon from './TaskIcon';
-import { Message } from 'element-ui';
+import Message from 'element-ui/lib/message';
 import { getTaskList, removeTask, startTask, stopTask } from '@sdx/utils/src/api/project';
 export default {
     name: 'SdxvProjectDetail',

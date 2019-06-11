@@ -1,4 +1,5 @@
 import httpService from '../http-service';
+// import httpService from '@sdx/utils/lib/http-service';
 import { getUserSimpleInfo } from './user';
 
 export function getResourceTmplList(start = 1, count = -1, templateType) {

@@ -57,27 +57,30 @@
                     <i class="sdx-icon sdx-paixu" />
                 </sdxu-button>
             </div>
-            <div
-                class="sdxv-project-detail__content"
-            >
-                <task-card-list v-loading="loading">
-                    <task-card
-                        @operate="handleOperate"
-                        v-for="(item, index) in taskList"
-                        :key="index"
-                        :meta="item"
+            <div v-if="taskList.length">
+                <div
+                    class="sdxv-project-detail__content"
+                >
+                    <task-card-list v-loading="loading">
+                        <task-card
+                            @operate="handleOperate"
+                            v-for="(item, index) in taskList"
+                            :key="index"
+                            :meta="item"
+                        />
+                    </task-card-list>
+                </div>
+                <div class="sdxv-project-detail__footer">
+                    <div />
+                    <sdxu-pagination
+                        :current-page.sync="current"
+                        :page-size="pageSize"
+                        :total="total"
+                        @current-change="currentChange"
                     />
-                </task-card-list>
+                </div>
             </div>
-            <div class="sdxv-project-detail__footer">
-                <div />
-                <sdxu-pagination
-                    :current-page.sync="current"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="currentChange"
-                />
-            </div>
+            <SdxuEmpty v-else />
         </sdxu-content-panel>
     </div>
 </template>
@@ -89,6 +92,7 @@ import Button from '@sdx/ui/components/button';
 import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
 import MessageBox from '@sdx/ui/components/message-box';
+import Empty from '@sdx/ui/components/empty';
 import TaskCard from './TaskCard';
 import TaskCardList from './TaskCardList';
 import TaskIcon from './TaskIcon';
@@ -173,6 +177,7 @@ export default {
         [Button.name]: Button,
         [IconButton.name]: IconButton,
         [Pagination.name]: Pagination,
+        [Empty.name]: Empty,
         TaskIcon,
         TaskCard,
         TaskCardList
@@ -203,8 +208,8 @@ export default {
                 projectId: this.$route.params.id
             };
             getTaskList(params).then(res => {
-                this.taskList = res.data.items;
-                this.total = res.data.total;
+                this.taskList = res.items;
+                this.total = res.total;
                 this.loading = false;
             });
         },

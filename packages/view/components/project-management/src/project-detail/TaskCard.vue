@@ -30,7 +30,7 @@
             </div>
             <div class="sdxv-task-card__info">
                 <i class="sdx-icon sdx-icon-time" />
-                <span>{{ meta.createAt }}</span>
+                <span>{{ meta.createdAt | dateFormatter }}</span>
             </div>
         </main>
         <footer class="sdxv-task-card__footer">
@@ -74,6 +74,7 @@
 
 <script>
 import TaskIcon from './TaskIcon';
+import Filters from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name: 'TaskCard',
     props: {
@@ -86,6 +87,7 @@ export default {
         return {
         };
     },
+    mixins: [Filters],
     computed: {
         taskType() {
             const taskType = {};
@@ -117,7 +119,7 @@ export default {
             default:
                 break;
             }
-            switch(this.meta.state.name) {
+            switch(this.meta.state) {
             case 'CREATED':
                 taskType.status = 'is-created';
                 taskType.statusText = '新建';

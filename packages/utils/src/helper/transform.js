@@ -63,6 +63,10 @@ export function formatDate(date,fmt){
     return fmt;
 }
 
+export function byteToGB(byte) {
+    return Math.floor(byte / Math.pow(1024, 3));
+}
+
 export function  byteFormatter(byte) {
     if (byte === 0) return '0 B';
     if (!byte) return '';

@@ -1,0 +1,12 @@
+@import "~@sdx/ui/theme/dialog";
+
+@include block('code-editor', $bem-namespace-widget) {
+    .vue-codemirror-wrap {
+        border: 1px solid $sdx-primary-color;
+        border-radius: $sdx-border-radius;
+        height: 50vh;
+        .CodeMirror {
+            height: 100%;
+        }
+    }
+}

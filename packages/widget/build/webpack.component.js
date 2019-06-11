@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const components = require('../components');
 
 const config = require('../../../build/config');
@@ -23,13 +24,13 @@ module.exports = {
     mode: 'production',
     entry: components,
     output: {
-        filename: "[name].js",
+        filename: '[name].js',
         path: path.resolve(__dirname, '../lib'),
         publicPath: './',
-        library: "@sdx/widget",
-        libraryTarget: "umd",
+        library: '@sdx/widget',
+        libraryTarget: 'umd',
         // chunkFilename: "[id].js",
-        libraryExport: "default"
+        libraryExport: 'default'
     },
     externals: config.externals,
     resolve: {
@@ -55,11 +56,11 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ['style-loader',"css-loader"]
+                use: ['style-loader','css-loader']
             },
             {
                 test: /\.scss$/,
-                use: ['style-loader', "css-loader", "sass-loader"]
+                use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.(svg|otf|ttf|woff2?|eot|gif|png|jpe?g)(\?\S*)?$/,

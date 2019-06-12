@@ -4,13 +4,24 @@
             alt="Vue logo"
             src="../assets/logo.png"
         >
-        <SdxFilePop></SdxFilePop>
-        <SdxwFileSelectMain check-type="file" v-model="files" accept="img/png;.py"></SdxwFileSelectMain>
-        <SdxuLazyList :load="loadData" item-key="uuid" store-name="file" store-keys="uuid,name" :item-height="50" style="height: 400px;">
-            <template #default="{data}">
-                <div >{{data.name}}</div>
-            </template>
-        </SdxuLazyList>
+        <SdxFilePop />
+        <SdxwFileSelectMain
+            check-type="file"
+            v-model="files"
+            accept="img/png;.py"
+        />
+        <!--        <SdxuLazyList :load="loadData" item-key="uuid" store-name="file" store-keys="uuid,name" :item-height="50" style="height: 400px;">-->
+        <!--            <template #default="{data}">-->
+        <!--                <div >{{data.name}}</div>-->
+        <!--            </template>-->
+        <!--        </SdxuLazyList>-->
+        <SdxuButton @click="editorVisible = true">打开代码编辑器</SdxuButton>
+        <SdxwCodeEditor
+            :visible.sync="editorVisible"
+            title="组件代码编辑"
+            v-model="code"
+            :save-handler="handleSave"
+        />
     </div>
 </template>
 
@@ -18,12 +29,17 @@
 // @ is an alias to /src
 import SdxFilePop from '@sdx/widget/components/file-select/src/FileSelectPop';
 import SdxwFileSelectMain from '@sdx/widget/components/file-select/src/FileSelectMix';
-import SdxuLazyList from '@sdx/ui/components/lazy-list/src/LazyList';
+// import SdxuLazyList from '@sdx/ui/components/lazy-list/src/LazyList';
+import SdxwCodeEditor from '@sdx/widget/components/code-editor/src/CodeEditor';
+
+import SdxuButton from '../../../packages/ui/components/button/src/Button';
 
 export default {
     name: 'Home',
     components: {
-        SdxuLazyList,
+        SdxuButton,
+        SdxwCodeEditor,
+        // SdxuLazyList,
         SdxFilePop,
         SdxwFileSelectMain
     },
@@ -31,7 +47,14 @@ export default {
         return {
             checkedNodes: [],
             searchCheckedNodes: [],
-            files: []
+            files: [],
+            editorVisible: false,
+            code: 'import os\n' +
+                'from typing import Callable, Dict\n' +
+                '\n' +
+                'from celery import Celery\n' +
+                '\n' +
+                'from api.management.dockerBuilderManager import DockerBuilderManager'
         };
     },
     methods: {
@@ -53,6 +76,9 @@ export default {
                     });
                 }, 3000);
             });
+        },
+        handleSave() {
+            return Promise.resolve();
         }
     }
 };

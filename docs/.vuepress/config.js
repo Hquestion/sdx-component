@@ -75,12 +75,9 @@ module.exports = {
                         'view/privilege',
                         'view/project-management',
                         'view/image-management',
-<<<<<<< HEAD
-=======
                         'view/component-state',
                         'view/resource-statistics',
                         'view/task-management',
->>>>>>> origin/master
                         'view/model-manage',
                     ]
                 },

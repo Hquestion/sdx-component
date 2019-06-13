@@ -56,7 +56,11 @@
                         prop="createdAt"
                         label="创建时间"
                         sortable
-                    />
+                    >
+                        <template slot-scope="scope">
+                            {{ dateFormatter(scope.row.createdAt) }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
                         style="width: 15%"
                         label="操作"
@@ -164,8 +168,10 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
-import {Form, FormItem}  from 'element-ui';
+import Form from 'element-ui/lib/form';
+import FormItem from 'element-ui/lib/form-item';
 import {getRolesList, createRoles, updateRoles, getRolesDetail, removeRoles} from '@sdx/utils/src/api/rolemange';
+import {dateFormatter} from '@sdx/utils/src/helper/transform';
 export default {
     name: 'SdxvRoleManage',
     components: {
@@ -326,7 +332,8 @@ export default {
             this.searchRoles.order =
                     order === 'descending' ? 'desc' : 'asc';
             this.roleList();
-        }
+        },
+        dateFormatter
     }
 };
 </script>

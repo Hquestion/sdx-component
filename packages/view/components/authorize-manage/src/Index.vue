@@ -3,7 +3,10 @@
         <SdxuContentPanel>
             <div class="sdxv-authorize-manage__header">
                 <div class="sdxv-authorize-manage__handle">
-                    <SdxuTabRadioGroup v-model="objectType">
+                    <SdxuTabRadioGroup
+                        v-model="objectType"
+                        @switch="switchTab"
+                    >
                         <SdxuTabRadioItem name="user">
                             用户授权列表
                         </SdxuTabRadioItem>
@@ -38,6 +41,7 @@
                             :searchable="false"
                             size="small"
                             type="search"
+                            placeholder="请输入角色名"
                         />
                     </SdxwSearchItem>
                 </SdxwSearchLayout>
@@ -47,7 +51,7 @@
                     :data="tableData"
                 >
                     <el-table-column
-                        prop="fullName"
+                        :prop="objectType === 'user' ? 'fullName' : 'name'"
                         label="授权对象"
                     />
                     <el-table-column
@@ -71,7 +75,7 @@
                             />
                             <i
                                 class="sdx-icon sdx-icon-delete icon"
-                                @click="remove(scope.row.uuid, scope.row.fullname)"
+                                @click="remove(scope.row.uuid, objectType === 'user' ? scope.row.fullName : scope.row.name)"
                             />
                         </template>
                     </el-table-column>
@@ -152,8 +156,11 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuTransfer from '@sdx/ui/components/transfer';
-import {Form, FormItem, Select} from 'element-ui';
-import {getPermissionsList, createPermissions, updatePermissions,getPermissionsDetail ,removePermissions} from '@sdx/utils/src/api/manage';
+import Select from 'element-ui/lib/select';
+import Form from 'element-ui/lib/form';
+import FormItem from 'element-ui/lib/form-item';
+import {getUserProfilesList, getGroupProfilesList} from '@sdx/utils/src/api/manage';
+import {updataUser} from '@sdx/utils/src/api/user';
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import TabRadio from '@sdx/ui/components/tab-radio';
@@ -220,16 +227,32 @@ export default {
 
     },
     created() {
-        this.authorizeList();
+        this.userList();
     },
     methods: {
-        authorizeList() {
-            getPermissionsList(this.searchPermissions)
+        userList() {
+            getUserProfilesList(this.searchPermissions)
                 .then(data => {
                     this.tableData = data.users;
                     this.total = data.total;
 
                 });
+        },
+        groupList() {
+            getGroupProfilesList(this.searchPermissions)
+                .then(data => {
+                    this.tableData = data.groups;
+                    this.total = data.total;
+
+                });
+        },
+        switchTab(name) {
+            this.searchPermissions.name = '';
+            if(name === 'user') {
+                this.userList();
+            } else if (name === 'group') {
+                this.groupList();
+            }
         },
         currentChange() {
 
@@ -262,10 +285,12 @@ export default {
                 content: '删除后不可恢复哦',
                 type: 'alert'
             }).then(() => {
-                removePermissions(id)
-                    .then(() => {
-                        this.authorizeList();
-                    });
+                if(this.objectType === 'user') {
+                    updataUser(id, {  permissions: []})
+                        .then(()=> {
+                            this.userList();
+                        });
+                }
             }, () => {
 
             });

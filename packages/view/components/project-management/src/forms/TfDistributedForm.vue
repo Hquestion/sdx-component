@@ -60,17 +60,17 @@
                 label="资源配置:"
             >
                 <i class="icon">*</i>
-                <ResourceConfig
+                <SdxwResourceConfig
                     v-model="cpuService"
                     type="cpu"
                     cpulabel="参数服务器CPU/内存"
                 />
-                <ResourceConfig
+                <SdxwResourceConfig
                     v-model="cpuCompute"
                     type="cpu"
                     cpulabel="计算节点CPU/内存"
                 />
-                <ResourceConfig
+                <SdxwResourceConfig
                     v-if="isGpuEnt"
                     v-model="gpuObj"
                     gpulabel="计算节点GPU"
@@ -128,7 +128,7 @@ import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
-import ResourceConfig from './ResourceConfig';
+import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask } from '@sdx/utils/src/api/project';
 import { cNameValidate } from '@sdx/utils/src/helper/validate';
 export default {
@@ -141,7 +141,7 @@ export default {
         [InputNumber.name]: InputNumber,
         SdxuInput,
         [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
-        ResourceConfig
+        SdxwResourceConfig
     },
     props: {
         task: {

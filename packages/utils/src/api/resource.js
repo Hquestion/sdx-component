@@ -1,7 +1,8 @@
 import httpService from '../http-service';
 // import httpService from '@sdx/utils/lib/http-service';
 import { getUserSimpleInfo } from './user';
-import { RESOURCE_MANAGE_GATWAY_BASE } from './config';
+import { RESOURCE_MANAGE_GATWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
+import shareCenter from '@sdx/utils/lib/helper/shareCenter';
 
 export function getResourceTmplList(start = 1, count = -1, templateType) {
     return httpService.get(`${RESOURCE_MANAGE_GATWAY_BASE}resource_templates`, {
@@ -12,38 +13,50 @@ export function getResourceTmplList(start = 1, count = -1, templateType) {
 }
 
 export function deleteResourceTmpl(uuid) {
+    return httpService.remove(`${RESOURCE_MANAGE_GATWAY_BASE}/resource_templates/${uuid}`);
+}
 
+export function getResourceStates() {
+    const user = shareCenter.getUser();
+    return httpService.get(`${RESOURCE_MANAGE_GATWAY_BASE}/resource_states`, {
+        userId: user.userId
+    });
+}
+
+export function getGpuModels() {
+    return getResourceStates().then(res => res.gpus);
 }
 
 export function getResourceConfigDetail(uuid) {
-    return httpService.get(`${RESOURCE_MANAGE_GATWAY_BASE}resource_config`, {
-        uuid
-    });
+    let param = {};
+    if (uuid) {
+        param = {userId: uuid};
+    }
+    return httpService.get(`${RESOURCE_MANAGE_GATWAY_BASE}resource_config`, param);
+}
+
+export function saveResourceConfig(uuid, params) {
+    return httpService.patch(`${RESOURCE_MANAGE_GATWAY_BASE}resource_configs/${uuid}`, params);
 }
 
 export function createResourceTmpl(params) {
     return httpService.post(`${RESOURCE_MANAGE_GATWAY_BASE}resource_templates`, params);
 }
 
+export function createUserResourceConfig(userId, params) {
+    return httpService.post(`${RESOURCE_MANAGE_GATWAY_BASE}resource_configs`, {userId, ...params});
+}
+
 export function getResourceConfigs(start = 1, count = -1, parameterType = 'USER') {
-    return httpService.get(`${RESOURCE_MANAGE_GATWAY_BASE}/resource_configs`, {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}resource-config-profiles`, {
         start,
         count,
         parameterType
-    }).then(res => {
-        const { items } = res;
-        const userInfoDeferArr = items.map(item => getUserSimpleInfo(item.user_Id));
-        return new Promise(resolve => {
-            Promise.all(userInfoDeferArr).then(resp => {
-                items.forEach((item, index) => {
-                    item.userName = resp[index].fullName;
-                });
-                resolve(res);
-            }, () => {
-                resolve(res);
-            });
-        });
     });
+}
+
+export function deleteResourceConfig(uuid) {
+    return httpService.remove(`${RESOURCE_MANAGE_GATWAY_BASE}/resource_configs/${uuid}`);
 }
 
 export default {

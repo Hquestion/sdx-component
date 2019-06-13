@@ -415,7 +415,10 @@ class Context {
                 resultKeys[url] = result;
             }
             const collector = function(element, value) {
-                uuids.add(value);
+                // add uuid into uuids when value is not empty
+                if (value) {
+                    uuids.add(value);
+                }
             };
             if (path !== undefined) {
                 scanObject(object, path, collector);
@@ -439,6 +442,7 @@ class Context {
                         resultKeys[url].split('.').forEach(key => body = body[key]);
                     }
                     if (Array.isArray(body)) {
+                        this.info('array body from batch get: ' + body);
                         body.forEach(element => {
                             if (element.uuid !== undefined) {
                                 results[element.uuid] = element;
@@ -455,7 +459,8 @@ class Context {
             patterns.forEach(pattern => {
                 const path = pattern.path;
                 const paths = pattern.paths;
-                const replacer = (element, value) => results[value];
+                const errorReplaceKey = pattern.errorReplaceKey;
+                const replacer = (element, value) => (results[value] || errorReplaceKey && {[errorReplaceKey]: value});
                 if (path !== undefined) {
                     scanObject(object, path, replacer);
                 }

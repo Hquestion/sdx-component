@@ -67,7 +67,19 @@ export function byteToGB(byte) {
     return Math.floor(byte / Math.pow(1024, 3));
 }
 
-export function  byteFormatter(byte) {
+export function gbToByte(gb) {
+    return gb * Math.pow(1024, 3);
+}
+
+export function parseMilli(milli) {
+    return milli / 1000;
+}
+
+export function toMilli(num) {
+    return num * 1000;
+}
+
+export function byteFormatter(byte) {
     if (byte === 0) return '0 B';
     if (!byte) return '';
 
@@ -89,4 +101,24 @@ export function dateFormatter(date) {
     } else {
         return date;
     }
+}
+
+export function secToHour(seconds) {
+    return seconds && Math.floor(seconds / (60 * 60)) || '';
+}
+
+export function hourToSec(hour) {
+    return hour && hour * 60 * 60;
+}
+
+export function secToDay(seconds) {
+    return seconds && Math.floor(seconds / (60 * 60 * 24));
+}
+
+export function dayToSec(day) {
+    return day && day * 60 * 60 * 24;
+}
+
+export function cpuTplFriendly(config) {
+    return config && `${parseMilli(config.cpu)}C ${byteToGB(config.memory)}GB` || '';
 }

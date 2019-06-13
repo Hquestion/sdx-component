@@ -16,6 +16,7 @@
 
 <script>
 import SdxuScroll from '@sdx/ui/components/scroll';
+import debounce from '@sdx/utils/src/helper/debounce';
 
 export default {
     name: 'SdxwLogDetail',
@@ -33,7 +34,7 @@ export default {
         }
     },
     methods: {
-        handleMouseWheel(event) {
+        handleMouseWheel: debounce(function(event) {
             const vueScroll = this.$refs.scroll.$refs.scroll;
             let scrollPosition = vueScroll.getPosition();
             let viewDom = vueScroll.getCurrentviewDom()[0];
@@ -45,7 +46,7 @@ export default {
             };
 
             this.$emit('scroll', { scrollInfo, event });
-        }
+        }, 500)
     }
 };
 </script>

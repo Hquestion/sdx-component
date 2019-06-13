@@ -82,7 +82,7 @@ export default {
                 title: '确定要删除此资源模板吗？',
                 content: '删除后不可恢复哦'
             }).then(() => {
-                // todo delete
+                this.$emit('delete');
             });
         }
     }

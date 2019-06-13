@@ -10,7 +10,7 @@ let reqErrorMap = errorMessageMap.req || [];
 
 
 function matchCodeWithMap(httpCode, code, map, isDefault = false) {
-    const matchedAll = map.find(item => item.httpCode === httpCode && item.code === code);
+    const matchedAll = map.find(item => httpCode !== '' && code !== '' && item.httpCode === httpCode && item.code === code);
     // 如果全部命中，则返回确切的提示
     if (matchedAll) {
         return {
@@ -20,8 +20,8 @@ function matchCodeWithMap(httpCode, code, map, isDefault = false) {
         };
     } else {
         // 如果未全部命中，但命中了部分，则拿命中部分的提示作为降级方案
-        const matchedServiceCode = map.find(item => item.code === code);
-        const matchedHttpCode = map.find(item => item.httpCode === httpCode);
+        const matchedServiceCode = map.find(item => code !== '' && item.code === code);
+        const matchedHttpCode = map.find(item => httpCode !== '' && item.httpCode === httpCode);
         if (matchedServiceCode || matchedHttpCode) {
             return {
                 httpCode,
@@ -94,7 +94,7 @@ function handler(resp, preventDefaultNotify) {
         return;
     }
     const httpCode = resp.status + '',
-        code = (resp.data && resp.data.code) + '' || '',
+        code = (resp.data && resp.data.code && resp.data.code + '') || '',
         url = resp.config.url,
         method = resp.config.method,
         preventDefaultError = resp.config.preventError;

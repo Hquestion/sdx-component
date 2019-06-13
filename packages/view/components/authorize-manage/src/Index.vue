@@ -188,6 +188,8 @@ export default {
                 name: '',
                 start: 1,
                 count: 10,
+                order: 'desc',
+                orderBy: 'updatedAt'
             },
             objectType: 'user',
             tableData: [],

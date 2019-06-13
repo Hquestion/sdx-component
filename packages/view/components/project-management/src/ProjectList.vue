@@ -90,7 +90,8 @@ import Pagination from '@sdx/ui/components/pagination';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import Project from '@sdx/widget/components/projectcard';
 import MessageBox from '@sdx/ui/components/message-box';
-import { Select, Message } from 'element-ui';
+import Select from 'element-ui/lib/select';
+import Message from 'element-ui/lib/message';
 import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
 import SortButton from '@sdx/ui/components/sort-button';
 export default {

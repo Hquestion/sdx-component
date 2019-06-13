@@ -114,7 +114,6 @@ import FormItem from 'element-ui/lib/form-item';
 import Select from 'element-ui/lib/select';
 import SdxuInput from '@sdx/ui/components/input';
 import { getImageList } from '@sdx/utils/src/api/image';
-// import ResourceConfig from './ResourceConfig';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { getProjectDetail, createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { cNameValidate } from '@sdx/utils/src/helper/validate';

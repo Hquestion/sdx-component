@@ -27,11 +27,12 @@
         "test:unit": "jest --passWithNoTests --no-cache",
         "test:unit:coverage": "jest --passWithNoTests --coverage",
         "build": "babel src --out-dir lib && gulp copy && webpack --config ./build/webpack.gateway.js",
-        "build:gateway": "webpack --config ./build/webpack.gateway.js"
+        "build:gateway": "webpack --watch --config ./build/webpack.gateway.js"
     },
     "peerDependencies": {
         "axios": "^0.18.0",
-        "vue": "^2.6.10"
+        "vue": "^2.6.10",
+        "dayjs": "^1.8.14"
     },
     "babel": {
         "presets": [

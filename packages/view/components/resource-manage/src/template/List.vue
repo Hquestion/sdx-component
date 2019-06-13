@@ -14,7 +14,7 @@
                 <template slot="dropdown">
                     <SdxuButton
                         type="text"
-                        @click="createGPUTplVisible=true"
+                        @click="createCPUTplVisible=true"
                     >
                         CPU/内存模板
                     </SdxuButton>
@@ -33,10 +33,17 @@
                 :key="index"
                 :type="item.type"
                 :count="item.count"
+                @delete="handleDeleteTpl(item, index)"
             />
         </div>
-        <CreateCpuTemplate :visible.sync="createGPUTplVisible" />
-        <CreateGpuTemplate :visible.sync="createCPUTplVisible" />
+        <CreateCpuTemplate
+            :visible.sync="createCPUTplVisible"
+            @refresh="init"
+        />
+        <CreateGpuTemplate
+            :visible.sync="createGPUTplVisible"
+            @refresh="init"
+        />
     </SdxuContentPanel>
 </template>
 
@@ -46,8 +53,9 @@ import Button from '@sdx/ui/components/button';
 import ResourceCard from './ResourceCard';
 import CreateGpuTemplate from './CreateGpuTemplate';
 import CreateCpuTemplate from './CreateCPUAndMemoryTemplate';
+import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 
-import { getResourceTmplList } from '@sdx/utils/src/api/resource';
+import {deleteResourceTmpl, getResourceTmplList} from '@sdx/utils/src/api/resource';
 
 export default {
     name: 'List',
@@ -76,13 +84,19 @@ export default {
                     if (item.templateType.toUpperCase() === 'GPU') {
                         count = [item.count, item.label];
                     } else if (item.templateType.toUpperCase() === 'CPU') {
-                        count = [item.cpu, item.memory];
+                        count = [parseMilli(item.cpu), byteToGB(item.memory)];
                     }
                     return {
                         type: item.templateType,
-                        count: count
+                        count: count,
+                        meta: item
                     };
                 });
+            });
+        },
+        handleDeleteTpl(item, index) {
+            deleteResourceTmpl(item.meta.uuid).then(() => {
+                this.templateList.splice(index, 1);
             });
         }
     },

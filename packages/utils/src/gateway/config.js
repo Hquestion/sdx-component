@@ -22,9 +22,21 @@ module.exports = [
         filePath: './compose/groupProfiles.js'
     },
     {
-        apiId: '/fe-compose/api/v1/image-profiles',
+        apiId: '/fe-compose/api/v1/resource-config-profiles',
         method: 'GET',
-        functionName: 'imageProfiles.handler',
-        filePath: './compose/imageProfiles.js'
+        functionName: 'resourceConfigProfiles.handler',
+        filePath: './compose/resourceConfigProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/project-profiles',
+        method: 'GET',
+        functionName: 'projectProfiles.handler',
+        filePath: './compose/projectProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/user-detail',
+        method: 'GET',
+        functionName: 'userDetail.handler',
+        filePath: './compose/userDetail.js'
     }
 ];

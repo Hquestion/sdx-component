@@ -1,4 +1,4 @@
-import { Notification } from "element-ui";
+import Notification from 'element-ui/lib/notification';
 import {t} from '../locale';
 
 // 默认一个简单的i18n处理，在应用中注入i18n
@@ -10,7 +10,7 @@ let reqErrorMap = errorMessageMap.req || [];
 
 
 function matchCodeWithMap(httpCode, code, map, isDefault = false) {
-    const matchedAll = map.find(item => item.httpCode === httpCode && item.code === code);
+    const matchedAll = map.find(item => httpCode !== '' && code !== '' && item.httpCode === httpCode && item.code === code);
     // 如果全部命中，则返回确切的提示
     if (matchedAll) {
         return {
@@ -19,13 +19,14 @@ function matchCodeWithMap(httpCode, code, map, isDefault = false) {
             msg: matchedAll.msg
         };
     } else {
-        const matchedCode = map.find(item => item.httpCode === httpCode || item.code === code);
         // 如果未全部命中，但命中了部分，则拿命中部分的提示作为降级方案
-        if (matchedCode) {
+        const matchedServiceCode = map.find(item => code !== '' && item.code === code);
+        const matchedHttpCode = map.find(item => httpCode !== '' && item.httpCode === httpCode);
+        if (matchedServiceCode || matchedHttpCode) {
             return {
                 httpCode,
                 code,
-                msg: matchedCode.msg
+                msg: (matchedServiceCode && matchedServiceCode.msg) || (matchedHttpCode && matchedHttpCode.msg)
             };
         } else {
             // 全部没命中，则转为默认处理
@@ -87,13 +88,13 @@ function handler(resp, preventDefaultNotify) {
             return errorInfo;
         }
         Notification.error({
-            title: `错误码: ${errorInfo.code || '未知'}`,
+            title: `错误码: ${errorInfo.code || errorInfo.httpCode || '未知'}`,
             message: i18n.t(errorInfo.msg),
         });
         return;
     }
-    const httpCode = resp.status,
-        code = resp.data && resp.data.error_code || '',
+    const httpCode = resp.status + '',
+        code = (resp.data && resp.data.code && resp.data.code + '') || '',
         url = resp.config.url,
         method = resp.config.method,
         preventDefaultError = resp.config.preventError;
@@ -105,7 +106,7 @@ function handler(resp, preventDefaultNotify) {
         return errorInfo;
     }
     Notification.error({
-        title: `错误码: ${errorInfo.code || '未知'}`,
+        title: `错误码: ${errorInfo.code || errorInfo.httpCode || '未知'}`,
         message: i18n.t(errorInfo.msg),
     });
 }

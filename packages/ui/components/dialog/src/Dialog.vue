@@ -51,14 +51,14 @@
                     size="small"
                     @click="cancel"
                 >
-                    取消
+                    {{ cancelLabel }}
                 </SdxuButton>
                 <SdxuButton
                     type="primary"
                     size="small"
                     @click="confirm"
                 >
-                    确认
+                    {{ confirmLabel }}
                 </SdxuButton>
             </slot>
         </div>
@@ -149,6 +149,14 @@ export default {
         titleIcon: {
             type: String,
             default: ''
+        },
+        confirmLabel: {
+            type: String,
+            default: '确定'
+        },
+        cancelLabel: {
+            type: String,
+            default: '取消'
         },
         confirmHandler: {
             type: Function,

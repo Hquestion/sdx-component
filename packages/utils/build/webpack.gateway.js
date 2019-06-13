@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopoyWebpackPlugin = require('copy-webpack-plugin');
@@ -13,15 +14,18 @@ const plugins = [
     ])
 ];
 
+const GATEWAY_COMPOSE_LOCATION = path.resolve(__dirname, '../src/gateway/compose');
+const files = fs.readdirSync(GATEWAY_COMPOSE_LOCATION);
+const entry = {};
+files.forEach(item => {
+    const extensionIndex = item.indexOf('.js');
+    const entryName = item.slice(0, extensionIndex);
+    entry[entryName] = path.resolve(GATEWAY_COMPOSE_LOCATION, item);
+});
 
 module.exports = {
     mode: 'production',
-    entry: {
-        login: './src/gateway/compose/login.js',
-        userProfiles: './src/gateway/compose/userProfiles.js',
-        groupProfiles: './src/gateway/compose/groupProfiles.js',
-        imageProfiles: './src/gateway/compose/imageProfiles.js',
-    },
+    entry: entry,
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, '../gateway/compose'),

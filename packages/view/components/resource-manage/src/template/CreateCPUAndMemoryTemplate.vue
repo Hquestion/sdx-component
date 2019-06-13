@@ -39,8 +39,11 @@
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
 import { createResourceTmpl } from '@sdx/utils/src/api/resource';
+import { gbToByte, toMilli } from '@sdx/utils/src/helper/transform';
 
-import { InputNumber, Form, FormItem } from 'element-ui';
+import InputNumber from 'element-ui/lib/input-number';
+import FormItem from 'element-ui/lib/form-item';
+import Form from 'element-ui/lib/form';
 
 export default {
     name: 'CreateCPUAndMemoryTemplate',
@@ -78,9 +81,14 @@ export default {
         handleConfirm() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    const params = Object.assign({}, this.formData, { templateType: 'CPU'});
-                    createResourceTmpl(params).then(data => {
+                    const params = {
+                        cpu: toMilli(this.formData.cpu),
+                        memory: gbToByte(this.formData.memory),
+                        templateType: 'CPU'
+                    };
+                    createResourceTmpl(params).then(() => {
                         this.$refs.form.resetFields();
+                        this.$emit('refresh');
                         this.dialogVisible = false;
                     });
                 } else {

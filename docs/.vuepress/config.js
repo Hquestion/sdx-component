@@ -60,7 +60,9 @@ module.exports = {
                         'widget/log-detail',
                         'widget/task-list',
                         'widget/task-start-dialog',
-                        'widget/task-stop-dialog'
+                        'widget/task-stop-dialog',
+                        'widget/code-edit',
+                        'widget/resource-config',
                     ]
                 },
                 {

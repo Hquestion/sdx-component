@@ -115,6 +115,18 @@
                         type: 'Function',
                         optionValue: '—',
                         defaultValue: 'undefined'
+                    }, {
+                        params: 'confirm-label',
+                        describe: '确认按钮文字',
+                        type: 'String',
+                        optionValue: '—',
+                        defaultValue: '确定'
+                    }, {
+                        params: 'cancel-label',
+                        describe: '取消按钮文字',
+                        type: 'String',
+                        optionValue: '—',
+                        defaultValue: '—'
                     }
                 ],
                 eventData: [

@@ -1,8 +1,8 @@
 
 <template>
-    <div class="sdxv-project-task-resource">
+    <div class="sdxw-resource-config">
         <div v-if="type === 'cpu'">
-            <div class="title">
+            <div class="sdxw-resource-config__title">
                 {{ cpulabel }}
             </div>
             <el-select
@@ -20,7 +20,7 @@
                     :value="item.value"
                     :label="item.label"
                 >
-                    <div class="selectOption">
+                    <div class="sdxw-resource-config__selectoption">
                         <i class="icon" />
                         <div>
                             <span>CPU</span> <span>{{ `${item.value.cpu}核` }}</span>
@@ -33,7 +33,7 @@
             </el-select>
         </div>
         <div v-if="type === 'gpu'">
-            <div class="title">
+            <div class="sdxw-resource-config__title">
                 {{ gpulabel }}
             </div>
             <el-select
@@ -50,8 +50,8 @@
                     :value="item.value"
                     :label="item.label"
                 >
-                    <div class="selectOption">
-                        <i class="icon" />
+                    <div class="sdxw-resource-config__selectoption">
+                        <i class="sdxw-resource-config__icon" />
                         <div>
                             <span>型号</span> <span>{{ item.value.label }}</span>
                         </div>
@@ -77,8 +77,8 @@
                     :value="item.value"
                     :label="item.label"
                 >
-                    <div class="selectOption">
-                        <i class="icon" />
+                    <div class="sdxw-resource-config__selectoption">
+                        <i class="sdxw-resource-config__icon" />
                         <div>
                             <span>CPU</span> <span>{{ `${item.value.cpu}核` }}</span>
                         </div>
@@ -94,7 +94,7 @@
 
 <script>
 
-import { Select } from 'element-ui';
+import Select from 'element-ui/lib/select';
 import { getResourceTmplList } from '@sdx/utils/src/api/resource';
 
 export default {
@@ -187,38 +187,4 @@ export default {
     }
 };
 </script>
-<style rel="stylesheet/scss" lang="scss" scoped>
-    .sdxv-project-task-resource {
-       .title {
-            color: #909399;
-        }
-        .selectOption {
-            & > div {
-                width: 130px;
-                display: inline-block;
-                vertical-align: middle;
-                span:first-child {
-                    color:#606266;
-                    font-size: 13px;
-                    padding: 0 12px 0 6px;
-                }
-                span:last-child {
-                    color:#262B3E;
-                    font-size: 14px;
-                    font-weight:500;
-                }
-            }
-            .icon {
-                width: 4px;
-                height: 4px;
-                border-radius: 100%;
-                display: inline-block;
-                background: #457FF6;
-                vertical-align: middle;
-            }
-        }
-        .sdxw-file-select {
-            max-width: 560px;
-        }
-    }
-</style>
+

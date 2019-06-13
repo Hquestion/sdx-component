@@ -60,18 +60,18 @@
                 label="资源配置:"
             >
                 <i class="icon">*</i>
-                <ResourceConfig
+                <SdxwResourceConfig
                     v-if="!isGpuEnt"
                     v-model="cpuObj"
                     type="onlycpu"
                 />
 
                 <div v-if="isGpuEnt">
-                    <ResourceConfig
+                    <SdxwResourceConfig
                         v-model="cpuObj"
                         type="cpu"
                     />
-                    <ResourceConfig
+                    <SdxwResourceConfig
                         v-model="gpuObj"
                         type="gpu"
                     />
@@ -114,7 +114,8 @@ import FormItem from 'element-ui/lib/form-item';
 import Select from 'element-ui/lib/select';
 import SdxuInput from '@sdx/ui/components/input';
 import { getImageList } from '@sdx/utils/src/api/image';
-import ResourceConfig from './ResourceConfig';
+// import ResourceConfig from './ResourceConfig';
+import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { getProjectDetail, createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { cNameValidate } from '@sdx/utils/src/helper/validate';
 import DataSourceSelect from './DataSourceSelect';
@@ -126,7 +127,7 @@ export default {
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
-        ResourceConfig,
+        SdxwResourceConfig,
         DataSourceSelect
     },
     props: {

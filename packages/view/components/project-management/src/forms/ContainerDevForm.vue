@@ -61,18 +61,18 @@
                 label="资源配置:"
             > 
                 <i class="icon">*</i>
-                <ResourceConfig
+                <SdxwResourceConfig
                     v-if="!isGpuEnt"
                     v-model="cpuObj"
                     type="onlycpu"
                 />
 
                 <div v-if="isGpuEnt">
-                    <ResourceConfig
+                    <SdxwResourceConfig
                         v-model="cpuObj"
                         type="cpu"
                     />
-                    <ResourceConfig
+                    <SdxwResourceConfig
                         v-model="gpuObj"
                         type="gpu"
                     /> 
@@ -115,7 +115,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import {  createTask, updateTask, getDataSet, getProjectDetail} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { cNameValidate } from '@sdx/utils/src/helper/validate';
-import ResourceConfig from './ResourceConfig';
+import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import DataSourceSelect from './DataSourceSelect';
 export default {
     name: 'ContainerDevForm',
@@ -125,7 +125,7 @@ export default {
         [FormItem.name]: FormItem,
         [Select.name]: Select,
         SdxuInput,
-        ResourceConfig,
+        SdxwResourceConfig,
         DataSourceSelect
     },
     props: {

@@ -145,10 +145,10 @@ export default {
             const CPU = list.map(item => {
                 const { cpu, memory ,uuid} = item;
                 return {
-                    label: `${ cpu/1000}C   ${memory / (1024*1024*1024)}GB`,
+                    label: `${ Math.ceil(cpu/1000)}C   ${Math.ceil(memory / (1024*1024*1024))}GB`,
                     value: {
-                        cpu: cpu/1000,
-                        memory: memory / (1024*1024*1024),
+                        cpu: Math.ceil(cpu/1000),
+                        memory:  Math.ceil(memory / (1024*1024*1024)),
                         uuid: `${cpu/1000}-${ memory / (1024*1024*1024)}`
                     },
                     uuid: `${cpu/1000}-${ memory / (1024*1024*1024)}`
@@ -160,10 +160,10 @@ export default {
             const GPU = list.map(item => {
                 const { label, count ,uuid} = item;
                 return {
-                    label: `${label}   ${count}块`,
+                    label: `${label}   ${Math.ceil(count)}块`,
                     value: {
                         label,
-                        count,
+                        count: Math.ceil(count),
                         uuid: `${label}-${count}`
                     },
                     uuid: `${label}-${count}`

@@ -3,8 +3,8 @@ import httpService from '@sdx/utils/lib/http-service';
 import { COMPOSE_GATEWAY_BASE } from './config';
 
 const userProfilesApi = `${COMPOSE_GATEWAY_BASE}user-profiles/`;
-
 const groupProfilesApi = `${COMPOSE_GATEWAY_BASE}group-profiles/`;
+const roleProfilesApi = `${COMPOSE_GATEWAY_BASE}role-profiles/`;
 
 // 授权
 
@@ -16,6 +16,11 @@ export function getUserProfilesList(params) {
 export function getGroupProfilesList(params) {
     return httpService.get(groupProfilesApi, params);
 }
+// 角色授权列表
+export function getRoleProfilesList(params) {
+    return httpService.get(roleProfilesApi, params);
+}
+
 // export function createPermissions(params) {
 //     return httpService.post(permissionsApi, params);
 // }

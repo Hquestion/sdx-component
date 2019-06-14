@@ -71,7 +71,7 @@
                         >
                             <i
                                 class="sdx-icon sdx-icon-edit icon"
-                                @click="edit()"
+                                @click="edit(scope.row)"
                             />
                             <i
                                 class="sdx-icon sdx-icon-delete icon"
@@ -94,49 +94,36 @@
                 @confirm="dialogConfirm"
                 @cancel="dialogCancel"
                 class="sdxv-authorize-model"
+                @closed="closedDialog"
+                :title="`${is_update ? '编辑' : '新建'}授权`"
+                @open="openDialog"
             >
-                <div slot="title">
-                    新建授权
-                </div>
                 <div>
                     <el-form
                         label-position="right"
                         label-width="80px"
                         @submit.native.prevent
-                        ref="user"
+                        ref="permissionForm"
                     >
                         <el-form-item
                             prop="name"
                             label="授权对象"
                         >
-                            <el-select
+                            <SdxuUserAvatar
+                                v-if="is_update"
+                                :name="objName"
+                            />
+                            <SdxwUserPicker
                                 v-model="objValue"
-                                multiple
-                                filterable
-                                remote
-                                reserve-keyword
-                                placeholder="请输入关键词"
-                            >
-                                <el-option
-                                    v-for="optItem in options"
-                                    :key="optItem.label"
-                                    :label="optItem.label"
-                                    :value="optItem.label"
-                                >
-                                    <span style="float: left;  color: #606266">
-                                        {{ optItem.label }}
-                                    </span>
-                                    <span style="float: right; color: #4781F8; margin-right: 20px">
-                                        {{ optItem.value }}
-                                    </span>
-                                </el-option>
-                            </el-select>
+                                :type="objectType"
+                                v-else
+                            />
                         </el-form-item>
                         <el-form-item
                             label="权限设置"
                         >
                             <SdxuTransfer
-                                :data="data"
+                                :data="permissionData"
                                 :tags.sync="tags"
                                 :default-keys.sync="defaultKeys"
                                 :tree-node-key="treeNodeKey"
@@ -156,15 +143,20 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuTransfer from '@sdx/ui/components/transfer';
+import SdxuUserAvatar from '@sdx/ui/components/user-avatar';
 import Select from 'element-ui/lib/select';
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
-import {getUserProfilesList, getGroupProfilesList} from '@sdx/utils/src/api/manage';
-import {updataUser} from '@sdx/utils/src/api/user';
+import {getUserProfilesList, getGroupProfilesList, getRoleProfilesList} from '@sdx/utils/src/api/manage';
+import {updataUser, updateGroups} from '@sdx/utils/src/api/user';
+import {getPermissionList} from '@sdx/utils/src/api/permissions';
+import {updateRoles} from '@sdx/utils/src/api/rolemange';
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import TabRadio from '@sdx/ui/components/tab-radio';
 import FoldLabel from '@sdx/widget/components/fold-label';
+import {  paginate } from '@sdx/utils/src/helper/tool';
+import SdxwUserPicker from '@sdx/widget/components/user-picker';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -181,6 +173,8 @@ export default {
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
+        SdxwUserPicker,
+        SdxuUserAvatar
     },
     data() {
         return {
@@ -189,7 +183,7 @@ export default {
                 start: 1,
                 count: 10,
                 order: 'desc',
-                orderBy: 'updatedAt'
+                orderBy: 'createdAt'
             },
             objectType: 'user',
             tableData: [],
@@ -197,32 +191,14 @@ export default {
             pageSize: 10,
             total: 0,
             dialogVisible: false,
-            data:[{
-                unid: 1,
-                label: '一级 1',
-
-            }, {
-                unid: 2,
-                label: '一级 2',
-
-            }, {
-                unid: 3,
-                label: '一级 3',
-
-            }, {
-                unid: 41,
-                label: '一级 4',
-
-            }],
+            permissionData:[],
+            savePermissionData: [],
             tags: [],
             defaultKeys: [],
-            treeNodeKey: 'unid',
-            objValue: [],
-            options: [
-                {label: '角色1', value: 1},
-                {label: '群组', value: 2},
-                {label: '授权', value: 3}
-            ]
+            treeNodeKey: 'uuid',
+            objValue: {},
+            objName: '',
+            is_update: false
         };
     },
     props: {
@@ -230,69 +206,147 @@ export default {
     },
     created() {
         this.userList();
+        this.getPermissions();
     },
     methods: {
-        userList() {
-            getUserProfilesList(this.searchPermissions)
+        // 何种类型是否重置页码
+        changeObjectType(type,reset) {
+            if(type === 'user') {
+                this.userList(reset);
+            } else if (type === 'group') {
+                this.groupList(reset);
+            } else if (type === 'role') {
+                this.roleList(reset);
+            }
+        },
+        // 何种类型更新权限
+        updatePermissions(objectType, id, permissions, reset, orderBy) {
+            if(objectType === 'user') {
+                updataUser(id, {  permissions})
+                    .then(()=> {
+                        this.userList(reset, orderBy);
+                    });
+            } else if (objectType === 'group') {
+                updateGroups(id, {  permissions })
+                    .then(()=> {
+                        this.groupList(reset, orderBy);
+                    });
+            } else if(objectType === 'role') {
+                updateRoles(id, {  permissions })
+                    .then(()=> {
+                        this.roleList(reset, orderBy);
+                    });
+            }  
+        },
+        // 权限列表
+        getPermissions() {
+            let params = {
+                start: 1,
+                count: -1
+            };
+            getPermissionList(params)
+                .then(res => {
+                    this.permissionData  = res.permissions.map(item => ({
+                        uuid: item.uuid,
+                        label: item.name
+                    }));
+
+                    this.savePermissionData = JSON.parse(JSON.stringify(this.permissionData));
+                });
+        },
+        userList(reset, orderBy) {
+            if(orderBy) this.searchPermissions.orderBy = orderBy;
+            if (reset) this.current = 1;
+            let params={...this.searchPermissions, ...paginate(this.current, this.pageSize),
+                fullName: this.searchPermissions.name, username: this.searchPermissions.name};
+            delete  params.name;
+            getUserProfilesList(params)
                 .then(data => {
                     this.tableData = data.users;
                     this.total = data.total;
 
                 });
         },
-        groupList() {
-            getGroupProfilesList(this.searchPermissions)
+        groupList(reset,orderBy) {
+            if(orderBy) this.searchPermissions.orderBy = orderBy;
+            if (reset) this.current = 1;
+            let params={...this.searchPermissions, ...paginate(this.current, this.pageSize)};
+            getGroupProfilesList(params)
                 .then(data => {
                     this.tableData = data.groups;
                     this.total = data.total;
 
                 });
         },
+        roleList(reset,orderBy) {
+            if (reset) this.current = 1;
+            if(orderBy) this.searchPermissions.orderBy = orderBy;
+            let params={...this.searchPermissions, ...paginate(this.current, this.pageSize)};
+            getRoleProfilesList(params)
+                .then(data => {
+                    this.tableData = data.roles;
+                    this.total = data.total;
+
+                });
+        },
+        // tab切换
         switchTab(name) {
             this.searchPermissions.name = '';
-            if(name === 'user') {
-                this.userList();
-            } else if (name === 'group') {
-                this.groupList();
-            }
+            this.changeObjectType(name, true);
         },
-        currentChange() {
-
+        // 页码变换
+        currentChange(nVal) {
+            this.current = nVal;
+            this.changeObjectType(this.objectType, false);
         },
         addAuthorize() {
-
+            this.is_update = false;
             this.dialogVisible = true;
+            
         },
         dialogConfirm() {
-
+            let permissions = [];
+            permissions = this.tags.map(item => item.uuid);
+            this.updatePermissions(this.objectType, this.objValue.uuid, permissions, true, 'updatedAt');
         },
         dialogCancel() {
 
         },
+        openDialog() {
+            this.permissionData = this.savePermissionData;
+        },
+        closedDialog() {
+            this.permissionData = [];
+            this.defaultKeys = [];
+            this.tags = [];
+            this.objValue = {};
+        },
+        // 搜索name
         searchName() {
             this.searchPermissions = Object.assign({}, this.searchPermissions, {
                 name: this.searchPermissions.name,
                 start:  1
             });
-            this.roleList();
+            this.changeObjectType(this.objectType, true);
         },
-        edit() {
-
+        edit(row) {
+            if(this.objectType === 'user') {
+                this.objName = row.fullName;
+            } else {
+                this.objName = row.name;
+            }
+            this.is_update = true;
             this.dialogVisible = true;
-
+            this.defaultKeys = row && row.permissions.map(item => item.uuid);
+            window.console.log(row,this.defaultKeys, 'res');
         },
         remove(id, name) {
             MessageBox.confirm({
                 title: `确定删除授权${name}吗？`,
                 content: '删除后不可恢复哦',
                 type: 'alert'
-            }).then(() => {
-                if(this.objectType === 'user') {
-                    updataUser(id, {  permissions: []})
-                        .then(()=> {
-                            this.userList();
-                        });
-                }
+            }).then(() => { 
+                this.updatePermissions(this.objectType, id, []);
             }, () => {
 
             });

@@ -1,0 +1,7 @@
+@import './general-running.scss';
+
+@include block("running-info", $bem-namespace-view) {
+    .el-date-editor .el-range-separator {
+        width: 10%;
+    }
+}

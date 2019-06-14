@@ -1,0 +1,62 @@
+$--font-path: "~element-ui/lib/theme-chalk/fonts";
+
+@import "~element-ui/packages/theme-chalk/src/base";
+@import "~element-ui/packages/theme-chalk/src/message";
+@import "~element-ui/packages/theme-chalk/src/select";
+@import "~element-ui/packages/theme-chalk/src/switch";
+@import "~element-ui/packages/theme-chalk/src/scrollbar";
+@import "~element-ui/packages/theme-chalk/src/time-picker";
+@import "~@sdx/ui/theme/base";
+@import "~@sdx/ui/theme/dialog";
+@import "~@sdx/ui/theme/pagination";
+@import "~@sdx/ui/theme/button";
+@import "~@sdx/ui/theme/content-panel";
+@import "~@sdx/ui/theme/tab-radio";
+@import "~@sdx/ui/theme/icon-button";
+@import "~@sdx/ui/theme/input";
+@import "~@sdx/ui/theme/transfer";
+@import "~@sdx/ui/theme/message-box.scss";
+@import "~@sdx/widget/theme/base";
+@import "~@sdx/widget/theme/projectcard";
+@import "~@sdx/widget/theme/select-group-user";
+@import "~@sdx/widget/theme/search-layout";
+@import "./workflow-card.scss";
+@import "./create-workflow.scss";
+@import "./running-info.scss";
+
+@include block("skyflow", $bem-namespace-view) {
+    padding: 30px 20px 40px;
+    @include element("header") {
+        height: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(48, 49, 51, 1);
+        line-height: 16px;
+        padding-left: 10px;
+        border-left: 3px solid #4781F8;
+    }
+    @include element("tool") {
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .sdxw-search-layout__btn {
+            margin-bottom: 2px;
+        }
+        .sdxw-search-item {
+            margin-bottom: 0;
+        }
+    }
+    @include element("template-cards") {
+        height: 230px;
+        flex-wrap: nowrap;
+        padding: 8px 4px;
+    }
+    @include element("panel-footer") {
+        display: flex;
+        margin-top: 10px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+}

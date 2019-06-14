@@ -1,15 +1,15 @@
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
-@include block('project-card', $bem-namespace-widget) {
+@include block('workflow-card', $bem-namespace-view) {
     position: relative;
     box-sizing: border-box;
     padding: $sdx-padding;
-    width: $sdxw-project-card-width;
-    height: $sdxw-project-card-height;
-    background: $sdxw-project-card-background;
-    box-shadow: $sdxw-project-card-box-shadow;
+    width: $sdxv-workflow-card-width;
+    height: $sdxv-workflow-card-height;
+    background: $sdxv-workflow-card-background;
+    box-shadow: $sdxv-workflow-card-box-shadow;
     border-radius: $sdx-border-radius;
-    font-size: $sdxw-project-card-font-size;
+    font-size: $sdxv-workflow-card-font-size;
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
@@ -18,30 +18,30 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     @include element('header') {
         display: flex;
         justify-content: flex-start;
-        align-items: center;
-        height: $sdxw-project-card-type-icon-size;
+        align-items: flex-start;
+        height: $sdxv-workflow-card-type-icon-size;
         @include modifier('icon') {
             margin-right: 12px;
             &.sdx-icon {
-                font-size: $sdxw-project-card-type-icon-size;
+                font-size: $sdxv-workflow-card-type-icon-size;
             }
             @include state('self') {
-                color: $sdxw-project-card-self-color;
+                color: $sdxv-workflow-card-self-color;
             }
             @include state('cooperation') {
-                color: $sdxw-project-card-cooperation-color;
+                color: $sdxv-workflow-card-cooperation-color;
             }
             @include state('template') {
-                color: $sdxw-project-card-template-color;
+                color: $sdxv-workflow-card-template-color;
             }
         }
         @include modifier('name') {
-            height: $sdxw-project-card-type-icon-size;
+            height: $sdxv-workflow-card-type-icon-size;
             font-weight: bold;
             letter-spacing: 0;
             color: #262B3E;
-            line-height: $sdxw-project-card-type-icon-size / 2;
-            @include text-truncation($sdxw-project-card-name-show-line-count);
+            line-height: $sdxv-workflow-card-type-icon-size / 2;
+            @include text-truncation($sdxv-workflow-card-name-show-line-count);
         }
     }
 
@@ -62,18 +62,18 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             background: rgba(192,196,204,0.2);
             margin-right: 10px;
             border-radius: 8px;
-            font-size: $sdxw-project-card-operate-icon-size;
+            font-size: $sdxv-workflow-card-operate-icon-size;
         }
         & > span {
-            line-height: $sdxw-project-card-operate-icon-size;
-            font-size: $sdxw-project-card-font-size;
+            line-height: $sdxv-workflow-card-operate-icon-size;
+            font-size: $sdxv-workflow-card-font-size;
         }
     }
 
     @include element('footer') {
         i {
-            color: $sdxw-project-card-operation-base-color;
-            font-size: $sdxw-project-card-operate-icon-size;
+            color: $sdxv-workflow-card-operation-base-color;
+            font-size: $sdxv-workflow-card-operate-icon-size;
         }
         @include modifier('select') {
             display: flex;
@@ -81,9 +81,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             align-items: center;
             cursor: pointer;
             &:hover {
-                color: $sdxw-project-card-operation-hover-color;
+                color: $sdxv-workflow-card-operation-hover-color;
                 i {
-                    color: $sdxw-project-card-operation-hover-color;
+                    color: $sdxv-workflow-card-operation-hover-color;
                 }
             }
             i {
@@ -93,12 +93,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
         @include modifier('operation') {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
             i {
                 cursor: pointer;
                 &:hover {
-                    color: $sdxw-project-card-operation-hover-color;
+                    color: $sdxv-workflow-card-operation-hover-color;
                 }
             }
         }
@@ -112,33 +112,33 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         box-sizing: border-box;
         border-radius: $sdx-border-radius $sdx-border-radius 0px 0px;
         padding: $sdx-padding;
-        height: $sdxw-project-card-mask-height;
+        height: $sdxv-workflow-card-mask-height;
         @include modifier('text') {
-            height: $sdxw-project-card-mask-text-show-line-count * 21px;
+            height: $sdxv-workflow-card-mask-text-show-line-count * 21px;
             line-height: 21px;
             color: #fff;
-            @include text-truncation($sdxw-project-card-mask-text-show-line-count);
+            @include text-truncation($sdxv-workflow-card-mask-text-show-line-count);
         }
 
         @include state('self') {
-            background: $sdxw-project-card-self-detail;
+            background: $sdxv-workflow-card-self-detail;
         }
         @include state('cooperation') {
-            background: $sdxw-project-card-cooperation-detail;
+            background: $sdxv-workflow-card-cooperation-detail;
         }
         @include state('template') {
-            background: $sdxw-project-card-template-detail;
+            background: $sdxv-workflow-card-template-detail;
         }
     }
 }
 
-@include block('project-card-list', $bem-namespace-widget) {
+@include block('workflow-card-list', $bem-namespace-view) {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
     margin: -$sdx-margin / 2;
-    & /deep/ .sdxw-project-card {
+    & /deep/ .sdxv-workflow-card {
         margin: $sdx-margin / 2;
     }
 }

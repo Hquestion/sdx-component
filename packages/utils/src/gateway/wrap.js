@@ -415,7 +415,7 @@ class Context {
                 resultKeys[url] = result;
             }
             const collector = function(element, value) {
-                // add uuid into uuids when value is not empty
+                // only add uuid into uuids when value is not empty
                 if (value) {
                     uuids.add(value);
                 }

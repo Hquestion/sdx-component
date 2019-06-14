@@ -38,5 +38,59 @@ module.exports = [
         method: 'GET',
         functionName: 'userDetail.handler',
         filePath: './compose/userDetail.js'
-    }
+    },
+    {
+        apiId: '/fe-compose/api/v1/role-profiles',
+        method: 'GET',
+        functionName: 'roleProfiles.handler',
+        filePath: './compose/roleProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/image-profiles',
+        method: 'GET',
+        functionName: 'imageProfiles.handler',
+        filePath: './compose/imageProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/image-delete-batch',
+        method: 'DELETE',
+        functionName: 'imageDeleteBatch.handler',
+        filePath: './compose/imageDeleteBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/image-share-batch',
+        method: 'PATCH',
+        functionName: 'imageShareBatch.handler',
+        filePath: './compose/imageShareBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/task-profiles',
+        method: 'GET',
+        functionName: 'taskProfiles.handler',
+        filePath: './compose/taskProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/project-detail-batch',
+        method: 'GET',
+        functionName: 'projectDetailBatch.handler',
+        filePath: './compose/projectDetailBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/task-detail',
+        method: 'GET',
+        functionName: 'taskDetail.handler',
+        filePath: './compose/taskDetail.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/model-delete-batch',
+        method: 'DELETE',
+        functionName: 'modelDeleteBatch.handler',
+        filePath: './compose/modelDeleteBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/model-share-batch',
+        method: 'PATCH',
+        functionName: 'modelShareBatch.handler',
+        filePath: './compose/modelShareBatch.js'
+    },
 ];

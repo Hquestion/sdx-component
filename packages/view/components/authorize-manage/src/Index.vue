@@ -91,8 +91,6 @@
             </div>
             <sdxu-dialog
                 :visible.sync="dialogVisible"
-                @confirm="dialogConfirm"
-                @cancel="dialogCancel"
                 class="sdxv-authorize-model"
                 @closed="closedDialog"
                 :title="`${is_update ? '编辑' : '新建'}授权`"
@@ -104,9 +102,12 @@
                         label-width="80px"
                         @submit.native.prevent
                         ref="permissionForm"
+                        :rules="is_update ? null : rules"
+                        :model="dialogParams"
+                        :validate-on-rule-change="false"
                     >
                         <el-form-item
-                            prop="name"
+                            prop="objValue"
                             label="授权对象"
                         >
                             <SdxuUserAvatar
@@ -114,22 +115,41 @@
                                 :name="objName"
                             />
                             <SdxwUserPicker
-                                v-model="objValue"
+                                v-model="dialogParams.objValue"
                                 :type="objectType"
                                 v-else
                             />
                         </el-form-item>
                         <el-form-item
                             label="权限设置"
+                            prop="tags"
                         >
                             <SdxuTransfer
                                 :data="permissionData"
-                                :tags.sync="tags"
+                                :tags.sync="dialogParams.tags"
                                 :default-keys.sync="defaultKeys"
                                 :tree-node-key="treeNodeKey"
                             />
                         </el-form-item>
                     </el-form>
+                </div>
+                <div
+                    slot="footer"
+                >
+                    <SdxuButton
+                        type="default"
+                        size="small"
+                        @click="dialogCancel"
+                    >
+                        取消
+                    </SdxuButton>
+                    <SdxuButton
+                        type="primary"
+                        size="small"
+                        @click="dialogConfirm"
+                    >
+                        确认
+                    </SdxuButton>
                 </div>
             </sdxu-dialog>
         </SdxuContentPanel>
@@ -177,6 +197,13 @@ export default {
         SdxuUserAvatar
     },
     data() {
+        const objValueValidate = (rule, value, callback) => {
+            if(!value) {
+                callback(new Error('请输入授权对象'));
+            } else {
+                callback();
+            }
+        };
         return {
             searchPermissions: {
                 name: '',
@@ -193,16 +220,26 @@ export default {
             dialogVisible: false,
             permissionData:[],
             savePermissionData: [],
-            tags: [],
             defaultKeys: [],
             treeNodeKey: 'uuid',
-            objValue: {},
             objName: '',
-            is_update: false
+            is_update: false,
+            dialogParams: {
+                objValue: null,
+                tags: [],
+            },
+            updateUuid: '',
+            rules:  {
+                objValue: [
+                    { required: true, message: '请输入授权对象', trigger: 'blue'},
+                    { validator: objValueValidate, trigger: 'change' }
+                ],
+                tags: [
+                    { required: true, message: '请设置权限设置', trigger: 'blue' }
+                ],
+                
+            },
         };
-    },
-    props: {
-
     },
     created() {
         this.userList();
@@ -302,24 +339,35 @@ export default {
         addAuthorize() {
             this.is_update = false;
             this.dialogVisible = true;
-            
         },
         dialogConfirm() {
-            let permissions = [];
-            permissions = this.tags.map(item => item.uuid);
-            this.updatePermissions(this.objectType, this.objValue.uuid, permissions, true, 'updatedAt');
+            this.searchPermissions.name = '';
+            this.dialogVisible = true;
+            let [permissions, uuid] = [[], ''];
+            permissions = this.dialogParams.tags.map(item => item.uuid);
+            this.$refs.permissionForm.validate().then(() => {
+                if(this.is_update) {
+                    uuid = this.updateUuid;
+                    this.updatePermissions(this.objectType, uuid, permissions);
+                } else {
+                    uuid = this.dialogParams.objValue.uuid;
+                    this.updatePermissions(this.objectType, uuid, permissions, true, 'updatedAt');
+                }
+                this.dialogVisible = false;
+            });
         },
         dialogCancel() {
-
+            this.dialogVisible = false;
         },
         openDialog() {
             this.permissionData = this.savePermissionData;
+            this.$refs.permissionForm && this.$refs.permissionForm.clearValidate();
         },
         closedDialog() {
             this.permissionData = [];
             this.defaultKeys = [];
-            this.tags = [];
-            this.objValue = {};
+            this.dialogParams.tags = [];
+            this.dialogParams.objValue = null;
         },
         // 搜索name
         searchName() {
@@ -337,8 +385,8 @@ export default {
             }
             this.is_update = true;
             this.dialogVisible = true;
+            this.updateUuid = row.uuid;
             this.defaultKeys = row && row.permissions.map(item => item.uuid);
-            window.console.log(row,this.defaultKeys, 'res');
         },
         remove(id, name) {
             MessageBox.confirm({

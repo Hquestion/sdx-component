@@ -7,13 +7,10 @@
                 type="search"
                 v-model="filterText"
             />
-            <el-scrollbar
-                class="sdxu-transfer__scrollbar"
-                wrap-class="sdxu-transfer__wrap"
+            <div
+                class="sdxu-transfer__tree"
             >
-                <div
-                    class="sdxu-transfer__tree"
-                >
+                <SdxuScroll>
                     <el-tree
                         :data="data"
                         show-checkbox
@@ -24,8 +21,8 @@
                         :default-checked-keys="defaultKeys"
                         @check="checkChange"
                     />
-                </div>
-            </el-scrollbar>
+                </SdxuScroll>
+            </div>
             <div class="sdxu-transfer__moveall">
                 <SdxuButton
                     type="default"

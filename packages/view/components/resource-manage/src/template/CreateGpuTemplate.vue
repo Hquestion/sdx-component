@@ -3,7 +3,7 @@
         :visible.sync="dialogVisible"
         title="新建GPU模板"
         size="small"
-        @confirm="handleConfirm"
+        :confirm-handler="handleConfirm"
         @cancel="handleCancel"
         class="sdxv-gpu-template"
     >
@@ -18,12 +18,12 @@
                 prop="label"
                 required
             >
-                <el-select v-model="formData.name">
+                <el-select v-model="formData.label">
                     <el-option
                         v-for="(item, i) in GPUList"
                         :key="i"
                         :label="item.label"
-                        :value="item.value"
+                        :value="item.label"
                     />
                 </el-select>
             </el-form-item>
@@ -43,7 +43,7 @@
 
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
-import { createResourceTmpl } from '@sdx/utils/src/api/resource';
+import {createResourceTmpl, getGpuModels} from '@sdx/utils/src/api/resource';
 
 import { InputNumber, Form, FormItem, Select } from 'element-ui';
 
@@ -88,16 +88,13 @@ export default {
     },
     methods: {
         handleConfirm() {
-            this.$refs.form.validate(valid => {
-                if (valid) {
-                    const params = Object.assign({}, this.formData, { templateType: 'GPU'});
-                    createResourceTmpl(params).then(data => {
-                        this.$refs.form.resetFields();
-                        this.dialogVisible = false;
-                    });
-                } else {
-                    return false;
-                }
+            return this.$refs.form.validate().then(() => {
+                const params = Object.assign({}, this.formData, { templateType: 'GPU'});
+                return createResourceTmpl(params).then(() => {
+                    this.$refs.form.resetFields();
+                    this.$emit('refresh');
+                    this.dialogVisible = false;
+                });
             });
         },
         handleCancel() {
@@ -105,7 +102,9 @@ export default {
             this.dialogVisible = false;
         },
         fetchGpuList() {
-            // todo:
+            getGpuModels().then(res => {
+                this.GPUList = res;
+            });
         },
         validateLabel(rule, value, callback) {
             if (value === '') {

@@ -1,5 +1,5 @@
 import { isString } from './tool';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 // 标准时间转换时间距离现在多久
 export function  getDateDiff(dateTimeStamp) {
@@ -46,10 +46,10 @@ export function formatDate(date,fmt){
         'M+' : date.getMonth() +1,                    //月份
         'd+' : date.getDate(),                        //日
         'h+' : date.getHours(),                       //小时
-        'm+' : date.getMinutes(),                     //分  
+        'm+' : date.getMinutes(),                     //分
         's+' : date.getSeconds(),                     //秒
-        'q+':  Math.floor((date.getMonth() + 3) / 3), //季度   
-        'S':   date.getMilliseconds()                 //毫秒   
+        'q+':  Math.floor((date.getMonth() + 3) / 3), //季度
+        'S':   date.getMilliseconds()                 //毫秒
     };
     if(/(y+)/.test(fmt)){   //年份
         fmt = fmt.replace(RegExp.$1,(date.getFullYear()+'').substr(4-RegExp.$1.length));
@@ -63,7 +63,23 @@ export function formatDate(date,fmt){
     return fmt;
 }
 
-export function  byteFormatter(byte) {
+export function byteToGB(byte) {
+    return Math.floor(byte / Math.pow(1024, 3));
+}
+
+export function gbToByte(gb) {
+    return gb * Math.pow(1024, 3);
+}
+
+export function parseMilli(milli) {
+    return milli / 1000;
+}
+
+export function toMilli(num) {
+    return num * 1000;
+}
+
+export function byteFormatter(byte) {
     if (byte === 0) return '0 B';
     if (!byte) return '';
 
@@ -77,12 +93,32 @@ export function  byteFormatter(byte) {
 export function dateFormatter(date) {
     if(!date) return '';
     if (isString(date)) {
-        return moment(date).format('YYYY-MM-DD HH:mm:ss');
+        return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
     } else if (date instanceof Date) {
-        return moment(date).format('YYYY-MM-DD HH:mm:ss');
-    } else if (date instanceof moment) {
+        return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+    } else if (date instanceof dayjs) {
         return date.format('YYYY-MM-DD HH:mm:ss');
     } else {
         return date;
     }
+}
+
+export function secToHour(seconds) {
+    return seconds && Math.floor(seconds / (60 * 60)) || '';
+}
+
+export function hourToSec(hour) {
+    return hour && hour * 60 * 60;
+}
+
+export function secToDay(seconds) {
+    return seconds && Math.floor(seconds / (60 * 60 * 24));
+}
+
+export function dayToSec(day) {
+    return day && day * 60 * 60 * 24;
+}
+
+export function cpuTplFriendly(config) {
+    return config && `${parseMilli(config.cpu)}C ${byteToGB(config.memory)}GB` || '';
 }

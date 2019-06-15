@@ -1,12 +1,12 @@
 // 等调试完改
 import httpService from '@sdx/utils/lib/http-service';
 
-import { PROJECT_MANAGE_GATWAY_BASE } from './config';
+import { PROJECT_MANAGE_GATEWAY_BASE } from './config';
 
 const taskApi = '/api/v1/tasks/';
 
 export function getProjectList(params) {
-    return httpService.get(PROJECT_MANAGE_GATWAY_BASE, params);
+    return httpService.get(`${PROJECT_MANAGE_GATEWAY_BASE}projects`, params);
 }
 
 export function getTaskList(params) {
@@ -14,19 +14,19 @@ export function getTaskList(params) {
 }
 
 export function getProjectDetail(uuid) {
-    return httpService.get(PROJECT_MANAGE_GATWAY_BASE + uuid);
+    return httpService.get(`${PROJECT_MANAGE_GATEWAY_BASE}projects` + uuid);
 }
 
 export function createProject(params) {
-    return httpService.post(PROJECT_MANAGE_GATWAY_BASE, params);
+    return httpService.post(`${PROJECT_MANAGE_GATEWAY_BASE}projects`, params);
 }
 
 export function updateProject(uuid, params) {
-    return httpService.patch(PROJECT_MANAGE_GATWAY_BASE + uuid, params);
+    return httpService.patch(`${PROJECT_MANAGE_GATEWAY_BASE}projects` + uuid, params);
 }
 
 export function removeProject(uuid) {
-    return httpService.remove(PROJECT_MANAGE_GATWAY_BASE + uuid);
+    return httpService.remove(`${PROJECT_MANAGE_GATEWAY_BASE}projects` + uuid);
 }
 
 export function removeTask(uuid) {

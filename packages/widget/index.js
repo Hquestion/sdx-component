@@ -14,7 +14,7 @@ import TaskResourceList from './components/task-list';
 import TaskStartDialog from './components/task-start-dialog';
 import TaskStopDialog from './components/task-stop-dialog';
 import CodeEditor from './components/code-editor';
-
+import ResourceConfig from './components/resource-config';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
@@ -32,7 +32,8 @@ const SdxWidget = {
     LogDetail,
     TaskStartDialog,
     TaskStopDialog,
-    CodeEditor
+    CodeEditor,
+    ResourceConfig
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -51,7 +52,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     TaskStartDialog.install(vue);
     TaskStopDialog.install(vue);
     CodeEditor.install(vue);
-
+    ResourceConfig.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

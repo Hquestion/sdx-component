@@ -32,7 +32,7 @@ import SdxwFileSelectMain from '@sdx/widget/components/file-select/src/FileSelec
 // import SdxuLazyList from '@sdx/ui/components/lazy-list/src/LazyList';
 import SdxwCodeEditor from '@sdx/widget/components/code-editor/src/CodeEditor';
 
-import SdxuButton from '../../../packages/ui/components/button/src/Button';
+import SdxuButton from '@sdx/ui/components/button';
 
 export default {
     name: 'Home',

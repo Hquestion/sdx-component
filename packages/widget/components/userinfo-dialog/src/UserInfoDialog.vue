@@ -21,7 +21,7 @@
                     <span>{{ users.username }}</span>
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.fullname')">
-                    <span v-if="theme == 'user'">
+                    <span v-if="theme == 'user'" style="word-break: break-all;">
                         {{ users.fullName }}
                     </span>
                     <div
@@ -110,8 +110,12 @@ export default {
         visible (nVal) {
             this.dialogVisible = nVal;
         },
-        userInfoData(nVal) {
-            this.users = JSON.parse(JSON.stringify(nVal));
+        userInfoData:{
+            immediate: true,
+            deep: true,
+            handler(nVal) {
+                this.users = JSON.parse(JSON.stringify(nVal));
+            }
         },
         id(nVal) {
             this.getData();

@@ -15,7 +15,7 @@ export default {
     methods: {
         getOperationList(row, isMonitor = false) {
             const currentUser = getUser();
-            let isOwnerTask = currentUser.userId === row.ownerId;
+            let isOwnerTask =  currentUser && currentUser.userId === row.ownerId;
             let list = STATE_TYPE_OPERATION[row.state];
             if (isMonitor) {
                 list = list.filter(item => {

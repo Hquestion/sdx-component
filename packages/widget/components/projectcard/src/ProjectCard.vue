@@ -14,7 +14,7 @@
         <main class="sdxw-project-card__main">
             <div class="sdxw-project-card__info">
                 <i class="sdx-icon sdx-icon-user" />
-                <span>{{ meta.owner }}</span>
+                <span>{{ meta.owner && meta.owner.fullName }}</span>
             </div>
             <div class="sdxw-project-card__info">
                 <i class="sdx-icon sdx-icon-time" />

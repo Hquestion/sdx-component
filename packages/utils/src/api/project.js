@@ -1,15 +1,15 @@
 // 等调试完改
 import httpService from '@sdx/utils/lib/http-service';
 
-// 项目网关
-import { PROJECT_MANAGE_GATWAY_BASE } from './config';
+import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
 
-const projectApi = `${PROJECT_MANAGE_GATWAY_BASE}projects/`;
+const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects/`;
 
-const taskApi = `${PROJECT_MANAGE_GATWAY_BASE}tasks/`;
+const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks/`;
 
+// 聚合拿到project
 export function getProjectList(params) {
-    return httpService.get(projectApi, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles/`, params);
 }
 
 export function getTaskList(params) {

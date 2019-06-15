@@ -23,63 +23,76 @@
         <div>
             <sdxw-search-layout
                 @search="search"
+                @reset="resetSearch"
                 style="width: 100%"
             >
-                <sdxw-search-item label="执行方式：">
-                    <el-select
-                        v-model="runningMethod"
-                        placeholder="请选择"
-                    >
-                        <el-option
-                            label="全部"
-                            value="all"
+                <span v-if="listType === 'timer'">
+                    <sdxw-search-item label="任务名称：">
+                        <sdxu-input
+                            v-model="searchConditions.name"
+                            type="search"
+                            size="small"
+                            placeholder="请输入任务名称"
                         />
-                        <el-option
-                            label="手动"
-                            value="manual"
+                    </sdxw-search-item>
+                </span>
+                <span v-else>
+                    <sdxw-search-item label="执行方式：">
+                        <el-select
+                            v-model="searchConditions.executeKind"
+                            placeholder="请选择"
+                        >
+                            <el-option
+                                label="全部"
+                                value=""
+                            />
+                            <el-option
+                                label="手动"
+                                value="manual"
+                            />
+                            <el-option
+                                label="续跑"
+                                value="auto"
+                            />
+                        </el-select>
+                    </sdxw-search-item>
+                    <sdxw-search-item label="工作流状态：">
+                        <el-select
+                            v-model="searchConditions.state"
+                            placeholder="请选择"
+                        >
+                            <el-option
+                                v-for="(item, index) in stateList"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
+                    </sdxw-search-item>
+                    <sdxw-search-item label="执行时间：">
+                        <el-date-picker
+                            v-model="searchConditions.timeRange"
+                            type="datetimerange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            align="right"
                         />
-                        <el-option
-                            label="续跑"
-                            value="auto"
-                        />
-                    </el-select>
-                </sdxw-search-item>
-                <sdxw-search-item label="工作流状态：">
-                    <el-select
-                        v-model="runningMethod"
-                        placeholder="请选择"
-                    >
-                        <el-option
-                            label="全部"
-                            value="all"
-                        />
-                        <el-option
-                            label="手动"
-                            value="manual"
-                        />
-                        <el-option
-                            label="续跑"
-                            value="auto"
-                        />
-                    </el-select>
-                </sdxw-search-item>
-                <sdxw-search-item label="执行时间：">
-                    <el-time-picker
-                        is-range
-                        v-model="value1"
-                        range-separator="至"
-                        start-placeholder="开始时间"
-                        end-placeholder="结束时间"
-                        placeholder="选择时间范围"
-                    />
-                </sdxw-search-item>
+                    </sdxw-search-item>
+                </span>
             </sdxw-search-layout>
         </div>
         <div>
             <general-running
                 v-if="listType === 'general'"
+                ref="generalRunningTable"
+                :search-conditions="searchConditions"
             />
-            <timer-running v-else />
+            <timer-running
+                v-else
+                ref="timerRunningTable"
+                :search-conditions="searchConditions"
+            />
         </div>
     </sdxu-content-panel>
 </template>
@@ -89,7 +102,7 @@ import TabRadio from '@sdx/ui/components/tab-radio';
 import SearchLayout from  '@sdx/widget/components/search-layout';
 import Input from '@sdx/ui/components/input';
 import Select from 'element-ui/lib/select';
-import TimePicker from 'element-ui/lib/time-picker';
+import DatePicker from 'element-ui/lib/date-picker';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import { getSkyflowInfo } from '@sdx/utils/src/api/skyflow';
 import GeneralRunning from './GeneralRunning';
@@ -99,9 +112,45 @@ export default {
     data() {
         return {
             listType: 'general',
-            runningMethod: 'all',
             skyflowInfo: {},
-            value1: ''
+            searchConditions: {
+                name: '',
+                executeKind: '',
+                state: '',
+                executeStartDate: '',
+                executeEndDate: '',
+                timeRange: []
+            },
+            stateList: [
+                {
+                    value: '',
+                    label: '全部'
+                },
+                {
+                    value: 'running',
+                    label: '运行中'
+                },
+                {
+                    value: 'launching',
+                    label: '启动中'
+                },
+                {
+                    value: 'failed',
+                    label: '失败'
+                },
+                {
+                    value: 'stopping',
+                    label: '终止中'
+                },
+                {
+                    value: 'stopped',
+                    label: '已终止'
+                },
+                {
+                    value: 'succeeded',
+                    label: '成功'
+                }
+            ]
         };
     },
     components: {
@@ -112,7 +161,7 @@ export default {
         [Input.name]: Input,
         [Select.name]: Select,
         [ContentPanel.name]: ContentPanel,
-        [TimePicker.name]: TimePicker,
+        [DatePicker.name]: DatePicker,
         GeneralRunning,
         TimerRunning
     },
@@ -123,12 +172,39 @@ export default {
     },
     methods: {
         search() {
-
+            if (this.listType === 'general' && this.searchConditions.timeRange.length) {
+                this.searchConditions.executeStartDate = this.searchConditions.timeRange[0];
+                this.searchConditions.executeEndDate = this.searchConditions.timeRange[1];
+            }
+            this.$nextTick(() => {
+                this.updateTable();
+            });
+        },
+        resetSearch() {
+            this.searchConditions = {
+                name: '',
+                executeKind: '',
+                state: '',
+                executeStartDate: '',
+                executeEndDate: '',
+                timeRange: []
+            };
+            this.$nextTick(() => {
+                this.updateTable();
+            });
         },
         init() {
             getSkyflowInfo(this.$route.params.id).then(res => {
                 this.skyflowInfo = res;
             });
+        },
+        updateTable() {
+            if (this.listType === 'general') {
+                this.$refs.generalRunningTable.initList(true);
+            } else {
+                this.$refs.timerRunningTable.initList(true);
+            }
+
         }
     }
 };

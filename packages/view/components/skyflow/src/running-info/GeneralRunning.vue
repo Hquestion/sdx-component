@@ -114,7 +114,7 @@ import { paginate } from '@sdx/utils/src/helper/tool';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import CreateWorkflow from '../CreateWorkflow';
 export default {
-    name: '',
+    name: 'GeneralRunnning',
     data() {
         return {
             runningInfoList: [],
@@ -171,8 +171,9 @@ export default {
                 this.initList();
             }
         },
-        initList() {
+        initList(reset) {
             this.loading = true;
+            if (reset) this.current = 1;
             const params = {
                 ...this.searchConditions,
                 ...paginate(this.current, this.pageSize),

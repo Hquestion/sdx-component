@@ -30,12 +30,24 @@ export function getGeneralRunningInfo(params) {
     return httpService.get('/api/v1/skyflow_executes', params);
 }
 
+export function getTimerRunningInfo(params) {
+    return httpService.get('/api/v1/skyflow_crontabs', params);
+}
+
+export function getTimerSubRunningInfo(params) {
+    return httpService.get('/api/v1/skyflow_crontab_jobs', params);
+}
+
 export function shutdownGeneralRunningTask(uuid) {
     return httpService.post('/api/v1/skyflow_executes/' + uuid + '/stop');
 }
 
 export function removeGeneralRunningTask(uuid) {
     return httpService.remove('/api/v1/skyflow_executes/' + uuid);
+}
+
+export function removeTimerRunningSubTask(uuid) {
+    return httpService.remove('/api/v1/skyflow_crontab_jobs/' + uuid);
 }
 
 export default {
@@ -47,5 +59,8 @@ export default {
     getSkyflowInfo,
     getGeneralRunningInfo,
     shutdownGeneralRunningTask,
-    removeGeneralRunningTask
+    removeGeneralRunningTask,
+    getTimerRunningInfo,
+    getTimerSubRunningInfo,
+    removeTimerRunningSubTask
 };

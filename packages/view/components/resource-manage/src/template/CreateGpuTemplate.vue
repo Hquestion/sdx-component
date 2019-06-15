@@ -18,12 +18,12 @@
                 prop="label"
                 required
             >
-                <el-select v-model="formData.name">
+                <el-select v-model="formData.label">
                     <el-option
                         v-for="(item, i) in GPUList"
                         :key="i"
                         :label="item.label"
-                        :value="item.value"
+                        :value="item.label"
                     />
                 </el-select>
             </el-form-item>
@@ -43,7 +43,7 @@
 
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
-import { createResourceTmpl } from '@sdx/utils/src/api/resource';
+import {createResourceTmpl, getGpuModels} from '@sdx/utils/src/api/resource';
 
 import { InputNumber, Form, FormItem, Select } from 'element-ui';
 
@@ -102,7 +102,9 @@ export default {
             this.dialogVisible = false;
         },
         fetchGpuList() {
-            // todo:
+            getGpuModels().then(res => {
+                this.GPUList = res;
+            });
         },
         validateLabel(rule, value, callback) {
             if (value === '') {

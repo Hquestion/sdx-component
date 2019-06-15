@@ -7,6 +7,7 @@
         @select="handleSelect"
         :trigger-on-focus="false"
         :popper-append-to-body="false"
+        :popper-options="{forceAbsolute: true}"
         @blur="onBlur"
     >
         <template slot-scope="{ item }">

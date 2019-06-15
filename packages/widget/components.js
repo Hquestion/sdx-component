@@ -15,5 +15,6 @@ module.exports = {
     'task-list': './components/task-list/index.js',
     'task-start-dialog': './components/task-start-dialog/index.js',
     'task-stop-dialog': './components/task-stop-dialog/index.js',
-    'code-editor': './components/code-editor/index.js'
+    'code-editor': './components/code-editor/index.js',
+    'resource-config': './components/resource-config/index.js'
 };

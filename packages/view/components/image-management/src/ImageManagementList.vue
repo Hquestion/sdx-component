@@ -17,6 +17,7 @@
                 icon="sdx-icon-plus"
                 size="small"
                 @click="goFileBuild"
+                v-auth.image.button="'IMAGE_BUILDER:BUILD_BASIC'"
             >
                 基于文件构建
             </SdxuButton>
@@ -163,6 +164,7 @@ import { Menu, MenuItem, Select } from 'element-ui';
 import Input from '@sdx/ui/components/input';
 import ImageTaskTable from './image-task-table/Index';
 import SearchLayout from  '@sdx/widget/components/search-layout';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvImageManage',
     data() {
@@ -248,6 +250,9 @@ export default {
         ImageTaskTable,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
+    },
+    directives: {
+        auth
     },
     methods: {
         search() {

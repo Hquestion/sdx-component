@@ -18,5 +18,9 @@ module.exports = {
     'user-avatar': './components/user-avatar/index.js',
     'scroll': './components/scroll/index.js',
     'upload': './components/upload/index.js',
-    layout: './components/layout/index.js'
+    layout: './components/layout/index.js',
+    'lazy-list': './components/lazy-list/index.js',
+    'icon-button-group': './components/icon-button-group/index.js',
+    'radial-progress': './components/radial-progress/index.js',
+    'sort-button': './components/sort-button/index.js',
 };

@@ -1,0 +1,14 @@
+@include block('log-detail', $bem-namespace-widget) {
+    height: 60vh;
+
+    @include element('content') {
+        padding: $sdx-padding;
+        background-color: $sdx-log-background;
+        text-align: left;
+        border-radius:2px;
+        word-break: break-word;
+        white-space: pre-wrap;
+        font-size: $sdx-log-font-size;
+        line-height: $sdx-log-line-height;
+    }
+}

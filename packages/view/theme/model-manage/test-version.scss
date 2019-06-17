@@ -1,0 +1,17 @@
+@include block('test-version', $bem-namespace-view) {
+    @include element('get-token-button') {
+        width: 100%;
+        background-color: #F2F6FC!important;
+        .sdxu-button__main {
+            display: flex;
+            justify-content: space-between;
+            color: #303133;
+            i {
+                color: #9BA3AF;
+            }
+        }
+    }
+    @include element('input') {
+        margin: 10px 0;
+    }
+}

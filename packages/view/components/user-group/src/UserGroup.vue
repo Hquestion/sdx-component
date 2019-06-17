@@ -51,9 +51,12 @@
                 </el-table-column>
                 <el-table-column
                     label="创建时间"
-                    prop="createdAtStr"
                     sortable
-                />
+                >
+                    <template #default="{row}">
+                        {{ row.createdAt | dateFormatter }}
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作">
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--operation">
@@ -111,10 +114,11 @@ import SdxuIconButton from '@sdx/ui/components/icon-button';
 
 import { getGroups, deleteGroup } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
-import moment from 'moment';
+import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 
 export default {
     name: 'SdxvUserGroup',
+    mixins: [transformFilter],
     components: {
         CreateUserGroup,
         SdxuPanel,
@@ -156,9 +160,6 @@ export default {
         fetchData(currentPage) {
             currentPage && (this.page = currentPage);
             getGroups(this.querys).then(data => {
-                data.groups.forEach(item => {
-                    item.createdAtStr = moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss');
-                });
                 this.groups = data.groups;
                 this.total = data.total;
             });

@@ -1,19 +1,18 @@
 <template>
-    <div class="sdxu-table">
-        <el-table 
-            :data="data"
-            :row-class-name="tableRowClassName"
-            v-bind="$attrs"
-            v-on="$listeners"
-            style="width: 100%"
-        >
-            <slot />
-        </el-table>
-    </div>
+    <el-table
+        class="sdxu-table"
+        :data="data"
+        :row-class-name="tableRowClassName"
+        v-bind="$attrs"
+        v-on="$listeners"
+        style="width: 100%"
+    >
+        <slot />
+    </el-table>
 </template>
 
 <script>
-import { Table } from 'element-ui';
+import Table from './el-table';
 export default {
     name: 'SdxuTable',
     components: {

@@ -4,15 +4,93 @@
  */
 module.exports = [
     {
+        apiId: '/fe-compose/api/v1/login',
+        method: 'POST',
+        functionName: 'login.handler',
+        filePath: './compose/login.js'
+    },
+    {
         apiId: '/fe-compose/api/v1/user-profiles',
         method: 'GET',
-        functionName: 'user.userProfiles',
-        filePath: './compose/user.js'
+        functionName: 'userProfiles.handler',
+        filePath: './compose/userProfiles.js'
     },
     {
         apiId: '/fe-compose/api/v1/group-profiles',
         method: 'GET',
-        functionName: 'groupList.groupProfiles',
-        filePath: './compose/groupList.js'
-    }
+        functionName: 'groupProfiles.handler',
+        filePath: './compose/groupProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/resource-config-profiles',
+        method: 'GET',
+        functionName: 'resourceConfigProfiles.handler',
+        filePath: './compose/resourceConfigProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/project-profiles',
+        method: 'GET',
+        functionName: 'projectProfiles.handler',
+        filePath: './compose/projectProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/user-detail',
+        method: 'GET',
+        functionName: 'userDetail.handler',
+        filePath: './compose/userDetail.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/role-profiles',
+        method: 'GET',
+        functionName: 'roleProfiles.handler',
+        filePath: './compose/roleProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/image-profiles',
+        method: 'GET',
+        functionName: 'imageProfiles.handler',
+        filePath: './compose/imageProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/image-delete-batch',
+        method: 'DELETE',
+        functionName: 'imageDeleteBatch.handler',
+        filePath: './compose/imageDeleteBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/image-share-batch',
+        method: 'PATCH',
+        functionName: 'imageShareBatch.handler',
+        filePath: './compose/imageShareBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/task-profiles',
+        method: 'GET',
+        functionName: 'taskProfiles.handler',
+        filePath: './compose/taskProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/project-detail-batch',
+        method: 'GET',
+        functionName: 'projectDetailBatch.handler',
+        filePath: './compose/projectDetailBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/task-detail',
+        method: 'GET',
+        functionName: 'taskDetail.handler',
+        filePath: './compose/taskDetail.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/model-delete-batch',
+        method: 'DELETE',
+        functionName: 'modelDeleteBatch.handler',
+        filePath: './compose/modelDeleteBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/model-share-batch',
+        method: 'PATCH',
+        functionName: 'modelShareBatch.handler',
+        filePath: './compose/modelShareBatch.js'
+    },
 ];

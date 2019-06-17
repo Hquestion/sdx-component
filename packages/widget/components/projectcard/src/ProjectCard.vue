@@ -18,7 +18,7 @@
             </div>
             <div class="sdxw-project-card__info">
                 <i class="sdx-icon sdx-icon-time" />
-                <span>{{ meta.createdAt }}</span>
+                <span>{{ dateFormatter(meta.createdAt) }}</span>
             </div>
         </main>
         <footer class="sdxw-project-card__footer">
@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import {dateFormatter} from '@sdx/utils/src/helper/transform';
 export default {
     name: 'SdxwProjectCard',
     props: {
@@ -133,7 +134,8 @@ export default {
         },
         handleMouseout() {
             this.showMask = false;
-        }
+        },
+        dateFormatter
     }
 };
 </script>

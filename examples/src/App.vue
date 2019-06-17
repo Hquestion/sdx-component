@@ -26,7 +26,16 @@
                 task-log测试
             </router-link> |
             <router-link to="/demo/buildImageBasic">
-                基于文件构建
+                在线构建
+            </router-link> |
+            <router-link to="/demo/resource-monitor">
+                资源监控
+            </router-link> |
+            <router-link to="/demo/all-tasklist">
+                全部列表
+            </router-link> |
+            <router-link to="/demo/component-state">
+                组件状态
             </router-link> |
             <router-link to="/paginationTest">
                 分页测试页面
@@ -48,6 +57,9 @@
             </router-link> |
             <router-link to="/imageManageTest">
                 镜像管理测试
+            </router-link> |
+            <router-link to="/modelManageTest">
+                模型管理测试
             </router-link> |
         </div>
         <p class="page-link">

@@ -12,7 +12,8 @@ import Pagination from '@sdx/ui/components/pagination';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import Project from '@sdx/widget/components/projectcard';
 import MessageBox from '@sdx/ui/components/message-box';
-import { Select, Message } from 'element-ui';
+import Select from 'element-ui/lib/select';
+import Message from 'element-ui/lib/message';
 import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
 export default {
     name: 'SdxvProjectManagement',
@@ -39,9 +40,6 @@ export default {
         [Project.ProjectCard.name]: Project.ProjectCard,
         [Project.ProjectCardList.name]: Project.ProjectCardList,
         [ContentPanel.name]: ContentPanel
-    },
-    created() {
-        this.initList();
     },
     methods: {
         sortChange(sort) {

@@ -1,0 +1,34 @@
+@include block('resource-config', $bem-namespace-widget) {
+    @include element('title') {
+        color: $sdx-text-minor-color;
+    }
+    @include element('selectoption') {
+        color: $sdx-text-minor-color;
+        div {
+            width: $sdxw-resource-label-width;
+            display: inline-block;
+            vertical-align: middle;
+            span:first-child {
+                color:$sdx-text-regular-color;
+                font-size: $sdxw-resource-label-fontsize;
+                padding: 0 12px 0 6px;
+            }
+            span:last-child {
+                color: $sdxw-userInfoDialog-title-color;
+                font-size: $sdx-content-font-size;
+                font-weight:500;
+            }
+        }
+    }
+    @include element('icon') {
+        width: $sdw-resource-icon-size;
+        height: $sdw-resource-icon-size;
+        border-radius: 100%;
+        display: inline-block;
+        background: $sdw-resource-icon-color;
+        vertical-align: middle;
+    }
+    .sdxw-file-select {
+        max-width: $sdw-resource-file-select-width;
+    }
+}

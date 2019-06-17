@@ -32,12 +32,15 @@ module.exports = {
                         'ui/transfer',
                         'ui/content-panel',
                         'ui/iconbutton',
+                        'ui/iconbutton-group',
                         'ui/empty',
                         'ui/placeholder',
                         'ui/user-avatar',
                         'ui/layout',
                         'ui/scroll',
-                        'ui/lazyList'
+                        'ui/lazyList',
+                        'ui/radial-progress',
+                        'ui/sort-button'
                     ]
                 },
                 {
@@ -52,7 +55,14 @@ module.exports = {
                         'widget/user-picker',
                         'widget/search-layout',
                         'widget/fileselect',
-                        'widget/select-group-user'
+                        'widget/select-group-user',
+                        'widget/share-setting',
+                        'widget/log-detail',
+                        'widget/task-list',
+                        'widget/task-start-dialog',
+                        'widget/task-stop-dialog',
+                        'widget/code-edit',
+                        'widget/resource-config',
                     ]
                 },
                 {
@@ -65,7 +75,11 @@ module.exports = {
                         'view/resource-manage',
                         'view/privilege',
                         'view/project-management',
-                        'view/image-management'
+                        'view/image-management',
+                        'view/component-state',
+                        'view/resource-statistics',
+                        'view/task-management',
+                        'view/model-manage',
                     ]
                 },
                 {

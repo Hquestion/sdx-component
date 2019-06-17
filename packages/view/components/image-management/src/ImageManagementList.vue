@@ -54,9 +54,9 @@
                     @search="search"
                     @reset="reset"
                     style="width: 100%"
-                    lable-width="72px"
+                    label-width="72px"
                 >
-                    <sdxw-search-item lable="镜像名称:">
+                    <sdxw-search-item label="镜像名称:">
                         <sdxu-input
                             v-model="searchName"
                             type="search"
@@ -64,7 +64,7 @@
                             placeholder="请输入镜像名称"
                         />
                     </sdxw-search-item>
-                    <sdxw-search-item lable="镜像种类:">
+                    <sdxw-search-item label="镜像种类:">
                         <el-select
                             v-model="imageType"
                             size="medium"
@@ -82,7 +82,7 @@
                         </el-select>
                     </sdxw-search-item>
                     <sdxw-search-item
-                        lable="状态:"
+                        label="状态:"
                         v-show="projectType === 'task'"
                     >
                         <el-select
@@ -102,7 +102,7 @@
                         </el-select>
                     </sdxw-search-item>
                     <sdxw-search-item
-                        lable="构建方式:"
+                        label="构建方式:"
                         v-show="imageKind !== 'basic'"
                     >
                         <el-select

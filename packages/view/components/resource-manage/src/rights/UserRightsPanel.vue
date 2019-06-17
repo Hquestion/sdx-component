@@ -17,12 +17,16 @@
                 <SdxuTable :data="userRightsList">
                     <el-table-column
                         label="用户名"
-                        prop="userName"
+                        prop="user.fullName"
                     />
                     <el-table-column
                         label="授权时间"
                         prop="createTime"
-                    />
+                    >
+                        <template #default="{row}">
+                            {{ row.createdAt | dateFormatter }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <SdxuIconButton
@@ -69,6 +73,7 @@
             :visible.sync="editVisible"
             :meta="userRightsDetail"
             :readonly="isView"
+            @refresh="handleRefresh"
         />
     </SdxuContentPanel>
 </template>
@@ -82,11 +87,13 @@ import Pagination from '@sdx/ui/components/pagination';
 import Empty from '@sdx/ui/components/empty';
 import MessageBox from '@sdx/ui/components/message-box';
 
-import { getResourceConfigs } from '@sdx/utils/src/api/resource';
+import { getResourceConfigs, deleteResourceConfig } from '@sdx/utils/src/api/resource';
 import EditUserRule from './EditUserRule';
+import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 
 export default {
     name: 'UserRightsPanel',
+    mixins: [transformFilter],
     data() {
         return {
             userRightsList: [],
@@ -128,17 +135,17 @@ export default {
                 title: '确定要删除次用户特权吗？',
                 content: '删除后不可恢复'
             }).then(() => {
-                // todo
+                deleteResourceConfig(row.uuid).then(() => {
+                    this.init();
+                });
             });
         },
         init() {
             this.getList(this.pageIndex);
         },
         getList(pageIndex) {
-            const start = (pageIndex - 1) * this.pageSize;
-            return getResourceConfigs((start - 1) * this.pageSize, this.pageSize).then(res => {
-                // eslint-disable-next-line
-                console.log(res);
+            const start = (pageIndex - 1) * this.pageSize + 1;
+            return getResourceConfigs(start, this.pageSize).then(res => {
                 this.userRightsList = res.items || [];
                 this.total = res.total || 0;
             }, () => {
@@ -148,6 +155,9 @@ export default {
         },
         currentChange(val) {
             this.getList(val);
+        },
+        handleRefresh() {
+            this.getList(this.pageIndex);
         }
     },
     mounted() {

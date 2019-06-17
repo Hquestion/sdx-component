@@ -23,28 +23,31 @@
             </div>
         </template>
         <template #default>
-            <SdxuScroll>
-                <div class="sdxv-log-info__scroll">
-                    <p class="sdxv-log-info__content">
-                        {{ logContent }}
-                    </p>
-                </div>
-            </SdxuScroll>
+            <SdxwLogDetail
+                :content="logContent"
+                @scroll="handleScroll"
+                ref="log"
+            />
         </template>
     </SdxuContentPanel>
 </template>
 
 <script>
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
-import SdxuScroll from '@sdx/ui/components/scroll';
-import { Switch } from 'element-ui';
+import SdxwLogDetail from '@sdx/widget/components/log-detail';
+import ElSwitch from 'element-ui/lib/switch';
+import ElMessage from 'element-ui/lib/message';
+
+import { getLogs } from '@sdx/utils/src/api/log';
+
+const AUTO_PULL_INTERVAL = 3000;
 
 export default {
     name: 'SdxvLogInfo',
     components: {
         SdxuContentPanel,
-        SdxuScroll,
-        [Switch.name]: Switch
+        SdxwLogDetail,
+        ElSwitch
     },
     props: {
         podId: {
@@ -58,13 +61,124 @@ export default {
     },
     data() {
         return {
+            start: 0,
+            end: 0,
+            size: 100,
+            isLoading: false,
             autoPull: false,
             followScroll: false,
-            logContent: '2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 584\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_36_piece0 on spark-1556271805760-driver-svc.5cad639a96c490000d8bcb00.svc:7079 in memory (size: 494.8 KB, free: 1961.2 MB)\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_36_piece0 on 198.168.49.147:36463 in memory (size: 494.8 KB, free: 1961.2 MB)\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 597\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 641\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 579\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 619\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 601\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 637\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 627\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 647\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 592\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 610\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 613\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 656\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 624\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 639\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 675\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 608\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 616\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 677\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 606\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 660\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_38_piece0 on spark-1556271805760-driver-svc.5cad639a96c490000d8bcb00.svc:7079 in memory (size: 137.0 KB, free: 1961.3 MB)\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_38_piece0 on 198.168.49.147:36463 in memory (size: 137.0 KB, free: 1961.3 MB)\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 659\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 620\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 611\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 672\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 661\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 678\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 589\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 657\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 630\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 649\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 593\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 600\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 598\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 582\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 632\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 625\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 643\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 628\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 621\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 667\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 590\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 651\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 604\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_35_piece0 on spark-1556271805760-driver-svc.5cad639a96c490000d8bcb00.svc:7079 in memory (size: 30.4 KB, free: 1961.4 MB)\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_35_piece0 on 198.168.49.147:36463 in memory (size: 30.4 KB, free: 1961.4 MB)\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 662\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 666\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 673\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 581\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 650\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 629\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 646\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned shuffle 3\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 580\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 599\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 658\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 623\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 586\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 644\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 585\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 594\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 605\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 609\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 612\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 636\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 618\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 603\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 587\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 634\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 640\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 631\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 583\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 602\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 653\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 652\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 668\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 665\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 638\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 633\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 588\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 615\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 676\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 614\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 622\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 607\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 595\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 679\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 626\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 645\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 655\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 648\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_37_piece0 on spark-1556271805760-driver-svc.5cad639a96c490000d8bcb00.svc:7079 in memory (size: 30.4 KB, free: 1961.4 MB)\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_37_piece0 on 198.168.49.147:36463 in memory (size: 30.4 KB, free: 1961.4 MB)\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 596\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 669'
+            autoPullInstance: null,
+            logContent: ''
         };
     },
     methods: {
-        // todo: 获取日志 
+        async fetchData(offset, size) {
+            // 修正offset
+            offset = size < 0 ? offset + size : offset;
+            offset = offset < 0 ? 0 : offset;
+            this.isLoading = true;
+            try {
+                const data = await getLogs({
+                    podId: this.podId,
+                    start: offset,
+                    count: Math.abs(size)
+                });
+                let content = Array.isArray(data.contents) && data.contents.join('\r\n');
+                if (size < 0) {
+                    this.start = this.start - data.contents.length;
+                    this.logContent = content + (content ? '\r\n' : '') + this.logContent;
+                } else {
+                    this.end = this.end + data.contents.length;
+                    this.logContent += (content ? '\r\n' : '') + content;
+                }
+                this.isLoading = false;
+            } catch (e) {
+                this.isLoading = false;
+            }
+        },
+        getBackwardLog() {
+            if (this.isLoading) {
+                return;
+            }
+            if (this.start > 0) {
+                this.fetchData(this.start, -this.size);
+            } else {
+                ElMessage.warning({
+                    message: '已经到达日志头部'
+                });
+            }
+        },
+        async getForwardLog() {
+            if (this.isLoading) {
+                return;
+            }
+            await this.fetchData(this.end, this.size);
+            this.$nextTick().then(() => {
+                if (this.followScroll) {
+                    this.gotoBottom();
+                }
+            });
+        },
+        handleScroll({ scrollInfo, event }) {
+            let { scrollTop, warpHeight, offsetHeight } = scrollInfo;
+            if (this.method === 'tail' && scrollTop === 0 && event.deltaY < 0) {
+                // 向前获取日志
+                this.getBackwardLog();
+            } else if (scrollTop + warpHeight === offsetHeight && event.deltaY > 0) {
+                // 向后获取日志
+                this.getForwardLog();
+            }
+        },
+        gotoBottom() {
+            this.$refs.log.$refs.scroll.$refs.scroll.scrollTo({
+                y: '100%'
+            });
+        },
+        startAutoPull() {
+            if (this.autoPullInstance) {
+                return;
+            }
+            this.autoPullInstance = window.setInterval(() => {
+                this.getForwardLog();
+            }, AUTO_PULL_INTERVAL);
+        },
+        stopAutoPull() {
+            window.clearInterval(this.autoPullInstance);
+            this.autoPullInstance = null;
+        },
+        async getCodeInfo() {
+            // tail 查看时的初始化方法，先查询最新日志
+            // 获取日志长度
+            const data = await getLogs({
+                podId: this.podId,
+                start: 1,
+                count: Math.abs(1)
+            });
+            this.start = this.end = data.total;
+            this.getBackwardLog();
+        }
+    },
+    created() {
+        if (this.method === 'head') {
+            this.getForwardLog();
+        } else {
+            this.getCodeInfo();
+            if (this.followScroll) {
+                this.gotoBottom();
+            }
+            if (this.autoPull) {
+                this.startAutoPull();
+            }
+        }
+    },
+    watch: {
+        autoPull(nval) {
+            if (nval) {
+                this.startAutoPull();
+            } else {
+                this.stopAutoPull();
+            }
+        }
     }
 };
 </script>

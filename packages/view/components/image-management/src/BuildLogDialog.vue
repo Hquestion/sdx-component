@@ -6,20 +6,15 @@
         @open="handleOpenDialog"
         class="sdxv-build-log"
     >
-        <el-scrollbar
-            wrap-class="sdxv-build-log__scrollbar--wrap"
-            view-class="sdxv-build-log__scrollbar--list"
-        >
-            <p class="sdxv-build-log__content">
-                {{ logInfo }}
-            </p>
-        </el-scrollbar>
+        <SdxwLogDetail
+            :content="logInfo"
+        />
     </sdxu-dialog>
 </template>
 
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
-import { Scrollbar } from 'element-ui';
+import SdxwLogDetail from '@sdx/widget/components/log-detail';
 
 import { getImageBuildLog } from '@sdx/utils/src/api/image';
 
@@ -27,7 +22,7 @@ export default {
     name: 'SdxvBuildLogDialog',
     components: {
         SdxuDialog,
-        [Scrollbar.name]: Scrollbar
+        SdxwLogDetail
     },
     props: {
         visible: {
@@ -74,16 +69,4 @@ export default {
 </script>
 
 <style lang="scss">
-    .sdxv-build-log {
-        .sdxv-build-log__scrollbar--wrap {
-            height: 60vh;
-        }
-        .sdxv-build-log__content {
-            background: #F7F9FD;
-            padding: 20px;
-            white-space: pre-wrap;
-            word-break: break-all;
-            text-align: left;
-        }
-    }
 </style>

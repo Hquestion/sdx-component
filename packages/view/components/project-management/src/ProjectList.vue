@@ -38,37 +38,27 @@
                         </SdxuButton>
                     </template>
                 </sdxu-button>
-            </div>
-            <div class="sdxv-project-management__header--right">
-                <sdxu-input
-                    v-model="searchName"
-                    searchable
-                    type="search"
-                    size="small"
-                    placeholder="请输入项目名"
-                    style="margin-right: 10px;"
-                    @search="searchProject"
+                <SdxuSortButton
+                    title="按创建时间排序"
+                    @sortChange="sortChange"
+                    :order="order"
                 />
-                <el-select
-                    v-model="sort"
-                    placeholder="请选择排序方式"
-                    size="medium"
-                    @change="sortChange"
-                >
-                    <el-option
-                        label="按创建时间排序"
-                        value="created_time"
-                    />
-                    <el-option
-                        label="按创建人排序"
-                        value="created_by"
-                    />
-                    <el-option
-                        label="按项目类型排序"
-                        value="project_type"
-                    />
-                </el-select>
             </div>
+            <SdxwSearchLayout
+                @search="searchProject"
+                :block="false"
+                align="right"
+                style="flex: 1"
+            >
+                <SdxwSearchItem>
+                    <sdxu-input
+                        v-model="searchName"
+                        type="search"
+                        size="small"
+                        placeholder="请输入项目名"
+                    />
+                </SdxwSearchItem>
+            </SdxwSearchLayout>
         </div>
         <div
             class="sdxv-project-management__content"
@@ -81,15 +71,6 @@
                     :meta="item"
                 />
             </sdxw-project-card-list>
-        </div>
-        <div class="sdxv-project-management__footer">
-            <div />
-            <sdxu-pagination
-                :current-page.sync="current"
-                :page-size="pageSize"
-                :total="total"
-                @current-change="currentChange"
-            />
         </div>
         <sdxv-create-project
             :visible.sync="createProjectVisible"
@@ -109,16 +90,17 @@ import Pagination from '@sdx/ui/components/pagination';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import Project from '@sdx/widget/components/projectcard';
 import MessageBox from '@sdx/ui/components/message-box';
-import { Select, Message } from 'element-ui';
+import Select from 'element-ui/lib/select';
+import Message from 'element-ui/lib/message';
 import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
+import SortButton from '@sdx/ui/components/sort-button';
 export default {
     name: 'SdxvProjectList',
     data() {
         return {
             searchName: '',
-            sort: 'created_time',
+            order: 'desc',
             current: 1,
-            pageSize: 10,
             total: 0,
             createProjectVisible: false,
             createType: '',
@@ -135,14 +117,15 @@ export default {
         [CreateProject.name]: CreateProject,
         [Project.ProjectCard.name]: Project.ProjectCard,
         [Project.ProjectCardList.name]: Project.ProjectCardList,
-        [ContentPanel.name]: ContentPanel
+        [ContentPanel.name]: ContentPanel,
+        [SortButton.name]:SortButton
     },
     created() {
         this.initList();
     },
     methods: {
-        sortChange(sort) {
-            this.sort = sort;
+        sortChange(order) {
+            this.order =  order;
             this.initList();
         },
         searchProject() {
@@ -153,9 +136,9 @@ export default {
             const params = {
                 name: this.searchName,
                 start: this.current,
-                count: this.pageSize,
-                order: 'asc',
-                orderBy: ''
+                count: -1,
+                order: this.order,
+                orderBy: 'createdAt'
             };
             getProjectList(params).then(res => {
                 this.projectList = res.data.items;

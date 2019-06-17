@@ -6,6 +6,7 @@
             active ? 'is-active' : '',
             disable ? 'is-disable': ''
         ]"
+        v-show="visible"
         :title="title"
         @click.stop="handlerClick"
     >
@@ -14,10 +15,14 @@
 </template>
 
 <script>
+import emitter from '@sdx/utils/src/mixins/emitter';
 export default {
     name: 'SdxuIconButton',
+    mixins: [emitter],
     data() {
-        return {};
+        return {
+            visible: true
+        };
     },
     props: {
         icon: {
@@ -45,6 +50,16 @@ export default {
         handlerClick(e) {
             this.$emit('click', e);
         }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.dispatch('SdxuIconButtonGroup', 'sdxu.change');
+        });
+    },
+    beforeDestroy() {
+        this.$nextTick(() => {
+            this.dispatch('SdxuIconButtonGroup', 'sdxu.change');
+        });
     }
 };
 </script>

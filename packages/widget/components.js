@@ -9,5 +9,12 @@ module.exports = {
     'select-group-user': './components/projectcard/index.js',
     'file-select': './components/file-select/index.js',
     'search-layout': './components/search-layout/index.js',
-    'user-picker': './components/user-picker/index.js'
+    'user-picker': './components/user-picker/index.js',
+    'share-setting': './components/share-setting/index.js',
+    'log-detail': './components/log-detail/index.js',
+    'task-list': './components/task-list/index.js',
+    'task-start-dialog': './components/task-start-dialog/index.js',
+    'task-stop-dialog': './components/task-stop-dialog/index.js',
+    'code-editor': './components/code-editor/index.js',
+    'resource-config': './components/resource-config/index.js'
 };

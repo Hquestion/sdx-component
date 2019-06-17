@@ -61,10 +61,13 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="createdAtStr"
                     label="创建时间"
                     sortable
-                />
+                >
+                    <template #default="{row}">
+                        {{ row.createdAt | dateFormatter }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     label="操作"
                 >
@@ -140,9 +143,10 @@ import JoinGroup from './components/JoinGroup';
 import UserDetail from './components/UserDetail';
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import SearchLayout from '@sdx/widget/components/search-layout';
-import moment from 'moment';
+import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name:'SdxvUserManage',
+    mixins: [transformFilter],
     data () {
         return {
             id:'',
@@ -231,7 +235,6 @@ export default {
                     this.total = res.total;
                     res.users.forEach(item => {
                         item.roleNames = item.roles.map(item => item.name);
-                        item.createdAtStr = moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss');
                     });
                     this.tableData = res.users;
                 });

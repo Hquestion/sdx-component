@@ -52,11 +52,23 @@ $sdxw-project-card-mask-height: 128px !default;
 // searchLayout
 $sdxw-search-background: rgba(245,245,245,1) !default;
 $sdxw-search-padding-right: 280px !default;
-$sdxw-search-item-margin: 10px !default;
-$sdxw-search-item-top: -1px !default;
+$sdxw-search-item-margin: 6px !default;
+$sdxw-search-item-top: -2px !default;
 $sdxw-search-content-width: 300px !default;
 
 // file-select 文件选择
 $sdx-file-select-node-height: 32px !default;
 $sdx-file-select-node-font-size: 14px !default;
 $sdx-file-select-node-icon-text-margin: 8px !default;
+
+// log
+$sdx-log-background: #F4F8FD !default;
+$sdx-log-font-size: $sdx-content-font-size !default;
+$sdx-log-line-height: 26px !default;
+
+// resource-config
+$sdxw-resource-label-width: 130px !default;
+$sdxw-resource-label-fontsize: 13px !default;
+$sdw-resource-icon-color: #457FF6 !default;
+$sdw-resource-icon-size: 4px !default;
+$sdw-resource-file-select-width: 560px !default;

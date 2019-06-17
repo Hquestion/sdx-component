@@ -9,6 +9,7 @@
                 size="small"
                 dropdown-width="150px"
                 placement="right"
+                v-auth.resource.button="'TEMPLATE:WRITE'"
             >
                 新建模板
                 <template slot="dropdown">
@@ -27,7 +28,7 @@
                 </template>
             </SdxuButton>
         </div>
-        <div class="template-list">
+        <div class="template-list" v-auth.resource.button="'TEMPLATE:READ'">
             <ResourceCard
                 v-for="(item, index) in templateList"
                 :key="index"
@@ -56,6 +57,7 @@ import CreateCpuTemplate from './CreateCPUAndMemoryTemplate';
 import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 
 import {deleteResourceTmpl, getResourceTmplList} from '@sdx/utils/src/api/resource';
+import auth from '@sdx/widget/components/auth';
 
 export default {
     name: 'List',
@@ -99,6 +101,9 @@ export default {
                 this.templateList.splice(index, 1);
             });
         }
+    },
+    directives: {
+        auth
     },
     mounted() {
         this.init();

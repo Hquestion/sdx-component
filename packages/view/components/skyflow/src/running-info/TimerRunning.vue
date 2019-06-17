@@ -1,6 +1,6 @@
 <template>
     <div
-        class="sdxv-general-running"
+        class="sdxv-timer-running"
         v-loading="loading"
     >
         <sdxu-table
@@ -16,6 +16,7 @@
                         :data="scope.row.subRunningInfoList"
                         @sort-change="subSortChange"
                         v-loading="scope.row.subLoading"
+                        class="sdxv-timer-running__expand-table"
                     >
                         <el-table-column
                             label="序号"
@@ -66,7 +67,7 @@
                             </template>
                         </el-table-column>
                     </sdxu-table>
-                    <div class="sdxv-general-running__footer">
+                    <div class="sdxv-timer-running__footer">
                         <div />
                         <sdxu-pagination
                             :current-page.sync="scope.row.subCurrent"
@@ -151,7 +152,7 @@
                 </template>
             </el-table-column>
         </sdxu-table>
-        <div class="sdxv-general-running__footer">
+        <div class="sdxv-timer-running__footer">
             <div />
             <sdxu-pagination
                 :current-page.sync="current"
@@ -166,6 +167,12 @@
             @close="createWorkflowClose"
             :data="editingWorkflow"
             is-copying
+        />
+        <timer-running-task-edit
+            :visible.sync="editDialogVisible"
+            v-if="editDialogVisible"
+            :data="editingTask"
+            @close="editDialogClose"
         />
     </div>
 </template>
@@ -182,6 +189,7 @@ import { getTimerRunningInfo, getSkyflowInfo, getTimerSubRunningInfo, startTimer
 import { paginate } from '@sdx/utils/src/helper/tool';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import CreateWorkflow from '../CreateWorkflow';
+import TimerRunningTaskEdit from './TimerRunningTaskEdit';
 export default {
     name: 'TimerRunning',
     data() {
@@ -197,9 +205,11 @@ export default {
             pageSize: 10,
             isOwnWorkflow: false,
             createWorkflowVisible: false,
+            editDialogVisible: false,
             editingWorkflow: null,
             skyflowInfo: null,
-            expandingRow: null
+            expandingRow: null,
+            editingTask: null
         };
     },
     components: {
@@ -208,7 +218,8 @@ export default {
         SdxuIconButton,
         [Pagination.name]: Pagination,
         [CreateWorkflow.name]: CreateWorkflow,
-        SdxuIconButtonGroup
+        SdxuIconButtonGroup,
+        TimerRunningTaskEdit
     },
     props: {
         searchConditions: {
@@ -240,6 +251,10 @@ export default {
         },
         createWorkflowClose() {
             this.editingWorkflow = null;
+        },
+        editDialogClose(needRefresh) {
+            if (needRefresh) this.initList();
+            this.editingTask = null;
         },
         subSortChange(sort) {
             this.subOrderBy = 'executeTime';
@@ -394,6 +409,8 @@ export default {
                 case 'canvas':
                     break;
                 case 'edit':
+                    this.editDialogVisible = true;
+                    this.editingTask = row;
                     break;
                 case 'copy':
                     this.createWorkflowVisible = true;

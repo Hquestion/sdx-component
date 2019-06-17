@@ -80,6 +80,7 @@ module.exports = {
                         'view/resource-statistics',
                         'view/task-management',
                         'view/model-manage',
+                        'view/skyflow',
                     ]
                 },
                 {

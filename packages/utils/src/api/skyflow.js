@@ -62,6 +62,10 @@ export function startTimerRunningTask(uuid) {
     return httpService.post('/api/v1/skyflow_crontabs/' + uuid + '/activate');
 }
 
+export function updateTimerRunningTask(uuid, params) {
+    return httpService.patch('/api/v1/skyflow_crontabs/' + uuid, params);
+}
+
 export default {
     getSkyflowList,
     getSkyflowTemplates,
@@ -76,5 +80,6 @@ export default {
     getTimerSubRunningInfo,
     removeTimerRunningSubTask,
     removeTimerRunningTask,
-    startTimerRunningTask
+    startTimerRunningTask,
+    updateTimerRunningTask
 };

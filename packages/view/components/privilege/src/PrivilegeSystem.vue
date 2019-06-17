@@ -114,12 +114,12 @@ export default {
                 this.total = data.total;
                 this.loading = false;
             }).catch(err => {
-                window.console.error(err);
+                // todo: 
             });
         },
         splitKey(key, i) {
             const list = key.split(':');
-            return list[i];
+            return list[i] || '';
         }, 
         handleChangePage(page) {
             this.page = page;

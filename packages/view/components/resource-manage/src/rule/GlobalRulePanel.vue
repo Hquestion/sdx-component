@@ -9,6 +9,7 @@
             slot="right"
         >
             <sdxu-icon-button
+                v-auth.resource.button="'CONFIG:WRITE'"
                 class="iconfont sdx-icon-edit"
                 :active="!isReadonly"
                 @click="handleEdit"
@@ -42,6 +43,7 @@ import ContentPanel from '@sdx/ui/components/content-panel';
 import Button from '@sdx/ui/components/button';
 import IconButton from '@sdx/ui/components/icon-button';
 import RuleForm from './RuleForm';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'GlobalRulePanel',
     data() {
@@ -49,6 +51,7 @@ export default {
             mode: 'read'
         };
     },
+    directives: {auth},
     components: {
         [ContentPanel.name]: ContentPanel,
         [Button.name]: Button,

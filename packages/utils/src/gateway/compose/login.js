@@ -39,5 +39,19 @@ export let handler = wrap(function(ctx, request) {
         }
     );
 
+    const permissionIds = new Set();
+    authToken.user.permissions.forEach(permission => permissionIds.add(permission.uuid));
+    authToken.user.roles.forEach(role => {
+        role.permissions.forEach(permission => permissionIds.add(permission));
+    });
+    authToken.user.groups.forEach(group => {
+        group.permissions.forEach(permission => permissionIds.add(permission));
+    });
+
+    ctx.info('all permission uuids:' + JSON.stringify([...permissionIds]));
+    const allPermissions = ctx.sendRequest(ctx.createGetRequest('http://tyk-gateway/user-manager/api/v1/permissions', {uuids: [...permissionIds]}));
+
+    authToken.user.allPermissions = allPermissions.permissions;
+
     return ctx.createResponse(200, authToken);
 });

@@ -355,7 +355,9 @@ export default {
                     this.shareForm.groups = this.shareForm.groups || [];
                     break;
                 case 'extend':
-                    this.$router.push({ name: 'basicbuild' });
+                    this.$router.push({
+                        path: `basicbuild/${row.uuid}`
+                    });
                     break;
                 case 'remove':
                     MessageBox({

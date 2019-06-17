@@ -127,10 +127,6 @@ export default {
         imageId: {
             type: String,
             default: ''
-        },
-        builderId: {
-            type: String,
-            default: ''
         }
     },
     data() {

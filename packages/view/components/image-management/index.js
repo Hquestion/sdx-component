@@ -27,12 +27,13 @@ const routeCfg = [
                 }
             },
             {
-                path: 'basicbuild',
+                path: 'basicbuild/:imageId',
                 name:'basicbuild',
                 component:  ImageBasicBuild,
                 meta: {
                     breadcrumb: '基于此构建',
-                }
+                },
+                props: true
             }]
     }
 ];

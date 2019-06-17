@@ -1,4 +1,5 @@
-import httpService from '../http-service';
+// import httpService from '../http-service';
+import httpService from '@sdx/utils/lib/http-service';
 import { USER_SERVICE_GATEWAY_BASE } from './config';
 
 const rolesApi = `${USER_SERVICE_GATEWAY_BASE}roles/`;
@@ -13,7 +14,7 @@ export function createRoles(params) {
 }
 
 export function updateRoles(uuid, params) {
-    return httpService.put(rolesApi + uuid, params);
+    return httpService.patch(rolesApi + uuid, params);
 }
 
 export function getRolesDetail(uuid) {

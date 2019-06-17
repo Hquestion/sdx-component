@@ -2,9 +2,9 @@
     <div class="sdxv-source-manage-home">
         <ResourceTemplate />
         <PlaceholderBlock />
-        <GlobalRulePanel />
-        <PlaceholderBlock />
-        <UserRightsPanel />
+        <GlobalRulePanel v-auth.resource.button="'GLOBAL-STATE:READ'" />
+        <PlaceholderBlock v-auth.resource.button="'GLOBAL-STATE:READ'" />
+        <UserRightsPanel v-auth.resource.button="'USER-STATE:READ'" />
     </div>
 </template>
 
@@ -13,12 +13,16 @@ import ResourceTemplate from './template/List';
 import GlobalRulePanel from './rule/GlobalRulePanel';
 import UserRightsPanel from './rights/UserRightsPanel';
 import PlaceholderBlock from '@sdx/ui/components/placeholder-block';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvSourceManageHome',
     data() {
         return {
 
         };
+    },
+    directives: {
+        auth
     },
     components: {
         ResourceTemplate,

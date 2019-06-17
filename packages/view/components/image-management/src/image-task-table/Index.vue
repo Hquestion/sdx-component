@@ -41,7 +41,13 @@
                 prop="createdAt"
                 label="创建时间"
                 sortable="custom"
-            />
+            >
+                <template
+                    slot-scope="scope"
+                >
+                    {{ dateFormatter(scope.row.createdAt) }}
+                </template>
+            </el-table-column>
             <el-table-column
                 style="width: 15%"
                 label="操作"
@@ -101,6 +107,7 @@ import FoldLabel from '@sdx/widget/components/fold-label';
 import {imageTaskLabel} from '@sdx/utils/src/const/relation';
 import PackageDetailCompareDialog from '../PackageDetailCompareDialog';
 import BuildLogDialog from '../BuildLogDialog';
+import {dateFormatter} from '@sdx/utils/src/helper/transform';
 export default {
     name: 'ImageTaskTable',
     data() {
@@ -149,6 +156,7 @@ export default {
         BuildLogDialog
     },
     methods: {
+        dateFormatter,
         taskList(params) {
             removeBlankAttr(params);
             getImageTaskList(params)

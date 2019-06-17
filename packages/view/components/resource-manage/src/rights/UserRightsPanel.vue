@@ -9,6 +9,7 @@
             slot="right"
             v-if="userRightsList.length > 0"
             @click="addRights"
+            v-auth.resource.button="'CONFIG:WRITE'"
         >
             新建特权
         </SdxuButton>
@@ -34,10 +35,12 @@
                                 @click="view(scope)"
                             />
                             <SdxuIconButton
+                                v-auth.resource.button="'CONFIG:WRITE'"
                                 icon="sdx-icon sdx-icon-edit"
                                 @click="edit(scope)"
                             />
                             <SdxuIconButton
+                                v-auth.resource.button="'CONFIG:WRITE'"
                                 icon="sdx-icon sdx-icon-delete"
                                 @click="del(scope)"
                             />
@@ -62,6 +65,7 @@
                             icon="sdx-icon-plus"
                             size="small"
                             @click="addRights"
+                            v-auth.resource.button="'CONFIG:WRITE'"
                         >
                             新建特权
                         </SdxuButton>
@@ -90,10 +94,12 @@ import MessageBox from '@sdx/ui/components/message-box';
 import { getResourceConfigs, deleteResourceConfig } from '@sdx/utils/src/api/resource';
 import EditUserRule from './EditUserRule';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+import auth from '@sdx/widget/components/auth';
 
 export default {
     name: 'UserRightsPanel',
     mixins: [transformFilter],
+    directives: {auth},
     data() {
         return {
             userRightsList: [],

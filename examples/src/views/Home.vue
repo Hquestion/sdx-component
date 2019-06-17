@@ -15,7 +15,7 @@
         <!--                <div >{{data.name}}</div>-->
         <!--            </template>-->
         <!--        </SdxuLazyList>-->
-        <SdxuButton @click="editorVisible = true">打开代码编辑器</SdxuButton>
+        <SdxuButton @click="editorVisible = true" v-auth.user.button="authFn" auth="USER:ACCESS">打开代码编辑器</SdxuButton>
         <SdxwCodeEditor
             :visible.sync="editorVisible"
             title="组件代码编辑"
@@ -79,6 +79,10 @@ export default {
         },
         handleSave() {
             return Promise.resolve();
+        },
+        authFn() {
+            console.log(arguments);
+            return this.authFn;
         }
     }
 };

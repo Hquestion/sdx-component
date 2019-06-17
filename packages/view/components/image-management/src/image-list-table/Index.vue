@@ -69,11 +69,14 @@
                 v-if="imageKind === 'all' || imageKind === 'otherShare'"
             />
             <el-table-column
-                prop="createdAt"
                 key="createdAt"
                 label="创建时间"
                 sortable="custom"
-            />
+            >
+                <template slot-scope="scope">
+                    {{ scope.row.createdAt | dateFormatter }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="操作"
             >
@@ -136,11 +139,14 @@ import Dialog from '@sdx/ui/components/dialog';
 import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { getImageList, removeImage, updateImage, updateGroupImages } from '@sdx/utils/src/api/image';
+import { removeBlankAttr, paginate } from '@sdx/utils/src/helper/tool';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import ImageDetail from './PackageDetailDialog';
 import { Message } from 'element-ui';
 import ShareSetting from '@sdx/widget/components/share-setting';
+import Filters from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name: 'ImageListTable',
     data() {
@@ -206,6 +212,12 @@ export default {
     },
     created() {
         this.initImageList();
+    },
+    mixins: [Filters],
+    computed: {
+        currentUser() {
+            return getUser();
+        }
     },
     methods: {
         share() {
@@ -284,7 +296,6 @@ export default {
                 this.dialogVisible = false;
                 // });
             }
-
         },
         initImageList(reset) {
             this.loading = true;
@@ -295,21 +306,25 @@ export default {
                 shareType: this.shareType,
                 buildType: this.buildType,
                 taskType: this.taskType,
-                start: this.current,
-                count: this.pageSize,
+                ...paginate(this.current, this.pageSize),
                 order: this.order,
                 orderBy: this.orderBy
             };
+            removeBlankAttr(params);
             if (this.isOwner) {
                 if (this.isOwner === 'true') {
-                    params.ownerId = '';  // TODO: 有用户ID时传入用户ID
+                    params.ownerId = this.currentUser.userId || '';
                 } else {
-                    params.excludeOwnerId = ''; // TODO: 有用户ID时传入用户ID
+                    params.excludeOwnerId = this.currentUser.userId || '';
                 }
             }
             getImageList(params).then((res) => {
                 this.imageList = res.data;
                 this.total = res.total;
+                this.loading = false;
+            }, () => {
+                this.imageList = [];
+                this.total = 0;
                 this.loading = false;
             });
         },
@@ -336,6 +351,8 @@ export default {
                     this.dialogVisible = true;
                     this.editingImage = row;
                     Object.assign(this.shareForm, row);
+                    this.shareForm.users = this.shareForm.users || [];
+                    this.shareForm.groups = this.shareForm.groups || [];
                     break;
                 case 'extend':
                     this.$router.push({ name: 'basicbuild' });
@@ -363,6 +380,3 @@ export default {
     }
 };
 </script>
-
-<style scoped lang="scss">
-</style>

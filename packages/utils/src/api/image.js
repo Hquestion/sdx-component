@@ -1,8 +1,11 @@
-import httpService from '../http-service';
+// import httpService from '../http-service';
+import httpService from '@sdx/utils/lib/http-service';
+import { IMAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
 
-const imageApi = '/api/v1/images/';
+const imageApi = `${IMAGE_GATEWAY_BASE}images/`;
 
-const imageTaskApi = '/api/v1/image_builders/';
+const imageTaskApi = `${IMAGE_GATEWAY_BASE}image_builders/`;
+
 // 获取构建任务列表
 export function getImageTaskList(params) {
     return httpService.get(imageTaskApi, params);
@@ -29,7 +32,6 @@ export function buildTar(params) {
 }
 
 // 基于 dockerfile 文件新建镜像任务
-
 export function buildImagefile(params) {
     return httpService.post(`${imageTaskApi}build-imagefile/`, params);
 }
@@ -40,7 +42,7 @@ export function getImageBuildLog(uuid) {
 }
 
 export function getImageList(params) {
-    return httpService.get(imageApi, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}image-profiles`, params);
 }
 
 export function updateImage(uuid, params) {
@@ -66,7 +68,7 @@ export function getPackagesByUuid(uuid, params) {
     return httpService.get(imageApi + uuid + '/packages', params);
 }
 
-// 获取镜像信息
+// 获取镜像信息
 export function getImage(uuid) {
     return httpService.get(imageApi + uuid);
 }

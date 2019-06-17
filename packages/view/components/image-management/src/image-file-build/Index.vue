@@ -7,10 +7,16 @@
                 v-model="radio"
                 @change="radioChange"
             >
-                <el-radio label="tar">
+                <el-radio
+                    label="tar"
+                    v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'"
+                >
                     基于tar文件构建
                 </el-radio>
-                <el-radio label="DockerFile">
+                <el-radio
+                    label="DockerFile"
+                    v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'"
+                >
                     基于DockerFile文件构建
                 </el-radio>
             </el-radio-group>
@@ -112,6 +118,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import {imageNameValidate, imageVersionValidate} from '@sdx/utils/src/helper/validate';
 import FileSelect from '@sdx/widget/components/file-select';
 import Iconinfo from './Iconinfo';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: '',
     data() {
@@ -175,6 +182,9 @@ export default {
         SdxuButton,
         [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
         Iconinfo
+    },
+    directives: {
+        auth
     },
     methods: {
         radioChange() {

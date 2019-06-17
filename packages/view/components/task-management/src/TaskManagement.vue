@@ -1,6 +1,6 @@
 <template>
     <SdxuContentPanel title="任务管理">
-        <SdxwTaskList :owner-id="currentUser.userId" />
+        <SdxwTaskList :owner-id="currentUser && currentUser.userId || ''" />
     </SdxuContentPanel>
 </template>
 

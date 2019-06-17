@@ -4,13 +4,14 @@
             :data="userResourceList"
             @sort-change="handleSortChange"
             :default-sort="defaultSort"
+            v-loading="loading"
         >
             <el-table-column
-                prop="user.name"
+                prop="owner.name"
                 label="用户名"
             />
             <el-table-column
-                prop="createdAt"
+                prop="owner.createdAt"
                 label="创建时间"
             />
             <el-table-column
@@ -18,6 +19,7 @@
                 label="已使用CPU（核）"
                 sortable="custom"
                 :sort-orders="sortOrders"
+                min-width="82px"
             >
                 <template #default="{ row }">
                     {{ row.quota.cpu / 1000 }}
@@ -28,6 +30,7 @@
                 label="已使用内存（GB）"
                 sortable="custom"
                 :sort-orders="sortOrders"
+                min-width="85px"
             >
                 <template #default="{ row }">
                     {{ row.quota.memory / (1024 * 1024 * 1024) }}
@@ -38,10 +41,20 @@
                 label="已使用GPU（块）"
                 sortable="custom"
                 :sort-orders="sortOrders"
+                min-width="82px"
             >
                 <template #default="{ row }">
-                    <span v-if="row.quota.gpu > 0">{{ `${row.quota.gpuModel}:${row.quota.gpu}` }}</span>
-                    <span v-else>0</span>
+                    <div v-if="hasGpu(row.quota.gpus)">
+                        <div
+                            v-for="(value, key) in row.quota.gpus"
+                            :key="key"
+                        >
+                            {{ `${key}: ${value}` }}
+                        </div>
+                    </div>
+                    <div v-else>
+                        0
+                    </div>
                 </template>
             </el-table-column>
         </SdxuTable>
@@ -76,19 +89,25 @@ export default {
                 order: 'desc',
                 orderBy: 'CPU',
                 groupBy: 'USER'
-            }
+            },
+            loading: false
         };
     },
     methods: {
         fetchData() {
+            this.loading = true;
             getTaskList(this.queryParams).then(data => {
-                this.userResourceList = data.data.items;
+                this.userResourceList = data.items;
+                this.loading = false;
             });
         },
         handleSortChange({prop, order}) {
             this.queryParams.order = order === 'ascending' ? 'asc' : 'desc';
             this.queryParams.orderBy = prop || 'CPU';
         },
+        hasGpu(gpus) {
+            return Object.keys(gpus).length;
+        }
     },
     created() {
         this.fetchData();

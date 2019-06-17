@@ -13,12 +13,12 @@ export function getResourceTmplList(start = 1, count = -1, templateType) {
 }
 
 export function deleteResourceTmpl(uuid) {
-    return httpService.remove(`${RESOURCE_MANAGE_GATEWAY_BASE}/resource_templates/${uuid}`);
+    return httpService.remove(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_templates/${uuid}`);
 }
 
-export function getResourceStates() {
+export function getResourceStates(global = false) {
     const user = shareCenter.getUser();
-    return httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}/resource_states`, {
+    return global ? httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_states`) : httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_states`, {
         userId: user.userId
     });
 }

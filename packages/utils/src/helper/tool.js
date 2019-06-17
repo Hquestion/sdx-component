@@ -29,3 +29,13 @@ export function paginate(pageIndex, pageSize) {
         count: pageSize
     });
 }
+
+export function removeBlankAttr(object) {
+    const propNames = Object.getOwnPropertyNames(object);
+    for (let i = 0; i < propNames.length; i++) {
+        let propName = propNames[i];
+        if (object[propName] === null || object[propName] === undefined || object[propName] === '') {
+            delete object[propName];
+        }
+    }
+}

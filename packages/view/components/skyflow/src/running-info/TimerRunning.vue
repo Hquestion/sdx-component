@@ -42,20 +42,20 @@
                             key="state"
                             label="状态"
                         >
-                            1
-                            <!-- <template slot-scope="scope">
+                            <template slot-scope="prop">
                                 <SdxwFoldLabel
                                     plain
-                                    :type="scope.row.label.type"
-                                    :status="scope.row.label.status"
+                                    :type="prop.row.label.type"
+                                    :status="prop.row.label.status"
                                 >
-                                    {{ scope.row.label.text }}
+                                    {{ prop.row.label.text }}
                                 </SdxwFoldLabel>
-                            </template> -->
+                            </template>
                         </el-table-column>
                         <el-table-column
                             label="操作"
                             key="operation"
+                            v-if="isOwnWorkflow"
                         >
                             <template slot-scope="props">
                                 <sdxu-icon-button
@@ -94,11 +94,37 @@
                 sortable="custom"
             />
             <el-table-column
+                key="state"
+                label="状态"
+            >
+                <template slot-scope="prop">
+                    <SdxwFoldLabel
+                        plain
+                        :type="prop.row.label.type"
+                        :status="prop.row.label.status"
+                    >
+                        {{ prop.row.label.text }}
+                    </SdxwFoldLabel>
+                </template>
+            </el-table-column>
+            <el-table-column
                 label="操作"
                 key="operation"
             >
                 <template slot-scope="scope">
                     <sdxu-icon-button-group>
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'run')"
+                            icon="sdx-icon sdx-icon-yunxing"
+                            v-if="scope.row.showRun"
+                            title="运行"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'shutdown')"
+                            icon="sdx-icon sdx-tingzhi"
+                            title="停止运行"
+                            v-if="scope.row.showShutdown"
+                        />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'canvas')"
                             icon="sdx-icon sdx-huabu"
@@ -107,14 +133,13 @@
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'copy')"
                             icon="sdx-icon sdx-kaobei"
-                            v-if="scope.row.showCopy"
                             title="复制工作流"
                         />
                         <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'shutdown')"
-                            icon="sdx-icon sdx-tingzhi"
-                            title="停止运行"
-                            v-if="scope.row.showShutdown"
+                            @click="handleOperation(scope.row, 'edit')"
+                            icon="sdx-icon sdx-icon-edit"
+                            v-if="scope.row.showEdit"
+                            title="定时运行设置"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'remove')"
@@ -153,7 +178,7 @@ import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import Message from 'element-ui/lib/message';
-import { getTimerRunningInfo, getSkyflowInfo, getTimerSubRunningInfo, removeTimerRunningSubTask } from '@sdx/utils/src/api/skyflow';
+import { getTimerRunningInfo, getSkyflowInfo, getTimerSubRunningInfo, startTimerRunningTask, shutdownTimerRunningTask, removeTimerRunningTask, removeTimerRunningSubTask } from '@sdx/utils/src/api/skyflow';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import CreateWorkflow from '../CreateWorkflow';
@@ -204,9 +229,8 @@ export default {
         });
     },
     methods: {
-        expand(row, expandedRows) {
-            console.log('expandedRows', expandedRows);
-            if (this.expandingRow) this.$refs.timerRunningTable.$refs.elTable.toggleRowExpansion(this.expandingRow, false);
+        expand(row) {
+            if (this.expandingRow !== row) this.$refs.timerRunningTable.$refs.elTable.toggleRowExpansion(this.expandingRow, false);
             this.expandingRow = row;
             if (!this.expandingRow.subRunningInfoList) {
                 this.$nextTick(() => {
@@ -240,6 +264,43 @@ export default {
                 orderBy: this.subOrderBy
             };
             getTimerSubRunningInfo(params).then(res => {
+                res.items.forEach(item => {
+                    item.label = {};
+                    switch(item.state) {
+                    case 'running':
+                        item.label.text = '运行中';
+                        item.label.type = 'running';
+                        item.label.status = 'loading';
+                        break;
+                    case 'launching':
+                        item.label.text = '启动中';
+                        item.label.type = 'processing';
+                        item.label.status = 'loading';
+                        break;
+                    case 'failed':
+                        item.label.text = '失败';
+                        item.label.type = 'error';
+                        item.label.status = 'warning';
+                        break;
+                    case 'stopping':
+                        item.label.text = '终止中';
+                        item.label.type = 'dying';
+                        item.label.status = 'loading';
+                        break;
+                    case 'stopped':
+                        item.label.text = '已终止';
+                        item.label.type = 'die';
+                        item.label.status = '';
+                        break;
+                    case 'succeeded':
+                        item.label.text = '成功';
+                        item.label.type = 'create';
+                        item.label.status = '';
+                        break;
+                    default:
+                        break;
+                    }
+                });
                 this.$set(this.expandingRow, 'subRunningInfoList', res.items);
                 this.$set(this.expandingRow, 'subTotal', res.total);
                 this.$set(this.expandingRow, 'subLoading', false);
@@ -263,9 +324,35 @@ export default {
             getTimerRunningInfo(params).then(res => {
                 this.runningInfoList = res.items;
                 this.runningInfoList.forEach(item => {
-                    item.showCopy = item.state !== 'launching' && item.state !== 'running' && item.state !== 'stopping';
-                    item.showRemove = this.isOwnWorkflow && item.state !== 'launching' && item.state !== 'running' && item.state !== 'stopping';
-                    item.showShutdown = this.isOwnWorkflow && (item.state === 'launching' || item.state === 'running');
+                    item.showRun = this.isOwnWorkflow && item.state === 'stopped';
+                    item.showEdit = this.isOwnWorkflow && (item.state === 'cronRunning' || item.state === 'stopped');
+                    item.showRemove = this.isOwnWorkflow;
+                    item.showShutdown = this.isOwnWorkflow && item.state === 'cronRunning';
+                    item.label = {};
+                    switch(item.state) {
+                    case 'succeeded':
+                        item.label.text = '运行完成';
+                        item.label.type = 'create';
+                        item.label.status = '';
+                        break;
+                    case 'failed':
+                        item.label.text = '运行失败';
+                        item.label.type = 'error';
+                        item.label.status = 'warning';
+                        break;
+                    case 'cronRunning':
+                        item.label.text = '运行中';
+                        item.label.type = 'running';
+                        item.label.status = 'loading';
+                        break;
+                    case 'stopped':
+                        item.label.text = '已终止';
+                        item.label.type = 'die';
+                        item.label.status = '';
+                        break;
+                    default:
+                        break;
+                    }
                 });
                 this.total = res.total;
                 this.loading = false;
@@ -306,16 +393,18 @@ export default {
                 switch (type) {
                 case 'canvas':
                     break;
+                case 'edit':
+                    break;
                 case 'copy':
                     this.createWorkflowVisible = true;
                     this.editingWorkflow = { ...this.skyflowInfo };
                     break;
                 case 'remove':
                     MessageBox({
-                        title: '确定要删除该执行记录吗？',
+                        title: '确定要删除该定时任务吗？',
                         content: '删除后将不可恢复'
                     }).then(() => {
-                        removeGeneralRunningTask(row.uuid).then(() => {
+                        removeTimerRunningTask(row.uuid).then(() => {
                             Message({
                                 message: '删除成功',
                                 type: 'success'
@@ -326,10 +415,24 @@ export default {
                     break;
                 case 'shutdown':
                     MessageBox({
-                        title: '确定要终止当前工作流任务吗？',
+                        title: '确定要停止运行当前定时任务吗？',
                         status: 'warning'
                     }).then(() => {
-                        shutdownGeneralRunningTask(row.uuid).then(() => {
+                        shutdownTimerRunningTask(row.uuid).then(() => {
+                            Message({
+                                message: '操作成功',
+                                type: 'success'
+                            });
+                            this.initList();
+                        });
+                    }).catch(() => {});
+                    break;
+                case 'run':
+                    MessageBox({
+                        title: '确定要运行当前定时任务吗？',
+                        status: 'warning'
+                    }).then(() => {
+                        startTimerRunningTask(row.uuid).then(() => {
                             Message({
                                 message: '操作成功',
                                 type: 'success'

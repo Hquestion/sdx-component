@@ -50,6 +50,18 @@ export function removeTimerRunningSubTask(uuid) {
     return httpService.remove('/api/v1/skyflow_crontab_jobs/' + uuid);
 }
 
+export function removeTimerRunningTask(uuid) {
+    return httpService.remove('/api/v1/skyflow_crontabs/' + uuid);
+}
+
+export function shutdownTimerRunningTask(uuid) {
+    return httpService.post('/api/v1/skyflow_crontabs/' + uuid + '/deactivate');
+}
+
+export function startTimerRunningTask(uuid) {
+    return httpService.post('/api/v1/skyflow_crontabs/' + uuid + '/activate');
+}
+
 export default {
     getSkyflowList,
     getSkyflowTemplates,
@@ -62,5 +74,7 @@ export default {
     removeGeneralRunningTask,
     getTimerRunningInfo,
     getTimerSubRunningInfo,
-    removeTimerRunningSubTask
+    removeTimerRunningSubTask,
+    removeTimerRunningTask,
+    startTimerRunningTask
 };

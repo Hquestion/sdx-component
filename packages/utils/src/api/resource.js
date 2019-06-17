@@ -1,8 +1,6 @@
 import httpService from '../http-service';
-// import httpService from '@sdx/utils/lib/http-service';
-import { getUserSimpleInfo } from './user';
 import { RESOURCE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
-import shareCenter from '@sdx/utils/lib/helper/shareCenter';
+import shareCenter from '../helper/shareCenter';
 
 export function getResourceTmplList(start = 1, count = -1, templateType) {
     return httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_templates`, {

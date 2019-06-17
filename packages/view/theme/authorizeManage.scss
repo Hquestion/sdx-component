@@ -1,10 +1,4 @@
 @include block('authorize-manage',$bem-namespace-view) {
-    position: relative;
-    .sdxu-button {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-    }
     @include element('header') {
         margin-bottom: $sdxu-role-margin-size;
         @include element('title') {
@@ -34,8 +28,12 @@
                 margin-left: $sdxu-role-margin-size;
                 i {
                     font-size: $sdxu-role-icon-size;
+                    cursor: pointer;
                 }
             }
+        }
+        .sdxw-search-layout {
+            margin-top: 20px;
         }
     }
     @include element('table') {

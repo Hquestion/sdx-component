@@ -2,7 +2,7 @@ import wrap from '../wrap';
 // import errorCode from '../errorCode';
 
 export let handler = wrap(function(ctx, request) {
-    ctx.info('PROJECT DETAIL PARAMS ' + JSON.stringify(request.Params));
+    ctx.debug('PROJECT DETAIL PARAMS ' + JSON.stringify(request.Params));
     const requests = request.Params.uuids.map(uuid => ctx.createGetRequest(`http://tyk-gateway/project-manager/api/v1/projects/${uuid}`));
     const results = ctx.sendRequests(...requests);
 

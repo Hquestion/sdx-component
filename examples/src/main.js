@@ -6,6 +6,7 @@ import store from './store';
 import i18n from './i18n';
 import './assets/scss/app.scss';
 import {Button} from '@sdx/ui';
+import SdxWidget from '@sdx/widget/index.js';
 import enMsg from  '@sdx/utils/lib/locale/lang/en';
 import febAlive from 'feb-alive';
 import Dialog from '@sdx/ui/components/dialog';
@@ -26,11 +27,16 @@ Vue.use(ElementUI);
 Vue.use(Breadcrumb);
 Vue.use(Pagination);
 Vue.use(ChangePassword);
+Vue.use(SdxWidget);
 
 shareCenter.setup({
     user: {
         name: 'zhansan',
-        uuid: '222'
+        uuid: '222',
+        allPermissions: [
+            {key: 'USER-MANAGER:USER:ACCESS:""', tags: ['BUTTON']},
+            {key: 'USER-MANAGER:USER:CREATE:""', tags: ['BUTTON']},
+        ]
     }
 });
 

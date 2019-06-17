@@ -16,19 +16,29 @@
                         />
                         新建角色
                     </sdxubutton>
-                    <SdxuInput
-                        v-model="searchRoles.name"
-                        :searchable="true"
-                        type="search"
-                        size="small"
+                    <SdxwSearchLayout
                         @search="searchName"
-                        @keyup.native.enter="searchName"
-                    />
+                        :block="false"
+                        align="right"
+                        style="flex: 1"
+                    >
+                        <SdxwSearchItem>
+                            <SdxuInput
+                                v-model="searchRoles.name"
+                                type="search"
+                                size="small"
+                                :searchable="false"
+                                placeholder="请输入角色名"
+                            />
+                        </SdxwSearchItem>
+                    </SdxwSearchLayout>
                 </div>
             </div>
             <div class="sdxv-role-manage__table">
                 <SdxuTable
                     :data="tableData"
+                    :default-sort="{prop: 'createdAt', order: 'descending'}"
+                    @sort-change="handleSortChange"
                 >
                     <el-table-column
                         prop="name"
@@ -45,7 +55,12 @@
                     <el-table-column
                         prop="createdAt"
                         label="创建时间"
-                    />
+                        sortable
+                    >
+                        <template slot-scope="scope">
+                            {{ dateFormatter(scope.row.createdAt) }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
                         style="width: 15%"
                         label="操作"
@@ -153,8 +168,10 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import MessageBox from '@sdx/ui/components/message-box';
 import ContentPanel from '@sdx/ui/components/content-panel';
-import {Form, FormItem}  from 'element-ui';
+import Form from 'element-ui/lib/form';
+import FormItem from 'element-ui/lib/form-item';
 import {getRolesList, createRoles, updateRoles, getRolesDetail, removeRoles} from '@sdx/utils/src/api/rolemange';
+import {dateFormatter} from '@sdx/utils/src/helper/transform';
 export default {
     name: 'SdxvRoleManage',
     components: {
@@ -185,6 +202,8 @@ export default {
                 name: '',
                 start: 1,
                 count: 10,
+                order: 'desc',
+                orderBy: 'createdAt'
             },
             rules: {
                 name: [
@@ -305,7 +324,16 @@ export default {
 
             });
 
-        }
+        },
+        handleSortChange({order}) {
+            if (!order) {
+                return;
+            }
+            this.searchRoles.order =
+                    order === 'descending' ? 'desc' : 'asc';
+            this.roleList();
+        },
+        dateFormatter
     }
 };
 </script>

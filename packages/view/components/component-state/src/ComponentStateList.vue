@@ -157,7 +157,6 @@ export default {
         fetchData() {
             this.loading = true;
             getPodsStatus(this.params).then(data => {
-                window.console.error(data);
                 this.componentList = data.status_list;
                 this.loading = false;
             });

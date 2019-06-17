@@ -38,7 +38,7 @@ import SdxwLogDetail from '@sdx/widget/components/log-detail';
 import ElSwitch from 'element-ui/lib/switch';
 import ElMessage from 'element-ui/lib/message';
 
-import { getLogs } from '@sdx/utils/src/api/log';
+import { getPodLog } from '@sdx/utils/src/api/system';
 
 const AUTO_PULL_INTERVAL = 3000;
 
@@ -61,8 +61,8 @@ export default {
     },
     data() {
         return {
-            start: 0,
-            end: 0,
+            start: 1,
+            end: 1,
             size: 100,
             isLoading: false,
             autoPull: false,
@@ -75,11 +75,10 @@ export default {
         async fetchData(offset, size) {
             // 修正offset
             offset = size < 0 ? offset + size : offset;
-            offset = offset < 0 ? 0 : offset;
+            offset = offset < 1 ? 1 : offset;
             this.isLoading = true;
             try {
-                const data = await getLogs({
-                    podId: this.podId,
+                const data = await getPodLog(this.podId, {
                     start: offset,
                     count: Math.abs(size)
                 });
@@ -100,7 +99,7 @@ export default {
             if (this.isLoading) {
                 return;
             }
-            if (this.start > 0) {
+            if (this.start > 1) {
                 this.fetchData(this.start, -this.size);
             } else {
                 ElMessage.warning({
@@ -149,12 +148,11 @@ export default {
         async getCodeInfo() {
             // tail 查看时的初始化方法，先查询最新日志
             // 获取日志长度
-            const data = await getLogs({
-                podId: this.podId,
+            const data = await getPodLog(this.podId, {
                 start: 1,
                 count: Math.abs(1)
             });
-            this.start = this.end = data.total;
+            this.start = this.end = data.total + 1;
             this.getBackwardLog();
         }
     },

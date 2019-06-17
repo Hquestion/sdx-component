@@ -15,8 +15,8 @@ export function getClusterResourceMonitor(params) {
  * Pod日志查询
  * @param {*} params 
  */
-export function getPodLog(params) {
-    return httpService.get(SYSTEM_MANAGE_GETWAY_BASE + 'logs', params);
+export function getPodLog(uuid, params) {
+    return httpService.get(`${SYSTEM_MANAGE_GETWAY_BASE}logs/${uuid}`, params);
 }
 
 /**

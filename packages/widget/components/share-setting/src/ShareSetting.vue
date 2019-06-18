@@ -13,7 +13,7 @@
         >
             <el-form-item
                 label="共享至全局："
-                v-if="isAdmin"
+                v-auth.button="auth"
             >
                 <el-switch
                     v-model="shareForm.shareType"
@@ -40,19 +40,22 @@ import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import ElSwitch from 'element-ui/lib/switch';
-import { getIsAdmin } from '@sdx/utils/src/helper/shareCenter';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxwShareSetting',
     data() {
         return {
             dialogVisible: this.visible,
-            isAdmin: false,
             shareForm: {
                 selectedUsers: [...this.defaultUsers],
                 selectedGroups: [...this.defaultGroups],
                 shareType: this.defaultShareType
-            }
+            },
+            auth: ''
         };
+    },
+    directives: {
+        auth
     },
     watch: {
         visible (nVal) {
@@ -60,7 +63,27 @@ export default {
         }
     },
     created() {
-        this.isAdmin = getIsAdmin();
+        if (this.sourceKind) {
+            switch (this.sourceKind) {
+            case 'image':
+                this.auth = 'GLOBAL_IMAGE_BUTTON:ACCESS';
+                break;
+            case 'skyflow':
+                this.auth = 'GLOBAL_SKYFLOW_BUTTON:ACCESS';
+                break;
+            case 'model':
+                this.auth = 'GLOBAL_MODEL_BUTTON:ACCESS';
+                break;
+            case 'dataset':
+                this.auth = 'GLOBAL_DATASET_BUTTON:ACCESS';
+                break;
+            case 'file':
+                this.auth = 'GLOBAL_FILE_BUTTON:ACCESS';
+                break;
+            default:
+                break;
+            }
+        }
     },
     components: {
         [SelectGroupUser.name]: SelectGroupUser,
@@ -89,6 +112,10 @@ export default {
         defaultShareType: {
             type: String,
             default: 'PRIVATE'
+        },
+        sourceKind: {
+            type: String,
+            default: ''
         }
     },
     methods: {

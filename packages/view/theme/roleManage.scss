@@ -25,9 +25,9 @@
             display: flex; 
             justify-content: space-between;
             .sdxu-button {
-                margin-left: $sdxu-role-margin-size;
                 i {
                     font-size: $sdxu-role-icon-size;
+                    cursor: pointer;
                 }
             }
         }
@@ -48,6 +48,11 @@
             font-size: 14px; 
             color: $sdx-text-holder-color;
             margin-right: 20px;
+        }
+        td > .cell {
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap
         }
     }
     @include element('pagination') {

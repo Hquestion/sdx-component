@@ -38,18 +38,18 @@
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.role') ">
                     <SdxwFoldLabelGroup
-                        v-if="users && users.roleNames && users.roleNames.length > 0"
+                        v-if="roleNames && roleNames.length > 0"
                         class="sdxw-userinfo__label-group"
-                        :list="users.roleNames"
+                        :list="roleNames"
                         type="default"
                     />
                     <span v-else>暂无角色</span>
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.groups')">
                     <SdxwFoldLabelGroup
-                        v-if="users && users.groupNames && users.groupNames.length > 0"
+                        v-if="groupNames && groupNames.length > 0"
                         class="sdxw-userinfo__label-group"
-                        :list="users.groupNames"
+                        :list="groupNames"
                         type="default"
                     />
                     <span v-else>暂未加入用户组</span>
@@ -104,7 +104,24 @@ export default {
         }
     },
     computed: {
-
+        roleNames() {
+            if (this.users && this.users.roleNames) {
+                return this.users.roleNames;
+            } else if (this.users && this.users.roles) {
+                return this.users.roles.map(item => item.name || item.uuid);
+            }else {
+                return [];
+            }
+        },
+        groupNames() {
+            if (this.users && this.users.groupNames) {
+                return this.users.groupNames;
+            } else if (this.users && this.users.groups) {
+                return this.users.groups.map(item => item.name || item.uuid);
+            } else {
+                return [];
+            }
+        }
     },
     watch: {
         visible (nVal) {
@@ -126,7 +143,7 @@ export default {
             this.$emit('update:visible', false);
             this.$emit('close');
             this.dashboardBtn = true;
-            this.user={};
+            this.users={};
         },
         getData() {
             if(this.id){

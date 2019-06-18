@@ -129,6 +129,7 @@
             :default-groups="shareForm.groups"
             :default-share-type="shareForm.shareType"
             @confirm-edit="confirmEdit"
+            source-kind="image"
         />
         <SdxvPackageDetailDialog
             :visible.sync="detailDialogVisible"

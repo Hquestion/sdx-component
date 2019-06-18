@@ -50,7 +50,10 @@ export default {
                     this.fileManager.enterDirectory(this.fileManager.currentPath);
                 });
             } else {
-                mkdir(this.tempRowName).then(() => {
+                let path = this.fileManager.currentPath.lastIndexOf('/') === this.fileManager.currentPath.length
+                    ? `${this.fileManager.currentPath}${this.tempRowName}`
+                    : `${this.fileManager.currentPath}/${this.tempRowName}`;
+                mkdir(path).then(() => {
                     this.editingRow = null;
                     this.tempRowName = '';
                     this.fileManager.enterDirectory(this.fileManager.currentPath);

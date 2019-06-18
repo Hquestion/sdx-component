@@ -15,8 +15,21 @@ export function registerUser(currentUser) {
     user = currentUser;
 }
 
+export function getUserAllPermissions(user) {
+    if (!user) return [];
+    if (!user.allPermissions) {
+        let allPermissions = user.permissions.slice();
+        user.roles.forEach(item => !allPermissions.find(p => p.uuid === item.uuid) && allPermissions.push(item));
+        user.groups.forEach(item => !allPermissions.find(p => p.uuid === item.uuid) && allPermissions.push(item));
+        return allPermissions;
+    }
+    return user.allPermissions;
+}
+
 export function getUser() {
-    return typeof user === 'function' ? user() : user;
+    const sharedUser = typeof user === 'function' ? user() : user;
+    sharedUser.allPermissions = getUserAllPermissions(sharedUser);
+    return sharedUser;
 }
 
 export function getIsAdmin() {

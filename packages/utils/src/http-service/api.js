@@ -22,9 +22,9 @@ export default function $axios(options) {
             // request 拦截器
             instance.interceptors.request.use(
                 config => {
-                    config.headers['Content-Type'] = 'application/json; charset=UTF-8';
-                    config.headers['ContentType'] = 'application/json';
-                    config.headers['x-content-type'] = 'application/json';
+                    // config.headers['Content-Type'] = 'application/json; charset=UTF-8';
+                    // config.headers['Content-Type'] = 'application/json';
+                    // config.headers['content-type'] = 'application/json';
                     if (axiosConfig.tokenKey) {
                         if (typeof axiosConfig.tokenValue === 'function') {
                             config.headers[axiosConfig.tokenKey] = axiosConfig.tokenValue();

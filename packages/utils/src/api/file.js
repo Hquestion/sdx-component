@@ -14,7 +14,7 @@ export function getFilesList(params = {}) {
         order = 'asc'
     } = params;
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files`, {
-        userId,
+        userId: userId || userInfo.userId,
         path,
         start,
         count,

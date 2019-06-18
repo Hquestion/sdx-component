@@ -9,14 +9,14 @@
             >
                 <el-radio
                     label="tar"
+                    v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'"
                 >
-                    <!--  v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'" -->
                     基于tar文件构建
                 </el-radio>
                 <el-radio
                     label="DockerFile"
+                    v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'"
                 >
-                    <!-- v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'" -->
                     基于DockerFile文件构建
                 </el-radio>
             </el-radio-group>

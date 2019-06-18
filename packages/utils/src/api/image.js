@@ -28,12 +28,12 @@ export function getSourceRepos() {
 
 // 基于 tar 文件新建镜像任务
 export function buildTar(params) {
-    return httpService.post(`${imageTaskApi}build-tar/`, params);
+    return httpService.post(`${imageTaskApi}build-tar`, params);
 }
 
 // 基于 dockerfile 文件新建镜像任务
 export function buildImagefile(params) {
-    return httpService.post(`${imageTaskApi}build-imagefile/`, params);
+    return httpService.post(`${imageTaskApi}build-imagefile`, params);
 }
 
 // 获取构建日志

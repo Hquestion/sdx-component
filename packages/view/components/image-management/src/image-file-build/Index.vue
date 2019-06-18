@@ -9,14 +9,14 @@
             >
                 <el-radio
                     label="tar"
-                    v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'"
                 >
+                    <!--  v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'" -->
                     基于tar文件构建
                 </el-radio>
                 <el-radio
                     label="DockerFile"
-                    v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'"
                 >
+                    <!-- v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'" -->
                     基于DockerFile文件构建
                 </el-radio>
             </el-radio-group>
@@ -123,7 +123,7 @@ export default {
     name: '',
     data() {
         return {
-            radio: 'tar',
+            radio: this.$auth('IMAGE-MANAGER:IMAGE_BUILDER:BUILD_TAR:""', 'button') ? 'tar' : 'DockerFile',
             params: {
                 name: '',
                 version: '',
@@ -184,7 +184,7 @@ export default {
         Iconinfo
     },
     directives: {
-        auth
+
     },
     methods: {
         radioChange() {
@@ -227,7 +227,7 @@ export default {
         }
     },
     created() {
-
+       
     }
 };
 </script>

@@ -1,6 +1,6 @@
 import axios from './api';
 
-function get (url, params, config) {
+function get (url, params = {}, config) {
     if (!url) return;
     return axios({
         method: 'get',
@@ -10,7 +10,7 @@ function get (url, params, config) {
     });
 }
 
-function post (url, data, config) {
+function post (url, data = {}, config) {
     if (!url) return;
     return axios({
         method: 'post',
@@ -20,7 +20,7 @@ function post (url, data, config) {
     });
 }
 
-function put (url, data, config) {
+function put (url, data = {}, config) {
     if (!url) return;
     return axios({
         method: 'put',
@@ -30,7 +30,7 @@ function put (url, data, config) {
     });
 }
 
-function remove (url, params, config) {
+function remove (url, params = {}, config) {
     if (!url) return;
     return axios({
         method: 'delete',
@@ -40,7 +40,7 @@ function remove (url, params, config) {
     });
 }
 
-function patch (url, data, config) {
+function patch (url, data = {}, config) {
     if (!url) return;
     return axios({
         method: 'patch',

@@ -13,7 +13,7 @@
         >
             <el-form-item
                 label="共享至全局："
-                v-auth.button="auth"
+                v-auth.button="authMap[sourceKind]"
             >
                 <el-switch
                     v-model="shareForm.shareType"
@@ -51,7 +51,13 @@ export default {
                 selectedGroups: [...this.defaultGroups],
                 shareType: this.defaultShareType
             },
-            auth: ''
+            authMap: {
+                image: 'GLOBAL_IMAGE_BUTTON:ACCESS',
+                skyflow: 'GLOBAL_SKYFLOW_BUTTON:ACCESS',
+                model: 'GLOBAL_MODEL_BUTTON:ACCESS',
+                dataset: 'GLOBAL_DATASET_BUTTON:ACCESS',
+                file: 'GLOBAL_FILE_BUTTON:ACCESS',
+            }
         };
     },
     directives: {
@@ -60,29 +66,6 @@ export default {
     watch: {
         visible (nVal) {
             this.dialogVisible = nVal;
-        }
-    },
-    created() {
-        if (this.sourceKind) {
-            switch (this.sourceKind) {
-            case 'image':
-                this.auth = 'GLOBAL_IMAGE_BUTTON:ACCESS';
-                break;
-            case 'skyflow':
-                this.auth = 'GLOBAL_SKYFLOW_BUTTON:ACCESS';
-                break;
-            case 'model':
-                this.auth = 'GLOBAL_MODEL_BUTTON:ACCESS';
-                break;
-            case 'dataset':
-                this.auth = 'GLOBAL_DATASET_BUTTON:ACCESS';
-                break;
-            case 'file':
-                this.auth = 'GLOBAL_FILE_BUTTON:ACCESS';
-                break;
-            default:
-                break;
-            }
         }
     },
     components: {

@@ -112,6 +112,7 @@
             <div class="sdxv-skyflow__panel-footer">
                 <div />
                 <sdxu-pagination
+                    v-if="total"
                     :current-page.sync="current"
                     :page-size="pageSize"
                     :total="total"

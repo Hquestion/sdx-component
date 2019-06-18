@@ -86,6 +86,7 @@
         <div class="sdxv-general-running__footer">
             <div />
             <sdxu-pagination
+                v-if="total"
                 :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
@@ -121,7 +122,7 @@ export default {
             order: '',
             orderBy: '',
             loading: false,
-            total: 1,
+            total: 0,
             current: 1,
             pageSize: 10,
             executionKinds: {

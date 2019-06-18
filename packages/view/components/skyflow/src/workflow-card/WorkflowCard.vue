@@ -10,7 +10,7 @@
                 :class="[workflowType.state, workflowType.icon]"
             />
             <span class="sdxv-workflow-card__header--name">{{ meta.name }}</span>
-            <span>
+            <span class="sdxv-workflow-card__header--type">
                 <SdxwFoldLabel :type="meta.processType === 'PATCH' ? 'patch' : 'stream'">{{ meta.processType === 'PATCH' ? '批处理' : '流处理' }}</SdxwFoldLabel>
             </span>
         </header>

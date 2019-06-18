@@ -70,6 +70,7 @@
                     <div class="sdxv-timer-running__footer">
                         <div />
                         <sdxu-pagination
+                            v-if="scope.row.subTotal"
                             :current-page.sync="scope.row.subCurrent"
                             :page-size="scope.row.subPageSize"
                             :total="scope.row.subTotal"
@@ -155,6 +156,7 @@
         <div class="sdxv-timer-running__footer">
             <div />
             <sdxu-pagination
+                v-if="total"
                 :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
@@ -200,7 +202,7 @@ export default {
             order: '',
             orderBy: '',
             loading: false,
-            total: 1,
+            total: 0,
             current: 1,
             pageSize: 10,
             isOwnWorkflow: false,

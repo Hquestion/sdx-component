@@ -11,6 +11,7 @@
         <el-form
             :inline="true"
             :label-width="labelWidth"
+            @submit.native.prevent
         >
             <slot />
             <div class="sdxw-search-layout__btn">

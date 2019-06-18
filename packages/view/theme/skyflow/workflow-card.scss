@@ -22,6 +22,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         height: $sdxv-workflow-card-type-icon-size;
         @include modifier('icon') {
             margin-right: 12px;
+            flex: 1;
             &.sdx-icon {
                 font-size: $sdxv-workflow-card-type-icon-size;
             }
@@ -38,10 +39,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include modifier('name') {
             height: $sdxv-workflow-card-type-icon-size;
             font-weight: bold;
+            flex: 10;
             letter-spacing: 0;
             color: #262B3E;
             line-height: $sdxv-workflow-card-type-icon-size / 2;
             @include text-truncation($sdxv-workflow-card-name-show-line-count);
+        }
+        @include modifier('type') {
+            flex: 1;
         }
     }
 

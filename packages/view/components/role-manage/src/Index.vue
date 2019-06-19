@@ -172,6 +172,7 @@ import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
 import {getRolesList, createRoles, updateRoles, getRolesDetail, removeRoles} from '@sdx/utils/src/api/rolemange';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import SearchLayout from '@sdx/widget/components/search-layout';
 export default {
     name: 'SdxvRoleManage',
     components: {
@@ -183,6 +184,8 @@ export default {
         [Form.name]:Form,
         [FormItem.name]:FormItem,
         [ContentPanel.name]: ContentPanel,
+        [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
     },
     data() {
         return {

@@ -85,6 +85,7 @@
                         v-model="params.filePath"
                         :accept="radio === 'DockerFile' ? '': '.tar'"
                         :check-type="radio === 'DockerFile' ? 'file' : 'all'"
+                        :string-model="true"
                     />
                 </el-form-item>
             </el-form>
@@ -128,7 +129,7 @@ export default {
                 name: '',
                 version: '',
                 imageType: 'JUPYTER',
-                filePath: []
+                filePath: ''
             },
             DOCKER_IMAGE_KIND_LIST,
             rules: {
@@ -184,11 +185,12 @@ export default {
         Iconinfo
     },
     directives: {
-
+        auth
     },
     methods: {
         radioChange() {
             this.$refs.form.clearValidate();
+            this.params.filePath = '';
         },
         // 基于 tar 文件新建镜像任务
         imageBuildTar(params) {

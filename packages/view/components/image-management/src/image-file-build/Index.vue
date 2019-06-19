@@ -9,14 +9,14 @@
             >
                 <el-radio
                     label="tar"
+                    v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'"
                 >
-                    <!--  v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'" -->
                     基于tar文件构建
                 </el-radio>
                 <el-radio
                     label="DockerFile"
+                    v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'"
                 >
-                    <!-- v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'" -->
                     基于DockerFile文件构建
                 </el-radio>
             </el-radio-group>
@@ -84,7 +84,9 @@
                     <SdxwFileSelect
                         v-model="params.filePath"
                         :accept="radio === 'DockerFile' ? '': '.tar'"
-                        :check-type="radio === 'DockerFile' ? 'file' : 'all'"
+                        check-type="file"
+                        :string-model="true"
+                        :source="radio === 'DockerFile' ? 'ceph': 'all'"
                     />
                 </el-form-item>
             </el-form>
@@ -128,7 +130,7 @@ export default {
                 name: '',
                 version: '',
                 imageType: 'JUPYTER',
-                filePath: []
+                filePath: ''
             },
             DOCKER_IMAGE_KIND_LIST,
             rules: {
@@ -184,23 +186,34 @@ export default {
         Iconinfo
     },
     directives: {
-
+        auth
     },
     methods: {
         radioChange() {
             this.$refs.form.clearValidate();
+            this.params.filePath = '';
         },
         // 基于 tar 文件新建镜像任务
         imageBuildTar(params) {
             buildTar(params)
                 .then(() => {
-                    this.$router.go(-1);
+                    this.$router.push({
+                        name: 'imageList',
+                        params: {
+                            tab: 'taskTab'
+                        }
+                    });
                 });
         },
         imageBuildImagefile(params) {
             buildImagefile(params)
                 .then(() => {
-                    this.$router.go(-1);
+                    this.$router.push({
+                        name: 'imageList',
+                        params: {
+                            tab: 'taskTab'
+                        }
+                    });
                 });
         },
         resetForm() {

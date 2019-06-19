@@ -17,10 +17,10 @@
                 icon="sdx-icon-plus"
                 size="small"
                 @click="goFileBuild"
+                v-auth.image.button="'IMAGE_BUILDER:BUILD_BASIC'"
             >
                 基于文件构建
             </SdxuButton>
-            <!-- v-auth.image.button="'IMAGE_BUILDER:BUILD_BASIC'" -->
         </div>
         <div>
             <div
@@ -173,7 +173,7 @@ export default {
             imageType: '',
             buildType: '',
             shareType: '',
-            projectType: 'image',
+            projectType: this.$route.params.tab === 'imageTab' ? 'image' : 'task',
             imageKind: 'all',
             isOwner: '',
             taskType: '',
@@ -275,6 +275,12 @@ export default {
             });
         },
         switchProjectType() {
+            this.$router.push({
+                name: 'imageList',
+                params: {
+                    tab: this.projectType === 'image'? 'imageTab':'taskTab'
+                }
+            });
         },
         selectImageKind(key) {
             this.resetVariables();

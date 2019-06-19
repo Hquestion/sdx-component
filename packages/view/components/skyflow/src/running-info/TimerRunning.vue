@@ -26,13 +26,23 @@
                         <el-table-column
                             key="startTime"
                             label="执行开始时间"
-                            prop="startTime"
-                        />
+                        >
+                            <template slot-scope="prop">
+                                <div>
+                                    {{ prop.row.startTime | dateFormatter }}
+                                </div>
+                            </template>
+                        </el-table-column>
                         <el-table-column
                             key="stopTime"
                             label="执行结束时间"
-                            prop="stopTime"
-                        />
+                        >
+                            <template slot-scope="prop">
+                                <div>
+                                    {{ prop.row.stopTime | dateFormatter }}
+                                </div>
+                            </template>
+                        </el-table-column>
                         <el-table-column
                             key="executeTime"
                             prop="executeTime"
@@ -91,10 +101,15 @@
             />
             <el-table-column
                 key="submitAt"
-                prop="submitAt"
                 label="提交时间"
                 sortable="custom"
-            />
+            >
+                <template slot-scope="prop">
+                    <div>
+                        {{ prop.row.submitAt | dateFormatter }}
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
                 key="state"
                 label="状态"
@@ -192,6 +207,7 @@ import { paginate } from '@sdx/utils/src/helper/tool';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import CreateWorkflow from '../CreateWorkflow';
 import TimerRunningTaskEdit from './TimerRunningTaskEdit';
+import TimeFilter from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name: 'TimerRunning',
     data() {
@@ -229,15 +245,11 @@ export default {
             default: () => {}
         }
     },
-    computed: {
-        userId() {
-            return getUser().userId || '111';
-        }
-    },
+    mixins: [TimeFilter],
     created() {
         getSkyflowInfo(this.$route.params.id).then(res => {
             this.skyflowInfo = res;
-            this.isOwnWorkflow = this.userId === res.user;
+            this.isOwnWorkflow = getUser().userId === res.user;
             this.initList();
         });
     },
@@ -260,14 +272,14 @@ export default {
         },
         subSortChange(sort) {
             this.subOrderBy = 'executeTime';
-            if (sort && sort.prop && sort.order) {
+            if (sort && sort.order) {
                 this.subOrder = sort.order === 'ascending' ? 'asc' : 'desc';
                 this.initSubList();
             }
         },
         sortChange(sort) {
             this.orderBy = 'submitAt';
-            if (sort && sort.prop && sort.order) {
+            if (sort && sort.order) {
                 this.order = sort.order === 'ascending' ? 'asc' : 'desc';
                 this.initList();
             }
@@ -276,7 +288,7 @@ export default {
             this.$set(this.expandingRow, 'subLoading', true);
             const params = {
                 skyflowCrontab: this.expandingRow.uuid,
-                ...paginate(this.expandingRow.subCurrent, this.expandingRow.subPageSize),
+                ...paginate(this.expandingRow.subCurrent || 1, this.expandingRow.subPageSize || 10),
                 order: this.subOrder,
                 orderBy: this.subOrderBy
             };

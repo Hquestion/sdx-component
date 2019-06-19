@@ -10,6 +10,7 @@
                     size="small"
                     icon="sdx-icon-plus"
                     style="margin-right: 10px;"
+                    v-auth.skyflow.button="'FLOW:CREATE'"
                 >
                     新建工作流
                     <template slot="dropdown">
@@ -147,6 +148,7 @@ import SortButton from '@sdx/ui/components/sort-button';
 import Scroll from '@sdx/ui/components/scroll';
 import WorkflowCard from './workflow-card/WorkflowCard';
 import WorkflowCardList from './workflow-card/WorkflowCardList';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvSkyflowList',
     data() {
@@ -186,10 +188,8 @@ export default {
     created() {
         this.initList(true);
     },
-    computed: {
-        userId() {
-            return getUser().userId;
-        }
+    directives: {
+        auth
     },
     methods: {
         switchTemplateType(tempalteType) {
@@ -219,7 +219,7 @@ export default {
             getSkyflowList(params).then(res => {
                 this.workflowList = res.items;
                 this.workflowList.forEach(item => {
-                    if (item.user === this.userId) {
+                    if (item.user === getUser().userId) {
                         item.editable = true;
                         item.removable = true;
                     }
@@ -252,7 +252,7 @@ export default {
             getSkyflowList(params).then(res => {
                 this.templatesList = res.items;
                 this.templatesList.forEach(item => {
-                    if (item.user === this.userId) {
+                    if (item.user === getUser().userId) {
                         item.editable = true;
                         item.removable = true;
                     }

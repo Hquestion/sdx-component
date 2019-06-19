@@ -17,7 +17,7 @@
         <main class="sdxv-workflow-card__main">
             <div class="sdxv-workflow-card__info">
                 <i class="sdx-icon sdx-icon-user" />
-                <span>{{ meta.owner }}</span>
+                <span>{{ (meta.user && meta.user.fullName) || '' }}</span>
             </div>
             <div class="sdxv-workflow-card__info">
                 <i class="sdx-icon sdx-icon-time" />
@@ -64,12 +64,14 @@
                     class="sdx-icon sdx-icon-edit"
                     title="编辑"
                     @click="$emit('operate', {item: meta, type: 'edit'})"
+                    v-auth.skyflow.button="auth"
                 />
                 <i
                     v-if="deleteAble"
                     class="sdx-icon sdx-icon-delete"
                     title="删除"
                     @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
+                    v-auth.skyflow.button="auth"
                 />
             </div>
         </footer>
@@ -88,6 +90,7 @@
 <script>
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import FoldLabel from '@sdx/widget/components/fold-label';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvWorkflowCard',
     props: {
@@ -111,6 +114,9 @@ export default {
             }
         }
     },
+    directives: {
+        auth
+    },
     data() {
         return {
             showMask: false
@@ -120,6 +126,9 @@ export default {
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel
     },
     computed: {
+        auth() {
+            return this.meta.isTemplate ? 'TEMPLATE_FLOW:WRITE' : '';
+        },
         workflowType() {
             const type = {};
             if (this.meta.isTemplate) {

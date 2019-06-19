@@ -58,7 +58,7 @@
             </el-form-item>
             <el-form-item
                 label="设为模板："
-                v-if="isAdmin"
+                v-auth.skyflow.button="'TEMPLATE_FLOW:CREATE'"
             >
                 <el-switch
                     v-model="workflowForm.isTemplate"
@@ -67,6 +67,7 @@
             <el-form-item
                 label="协作者/组："
                 v-show="!workflowForm.isTemplate"
+                v-auth.skyflow.button="'FLOW:SHARE'"
             >
                 <sdxw-select-group-user
                     :users.sync="selectedUsers"
@@ -183,6 +184,7 @@ import Transfer from '@sdx/ui/components/transfer';
 import { updateWorkflow, getSkyflowList, createWorkflow, getSkyflowTemplates } from '@sdx/utils/src/api/skyflow';
 import ElSelect from 'element-ui/lib/select';
 import Scroll from '@sdx/ui/components/scroll';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvCreateWorkflow',
     data() {
@@ -236,6 +238,9 @@ export default {
         ElSelect,
         [Scroll.name]: Scroll
     },
+    directives: {
+        auth
+    },
     props: {
         visible: {
             type: Boolean,
@@ -262,9 +267,6 @@ export default {
     computed: {
         isEditing() {
             return !!this.data;
-        },
-        isAdmin() {
-            return true;
         }
     },
     created() {

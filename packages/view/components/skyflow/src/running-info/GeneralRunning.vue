@@ -38,20 +38,35 @@
             </el-table-column>
             <el-table-column
                 key="executeStart"
-                prop="executeStart"
                 label="执行开始时间"
-            />
+            >
+                <template slot-scope="scope">
+                    <div>
+                        {{ scope.row.executeStart | dateFormatter }}
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
                 key="executeEnd"
-                prop="executeEnd"
                 label="执行结束时间"
-            />
+            >
+                <template slot-scope="scope">
+                    <div>
+                        {{ scope.row.executeEnd | dateFormatter }}
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
-                prop="executeTime"
                 key="executeTime"
                 label="执行时长"
                 sortable="custom"
-            />
+            >
+                <template slot-scope="scope">
+                    <div>
+                        {{ scope.row.executeTime | seconds2HMS }}
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
                 label="操作"
                 key="operation"
@@ -114,6 +129,7 @@ import { getGeneralRunningInfo, getSkyflowInfo, shutdownGeneralRunningTask, remo
 import { paginate } from '@sdx/utils/src/helper/tool';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import CreateWorkflow from '../CreateWorkflow';
+import TimeFilter from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name: 'GeneralRunnning',
     data() {
@@ -142,21 +158,17 @@ export default {
         [Pagination.name]: Pagination,
         [CreateWorkflow.name]: CreateWorkflow
     },
+    mixins: [TimeFilter],
     props: {
         searchConditions: {
             type: Object,
             default: () => {}
         }
     },
-    computed: {
-        userId() {
-            return getUser().userId || '111';
-        }
-    },
     created() {
         getSkyflowInfo(this.$route.params.id).then(res => {
             this.skyflowInfo = res;
-            this.isOwnWorkflow = this.userId === res.user;
+            this.isOwnWorkflow = getUser().userId === res.user;
             this.initList();
         });
     },
@@ -166,9 +178,8 @@ export default {
         },
         sortChange(sort) {
             this.orderBy = 'executeTime';
-            if (sort && sort.prop && sort.order) {
-                this.order = sort.prop;
-                this.orderBy = sort.order === 'ascending' ? 'asc' : 'desc';
+            if (sort && sort.order) {
+                this.order = sort.order === 'ascending' ? 'asc' : 'desc';
                 this.initList();
             }
         },

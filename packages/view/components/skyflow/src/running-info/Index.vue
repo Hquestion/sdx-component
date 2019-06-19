@@ -48,11 +48,11 @@
                             />
                             <el-option
                                 label="手动"
-                                value="manual"
+                                value="MANUAL"
                             />
                             <el-option
                                 label="续跑"
-                                value="auto"
+                                value="RESUME"
                             />
                         </el-select>
                     </sdxw-search-item>

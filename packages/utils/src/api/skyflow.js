@@ -1,5 +1,5 @@
 import httpService from '../http-service';
-import { SKYFLOW_MANAGE_GATEWAY_BASE } from './config';
+import { SKYFLOW_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
 
 const skyflowApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflows`;
 
@@ -8,7 +8,7 @@ const skyflowExecuteApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_executes`;
 const skyflowCrontabApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_crontabs`;
 
 export function getSkyflowList(params) {
-    return httpService.get(skyflowApi, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}skyflow-profiles`, params);
 }
 
 export function getSkyflowTemplates() {

@@ -30,7 +30,7 @@
                             :on-success="onSuccess"
                             :on-exceed="onExceed"
                             :data="uploadParams"
-                            :limit="limit === -1 ? Infinity : limit"
+                            :limit="realLimit"
                             :show-file-list="false"
                             :before-upload="beforeUpload"
                             @click.native="$refs.fileSelectPop && $refs.fileSelectPop.close()"
@@ -53,7 +53,7 @@
                             :on-change="handlerDirectoryChange"
                             :on-error="onDirectoryError"
                             :on-exceed="onExceed"
-                            :limit="limit === -1 ? Infinity : limit"
+                            :limit="realLimit"
                             :data="uploadParams"
                             :show-file-list="false"
                             :on-progress="onProgress"
@@ -75,7 +75,7 @@
                             :user-id="userId"
                             :root-path="rootPath"
                             :accept="accept"
-                            :limit="limit"
+                            :limit="realLimit"
                             :tree-options="treeOptions"
                             :checkable="checkable"
                             :check-type="checkType"
@@ -231,6 +231,9 @@ export default {
         }
     },
     computed: {
+        realLimit() {
+            return +this.limit === -1 ? Infinity : +this.limit;
+        },
         localVisible() {
             return ['all', 'local'].includes(this.source) && ['all', 'file'].includes(this.checkType);
         },
@@ -238,7 +241,7 @@ export default {
             return ['all', 'ceph'].includes(this.source);
         },
         localFolderVisible() {
-            return this.localVisible && (this.limit > 1 || this.limit === -1) && ['all', 'file'].includes(this.checkType);
+            return this.localVisible && this.realLimit > 1 && ['all', 'file'].includes(this.checkType);
         },
         selectedFiles() {
             if (typeof this.value === 'string') {
@@ -256,7 +259,7 @@ export default {
             }
         },
         disableCheck() {
-            return this.disabled || this.selectedFiles.length >= this.limit;
+            return this.disabled || this.selectedFiles.length >= this.realLimit;
         }
     },
     methods: {
@@ -314,7 +317,7 @@ export default {
         onExceed() {
             this.$notify.error({
                 title: '文件过多',
-                message: `最多选择${this.limit}个文件`
+                message: `最多选择${this.realLimit}个文件`
             });
         },
         onFileError(err, file, fileList) {

@@ -52,11 +52,11 @@ export default {
                 shareType: this.defaultShareType
             },
             authMap: {
-                image: 'GLOBAL_IMAGE_BUTTON:ACCESS',
-                skyflow: 'GLOBAL_SKYFLOW_BUTTON:ACCESS',
-                model: 'GLOBAL_MODEL_BUTTON:ACCESS',
-                dataset: 'GLOBAL_DATASET_BUTTON:ACCESS',
-                file: 'GLOBAL_FILE_BUTTON:ACCESS',
+                image: 'APPLICATION:GLOBAL_IMAGE_BUTTON:ACCESS',
+                skyflow: 'APPLICATION:GLOBAL_SKYFLOW_BUTTON:ACCESS',
+                model: 'APPLICATION:GLOBAL_MODEL_BUTTON:ACCESS',
+                dataset: 'APPLICATION:GLOBAL_DATASET_BUTTON:ACCESS',
+                file: 'APPLICATION:GLOBAL_FILE_BUTTON:ACCESS',
             }
         };
     },

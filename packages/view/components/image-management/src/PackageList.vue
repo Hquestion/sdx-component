@@ -33,7 +33,10 @@
             </sdxu-button>
         </div>
         <div class="sdxv-package-list__table">
-            <sdxu-table :data="packageList">
+            <sdxu-table
+                :data="packageList"
+                v-loading="loading"
+            >
                 <el-table-column
                     prop="name"
                     label="包名称"
@@ -133,7 +136,8 @@ export default {
             sourceType: '',
             upgradeDialog: false,
             emitResultCount: false,
-            currentPackage: null
+            currentPackage: null,
+            loading: false
         };
     },
     computed: {
@@ -156,15 +160,18 @@ export default {
     },
     methods: {
         fetchData() {
+            this.loading = true;
             getPackagesByUuid(this.imageId, this.querys).then(data => {
                 this.packageList = data.data;
                 this.total = data.total;
                 if (this.emitResultCount) {
                     this.$emit('queryCount', data.total);
                 }
+                this.loading = false;
             }).catch(() => {
                 this.packageList = [];
                 this.total = 0;
+                this.loading = false;
             });
         },
         handleChangePage(page) {

@@ -173,7 +173,7 @@ export default {
             imageType: '',
             buildType: '',
             shareType: '',
-            projectType: 'image',
+            projectType: this.$route.params.tab === 'imageTab' ? 'image' : 'task',
             imageKind: 'all',
             isOwner: '',
             taskType: '',

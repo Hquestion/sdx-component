@@ -31,8 +31,9 @@ Vue.use(SdxWidget);
 
 shareCenter.setup({
     user: {
+        userId: '1f3da8d1-b0c6-41de-bac3-f5e9b956e62d',
         name: 'zhansan',
-        uuid: '222',
+        uuid: '1f3da8d1-b0c6-41de-bac3-f5e9b956e62d',
         allPermissions: [
             {key: 'USER-MANAGER:USER:ACCESS:""', tags: ['BUTTON']},
             {key: 'USER-MANAGER:USER:CREATE:""', tags: ['BUTTON']},

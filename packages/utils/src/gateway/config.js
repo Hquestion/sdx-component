@@ -53,7 +53,7 @@ module.exports = [
     },
     {
         apiId: '/fe-compose/api/v1/image-delete-batch',
-        method: 'DELETE',
+        method: 'POST',
         functionName: 'imageDeleteBatch.handler',
         filePath: './compose/imageDeleteBatch.js'
     },
@@ -83,7 +83,7 @@ module.exports = [
     },
     {
         apiId: '/fe-compose/api/v1/model-delete-batch',
-        method: 'DELETE',
+        method: 'POST',
         functionName: 'modelDeleteBatch.handler',
         filePath: './compose/modelDeleteBatch.js'
     },

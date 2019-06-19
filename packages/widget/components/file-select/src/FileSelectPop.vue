@@ -56,8 +56,12 @@ export default {
     },
     props: {
         value: {
-            type: Array,
+            type: [String, Array],
             default: () => []
+        },
+        stringModel: {
+            type: Boolean,
+            default: false
         },
         noRef: {
             type: Boolean,
@@ -102,7 +106,7 @@ export default {
             this.$emit('cancel');
         },
         handleConfirm() {
-            this.$emit('input', this.checked);
+            this.$emit('input', this.stringModel ? this.checked.map(item => typeof item ==='string'?item : item.path).join(',') : this.checked);
             this.close();
             this.$emit('confirm');
         },
@@ -122,7 +126,11 @@ export default {
             immediate: true,
             deep: true,
             handler(val) {
-                this.checked = val;
+                if (typeof val === 'string') {
+                    this.checked = val.split(',');
+                } else {
+                    this.checked = val;
+                }
             }
         }
     },

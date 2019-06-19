@@ -25,8 +25,11 @@ function getError(action, option, xhr) {
 
     const err = new Error(msg);
     err.status = xhr.status;
-    err.method = 'post';
-    err.url = action;
+    err.config = {
+        url: action,
+        method: 'post'
+    };
+    err.data = xhr.response;
     return err;
 }
 

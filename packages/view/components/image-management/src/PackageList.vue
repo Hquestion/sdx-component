@@ -18,6 +18,7 @@
                     <el-option
                         v-for="(v, k) in SOURCE_TYPE"
                         :key="k"
+                        :label="k"
                         :value="v"
                     />
                 </el-select>
@@ -120,11 +121,11 @@ export default {
         }
     },
     data() {
-        this.SOURCE_TYPE = SOURCE_TYPE;
+        this.SOURCE_TYPE = Object.assign({'全部': ''}, SOURCE_TYPE);
         this.VERSION_TYPE = VERSION_TYPE;
         this.SOURCE_URL_TYPE = SOURCE_URL_TYPE;
         return {
-            total: 100,
+            total: 0,
             page: 1,
             pageSize: 5,
             packageList: [],
@@ -137,14 +138,20 @@ export default {
     },
     computed: {
         querys() {
-            return {
-                packageName: this.packageName,
+            const params = {
+                name: this.packageName.trim(),
                 sourceType: this.sourceType,
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize,
-                order: 'packageName',
-                orderBy: 'asc'
+                orderBy: 'name',
+                order: 'asc'
             };
+            Object.keys(params).forEach(item => {
+                if (params[item] === '') {
+                    delete params[item];
+                }
+            });
+            return params;
         }
     },
     methods: {
@@ -155,6 +162,9 @@ export default {
                 if (this.emitResultCount) {
                     this.$emit('queryCount', data.total);
                 }
+            }).catch(() => {
+                this.packageList = [];
+                this.total = 0;
             });
         },
         handleChangePage(page) {
@@ -190,8 +200,13 @@ export default {
     watch: {
         search(nval) {
             this.packageName = nval;
+            this.sourceType = '';
+            this.page = 1;
             this.emitResultCount = true;
             this.fetchData();
+        },
+        imageId() {
+            this.handleReset();
         }
     },
     created() {

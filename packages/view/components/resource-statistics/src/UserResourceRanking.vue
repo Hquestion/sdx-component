@@ -83,6 +83,8 @@ export default {
         fetchData() {
             getTaskList(this.queryParams).then(data => {
                 this.userResourceList = data.data.items;
+            }).catch(() => {
+                this.userResourceList = [];
             });
         },
         handleSortChange({prop, order}) {

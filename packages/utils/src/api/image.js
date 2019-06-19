@@ -37,8 +37,8 @@ export function buildImagefile(params) {
 }
 
 // 获取构建日志
-export function getImageBuildLog(uuid) {
-    return httpService.get(`${imageTaskApi + uuid}/log/`);
+export function getImageBuildLog(uuid, params) {
+    return httpService.get(`${imageTaskApi + uuid}/log`, params);
 }
 
 export function getImageList(params) {

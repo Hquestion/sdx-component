@@ -269,9 +269,11 @@ export default {
     methods: {
         fetchData() {
             getTaskList(this.queryParams).then(data => {
-                window.console.error(data);
                 this.taskResourceList = data.data.items;
                 this.total = data.data.total;
+            }).catch(() => {
+                this.taskResourceList = [];
+                this.total = 0;
             });
         },
         stateIcon(state) {

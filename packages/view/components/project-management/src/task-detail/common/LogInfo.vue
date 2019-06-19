@@ -83,13 +83,13 @@ export default {
                     start: offset,
                     count: Math.abs(size)
                 });
-                let content = Array.isArray(data.contents) && data.contents.join('\r\n');
+                let content = Array.isArray(data.contents) && data.contents.join('');
                 if (size < 0) {
                     this.start = this.start - data.contents.length;
-                    this.logContent = content + (content ? '\r\n' : '') + this.logContent;
+                    this.logContent = content + this.logContent;
                 } else {
                     this.end = this.end + data.contents.length;
-                    this.logContent += (content ? '\r\n' : '') + content;
+                    this.logContent += content;
                 }
                 this.isLoading = false;
             } catch (e) {

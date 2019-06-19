@@ -142,6 +142,7 @@ import SearchLayout from '@sdx/widget/components/search-layout';
 import Message from 'element-ui/lib/message';
 import { getSkyflowTemplates, getSkyflowList, removeWorkflow } from '@sdx/utils/src/api/skyflow';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import { paginate } from '@sdx/utils/src/helper/tool';
 import SortButton from '@sdx/ui/components/sort-button';
 import Scroll from '@sdx/ui/components/scroll';
 import WorkflowCard from './workflow-card/WorkflowCard';
@@ -187,7 +188,7 @@ export default {
     },
     computed: {
         userId() {
-            return getUser().userId || '123';
+            return getUser().userId;
         }
     },
     methods: {
@@ -201,17 +202,16 @@ export default {
         searchWorkflow() {
             this.initList();
         },
-        initList(refreshTemplates) {
+        async initList(refreshTemplates) {
             this.initWorkflowsList();
-            if (refreshTemplates)  this.initTemplates();
+            if (refreshTemplates)  await this.initTemplates();
             this.initTemplatesList();
         },
         initWorkflowsList() {
             this.workflowsLoading = true;
             const params = {
                 name: this.searchName,
-                start: this.current,
-                count: -1,
+                ...paginate(this.current, this.pageSize),
                 order: this.order,
                 orderBy: 'createdAt',
                 isTemplate: false

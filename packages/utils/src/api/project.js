@@ -3,13 +3,13 @@ import httpService from '@sdx/utils/lib/http-service';
 
 import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
 
-const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects/`;
+const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 
-const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks/`;
+const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks`;
 
 // 聚合拿到project
 export function getProjectList(params) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles/`, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
 }
 
 export function getTaskList(params) {
@@ -55,11 +55,11 @@ export function updateTask(uuid,params) {
 
 // 数据集列表
 export function getDataSet(params) {
-    return httpService.get('/v2/dataset/options/', params);
+    return httpService.get('/v2/dataset/options', params);
 }
 // 数据源列表
 export function getTaskDataSource(params) {
-    return httpService.get('/v2/datasource/taskOptions/', params);
+    return httpService.get('/v2/datasource/taskOptions', params);
 }
 
 export default {

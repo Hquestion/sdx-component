@@ -84,6 +84,7 @@
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
                     :accept="'.py'"
+                    :string-model="true"
                 />
             </el-form-item>
             <el-form-item

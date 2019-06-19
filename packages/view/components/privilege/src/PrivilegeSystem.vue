@@ -107,11 +107,11 @@ export default {
     methods: {
         fetchData() {
             getPermissionList(this.querys).then(data => {
-                // window.console.error(data);
                 this.data = data.permissions;
                 this.total = data.total;
-            }).catch(err => {
-                window.console.error(err);
+            }).catch(() => {
+                this.data = [];
+                this.total = 0;
             });
         },
         splitKey(key, i) {

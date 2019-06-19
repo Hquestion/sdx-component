@@ -152,8 +152,9 @@ export default {
     methods: {
         fetchData() {
             getPodsList(this.params).then(data => {
-                window.console.error(data);
                 this.componentList = data.status_list;
+            }).catch(() => {
+                this.componentList = [];
             });
         },
         handleViewLog(podId) {

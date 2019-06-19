@@ -162,6 +162,9 @@ export default {
                 if (this.emitResultCount) {
                     this.$emit('queryCount', data.total);
                 }
+            }).catch(() => {
+                this.packageList = [];
+                this.total = 0;
             });
         },
         handleChangePage(page) {
@@ -203,7 +206,7 @@ export default {
             this.fetchData();
         },
         imageId() {
-            this.fetchData();
+            this.handleReset();
         }
     },
     created() {

@@ -84,8 +84,9 @@
                     <SdxwFileSelect
                         v-model="params.filePath"
                         :accept="radio === 'DockerFile' ? '': '.tar'"
-                        :check-type="radio === 'DockerFile' ? 'file' : 'all'"
+                        check-type="file"
                         :string-model="true"
+                        :source="radio === 'DockerFile' ? 'ceph': 'all'"
                     />
                 </el-form-item>
             </el-form>

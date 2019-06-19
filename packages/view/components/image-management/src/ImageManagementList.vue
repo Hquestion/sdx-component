@@ -17,10 +17,10 @@
                 icon="sdx-icon-plus"
                 size="small"
                 @click="goFileBuild"
-                v-auth.image.button="'IMAGE_BUILDER:BUILD_BASIC'"
             >
                 基于文件构建
             </SdxuButton>
+            <!-- v-auth.image.button="'IMAGE_BUILDER:BUILD_BASIC'" -->
         </div>
         <div>
             <div

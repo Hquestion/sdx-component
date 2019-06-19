@@ -32,16 +32,17 @@ export let handler = wrap(function(ctx, request) {
             url: 'http://tyk-gateway/user-manager/api/v1/groups',
             result: 'groups'
         },
-        {
-            paths: [
-                'user.permissions.*',
-                'user.groups.*.permissions.*',
-                'user.roles.*.permissions.*',
-            ],
-            url: 'http://tyk-gateway/user-manager/api/v1/permissions',
-            result: 'permissions'
-        }
     );
+
+    ctx.resolveUuids(authToken, {
+        paths: [
+            'user.permissions.*',
+            'user.groups.*.permissions.*',
+            'user.roles.*.permissions.*',
+        ],
+        url: 'http://tyk-gateway/user-manager/api/v1/permissions',
+        result: 'permissions'
+    });
 
     return ctx.createResponse(200, authToken);
 });

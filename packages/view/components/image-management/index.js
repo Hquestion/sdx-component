@@ -8,13 +8,13 @@ const routeCfg = [
         path: '/sdxv-image-manage',
         name: 'SdxvImageManagement',
         component: ImageManagement,
-        redirect: '/sdxv-image-manage/imageList',
+        redirect: '/sdxv-image-manage/imageList/imageTab',
         meta: {
             breadcrumb: '镜像管理'
         },
         children: [
             {
-                path: 'imageList',
+                path: 'imageList/:tab',
                 name:'imageList',
                 component: ImageManagementList,
             },

@@ -196,13 +196,23 @@ export default {
         imageBuildTar(params) {
             buildTar(params)
                 .then(() => {
-                    this.$router.go(-1);
+                    this.$router.push({
+                        name: 'imageList',
+                        params: {
+                            tab: 'taskTab'
+                        }
+                    });
                 });
         },
         imageBuildImagefile(params) {
             buildImagefile(params)
                 .then(() => {
-                    this.$router.go(-1);
+                    this.$router.push({
+                        name: 'imageList',
+                        params: {
+                            tab: 'taskTab'
+                        }
+                    });
                 });
         },
         resetForm() {

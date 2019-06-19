@@ -275,6 +275,12 @@ export default {
             });
         },
         switchProjectType() {
+            this.$router.push({
+                name: 'imageList',
+                params: {
+                    tab: this.projectType === 'image'? 'imageTab':'taskTab'
+                }
+            });
         },
         selectImageKind(key) {
             this.resetVariables();

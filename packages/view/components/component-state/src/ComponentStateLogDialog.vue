@@ -40,7 +40,7 @@ export default {
         return {
             start: 1,
             end: 1,
-            size: 100,
+            size: 20,
             isLoading: false,
             logContent: ''
         };
@@ -69,13 +69,13 @@ export default {
                     start: offset,
                     count: Math.abs(size)
                 });
-                let content = Array.isArray(data.contents) && data.contents.join('\r\n');
+                let content = Array.isArray(data.contents) && data.contents.join('');
                 if (size < 0) {
                     this.start = this.start - data.contents.length;
-                    this.logContent = content + (content ? '\r\n' : '') + this.logContent;
+                    this.logContent = content + this.logContent;
                 } else {
                     this.end = this.end + data.contents.length;
-                    this.logContent += (content ? '\r\n' : '') + content;
+                    this.logContent += content;
                 }
                 // this.logContent = this.logContent.trim();
                 this.isLoading = false;
@@ -95,7 +95,7 @@ export default {
         handleClose() {
             this.start = 1;
             this.end = 1;
-            this.size = 100;
+            this.size = 20;
             this.isLoading = false;
             this.logContent = '';
         }

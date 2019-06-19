@@ -139,7 +139,7 @@ export default {
     computed: {
         filterTotalList() {
             return this.componentList.filter(item => {
-                return item.podName.includes(this.query.podName.trim()) && (this.query.status === '' || item.status === this.query.status);
+                return item.podName.includes(this.query.podName) && (this.query.status === '' || item.status === this.query.status);
             });
         },
         dataList() {
@@ -166,7 +166,8 @@ export default {
             this.currentPodId = podId;
         },
         handleSearch() {
-            this.query.podName = this.searchName;
+            this.page = 1;
+            this.query.podName = this.searchName.trim();
             this.query.status = this.podState;
         },
         handlePageChange(page) {

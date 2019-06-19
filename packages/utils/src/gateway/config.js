@@ -64,6 +64,12 @@ module.exports = [
         filePath: './compose/imageShareBatch.js'
     },
     {
+        apiId: '/fe-compose/api/v1/image-builder-profiles',
+        method: 'GET',
+        functionName: 'imageBuilderProfiles.handler',
+        filePath: './compose/imageBuilderProfiles.js'
+    },
+    {
         apiId: '/fe-compose/api/v1/task-profiles',
         method: 'GET',
         functionName: 'taskProfiles.handler',
@@ -92,5 +98,11 @@ module.exports = [
         method: 'PATCH',
         functionName: 'modelShareBatch.handler',
         filePath: './compose/modelShareBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/skyflow-profiles',
+        method: 'GET',
+        functionName: 'skyflowProfiles.handler',
+        filePath: './compose/skyflowProfiles.js'
     },
 ];

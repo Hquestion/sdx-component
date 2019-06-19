@@ -69,6 +69,8 @@
                     v-for="(item, index) in projectList"
                     :key="index"
                     :meta="item"
+                    :edit-able="item.showEdit"
+                    :delete-able="item.showRemove"
                 />
             </sdxw-project-card-list>
         </div>
@@ -95,6 +97,7 @@ import Message from 'element-ui/lib/message';
 import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
 import SortButton from '@sdx/ui/components/sort-button';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -145,6 +148,11 @@ export default {
             };
             getProjectList(params).then(res => {
                 this.projectList = res.data.items;
+                this.projectList.forEach(item => {
+                    const isOwn = getUser().userId === item.owner.uuid;
+                    item.showEdit = isOwn;
+                    item.showRemove = isOwn;
+                });
                 this.total = res.data.total;
                 this.loading = false;
             });

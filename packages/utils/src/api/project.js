@@ -13,7 +13,7 @@ export function getProjectList(params) {
 }
 
 export function getTaskList(params) {
-    return httpService.get(taskApi, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
 }
 
 export function getProjectDetail(uuid) {

@@ -71,6 +71,7 @@
                 <div class="sdxv-project-detail__footer">
                     <div />
                     <sdxu-pagination
+                        v-if="total"
                         :current-page.sync="current"
                         :page-size="pageSize"
                         :total="total"
@@ -127,7 +128,7 @@ export default {
                         {
                             name: 'ContainerDev',
                             class: 'icon-docker',
-                            type: 'CONTAINER_DEV'
+                            type: 'CONTAINERDEV'
                         }
                     ]
                 },

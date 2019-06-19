@@ -20,7 +20,7 @@
         <main class="sdxv-task-card__main">
             <div class="sdxv-task-card__info">
                 <i class="sdx-icon sdx-icon-user" />
-                <span>{{ meta.ownerName }}</span>
+                <span>{{ (meta.owner && meta.owner.fullName) || '' }}</span>
             </div>
             <div class="sdxv-task-card__info">
                 <i class="sdx-icon sdx-icon-time" />
@@ -105,7 +105,7 @@ export default {
             case 'PYTHON':
                 taskType.class = 'icon-python';
                 break;
-            case 'CONTAINER_DEV':
+            case 'CONTAINERDEV':
                 taskType.class = 'icon-docker';
                 break;
             case 'SPARK':

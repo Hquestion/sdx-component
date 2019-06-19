@@ -41,7 +41,7 @@
                             :searchable="false"
                             size="small"
                             type="search"
-                            placeholder="请输入角色名"
+                            :placeholder="`请输入${tabName}`"
                         />
                     </SdxwSearchItem>
                 </SdxwSearchLayout>
@@ -52,7 +52,7 @@
                 >
                     <el-table-column
                         :prop="objectType === 'user' ? 'fullName' : 'name'"
-                        label="授权对象"
+                        :label="tabName"
                     />
                     <el-table-column
                         label="权限"
@@ -177,6 +177,7 @@ import TabRadio from '@sdx/ui/components/tab-radio';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import {  paginate } from '@sdx/utils/src/helper/tool';
 import SdxwUserPicker from '@sdx/widget/components/user-picker';
+import SearchLayout from '@sdx/widget/components/search-layout';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -194,7 +195,9 @@ export default {
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
         SdxwUserPicker,
-        SdxuUserAvatar
+        SdxuUserAvatar,
+        [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
     },
     data() {
         const objValueValidate = (rule, value, callback) => {
@@ -244,6 +247,19 @@ export default {
     created() {
         this.userList();
         this.getPermissions();
+    },
+    computed: {
+        tabName() {
+            let name ='';
+            if(this.objectType === 'user') {
+                name = '用户名';
+            } else if(this.objectType === 'group') {
+                name = '用户组名';
+            } else if (this.objectType === 'role'){
+                name = '角色名';
+            }
+            return name;
+        }
     },
     methods: {
         // 何种类型是否重置页码

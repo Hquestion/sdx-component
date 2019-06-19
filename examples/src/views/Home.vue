@@ -4,11 +4,12 @@
             alt="Vue logo"
             src="../assets/logo.png"
         >
-        <SdxFilePop />
+        <SdxFilePop v-model="myfile" />
         <SdxwFileSelectMain
             check-type="file"
             v-model="files"
-            accept="img/png;.py"
+            :string-model="true"
+            accept="image/png;.py"
         />
         <!--        <SdxuLazyList :load="loadData" item-key="uuid" store-name="file" store-keys="uuid,name" :item-height="50" style="height: 400px;">-->
         <!--            <template #default="{data}">-->
@@ -47,7 +48,8 @@ export default {
         return {
             checkedNodes: [],
             searchCheckedNodes: [],
-            files: [],
+            files: '',
+            myfile: [],
             editorVisible: false,
             code: 'import os\n' +
                 'from typing import Callable, Dict\n' +

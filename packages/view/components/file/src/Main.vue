@@ -3,7 +3,7 @@
         :fullscreen="true"
         class="sdxv-file-main"
     >
-        <OperationBar />
+        <OperationBar ref="operationBar" />
         <BreadcrumbBar />
         <FileTable ref="fileTable" />
         <SdxvFileTask :visible.sync="taskVisible" />
@@ -59,7 +59,8 @@ export default {
             orderBy: 'name',
             order: 'asc',
             fixedRows,
-            taskVisible: false
+            taskVisible: false,
+            uploadingFiles: []
         };
     },
     components: {
@@ -126,6 +127,7 @@ export default {
                 this.loading = false;
                 if (this.isRoot) {
                     fileList = fixedRows.concat(fileList);
+                    this.total = res.total + fixedRows.length;
                 }
                 return this.db.list.bulkAdd(fileList).then(() => {
                     this.loadedTotal += fileList.length;
@@ -133,8 +135,18 @@ export default {
                     window.console.error(e);
                 });
             }, () => {
+                let fileList = [];
                 this.total = 0;
                 this.loading = false;
+                if (this.isRoot) {
+                    fileList = fixedRows;
+                    this.total = fixedRows.length;
+                }
+                return this.db.list.bulkAdd(fileList).then(() => {
+                    this.loadedTotal += fileList.length;
+                }, e => {
+                    window.console.error(e);
+                });
             }).then(res => {
                 this.$nextTick(() => {
                     this.$refs.fileTable.calcViewportVisible();
@@ -226,6 +238,9 @@ export default {
         async getRenderList(offset, limit) {
             // 获取需要渲染到列表中的数据
             return Object.freeze(await this.db.list.offset(offset).limit(limit).toArray());
+        },
+        getUploadFiles() {
+            return this.$refs.operationBar.$refs.fileUploader.getUploadFiles();
         }
     },
     mounted() {
@@ -255,19 +270,19 @@ export default {
     },
     deactivated() {
         this.unwatch && this.unwatch();
+    },
+    watch: {
+        // $route(val, oldval) {
+        //     this.currentPath = val.query.path || '/';
+        //     if (val.query.search) {
+        //         this.enterSearch(this.currentPath, val.query.search);
+        //     } else {
+        //         if (val.query.path !== oldval.query.path) {
+        //             this.enterDirectory(this.currentPath);
+        //         }
+        //     }
+        // }
     }
-    // watch: {
-    //     $route(val, oldval) {
-    //         this.currentPath = val.query.path || '/';
-    //         if (val.query.search) {
-    //             this.enterSearch(this.currentPath, val.query.search);
-    //         } else {
-    //             if (val.query.path !== oldval.query.path) {
-    //                 this.enterDirectory(this.currentPath);
-    //             }
-    //         }
-    //     }
-    // }
 };
 </script>
 

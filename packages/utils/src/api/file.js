@@ -38,7 +38,7 @@ export function searchFiles(params) {
         showHidden = 0
     } = params;
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/search`, {
-        userId,
+        userId: userId || userInfo.userId,
         path,
         start,
         count,
@@ -62,8 +62,8 @@ export function share(params) {
         groups = []
     } = params;
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
-        ownerId,
-        sharerId,
+        ownerId: ownerId || userInfo.userId,
+        sharerId: sharerId || userInfo.userId,
         path,
         isGlobal,
         users,
@@ -107,7 +107,7 @@ export function getMyShare(params) {
         order = 'asc'
     } = params;
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
-        sharerId,
+        sharerId: sharerId || userInfo.userId,
         path,
         start,
         count,
@@ -127,7 +127,7 @@ export function getMyAcceptedShare(params) {
         order = 'asc'
     } = params;
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
-        userId,
+        userId: userId || userInfo.userId,
         path,
         start,
         count,
@@ -147,7 +147,7 @@ export function getProjectShare(params) {
         order = 'asc'
     } = params;
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
-        userId,
+        userId: userId || userInfo.userId,
         path,
         start,
         count,
@@ -205,7 +205,7 @@ export function zipPreview({ path = '/', pathInZip = '/', start = 1, count = -1 
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/preview`, {
         userId: userInfo.userId,
         path,
-        pathInZip,
+        pathInArchive: pathInZip,
         start,
         count
     });
@@ -231,7 +231,7 @@ export function download(path, filesystem = 'cephfs') {
 
 export function getCopyTaskList() {
     let userInfo = shareCenter.getUser() || {};
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs/`, {
+    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
         userId: userInfo.userId,
         jobType: 'COPY'
     });
@@ -239,7 +239,7 @@ export function getCopyTaskList() {
 
 export function getDelTaskList() {
     let userInfo = shareCenter.getUser() || {};
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs/`, {
+    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
         userId: userInfo.userId,
         jobType: 'DELETE'
     });

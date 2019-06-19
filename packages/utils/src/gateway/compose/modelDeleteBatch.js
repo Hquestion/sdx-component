@@ -2,8 +2,8 @@ import wrap from '../wrap';
 import errorCode from '../errorCode';
 
 export let handler = wrap(function(ctx, request) {
-    ctx.debug('MODEL DELETE PARAMS ' + JSON.stringify(request.Params));
-    const requests = request.Params.uuids.map(uuid => ctx.createDeleteRequest(`http://tyk-gateway/model-manager/api/v1/models/${uuid}`));
+    ctx.debug('MODEL DELETE BODY ' + request.Body);
+    const requests = JSON.parse(request.Body).uuids.map(uuid => ctx.createDeleteRequest(`http://tyk-gateway/model-manager/api/v1/models/${uuid}`));
     const results = ctx.sendRequests(...requests);
 
     let errorRequest = [];

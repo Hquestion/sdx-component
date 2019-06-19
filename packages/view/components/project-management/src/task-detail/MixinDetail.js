@@ -8,6 +8,7 @@ import SdxvMonitorInfo from './common/MonitorInfo';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuButton from '@sdx/ui/components/button';
 import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL } from '@sdx/utils/src/const/task';
+import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 
 export default {
     props: {
@@ -94,10 +95,10 @@ export default {
             return time;
         },
         byteToGb(byte) {
-            return byte / (1024 * 1024 * 1024); 
+            return byteToGB(byte); 
         },
         milliCoreToCore(millicore) {
-            return millicore / 1000;
+            return parseMilli(millicore);
         }
     }
 };

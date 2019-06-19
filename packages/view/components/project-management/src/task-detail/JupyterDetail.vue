@@ -41,7 +41,7 @@
         <template #running-info>
             <SdxvBaseInfoItem
                 label="运行环境"
-                :value="task.dockerImageName"
+                :value="task.image.name"
             />
             <SdxvBaseInfoItem
                 label="实例个数"
@@ -104,7 +104,7 @@
         </template>
         <template #data-info>
             <SdxvHasNothing
-                v-if="!task.datasources.length && !task.datasets.length"
+                v-if="task.datasources && !task.datasources.length && task.datasets && !task.datasets.length"
                 tips="暂时还没数据信息哦"
             />
             <SdxvDataInfo
@@ -152,7 +152,6 @@ export default {
             window.open(`${this.task.external_url}/${param}`);
         }
     }
-
 };
 </script>
 

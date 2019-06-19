@@ -20,7 +20,9 @@ export default {
                     name: 'creator'
                 },
                 description: 'xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高觉得是浪费感觉啊都说了割发代首',
-                dockerImageName: 'sadfasfljlkjlfkjasklga',
+                image: {
+                    name: 'sadfasfljlkjlfkjasklga'
+                },
                 resourceConfig: {
                     EXECUTOR_INSTANCES: 1,
                     EXECUTOR_CPUS: 4000,

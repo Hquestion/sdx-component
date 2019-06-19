@@ -34,12 +34,7 @@ module.exports = {
                 ws: true,
                 changeOrigin: true,
             },
-            '^/project-manager': {
-                target: 'http://10.115.1.130:30080',
-                ws: true,
-                changeOrigin: true,
-            },
-            '^/resource-manager': {
+            '^/.*-manager': {
                 target: 'http://10.115.1.130:30080',
                 ws: true,
                 changeOrigin: true,

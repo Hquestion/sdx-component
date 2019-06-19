@@ -9,12 +9,16 @@
                 新建文件夹
             </SdxuButton>
             <SdxwFileSelect
+                ref="fileUploader"
                 source="local"
                 :inline="true"
                 :limit="-1"
                 dropdown-width="138px"
                 local-file-label="上传文件"
                 local-folder-label="上传文件夹"
+                :upload-params="makeUploadParams()"
+                :on-progress="handleProgress"
+                :on-success="removeUpload"
                 style="margin-left: 20px;margin-right: 20px;"
                 v-if="canUpload()"
             >
@@ -76,6 +80,7 @@ import SdxwFileSelect from '@sdx/widget/components/file-select';
 import SdxwSearch from '@sdx/widget/components/search-layout';
 import SdxuInput from '@sdx/ui/components/input';
 import batchOperationAuthMixin from './helper/batchOperationAuthMixin';
+import shareCenter from '@sdx/utils/src/helper/shareCenter';
 
 export default {
     name: 'OperationBar',
@@ -125,6 +130,21 @@ export default {
         },
         handleDelete() {
             this.fileManager.$refs.fileTable.deleteRow();
+        },
+        makeUploadParams() {
+            return {
+                userId: shareCenter.getUser().uuid,
+                path: this.fileManager.currentPath,
+                filesystem: 'cephfs',
+                overwrite: 0
+            };
+        },
+        handleProgress(e, file, files) {
+            this.fileManager.uploadingFiles = files;
+            this.fileManager.taskVisible = true;
+        },
+        removeUpload(file) {
+            this.$refs.fileUploader.handleRemove(file);
         }
     },
     mounted() {

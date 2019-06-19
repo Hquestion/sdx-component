@@ -151,7 +151,7 @@ export default {
                 const relativePathList = webkitRelativePath.split('/');
                 if (relativePathList.length > 1) {
                     uploadRelativePath = relativePathList.slice(0, -1).join('/');
-                    if (action[action.length - 1] !== '/') {
+                    if (this.data.path[this.data.path.length - 1] !== '/') {
                         uploadRelativePath = `/${uploadRelativePath}`;
                     }
                 }
@@ -160,9 +160,9 @@ export default {
                 headers: this.headers,
                 withCredentials: this.withCredentials,
                 file: rawFile,
-                data: this.data,
+                data: {...this.data, path: `${this.data.path || ''}${uploadRelativePath}`},
                 filename: this.name,
-                action: action + uploadRelativePath,
+                action: action,
                 onProgress: e => {
                     this.onProgress(e, rawFile);
                 },

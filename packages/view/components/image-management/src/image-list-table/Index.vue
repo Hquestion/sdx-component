@@ -8,7 +8,8 @@
                 type="primary"
                 size="small"
                 @click="share"
-                v-if="imageKind === 'private'"
+                v-show="imageKind === 'private'"
+                v-auth.image.button="'IMAGE:SHARE'"
             >
                 全部共享
             </SdxuButton>
@@ -25,7 +26,8 @@
                 type="primary"
                 size="small"
                 @click="cancelShare"
-                v-if="imageKind === 'myShare'"
+                v-show="imageKind === 'myShare'"
+                v-auth.image.button="'IMAGE:SHARE'"
             >
                 取消共享
             </SdxuButton>

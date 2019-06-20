@@ -44,7 +44,7 @@ export function getTimerSubRunningInfo(params) {
 }
 
 export function shutdownGeneralRunningTask(uuid) {
-    return httpService.post(skyflowExecuteApi + uuid + '/stop');
+    return httpService.post(`${skyflowExecuteApi}/${uuid}/stop`);
 }
 
 export function removeGeneralRunningTask(uuid) {

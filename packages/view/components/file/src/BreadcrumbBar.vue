@@ -62,23 +62,23 @@ export default {
     mounted() {
         this.list = this.buildBreadcrumb(this.$route.query.path);
     },
-    activated() {
-        this.unwatch = this.$watch('$route', (val, oldval) => {
+    // activated() {
+    //     this.unwatch = this.$watch('$route', (val, oldval) => {
+    //         if (val.query.path !==  oldval.query.path || val.query.search !== oldval.query.search) {
+    //             this.list = this.buildBreadcrumb(val.query.path);
+    //         }
+    //     });
+    // },
+    // deactivated() {
+    //     this.unwatch && this.unwatch();
+    // },
+    watch: {
+        $route(val, oldval) {
             if (val.query.path !==  oldval.query.path || val.query.search !== oldval.query.search) {
                 this.list = this.buildBreadcrumb(val.query.path);
             }
-        });
-    },
-    deactivated() {
-        this.unwatch && this.unwatch();
+        }
     }
-    // watch: {
-    //     $route(val, oldval) {
-    //         if (val.query.path !==  oldval.query.path) {
-    //             this.list = this.buildBreadcrumb(val.query.path);
-    //         }
-    //     }
-    // }
 };
 </script>
 

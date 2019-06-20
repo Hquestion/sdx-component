@@ -100,6 +100,12 @@ module.exports = [
         filePath: './compose/modelShareBatch.js'
     },
     {
+        apiId: '/fe-compose/api/v1/model-profiles',
+        method: 'GET',
+        functionName: 'modelProfiles.handler',
+        filePath: './compose/modelProfiles.js'
+    },
+    {
         apiId: '/fe-compose/api/v1/skyflow-profiles',
         method: 'GET',
         functionName: 'skyflowProfiles.handler',

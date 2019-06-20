@@ -17,6 +17,7 @@
             :reverse-selection="true"
             :row-key="setRowKey"
             :data="fileManager.renderFiles"
+            :default-sort="{prop: fileManager.orderBy, order: 'ascending'}"
             @sort-change="handleSortChange"
             :show-header="fileManager.checked.length === 0"
             @select="handleSelect"
@@ -36,6 +37,7 @@
                 label="文件名"
                 sortable="custom"
                 prop="name"
+                :sort-orders="['ascending', 'descending']"
             >
                 <template #default="{row}">
                     <span
@@ -96,6 +98,7 @@
                 sortable="custom"
                 prop="size"
                 width="180"
+                :sort-orders="['ascending', 'descending']"
             >
                 <template #default="{row}">
                     {{ row.size | byteFormatter }}
@@ -106,6 +109,7 @@
                 sortable="custom"
                 prop="updatedAt"
                 width="240"
+                :sort-orders="['ascending', 'descending']"
             >
                 <template #default="{row}">
                     {{ row.updatedAt | dateFormatter }}
@@ -129,6 +133,7 @@
             </el-table-column>
         </SdxuTable>
         <SdxvFolderSelect
+            v-if="moveVisible"
             :visible.sync="moveVisible"
             :support-move="supportMove"
             @move="handleMove"
@@ -168,6 +173,7 @@ import OperationHandlerMixin from './helper/operationHandlerMixin';
 import FileSelect from '@sdx/widget/components/file-select';
 
 const ROW_HEIGHT = 52;
+let isFirstSort = true;
 
 export default {
     name: 'FileTable',
@@ -280,7 +286,23 @@ export default {
         setRowKey(row) {
             return row.path;
         },
-        handleSortChange() {},
+        handleSortChange({order, prop}) {
+            const orderMap = {
+                'descending': 'desc',
+                'ascending': 'asc',
+                '': ''
+            };
+            if (isFirstSort) {
+                isFirstSort = false;
+                return;
+            }
+            if (this.fileManager.orderBy === prop && this.fileManager.order === orderMap[order]) {
+                return;
+            }
+            this.fileManager.orderBy = prop;
+            this.fileManager.order = orderMap[order];
+            this.fileManager.enterDirectory(this.fileManager.currentPath);
+        },
         handleFileAction(row, { name }) {
             return this.OPERATION_MAP[name] && this.OPERATION_MAP[name](row);
         },
@@ -340,6 +362,9 @@ export default {
     },
     mounted() {
         this.init();
+    },
+    beforeDestroy() {
+        isFirstSort = true;
     }
 };
 </script>

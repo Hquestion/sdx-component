@@ -348,7 +348,6 @@ export default {
                 this.modelList = res.items;
                 this.modelList.forEach(item => {
                     const userId = getUser().userId;
-                    window.console.log('userId', userId);
                     item.showShare = (this.modelType === 'ALL' && item.creator.uuid === userId) || this.modelType === 'PRIVATE';
                     item.showEdit = (this.modelType === 'ALL' && item.creator.uuid === userId) || this.modelType === 'PRIVATE';
                     item.showRemove = (this.modelType === 'ALL' && item.creator.uuid === userId) || this.modelType === 'PRIVATE';

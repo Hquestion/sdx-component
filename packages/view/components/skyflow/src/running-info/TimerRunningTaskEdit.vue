@@ -117,7 +117,8 @@ export default {
         }
     },
     created() {
-        Object.assign(this.taskForm, this.data);
+        this.taskForm.crontabName = this.data.crontabName;
+        this.taskForm.crontab = this.data.crontab;
     },
     methods: {
         confirm() {
@@ -125,7 +126,7 @@ export default {
                 if (!valid) {
                     Message.error('请输入必填信息');
                 } else {
-                    updateTimerRunningTask(this.taskForm.uuid, this.taskForm).then(() => {
+                    updateTimerRunningTask(this.data.uuid, this.taskForm).then(() => {
                         Message({
                             message: '更新成功',
                             type: 'success'

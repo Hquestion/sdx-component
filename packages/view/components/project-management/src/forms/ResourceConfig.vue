@@ -114,7 +114,7 @@ export default {
         },
         gpulabel: {
             type: String,
-            default: ' GPU'
+            default: 'GPU'
         },
         readOnly: {
             type: Boolean,

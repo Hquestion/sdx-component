@@ -7,13 +7,10 @@
                 type="search"
                 v-model="filterText"
             />
-            <el-scrollbar
-                class="sdxu-transfer__scrollbar"
-                wrap-class="sdxu-transfer__wrap"
+            <div
+                class="sdxu-transfer__tree"
             >
-                <div
-                    class="sdxu-transfer__tree"
-                >
+                <SdxuScroll>
                     <el-tree
                         :data="data"
                         show-checkbox
@@ -24,8 +21,8 @@
                         :default-checked-keys="defaultKeys"
                         @check="checkChange"
                     />
-                </div>
-            </el-scrollbar>
+                </SdxuScroll>
+            </div>
             <div class="sdxu-transfer__moveall">
                 <SdxuButton
                     type="default"
@@ -151,7 +148,8 @@ export default {
             }
             moveNodes = checkedNodes.filter(v => !childrenKeys.includes(v[this.treeNodeKey]));
             for (let i =0; i < moveNodes.length ; i++ ) {
-                if (tags.find(item => item.name === moveNodes[i].label)) continue;
+                // if (tags.find(item => item.name === moveNodes[i].label)) continue;
+                if (tags.find(item => item[this.treeNodeKey] === moveNodes[i][this.treeNodeKey])) continue;
                 tags.push(
                     {
                         name: moveNodes[i].label,
@@ -185,7 +183,7 @@ export default {
                     {
                         name: this.data[i].label,
                         [this.treeNodeKey]: this.data[i][this.treeNodeKey],
-                        is_group:  true
+                        is_group:  this.data[i].children ? true : false
                     }
                 );
                 keys.push(this.data[i][this.treeNodeKey]);

@@ -176,7 +176,7 @@ export default {
             if (file) {
                 file.status = 'success';
                 file.response = res;
-                file.cephName = res.path;
+                file.cephName = res.files[0].path;
 
                 this.onSuccess(res, file, this.uploadFiles);
                 this.onChange(file, this.uploadFiles);

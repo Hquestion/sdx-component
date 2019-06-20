@@ -35,7 +35,7 @@
                 <span>资源设置大于等于</span>
                 <ElSelect
                     v-if="!readonly"
-                    v-model="params.heavyTaskArr[0]"
+                    v-model="cpuTplInput"
                     placeholder="请选择"
                 >
                     <ElOption
@@ -95,7 +95,7 @@
                     :inline="true"
                     type="number"
                     v-if="!readonly"
-                    v-model="params.maxGpuTime"
+                    v-model="maxGpuTimeHour"
                 />
                 <InputReadonly
                     size="regular"
@@ -114,7 +114,7 @@
                     :inline="true"
                     type="number"
                     v-if="!readonly"
-                    v-model="params.maxCpuTime"
+                    v-model="maxCpuTimeDay"
                 />
                 <InputReadonly
                     size="regular"
@@ -133,8 +133,9 @@ import SdxuInput from '@sdx/ui/components/input';
 import InputReadonly from './InputReadonly';
 
 import { deepCopy } from '@sdx/utils/src/helper/tool';
-import {getResourceConfigDetail, getResourceTmplList} from '@sdx/utils/src/api/resource';
+import { getResourceConfigDetail, getResourceTmplList, saveResourceConfig } from '@sdx/utils/src/api/resource';
 import { Select, Form, FormItem } from 'element-ui';
+import { byteToGB, secToHour, secToDay, cpuTplFriendly, hourToSec, dayToSec, parseMilli } from '@sdx/utils/src/helper/transform';
 
 export default {
     name: 'RuleForm',
@@ -145,7 +146,7 @@ export default {
                 heavyTaskArr: [],
                 maxGpus: 0,
                 maxGpuTime: 0,
-                maxCpuTime: 0
+                maxCpuTime: 0,
             },
             resourceTmplList: [],
             defaultConfig: {}
@@ -178,6 +179,39 @@ export default {
                 h: 'right',
                 v: 'top'
             }[this.mode];
+        },
+        cpuTplInput: {
+            get() {
+                const cpuTplInfo = this.params.heavyTaskArr[0];
+                if (cpuTplInfo) {
+                    return `${cpuTplInfo.cpu}/${cpuTplInfo.memory}`;
+                } else {
+                    return '';
+                }
+            },
+            set(val) {
+                const tplArr = val.split('/');
+                this.$set(this.params.heavyTaskArr, 0, {
+                    cpu: +tplArr[0],
+                    memory: +tplArr[1]
+                });
+            }
+        },
+        maxGpuTimeHour: {
+            get() {
+                return secToHour(this.params.maxGpuTime || 0);
+            },
+            set(val) {
+                this.params.maxGpuTime = hourToSec(+val);
+            }
+        },
+        maxCpuTimeDay: {
+            get() {
+                return secToDay(this.params.maxCpuTime || 0);
+            },
+            set(val) {
+                this.params.maxCpuTime = dayToSec(+val);
+            }
         }
     },
     methods: {
@@ -186,45 +220,64 @@ export default {
                 this.resourceTmplList = res.items.map(item => {
                     const { cpu, memory } = item;
                     return {
-                        label: `${cpu}C ${memory}GB`,
-                        value: {
-                            cpu,
-                            memory
-                        }
+                        label: `${parseMilli(cpu)}C ${byteToGB(memory)}GB`,
+                        value: `${cpu}/${memory}`
                     };
-                });
-                getResourceConfigDetail(this.userId).then(res => {
-                    const heavyTaskArr = [];
-                    heavyTaskArr[0] = res.heavyTaskThreshold;
-                    heavyTaskArr[1] = res.maxConcurrentHeavyTasks || 0;
-                    res.heavyTaskArr = heavyTaskArr;
-                    this.params = Object.assign(this.params, res);
-                    this.defaultConfig = deepCopy(this.params);
                 });
             });
         },
+        initResourceConfigDetail() {
+            getResourceConfigDetail(this.userId).then(res => {
+                const heavyTaskArr = [];
+                heavyTaskArr[0] = res.heavyTaskThreshold;
+                heavyTaskArr[1] = res.maxConcurrentHeavyTasks || 0;
+                res.heavyTaskArr = heavyTaskArr;
+                this.params = Object.assign(this.params, res);
+                this.defaultConfig = deepCopy(this.params);
+            });
+        },
         save() {
-            // todo 保存配置
-
+            saveResourceConfig(this.params.uuid, {
+                maxConcurrentTasks: +this.params.maxConcurrentTasks,
+                maxConcurrentHeavyTasks: +this.params.heavyTaskArr[1],
+                maxGpuTime: +this.params.maxGpuTime,
+                maxCpuTime: +this.params.maxCpuTime,
+                maxGpus: +this.params.maxGpus,
+                heavyTaskThreshold: this.params.heavyTaskArr[0]
+            }).then(() => {
+                this.defaultConfig = deepCopy(this.params);
+            });
         },
         cancel() {
             this.params = Object.assign(this.params, this.defaultConfig);
+        },
+        getConfig() {
+            return {
+                maxConcurrentTasks: +this.params.maxConcurrentTasks,
+                maxConcurrentHeavyTasks: +this.params.heavyTaskArr[1],
+                maxGpuTime: +this.params.maxGpuTime,
+                maxCpuTime: +this.params.maxCpuTime,
+                maxGpus: +this.params.maxGpus,
+                heavyTaskThreshold: this.params.heavyTaskArr[0],
+                resourceUuid: this.params.uuid
+            };
         }
     },
     filters: {
-        secToHour(seconds) {
-
-            return seconds && Math.floor(seconds / (60 * 60)) || '';
-        },
-        secToDay(seconds) {
-            return seconds && Math.floor(seconds / (60 * 60 * 24));
-        },
-        cpuTplFriendly(config) {
-            return config && `${config.cpu}C ${config.memory}GB` || '';
-        }
+        secToHour,
+        secToDay,
+        cpuTplFriendly
     },
     mounted() {
         this.init();
+    },
+    watch: {
+        userId: {
+            immediate: true,
+            handler() {
+                this.initResourceConfigDetail();
+            }
+        }
     }
 };
 </script>

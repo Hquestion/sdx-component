@@ -4,18 +4,19 @@
             alt="Vue logo"
             src="../assets/logo.png"
         >
-        <SdxFilePop />
+        <SdxFilePop v-model="myfile" />
         <SdxwFileSelectMain
             check-type="file"
             v-model="files"
-            accept="img/png;.py"
+            :string-model="true"
+            accept="image/png;.py"
         />
         <!--        <SdxuLazyList :load="loadData" item-key="uuid" store-name="file" store-keys="uuid,name" :item-height="50" style="height: 400px;">-->
         <!--            <template #default="{data}">-->
         <!--                <div >{{data.name}}</div>-->
         <!--            </template>-->
         <!--        </SdxuLazyList>-->
-        <SdxuButton @click="editorVisible = true">打开代码编辑器</SdxuButton>
+        <SdxuButton @click="editorVisible = true" v-auth.user.button="authFn" auth="USER:ACCESS">打开代码编辑器</SdxuButton>
         <SdxwCodeEditor
             :visible.sync="editorVisible"
             title="组件代码编辑"
@@ -32,7 +33,7 @@ import SdxwFileSelectMain from '@sdx/widget/components/file-select/src/FileSelec
 // import SdxuLazyList from '@sdx/ui/components/lazy-list/src/LazyList';
 import SdxwCodeEditor from '@sdx/widget/components/code-editor/src/CodeEditor';
 
-import SdxuButton from '../../../packages/ui/components/button/src/Button';
+import SdxuButton from '@sdx/ui/components/button';
 
 export default {
     name: 'Home',
@@ -47,7 +48,8 @@ export default {
         return {
             checkedNodes: [],
             searchCheckedNodes: [],
-            files: [],
+            files: '',
+            myfile: [],
             editorVisible: false,
             code: 'import os\n' +
                 'from typing import Callable, Dict\n' +
@@ -79,6 +81,10 @@ export default {
         },
         handleSave() {
             return Promise.resolve();
+        },
+        authFn() {
+            console.log(arguments);
+            return this.authFn;
         }
     }
 };

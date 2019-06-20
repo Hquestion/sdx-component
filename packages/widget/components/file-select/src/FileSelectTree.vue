@@ -98,10 +98,7 @@ export default {
                 props: {
                     label: 'name',
                     children: 'children',
-                    isLeaf: data => {
-                        window.console.log(data);
-                        return !!data.isFile;
-                    },
+                    isLeaf: 'isFile',
                     disabled: data => {
                         if (this.checkType === 'file') {
                             return !data.isFile;

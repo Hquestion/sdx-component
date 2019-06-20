@@ -127,6 +127,7 @@ export default {
             type: [Array, String],
             default: () => []
         },
+        // 控制value为数组时，是否只返回path字符串数组，默认返回文件Object数组
         stringModel: {
             type: Boolean,
             default: false
@@ -255,7 +256,21 @@ export default {
                     isFile: true
                 }));
             } else {
-                return this.value;
+                return this.value.map(item => {
+                    if (typeof item === 'string') {
+                        return {
+                            name: item,
+                            cephName: item,
+                            status: 'success',
+                            percentage: 100,
+                            uid: Math.ceil(Math.random() * 1000000000),
+                            from: 'unknown',
+                            isFile: true
+                        };
+                    } else {
+                        return item;
+                    }
+                });
             }
         },
         disableCheck() {
@@ -389,7 +404,10 @@ export default {
                 isDir: !item.isFile
             }));
             let temp = [...fileUploadFiles, ...dirUploadFiles, ...cephPathsMap];
-            this.$emit('input', this.stringModel ? temp.map(item => item.cephName || item.name).join(',') : temp);
+            this.$emit('input',
+                typeof this.value === 'string'
+                    ? temp.map(item => item.cephName || item.name).join(',')
+                    : (this.stringModel ? temp.map(item => item.cephName || item.name) : temp));
         },
         emitBlurOnFormItem() {
             this.dispatch('ElFormItem', 'el.form.blur');

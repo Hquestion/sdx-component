@@ -3,7 +3,7 @@
         <SdxuTable
             :data="list"
             height="420"
-            style="width: 100%"
+            style="width: 560px"
             size="small"
         >
             <el-table-column

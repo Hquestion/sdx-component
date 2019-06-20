@@ -66,7 +66,7 @@ export function getPackagesByUuid(uuid, params) {
     return httpService.get(imageApi + uuid + '/packages', params);
 }
 
-// 获取镜像信息
+// 获取镜像信息
 export function getImage(uuid) {
     return httpService.get(imageApi + uuid);
 }

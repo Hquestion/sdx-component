@@ -232,18 +232,20 @@ export default {
 
             this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
             lock(this.$el.querySelector('.el-table__body-wrapper'));
-            setTimeout(() => {
-                if (this.fileManager.isRoot) {
-                    this.fileManager.renderFiles.splice(this.fileManager.fixedRows.length, 0, emptyRow);
-                } else {
-                    this.fileManager.renderFiles.unshift(emptyRow);
-                }
-                this.editingRow = emptyRow;
-                this.tempRowName = emptyRow.name;
+            this.$nextTick(() => {
                 setTimeout(() => {
-                    lock(this.$el.querySelector('.el-table__body-wrapper'));
-                }, 0);
-            }, 10);
+                    if (this.fileManager.isRoot) {
+                        this.fileManager.renderFiles.splice(this.fileManager.fixedRows.length, 0, emptyRow);
+                    } else {
+                        this.fileManager.renderFiles.unshift(emptyRow);
+                    }
+                    this.editingRow = emptyRow;
+                    this.tempRowName = emptyRow.name;
+                    setTimeout(() => {
+                        lock(this.$el.querySelector('.el-table__body-wrapper'));
+                    }, 0);
+                }, 100);
+            });
         },
         handlePathNameClick(row) {
             if (!row.isFile) {

@@ -7,6 +7,7 @@ VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
 import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail } from '@sdx/utils/src/api/file';
+import { unlock } from '@sdx/utils/src/lockScroll';
 
 export default {
     data() {
@@ -44,19 +45,24 @@ export default {
         doRenameOrMakePath() {
             if (this.editingRow.path) {
                 rename(this.editingRow.path, this.tempRowName).then(() => {
-                    // todo 刷新列表
+                    unlock(this.$el.querySelector('.el-table__body-wrapper'));
                     this.editingRow = null;
                     this.tempRowName = '';
                     this.fileManager.enterDirectory(this.fileManager.currentPath);
+                }, () => {
+                    unlock(this.$el.querySelector('.el-table__body-wrapper'));
                 });
             } else {
                 let path = this.fileManager.currentPath.lastIndexOf('/') === this.fileManager.currentPath.length
                     ? `${this.fileManager.currentPath}${this.tempRowName}`
                     : `${this.fileManager.currentPath}/${this.tempRowName}`;
                 mkdir(path).then(() => {
+                    unlock(this.$el.querySelector('.el-table__body-wrapper'));
                     this.editingRow = null;
                     this.tempRowName = '';
                     this.fileManager.enterDirectory(this.fileManager.currentPath);
+                }, () => {
+                    unlock(this.$el.querySelector('.el-table__body-wrapper'));
                 });
             }
         },
@@ -109,13 +115,11 @@ export default {
             if (this.toMoveOrCopyRow) {
                 // 移动单个路径
                 move(this.toMoveOrCopyRow.path, target.path).then(() => {
-                    // todo 刷新列表
                     this.fileManager.enterDirectory(this.fileManager.currentPath);
                 });
             } else {
                 if (this.fileManager.checked.length > 0) {
                     move(this.fileManager.checked.map(item => item.path), target.path).then(() => {
-                        // todo 刷新列表
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
                     });
                 }
@@ -202,7 +206,9 @@ export default {
                         groups
                     }).then(res => {
                         Message.success('分享成功');
-                        // todo 更新这条记录的shareDetailId
+                        let meta = this.fileManager.renderFiles.find(item => item.path === this.toShareRow.path);
+                        this.$set(meta, 'fileShareDetailId', res.uuid);
+                        this.fileManager.db.list.where('path').equals(meta.path).modify({fileShareDetailId: res.uuid});
                     });
                 }
             } else {

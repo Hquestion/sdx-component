@@ -133,6 +133,7 @@ export default {
             type: [Array, String],
             default: () => []
         },
+        // 控制value为数组时，是否只返回path字符串数组，默认返回文件Object数组
         stringModel: {
             type: Boolean,
             default: false
@@ -409,7 +410,6 @@ export default {
                 isDir: !item.isFile
             }));
             let temp = [...fileUploadFiles, ...dirUploadFiles, ...cephPathsMap];
-            // this.$emit('input', this.stringModel ? temp.map(item => item.cephName || item.name).join(',') : temp);
             this.$emit('input',
                 typeof this.value === 'string'
                     ? temp.map(item => item.cephName || item.name).join(',')

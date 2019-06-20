@@ -56,7 +56,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                prop="resource"
+                prop="resourceConfig"
                 label="资源配置:"
             >
                 <i class="icon">*</i>
@@ -131,7 +131,7 @@ export default {
                 description: '',
                 type: 'TENSORBOARD',
                 imageId: '',
-                resource: {
+                resourceConfig: {
                     'EXECUTOR_INSTANCES': 1,
                     'EXECUTOR_CPUS': 0,
                     'EXECUTOR_GPUS': 0,
@@ -154,7 +154,7 @@ export default {
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
                 ],
-                resource: [
+                resourceConfig: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -206,7 +206,7 @@ export default {
             };
         },
         cpuObj(val) {
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': val.cpu * 1000,
                 'EXECUTOR_GPUS': 0,

@@ -1,6 +1,7 @@
 import ResourceStatistics from './src/index';
 import ResourceStatisticsIndex from './src/ResourceStatistics';
 import AllTaskList from './src/AllTaskList';
+import UserResourceList from './src/UserResourceList';
 
 ResourceStatistics.install = vue => {
     vue.component(ResourceStatistics.name, ResourceStatistics);
@@ -25,6 +26,14 @@ const routeCfg = [{
         component: AllTaskList,
         meta: {
             breadcrumb: '全部任务列表',
+            system: 'manage'
+        }
+    }, {
+        path: 'user-resource-list',
+        name: 'SdxvUserResourceList',
+        component: UserResourceList,
+        meta: {
+            breadcrumb: '全部用户资源统计',
             system: 'manage'
         }
     }]

@@ -4,7 +4,10 @@
             <SdxvPlatformResource />
         </div>
         <div class="sdxv-resource-statistics__item">
-            <SdxvUserResourceRanking />
+            <SdxvUserResourceList
+                title="用户资源使用Top10"
+                :ranking="true"
+            />
         </div>
         <div class="sdxv-resource-statistics__item">
             <SdxvTaskResourceRanking />
@@ -14,14 +17,14 @@
 
 <script>
 import SdxvPlatformResource from './PlatformResource';
-import SdxvUserResourceRanking from './UserResourceRanking';
 import SdxvTaskResourceRanking from './TaskResourceRanking';
+import SdxvUserResourceList from './UserResourceList';
 
 export default {
     name: 'SdxvResourceStatisticsIndex',
     components: {
         SdxvPlatformResource,
-        SdxvUserResourceRanking,
+        SdxvUserResourceList,
         SdxvTaskResourceRanking
     }
 };

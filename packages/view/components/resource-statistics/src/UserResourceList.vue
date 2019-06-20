@@ -1,5 +1,40 @@
 <template>
-    <SdxuContentPanel title="用户资源使用Top10">
+    <SdxuContentPanel
+        :title="title"
+        class="sdxv-user-resource-list"
+    >
+        <template
+            #right
+            v-if="ranking || searchable"
+        >
+            <div
+                v-if="ranking"
+                class="sdxv-user-resource-list__more"
+                @click="handGotoUserResourceList"
+            >
+                <span>全部</span>
+                <i class="sdx-icon sdx-icon-arrow-right" />
+            </div>
+            <div
+                v-else-if="searchable"
+                class="sdxv-user-resource-list__search"
+            >
+                <SdxuInput
+                    v-model="searchName"
+                    type="search"
+                    placeholder="请输入用户名"
+                    size="small"
+                />
+                <SdxuButton
+                    type="primary"
+                    size="small"
+                    @click="handleSearch"
+                    class="sdxv-user-resource-list__search--button"
+                >
+                    搜索
+                </SdxuButton>
+            </div>
+        </template>
         <SdxuTable
             :data="userResourceList"
             @sort-change="handleSortChange"
@@ -58,6 +93,15 @@
                 </template>
             </el-table-column>
         </SdxuTable>
+        <div class="sdxv-user-resource-list__pagination">
+            <SdxuPagination
+                v-if="!ranking"
+                :current-page.sync="page"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="handlePageChange"
+            />
+        </div>
     </SdxuContentPanel>
 </template>
 
@@ -65,15 +109,35 @@
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import SdxuTable from '@sdx/ui/components/table';
 import ElTableColumn from 'element-ui/lib/table-column';
+import SdxuInput from '@sdx/ui/components/input';
+import SdxuButton from '@sdx/ui/components/button';
+import SdxuPagination from '@sdx/ui/components/pagination';
 
 import { getTaskList } from '@sdx/utils/src/api/project';
 
 export default {
-    name: 'SdxvUserResourceRanking',
+    name: 'SdxvUserResourceList',
     components: {
         SdxuContentPanel,
         SdxuTable,
-        ElTableColumn
+        ElTableColumn,
+        SdxuInput,
+        SdxuButton,
+        SdxuPagination
+    },
+    props: {
+        title: {
+            type: String,
+            default: '全部用户资源统计'
+        },
+        ranking: {
+            type: Boolean,
+            default: false
+        },
+        searchable: {
+            type: Boolean,
+            default: true
+        }
     },
     data() {
         return {
@@ -82,42 +146,64 @@ export default {
                 prop: 'CPU',
                 order: 'descending'
             },
-            sortOrders: ['descending'],
-            queryParams: {
-                start: 1,
-                count: 10,
+            params: {
+                name: '',
                 order: 'desc',
                 orderBy: 'CPU',
                 groupBy: 'USER'
             },
-            loading: false
+            loading: false,
+            searchName: '',
+            page: 1,
+            pageSize: 10,
+            total: 0
         };
+    },
+    computed: {
+        sortOrders() {
+            return this.ranking ? ['descending'] : ['descending', 'ascending', null];
+        },
+        queryParams() {
+            return Object.assign({}, this.params, {
+                start: (this.page - 1) * this.pageSize + 1,
+                count: this.pageSize
+            });
+        }
     },
     methods: {
         fetchData() {
             this.loading = true;
             getTaskList(this.queryParams).then(data => {
                 this.userResourceList = data.items;
+                this.total = data.total;
                 this.loading = false;
             });
         },
         handleSortChange({prop, order}) {
-            this.queryParams.order = order === 'ascending' ? 'asc' : 'desc';
-            this.queryParams.orderBy = prop || 'CPU';
+            this.params.order = order === 'ascending' ? 'asc' : 'desc';
+            this.params.orderBy = prop || 'CPU';
+            this.page = 1;
         },
         hasGpu(gpus) {
             return Object.keys(gpus).length;
+        },
+        handGotoUserResourceList() {
+            this.$router.push({name: 'SdxvUserResourceList'});
+        },
+        handleSearch() {
+            this.params.name = this.searchName;
+            this.page = 1;
+        },
+        handlePageChange(page) {
+            this.page = page;
         }
     },
     created() {
         this.fetchData();
     },
     watch: {
-        queryParams: {
-            deep: true,
-            handler: function() {
-                this.fetchData();
-            }
+        queryParams() {
+            this.fetchData();
         }
     }
 };

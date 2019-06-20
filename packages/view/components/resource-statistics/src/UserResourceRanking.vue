@@ -4,6 +4,7 @@
             :data="userResourceList"
             @sort-change="handleSortChange"
             :default-sort="defaultSort"
+            v-loading="loading"
         >
             <el-table-column
                 prop="user.name"
@@ -76,15 +77,19 @@ export default {
                 order: 'desc',
                 orderBy: 'CPU',
                 groupBy: 'USER'
-            }
+            },
+            loading: false
         };
     },
     methods: {
         fetchData() {
+            this.loading = true;
             getTaskList(this.queryParams).then(data => {
                 this.userResourceList = data.data.items;
+                this.loading = false;
             }).catch(() => {
                 this.userResourceList = [];
+                this.loading = false;
             });
         },
         handleSortChange({prop, order}) {

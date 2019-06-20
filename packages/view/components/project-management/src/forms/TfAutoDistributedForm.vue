@@ -110,6 +110,7 @@
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
                     :accept="'.py'"
+                    :string-model="true"
                 />
             </el-form-item>
             <el-form-item
@@ -130,6 +131,7 @@
                 <SdxwFileSelect
                     check-type="folder"
                     v-model="params.outputPaths"
+                    :string-model="true"
                 />
             </el-form-item>
         </el-form>
@@ -271,7 +273,7 @@ export default {
     methods: {
         imageList() {
             const params = {
-                imageType: 'TENSORFLOW_AUTO_DIST',
+                imageType: 'TENSORFLOW',
                 start: 1,
                 count: -1
             };

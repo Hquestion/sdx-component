@@ -72,6 +72,7 @@
                 <SdxwFileSelect
                     v-model="params.logPaths"
                     check-type="folder"
+                    :string-model="true"
                 />
             </el-form-item>
         </el-form>
@@ -174,7 +175,7 @@ export default {
     methods: {
         imageList() {
             const params = {
-                imageType: 'TENSORBOARD',
+                imageType: 'TENSORFLOW',
                 start: 1,
                 count: -1
             };

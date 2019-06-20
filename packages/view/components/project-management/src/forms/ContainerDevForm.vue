@@ -158,7 +158,7 @@ export default {
                 projectId: this.$route.params.projectId,
                 name: '',
                 description: '',
-                type: 'CONTAINER_DEV',
+                type: 'CONTAINERDEV',
                 imageId: '',
                 resourceConfig: {
                     'EXECUTOR_INSTANCES': 1,

@@ -1,5 +1,8 @@
 <template>
-    <div class="sdxw-file-select" :class="{'is-inline': inline}">
+    <div
+        class="sdxw-file-select"
+        :class="{'is-inline': inline}"
+    >
         <div class="sdxw-file-select__main">
             <SdxuButton
                 trigger="click"
@@ -87,7 +90,10 @@
                     </SdxuButton>
                 </template>
             </SdxuButton>
-            <span class="sdxw-file-select__accept-tip" v-show="accept">请选择{{accept}}类型的文件</span>
+            <span
+                class="sdxw-file-select__accept-tip"
+                v-show="accept"
+            >请选择{{ accept }}类型的文件</span>
         </div>
         <SdxuUploadList
             class="sdxw-file-select__files"
@@ -252,7 +258,21 @@ export default {
                     isFile: true
                 }));
             } else {
-                return this.value;
+                return this.value.map(item => {
+                    if (typeof item === 'string') {
+                        return {
+                            name: item,
+                            cephName: item,
+                            status: 'success',
+                            percentage: 100,
+                            uid: Math.ceil(Math.random() * 1000000000),
+                            from: 'unknown',
+                            isFile: true
+                        };
+                    } else {
+                        return item;
+                    }
+                });
             }
         },
         disableCheck() {
@@ -386,7 +406,11 @@ export default {
                 isDir: !item.isFile
             }));
             let temp = [...fileUploadFiles, ...dirUploadFiles, ...cephPathsMap];
-            this.$emit('input', this.stringModel ? temp.map(item => item.cephName || item.name).join(',') : temp);
+            // this.$emit('input', this.stringModel ? temp.map(item => item.cephName || item.name).join(',') : temp);
+            this.$emit('input',
+                typeof this.value === 'string'
+                    ? temp.map(item => item.cephName || item.name).join(',')
+                    : (this.stringModel ? temp.map(item => item.cephName || item.name) : temp));
         },
         emitBlurOnFormItem() {
             this.dispatch('ElFormItem', 'el.form.blur');

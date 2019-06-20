@@ -100,10 +100,12 @@
             <el-form-item
                 prop="sourcePaths"
                 label="源代码:"
+                :string-model="true"
             >
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
                     :accept="'.py'"
+                    :string-model="true"
                 />
             </el-form-item>
             <el-form-item
@@ -251,7 +253,7 @@ export default {
     methods: {
         imageList() {
             const params = {
-                imageType: 'TENSORFLOW_DIST',
+                imageType: 'TENSORFLOW',
                 start: 1,
                 count: -1
             };

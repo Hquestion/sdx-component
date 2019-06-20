@@ -84,6 +84,7 @@
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
                     :accept="'.py'"
+                    :string-model="true"
                 />
             </el-form-item>
             <el-form-item
@@ -224,12 +225,10 @@ export default {
         },
         commit() {
             this.$refs.tfsingle.validate().then(() => {
-                this.$refs.containerdev.validate().then(() => {
-                    (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
-                        .then (() => {
-                            this.$router.go(-1);
-                        });
-                });
+                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
+                    .then (() => {
+                        this.$router.go(-1);
+                    });
             });
         }
     },

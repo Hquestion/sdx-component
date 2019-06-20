@@ -88,6 +88,7 @@
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
                     :accept="'.jar'"
+                    :string-model="true"
                 />
             </el-form-item>
             <el-form-item

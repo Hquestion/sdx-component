@@ -59,7 +59,7 @@
             <el-form-item
                 prop="resourceConfig"
                 label="资源配置:"
-            > 
+            >
                 <i class="icon">*</i>
                 <SdxwResourceConfig
                     v-if="!isGpuEnt"
@@ -75,7 +75,7 @@
                     <SdxwResourceConfig
                         v-model="gpuObj"
                         type="gpu"
-                    /> 
+                    />
                 </div>
             </el-form-item>
             <el-form-item
@@ -266,7 +266,7 @@ export default {
             };
         },
         cpuObj(val) {
-            this.params.resourceConfig = { 
+            this.params.resourceConfig = {
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': val.cpu * 1000,
                 'EXECUTOR_GPUS': this.params.resourceConfig.EXECUTOR_GPUS,
@@ -275,7 +275,7 @@ export default {
             };
         },
         gpuObj(val) {
-            this.params.resourceConfig = { 
+            this.params.resourceConfig = {
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': this.params.resourceConfig.EXECUTOR_CPUS,
                 'EXECUTOR_GPUS': val.count,

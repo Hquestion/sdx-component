@@ -84,12 +84,12 @@ export default {
     methods: {
         newFolder() {
             let node = this.$refs.fileSelectTree.$refs.fileTree.currentNode;
-            this.$refs.fileSelectTree.$refs.fileTree.insertBefore({
+            this.$refs.fileSelectTree.$refs.fileTree.append({
                 path: '',
                 name: '新建文件夹',
                 isFile: false,
                 parentPath: this.currentNode().node.data.path
-            }, node.node.childNodes[0]);
+            }, node.node);
         },
         currentNode() {
             return this.$refs.fileSelectTree && this.$refs.fileSelectTree.$refs.fileTree && this.$refs.fileSelectTree.$refs.fileTree.currentNode;

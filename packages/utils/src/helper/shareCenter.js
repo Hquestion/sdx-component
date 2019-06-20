@@ -10,7 +10,7 @@ let user;
 export function setup(opt) {
     // 如果有其他需要共享的数据，在这里添加
     user = opt.user || user;
-    if(opt.authSwitcher === 'OFF') {
+    if(opt.authSwitch === 'OFF') {
         AUTH_ON = false;
     }
 }

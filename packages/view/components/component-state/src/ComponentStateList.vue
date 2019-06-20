@@ -25,7 +25,10 @@
                 </el-select>
             </SdxwSearchItem>
         </SdxwSearchLayout>
-        <SdxuTable :data="dataList">
+        <SdxuTable
+            :data="dataList"
+            v-loading="loading"
+        >
             <el-table-column
                 label="Pod名称"
                 prop="podName"
@@ -129,7 +132,8 @@ export default {
                 status: ''
             },
             logDialogVisible: false,
-            currentPodId: ''
+            currentPodId: '',
+            loading: false
         };
     },
     computed: {
@@ -151,9 +155,13 @@ export default {
     },
     methods: {
         fetchData() {
+            this.loading = true;
             getPodsList(this.params).then(data => {
-                window.console.error(data);
                 this.componentList = data.status_list;
+                this.loading = false;
+            }).catch(() => {
+                this.componentList = [];
+                this.loading = false;
             });
         },
         handleViewLog(podId) {

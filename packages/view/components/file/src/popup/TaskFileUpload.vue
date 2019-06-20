@@ -2,6 +2,7 @@
     <div class="sdxv-task-file-upload">
         <SdxuTable
             :data="list"
+            height="420"
             style="width: 100%"
             size="small"
         >
@@ -62,28 +63,10 @@ export default {
         SdxwFoldLabel: SdxwFoldLabel.FoldLabel,
         SdxuIconButton
     },
+    inject: ['fileManager'],
     data() {
         return {
-            list: [
-                {
-                    name: '文件名称.csv',
-                    size: 1000,
-                    status: 'uploading',
-                    percentage: 80
-                },
-                {
-                    name: '文件名称.csv',
-                    size: 1000,
-                    status: 'success',
-                    percentage: 80
-                },
-                {
-                    name: '文件名称.csv',
-                    size: 1000,
-                    status: 'error',
-                    percentage: 80
-                }
-            ]
+
         };
     },
     props: {
@@ -92,8 +75,15 @@ export default {
             default: () => []
         }
     },
+    computed: {
+        list() {
+            return this.fileManager.uploadingFiles;
+        }
+    },
     methods: {
-        handleCancelUpload() {},
+        handleCancelUpload(row) {
+            this.fileManager.$refs.operationBar.$refs.fileUploader.handleRemove(row);
+        },
         getRowLabel(row) {
             let label = '上传中';
             if (row.status === 'success') {
@@ -120,14 +110,18 @@ export default {
                 label = 'warning';
             }
             return label;
+        },
+        isEmpty() {
+            return this.list.every(item => item.status === 'success' || item.status === 'error');
         }
     },
     watch: {
-        uploadFileList: {
+        list: {
             deep: true,
+            immediate: false,
             handler(val) {
-                if (val.every(item => item.status === 'success')) {
-                    this.$emit('upload-list-empty');
+                if (val.every(item => item.status === 'success' || item.status === 'error')) {
+                    this.$emit('empty');
                 }
             }
         }

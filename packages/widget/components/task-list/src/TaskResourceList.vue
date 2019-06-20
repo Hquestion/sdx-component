@@ -45,6 +45,7 @@
             :data="taskResourceList"
             @sort-change="handleSortChange"
             :default-sort="defaultSort"
+            v-loading="loading"
         >
             <el-table-column
                 prop="name"
@@ -251,7 +252,8 @@ export default {
                 orderBy: 'CPU',
                 states: '',
                 taskType: ''
-            }
+            },
+            loading: false
         };
     },
     computed: {
@@ -268,10 +270,15 @@ export default {
     },
     methods: {
         fetchData() {
+            this.loading = true;
             getTaskList(this.queryParams).then(data => {
-                window.console.error(data);
                 this.taskResourceList = data.data.items;
                 this.total = data.data.total;
+                this.loading = false;
+            }).catch(() => {
+                this.taskResourceList = [];
+                this.total = 0;
+                this.loading = false;
             });
         },
         stateIcon(state) {

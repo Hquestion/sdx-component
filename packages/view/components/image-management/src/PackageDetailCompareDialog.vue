@@ -5,10 +5,7 @@
         :no-footer="true"
     >
         <div class="sdxv-package-compare">
-            <el-scrollbar
-                wrap-class="sdxv-package-compare__scrollbar--wrap"
-                view-class="sdxv-package-compare__scrollbar--list"
-            >
+            <SdxuScroll>
                 <div class="sdxv-package-compare__item">
                     <span class="sdxv-package-compare__item--title">{{ title }}</span>
                     <sdxv-package-list
@@ -26,7 +23,7 @@
                         :operatable="false"
                     />
                 </div>
-            </el-scrollbar>
+            </SdxuScroll>
         </div>
     </sdxu-dialog>
 </template>
@@ -35,8 +32,7 @@
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxvPackageList from './PackageList';
 import SdxvModifiedPackageList from './ModifiedPackageList';
-
-import { Scrollbar } from 'element-ui';
+import SdxuScroll from '@sdx/ui/components/scroll';
 
 export default {
     name: 'SdxvPackageDetailCompareDialog',
@@ -44,7 +40,7 @@ export default {
         SdxuDialog,
         SdxvPackageList,
         SdxvModifiedPackageList,
-        [Scrollbar.name]: Scrollbar
+        SdxuScroll
     },
     props: {
         visible: {
@@ -80,9 +76,7 @@ export default {
 
 <style lang="scss">
     .sdxv-package-compare{
-        .sdxv-package-compare__scrollbar--wrap {
-            height: 60vh;
-        }
+        height: 60vh;
         .sdxv-package-compare__item {
             .sdxv-package-compare__item--title {
                 display: block;

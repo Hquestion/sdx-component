@@ -220,15 +220,10 @@ export default {
         [ImageDetail.name]: ImageDetail,
         [ShareSetting.name]: ShareSetting
     },
-    created() {
+    mounted() {
         this.initImageList();
     },
     mixins: [Filters],
-    computed: {
-        currentUser() {
-            return getUser();
-        }
-    },
     methods: {
         share() {
             if (!this.selectedImages.length) {
@@ -352,21 +347,23 @@ export default {
                 orderBy: this.orderBy
             };
             removeBlankAttr(params);
+            const currentUser = getUser();
             if (this.isOwner) {
                 if (this.isOwner === 'true') {
-                    params.ownerId = this.currentUser.userId || '';
+                    params.ownerId = currentUser.userId || '';
                 } else {
-                    params.excludeOwnerId = this.currentUser.userId || '';
+                    params.excludeOwnerId = currentUser.userId || '';
                 }
             }
             getImageList(params).then((res) => {
                 this.imageList = res.data;
                 this.imageList.forEach(item => {
-                    const isOwnImage = (item.owner && item.owner.uuid) === this.currentUser.userId;
+                    const isOwnImage = (item.owner && item.owner.uuid) === currentUser.userId;
                     item.showEdit = isOwnImage;
                     item.showExtend = item.buildType === 'BASIC' && item.packages && item.packages.length;
                     item.showRemove = isOwnImage && item.buildType !== 'BASIC' && item.shareType === 'PRIVATE';
-                    item.showDetail = (isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE';
+                    // item.showDetail = (isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE';
+                    item.showDetail = true;
                 });
                 this.total = res.total;
                 this.loading = false;
@@ -403,7 +400,9 @@ export default {
                     this.shareForm.groups = this.shareForm.groups || [];
                     break;
                 case 'extend':
-                    this.$router.push({ name: 'basicbuild' });
+                    this.$router.push({
+                        path: `basicbuild/${row.uuid}`
+                    });
                     break;
                 case 'remove':
                     MessageBox({

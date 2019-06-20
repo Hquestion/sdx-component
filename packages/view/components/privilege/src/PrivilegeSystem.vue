@@ -13,6 +13,7 @@
         <sdxu-table
             class="sdxv-privilege-system__table"
             :data="data"
+            v-loading="loading"
         >
             <el-table-column
                 label="权限名"
@@ -92,7 +93,8 @@ export default {
             page: 1,
             total: 100,
             data: [],
-            name: ''
+            name: '',
+            loading: false
         };
     },
     computed: {
@@ -106,12 +108,15 @@ export default {
     },
     methods: {
         fetchData() {
+            this.loading = true;
             getPermissionList(this.querys).then(data => {
-                // window.console.error(data);
                 this.data = data.permissions;
                 this.total = data.total;
-            }).catch(err => {
-                window.console.error(err);
+                this.loading = false;
+            }).catch(() => {
+                this.data = [];
+                this.total = 0;
+                this.loading = false;
             });
         },
         splitKey(key, i) {

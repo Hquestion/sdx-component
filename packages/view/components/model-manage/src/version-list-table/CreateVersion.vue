@@ -112,17 +112,18 @@
             </el-form-item>
             <el-form-item
                 label="模型路径："
-                prop="modelPathArray"
+                prop="modelPath"
             >
                 <div v-if="isPublishing">
                     {{ versionInfoForm.modelPath }}
                 </div>
                 <SdxwFileSelect
                     v-else
-                    v-model="versionInfoForm.modelPathArray"
+                    v-model="versionInfoForm.modelPath"
                     source="ceph"
                     check-type="folder"
                     :disabled="!!editingVersion"
+                    string-model
                 />
             </el-form-item>
         </el-form>
@@ -171,15 +172,7 @@ export default {
                 description: '',
                 framework: '',
                 runtimeImage: '',
-                modelPathArray: [{
-                    cephName: 'fdsfbdsbfdsb',
-                    from: 'ceph',
-                    isDir: true,
-                    name: 'dhuiafhuidshu',
-                    percentage: 100,
-                    status: 'success',
-                    uid: 731654536
-                }],
+                modelPath: '',
                 runtimeResource: {
                     cpuObj: {},
                     gpuObj: {},
@@ -202,8 +195,8 @@ export default {
                     { required: true, message: '请选择资源环境', trigger: 'change' },
                     { validator: this.validateResource, trigger: 'change' }
                 ],
-                modelPathArray: [
-                    { required: true, message: '请选择模型路径', trigger: 'change' },
+                modelPath: [
+                    { required: true, message: '请选择模型路径', trigger: 'blur' },
                 ],
                 description: [
                     {
@@ -247,7 +240,7 @@ export default {
     },
     created() {
         getFrameworks().then(res => {
-            this.frameworks = res.data;
+            this.frameworks = res;
         });
         if (this.editingVersion) {
             this.title = this.isPublishing ? '发布版本' : '编辑版本';
@@ -339,7 +332,6 @@ export default {
                         this.versionInfoForm.runtimeResource.memory = this.versionInfoForm.runtimeResource.cpuObj.memory * 1024 * 1024 * 1024;
                         this.versionInfoForm.runtimeResource.gpu = this.versionInfoForm.runtimeResource.gpuObj.count;
                         this.versionInfoForm.runtimeResource.gpuModel = this.versionInfoForm.runtimeResource.gpuObj.label;
-                        this.versionInfoForm.modelPath = this.versionInfoForm.modelPathArray && this.versionInfoForm.modelPathArray[0];
                         createVersion(this.$route.params.modelId, this.versionInfoForm).then(() => {
                             Message({
                                 message: '创建成功',

@@ -70,17 +70,23 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="owner"
                 key="owner"
                 label="创建人"
                 v-if="modelType === 'ALL' || modelType === 'OTHER_SHARE'"
-            />
+            >
+                <template slot-scope="scope">
+                    {{ (scope.row.creator && scope.row.creator.fullName) || '' }}
+                </template>
+            </el-table-column>
             <el-table-column
-                prop="createdAt"
                 key="createdAt"
                 label="创建时间"
                 sortable="custom"
-            />
+            >
+                <template slot-scope="scope">
+                    {{ scope.row.createdAt | dateFormatter }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="操作"
                 key="operation"
@@ -92,6 +98,7 @@
                             icon="sdx-icon sdx-fenxiang"
                             title="共享设置"
                             v-if="scope.row.showShare"
+                            v-auth.model.button="'MODEL:SHARE'"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'detail')"
@@ -124,6 +131,7 @@
         <div class="sdxv-model-list__footer">
             <div />
             <sdxu-pagination
+                v-if="total"
                 :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
@@ -137,6 +145,7 @@
             :default-groups="shareForm.groups"
             :default-share-type="shareForm.shareType"
             @confirm-edit="confirmEdit"
+            source-kind="model"
         />
         <create-model
             :visible.sync="createDialogVisible"
@@ -154,18 +163,22 @@ import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
 import FoldLabel from '@sdx/widget/components/fold-label';
-import { getModelList, removeModel, updateModel } from '@sdx/utils/src/api/model';
+import { getModelList, removeModel, updateModel, removeGroupModels, updateGroupModels } from '@sdx/utils/src/api/model';
 import Pagination from '@sdx/ui/components/pagination';
 import ShareSetting from '@sdx/widget/components/share-setting';
 import MessageBox from '@sdx/ui/components/message-box';
 import CreateModel from '../CreateModel';
 import Message from 'element-ui/lib/message';
+import { removeBlankAttr, paginate } from '@sdx/utils/src/helper/tool';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import TimerFilter from '@sdx/utils/src/mixins/transformFilter';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'ModelListTable',
     data() {
         return {
             modelList: [],
-            total: 1,
+            total: 0,
             current: 1,
             pageSize: 10,
             order: '',
@@ -192,6 +205,9 @@ export default {
             default: ''
         }
     },
+    directives: {
+        auth
+    },
     components: {
         [Table.name]: Table,
         [Pagination.name]: Pagination,
@@ -203,11 +219,7 @@ export default {
         CreateModel,
         [ShareSetting.name]: ShareSetting
     },
-    computed: {
-        userId() {
-            return '123'; // TODO: 拿到用户id
-        }
-    },
+    mixins: [TimerFilter],
     methods: {
         dialogClose(needRefresh) {
             if (needRefresh) this.initModelList();
@@ -235,11 +247,20 @@ export default {
                 });
                 return;
             }
-            Message({    // TODO: 换成批量删除接口
-                message: '删除成功',
-                type: 'success'
-            });
-            this.initModelList();
+            MessageBox({
+                title: '确定要删除选中的模型吗？',
+                content: '删除后将不可恢复'
+            }).then(() => {
+                const uuids = [];
+                this.selectedModels.forEach(item => uuids.push(item.uuid));
+                removeGroupModels({ uuids }).then(() => {
+                    Message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                    this.initModelList();
+                });
+            }).catch(() => {});
         },
         cancelShare() {
             if (!this.selectedModels.length) {
@@ -249,11 +270,27 @@ export default {
                 });
                 return;
             }
-            Message({    // TODO: 换成批量取消共享接口
-                message: '取消共享成功',
-                type: 'success'
-            });
-            this.initModelList();
+            MessageBox({
+                title: '确定要取消共享选中的模型吗？'
+            }).then(() => {
+                const uuids = [];
+                this.selectedModels.forEach(item => uuids.push(item.uuid));
+                const params = {
+                    uuids,
+                    setting: {
+                        shareType: 'PRIVATE',
+                        users: [],
+                        groups: []
+                    }
+                };
+                updateGroupModels(params).then(() => {
+                    Message({
+                        message: '操作成功',
+                        type: 'success'
+                    });
+                    this.initModelList();
+                });
+            }).catch(() => {});
         },
         selectionChange(selection) {
             this.selectedModels = selection;
@@ -278,15 +315,20 @@ export default {
                     this.initModelList();
                 });
             } else {
-                // 批量共享设置  TODO 换成批量接口
-                // updateGroupModels(this.selectedModels, this.shareForm).then(() => {
-                Message({
-                    message: '全部共享成功',
-                    type: 'success'
+                const uuids = [];
+                this.selectedModels.forEach(item => uuids.push(item.uuid));
+                const params = {
+                    uuids,
+                    setting: this.shareForm
+                };
+                updateGroupModels(params).then(() => {
+                    Message({
+                        message: '设置成功',
+                        type: 'success'
+                    });
+                    this.initModelList();
+                    this.dialogVisible = false;
                 });
-                this.initModelList();
-                this.dialogVisible = false;
-                // });
             }
         },
         initModelList(reset) {
@@ -294,18 +336,20 @@ export default {
             if (reset) this.current = 1;
             const params = {
                 name: this.name,
-                start: this.current,
-                count: this.pageSize,
+                ...paginate(this.current, this.pageSize),
                 order: this.order,
                 orderBy: this.orderBy,
                 shareType: this.modelType
             };
+            removeBlankAttr(params);
             getModelList(params).then((res) => {
                 this.modelList = res.items;
                 this.modelList.forEach(item => {
-                    item.showShare = (this.modelType === 'ALL' && item.creatorId === this.userId) || this.modelType === 'PRIVATE';
-                    item.showEdit = (this.modelType === 'ALL' && item.creatorId === this.userId) || this.modelType === 'PRIVATE';
-                    item.showRemove = (this.modelType === 'ALL' && item.creatorId === this.userId) || this.modelType === 'PRIVATE';
+                    const userId = getUser().userId;
+                    window.console.log('userId', userId);
+                    item.showShare = (this.modelType === 'ALL' && item.creator.uuid === userId) || this.modelType === 'PRIVATE';
+                    item.showEdit = (this.modelType === 'ALL' && item.creator.uuid === userId) || this.modelType === 'PRIVATE';
+                    item.showRemove = (this.modelType === 'ALL' && item.creator.uuid === userId) || this.modelType === 'PRIVATE';
                     item.showCancelShare = this.modelType === 'MY_SHARE';
                     item.showDetail = this.modelType !== 'MY_SHARE';
                 });
@@ -318,9 +362,9 @@ export default {
             this.initModelList();
         },
         sortChange(sort) {
-            if (sort && sort.prop && sort.order) {
-                this.order = sort.prop;
-                this.orderBy = sort.order === 'ascending' ? 'asc' : 'desc';
+            this.orderBy = 'createdAt';
+            if (sort && sort.order) {
+                this.order = sort.order === 'ascending' ? 'asc' : 'desc';
                 this.initModelList();
             }
         },

@@ -65,11 +65,14 @@
                 label="REST API"
             />
             <el-table-column
-                prop="createdAt"
                 key="createdAt"
                 label="创建时间"
                 sortable="custom"
-            />
+            >
+                <template slot-scope="scope">
+                    {{ scope.row.createdAt | dateFormatter }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="操作"
                 key="operation"
@@ -162,6 +165,7 @@ import CreateVersion from './CreateVersion';
 import TestVersion from './TestVersion';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import auth from '@sdx/widget/components/auth';
+import TimerFilter from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name: 'VersionListTable',
     data() {
@@ -201,6 +205,7 @@ export default {
     directives: {
         auth
     },
+    mixins: [TimerFilter],
     methods: {
         dialogClose(needRefresh) {
             this.editingVersion = null;
@@ -218,9 +223,9 @@ export default {
             this.initVersionList();
         },
         sortChange(sort) {
-            if (sort && sort.prop && sort.order) {
-                this.order = sort.prop;
-                this.orderBy = sort.order === 'ascending' ? 'asc' : 'desc';
+            this.orderBy = 'createdAt';
+            if (sort&& sort.order) {
+                this.order = sort.order === 'ascending' ? 'asc' : 'desc';
                 this.initVersionList();
             }
         },

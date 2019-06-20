@@ -8,7 +8,8 @@
                 type="primary"
                 size="small"
                 @click="share"
-                v-if="modelType === 'PRIVATE'"
+                v-show="modelType === 'PRIVATE'"
+                v-auth.model.button="'MODEL:SHARE'"
             >
                 全部共享
             </SdxuButton>
@@ -17,7 +18,7 @@
                 invert
                 size="small"
                 @click="remove"
-                v-if="modelType === 'PRIVATE'"
+                v-show="modelType === 'PRIVATE'"
             >
                 删除
             </SdxuButton>
@@ -25,7 +26,8 @@
                 type="primary"
                 size="small"
                 @click="cancelShare"
-                v-if="modelType === 'MY_SHARE'"
+                v-show="modelType === 'MY_SHARE'"
+                v-auth.model.button="'MODEL:SHARE'"
             >
                 取消共享
             </SdxuButton>

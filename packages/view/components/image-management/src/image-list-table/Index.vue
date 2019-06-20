@@ -362,8 +362,7 @@ export default {
                     item.showEdit = isOwnImage;
                     item.showExtend = item.buildType === 'BASIC' && item.packages && item.packages.length;
                     item.showRemove = isOwnImage && item.buildType !== 'BASIC' && item.shareType === 'PRIVATE';
-                    // item.showDetail = (isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE';
-                    item.showDetail = true;
+                    item.showDetail = (isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE';
                 });
                 this.total = res.total;
                 this.loading = false;

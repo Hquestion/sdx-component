@@ -1,16 +1,16 @@
 // 等调试完改
 import httpService from '@sdx/utils/lib/http-service';
 
-import { PROJECT_MANAGE_GATEWAY_BASE } from './config';
+import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
 
-const taskApi = '/api/v1/tasks/';
+const TASK_MANAGE_GETWAY_BASE = PROJECT_MANAGE_GATEWAY_BASE + 'tasks/';
 
 export function getProjectList(params) {
     return httpService.get(`${PROJECT_MANAGE_GATEWAY_BASE}projects`, params);
 }
 
 export function getTaskList(params) {
-    return httpService.get(taskApi, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
 }
 
 export function getProjectDetail(uuid) {
@@ -30,24 +30,24 @@ export function removeProject(uuid) {
 }
 
 export function removeTask(uuid) {
-    return httpService.remove(taskApi + uuid);
+    return httpService.remove(TASK_MANAGE_GETWAY_BASE + uuid);
 }
 
 export function startTask(uuid, params) {
-    return httpService.post(taskApi + uuid + '/start', params);
+    return httpService.post(TASK_MANAGE_GETWAY_BASE + uuid + '/start', params);
 }
 
 export function stopTask(uuid, params) {
-    return httpService.post(taskApi + uuid + '/stop', params);
+    return httpService.post(TASK_MANAGE_GETWAY_BASE + uuid + '/stop', params);
 }
 export function createTask(params) {
-    return httpService.post(taskApi, params);
+    return httpService.post(TASK_MANAGE_GETWAY_BASE, params);
 }
 export function getTaskDetail(uuid) {
-    return httpService.get(taskApi + uuid);
+    return httpService.get(TASK_MANAGE_GETWAY_BASE + uuid);
 }
 export function updateTask(uuid,params) {
-    return httpService.patch(taskApi + uuid, params);
+    return httpService.patch(TASK_MANAGE_GETWAY_BASE + uuid, params);
 }
 
 // 数据集列表
@@ -60,12 +60,12 @@ export function getTaskDataSource(params) {
 }
 
 export default {
+    getTaskList,
     getProjectList,
     getProjectDetail,
     createProject,
     updateProject,
     removeProject,
-    getTaskList,
     removeTask,
     startTask,
     stopTask,

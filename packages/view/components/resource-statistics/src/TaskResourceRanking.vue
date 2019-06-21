@@ -42,7 +42,7 @@ export default {
     },
     methods: {
         handGotoTasksList() {
-            // todo:
+            this.$router.push({name: 'SdxvAllTaskList'});
         }
     }
 };

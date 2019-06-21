@@ -45,6 +45,7 @@
             :data="taskResourceList"
             @sort-change="handleSortChange"
             :default-sort="defaultSort"
+            v-loading="loading"
         >
             <el-table-column
                 prop="name"
@@ -114,7 +115,7 @@
                 min-width="170px"
             >
                 <template #default="{ row }">
-                    <span v-if="row.quota.gpu > 0">{{ `${row.quota.gpuModel}:${row.quota.gpu}` }}</span>
+                    <span v-if="row.quota.gpu > 0">{{ `${row.quota.gpuModel}: ${row.quota.gpu}` }}</span>
                     <span v-else>0</span>
                 </template>
             </el-table-column>
@@ -129,7 +130,13 @@
                 :sortable="ranking ? false : 'custom'"
                 :sort-orders="sortOrders"
                 min-width="200px"
-            />
+            >
+                <template #default="{ row }">
+                    <span>
+                        {{ formatDate(row.createdAt) }}
+                    </span>
+                </template>
+            </el-table-column>
             <el-table-column
                 label="操作"
                 fixed="right"
@@ -176,8 +183,9 @@ import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
 
 import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE } from '@sdx/utils/src/const/task';
-import { getTaskList } from '@sdx/utils/src/api/project';
 import taskMixin from '@sdx/utils/src/mixins/task';
+import { dateFormatter } from '@sdx/utils/src/helper/transform';
+import { getTaskList } from '@sdx/utils/src/api/project';
 
 export default {
     name: 'SdxwTaskResourceList',
@@ -250,8 +258,9 @@ export default {
                 order: 'desc',
                 orderBy: 'CPU',
                 states: '',
-                taskType: ''
-            }
+                type: ''
+            },
+            loading: false
         };
     },
     computed: {
@@ -268,10 +277,11 @@ export default {
     },
     methods: {
         fetchData() {
+            this.loading = true;
             getTaskList(this.queryParams).then(data => {
-                window.console.error(data);
-                this.taskResourceList = data.data.items;
-                this.total = data.data.total;
+                this.taskResourceList = data.items;
+                this.total = data.total;
+                this.loading = false;
             });
         },
         stateIcon(state) {
@@ -289,7 +299,7 @@ export default {
         handleSearch() {
             this.params.name = this.searchName;
             this.params.states = this.taskState;
-            this.params.taskType = this.taskType;
+            this.params.type = this.taskType;
             this.page = 1;
         },
         handleReset() {
@@ -299,13 +309,15 @@ export default {
             this.handleSearch();
         },
         handleSortChange({prop, order}) {
-            window.console.error(prop, order);
             this.params.order = order === 'ascending' ? 'asc' : 'desc';
             this.params.orderBy = prop || 'CPU';
             this.page = 1;
         },
-        handleGotoProject() {
-
+        handleGotoProject(project) {
+            this.$router.push(`/sdxv-project-manage/project-detail/${project.uuid}`);
+        },
+        formatDate(date) {
+            return dateFormatter(date, 'YYYY-MM-DD HH:mm:ss');
         }
     },
     created() {

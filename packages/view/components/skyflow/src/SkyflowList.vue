@@ -81,7 +81,7 @@
                         {{ item.name }}
                     </SdxuTabRadioItem>
                 </SdxuTabRadioGroup>
-                <SdxuScroll style="height: 220px;">
+                <SdxuScroll style="height: 230px;">
                     <sdxv-workflow-card-list
                         v-loading="templatesLoading"
                         class="sdxv-skyflow__template-cards"

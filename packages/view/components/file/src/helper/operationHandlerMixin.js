@@ -127,7 +127,7 @@ export default {
         },
         handleCopy(target) {
             if (this.toMoveOrCopyRow) {
-                copy(this.toMoveOrCopyRow.path, target.path).then(res => {
+                copy([this.toMoveOrCopyRow.path], target.path).then(res => {
                     // todo 展示拷贝弹框
                 });
             } else {

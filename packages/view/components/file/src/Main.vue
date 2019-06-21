@@ -16,8 +16,8 @@ import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 
-import { getFilesList, searchFiles } from '@sdx/utils/src/api/file';
-import { rootKinds, fixedRows, fixedRowsNameMap, getDirRootKind } from './helper/fileListTool';
+import { getFilesList, searchFiles, getMyShare, getMyAcceptedShare } from '@sdx/utils/src/api/file';
+import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind } from './helper/fileListTool';
 import BreadcrumbBar from './BreadcrumbBar';
 import SdxvFileTask from './popup/FileTask';
 
@@ -84,6 +84,9 @@ export default {
         isProjectRoot() {
             return this.currentPath === '/fe-fixed-project-share';
         },
+        isShareRoot() {
+            return !!fixedRowsKeyMap[this.currentPath];
+        },
         resetFlags() {
             // 重置页码
             this.pageIndex = 1;
@@ -112,14 +115,14 @@ export default {
 
             let defer;
             const deferMap = {
-                [rootKinds.MY_SHARE]: this.loadFileList,
+                [rootKinds.MY_SHARE]: this.loadMyShare,
                 [rootKinds.ACCEPTED_SHARE]: this.loadFileList,
                 [rootKinds.PROJECT_SHARE]: this.loadFileList
             };
             if (this.rootKind === '') {
                 defer = this.loadFileList();
             } else {
-                defer = deferMap[this.rootKind]();
+                defer = (this.isShareRoot() ? deferMap[this.rootKind] : this.loadFileList)();
             }
             return defer.then(res => {
                 let fileList = res.children;
@@ -224,6 +227,21 @@ export default {
                 orderBy: this.orderBy,
                 order: this.order
             });
+        },
+        loadMyShare() {
+            return getMyShare({
+                start: (this.pageIndex - 1) * this.pageSize,
+                count: this.pageSize,
+                path: '',
+                orderBy: this.orderBy,
+                order: this.order
+            });
+        },
+        loadAcceptedShare() {
+
+        },
+        loadProjectShare() {
+
         },
         loadSearchResult() {
             return searchFiles({

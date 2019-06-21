@@ -99,7 +99,7 @@ export function shareDetail(uuid) {
 export function getMyShare(params) {
     let userInfo = shareCenter.getUser() || {};
     const {
-        sharerId = userInfo.userId,
+        ownerId = userInfo.userId,
         path = params.path || '/',
         start = 1,
         count = -1,
@@ -107,7 +107,7 @@ export function getMyShare(params) {
         order = 'asc'
     } = params;
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
-        sharerId: sharerId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         path,
         start,
         count,

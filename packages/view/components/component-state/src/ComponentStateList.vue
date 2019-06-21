@@ -85,7 +85,7 @@ import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
 
 import { POD_STATE_TYPE } from '@sdx/utils/src/const/task';
-import { getPodsList } from '@sdx/utils/src/api/monitor';
+import { getPodsStatus } from '@sdx/utils/src/api/system';
 
 export default {
     name: 'SdxvComponentStateList',
@@ -139,7 +139,7 @@ export default {
     computed: {
         filterTotalList() {
             return this.componentList.filter(item => {
-                return item.podName.includes(this.query.podName.trim()) && (this.query.status === '' || item.status === this.query.status);
+                return item.podName.includes(this.query.podName) && (this.query.status === '' || item.status === this.query.status);
             });
         },
         dataList() {
@@ -149,14 +149,14 @@ export default {
         },
         params() {
             return {
-                namespace: this.type === 'base' ? ['kube-system', 'skydiscovery'] : ['skydiscovery-system']
+                namespace: this.type === 'base' ? 'kube-system,skydiscovery' : 'skydiscovery-system'
             };
         }
     },
     methods: {
         fetchData() {
             this.loading = true;
-            getPodsList(this.params).then(data => {
+            getPodsStatus(this.params).then(data => {
                 this.componentList = data.status_list;
                 this.loading = false;
             }).catch(() => {
@@ -169,7 +169,8 @@ export default {
             this.currentPodId = podId;
         },
         handleSearch() {
-            this.query.podName = this.searchName;
+            this.page = 1;
+            this.query.podName = this.searchName.trim();
             this.query.status = this.podState;
         },
         handlePageChange(page) {

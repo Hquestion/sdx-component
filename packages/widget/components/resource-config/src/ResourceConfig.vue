@@ -3,7 +3,7 @@
     <div class="sdxw-resource-config">
         <div v-if="type === 'cpu'">
             <div class="sdxw-resource-config__title">
-                {{ cpulabel }}
+                <span v-if="required">*</span>  {{ cpulabel }}
             </div>
             <el-select
                 :searchable="true"
@@ -34,7 +34,7 @@
         </div>
         <div v-if="type === 'gpu'">
             <div class="sdxw-resource-config__title">
-                {{ gpulabel }}
+                <span v-if="required">*</span> {{ gpulabel }}
             </div>
             <el-select
                 size="small"
@@ -117,6 +117,10 @@ export default {
             default: 'GPU'
         },
         readOnly: {
+            type: Boolean,
+            default: false
+        },
+        required: {
             type: Boolean,
             default: false
         }

@@ -121,7 +121,7 @@ export default {
         },
         splitKey(key, i) {
             const list = key.split(':');
-            return list[i];
+            return list[i] || '';
         }, 
         handleChangePage(page) {
             this.page = page;

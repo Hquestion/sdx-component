@@ -1,7 +1,7 @@
 <template>
     <SdxuTable
         :data="copyFileList"
-        style="width: 100%"
+        style="width: 560px"
         height="420"
         size="small"
         class="copy-file-list"
@@ -144,7 +144,7 @@ export default {
         fetchCopyTaskList() {
             return getCopyTaskList()
                 .then(data => {
-                    this.copyFileList = data.items;
+                    this.copyFileList = data.items || [];
                 });
         },
         // 停止拷贝任务
@@ -167,7 +167,7 @@ export default {
         },
         copyFileList(val) {
             if (val.length === 0) {
-                this.$emit('copy-list-empty');
+                this.$emit('empty');
             }
         }
     },

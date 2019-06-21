@@ -1,0 +1,11 @@
+@include block('create-workflow', $bem-namespace-view) {
+    @include element('filter') {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 10px 10px 0;
+    }
+    @include element('template-list') {
+        margin: 0;
+    }
+}

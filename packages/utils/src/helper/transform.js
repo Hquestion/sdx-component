@@ -91,7 +91,7 @@ export function byteFormatter(byte) {
 }
 
 export function dateFormatter(date) {
-    if(!date) return '';
+    if(!date) return '-';
     if (isString(date)) {
         return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
     } else if (date instanceof Date) {

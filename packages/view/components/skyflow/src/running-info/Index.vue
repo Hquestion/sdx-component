@@ -172,9 +172,12 @@ export default {
     },
     methods: {
         search() {
-            if (this.listType === 'general' && this.searchConditions.timeRange.length) {
+            if (this.listType === 'general' && this.searchConditions.timeRange && this.searchConditions.timeRange.length) {
                 this.searchConditions.executeStartDate = this.searchConditions.timeRange[0];
                 this.searchConditions.executeEndDate = this.searchConditions.timeRange[1];
+            } else {
+                this.searchConditions.executeStartDate = '';
+                this.searchConditions.executeEndDate = '';
             }
             this.$nextTick(() => {
                 this.updateTable();

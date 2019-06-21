@@ -65,35 +65,39 @@
         </div>
         <sdxu-content-panel
             style="margin-bottom: 30px;"
+            title="模板"
         >
-            <SdxuTabRadioGroup
-                v-model="templateType"
-                style="margin-bottom: 10px;"
-                @switch="switchTemplateType"
-            >
-                <SdxuTabRadioItem
-                    v-for="(item, index) in templateOptions"
-                    :key="index"
-                    :name="item.name"
+            <div v-if="templatesList.length">
+                <SdxuTabRadioGroup
+                    v-model="templateType"
+                    style="margin-bottom: 10px;"
+                    @switch="switchTemplateType"
                 >
-                    {{ item.name }}
-                </SdxuTabRadioItem>
-            </SdxuTabRadioGroup>
-            <SdxuScroll style="height: 220px;">
-                <sdxv-workflow-card-list
-                    v-loading="templatesLoading"
-                    class="sdxv-skyflow__template-cards"
-                >
-                    <sdxv-workflow-card
-                        @operate="handleOperate"
-                        v-for="(item, index) in templatesListWithType"
+                    <SdxuTabRadioItem
+                        v-for="(item, index) in templateOptions"
                         :key="index"
-                        :meta="item"
-                        :edit-able="item.editable"
-                        :delete-able="item.removable"
-                    />
-                </sdxv-workflow-card-list>
-            </SdxuScroll>
+                        :name="item.name"
+                    >
+                        {{ item.name }}
+                    </SdxuTabRadioItem>
+                </SdxuTabRadioGroup>
+                <SdxuScroll style="height: 220px;">
+                    <sdxv-workflow-card-list
+                        v-loading="templatesLoading"
+                        class="sdxv-skyflow__template-cards"
+                    >
+                        <sdxv-workflow-card
+                            @operate="handleOperate"
+                            v-for="(item, index) in templatesListWithType"
+                            :key="index"
+                            :meta="item"
+                            :edit-able="item.editable"
+                            :delete-able="item.removable"
+                        />
+                    </sdxv-workflow-card-list>
+                </SdxuScroll>
+            </div>
+            <SdxuEmpty v-else />
         </sdxu-content-panel>
         <sdxu-content-panel
             title="私有与共享"
@@ -138,6 +142,7 @@ import CreateWorkflow from './CreateWorkflow';
 import Pagination from '@sdx/ui/components/pagination';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import TabRadio from '@sdx/ui/components/tab-radio';
+import Empty from '@sdx/ui/components/empty';
 import MessageBox from '@sdx/ui/components/message-box';
 import SearchLayout from '@sdx/widget/components/search-layout';
 import Message from 'element-ui/lib/message';
@@ -184,6 +189,7 @@ export default {
         [Scroll.name]: Scroll,
         [WorkflowCard.name]: WorkflowCard,
         [WorkflowCardList.name]: WorkflowCardList,
+        [Empty.name]: Empty,
     },
     created() {
         this.initList(true);
@@ -232,7 +238,7 @@ export default {
             return new Promise((resolve) => {
                 getSkyflowTemplates().then(res => {
                     this.templateOptions = res.items;
-                    if (this.templateOptions.length) {
+                    if (this.templateOptions && this.templateOptions.length) {
                         this.templateType = this.templateOptions[0].name;
                     }
                     resolve();

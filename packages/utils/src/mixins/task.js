@@ -26,26 +26,26 @@ export default {
                     return NON_OWNER_TASK_OPERATION.includes(item);
                 });
             }
-            
+
             return list.map(item => {
                 return OPERATION_INFO[item];
             });
         },
         handleOperation(operation, row) {
             switch(operation) {
-            case 'start': 
+            case 'start':
                 this.handleStart(row);
                 break;
             case 'kill':
                 this.handleKill(row);
                 break;
-            case 'detail': 
+            case 'detail':
                 this.handleDetail(row);
                 break;
-            case 'edit': 
+            case 'edit':
                 this.handleEdit(row);
                 break;
-            case 'delete': 
+            case 'delete':
                 this.handleDelete(row);
                 break;
             }

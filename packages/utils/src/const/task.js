@@ -41,7 +41,6 @@ export const STATE_TYPE_OPERATION = {
     KILLED: ['start', 'detail', 'edit', 'remove'],
     FAILED: ['start', 'detail', 'edit', 'remove'],
     KILLING: ['detail']
-
 };
 
 export const STATE_MAP_FOLD_LABEL_TYPE = {
@@ -80,7 +79,7 @@ export const OPERATION_INFO = {
         icon: 'sdx-icon sdx-icon-yanjing'
     },
     edit: {
-        label: '编辑',
+        label: '编辑',
         value: 'edit',
         icon: 'sdx-icon sdx-icon-edit'
     },

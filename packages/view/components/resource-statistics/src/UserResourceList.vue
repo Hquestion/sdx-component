@@ -48,7 +48,13 @@
             <el-table-column
                 prop="owner.createdAt"
                 label="创建时间"
-            />
+            >
+                <template #default="{ row }">
+                    <span>
+                        {{ formatDate(row.owner.createdAt) }}
+                    </span>
+                </template>
+            </el-table-column>
             <el-table-column
                 prop="CPU"
                 label="已使用CPU（核）"
@@ -114,6 +120,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import SdxuPagination from '@sdx/ui/components/pagination';
 
 import { getTaskList } from '@sdx/utils/src/api/project';
+import { dateFormatter } from '@sdx/utils/src/helper/transform';
 
 export default {
     name: 'SdxvUserResourceList',
@@ -196,6 +203,9 @@ export default {
         },
         handlePageChange(page) {
             this.page = page;
+        },
+        formatDate(date) {
+            return dateFormatter(date, 'YYYY-MM-DD HH:mm:ss');
         }
     },
     created() {

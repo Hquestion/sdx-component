@@ -113,8 +113,9 @@
             </el-form-item>
         </el-form>
         <el-alert
+            class="sdxv-add-package__warning-tips"
             title="发现已经存在类似的包,请优先选择升级已有包!"
-            type="success"
+            type="warning"
             :closable="false"
             v-show="packageInfo.name && queryCount"
         />
@@ -185,15 +186,13 @@ export default {
     },
     computed: {
         urlOptions() {
-            return this.sourceRepos.filter(el => {
-                return el.sourceType === this.packageInfo.sourceType;
-            });
+            return this.sourceRepos.filter(el => el.sourceType === this.packageInfo.sourceType);
         }
     },
     methods: {
         fetchSourceUrlOption() {
             getSourceRepos().then(data => {
-                this.sourceRepos = data.data;
+                this.sourceRepos = data;
             });
         },
         handleCommitUpdate() {

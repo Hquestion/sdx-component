@@ -41,7 +41,13 @@
                 prop="createdAt"
                 label="创建时间"
                 sortable="custom"
-            />
+            >
+                <template
+                    slot-scope="scope"
+                >
+                    {{ dateFormatter(scope.row.createdAt) }}
+                </template>
+            </el-table-column>
             <el-table-column
                 style="width: 15%"
                 label="操作"
@@ -94,22 +100,20 @@
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import {getImageTaskList, removeImageTask} from '@sdx/utils/src/api/image';
+import { removeBlankAttr, paginate } from '@sdx/utils/src/helper/tool';
 import MessageBox from '@sdx/ui/components/message-box';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import {imageTaskLabel} from '@sdx/utils/src/const/relation';
 import PackageDetailCompareDialog from '../PackageDetailCompareDialog';
 import BuildLogDialog from '../BuildLogDialog';
+import {dateFormatter} from '@sdx/utils/src/helper/transform';
 export default {
-    name: '',
+    name: 'ImageTaskTable',
     data() {
         return {
             tableData: [],
             searchTask: {
-                name: '',
-                state: '',
-                imageType: '',
-                buildType: '',
                 start: 1,
                 count: 10,
                 order: 'desc',
@@ -152,7 +156,9 @@ export default {
         BuildLogDialog
     },
     methods: {
+        dateFormatter,
         taskList(params) {
+            removeBlankAttr(params);
             getImageTaskList(params)
                 .then(data =>{
                     this.tableData = data.data;
@@ -166,39 +172,34 @@ export default {
         }).then(() => {
             removeImageTask(id)
                 .then(()=> {
-                    this.taskList();
+                    this.initImageTaskList();
                 });
         });    
         },
-        currentChange() {
-            this.searchTask = Object.assign({}, this.searchTask, {
-                start: (this.current - 1) * 10 + 1, 
-            },
-            {
-                name: this.name,
-                state: this.state,
-                imageType: this.imageType,
-                buildType: this.buildType,
-            });
-            this.taskList(this.searchTask);
+        currentChange(val) {
+            this.current = val;
+            this.initImageTaskList();
         },
         initImageTaskList(reset) {
             if (reset) this.current = 1;
             const params = {
                 name: this.name,
-                state: this.state,
+                ...paginate(this.current, this.pageSize),
                 imageType: this.imageType,
                 buildType: this.buildType,
+                state:this.state,
+                order: this.searchTask.order,
+                orderBy: this.searchTask.orderBy,
             };
-            this.searchTask = Object.assign({}, this.searchTask, params);
-            this.taskList(this.searchTask);
+            removeBlankAttr(params);
+            this.taskList(params);
         },
         handleSortChange({ order }) {
             if (!order) {
                 return;
             }
             this.searchTask.order = order === 'descending' ? 'desc' : 'asc';
-            this.taskList(this.searchTask);
+            this.initImageTaskList();
         },
         handleShowCompareDialog(imageBuilder) {
             this.currentImageBuilder = imageBuilder;
@@ -209,9 +210,7 @@ export default {
             this.showBuildLogDialog = true;
         },
     },
-    created() {
-        this.taskList(this.searchTask);
-    }
+    
 };
 </script>
 

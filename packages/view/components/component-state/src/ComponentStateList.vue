@@ -159,6 +159,9 @@ export default {
             getPodsStatus(this.params).then(data => {
                 this.componentList = data.status_list;
                 this.loading = false;
+            }).catch(() => {
+                this.componentList = [];
+                this.loading = false;
             });
         },
         handleViewLog(podId) {

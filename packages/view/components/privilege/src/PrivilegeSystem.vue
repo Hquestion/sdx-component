@@ -113,8 +113,10 @@ export default {
                 this.data = data.permissions;
                 this.total = data.total;
                 this.loading = false;
-            }).catch(err => {
-                // todo: 
+            }).catch(() => {
+                this.data = [];
+                this.total = 0;
+                this.loading = false;
             });
         },
         splitKey(key, i) {

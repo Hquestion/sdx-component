@@ -6,8 +6,8 @@
             @click="sortChange"
         >
             {{ title }}
-            <i :class="['sdx-icon', 'sdx-Paixu1', order === 'desc' ? 'is-active' : 'is-normal']" />
-            <i :class="['sdx-icon' ,'sdx-Paixu', order === 'asc' ? 'is-active' : 'is-normal']" />
+            <i :class="['sdx-icon', 'sdx-Paixu1', _order === 'desc' ? 'is-active' : 'is-normal']" />
+            <i :class="['sdx-icon' ,'sdx-Paixu', _order === 'asc' ? 'is-active' : 'is-normal']" />
         </sdxu-button>
     </div>
 </template>
@@ -33,10 +33,20 @@ export default {
     components: {
         [Button.name]: Button,
     },
+    computed: {
+        _order: {
+            get() {
+                return this.order;
+            },
+            set(val) {
+                this.$emit('update:order', val);
+            }
+        }
+    },
     methods: {
         sortChange() {
-            this.order = this.order === 'desc' ? 'asc' : 'desc';
-            this.$emit('sortChange', this.order);
+            this._order = this._order === 'desc' ? 'asc' : 'desc';
+            this.$emit('sortChange');
         }
     },
 };

@@ -282,6 +282,9 @@ export default {
                 this.taskResourceList = data.items;
                 this.total = data.total;
                 this.loading = false;
+            }).catch(() => {
+                this.taskResourceList = [];
+                this.total = 0;
             });
         },
         stateIcon(state) {

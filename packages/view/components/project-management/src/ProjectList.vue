@@ -41,7 +41,7 @@
                 <SdxuSortButton
                     title="按创建时间排序"
                     @sortChange="sortChange"
-                    :order="order"
+                    :order.sync="order"
                 />
             </div>
             <SdxwSearchLayout
@@ -124,8 +124,7 @@ export default {
         this.initList();
     },
     methods: {
-        sortChange(order) {
-            this.order =  order;
+        sortChange() {
             this.initList();
         },
         searchProject() {

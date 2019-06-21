@@ -10,6 +10,7 @@
                 icon="sdx-icon-plus"
                 size="small"
                 @click="createVersion"
+                v-auth.model.button="'MODEL_VERSION:CREATE'"
             >
                 新增模型版本
             </SdxuButton>
@@ -64,11 +65,14 @@
                 label="REST API"
             />
             <el-table-column
-                prop="createdAt"
                 key="createdAt"
                 label="创建时间"
                 sortable="custom"
-            />
+            >
+                <template slot-scope="scope">
+                    {{ scope.row.createdAt | dateFormatter }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="操作"
                 key="operation"
@@ -117,6 +121,7 @@
         <div class="sdxv-version-list__footer">
             <div />
             <sdxu-pagination
+                v-if="total"
                 :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
@@ -155,14 +160,18 @@ import { getVersionList, removeVersion, shutdownVersion, getModelInfo } from '@s
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import Message from 'element-ui/lib/message';
+import { removeBlankAttr, paginate } from '@sdx/utils/src/helper/tool';
 import CreateVersion from './CreateVersion';
 import TestVersion from './TestVersion';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import auth from '@sdx/widget/components/auth';
+import TimerFilter from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name: 'VersionListTable',
     data() {
         return {
             versionList: [],
-            total: 1,
+            total: 0,
             current: 1,
             pageSize: 10,
             order: '',
@@ -187,17 +196,16 @@ export default {
         CreateVersion,
         TestVersion
     },
-    computed: {
-        userId() {
-            return '1';   // TODO: 获取用户ID
-        }
-    },
     created() {
         getModelInfo(this.$route.params.modelId).then(res => {
-            this.isModelOwner = res.creatorId === this.userId;
+            this.isModelOwner = res.creatorId === getUser().userId;
             this.initVersionList();
         });
     },
+    directives: {
+        auth
+    },
+    mixins: [TimerFilter],
     methods: {
         dialogClose(needRefresh) {
             this.editingVersion = null;
@@ -215,9 +223,9 @@ export default {
             this.initVersionList();
         },
         sortChange(sort) {
-            if (sort && sort.prop && sort.order) {
-                this.order = sort.prop;
-                this.orderBy = sort.order === 'ascending' ? 'asc' : 'desc';
+            this.orderBy = 'createdAt';
+            if (sort&& sort.order) {
+                this.order = sort.order === 'ascending' ? 'asc' : 'desc';
                 this.initVersionList();
             }
         },
@@ -225,12 +233,12 @@ export default {
             this.loading = true;
             const params = {
                 name: this.name,
-                start: this.current,
-                count: this.pageSize,
+                ...paginate(this.current, this.pageSize),
                 order: this.order,
                 orderBy: this.orderBy
             };
-            getVersionList(params).then((res) => {
+            removeBlankAttr(params);
+            getVersionList(this.$route.params.modelId, params).then((res) => {
                 this.versionList = res.items;
                 this.versionList.forEach(item => {
                     item.showPublish = this.isModelOwner && (item.state === 'CREATED' || item.state === 'FAILED' || item.state === 'KILLED');

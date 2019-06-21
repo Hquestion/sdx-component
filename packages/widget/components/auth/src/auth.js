@@ -65,6 +65,7 @@ export const auth = (key, tag) => {
 
 export default {
     name: 'auth',
+    $auth: auth,
     inserted(el, binding, vnode) {
         vnode = locateNode(vnode);
         const system = getSystem(binding.modifiers);

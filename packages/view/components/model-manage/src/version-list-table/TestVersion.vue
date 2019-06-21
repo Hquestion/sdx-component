@@ -31,7 +31,10 @@
                 >
                     获取Key
                 </SdxuButton>
-                <div v-else>
+                <div
+                    v-else
+                    style="overflow-wrap: break-word;"
+                >
                     {{ token }}
                 </div>
             </el-form-item>
@@ -145,7 +148,7 @@ export default {
         getToken() {
             this.loading = true;
             getVersionToken(this.$route.params.modelId, this.version.uuid).then(res => {
-                this.token = res.data;
+                this.token = res.token;
                 this.loading = false;
             });
         },

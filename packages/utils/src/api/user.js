@@ -2,10 +2,10 @@ import httpService from '../http-service';
 import {getRolesList} from './rolemange';
 import { COMPOSE_GATEWAY_BASE, USER_SERVICE_GATEWAY_BASE } from './config';
 
-const changePasswordApi = '/api/v1/user/changePassword'; // 目前后端暂时不能确定, 之后需要再做修改
 
-export function changePassword(params) {
-    return httpService.post(changePasswordApi, params);
+
+export function changePassword(uuid, params) {
+    return httpService.patch(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}`, params);
 }
 
 export function getRoleDetail(uuid) {

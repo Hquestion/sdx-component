@@ -20,6 +20,33 @@
     }
 }
 
+@include block('user-resource-list', $bem-namespace-view) {
+    
+    @include element('more') {
+        font-size: 12px;
+        color: #5C89FF;
+        cursor: pointer;
+        i {
+            font-size: 12px;
+            margin-left: 5px;
+        }
+    }
+
+    @include element('search') {
+        display: flex;
+
+        @include modifier('button') {
+            margin-left: $sdx-margin;
+        }
+    }
+
+    @include element('pagination') {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: $sdx-margin;
+    }
+}
+
 @include block('platform-resource', $bem-namespace-view) {
     // padding: $sdx-padding;
     @include element('title') {

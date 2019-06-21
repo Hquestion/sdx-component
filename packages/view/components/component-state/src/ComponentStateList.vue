@@ -25,7 +25,10 @@
                 </el-select>
             </SdxwSearchItem>
         </SdxwSearchLayout>
-        <SdxuTable :data="dataList">
+        <SdxuTable
+            :data="dataList"
+            v-loading="loading"
+        >
             <el-table-column
                 label="Pod名称"
                 prop="podName"
@@ -82,7 +85,7 @@ import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
 
 import { POD_STATE_TYPE } from '@sdx/utils/src/const/task';
-import { getPodsList } from '@sdx/utils/src/api/monitor';
+import { getPodsStatus } from '@sdx/utils/src/api/system';
 
 export default {
     name: 'SdxvComponentStateList',
@@ -129,13 +132,14 @@ export default {
                 status: ''
             },
             logDialogVisible: false,
-            currentPodId: ''
+            currentPodId: '',
+            loading: false
         };
     },
     computed: {
         filterTotalList() {
             return this.componentList.filter(item => {
-                return item.podName.includes(this.query.podName.trim()) && (this.query.status === '' || item.status === this.query.status);
+                return item.podName.includes(this.query.podName) && (this.query.status === '' || item.status === this.query.status);
             });
         },
         dataList() {
@@ -145,15 +149,19 @@ export default {
         },
         params() {
             return {
-                namespace: this.type === 'base' ? ['kube-system', 'skydiscovery'] : ['skydiscovery-system']
+                namespace: this.type === 'base' ? 'kube-system,skydiscovery' : 'skydiscovery-system'
             };
         }
     },
     methods: {
         fetchData() {
-            getPodsList(this.params).then(data => {
-                window.console.error(data);
+            this.loading = true;
+            getPodsStatus(this.params).then(data => {
                 this.componentList = data.status_list;
+                this.loading = false;
+            }).catch(() => {
+                this.componentList = [];
+                this.loading = false;
             });
         },
         handleViewLog(podId) {
@@ -161,7 +169,8 @@ export default {
             this.currentPodId = podId;
         },
         handleSearch() {
-            this.query.podName = this.searchName;
+            this.page = 1;
+            this.query.podName = this.searchName.trim();
             this.query.status = this.podState;
         },
         handlePageChange(page) {

@@ -4,7 +4,10 @@
             v-if="task.state === STATE_TYPE.RUNNING"
             #base-info-right
         >
-            <SdxuButton @click="dialogVisible = true">
+            <SdxuButton
+                v-auth.project.button="'TASK:SAVE_IMAGE'"
+                @click="dialogVisible = true"
+            >
                 另存为镜像
             </SdxuButton>
             <SdxvSaveAsDialog
@@ -138,10 +141,14 @@
 
 <script>
 import MixinDetail from './MixinDetail';
+import auth from '@sdx/widget/components/auth';
 
 export default {
     name: 'SdxvJupyterDetail',
     mixins: [MixinDetail],
+    directives: {
+        auth
+    },
     data() {
         return {
             dialogVisible: false

@@ -160,7 +160,7 @@ export default {
         },
 
         circleSlice () {
-            return 2 * Math.PI / this.totalSteps;
+            return this.totalSteps === 0 ? 0 : 2 * Math.PI / this.totalSteps;
         },
 
         animateSlice () {

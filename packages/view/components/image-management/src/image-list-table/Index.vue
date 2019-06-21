@@ -8,7 +8,8 @@
                 type="primary"
                 size="small"
                 @click="share"
-                v-if="imageKind === 'private'"
+                v-show="imageKind === 'private'"
+                v-auth.image.button="'IMAGE:SHARE'"
             >
                 全部共享
             </SdxuButton>
@@ -25,7 +26,8 @@
                 type="primary"
                 size="small"
                 @click="cancelShare"
-                v-if="imageKind === 'myShare'"
+                v-show="imageKind === 'myShare'"
+                v-auth.image.button="'IMAGE:SHARE'"
             >
                 取消共享
             </SdxuButton>
@@ -89,7 +91,6 @@
                         icon="sdx-icon sdx-fenxiang"
                         title="共享设置"
                         v-if="scope.row.showEdit"
-                        v-auth.image.button="'IMAGE:SHARE'"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'extend')"
@@ -359,7 +360,7 @@ export default {
                 this.imageList = res.data;
                 this.imageList.forEach(item => {
                     const isOwnImage = (item.owner && item.owner.uuid) === currentUser.userId;
-                    item.showEdit = isOwnImage;
+                    item.showEdit = isOwnImage && auth.$auth('IMAGE-MANAGER:IMAGE:SHARE', 'BUTTON');
                     item.showExtend = item.buildType === 'BASIC' && item.packages && item.packages.length;
                     item.showRemove = isOwnImage && item.buildType !== 'BASIC' && item.shareType === 'PRIVATE';
                     item.showDetail = (isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE';

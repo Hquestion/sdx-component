@@ -57,11 +57,15 @@ export const auth = (key, tag) => {
     if (!shareCenter.getAuthSwitcher()) return true;
     if (!key) return true;
     const permissions = getUserRightsByTag(tag);
+    if (key.split(':').length === 3) {
+        key = `${key}:${emptyPlaceholder}`;
+    }
     return permissions.includes(key);
 };
 
 export default {
     name: 'auth',
+    $auth: auth,
     inserted(el, binding, vnode) {
         vnode = locateNode(vnode);
         const system = getSystem(binding.modifiers);

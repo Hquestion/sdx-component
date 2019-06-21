@@ -130,7 +130,7 @@ export default {
     },
     methods: {
         handleMouseover() {
-            this.showMask = true;
+            this.showMask = !!this.meta.description;
         },
         handleMouseout() {
             this.showMask = false;

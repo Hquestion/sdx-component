@@ -1,0 +1,9 @@
+@import './general-running.scss';
+@import './timer-running.scss';
+@import './timer-running-task-edit.scss';
+
+@include block("running-info", $bem-namespace-view) {
+    .el-date-editor .el-range-separator {
+        width: 10%;
+    }
+}

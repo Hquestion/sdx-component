@@ -1,6 +1,12 @@
 @include block('resource-config', $bem-namespace-widget) {
     @include element('title') {
         color: $sdx-text-minor-color;
+        height: $sdxw-resource-label-height;
+        line-height: $sdxw-resource-label-height;
+        span {
+            vertical-align: middle;
+            color: $sdxw-resource-require-color;
+        }
     }
     @include element('selectoption') {
         color: $sdx-text-minor-color;

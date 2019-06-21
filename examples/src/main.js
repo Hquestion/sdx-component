@@ -16,6 +16,7 @@ import ChangePassword from '@sdx/widget/components/change-password';
 import Project from '@sdx/view/components/project-management';
 import Image from '@sdx/view/components/image-management';
 import Model from '@sdx/view/components/model-manage';
+import Skyflow from '@sdx/view/components/skyflow';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import '@sdx/ui/theme/index.scss';
 import '@sdx/widget/theme/index.scss';
@@ -50,6 +51,7 @@ Project.viewRouter.register(router, '/');
 // Image.viewRouter.register(router, '/imageManageTest');
 
 Model.viewRouter.register(router, '/modelManageTest');
+Skyflow.viewRouter.register(router, '/skyflowTest');
 
 Vue.config.productionTip = false;
 

@@ -4,6 +4,7 @@
         :no-footer="true"
         title="日志详情"
         @open="handleOpenDialog"
+        @close="handleCloseDialog"
         class="sdxv-build-log"
     >
         <SdxwLogDetail
@@ -51,7 +52,10 @@ export default {
     },
     methods: {
         fetchLogInfo() {
-            getImageBuildLog(this.imageBuilderId).then(data => {
+            const params = {
+                length: -1 // 获取全部日志
+            };
+            getImageBuildLog(this.imageBuilderId, params).then(data => {
                 this.logInfo = this.filterIp(data.content);
             });
         },
@@ -63,6 +67,9 @@ export default {
         },
         handleOpenDialog() {
             this.fetchLogInfo();
+        },
+        handleCloseDialog() {
+            this.logInfo = '';
         }
     }
 };

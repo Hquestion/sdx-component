@@ -13,5 +13,6 @@ module.exports = {
     'component-state': './components/component-state/index.js',
     'resource-statistics': './components/resource-statistics/index.js',
     'task-management': './components/task-management/index.js',
-    'file': './components/file/index.js'
+    'file': './components/file/index.js',
+    'skyflow': './components/skyflow/index.js'
 };

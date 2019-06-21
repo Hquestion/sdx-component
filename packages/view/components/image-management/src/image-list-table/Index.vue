@@ -8,7 +8,8 @@
                 type="primary"
                 size="small"
                 @click="share"
-                v-if="imageKind === 'private'"
+                v-show="imageKind === 'private'"
+                v-auth.image.button="'IMAGE:SHARE'"
             >
                 全部共享
             </SdxuButton>
@@ -25,7 +26,8 @@
                 type="primary"
                 size="small"
                 @click="cancelShare"
-                v-if="imageKind === 'myShare'"
+                v-show="imageKind === 'myShare'"
+                v-auth.image.button="'IMAGE:SHARE'"
             >
                 取消共享
             </SdxuButton>
@@ -63,17 +65,23 @@
                 v-if="imageKind !== 'basic'"
             />
             <el-table-column
-                prop="owner"
                 key="owner"
                 label="创建人"
                 v-if="imageKind === 'all' || imageKind === 'otherShare'"
-            />
+            >
+                <template slot-scope="scope">
+                    {{ (scope.row.owner && scope.row.owner.fullName) || '' }}
+                </template>
+            </el-table-column>
             <el-table-column
-                prop="createdAt"
                 key="createdAt"
                 label="创建时间"
                 sortable="custom"
-            />
+            >
+                <template slot-scope="scope">
+                    {{ scope.row.createdAt | dateFormatter }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="操作"
             >
@@ -82,25 +90,25 @@
                         @click="handleOperation(scope.row, 'edit')"
                         icon="sdx-icon sdx-fenxiang"
                         title="共享设置"
-                        v-if="scope.row.operations.indexOf('edit') > -1"
+                        v-if="scope.row.showEdit"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'extend')"
                         icon="sdx-icon sdx-kaobei"
                         title="基于此创建"
-                        v-if="scope.row.operations.indexOf('extend') > -1"
+                        v-if="scope.row.showExtend"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'detail')"
                         icon="sdx-icon sdx-icon-tickets"
                         title="查看详情"
-                        v-if="scope.row.operations.indexOf('detail') > -1"
+                        v-if="scope.row.showDetail"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'remove')"
                         icon="sdx-icon sdx-icon-delete"
                         title="删除"
-                        v-if="scope.row.operations.indexOf('remove') > -1"
+                        v-if="scope.row.showRemove"
                     />
                 </template>
             </el-table-column>
@@ -108,6 +116,7 @@
         <div class="sdxv-image-list__footer">
             <div />
             <sdxu-pagination
+                v-if="!!total"
                 :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
@@ -121,6 +130,7 @@
             :default-groups="shareForm.groups"
             :default-share-type="shareForm.shareType"
             @confirm-edit="confirmEdit"
+            source-kind="image"
         />
         <SdxvPackageDetailDialog
             :visible.sync="detailDialogVisible"
@@ -135,18 +145,22 @@ import Table from '@sdx/ui/components/table';
 import Dialog from '@sdx/ui/components/dialog';
 import Button from '@sdx/ui/components/button';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
-import { getImageList, removeImage, updateImage, updateGroupImages } from '@sdx/utils/src/api/image';
+import { getImageList, removeImage, updateImage, updateGroupImages, removeGroupImages } from '@sdx/utils/src/api/image';
+import { removeBlankAttr, paginate } from '@sdx/utils/src/helper/tool';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import ImageDetail from './PackageDetailDialog';
 import { Message } from 'element-ui';
 import ShareSetting from '@sdx/widget/components/share-setting';
+import Filters from '@sdx/utils/src/mixins/transformFilter';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'ImageListTable',
     data() {
         return {
             imageList: [],
-            total: 1,
+            total: 0,
             current: 1,
             pageSize: 10,
             order: '',
@@ -164,6 +178,9 @@ export default {
             imageName: '',
             imageId: ''
         };
+    },
+    directives: {
+        auth
     },
     props: {
         imageKind: {
@@ -204,9 +221,10 @@ export default {
         [ImageDetail.name]: ImageDetail,
         [ShareSetting.name]: ShareSetting
     },
-    created() {
+    mounted() {
         this.initImageList();
     },
+    mixins: [Filters],
     methods: {
         share() {
             if (!this.selectedImages.length) {
@@ -231,11 +249,20 @@ export default {
                 });
                 return;
             }
-            Message({    // TODO: 换成批量删除接口
-                message: '删除成功',
-                type: 'success'
-            });
-            this.initImageList();
+            MessageBox({
+                title: '确定要删除选中的镜像吗？',
+                content: '删除后将不可恢复'
+            }).then(() => {
+                const uuids = [];
+                this.selectedImages.forEach(item => uuids.push(item.uuid));
+                removeGroupImages({ uuids }).then(() => {
+                    Message({
+                        message: '删除成功',
+                        type: 'success'
+                    });
+                    this.initImageList();
+                });
+            }).catch(() => {});
         },
         cancelShare() {
             if (!this.selectedImages.length) {
@@ -245,11 +272,27 @@ export default {
                 });
                 return;
             }
-            Message({    // TODO: 换成批量取消共享接口
-                message: '取消共享成功',
-                type: 'success'
-            });
-            this.initImageList();
+            MessageBox({
+                title: '确定要取消共享选中的镜像吗？'
+            }).then(() => {
+                const uuids = [];
+                this.selectedImages.forEach(item => uuids.push(item.uuid));
+                const params = {
+                    uuids,
+                    setting: {
+                        shareType: 'PRIVATE',
+                        users: [],
+                        groups: []
+                    }
+                };
+                updateGroupImages(params).then(() => {
+                    Message({
+                        message: '操作成功',
+                        type: 'success'
+                    });
+                    this.initImageList();
+                });
+            }).catch(() => {});
         },
         selectionChange(selection) {
             this.selectedImages = selection;
@@ -275,16 +318,21 @@ export default {
                 });
             } else {
                 // 批量共享设置  TODO 换成批量接口
-                // updateGroupImages(this.selectedImages, this.shareForm).then(() => {
-                Message({
-                    message: '全部共享成功',
-                    type: 'success'
+                const uuids = [];
+                this.selectedImages.forEach(item => uuids.push(item.uuid));
+                const params = {
+                    uuids,
+                    setting: this.shareForm
+                };
+                updateGroupImages(params).then(() => {
+                    Message({
+                        message: '设置成功',
+                        type: 'success'
+                    });
+                    this.initImageList();
+                    this.dialogVisible = false;
                 });
-                this.initImageList();
-                this.dialogVisible = false;
-                // });
             }
-
         },
         initImageList(reset) {
             this.loading = true;
@@ -295,21 +343,33 @@ export default {
                 shareType: this.shareType,
                 buildType: this.buildType,
                 taskType: this.taskType,
-                start: this.current,
-                count: this.pageSize,
+                ...paginate(this.current, this.pageSize),
                 order: this.order,
                 orderBy: this.orderBy
             };
+            removeBlankAttr(params);
+            const currentUser = getUser();
             if (this.isOwner) {
                 if (this.isOwner === 'true') {
-                    params.ownerId = '';  // TODO: 有用户ID时传入用户ID
+                    params.ownerId = currentUser.userId || '';
                 } else {
-                    params.excludeOwnerId = ''; // TODO: 有用户ID时传入用户ID
+                    params.excludeOwnerId = currentUser.userId || '';
                 }
             }
             getImageList(params).then((res) => {
                 this.imageList = res.data;
+                this.imageList.forEach(item => {
+                    const isOwnImage = (item.owner && item.owner.uuid) === currentUser.userId;
+                    item.showEdit = isOwnImage && auth.$auth('IMAGE-MANAGER:IMAGE:SHARE', 'BUTTON');
+                    item.showExtend = item.buildType === 'BASIC' && item.packages && item.packages.length;
+                    item.showRemove = isOwnImage && item.buildType !== 'BASIC' && item.shareType === 'PRIVATE';
+                    item.showDetail = (isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE';
+                });
                 this.total = res.total;
+                this.loading = false;
+            }, () => {
+                this.imageList = [];
+                this.total = 0;
                 this.loading = false;
             });
         },
@@ -318,9 +378,9 @@ export default {
             this.initImageList();
         },
         sortChange(sort) {
-            if (sort && sort.prop && sort.order) {
-                this.order = sort.prop;
-                this.orderBy = sort.order === 'ascending' ? 'asc' : 'desc';
+            this.orderBy = 'createdAt';
+            if (sort &&  sort.order) {
+                this.order = sort.order === 'ascending' ? 'asc' : 'desc';
                 this.initImageList();
             }
         },
@@ -336,9 +396,13 @@ export default {
                     this.dialogVisible = true;
                     this.editingImage = row;
                     Object.assign(this.shareForm, row);
+                    this.shareForm.users = this.shareForm.users || [];
+                    this.shareForm.groups = this.shareForm.groups || [];
                     break;
                 case 'extend':
-                    this.$router.push({ name: 'basicbuild' });
+                    this.$router.push({
+                        path: `basicbuild/${row.uuid}`
+                    });
                     break;
                 case 'remove':
                     MessageBox({
@@ -363,6 +427,3 @@ export default {
     }
 };
 </script>
-
-<style scoped lang="scss">
-</style>

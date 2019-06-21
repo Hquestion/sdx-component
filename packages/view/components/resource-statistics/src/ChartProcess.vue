@@ -11,7 +11,7 @@
             :slide-width="8"
         >
             <p class="sdxv-resource-chart__percent">
-                {{ percent }}
+                {{ percent }}%
             </p>
             <p class="sdxv-resource-chart__desc">
                 已使用
@@ -39,7 +39,7 @@ export default {
     },
     computed: {
         percent() {
-            return (this.used / this.total).toFixed(2) * 100 + '%';
+            return this.total ? Math.floor((this.used / this.total) * 100) : 0;
         }
     }
 };

@@ -17,7 +17,7 @@
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxwLogDetail from '@sdx/widget/components/log-detail';
 
-import { getLogs } from '@sdx/utils/src/api/log';
+import { getPodLog } from '@sdx/utils/src/api/system';
 
 export default {
     name: 'SdxvComponentStateLogDialog',
@@ -38,9 +38,9 @@ export default {
     },
     data() {
         return {
-            start: 0,
-            end: 0,
-            size: 100,
+            start: 1,
+            end: 1,
+            size: 20,
             isLoading: false,
             logContent: ''
         };
@@ -62,21 +62,20 @@ export default {
             }
             // 修正offset
             offset = size < 0 ? offset + size : offset;
-            offset = offset < 0 ? 0 : offset;
+            offset = offset < 1 ? 1 : offset;
             this.isLoading = true;
             try {
-                const data = await getLogs({
-                    podId: this.podId,
+                const data = await getPodLog(this.podId, {
                     start: offset,
                     count: Math.abs(size)
                 });
-                let content = Array.isArray(data.contents) && data.contents.join('\r\n');
+                let content = Array.isArray(data.contents) && data.contents.join('');
                 if (size < 0) {
                     this.start = this.start - data.contents.length;
-                    this.logContent = content + (content ? '\r\n' : '') + this.logContent;
+                    this.logContent = content + this.logContent;
                 } else {
                     this.end = this.end + data.contents.length;
-                    this.logContent += (content ? '\r\n' : '') + content;
+                    this.logContent += content;
                 }
                 // this.logContent = this.logContent.trim();
                 this.isLoading = false;
@@ -94,9 +93,9 @@ export default {
             this.fetchData(this.end, this.size);
         },
         handleClose() {
-            this.start = 0;
-            this.end = 0;
-            this.size = 100;
+            this.start = 1;
+            this.end = 1;
+            this.size = 20;
             this.isLoading = false;
             this.logContent = '';
         }

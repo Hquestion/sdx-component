@@ -43,6 +43,11 @@ import SdxvExpandCollapseToggler from './ExpandCollapseToggler';
 import SdxvTaskFileUpload from './TaskFileUpload';
 import MessageBox from '@sdx/ui/components/message-box';
 import TaskFileCopy from './TaskFileCopy';
+const TAB_REF_MAP = {
+    UPLOAD: 'uploadTask',
+    COPY: 'copyTask',
+    DELETE: 'deleteTask'
+};
 export default {
     name: 'SdxvFileTask',
     components: {
@@ -95,6 +100,11 @@ export default {
                 }
             });
             isEmpty && (this._visible = false);
+        },
+        checkTab(tab) {
+            this.currentTab = tab;
+            const vm = this.$refs[TAB_REF_MAP[tab]];
+            vm.init && vm.init();
         }
     },
     watch: {

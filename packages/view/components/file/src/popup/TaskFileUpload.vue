@@ -119,8 +119,8 @@ export default {
         list: {
             deep: true,
             immediate: false,
-            handler(val) {
-                if (val.every(item => item.status === 'success' || item.status === 'error')) {
+            handler() {
+                if (this.isEmpty()) {
                     this.$emit('empty');
                 }
             }

@@ -6,7 +6,7 @@ import VueClipboard from 'vue-clipboard2';
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
-import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail } from '@sdx/utils/src/api/file';
+import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail, pack } from '@sdx/utils/src/api/file';
 import { unlock } from '@sdx/utils/src/lockScroll';
 
 export default {
@@ -71,7 +71,7 @@ export default {
             let content = '确定删除后不可恢复哦';
             const shareContent = '选中文件已被共享，或包含被共享的文件，如果继续其他用户将无法访问共享内容。';
             if (row) {
-                if (row.fileShareDetailId) {
+                if (row.fileShareId) {
                     content = shareContent;
                 }
                 MessageBox.confirm.error({
@@ -86,7 +86,7 @@ export default {
             } else {
                 const checkedRows = this.fileManager.checked;
                 if (checkedRows.length === 0) return;
-                const hasSharedRows = checkedRows.some(item => !!item.fileShareDetailId);
+                const hasSharedRows = checkedRows.some(item => !!item.fileShareId);
                 if (hasSharedRows) {
                     content = shareContent;
                 }
@@ -148,12 +148,21 @@ export default {
             });
         },
         download(row) {
-            if (row) {
-                download(row.path).then(() => {
-                    // 暂时不需要做啥
-                });
+            if (row && row.isFile) {
+                download(row.path);
             } else {
-                // todo 支持批量操作
+                // 打包，然后下载
+                let defer;
+                if (row) {
+                    // 打包文件夹
+                    defer = pack([row.path]);
+                } else {
+                    // 打包批量的
+                    defer = pack(this.fileManager.checked.map(item => item.path));
+                }
+                defer.then(res => {
+                    download(res);
+                });
             }
         },
         path(row) {
@@ -168,8 +177,8 @@ export default {
             this.toShareRow = row;
             if (row) {
                 // 获取分享详情，初始化shareUsers 和 shareGroups
-                if (row.fileShareDetailId) {
-                    shareDetail(row.fileShareDetailId).then(res => {
+                if (row.fileShareId) {
+                    shareDetail(row.fileShareId).then(res => {
                         this.shareUsers = res.users || [];
                         this.shareGroups = res.groups || [];
                         this.shareVisible = true;
@@ -189,9 +198,9 @@ export default {
         },
         doShare(users, groups, shareType) {
             if (this.toShareRow) {
-                if (this.toShareRow.fileShareDetailId) {
+                if (this.toShareRow.fileShareId) {
                     return sharePatch({
-                        uuid: this.toShareRow.fileShareDetailId,
+                        uuid: this.toShareRow.fileShareId,
                         isGlobal: shareType === 'PUBLIC',
                         users,
                         groups
@@ -207,8 +216,8 @@ export default {
                     }).then(res => {
                         Message.success('分享成功');
                         let meta = this.fileManager.renderFiles.find(item => item.path === this.toShareRow.path);
-                        this.$set(meta, 'fileShareDetailId', res.uuid);
-                        this.fileManager.db.list.where('path').equals(meta.path).modify({fileShareDetailId: res.uuid});
+                        this.$set(meta, 'fileShareId', res.uuid);
+                        this.fileManager.db.list.where('path').equals(meta.path).modify({fileShareId: res.uuid});
                     });
                 }
             } else {
@@ -220,11 +229,11 @@ export default {
                 title: '您确定要取消共享选中的文件吗？'
             }).then(() => {
                 if (row) {
-                    shareCancel(row.fileShareDetailId).then(res => {
+                    shareCancel(row.fileShareId).then(res => {
                         // todo 更新这些记录的shareDetailId
                     });
                 } else {
-                    shareCancel(this.fileManager.checked.map(item => item.fileShareDetailId)).then(res => {
+                    shareCancel(this.fileManager.checked.map(item => item.fileShareId)).then(res => {
                         // todo 更新这些记录的shareDetailId
                     });
                 }

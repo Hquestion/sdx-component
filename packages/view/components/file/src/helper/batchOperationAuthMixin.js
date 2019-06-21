@@ -16,7 +16,7 @@ export default {
             if ([rootKinds.MY_SHARE, rootKinds.ACCEPTED_SHARE, rootKinds.PROJECT_SHARE].includes(this.fileManager.rootKind)) {
                 return false;
             } else {
-                return this.fileManager.checked.length > 0 && this.fileManager.checked.every(item => !item.fileShareDetailId);
+                return this.fileManager.checked.length > 0 && this.fileManager.checked.every(item => !item.fileShareId);
             }
         },
         canCancelShare() {
@@ -27,7 +27,7 @@ export default {
                 return true;
             }
             if ([rootKinds.ACCEPTED_SHARE, rootKinds.PROJECT_SHARE].includes(this.fileManager.rootKind)) return false;
-            // return this.fileManager.checked.every(item => !!item.fileShareDetailId);
+            // return this.fileManager.checked.every(item => !!item.fileShareId);
             return false;
         },
         canDownload() {

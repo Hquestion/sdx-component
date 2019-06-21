@@ -112,9 +112,9 @@ module.exports = [
         filePath: './compose/skyflowProfiles.js'
     },
     {
-        apiId: '/fe-compose/api/v1/file-download',
+        apiId: '/fe-compose/api/v1/file-share-profiles',
         method: 'GET',
-        functionName: 'fileDownload.handler',
-        filePath: './compose/fileDownload.js'
+        functionName: 'fileShareProfiles.handler',
+        filePath: './compose/fileShareProfiles.js'
     },
 ];

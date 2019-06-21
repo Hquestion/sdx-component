@@ -1,7 +1,9 @@
 import httpService from '../http-service';
 import shareCenter from '../helper/shareCenter';
-import { FILE_MANAGE_GATEWAY_BASE } from './config';
+import { FILE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
 import { isString } from '../helper/tool';
+import { asyncJobStatus } from '../const/file';
+import { Notification } from 'element-ui';
 
 export function getFilesList(params = {}) {
     let userInfo = shareCenter.getUser() || {};
@@ -100,19 +102,13 @@ export function getMyShare(params) {
     let userInfo = shareCenter.getUser() || {};
     const {
         ownerId = userInfo.userId,
-        path = params.path || '/',
         start = 1,
-        count = -1,
-        orderBy = 'name',
-        order = 'asc'
+        count = -1
     } = params;
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}file-share-profiles`, {
         ownerId: ownerId || userInfo.userId,
-        path,
         start,
-        count,
-        orderBy,
-        order
+        count
     });
 }
 
@@ -120,19 +116,13 @@ export function getMyAcceptedShare(params) {
     let userInfo = shareCenter.getUser() || {};
     const {
         userId = userInfo.userId,
-        path = params.path || '/',
         start = 1,
-        count = -1,
-        orderBy = 'name',
-        order = 'asc'
+        count = -1
     } = params;
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}file-share-profiles`, {
         userId: userId || userInfo.userId,
-        path,
         start,
-        count,
-        orderBy,
-        order
+        count
     });
 }
 
@@ -222,11 +212,64 @@ export function unzip(path) {
 
 export function download(path, filesystem = 'cephfs') {
     let userInfo = shareCenter.getUser() || {};
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/download`, {
+    const origin = location.origin;
+    window.open(`${origin}${FILE_MANAGE_GATEWAY_BASE}files/download?userId=${userInfo.userId}&path=${path}&filesystem=${filesystem}`);
+    // return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/download`, {
+    //     userId: userInfo.userId,
+    //     path,
+    //     filesystem
+    // });
+}
+
+export function pack(paths) {
+    let _resolve, _reject;
+    let userInfo = shareCenter.getUser() || {};
+    httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/pack`, {
         userId: userInfo.userId,
-        path,
-        filesystem
+        paths,
+        targetPath: '/.download/__' + +new Date()
+    }).then(res => {
+        const jobId = res.jobId;
+        let timer = null;
+        (function pullJob() {
+            getJobDetail(jobId).then(res => {
+                if (res.state === asyncJobStatus.SUCCESS || res.state === asyncJobStatus.FAILURE) {
+                    clearTimeout(timer);
+                    if (res.state === asyncJobStatus.SUCCESS) {
+                        _resolve(res.args.targetPath);
+                    } else {
+                        Notification.error({
+                            title: '出错了！',
+                            message: '下载失败！'
+                        });
+                        _reject();
+                    }
+                } else {
+                    clearTimeout(timer);
+                    timer = setTimeout(pullJob, 1000);
+                }
+            }, () => {
+                clearTimeout(timer);
+                _reject();
+            });
+        })();
+    }, _reject);
+    return new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
     });
+}
+
+export function getPackTaskList() {
+    let userInfo = shareCenter.getUser() || {};
+    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
+        userId: userInfo.userId,
+        jobType: 'PACK'
+    });
+}
+
+export function getJobDetail(id) {
+    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs/${id}`);
 }
 
 export function getCopyTaskList() {

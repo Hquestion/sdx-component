@@ -17,7 +17,7 @@ import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 
 import { getFilesList, searchFiles, getMyShare, getMyAcceptedShare } from '@sdx/utils/src/api/file';
-import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind } from './helper/fileListTool';
+import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap, MY_SHARE_PATH, PROJECT_SHARE_PATH, ACCEPTED_SHARE_PATH } from './helper/fileListTool';
 import BreadcrumbBar from './BreadcrumbBar';
 import SdxvFileTask from './popup/FileTask';
 
@@ -57,7 +57,7 @@ export default {
             loading: false,
             // 排序信息
             orderBy: 'updatedAt',
-            order: 'asc',
+            order: 'desc',
             fixedRows,
             taskVisible: false,
             uploadingFiles: []
@@ -82,7 +82,7 @@ export default {
     },
     methods: {
         isProjectRoot() {
-            return this.currentPath === '/fe-fixed-project-share';
+            return this.currentPath === PROJECT_SHARE_PATH;
         },
         isShareRoot() {
             return !!fixedRowsKeyMap[this.currentPath];
@@ -116,8 +116,8 @@ export default {
             let defer;
             const deferMap = {
                 [rootKinds.MY_SHARE]: this.loadMyShare,
-                [rootKinds.ACCEPTED_SHARE]: this.loadFileList,
-                [rootKinds.PROJECT_SHARE]: this.loadFileList
+                [rootKinds.ACCEPTED_SHARE]: this.loadAcceptedShare,
+                [rootKinds.PROJECT_SHARE]: this.loadProjectShare
             };
             if (this.rootKind === '') {
                 defer = this.loadFileList();
@@ -220,17 +220,31 @@ export default {
             }
         },
         loadFileList() {
-            return getFilesList({
-                start: (this.pageIndex - 1) * this.pageSize,
-                count: this.pageSize,
-                path: this.currentPath,
-                orderBy: this.orderBy,
-                order: this.order
-            });
+            if (this.rootKind === '') {
+                return getFilesList({
+                    start: (this.pageIndex - 1) * this.pageSize + 1,
+                    count: this.pageSize,
+                    path: this.currentPath,
+                    orderBy: this.orderBy,
+                    order: this.order
+                });
+            } else {
+                let path = '', ownerId;
+                path = this.currentPath.replace(eval(`/\\${rootKindPathMap[this.rootKind]}(.*)/`), '$1');
+                ownerId = this.$route.query.ownerId;
+                return getFilesList({
+                    userId: ownerId,
+                    start: (this.pageIndex - 1) * this.pageSize + 1,
+                    count: this.pageSize,
+                    path: path,
+                    orderBy: this.orderBy,
+                    order: this.order
+                });
+            }
         },
         loadMyShare() {
             return getMyShare({
-                start: (this.pageIndex - 1) * this.pageSize,
+                start: (this.pageIndex - 1) * this.pageSize + 1,
                 count: this.pageSize,
                 path: '',
                 orderBy: this.orderBy,
@@ -238,14 +252,20 @@ export default {
             });
         },
         loadAcceptedShare() {
-
+            return getMyAcceptedShare({
+                start: (this.pageIndex - 1) * this.pageSize + 1,
+                count: this.pageSize,
+                path: '',
+                orderBy: this.orderBy,
+                order: this.order
+            });
         },
         loadProjectShare() {
 
         },
         loadSearchResult() {
             return searchFiles({
-                start: (this.pageIndex - 1) * this.pageSize,
+                start: (this.pageIndex - 1) * this.pageSize + 1,
                 count: this.pageSize,
                 path: this.currentPath,
                 orderBy: this.orderBy,
@@ -264,7 +284,7 @@ export default {
     mounted() {
         const db = new Dexie('SdxvFile');
         db.version(1).stores({
-            list: '++,path,userId,name,filesystem,isFile,mimeType,fileExtension,fileShareDetailId,createdAt,updatedAt,size'
+            list: '++,path,userId,name,filesystem,isFile,mimeType,fileExtension,fileShareId,createdAt,updatedAt,size'
         });
         this.db = db;
         this.currentPath = this.$route.query.path || '/';

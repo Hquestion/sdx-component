@@ -17,7 +17,7 @@
             :reverse-selection="true"
             :row-key="setRowKey"
             :data="fileManager.renderFiles"
-            :default-sort="{prop: fileManager.orderBy, order: 'ascending'}"
+            :default-sort="{prop: fileManager.orderBy, order: 'descending'}"
             @sort-change="handleSortChange"
             :show-header="fileManager.checked.length === 0"
             @select="handleSelect"
@@ -92,7 +92,13 @@
                 prop="path"
                 width="240"
                 v-if="fileManager.isSearch"
-            />
+            >
+                <template #default="{row}">
+                    <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" :title="row.path">
+                        {{ row.path }}
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
                 label="大小"
                 sortable="custom"
@@ -171,6 +177,7 @@ import Loadmore from './helper/loadmore';
 import checkMixin from './helper/checkMixin';
 import OperationHandlerMixin from './helper/operationHandlerMixin';
 import FileSelect from '@sdx/widget/components/file-select';
+import { rootKindPathMap } from './helper/fileListTool';
 
 const ROW_HEIGHT = 52;
 let isFirstSort = true;
@@ -224,7 +231,7 @@ export default {
                 isFile: false,
                 mimeType: 'text/directory',
                 fileExtension: '',
-                fileShareDetailId: '',
+                fileShareId: '',
                 createdAt: dayjs().toISOString(),
                 updatedAt: dayjs().toISOString(),
                 size: 0
@@ -250,12 +257,33 @@ export default {
         handlePathNameClick(row) {
             if (!row.isFile) {
                 unlock(this.$el.querySelector('.el-table__body-wrapper'));
-                this.$router.push({
-                    name: this.$route.name,
-                    query: {
-                        path: row.path
+                if (this.fileManager.rootKind !== '') {
+                    let query;
+                    if (this.fileManager.isShareRoot()) {
+                        query = {
+                            path: rootKindPathMap[this.fileManager.rootKind] + row.path,
+                            startPath: row.path,
+                            ownerId: row.userId
+                        };
+                    } else {
+                        query = {
+                            path: rootKindPathMap[this.fileManager.rootKind] + row.path,
+                            startPath: this.$route.query.startPath,
+                            ownerId: row.userId
+                        };
                     }
-                });
+                    this.$router.push({
+                        name: this.$route.name,
+                        query
+                    });
+                } else {
+                    this.$router.push({
+                        name: this.$route.name,
+                        query: {
+                            path: row.path
+                        }
+                    });
+                }
             }
         },
         isEditingRow(row) {

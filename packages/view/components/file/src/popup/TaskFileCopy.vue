@@ -132,6 +132,10 @@ export default {
         }
     },
     methods: {
+        init() {
+            this.fetchCopyTaskList()();
+        },
+        checkNeedToShow() {},
         startPullCopyTask() {
             this.timeInterval = setInterval(() => {
                 this.fetchCopyTaskList();
@@ -171,9 +175,9 @@ export default {
             }
         }
     },
-    created() {
+    mounted() {
         // 先刷一下,看有没有拷贝任务
-        this.fetchCopyTaskList();
+        this.init();
     },
     beforeDestroy() {
         // 销毁前清理定时器

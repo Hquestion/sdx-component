@@ -1,6 +1,15 @@
 import wrap from '../wrap';
 
 export let handler = wrap(function(ctx, request) {
+    let name = request.Params.name && request.Params.name[0];
+    if (name && name.trim()) {
+        // 根据名称获取用户uuid
+        const users = ctx.sendRequest(ctx.createGetRequest(
+            'http://tyk-gateway/user-manager/api/v1/users',
+            {username: [name], fullName: [name]}));
+        request.Params.ownerIds = [users.users.map(item => item.uuid)];
+    }
+    ctx.info('[Request Params]: ' + JSON.stringify(request.Params));
     const projects = ctx.sendRequest(ctx.createGetRequest(
         'http://tyk-gateway/project-manager/api/v1/tasks',
         request.Params));

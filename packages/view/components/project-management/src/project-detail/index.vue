@@ -1,6 +1,9 @@
 <template>
     <div class="sdxv-project-detail">
-        <sdxu-content-panel class="sdxv-project-detail__create-task">
+        <sdxu-content-panel
+            class="sdxv-project-detail__create-task"
+            v-auth.project.button="'TASK:CREATE'"
+        >
             <div class="sdxv-project-detail__create-task--content">
                 <div
                     v-for="(tool,index) in taskOptions"
@@ -99,6 +102,7 @@ import { paginate } from '@sdx/utils/src/helper/tool';
 import TaskIcon from './TaskIcon';
 import Message from 'element-ui/lib/message';
 import { getTaskList, removeTask, startTask, stopTask } from '@sdx/utils/src/api/project';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvProjectDetail',
     data() {
@@ -173,6 +177,9 @@ export default {
     },
     created() {
         this.initList();
+    },
+    directives: {
+        auth
     },
     components: {
         [ContentPanel.name]: ContentPanel,

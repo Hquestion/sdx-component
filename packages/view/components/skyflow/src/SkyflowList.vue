@@ -296,6 +296,9 @@ export default {
                         }
                     });
                     break;
+                case 'canvas':
+                    window.open(`${window.location.origin}/#/editor/${operation.id}`);
+                    break;
                 default:
                     break;
                 }

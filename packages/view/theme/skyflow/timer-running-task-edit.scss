@@ -1,0 +1,20 @@
+
+@include block("task-edit", $bem-namespace-view) {
+    @include element('tip') {
+        color: #909399;
+    }
+    @include element('hint') {
+        padding: 10px;
+        background: #F7F7F7;
+        .el-alert {
+            display: flex;
+            .el-alert__icon {
+                margin-top: 4px;
+                padding-right: 5px;
+            }
+            .el-alert__content {
+                color: #909399!important;
+            }
+        }
+    }
+}

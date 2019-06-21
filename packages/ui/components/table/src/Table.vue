@@ -6,6 +6,7 @@
         v-bind="$attrs"
         v-on="$listeners"
         style="width: 100%"
+        ref="elTable"
     >
         <slot />
     </el-table>

@@ -66,13 +66,18 @@
                         <el-table-column
                             label="操作"
                             key="operation"
-                            v-if="isOwnWorkflow"
                         >
                             <template slot-scope="props">
                                 <sdxu-icon-button
                                     @click="handleSubOperation(props.row, 'remove')"
                                     icon="sdx-icon sdx-icon-delete"
                                     title="删除"
+                                    v-if="isOwnWorkflow"
+                                />
+                                <sdxu-icon-button
+                                    @click="handleSubOperation(props.row, 'canvas')"
+                                    icon="sdx-icon sdx-huabu"
+                                    title="进入画布"
                                 />
                             </template>
                         </el-table-column>
@@ -141,11 +146,6 @@
                             icon="sdx-icon sdx-tingzhi"
                             title="停止运行"
                             v-if="scope.row.showShutdown"
-                        />
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'canvas')"
-                            icon="sdx-icon sdx-huabu"
-                            title="进入画布"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'copy')"
@@ -293,7 +293,7 @@ export default {
                 orderBy: this.subOrderBy
             };
             getTimerSubRunningInfo(params).then(res => {
-                res.items.forEach(item => {
+                res.items && res.items.forEach(item => {
                     item.label = {};
                     switch(item.state) {
                     case 'running':
@@ -330,8 +330,8 @@ export default {
                         break;
                     }
                 });
-                this.$set(this.expandingRow, 'subRunningInfoList', res.items);
-                this.$set(this.expandingRow, 'subTotal', res.total);
+                this.$set(this.expandingRow, 'subRunningInfoList', res.items || []);
+                this.$set(this.expandingRow, 'subTotal', res.total || 0);
                 this.$set(this.expandingRow, 'subLoading', false);
                 if (reset) {
                     this.$set(this.expandingRow, 'subCurrent', 1);
@@ -412,6 +412,8 @@ export default {
                         });
                     }).catch(() => {});
                     break;
+                case 'canvas':
+                    break;
                 default:
                     break;
                 }
@@ -420,8 +422,6 @@ export default {
         handleOperation(row, type) {
             if (type && row.uuid) {
                 switch (type) {
-                case 'canvas':
-                    break;
                 case 'edit':
                     this.editDialogVisible = true;
                     this.editingTask = row;

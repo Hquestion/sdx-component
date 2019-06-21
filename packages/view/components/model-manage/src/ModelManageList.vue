@@ -23,6 +23,7 @@
                 icon="sdx-icon-plus"
                 size="small"
                 @click="createModel"
+                v-auth.model.button="'MODEL:CREATE'"
             >
                 新建模型
             </SdxuButton>
@@ -72,6 +73,7 @@ import ContentPanel from '@sdx/ui/components/content-panel';
 import Button from '@sdx/ui/components/button';
 import Input from '@sdx/ui/components/input';
 import SearchLayout from  '@sdx/widget/components/search-layout';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvModelManage',
     data() {
@@ -94,6 +96,9 @@ export default {
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
         CreateModel
+    },
+    directives: {
+        auth
     },
     methods: {
         dialogClose(needRefresh) {
@@ -151,7 +156,3 @@ export default {
     }
 };
 </script>
-
-<style scoped lang="scss">
-</style>
-

@@ -84,6 +84,7 @@
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
                     :accept="'.py'"
+                    :string-model="true"
                 />
             </el-form-item>
             <el-form-item
@@ -110,7 +111,7 @@ import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask} from '@sdx/utils/src/api/project';
-import { cNameValidate } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'PythonForm',
     components: {
@@ -173,7 +174,7 @@ export default {
                             return value && ('' + value).trim();
                         }
                     },
-                    { validator: cNameValidate, trigger: 'blur' }
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }

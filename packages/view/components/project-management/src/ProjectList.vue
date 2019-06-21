@@ -9,6 +9,7 @@
                     placement="right"
                     size="small"
                     icon="sdx-icon-plus"
+                    v-auth.project.button="'PROJECT:CREATE'"
                 >
                     新建项目
                     <template slot="dropdown">
@@ -69,6 +70,8 @@
                     v-for="(item, index) in projectList"
                     :key="index"
                     :meta="item"
+                    :edit-able="item.showEdit"
+                    :delete-able="item.showRemove"
                 />
             </sdxw-project-card-list>
         </div>
@@ -95,6 +98,8 @@ import Message from 'element-ui/lib/message';
 import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
 import SortButton from '@sdx/ui/components/sort-button';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -109,6 +114,9 @@ export default {
             loading: false,
             editingProject: null
         };
+    },
+    directives: {
+        auth
     },
     components: {
         [Select.name]: Select,
@@ -144,6 +152,13 @@ export default {
             };
             getProjectList(params).then(res => {
                 this.projectList = res.data.items;
+                this.projectList.forEach(item => {
+                    const isOwn = getUser().userId === item.owner.uuid;
+                    let hasWriteAuth = true;
+                    if (item.isTempalte) hasWriteAuth = auth.$auth('PROJECT-MANAGER:TEMPLATE_PROJECT:WRITE', 'BUTTON');
+                    item.showEdit = isOwn && hasWriteAuth;
+                    item.showRemove = isOwn && hasWriteAuth;
+                });
                 this.total = res.data.total;
                 this.loading = false;
             });

@@ -2,13 +2,12 @@
  * 用户名,群租名通用检查规则,用于element-ui的form组件的rule参数 const reg = /^[a-zA-Z][a-zA-Z0-9_\-\\.]{3,19}$/i;
  */
 
-export class ValidateReg {
-    limit = {
+export function ValidateReg (limit, character, start) {
+    this.limit = {
         min: 1,
         max: 10
     };
-
-    character = {
+    this.character = {
         upperCase: true,
         lowerCase: true,
         number: true,
@@ -21,66 +20,144 @@ export class ValidateReg {
         other: false
     };
 
-    start = undefined;
+    this.start = undefined;
 
-    static characterMap = {
-        lowerCase: 'a-z',
-        upperCase: 'A-Z',
-        letter: 'a-zA-Z',
-        number: '1-9',
-        chinese: '\\u4e00-\\u9fa5',
-        space: '\\s',
-        underline: '_',
-        dot: '\\.',
-        dash: '\\-',
-        at: '@',
-        other: '.'
-    };
-
-    constructor(limit, character, start) {
-        limit && Object.assign(this.limit, limit );
-        character && Object.assign(this.character, character);
-        this.start = start;
-    }
-
-    generate() {
-        let regStr = '';
-        if (this.start) {
-            regStr += `[${ValidateReg.characterMap[this.start]}]`;
-        }
-        // if can match any character
-        if (this.character.other) {
-            regStr = `${ValidateReg.characterMap['other']}`;
-        } else {
-            let matchedKeys = Object.keys(this.character).filter(key => this.character[key]);
-
-            matchedKeys.forEach((key, index) => {
-                if (index === 0) {
-                    regStr += '[';
-                    regStr = ValidateReg.appendMatchedRegStr(key, regStr);
-                } else if (index === matchedKeys.length - 1) {
-                    regStr = ValidateReg.appendMatchedRegStr(key, regStr);
-                    regStr += ']';
-                } else {
-                    regStr = ValidateReg.appendMatchedRegStr(key, regStr);
-                }
-            });
-        }
-        let {min, max} = this.limit;
-
-        min = this.start ? min - 1 : min;
-        min = min <= 0 ? 0 : min;
-
-        max = this.start ? max - 1 : max;
-        max = max <= 0 ? 0 : max;
-        regStr += `{${min},${max}}`;
-        return eval(`/^${regStr}$${this.limit.min === 0 ? '|^$' : ''}/`);
-    }
-
-    static appendMatchedRegStr(key, str) {
-        return str + ValidateReg.characterMap[key];
-    }
+    limit && Object.assign(this.limit, limit );
+    character && Object.assign(this.character, character);
+    this.start = start;
 }
+
+ValidateReg.characterMap = {
+    lowerCase: 'a-z',
+    upperCase: 'A-Z',
+    letter: 'a-zA-Z',
+    number: '1-9',
+    chinese: '\\u4e00-\\u9fa5',
+    space: '\\s',
+    underline: '_',
+    dot: '\\.',
+    dash: '\\-',
+    at: '@',
+    other: '.'
+};
+
+ValidateReg.appendMatchedRegStr = function appendMatchedRegStr(key, str) {
+    return str + ValidateReg.characterMap[key];
+};
+
+ValidateReg.prototype.generate = function() {
+    let regStr = '';
+    if (this.start) {
+        regStr += `[${ValidateReg.characterMap[this.start]}]`;
+    }
+    // if can match any character
+    if (this.character.other) {
+        regStr = `${ValidateReg.characterMap['other']}`;
+    } else {
+        let matchedKeys = Object.keys(this.character).filter(key => this.character[key]);
+
+        matchedKeys.forEach((key, index) => {
+            if (index === 0) {
+                regStr += '[';
+                regStr = ValidateReg.appendMatchedRegStr(key, regStr);
+            } else if (index === matchedKeys.length - 1) {
+                regStr = ValidateReg.appendMatchedRegStr(key, regStr);
+                regStr += ']';
+            } else {
+                regStr = ValidateReg.appendMatchedRegStr(key, regStr);
+            }
+        });
+    }
+    let {min, max} = this.limit;
+
+    min = this.start ? min - 1 : min;
+    min = min <= 0 ? 0 : min;
+
+    max = this.start ? max - 1 : max;
+    max = max <= 0 ? 0 : max;
+    regStr += `{${min},${max}}`;
+    return eval(`/^${regStr}$${this.limit.min === 0 ? '|^$' : ''}/`);
+};
+
+// export class ValidateReg {
+//     limit = {
+//         min: 1,
+//         max: 10
+//     };
+//
+//     character = {
+//         upperCase: true,
+//         lowerCase: true,
+//         number: true,
+//         chinese: true,
+//         space: true,
+//         underline: true,
+//         dot: true,
+//         dash: true,
+//         at: true,
+//         other: false
+//     };
+//
+//     start = undefined;
+//
+//     static characterMap = {
+//         lowerCase: 'a-z',
+//         upperCase: 'A-Z',
+//         letter: 'a-zA-Z',
+//         number: '1-9',
+//         chinese: '\\u4e00-\\u9fa5',
+//         space: '\\s',
+//         underline: '_',
+//         dot: '\\.',
+//         dash: '\\-',
+//         at: '@',
+//         other: '.'
+//     };
+//
+//     constructor(limit, character, start) {
+//         limit && Object.assign(this.limit, limit );
+//         character && Object.assign(this.character, character);
+//         this.start = start;
+//     }
+//
+//     generate() {
+//         let regStr = '';
+//         if (this.start) {
+//             regStr += `[${ValidateReg.characterMap[this.start]}]`;
+//         }
+//         // if can match any character
+//         if (this.character.other) {
+//             regStr = `${ValidateReg.characterMap['other']}`;
+//         } else {
+//             let matchedKeys = Object.keys(this.character).filter(key => this.character[key]);
+//
+//             matchedKeys.forEach((key, index) => {
+//                 if (index === 0) {
+//                     regStr += '[';
+//                     regStr = ValidateReg.appendMatchedRegStr(key, regStr);
+//                 } else if (index === matchedKeys.length - 1) {
+//                     regStr = ValidateReg.appendMatchedRegStr(key, regStr);
+//                     regStr += ']';
+//                 } else {
+//                     regStr = ValidateReg.appendMatchedRegStr(key, regStr);
+//                 }
+//             });
+//         }
+//         let {min, max} = this.limit;
+//
+//         min = this.start ? min - 1 : min;
+//         min = min <= 0 ? 0 : min;
+//
+//         max = this.start ? max - 1 : max;
+//         max = max <= 0 ? 0 : max;
+//         regStr += `{${min},${max}}`;
+//         return eval(`/^${regStr}$${this.limit.min === 0 ? '|^$' : ''}/`);
+//     }
+//
+//     static appendMatchedRegStr(key, str) {
+//         return str + ValidateReg.characterMap[key];
+//     }
+// }
 
 export function commonNameValidator(rule, value, callback) {
     const reg = new ValidateReg({min:1, max:64}, {at: false, chinese: false}).generate();

@@ -3,7 +3,7 @@ import httpService from '@sdx/utils/lib/http-service';
 
 import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
 
-const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
+const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects/`;
 
 const TASK_MANAGE_GETWAY_BASE = PROJECT_MANAGE_GATEWAY_BASE + 'tasks/';
 

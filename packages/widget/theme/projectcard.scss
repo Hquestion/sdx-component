@@ -13,6 +13,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
+    flex-shrink: 0;
 
     @include element('header') {
         display: flex;

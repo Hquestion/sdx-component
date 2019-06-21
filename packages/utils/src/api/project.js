@@ -5,6 +5,8 @@ import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
 
 const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 
+const TASK_MANAGE_GETWAY_BASE = PROJECT_MANAGE_GATEWAY_BASE + 'tasks/';
+
 const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks`;
 
 // 聚合拿到project
@@ -33,24 +35,24 @@ export function removeProject(uuid) {
 }
 
 export function removeTask(uuid) {
-    return httpService.remove(taskApi + uuid);
+    return httpService.remove(TASK_MANAGE_GETWAY_BASE + uuid);
 }
 
-export function startTask(uuid) {
-    return httpService.post(taskApi + uuid + '/start');
+export function startTask(uuid, params) {
+    return httpService.post(TASK_MANAGE_GETWAY_BASE + uuid + '/start', params);
 }
 
-export function stopTask(uuid) {
-    return httpService.post(taskApi + uuid + '/stop');
+export function stopTask(uuid, params) {
+    return httpService.post(TASK_MANAGE_GETWAY_BASE + uuid + '/stop', params);
 }
 export function createTask(params) {
-    return httpService.post(taskApi, params);
+    return httpService.post(TASK_MANAGE_GETWAY_BASE, params);
 }
 export function getTaskDetail(uuid) {
-    return httpService.get(taskApi + uuid);
+    return httpService.get(TASK_MANAGE_GETWAY_BASE + uuid);
 }
 export function updateTask(uuid,params) {
-    return httpService.patch(taskApi + uuid, params);
+    return httpService.patch(TASK_MANAGE_GETWAY_BASE + uuid, params);
 }
 
 // 数据集列表
@@ -63,12 +65,12 @@ export function getTaskDataSource(params) {
 }
 
 export default {
+    getTaskList,
     getProjectList,
     getProjectDetail,
     createProject,
     updateProject,
     removeProject,
-    getTaskList,
     removeTask,
     startTask,
     stopTask,

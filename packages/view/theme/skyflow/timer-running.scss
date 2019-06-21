@@ -1,0 +1,21 @@
+@include block("timer-running", $bem-namespace-view) {
+    @include element('footer') {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .el-table__expanded-cell {
+        background: rgba(247,247,247,1)!important;
+        td, th {
+            background: rgba(247,247,247,1)!important;
+        }
+        .btn-prev, .el-pager li, .btn-next {
+            background: rgba(247,247,247,1)!important;
+            border: none !important;
+        }
+        .el-pager li.active {
+            color: #1989FA!important;
+        }
+    }
+}

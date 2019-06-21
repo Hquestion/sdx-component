@@ -138,7 +138,7 @@ export default {
         getToken() {
             this.loading = true;
             getVersionToken(this.$route.params.modelId, this.$route.params.versionId).then(res => {
-                this.key = res.data;
+                this.key = res.token;
                 this.loading = false;
             });
         },

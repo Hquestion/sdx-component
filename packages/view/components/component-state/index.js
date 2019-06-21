@@ -9,7 +9,8 @@ const routeCfg = [{
     name: 'SdxvComponentState',
     component: ComponentState,
     meta: {
-        breadcrumb: '组件状态'
+        breadcrumb: '组件状态',
+        system: 'manage'
     }
 }];
 

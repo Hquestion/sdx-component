@@ -7,10 +7,16 @@
                 v-model="radio"
                 @change="radioChange"
             >
-                <el-radio label="tar">
+                <el-radio
+                    label="tar"
+                    v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'"
+                >
                     基于tar文件构建
                 </el-radio>
-                <el-radio label="DockerFile">
+                <el-radio
+                    label="DockerFile"
+                    v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'"
+                >
                     基于DockerFile文件构建
                 </el-radio>
             </el-radio-group>
@@ -78,7 +84,9 @@
                     <SdxwFileSelect
                         v-model="params.filePath"
                         :accept="radio === 'DockerFile' ? '': '.tar'"
-                        :check-type="radio === 'DockerFile' ? 'file' : 'all'"
+                        check-type="file"
+                        :string-model="true"
+                        :source="radio === 'DockerFile' ? 'ceph': 'all'"
                     />
                 </el-form-item>
             </el-form>
@@ -112,16 +120,17 @@ import SdxuButton from '@sdx/ui/components/button';
 import {imageNameValidate, imageVersionValidate} from '@sdx/utils/src/helper/validate';
 import FileSelect from '@sdx/widget/components/file-select';
 import Iconinfo from './Iconinfo';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: '',
     data() {
         return {
-            radio: 'tar',
+            radio: this.$auth('IMAGE-MANAGER:IMAGE_BUILDER:BUILD_TAR:""', 'button') ? 'tar' : 'DockerFile',
             params: {
                 name: '',
                 version: '',
                 imageType: 'JUPYTER',
-                filePath: []
+                filePath: ''
             },
             DOCKER_IMAGE_KIND_LIST,
             rules: {
@@ -176,21 +185,35 @@ export default {
         [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
         Iconinfo
     },
+    directives: {
+        auth
+    },
     methods: {
         radioChange() {
             this.$refs.form.clearValidate();
+            this.params.filePath = '';
         },
         // 基于 tar 文件新建镜像任务
         imageBuildTar(params) {
             buildTar(params)
                 .then(() => {
-                    this.$router.go(-1);
+                    this.$router.push({
+                        name: 'imageList',
+                        params: {
+                            tab: 'taskTab'
+                        }
+                    });
                 });
         },
         imageBuildImagefile(params) {
             buildImagefile(params)
                 .then(() => {
-                    this.$router.go(-1);
+                    this.$router.push({
+                        name: 'imageList',
+                        params: {
+                            tab: 'taskTab'
+                        }
+                    });
                 });
         },
         resetForm() {
@@ -217,7 +240,7 @@ export default {
         }
     },
     created() {
-
+       
     }
 };
 </script>

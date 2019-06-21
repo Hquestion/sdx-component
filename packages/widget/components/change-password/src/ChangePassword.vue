@@ -135,7 +135,14 @@ export default {
         handler: {
             type: Function,
             default: undefined
-        }
+        },
+        userInfoData:{
+            type: Object,
+            default: () => {
+                return {
+                };
+            }
+        },
     },
     watch: {
         visible (nVal) {
@@ -176,13 +183,13 @@ export default {
                         return;
                     }
                     const params = {
-                        oldPasswd: this.changePwdForm.oldPasswd,
-                        newPasswd: this.changePwdForm.newPasswd
+                        oldPassword: this.changePwdForm.oldPasswd,
+                        password: this.changePwdForm.newPasswd
                     };
                     if (this.handler) {
                         this.handler(params);
                     } else {
-                        userApi.changePassword(params).then(() => {
+                        userApi.changePassword(this.userInfoData.userId, params).then(() => {
                             Message({
                                 message: '密码修改成功！',
                                 type: 'success'

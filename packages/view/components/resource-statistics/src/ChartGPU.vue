@@ -7,43 +7,51 @@ import echarts from 'echarts';
 
 export default {
     name: 'SdxvChartGPU',
+    props: {
+        allocations: {
+            type: Array,
+            default: () => []
+        },
+        used: {
+            type: Object,
+            default: () => ({})
+        }
+    },
     data() {
         return {
             chartInstance: null,
-            data: [{
-                name: 'GTK-897',
-                value: 2
-            }, {
-                name: 'HTOS-349',
-                value: 4
-            }, {
-                name: 'TIFS-8',
-                value: 5
-            }],
-            assigned: [{
-                name: '已使用',
-                value: 1
-            }, {
-                name: '未使用',
-                value: 1
-            }, {
-                name: '已使用',
-                value: 1
-            }, {
-                name: '未使用',
-                value: 3
-            }, {
-                name: '已使用',
-                value: 3
-            }, {
-                name: '未使用',
-                value: 2
-            }]
+            color: ['#58D0FF', '#6E9FFE', '#6975F7', '#00A495', '#0C5EA5']
         };
+    },
+    computed: {
+        allocationList() {
+            return this.allocations.map(item => {
+                return {
+                    name: item.label,
+                    value: item.count
+                };
+            });
+        },
+        usedList() {
+            const list = [];
+            this.allocations.map((item, i) => {
+                let value = this.used[item.label] || 0;
+                list.push({
+                    name: '已使用',
+                    value: value,
+                    itemStyle: { color: this.color[i] }
+                });
+                list.push({
+                    name: '未使用',
+                    value: item.count - value,
+                    itemStyle: { color: this.color[i], opacity: 0.5 }
+                });
+            });
+            return list;
+        }
     },
     methods: {
         initChart() {
-            const color = ['#58D0FF', '#6E9FFE', '#6975F7', '#00A495', '#0C5EA5'];
             this.chartInstance && this.chartInstance.clear();
             this.chartInstance = echarts.init(this.$el);
             this.chartInstance.setOption({
@@ -58,8 +66,8 @@ export default {
                     label: {
                         show: false
                     },
-                    color: color,
-                    data: this.data
+                    color: this.color,
+                    data: this.allocationList
                 }, {
                     name: '使用情况',
                     type: 'pie',
@@ -68,16 +76,21 @@ export default {
                     label: {
                         show: false
                     },
-                    data: this.assigned
+                    data: this.usedList
                 }]
             });
         }
     },
     mounted() {
         this.initChart();
-        // window.addEventListener('resize', () => {
-        //     this.chartInstance && this.chartInstance.resize();
-        // });
+    },
+    watch: {
+        allocations() {
+            this.initChart();
+        },
+        used() {
+            this.initChart();
+        }
     }
 };
 </script>

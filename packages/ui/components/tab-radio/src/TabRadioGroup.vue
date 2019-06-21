@@ -51,6 +51,14 @@ export default {
                 // 抛出switch事件，便于在切换时做一些操作
                 this.$emit('switch', val);
             }
+        },
+        'value': {
+            immediate: true,
+            handler() {
+                if (this._isMounted) {
+                    this.init();
+                }
+            }
         }
     }
 };

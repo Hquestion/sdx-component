@@ -147,7 +147,7 @@ export default {
                 order: 'descending'
             },
             params: {
-                name: '',
+                userName: '',
                 order: 'desc',
                 orderBy: 'CPU',
                 groupBy: 'USER'
@@ -191,7 +191,7 @@ export default {
             this.$router.push({name: 'SdxvUserResourceList'});
         },
         handleSearch() {
-            this.params.name = this.searchName;
+            this.params.userName = this.searchName;
             this.page = 1;
         },
         handlePageChange(page) {

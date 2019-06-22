@@ -43,6 +43,7 @@
             <el-form-item
                 label="设为模板："
                 v-if="isAdmin"
+                v-auth.project.button="'TEMPLATE_PROJECT:CREATE'"
             >
                 <el-switch
                     v-model="projectForm.isTemplate"
@@ -51,6 +52,7 @@
             <el-form-item
                 label="协作者/组："
                 v-show="!projectForm.isTemplate"
+                v-auth.project.button="'COOPERATE_PROJECT:CREATE'"
             >
                 <sdxw-select-group-user
                     :users.sync="selectedUsers"
@@ -131,6 +133,7 @@ import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Switch, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
 import { updateProject, getProjectList, createProject } from '@sdx/utils/src/api/project';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvCreateProject',
     data() {
@@ -172,6 +175,9 @@ export default {
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         [SelectGroupUser.name]: SelectGroupUser
+    },
+    directives: {
+        auth
     },
     props: {
         visible: {
@@ -276,7 +282,7 @@ export default {
                         this.dialogVisible = false;
                     }).catch(() => {});
                 }
-                
+
             });
 
         },

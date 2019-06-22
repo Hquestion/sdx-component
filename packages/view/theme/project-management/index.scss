@@ -12,16 +12,22 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~@sdx/ui/theme/content-panel';
 @import '~@sdx/ui/theme/tab-radio';
 @import '~@sdx/ui/theme/icon-button';
+@import '~@sdx/ui/theme/sort-button';
 @import '~@sdx/ui/theme/input';
 @import '~@sdx/ui/theme/transfer';
 @import '~@sdx/ui/theme/message-box.scss';
 @import '~@sdx/widget/theme/base';
 @import '~@sdx/widget/theme/projectcard';
+@import '~@sdx/widget/theme/fold-label';
 @import '~@sdx/widget/theme/select-group-user';
 @import './create-project.scss';
 @import './project-detail/project-detail.scss';
 
+@include block('project-router', $bem-namespace-view) {
+    height: 100%;
+}
 @include block('project-management', $bem-namespace-view) {
+    height: 100%;
     @include element('header') {
         display: flex;
         align-items: center;

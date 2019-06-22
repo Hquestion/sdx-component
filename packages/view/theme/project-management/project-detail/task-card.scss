@@ -39,6 +39,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include modifier('status') {
             width: 64px;
             margin-left: 6px;
+            padding: 0!important;
             text-align: right;
             @include state('created') {
                 color: #26C8A9;

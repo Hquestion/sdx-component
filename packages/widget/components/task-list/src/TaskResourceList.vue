@@ -120,7 +120,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="user.name"
+                prop="owner.username"
                 label="创建人"
                 min-width="100px"
             />
@@ -233,7 +233,7 @@ export default {
         });
         this.taskStateList = Object.values(STATE_TYPE).map(item => {
             return {
-                label: item,
+                label: STATE_TYPE_LABEL[item],
                 value: item
             };
         });

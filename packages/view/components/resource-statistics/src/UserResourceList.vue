@@ -42,7 +42,7 @@
             v-loading="loading"
         >
             <el-table-column
-                prop="owner.name"
+                prop="owner.username"
                 label="用户名"
             />
             <el-table-column

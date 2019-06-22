@@ -8,6 +8,7 @@ Vue.use(VueClipboard);
 
 import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail, pack } from '@sdx/utils/src/api/file';
 import { unlock } from '@sdx/utils/src/lockScroll';
+import { isString } from '@sdx/utils/src/helper/tool';
 
 export default {
     data() {
@@ -129,6 +130,7 @@ export default {
             if (this.toMoveOrCopyRow) {
                 copy([this.toMoveOrCopyRow.path], target.path).then(res => {
                     // todo 展示拷贝弹框
+
                 });
             } else {
                 if (this.fileManager.checked.length > 0) {
@@ -215,13 +217,12 @@ export default {
                         groups
                     }).then(res => {
                         Message.success('分享成功');
-                        let meta = this.fileManager.renderFiles.find(item => item.path === this.toShareRow.path);
-                        this.$set(meta, 'fileShareId', res.uuid);
-                        this.fileManager.db.list.where('path').equals(meta.path).modify({fileShareId: res.uuid});
+                        this.updateCachedShareId(this.toShareRow, res.uuid);
                     });
                 }
             } else {
-                // todo 暂不支持?
+                // 批量共享
+
             }
         },
         cancelShare(row) {
@@ -231,13 +232,39 @@ export default {
                 if (row) {
                     shareCancel(row.fileShareId).then(res => {
                         // todo 更新这些记录的shareDetailId
+                        this.updateCachedShareId(row);
+                        Message.success('取消分享成功');
                     });
                 } else {
                     shareCancel(this.fileManager.checked.map(item => item.fileShareId)).then(res => {
-                        // todo 更新这些记录的shareDetailId
+                        this.updateCachedShareId(this.fileManager.checked);
+                        Message.success('取消分享成功');
+                        // 清空选中的项
+                        this.fileManager.checked = [];
+                        this.fileManager.checkedMap = {};
+                        this.fileManager.isCheckAll = false;
                     });
                 }
             });
+        },
+        updateCachedShareId(rows, shareId = '') {
+            if (typeof rows === 'object') {
+                if (!Array.isArray(rows)) {
+                    rows = [rows];
+                }
+                rows.forEach(row => {
+                    if (isString(row)) {
+                        this.updateCachedShareId(row, shareId);
+                    } else {
+                        this.updateCachedShareId(row.path, shareId);
+                    }
+                });
+            } else if (isString(rows)) {
+                let path = rows;
+                let meta = this.fileManager.renderFiles.find(item => item.path === path);
+                this.$set(meta, 'fileShareId', shareId);
+                this.fileManager.db.list.where('path').equals(meta.path).modify({fileShareId: shareId});
+            }
         }
     }
 };

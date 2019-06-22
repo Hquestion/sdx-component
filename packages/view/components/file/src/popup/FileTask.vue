@@ -102,6 +102,7 @@ export default {
             isEmpty && (this._visible = false);
         },
         checkTab(tab) {
+            this._visible = true;
             this.currentTab = tab;
             const vm = this.$refs[TAB_REF_MAP[tab]];
             vm.init && vm.init();

@@ -117,4 +117,16 @@ module.exports = [
         functionName: 'fileShareProfiles.handler',
         filePath: './compose/fileShareProfiles.js'
     },
+    {
+        apiId: '/fe-compose/api/v1/project-share-profiles',
+        method: 'GET',
+        functionName: 'projectFileShareProfiles.handler',
+        filePath: './compose/projectFileShareProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/file-share-batch',
+        method: 'POST',
+        functionName: 'fileShareBatch.handler',
+        filePath: './compose/fileShareBatch.js'
+    },
 ];

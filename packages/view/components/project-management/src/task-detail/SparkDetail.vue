@@ -18,7 +18,7 @@
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
                 label="创建人"
-                :value="task.user.name"
+                :value="task.owner && task.owner.username || ''"
             />
             <SdxvBaseInfoItem
                 label="任务描述"
@@ -37,7 +37,7 @@
             />
             <SdxvBaseInfoItem
                 label="运行环境"
-                :value="task.image.name"
+                :value="task.image && task.image.name || ''"
             />
             <SdxvBaseInfoItem
                 label="启动参数"
@@ -53,7 +53,7 @@
             />
             <SdxvBaseInfoItem
                 label="运行时长"
-                :value="dealTime(task.runningAt, task.stoppedAt || new Date())"
+                :value="dealTime(task.runningAt, task.stoppedAt)"
             />
         </template>
         <template #resource-info>

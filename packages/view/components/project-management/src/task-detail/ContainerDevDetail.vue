@@ -34,7 +34,7 @@
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
                 label="创建人"
-                :value="task.user.name"
+                :value="task.owner && task.owner.username || ''"
             />
             <SdxvBaseInfoItem
                 label="任务描述"
@@ -44,7 +44,7 @@
         <template #running-info>
             <SdxvBaseInfoItem
                 label="运行环境"
-                :value="task.image.name"
+                :value="task.image && task.image.name || ''"
             />
             <SdxvBaseInfoItem
                 label="IP"
@@ -64,7 +64,7 @@
             />
             <SdxvBaseInfoItem
                 label="运行时长"
-                :value="dealTime(task.runningAt, task.stoppedAt || new Date())"
+                :value="dealTime(task.runningAt, task.stoppedAt)"
             />
             <SdxvBaseInfoItem
                 v-if="task.externalUrl"

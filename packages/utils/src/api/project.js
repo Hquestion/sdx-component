@@ -46,8 +46,9 @@ export function stopTask(uuid, params) {
 export function createTask(params) {
     return httpService.post(taskApi, params);
 }
+
 export function getTaskDetail(uuid) {
-    return httpService.get(`${taskApi}/${uuid}`);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-detail`, {uuid});
 }
 export function updateTask(uuid,params) {
     return httpService.patch(`${taskApi}/${uuid}`, params);

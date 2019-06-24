@@ -45,7 +45,7 @@
                     v-model="params.imageId"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入任务描述"
+                    placeholder="请选择运行环境"
                 >
                     <el-option
                         v-for="item in imageOptions"
@@ -92,7 +92,6 @@
                     v-model="params.datasets"
                     size="small"
                     placeholder="请选择数据集"
-                    multiple
                 >
                     <el-option
                         v-for="item in datasetsOptions"

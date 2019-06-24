@@ -39,6 +39,7 @@
                 <sdxv-package-list
                     :image-id="imageId"
                     :search="search"
+                    @queryCount="total => queryCount = total"
                     @deletePackage="handleDeletePackage"
                     @upgradePackage="handleUpgradePackage"
                 />
@@ -51,7 +52,7 @@
                     >
                         <sdxu-button
                             size="small"
-                            @click.stop="showAddPackageForm = !showAddPackageForm"
+                            @click.native.stop="showAddPackageForm = !showAddPackageForm"
                         >
                             新增包
                         </sdxu-button>
@@ -110,6 +111,7 @@ import SdxvPackageList from '../PackageList';
 import { Form, FormItem } from 'element-ui';
 
 import { getImage, buildImageBasic } from '@sdx/utils/src/api/image';
+import { imageNameValidate, imageVersionValidate } from '@sdx/utils/src/helper/validate';
 
 export default {
     name: 'SdxvImageBuildBasic',
@@ -125,10 +127,6 @@ export default {
     },
     props: {
         imageId: {
-            type: String,
-            default: ''
-        },
-        builderId: {
             type: String,
             default: ''
         }
@@ -155,7 +153,7 @@ export default {
                     trigger: 'blur'
                 },
                 {
-                    validator: this.itemNameValidate,
+                    validator: imageNameValidate,
                     trigger: 'blur'
                 }],
                 version: [{
@@ -164,7 +162,7 @@ export default {
                     trigger: 'blur'
                 },
                 {
-                    validator: this.tagNameValidate,
+                    validator: imageVersionValidate,
                     trigger: 'blur'
                 }]
             }
@@ -211,21 +209,13 @@ export default {
         handleSaveAndBuild() {
             this.$refs.form.validate().then(valid => {
                 if (valid) {
-                    buildImageBasic(this.imageInfo).then(data => {
-                        // todo:
+                    buildImageBasic(this.imageInfo).then(() => {
+                        this.$router.go(-1);
                     });
                 } else {
                     return false;
                 }
             });
-        },
-        itemNameValidate(rule, value, callback) {
-            // todo:
-            callback();
-        },
-        tagNameValidate(rule, value, callback) {
-            // todo:
-            callback();
         }
     },
     created() {

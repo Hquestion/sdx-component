@@ -21,7 +21,7 @@
                     @click="handleSearch"
                 >
                     搜索
-                </sdxubutton>
+                </SdxuButton>
                 <SdxuButton
                     size="small"
                     @click="handleReset"
@@ -31,7 +31,7 @@
                     v-if="$slots.default.length > 2"
                 >
                     重置
-                </sdxubutton>
+                </SdxuButton>
             </div>
         </el-form>
         <div

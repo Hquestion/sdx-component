@@ -9,6 +9,7 @@
                     placement="right"
                     size="small"
                     icon="sdx-icon-plus"
+                    v-auth.project.button="'PROJECT:CREATE'"
                 >
                     新建项目
                     <template slot="dropdown">
@@ -41,7 +42,7 @@
                 <SdxuSortButton
                     title="按创建时间排序"
                     @sortChange="sortChange"
-                    :order="order"
+                    :order.sync="order"
                 />
             </div>
             <SdxwSearchLayout
@@ -69,6 +70,8 @@
                     v-for="(item, index) in projectList"
                     :key="index"
                     :meta="item"
+                    :edit-able="item.showEdit"
+                    :delete-able="item.showRemove"
                 />
             </sdxw-project-card-list>
         </div>
@@ -94,6 +97,9 @@ import Select from 'element-ui/lib/select';
 import Message from 'element-ui/lib/message';
 import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
 import SortButton from '@sdx/ui/components/sort-button';
+import SdxwSearchLayout from '@sdx/widget/components/search-layout';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -109,6 +115,9 @@ export default {
             editingProject: null
         };
     },
+    directives: {
+        auth
+    },
     components: {
         [Select.name]: Select,
         [Button.name]: Button,
@@ -118,14 +127,26 @@ export default {
         [Project.ProjectCard.name]: Project.ProjectCard,
         [Project.ProjectCardList.name]: Project.ProjectCardList,
         [ContentPanel.name]: ContentPanel,
-        [SortButton.name]:SortButton
+        [SortButton.name]:SortButton,
+        [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
+        [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem
     },
     created() {
         this.initList();
     },
     methods: {
-        sortChange(order) {
-            this.order =  order;
+        // 模版排序 前面
+        sortTemplate(frontObj, endObj) {
+            let [a, b] =[frontObj.isTemplate, endObj.isTemplate];
+            if (a < b) {
+                return 1;
+            } else if (a > b) {
+                return -1;
+            } else {
+                return 0;
+            }    
+        },
+        sortChange() {
             this.initList();
         },
         searchProject() {
@@ -142,6 +163,27 @@ export default {
             };
             getProjectList(params).then(res => {
                 this.projectList = res.data.items;
+                this.projectList.forEach(item => {
+                    const isOwn = getUser().userId === item.owner.uuid;
+                    let hasWriteAuth = true;
+                    if (item.isTempalte) hasWriteAuth = auth.$auth('PROJECT-MANAGER:TEMPLATE_PROJECT:WRITE', 'BUTTON');
+                    item.showEdit = isOwn && hasWriteAuth;
+                    item.showRemove = isOwn && hasWriteAuth;
+                });
+
+                // 暂时排序
+                let [templateList, otherList ] = [[], []]; 
+                for (let i =0; i< this.projectList.length; i++) {
+                    if(this.projectList[i].isTemplate) {
+                        templateList.push(this.projectList[i]);
+                    } else {
+                        otherList.push(this.projectList[i]);
+                    }
+                }
+                this.projectList = [...templateList, ...otherList];
+                // this.projectList.sort(this.sortTemplate);
+                // 暂时排序
+
                 this.total = res.data.total;
                 this.loading = false;
             });

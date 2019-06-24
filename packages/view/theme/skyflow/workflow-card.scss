@@ -1,0 +1,149 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@include block('workflow-card', $bem-namespace-view) {
+    position: relative;
+    box-sizing: border-box;
+    padding: $sdx-padding;
+    width: $sdxv-workflow-card-width;
+    height: $sdxv-workflow-card-height;
+    background: $sdxv-workflow-card-background;
+    box-shadow: $sdxv-workflow-card-box-shadow;
+    border-radius: $sdx-border-radius;
+    font-size: $sdxv-workflow-card-font-size;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    flex-shrink: 0;
+
+    @include element('header') {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        height: $sdxv-workflow-card-type-icon-size;
+        @include modifier('icon') {
+            margin-right: 12px;
+            flex: 1;
+            &.sdx-icon {
+                font-size: $sdxv-workflow-card-type-icon-size;
+            }
+            @include state('self') {
+                color: $sdxv-workflow-card-self-color;
+            }
+            @include state('cooperation') {
+                color: $sdxv-workflow-card-cooperation-color;
+            }
+            @include state('template') {
+                color: $sdxv-workflow-card-template-color;
+            }
+        }
+        @include modifier('name') {
+            height: $sdxv-workflow-card-type-icon-size;
+            font-weight: bold;
+            flex: 10;
+            letter-spacing: 0;
+            color: #262B3E;
+            line-height: $sdxv-workflow-card-type-icon-size / 2;
+            @include text-truncation($sdxv-workflow-card-name-show-line-count);
+        }
+        @include modifier('type') {
+            flex: 1;
+            margin-left: 5px;
+        }
+    }
+
+    @include element('main') {
+        padding: 24px 0 30px;
+        height: 40px;
+        box-sizing: content-box;
+    }
+
+    @include element('info') {
+        display: flex;
+        color: #606266;
+        margin-bottom: 10px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+        & > i {
+            background: rgba(192,196,204,0.2);
+            margin-right: 10px;
+            border-radius: 8px;
+            font-size: $sdxv-workflow-card-operate-icon-size;
+        }
+        & > span {
+            line-height: $sdxv-workflow-card-operate-icon-size;
+            font-size: $sdxv-workflow-card-font-size;
+        }
+    }
+
+    @include element('footer') {
+        i {
+            color: $sdxv-workflow-card-operation-base-color;
+            font-size: $sdxv-workflow-card-operate-icon-size;
+        }
+        @include modifier('select') {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            &:hover {
+                color: $sdxv-workflow-card-operation-hover-color;
+                i {
+                    color: $sdxv-workflow-card-operation-hover-color;
+                }
+            }
+            i {
+                margin-right: 6px;
+            }
+        }
+
+        @include modifier('operation') {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            i {
+                cursor: pointer;
+                &:hover {
+                    color: $sdxv-workflow-card-operation-hover-color;
+                }
+            }
+        }
+    }
+
+    @include element('mask') {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: $sdx-border-radius $sdx-border-radius 0px 0px;
+        padding: $sdx-padding;
+        height: $sdxv-workflow-card-mask-height;
+        @include modifier('text') {
+            height: $sdxv-workflow-card-mask-text-show-line-count * 21px;
+            line-height: 21px;
+            color: #fff;
+            @include text-truncation($sdxv-workflow-card-mask-text-show-line-count);
+        }
+
+        @include state('self') {
+            background: $sdxv-workflow-card-self-detail;
+        }
+        @include state('cooperation') {
+            background: $sdxv-workflow-card-cooperation-detail;
+        }
+        @include state('template') {
+            background: $sdxv-workflow-card-template-detail;
+        }
+    }
+}
+
+@include block('workflow-card-list', $bem-namespace-view) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    & /deep/ .sdxv-workflow-card {
+        margin: $sdx-margin / 2;
+    }
+}

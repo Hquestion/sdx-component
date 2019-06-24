@@ -1,0 +1,8 @@
+@include block("general-running", $bem-namespace-view) {
+    @include element('footer') {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+    }
+}

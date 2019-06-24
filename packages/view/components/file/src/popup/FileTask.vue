@@ -19,17 +19,18 @@
                     label="文件上传"
                     name="UPLOAD"
                 >
-                    <SdxvTaskFileUpload />
+                    <SdxvTaskFileUpload ref="uploadTask" @empty="handleUploadFinish" />
                 </el-tab-pane>
                 <el-tab-pane
                     label="文件复制"
                     name="COPY"
                 >
-                    <TaskFileCopy />
+                    <TaskFileCopy ref="copyTask" />
                 </el-tab-pane>
                 <el-tab-pane
                     label="文件删除"
                     name="DELETE"
+                    ref="deleteTask"
                     v-if="false"
                 />
             </el-tabs>
@@ -49,6 +50,7 @@ export default {
         SdxvTaskFileUpload,
         SdxvExpandCollapseToggler
     },
+    inject: ['fileManager'],
     data() {
         return {
             expanded: false,
@@ -73,12 +75,26 @@ export default {
     },
     methods: {
         handleHide() {
-            MessageBox.confirm.wrning({
+            MessageBox.confirm.warning({
                 title: '您确定要取消所有未完成的任务吗？'
             }).then(() => {
                 // todo 取消上传或者取消拷贝任务
                 this._visible = false;
             });
+        },
+        handleUploadFinish() {
+            this.fileManager.enterDirectory(this.fileManager.currentPath);
+            this.checkToClose();
+        },
+        checkToClose() {
+            const refs = ['uploadTask', 'copyTask'];
+            let isEmpty = true;
+            refs.forEach(ref => {
+                if (!this.$refs[ref].isEmpty()) {
+                    isEmpty = false;
+                }
+            });
+            isEmpty && (this._visible = false);
         }
     },
     watch: {

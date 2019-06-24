@@ -13,14 +13,17 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
+    flex-shrink: 0;
 
     @include element('header') {
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        position: relative;
         height: $sdxw-project-card-type-icon-size;
         @include modifier('icon') {
             margin-right: 12px;
+            flex: 1;
             &.sdx-icon {
                 font-size: $sdxw-project-card-type-icon-size;
             }
@@ -35,12 +38,26 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             }
         }
         @include modifier('name') {
+            flex: 10;
             height: $sdxw-project-card-type-icon-size;
             font-weight: bold;
             letter-spacing: 0;
             color: #262B3E;
             line-height: $sdxw-project-card-type-icon-size / 2;
             @include text-truncation($sdxw-project-card-name-show-line-count);
+        }
+        @include modifier('type') {
+            flex: 1;
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            width: 58px;
+            background: rgba(38,200,169,0.10);
+            color: #26C8A9;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
 

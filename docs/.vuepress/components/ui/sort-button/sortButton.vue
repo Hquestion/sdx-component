@@ -3,7 +3,7 @@
         <SdxuSortButton
             title="按创建时间排序"
             @sortChange="sortChange"
-            :order="order"
+            :order.sync="order"
         />
     </div>
 </template>
@@ -21,8 +21,8 @@ export default {
         [SortButton.name]:SortButton
     },
     methods: {
-        sortChange(order) {
-            this.order =  order;
+        sortChange() {
+           
         },
     }
 }

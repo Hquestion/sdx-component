@@ -3,7 +3,7 @@
         :fullscreen="true"
         class="sdxv-file-main"
     >
-        <OperationBar />
+        <OperationBar ref="operationBar" />
         <BreadcrumbBar />
         <FileTable ref="fileTable" />
         <SdxvFileTask :visible.sync="taskVisible" />
@@ -56,10 +56,11 @@ export default {
             // 是否正在请求数据
             loading: false,
             // 排序信息
-            orderBy: 'name',
+            orderBy: 'updatedAt',
             order: 'asc',
             fixedRows,
-            taskVisible: false
+            taskVisible: false,
+            uploadingFiles: []
         };
     },
     components: {
@@ -122,10 +123,11 @@ export default {
             }
             return defer.then(res => {
                 let fileList = res.children;
-                this.total = res.total;
+                this.total = res.childrenCount;
                 this.loading = false;
                 if (this.isRoot) {
                     fileList = fixedRows.concat(fileList);
+                    this.total = res.childrenCount + fixedRows.length;
                 }
                 return this.db.list.bulkAdd(fileList).then(() => {
                     this.loadedTotal += fileList.length;
@@ -133,8 +135,18 @@ export default {
                     window.console.error(e);
                 });
             }, () => {
+                let fileList = [];
                 this.total = 0;
                 this.loading = false;
+                if (this.isRoot) {
+                    fileList = fixedRows;
+                    this.total = fixedRows.length;
+                }
+                return this.db.list.bulkAdd(fileList).then(() => {
+                    this.loadedTotal += fileList.length;
+                }, e => {
+                    window.console.error(e);
+                });
             }).then(res => {
                 this.$nextTick(() => {
                     this.$refs.fileTable.calcViewportVisible();
@@ -226,12 +238,15 @@ export default {
         async getRenderList(offset, limit) {
             // 获取需要渲染到列表中的数据
             return Object.freeze(await this.db.list.offset(offset).limit(limit).toArray());
+        },
+        getUploadFiles() {
+            return this.$refs.operationBar.$refs.fileUploader.getUploadFiles();
         }
     },
     mounted() {
         const db = new Dexie('SdxvFile');
         db.version(1).stores({
-            list: '++,userId,name,path,filesystem,isFile,mimeType,fileExtension,fileShareDetailId,createdAt,updatedAt,size'
+            list: '++,path,userId,name,filesystem,isFile,mimeType,fileExtension,fileShareDetailId,createdAt,updatedAt,size'
         });
         this.db = db;
         this.currentPath = this.$route.query.path || '/';
@@ -241,8 +256,34 @@ export default {
             this.enterDirectory(this.currentPath);
         }
     },
-    activated() {
-        this.unwatch = this.$watch('$route', (val, oldval) => {
+    // activated() {
+    //     const db = new Dexie('SdxvFile');
+    //     db.version(1).stores({
+    //         list: '++,userId,name,path,filesystem,isFile,mimeType,fileExtension,fileShareDetailId,createdAt,updatedAt,size'
+    //     });
+    //     this.db = db;
+    //     this.currentPath = this.$route.query.path || '/';
+    //     if (this.$route.query.search) {
+    //         this.enterSearch(this.currentPath, this.$route.query.search);
+    //     } else {
+    //         this.enterDirectory(this.currentPath);
+    //     }
+    //     this.unwatch = this.$watch('$route', (val, oldval) => {
+    //         this.currentPath = val.query.path || '/';
+    //         if (val.query.search) {
+    //             this.enterSearch(this.currentPath, val.query.search);
+    //         } else {
+    //             if (val.query.path !== oldval.query.path || val.query.search !== oldval.query.search) {
+    //                 this.enterDirectory(this.currentPath);
+    //             }
+    //         }
+    //     });
+    // },
+    // deactivated() {
+    //     this.unwatch && this.unwatch();
+    // },
+    watch: {
+        $route(val, oldval) {
             this.currentPath = val.query.path || '/';
             if (val.query.search) {
                 this.enterSearch(this.currentPath, val.query.search);
@@ -251,23 +292,8 @@ export default {
                     this.enterDirectory(this.currentPath);
                 }
             }
-        });
-    },
-    deactivated() {
-        this.unwatch && this.unwatch();
+        }
     }
-    // watch: {
-    //     $route(val, oldval) {
-    //         this.currentPath = val.query.path || '/';
-    //         if (val.query.search) {
-    //             this.enterSearch(this.currentPath, val.query.search);
-    //         } else {
-    //             if (val.query.path !== oldval.query.path) {
-    //                 this.enterDirectory(this.currentPath);
-    //             }
-    //         }
-    //     }
-    // }
 };
 </script>
 

@@ -53,12 +53,19 @@ function locateNode (vnode) {
 }
 
 export const auth = (key, tag) => {
+    // 如果关闭鉴权，则跳过鉴权逻辑
+    if (!shareCenter.getAuthSwitcher()) return true;
+    if (!key) return true;
     const permissions = getUserRightsByTag(tag);
+    if (key.split(':').length === 3) {
+        key = `${key}:${emptyPlaceholder}`;
+    }
     return permissions.includes(key);
 };
 
 export default {
     name: 'auth',
+    $auth: auth,
     inserted(el, binding, vnode) {
         vnode = locateNode(vnode);
         const system = getSystem(binding.modifiers);
@@ -66,12 +73,13 @@ export default {
         const exp = binding.value;
         const originalDisplay = el.__vOriginalDisplay =
             el.style.display === 'none' ? '' : el.style.display;
+        const authKeyLength = system ? 2 : 3;
         if (typeof exp === 'string') {
             let value = exp;
-            if (value.split(':').length === 2) {
+            if (value.split(':').length === authKeyLength) {
                 value = `${value}:${emptyPlaceholder}`;
             }
-            let key = `${system}:${value}`;
+            let key = system ? `${system}:${value}` : value;
             // 用户无此权限时，隐藏节点
             if (!auth(key, tag)) {
                 if (!vnode._isBeingDestroyed && !vnode.isDestroyed) {
@@ -79,13 +87,13 @@ export default {
                     el.remove();
                 }
             } else {
-                if (!vnode._isMounted) {
-                    if (vnode.$mount) {
-                        vnode.$mount(el);
-                    }else {
-                        el.parentNode.appendChild(el);
-                    }
-                }
+                // if (!vnode._isMounted) {
+                //     if (vnode.$mount) {
+                //         vnode.$mount(el);
+                //     }else {
+                //         el.parentNode.appendChild(el);
+                //     }
+                // }
             }
         } else if (typeof exp === 'function') {
             let authAttr = vnode.componentInstance.$attrs.auth;
@@ -93,10 +101,10 @@ export default {
                 // eslint-disable-next-line
                 console.warn('You passed a function to v-auth, a "auth" attribute is needed to describe the rights which indicate the block could be accessed!');
             }
-            if (authAttr.split(':').length === 2) {
+            if (authAttr.split(':').length === authKeyLength) {
                 authAttr = `${authAttr}:${emptyPlaceholder}`;
             }
-            const key = `${system}:${authAttr}`;
+            const key = system ? `${system}:${authAttr}` : authAttr;
             // 把鉴权结果传递给用户自定义函数，由用户自行处理权限
             exp(auth(key, tag));
         } else {

@@ -10,11 +10,15 @@
                 :class="[projectType.state, projectType.icon]"
             />
             <span class="sdxw-project-card__header--name">{{ meta.name }}</span>
+            <span
+                v-if="meta.isTemplate"
+                class="sdxw-project-card__header--type"
+            >模板</span>
         </header>
         <main class="sdxw-project-card__main">
             <div class="sdxw-project-card__info">
                 <i class="sdx-icon sdx-icon-user" />
-                <span>{{ meta.owner }}</span>
+                <span>{{ (meta.owner && meta.owner.fullName) || '' }}</span>
             </div>
             <div class="sdxw-project-card__info">
                 <i class="sdx-icon sdx-icon-time" />
@@ -130,7 +134,7 @@ export default {
     },
     methods: {
         handleMouseover() {
-            this.showMask = true;
+            this.showMask = !!this.meta.description;
         },
         handleMouseout() {
             this.showMask = false;

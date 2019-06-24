@@ -166,9 +166,12 @@ export default {
         },
         handleProgress(ev, rawFile) {
             const file = this.getFile(rawFile);
+
             this.onProgress(ev, file, this.uploadFiles);
-            file.status = 'uploading';
-            file.percentage = ev.percent || 0;
+            if (file) {
+                file.status = 'uploading';
+                file.percentage = ev.percent || 0;
+            }
         },
         handleSuccess(res, rawFile) {
             const file = this.getFile(rawFile);
@@ -176,7 +179,7 @@ export default {
             if (file) {
                 file.status = 'success';
                 file.response = res;
-                file.cephName = res.path;
+                file.cephName = res.files[0].path;
 
                 this.onSuccess(res, file, this.uploadFiles);
                 this.onChange(file, this.uploadFiles);

@@ -59,7 +59,7 @@
             <el-form-item
                 prop="resourceConfig"
                 label="资源配置:"
-            > 
+            >
                 <i class="icon">*</i>
                 <SdxwResourceConfig
                     v-if="!isGpuEnt"
@@ -75,7 +75,7 @@
                     <SdxwResourceConfig
                         v-model="gpuObj"
                         type="gpu"
-                    /> 
+                    />
                 </div>
             </el-form-item>
             <el-form-item
@@ -114,7 +114,7 @@ import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import {  createTask, updateTask, getDataSet, getProjectDetail} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
-import { cNameValidate } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import DataSourceSelect from './DataSourceSelect';
 export default {
@@ -158,7 +158,7 @@ export default {
                 projectId: this.$route.params.projectId,
                 name: '',
                 description: '',
-                type: 'CONTAINER_DEV',
+                type: 'CONTAINERDEV',
                 imageId: '',
                 resourceConfig: {
                     'EXECUTOR_INSTANCES': 1,
@@ -180,7 +180,7 @@ export default {
                             return value && ('' + value).trim();
                         }
                     },
-                    { validator: cNameValidate, trigger: 'blur' }
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
@@ -266,7 +266,7 @@ export default {
             };
         },
         cpuObj(val) {
-            this.params.resourceConfig = { 
+            this.params.resourceConfig = {
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': val.cpu * 1000,
                 'EXECUTOR_GPUS': this.params.resourceConfig.EXECUTOR_GPUS,
@@ -275,13 +275,16 @@ export default {
             };
         },
         gpuObj(val) {
-            this.params.resourceConfig = { 
+            this.params.resourceConfig = {
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': this.params.resourceConfig.EXECUTOR_CPUS,
                 'EXECUTOR_GPUS': val.count,
                 'EXECUTOR_MEMORY': this.params.resourceConfig.EXECUTOR_MEMORY,
                 'GPU_MODEL': val.label
             };
+        },
+        'params.imageId'() {
+            this.$refs.containerdev.clearValidate('resourceConfig');
         }
     }
 };

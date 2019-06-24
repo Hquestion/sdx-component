@@ -1,8 +1,8 @@
 <template>
     <SdxuTable
         :data="delFileList"
-        style="width: 100%"
-        height="360"
+        style="width: 560px"
+        height="420"
         size="small"
         class="del-file-list"
     >
@@ -68,7 +68,7 @@ export default {
                     this.delFileList = data;
                 });
         },
-        isListEmpty() {
+        isEmpty() {
             return !this.delFileList.length;
         }
     },

@@ -1,8 +1,8 @@
 <template>
     <SdxuTable
         :data="copyFileList"
-        style="width: 100%"
-        height="360"
+        style="width: 560px"
+        height="420"
         size="small"
         class="copy-file-list"
         :default-expand-all="true"
@@ -101,26 +101,26 @@ export default {
     data() {
         return {
             copyFileList: [
-                {
-                    jobId: '1',
-                    ownerId: '1',
-                    status: 'PROCESSING',
-                    totalCount: 2,
-                    finishCount: 1,
-                    copyEntries: [
-                        {sourcePath: '/dir/file1', targetPath: '/dir/file2'}
-                    ],
-                    currentCopy: {
-                        index: 2,
-                        sourcePath: '/dir/file1',
-                        targetPath: '/dir/file2',
-                        progressInPerentage: 50,
-                        remainingTimeInSec: 20,
-                        totalBytes: 20048,
-                        copiedBytes: 1002,
-                        speedBytesPerSec: 1024
-                    }
-                }
+                // {
+                //     jobId: '1',
+                //     ownerId: '1',
+                //     status: 'PROCESSING',
+                //     totalCount: 2,
+                //     finishCount: 1,
+                //     copyEntries: [
+                //         {sourcePath: '/dir/file1', targetPath: '/dir/file2'}
+                //     ],
+                //     currentCopy: {
+                //         index: 2,
+                //         sourcePath: '/dir/file1',
+                //         targetPath: '/dir/file2',
+                //         progressInPerentage: 50,
+                //         remainingTimeInSec: 20,
+                //         totalBytes: 20048,
+                //         copiedBytes: 1002,
+                //         speedBytesPerSec: 1024
+                //     }
+                // }
             ],
             total: 0,
             copyTaskStatusMap
@@ -128,7 +128,7 @@ export default {
     },
     computed: {
         __needPull() {
-            return this.copyFileList.some(item => item.state.need_pull);
+            return this.copyFileList.some(item => item.state && item.state.need_pull);
         }
     },
     methods: {
@@ -144,14 +144,14 @@ export default {
         fetchCopyTaskList() {
             return getCopyTaskList()
                 .then(data => {
-                    this.copyFileList = data.items;
+                    this.copyFileList = data.items || [];
                 });
         },
         // 停止拷贝任务
         handleStopTask(_id) {
             return cancelCopyTask(_id);
         },
-        isListEmpty() {
+        isEmpty() {
             return !this.copyFileList.length;
         }
     },
@@ -167,7 +167,7 @@ export default {
         },
         copyFileList(val) {
             if (val.length === 0) {
-                this.$emit('copy-list-empty');
+                this.$emit('empty');
             }
         }
     },

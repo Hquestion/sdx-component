@@ -53,7 +53,7 @@ module.exports = [
     },
     {
         apiId: '/fe-compose/api/v1/image-delete-batch',
-        method: 'DELETE',
+        method: 'POST',
         functionName: 'imageDeleteBatch.handler',
         filePath: './compose/imageDeleteBatch.js'
     },
@@ -62,6 +62,12 @@ module.exports = [
         method: 'PATCH',
         functionName: 'imageShareBatch.handler',
         filePath: './compose/imageShareBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/image-builder-profiles',
+        method: 'GET',
+        functionName: 'imageBuilderProfiles.handler',
+        filePath: './compose/imageBuilderProfiles.js'
     },
     {
         apiId: '/fe-compose/api/v1/task-profiles',
@@ -83,7 +89,7 @@ module.exports = [
     },
     {
         apiId: '/fe-compose/api/v1/model-delete-batch',
-        method: 'DELETE',
+        method: 'POST',
         functionName: 'modelDeleteBatch.handler',
         filePath: './compose/modelDeleteBatch.js'
     },
@@ -92,5 +98,17 @@ module.exports = [
         method: 'PATCH',
         functionName: 'modelShareBatch.handler',
         filePath: './compose/modelShareBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/model-profiles',
+        method: 'GET',
+        functionName: 'modelProfiles.handler',
+        filePath: './compose/modelProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/skyflow-profiles',
+        method: 'GET',
+        functionName: 'skyflowProfiles.handler',
+        filePath: './compose/skyflowProfiles.js'
     },
 ];

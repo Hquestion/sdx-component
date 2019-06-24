@@ -1,5 +1,8 @@
 <template>
-    <div class="sdxw-file-select" :class="{'is-inline': inline}">
+    <div
+        class="sdxw-file-select"
+        :class="{'is-inline': inline}"
+    >
         <div class="sdxw-file-select__main">
             <SdxuButton
                 trigger="click"
@@ -7,7 +10,7 @@
                 :keep-dropdown-open="true"
                 ref="dropdownMain"
                 :dropdown-width="dropdownWidth"
-                :disabled="disabled"
+                :disabled="disableCheck"
                 @dropdown-hide="emitBlurOnFormItem"
             >
                 <slot>选择文件</slot>
@@ -19,8 +22,9 @@
                         <SdxuUpload
                             ref="fileSelect"
                             class="upload-type-item"
-                            :action="'/v2/ceph/upload/admin/hxl'"
+                            action="/file-manager/api/v1/files/upload"
                             :multiple="true"
+                            name="files"
                             :directory="false"
                             :accept="accept"
                             :on-change="handlerFileChange"
@@ -29,7 +33,7 @@
                             :on-success="onSuccess"
                             :on-exceed="onExceed"
                             :data="uploadParams"
-                            :limit="limit"
+                            :limit="realLimit"
                             :show-file-list="false"
                             :before-upload="beforeUpload"
                             @click.native="$refs.fileSelectPop && $refs.fileSelectPop.close()"
@@ -44,14 +48,15 @@
                         <SdxuUpload
                             ref="directorySelect"
                             class="upload-type-item"
-                            :action="'/v2/ceph/upload/admin/hxl'"
+                            action="/file-manager/api/v1/files/upload"
+                            name="files"
                             :multiple="true"
                             :directory="true"
                             :accept="accept"
                             :on-change="handlerDirectoryChange"
                             :on-error="onDirectoryError"
                             :on-exceed="onExceed"
-                            :limit="limit"
+                            :limit="realLimit"
                             :data="uploadParams"
                             :show-file-list="false"
                             :on-progress="onProgress"
@@ -73,7 +78,7 @@
                             :user-id="userId"
                             :root-path="rootPath"
                             :accept="accept"
-                            :limit="limit"
+                            :limit="realLimit"
                             :tree-options="treeOptions"
                             :checkable="checkable"
                             :check-type="checkType"
@@ -85,12 +90,16 @@
                     </SdxuButton>
                 </template>
             </SdxuButton>
-            <span class="sdxw-file-select__accept-tip" v-show="accept">请选择{{accept}}类型的文件</span>
+            <span
+                class="sdxw-file-select__accept-tip"
+                v-show="accept"
+            >请选择{{ accept }}类型的文件</span>
         </div>
         <SdxuUploadList
             class="sdxw-file-select__files"
             v-if="showUploadList"
             :files="selectedFiles"
+            :disabled="disabled"
             @remove="handleRemove"
         />
     </div>
@@ -101,7 +110,8 @@ import SdxuButton from '@sdx/ui/components/button';
 import Upload from '@sdx/ui/components/upload';
 import SdxwFileSelectPop from './FileSelectPop';
 import emitter from '@sdx/utils/src/mixins/emitter';
-import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import errorHandler from '@sdx/utils/src/error-handler';
+import shareCenter from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'SdxwFileSelect',
     mixins: [emitter],
@@ -120,8 +130,13 @@ export default {
     },
     props: {
         value: {
-            type: Array,
+            type: [Array, String],
             default: () => []
+        },
+        // 控制value为数组时，是否只返回path字符串数组，默认返回文件Object数组
+        stringModel: {
+            type: Boolean,
+            default: false
         },
         inline: {
             type: Boolean,
@@ -190,7 +205,12 @@ export default {
         },
         uploadParams: {
             type: Object,
-            default: undefined
+            default: () => ({
+                userId: shareCenter.getUser().uuid,
+                path: '/',
+                filesystem: 'cephfs',
+                overwrite: 0
+            })
         },
         localFileLabel: {
             type: String,
@@ -218,6 +238,9 @@ export default {
         }
     },
     computed: {
+        realLimit() {
+            return +this.limit === -1 ? Infinity : +this.limit;
+        },
         localVisible() {
             return ['all', 'local'].includes(this.source) && ['all', 'file'].includes(this.checkType);
         },
@@ -225,10 +248,39 @@ export default {
             return ['all', 'ceph'].includes(this.source);
         },
         localFolderVisible() {
-            return this.localVisible && (this.limit > 1 || this.limit === -1) && ['all', 'file'].includes(this.checkType);
+            return this.localVisible && this.realLimit > 1 && ['all', 'file'].includes(this.checkType);
         },
         selectedFiles() {
-            return this.value;
+            if (typeof this.value === 'string') {
+                return (this.value && this.value.split(',') || []).map(item => ({
+                    name: item,
+                    cephName: item,
+                    status: 'success',
+                    percentage: 100,
+                    uid: Math.ceil(Math.random() * 1000000000),
+                    from: 'unknown',
+                    isFile: true
+                }));
+            } else {
+                return this.value.map(item => {
+                    if (typeof item === 'string') {
+                        return {
+                            name: item,
+                            cephName: item,
+                            status: 'success',
+                            percentage: 100,
+                            uid: Math.ceil(Math.random() * 1000000000),
+                            from: 'unknown',
+                            isFile: true
+                        };
+                    } else {
+                        return item;
+                    }
+                });
+            }
+        },
+        disableCheck() {
+            return this.disabled || this.selectedFiles.length >= this.realLimit;
         }
     },
     methods: {
@@ -286,18 +338,18 @@ export default {
         onExceed() {
             this.$notify.error({
                 title: '文件过多',
-                message: `最多选择${this.limit}个文件`
+                message: `最多选择${this.realLimit}个文件`
             });
         },
         onFileError(err, file, fileList) {
             this.onError && this.onError(err, file, fileList);
-            this.$message.error(err.message);
             this.handleRemove(file);
+            errorHandler(err);
         },
         onDirectoryError(err, file) {
             this.onError && this.onError(err, file);
-            this.$message.error(err.message);
             this.handleRemove(file);
+            errorHandler(err);
         },
         handleRemove(file, rawFile) {
             if (file.from === 'ceph') {
@@ -335,6 +387,19 @@ export default {
             let cephPaths = this.cephPaths;
             let fileUploadFiles = this.$refs.fileSelect && this.$refs.fileSelect.uploadFiles || [];
             let dirUploadFiles = this.$refs.directorySelect && this.$refs.directorySelect.uploadFiles || [];
+            if (typeof cephPaths === 'string') {
+                if (cephPaths !== '') {
+                    cephPaths = [{
+                        fullpath: cephPaths,
+                        path: cephPaths,
+                        is_dir: false
+                    }];
+                } else {
+                    cephPaths = [];
+                }
+            } else if (typeof cephPaths === 'object' && !Array.isArray(cephPaths)) {
+                cephPaths = [cephPaths];
+            }
             const cephPathsMap = cephPaths.map(item => ({
                 name: item.path,
                 cephName: item.path,
@@ -345,7 +410,10 @@ export default {
                 isDir: !item.isFile
             }));
             let temp = [...fileUploadFiles, ...dirUploadFiles, ...cephPathsMap];
-            this.$emit('input', temp);
+            this.$emit('input',
+                typeof this.value === 'string'
+                    ? temp.map(item => item.cephName || item.name).join(',')
+                    : (this.stringModel ? temp.map(item => item.cephName || item.name) : temp));
         },
         emitBlurOnFormItem() {
             this.dispatch('ElFormItem', 'el.form.blur');
@@ -355,6 +423,11 @@ export default {
             this.$refs.fileSelect && this.$refs.fileSelect.clearFiles();
             this.$refs.directorySelect && this.$refs.directorySelect.clearFiles();
             this.makeFileList();
+        },
+        getUploadFiles() {
+            let fileUploadFiles = this.$refs.fileSelect && this.$refs.fileSelect.uploadFiles || [];
+            let dirUploadFiles = this.$refs.directorySelect && this.$refs.directorySelect.uploadFiles || [];
+            return [...fileUploadFiles, ...dirUploadFiles];
         }
     },
     mounted() {

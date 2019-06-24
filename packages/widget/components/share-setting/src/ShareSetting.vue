@@ -13,7 +13,7 @@
         >
             <el-form-item
                 label="共享至全局："
-                v-if="isAdmin"
+                v-auth.button="authMap[sourceKind]"
             >
                 <el-switch
                     v-model="shareForm.shareType"
@@ -40,27 +40,33 @@ import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import ElSwitch from 'element-ui/lib/switch';
-import { getIsAdmin } from '@sdx/utils/src/helper/shareCenter';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxwShareSetting',
     data() {
         return {
             dialogVisible: this.visible,
-            isAdmin: false,
             shareForm: {
                 selectedUsers: [...this.defaultUsers],
                 selectedGroups: [...this.defaultGroups],
                 shareType: this.defaultShareType
+            },
+            authMap: {
+                image: 'APPLICATION:GLOBAL_IMAGE_BUTTON:ACCESS',
+                skyflow: 'APPLICATION:GLOBAL_SKYFLOW_BUTTON:ACCESS',
+                model: 'APPLICATION:GLOBAL_MODEL_BUTTON:ACCESS',
+                dataset: 'APPLICATION:GLOBAL_DATASET_BUTTON:ACCESS',
+                file: 'APPLICATION:GLOBAL_FILE_BUTTON:ACCESS',
             }
         };
+    },
+    directives: {
+        auth
     },
     watch: {
         visible (nVal) {
             this.dialogVisible = nVal;
         }
-    },
-    created() {
-        this.isAdmin = getIsAdmin();
     },
     components: {
         [SelectGroupUser.name]: SelectGroupUser,
@@ -89,6 +95,10 @@ export default {
         defaultShareType: {
             type: String,
             default: 'PRIVATE'
+        },
+        sourceKind: {
+            type: String,
+            default: ''
         }
     },
     methods: {

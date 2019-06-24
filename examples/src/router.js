@@ -20,6 +20,7 @@ import ChangePwdTest from './views/widget/changePwdTest.vue';
 import projectManageTest from './views/view/projectManageTest.vue';
 import imageManageTest from './views/view/imageManageTest.vue';
 import modelManageTest from './views/view/modelManageTest.vue';
+import skyflowTest from './views/view/skyflowTest.vue';
 import PrivilegeDemo from './views/demo/privilegeDemo';
 import UserGroupDemo from './views/demo/userGroupDemo';
 import UserManageTest from './views/widget/userTest.vue';
@@ -226,6 +227,11 @@ const router = new Router({
             path: '/modelManageTest',
             name: '模型管理测试',
             component: modelManageTest
+        },
+        {
+            path: '/skyflowTest',
+            name: 'skyflow测试',
+            component: skyflowTest
         }
     ]
 });

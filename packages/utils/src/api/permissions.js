@@ -1,5 +1,5 @@
-// import httpService from '../http-service';
-import httpService from '@sdx/utils/lib/http-service';
+import httpService from '../http-service';
+
 import { USER_SERVICE_GATEWAY_BASE } from './config';
 const permissionsBaseUrl = `${USER_SERVICE_GATEWAY_BASE}/permissions/`;
 

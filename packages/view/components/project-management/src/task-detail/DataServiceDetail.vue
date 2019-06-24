@@ -29,7 +29,7 @@
         <template #running-info>
             <SdxvBaseInfoItem
                 label="运行环境"
-                :value="task.dockerImageName"
+                :value="task.image.name"
             />
             <SdxvBaseInfoItem
                 label="启动时间"

@@ -56,7 +56,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                prop="resource"
+                prop="resourceConfig"
                 label="资源配置:"
             >
                 <i class="icon">*</i>
@@ -72,6 +72,7 @@
                 <SdxwFileSelect
                     v-model="params.logPaths"
                     check-type="folder"
+                    :string-model="true"
                 />
             </el-form-item>
         </el-form>
@@ -87,7 +88,7 @@ import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask, updateTask } from '@sdx/utils/src/api/project';
-import { cNameValidate } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'TensorboardForm',
     components: {
@@ -130,7 +131,7 @@ export default {
                 description: '',
                 type: 'TENSORBOARD',
                 imageId: '',
-                resource: {
+                resourceConfig: {
                     'EXECUTOR_INSTANCES': 1,
                     'EXECUTOR_CPUS': 0,
                     'EXECUTOR_GPUS': 0,
@@ -148,12 +149,12 @@ export default {
                             return value && ('' + value).trim();
                         }
                     },
-                    { validator: cNameValidate, trigger: 'blur' }
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
                 ],
-                resource: [
+                resourceConfig: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -174,7 +175,7 @@ export default {
     methods: {
         imageList() {
             const params = {
-                imageType: 'TENSORBOARD',
+                imageType: 'TENSORFLOW',
                 start: 1,
                 count: -1
             };
@@ -205,7 +206,7 @@ export default {
             };
         },
         cpuObj(val) {
-            this.params.resource = { 
+            this.params.resourceConfig = { 
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': val.cpu * 1000,
                 'EXECUTOR_GPUS': 0,
@@ -213,6 +214,9 @@ export default {
                 'GPU_MODEL': ''
             };
         },
+        'params.imageId'() {
+            this.$refs.tensorboard.clearValidate('resourceConfig');
+        }
     }
 };
 </script>

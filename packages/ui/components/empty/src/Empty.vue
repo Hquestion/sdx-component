@@ -24,11 +24,35 @@ export default {
     props: {
         emptyType: {
             type: String,
-            default: 'nodata',
-        }
+            default: 'noData',
+        },
+        size: {
+            type: String,
+            default: 'normal'
+        },
     },
     data() {
         return {};
+    },
+    methods: {
+        getIconContent(type) {
+            let [icon, content] = ['', ''];
+            if (this.emptyType === 'noData') {
+                icon = '#sdx-wushuju';
+                content = '暂无数据哦';
+            } else if(this.emptyType === 'noSearchResult'){
+                icon = '#sdx-wusousuojieguo';
+                content = '无搜索结果哦';
+            } else if (this.emptyType === 'noNetwork') {
+                icon = '#sdx-wuwangluo';
+            } else if(this.emptyType === 'noFind') {
+                icon = '#sdx-icon-test';
+                content = '哎呀！您所在的页面出现错误';
+            } else {
+                icon = 'sdx-icon-warning';
+                content = '哎呀！您所在的页面出现错误';
+            }
+        }
     }
 };
 </script>

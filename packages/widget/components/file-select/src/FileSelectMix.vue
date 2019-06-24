@@ -1,5 +1,8 @@
 <template>
-    <div class="sdxw-file-select" :class="{'is-inline': inline}">
+    <div
+        class="sdxw-file-select"
+        :class="{'is-inline': inline}"
+    >
         <div class="sdxw-file-select__main">
             <SdxuButton
                 trigger="click"
@@ -87,7 +90,10 @@
                     </SdxuButton>
                 </template>
             </SdxuButton>
-            <span class="sdxw-file-select__accept-tip" v-show="accept">请选择{{accept}}类型的文件</span>
+            <span
+                class="sdxw-file-select__accept-tip"
+                v-show="accept"
+            >请选择{{ accept }}类型的文件</span>
         </div>
         <SdxuUploadList
             class="sdxw-file-select__files"

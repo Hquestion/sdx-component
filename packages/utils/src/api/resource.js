@@ -2,6 +2,7 @@ import httpService from '../http-service';
 import { RESOURCE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
 import shareCenter from '../helper/shareCenter';
 
+
 export function getResourceTmplList(start = 1, count = -1, templateType) {
     return httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_templates`, {
         start,

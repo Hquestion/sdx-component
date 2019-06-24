@@ -143,7 +143,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
-    margin: -$sdx-margin / 2;
     & /deep/ .sdxv-workflow-card {
         margin: $sdx-margin / 2;
     }

@@ -100,10 +100,12 @@
             <el-form-item
                 prop="sourcePaths"
                 label="源代码:"
+                :string-model="true"
             >
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
                     :accept="'.py'"
+                    :string-model="true"
                 />
             </el-form-item>
             <el-form-item
@@ -130,7 +132,7 @@ import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask } from '@sdx/utils/src/api/project';
-import { cNameValidate } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'TfDistributedForm',
     components: {
@@ -207,7 +209,7 @@ export default {
                             return value && ('' + value).trim();
                         }
                     },
-                    { validator: cNameValidate, trigger: 'blur' }
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
@@ -251,7 +253,7 @@ export default {
     methods: {
         imageList() {
             const params = {
-                imageType: 'TENSORFLOW_DIST',
+                imageType: 'TENSORFLOW',
                 start: 1,
                 count: -1
             };
@@ -330,6 +332,9 @@ export default {
                 'TF_PS_MEMORY': this.params.resourceConfig.TF_PS_MEMORY,
                 'GPU_MODEL':  val.label
             };
+        },
+        'params.imageId'() {
+            this.$refs.tfdistributed.clearValidate('resourceConfig');
         }
     }
 };

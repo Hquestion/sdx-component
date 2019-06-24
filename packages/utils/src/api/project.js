@@ -1,5 +1,5 @@
-// 等调试完改
-import httpService from '@sdx/utils/lib/http-service';
+
+import httpService from '../http-service';
 
 import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
 

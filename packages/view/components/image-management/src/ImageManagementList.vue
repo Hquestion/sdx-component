@@ -215,11 +215,15 @@ export default {
             ],
             states: [
                 {
-                    label: '创建中',
+                    label: '已创建',
+                    value: 'CREATED'
+                },
+                {
+                    label: '构建中',
                     value: 'BUILDING'
                 },
                 {
-                    label: '创建完成',
+                    label: '已构建',
                     value: 'BUILDED'
                 },
                 {
@@ -227,7 +231,7 @@ export default {
                     value: 'UPLOADING'
                 },
                 {
-                    label: '失败',
+                    label: '已失败',
                     value: 'FAILED'
                 },
                 {

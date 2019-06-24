@@ -3,9 +3,7 @@ import httpService from '@sdx/utils/lib/http-service';
 
 import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
 
-const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects/`;
-
-const TASK_MANAGE_GETWAY_BASE = PROJECT_MANAGE_GATEWAY_BASE + 'tasks/';
+const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 
 const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks`;
 
@@ -19,7 +17,7 @@ export function getTaskList(params) {
 }
 
 export function getProjectDetail(uuid) {
-    return httpService.get(projectApi + uuid);
+    return httpService.get(`${projectApi}/${uuid}`);
 }
 
 export function createProject(params) {
@@ -27,32 +25,32 @@ export function createProject(params) {
 }
 
 export function updateProject(uuid, params) {
-    return httpService.patch(projectApi + uuid, params);
+    return httpService.patch(`${projectApi}/${uuid}`, params);
 }
 
 export function removeProject(uuid) {
-    return httpService.remove(projectApi + uuid);
+    return httpService.remove(`${projectApi}/${uuid}`);
 }
 
 export function removeTask(uuid) {
-    return httpService.remove(TASK_MANAGE_GETWAY_BASE + uuid);
+    return httpService.remove(`${taskApi}/${uuid}`);
 }
 
 export function startTask(uuid, params) {
-    return httpService.post(TASK_MANAGE_GETWAY_BASE + uuid + '/start', params);
+    return httpService.post(`${taskApi}/${uuid}/start`, params);
 }
 
 export function stopTask(uuid, params) {
-    return httpService.post(TASK_MANAGE_GETWAY_BASE + uuid + '/stop', params);
+    return httpService.post(`${taskApi}/${uuid}/stop`, params);
 }
 export function createTask(params) {
-    return httpService.post(TASK_MANAGE_GETWAY_BASE, params);
+    return httpService.post(taskApi, params);
 }
 export function getTaskDetail(uuid) {
-    return httpService.get(TASK_MANAGE_GETWAY_BASE + uuid);
+    return httpService.get(`${taskApi}/${uuid}`);
 }
 export function updateTask(uuid,params) {
-    return httpService.patch(TASK_MANAGE_GETWAY_BASE + uuid, params);
+    return httpService.patch(`${taskApi}/${uuid}`, params);
 }
 
 // 数据集列表

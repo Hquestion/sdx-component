@@ -10,6 +10,10 @@
                 :class="[projectType.state, projectType.icon]"
             />
             <span class="sdxw-project-card__header--name">{{ meta.name }}</span>
+            <span
+                v-if="meta.isTemplate"
+                class="sdxw-project-card__header--type"
+            >模板</span>
         </header>
         <main class="sdxw-project-card__main">
             <div class="sdxw-project-card__info">

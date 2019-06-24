@@ -135,6 +135,17 @@ export default {
         this.initList();
     },
     methods: {
+        // 模版排序 前面
+        sortTemplate(frontObj, endObj) {
+            let [a, b] =[frontObj.isTemplate, endObj.isTemplate];
+            if (a < b) {
+                return 1;
+            } else if (a > b) {
+                return -1;
+            } else {
+                return 0;
+            }    
+        },
         sortChange() {
             this.initList();
         },
@@ -159,6 +170,20 @@ export default {
                     item.showEdit = isOwn && hasWriteAuth;
                     item.showRemove = isOwn && hasWriteAuth;
                 });
+
+                // 暂时排序
+                let [templateList, otherList ] = [[], []]; 
+                for (let i =0; i< this.projectList.length; i++) {
+                    if(this.projectList[i].isTemplate) {
+                        templateList.push(this.projectList[i]);
+                    } else {
+                        otherList.push(this.projectList[i]);
+                    }
+                }
+                this.projectList = [...templateList, ...otherList];
+                // this.projectList.sort(this.sortTemplate);
+                // 暂时排序
+
                 this.total = res.data.total;
                 this.loading = false;
             });

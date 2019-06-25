@@ -31,10 +31,9 @@ export default {
             type: Boolean,
             default: false
         },
-        podId: {
-            type: String,
-            default: '',
-            required: true
+        pod: {
+            type: Object,
+            default: () => ({})
         }
     },
     data() {
@@ -74,7 +73,7 @@ export default {
                 if (this.startedAt) {
                     params.startedAt = this.startedAt;
                 }
-                const data = await getPodLog(this.podId, params);
+                const data = await getPodLog(this.pod.podId, params);
                 let content = Array.isArray(data.contents) && data.contents.join('');
                 if (size < 0) {
                     this.start = this.start - data.contents.length;
@@ -96,8 +95,9 @@ export default {
             }
         },
         async handleOpenDialog() {
-            const taskInfos = await getTaskList({ podId: this.podId });
-            this.startedAt = Array.isArray(taskInfos) && taskInfos[0] && taskInfos[0].runningAt && new Date(taskInfos[0].runningAt).getTime() || '';
+            const data = await getTaskList({ podName: this.pod.podName });
+            const task = data && Array.isArray(data.items) && data.items[0] || null;
+            this.startedAt = task && new Date(task.runningAt).getTime() || '';
             this.fetchData(this.end, this.size);
         },
         handleClose() {

@@ -50,7 +50,7 @@
                     <SdxuIconButton
                         icon="sdx-icon sdx-chakanrizhi"
                         title="日志"
-                        @click="handleViewLog(row.podId)"
+                        @click="handleViewLog(row)"
                     />
                 </template>
             </el-table-column>
@@ -67,7 +67,7 @@
         </div>
         <SdxvComponentStateLogDialog
             :visible.sync="logDialogVisible"
-            :pod-id="currentPodId"
+            :pod="currentPod"
         />
     </div>
 </template>
@@ -132,7 +132,7 @@ export default {
                 status: ''
             },
             logDialogVisible: false,
-            currentPodId: '',
+            currentPod: {},
             loading: false
         };
     },
@@ -164,9 +164,9 @@ export default {
                 this.loading = false;
             });
         },
-        handleViewLog(podId) {
+        handleViewLog(pod) {
             this.logDialogVisible = true;
-            this.currentPodId = podId;
+            this.currentPod = pod;
         },
         handleSearch() {
             this.page = 1;

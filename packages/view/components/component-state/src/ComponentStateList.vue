@@ -34,7 +34,7 @@
                 prop="podName"
             />
             <el-table-column
-                label="Namespace"
+                label="命名空间"
                 prop="namespace"
             />
             <el-table-column
@@ -42,7 +42,7 @@
                 prop="status"
             />
             <el-table-column
-                label="node"
+                label="节点"
                 prop="nodeName"
             />
             <el-table-column label="操作">

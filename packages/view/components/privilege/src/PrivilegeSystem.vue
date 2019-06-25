@@ -30,7 +30,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="系统类别"
+                label="服务名称"
             >
                 <template #default="{ row }">
                     {{ splitKey(row.key, 0) }}

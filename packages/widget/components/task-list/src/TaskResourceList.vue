@@ -291,6 +291,7 @@ export default {
             }).catch(() => {
                 this.taskResourceList = [];
                 this.total = 0;
+                this.loading = false;
             });
         },
         stateIcon(state) {

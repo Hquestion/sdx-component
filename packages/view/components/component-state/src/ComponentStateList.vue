@@ -45,7 +45,10 @@
                 label="节点"
                 prop="nodeName"
             />
-            <el-table-column label="操作">
+            <el-table-column 
+                v-auth.system.button="'POD-LOG:READ'"
+                label="操作"
+            >
                 <template #default="{ row }">
                     <SdxuIconButton
                         icon="sdx-icon sdx-chakanrizhi"
@@ -79,6 +82,7 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxvComponentStateLogDialog from './ComponentStateLogDialog';
+import auth from '@sdx/widget/components/auth';
 
 import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
@@ -89,6 +93,7 @@ import { getPodsStatus } from '@sdx/utils/src/api/system';
 
 export default {
     name: 'SdxvComponentStateList',
+    directives: { auth },
     components: {
         [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,

@@ -115,7 +115,7 @@
                                 value=""
                             />
                             <el-option
-                                v-for="(item, index) in buildTypes"
+                                v-for="(item, index) in dynamicBuildTypes"
                                 :key="index"
                                 :value="item.value"
                                 :label="item.label"
@@ -144,7 +144,7 @@
             class="sdxv-image-management__list"
             v-if="projectType === 'task'"
         >
-            <image-task-table 
+            <image-task-table
                 ref="imageTaskTable"
                 :name="searchName"
                 :image-type="imageType"
@@ -258,6 +258,15 @@ export default {
     directives: {
         auth
     },
+    computed: {
+        dynamicBuildTypes() {
+            if (this.imageKind === 'all' || this.imageKind === 'basic') {
+                return this.buildTypes;
+            } else {
+                return this.buildTypes.filter(item => item.value !== 'BASIC');
+            }
+        }
+    },
     methods: {
         search() {
             this.$nextTick(() => {
@@ -337,7 +346,4 @@ export default {
     }
 };
 </script>
-
-<style scoped lang="scss">
-</style>
 

@@ -67,6 +67,10 @@ export function getComponents(params) {
     return httpService.get('/api/v1/skyflow_components', params);
 }
 
+export function deployModel(params) {
+    return httpService.post(`${COMPOSE_GATEWAY_BASE}model-deploy`, params);
+}
+
 export function getVersionInfo(modelId, versionId) {
     return httpService.get(`${modelApi}/${modelId}/versions/${versionId}`);
 }

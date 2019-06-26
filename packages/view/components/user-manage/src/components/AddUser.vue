@@ -150,7 +150,7 @@ export default {
                 username: '',
                 fullName: '',
                 password: '',
-                isActive:false,
+                isActive:true,
                 roles:[],
                 expire_at: 365*24*60*60*1000
             },

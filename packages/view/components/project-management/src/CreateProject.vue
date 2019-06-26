@@ -45,9 +45,18 @@
                 v-if="isAdmin"
                 v-auth.project.button="'TEMPLATE_PROJECT:CREATE'"
             >
-                <el-switch
+                <el-radio
                     v-model="projectForm.isTemplate"
-                />
+                    :label="true"
+                >
+                    是
+                </el-radio>
+                <el-radio
+                    v-model="projectForm.isTemplate"
+                    :label="false"
+                >
+                    否
+                </el-radio>
             </el-form-item>
             <el-form-item
                 label="协作者/组："
@@ -130,7 +139,7 @@ import Button from '@sdx/ui/components/button';
 import TabRadio from '@sdx/ui/components/tab-radio';
 import Project from '@sdx/widget/components/projectcard';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
-import { Form, FormItem, Message, Switch, Scrollbar } from 'element-ui';
+import { Form, FormItem, Message, Radio, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
 import { updateProject, getProjectList, createProject } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
@@ -165,7 +174,7 @@ export default {
         [Dialog.name]: Dialog,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
-        [Switch.name]: Switch,
+        [Radio.name]: Radio,
         [Input.name]: Input,
         [Button.name]: Button,
         [Transfer.name]: Transfer,

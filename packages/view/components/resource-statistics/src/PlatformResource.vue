@@ -104,6 +104,9 @@ export default {
                 };
                 this.gpuModelAllocations = allocations.gpus;
                 this.gpuModelUsedMap = usedInfo.gpus;
+            }).catch(() => {
+                this.gpuModelAllocations = [];
+                this.gpuModelUsedMap = {};
             });
         }
     },

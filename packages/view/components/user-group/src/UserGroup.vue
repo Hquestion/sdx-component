@@ -181,7 +181,7 @@ export default {
         handleDelete(row) {
             SdxuMessageBox.confirm({
                 title: `确定要删除${row.name}用户组吗？`,
-                content: '用户组确定删除后补课恢复哦'
+                content: '用户组确定删除后不可恢复哦'
             }).then(() => {
                 // todo: 请求接口
                 deleteGroup(row.uuid).then(() => {

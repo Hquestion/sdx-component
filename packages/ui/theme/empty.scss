@@ -1,14 +1,20 @@
 @include block('empty', $bem-namespace-ui) {
     padding-top: $sdx-padding;
     text-align: center;
-    @include element('icon') {
-        &.sdx-icon {
-            font-size: 60px;
-        }
+    @include modifier('small') {
+        width: $sdu-empty-small-size;
+        height: $sdu-empty-small-size;
+    }
+    @include modifier('normal') {
+        width: $sdu-empty-normal-size;
+        height: $sdu-empty-normal-size;
+    }
+    @include modifier('large') {
+        width: $sdu-empty-large-size;
+        height: $sdu-empty-large-size;
     }
     @include element('desc') {
         font-size: $sdx-help-font-size;
         color: $sdx-text-regular-color;
-        margin-top: $sdx-margin;
     }
 }

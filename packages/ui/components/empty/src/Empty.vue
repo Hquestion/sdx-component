@@ -1,19 +1,15 @@
 <template>
     <div class="sdxu-empty">
         <div>
-            <i
-                class="sdx-icon sdx-icon-warning sdxu-empty__icon"
-                v-if="emptyType === 'warning'"
-            />
             <svg
-                class="icon"
+                :class="`sdxu-empty--${size}`"
                 aria-hidden="true"
             >
-                <use xlink:href="#iconwushuju" />
+                <use :xlink:href="getIconContent('icon', emptyType, emptyContent)" />
             </svg>
         </div>
         <div class="sdxu-empty__desc">
-            <slot>暂无内容</slot>
+            <slot>{{ getIconContent('content', emptyType, emptyContent) }}</slot>
         </div>
     </div>
 </template>
@@ -26,6 +22,10 @@ export default {
             type: String,
             default: 'noData',
         },
+        emptyContent: {
+            type: String,
+            default: '',
+        },
         size: {
             type: String,
             default: 'normal'
@@ -35,23 +35,29 @@ export default {
         return {};
     },
     methods: {
-        getIconContent(type) {
-            let [icon, content] = ['', ''];
-            if (this.emptyType === 'noData') {
+        getIconContent(type, emptytype, emptycontent) {
+            let [icon, content, res] = ['', '', ''];
+            if (emptytype === 'noData') {
                 icon = '#sdx-wushuju';
-                content = '暂无数据哦';
-            } else if(this.emptyType === 'noSearchResult'){
+                content = '暂无数据哦'; 
+            } else if(emptytype === 'noSearchResult'){
                 icon = '#sdx-wusousuojieguo';
                 content = '无搜索结果哦';
-            } else if (this.emptyType === 'noNetwork') {
+            } else if (emptytype === 'noNetwork') {
                 icon = '#sdx-wuwangluo';
-            } else if(this.emptyType === 'noFind') {
+            } else if(emptytype === 'noFound') {
                 icon = '#sdx-icon-test';
                 content = '哎呀！您所在的页面出现错误';
             } else {
-                icon = 'sdx-icon-warning';
-                content = '哎呀！您所在的页面出现错误';
+                icon = `#${emptytype}`;
+                content = emptycontent;
             }
+            if (type === 'icon') {
+                res  = icon;
+            } else {
+                res = content;
+            }
+            return res;
         }
     }
 };

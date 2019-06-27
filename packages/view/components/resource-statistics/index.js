@@ -19,7 +19,10 @@ const routeCfg = [{
     children: [{
         path: 'index',
         name: 'index',
-        component: ResourceStatisticsIndex
+        component: ResourceStatisticsIndex,
+        meta: {
+            system: 'manage'
+        }
     }, {
         path: 'all-task-list',
         name: 'SdxvAllTaskList',

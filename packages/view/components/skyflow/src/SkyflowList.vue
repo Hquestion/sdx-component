@@ -66,8 +66,9 @@
         <sdxu-content-panel
             style="margin-bottom: 30px;"
             title="模板"
+            v-loading="templatesLoading"
         >
-            <div v-if="templatesList.length">
+            <div v-if="templatesList.length || !templatesLoaded">
                 <SdxuTabRadioGroup
                     v-model="templateType"
                     style="margin-bottom: 10px;"
@@ -83,7 +84,6 @@
                 </SdxuTabRadioGroup>
                 <SdxuScroll style="height: 230px;">
                     <sdxv-workflow-card-list
-                        v-loading="templatesLoading"
                         class="sdxv-skyflow__template-cards"
                     >
                         <sdxv-workflow-card
@@ -169,6 +169,7 @@ export default {
             templatesList: [],
             templatesListWithType: [],
             templatesLoading: false,
+            templatesLoaded: false,
             workflowsLoading: false,
             editingWorkflow: null,
             templateType: '',
@@ -247,6 +248,7 @@ export default {
         },
         initTemplatesList() {
             this.templatesLoading = true;
+            this.templatesLoaded = false;
             const params = {
                 name: this.searchName,
                 start: 1,
@@ -264,6 +266,7 @@ export default {
                     }
                 });
                 this.templatesLoading = false;
+                this.templatesLoaded = true;
                 this.templatesListWithType = this.templatesList.filter(item => item.skyflowTemplate === this.templateType);
             });
         },

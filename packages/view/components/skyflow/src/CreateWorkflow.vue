@@ -60,9 +60,18 @@
                 label="设为模板："
                 v-auth.skyflow.button="'TEMPLATE_FLOW:CREATE'"
             >
-                <el-switch
+                <el-radio
                     v-model="workflowForm.isTemplate"
-                />
+                    :label="true"
+                >
+                    是
+                </el-radio>
+                <el-radio
+                    v-model="workflowForm.isTemplate"
+                    :label="false"
+                >
+                    否
+                </el-radio>
             </el-form-item>
             <el-form-item
                 label="协作者/组："
@@ -179,7 +188,7 @@ import TabRadio from '@sdx/ui/components/tab-radio';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import WorkflowCard from './workflow-card/WorkflowCard';
 import WorkflowCardList from './workflow-card/WorkflowCardList';
-import { Form, FormItem, Message, Switch, Scrollbar, Radio } from 'element-ui';
+import { Form, FormItem, Message, Scrollbar, Radio } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
 import { updateWorkflow, getSkyflowList, createWorkflow, getSkyflowTemplates } from '@sdx/utils/src/api/skyflow';
 import ElSelect from 'element-ui/lib/select';
@@ -224,7 +233,6 @@ export default {
         [Dialog.name]: Dialog,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
-        [Switch.name]: Switch,
         [Input.name]: Input,
         [Button.name]: Button,
         [Radio.name]: Radio,

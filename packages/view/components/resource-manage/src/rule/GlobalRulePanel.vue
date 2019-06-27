@@ -2,7 +2,7 @@
     <SdxuContentPanel
         class="global-rule-panel"
         title="全局规则设置"
-        subtitle="规则使用对象为单个用户"
+        subtitle="规则适用对象为单个用户"
     >
         <div
             class="edit-icon"
@@ -16,8 +16,14 @@
             />
         </div>
         <div class="global-rule-panel__body">
-            <RuleForm :readonly="isReadonly" ref="ruleForm"/>
-            <div class="global-rule-panel__footer" v-show="!isReadonly">
+            <RuleForm
+                :readonly="isReadonly"
+                ref="ruleForm"
+            />
+            <div
+                class="global-rule-panel__footer"
+                v-show="!isReadonly"
+            >
                 <SdxuButton
                     type="default"
                     @click="cancel"

@@ -13,7 +13,11 @@ export function getFilesList(params = {}) {
         start = 1,
         count = -1,
         orderBy = 'name',
-        order = 'asc'
+        order = 'asc',
+        filesystem = 'cephfs',
+        fileExtension = '',
+        onlyDirectory = 0,
+        onlyFile = 0
     } = params;
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files`, {
         userId: userId || userInfo.userId,
@@ -21,11 +25,16 @@ export function getFilesList(params = {}) {
         start,
         count,
         orderBy,
-        order
+        order,
+        filesystem,
+        fileExtensions: fileExtension.split(','),
+        onlyDirectory: +onlyDirectory,
+        onlyFile: +onlyFile
     });
 }
 
 export function searchFiles(params) {
+    let _resolve, _reject;
     let userInfo = shareCenter.getUser() || {};
     const {
         userId = userInfo.userId,
@@ -37,9 +46,12 @@ export function searchFiles(params) {
         recursive = 1,
         keyword = '',
         filesystem = 'cephfs',
-        showHidden = 0
+        showHidden = 0,
+        fileExtension = '',
+        onlyDirectory = false,
+        onlyFile = false
     } = params;
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/search`, {
+    httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/search`, {
         userId: userId || userInfo.userId,
         path,
         start,
@@ -49,7 +61,77 @@ export function searchFiles(params) {
         recursive,
         keyword,
         showHidden,
-        filesystem
+        filesystem,
+        fileExtensions: fileExtension.split(','),
+        onlyDirectory: +onlyDirectory,
+        onlyFile: +onlyFile
+    }).then(res => {
+        let jobId = res.jobId;
+        let timer = null;
+        (function pullJob() {
+            getJobDetail(jobId).then(res => {
+                if (res.state === asyncJobStatus.SUCCESS || res.state === asyncJobStatus.FAILURE) {
+                    clearTimeout(timer);
+                    if (res.state === asyncJobStatus.SUCCESS) {
+                        _resolve(res.extra);
+                    } else {
+                        Notification.error({
+                            title: '出错了！',
+                            message: '搜索失败！'
+                        });
+                        _reject();
+                    }
+                } else {
+                    clearTimeout(timer);
+                    timer = setTimeout(pullJob, 1000);
+                }
+            }, () => {
+                clearTimeout(timer);
+                _reject();
+            });
+        })();
+    }, _reject);
+    return new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+    });
+}
+
+export function searchShareFiles(params) {
+    let userInfo = shareCenter.getUser() || {};
+    let _resolve, _reject;
+    httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares/search`, {
+        ownerId: userInfo.userId,
+        ...params
+    }).then(res => {
+        let jobId = res.jobId;
+        let timer = null;
+        (function pullJob() {
+            getJobDetail(jobId).then(res => {
+                if (res.state === asyncJobStatus.SUCCESS || res.state === asyncJobStatus.FAILURE) {
+                    clearTimeout(timer);
+                    if (res.state === asyncJobStatus.SUCCESS) {
+                        _resolve(res.extra);
+                    } else {
+                        Notification.error({
+                            title: '出错了！',
+                            message: '搜索失败！'
+                        });
+                        _reject();
+                    }
+                } else {
+                    clearTimeout(timer);
+                    timer = setTimeout(pullJob, 1000);
+                }
+            }, () => {
+                clearTimeout(timer);
+                _reject();
+            });
+        })();
+    }, _reject);
+    return new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
     });
 }
 
@@ -67,6 +149,29 @@ export function share(params) {
         ownerId: ownerId || userInfo.userId,
         sharerId: sharerId || userInfo.userId,
         path,
+        isGlobal,
+        users,
+        groups
+    });
+}
+
+export function shareBatch(params) {
+    let userInfo = shareCenter.getUser() || {};
+    const {
+        ownerId = userInfo.userId,
+        sharerId = userInfo.userId,
+        paths = params.paths || [],
+        isGlobal = false,
+        users = [],
+        groups = []
+    } = params;
+    if (paths.length === 0) {
+        return Promise.reject('no path defined');
+    }
+    return httpService.post(`${COMPOSE_GATEWAY_BASE}file-share-batch`, {
+        ownerId: ownerId || userInfo.userId,
+        sharerId: sharerId || userInfo.userId,
+        paths,
         isGlobal,
         users,
         groups
@@ -136,7 +241,7 @@ export function getProjectShare(params) {
         orderBy = 'name',
         order = 'asc'
     } = params;
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}file_shares`, {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-share-profiles`, {
         userId: userId || userInfo.userId,
         path,
         start,
@@ -201,12 +306,12 @@ export function zipPreview({ path = '/', pathInZip = '/', start = 1, count = -1 
     });
 }
 
-export function unzip(path) {
+export function unzip(path, targetPath) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/extract`, {
         userId: userInfo.userId,
         path,
-        targetPath: path.slice(0, path.lastIndexOf('.zip'))
+        targetPath
     });
 }
 
@@ -260,36 +365,39 @@ export function pack(paths) {
     });
 }
 
-export function getPackTaskList() {
-    let userInfo = shareCenter.getUser() || {};
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
-        userId: userInfo.userId,
-        jobType: 'PACK'
-    });
+export function getAsyncJobList(jobType) {
+    return function() {
+        let userInfo = shareCenter.getUser() || {};
+        return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
+            userId: userInfo.userId,
+            jobType
+        });
+    };
 }
+
+export const getPackTaskList = getAsyncJobList('PACK');
+export const getCopyTaskList = getAsyncJobList('COPY');
+export const getDelTaskList = getAsyncJobList('DELETE');
+export const getUnzipTaskList = getAsyncJobList('UNPACK');
 
 export function getJobDetail(id) {
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs/${id}`);
 }
 
-export function getCopyTaskList() {
-    let userInfo = shareCenter.getUser() || {};
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
-        userId: userInfo.userId,
-        jobType: 'COPY'
-    });
-}
-
-export function getDelTaskList() {
-    let userInfo = shareCenter.getUser() || {};
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
-        userId: userInfo.userId,
-        jobType: 'DELETE'
-    });
-}
-
-export function cancelCopyTask(uuid) {
+export function cancelTask(uuid) {
     return httpService.remove(`${FILE_MANAGE_GATEWAY_BASE}jobs/${uuid}`);
+}
+
+export function deleteTask(uuid) {
+    return httpService.remove(`${FILE_MANAGE_GATEWAY_BASE}jobs/${uuid}`);
+}
+
+export function deleteTaskType(jobType) {
+    let userInfo = shareCenter.getUser() || {};
+    return httpService.remove(`${FILE_MANAGE_GATEWAY_BASE}jobs/all`, {
+        jobType,
+        userId: userInfo.userId
+    });
 }
 
 export default {
@@ -311,5 +419,8 @@ export default {
     share,
     shareCancel,
     sharePatch,
-    shareDetail
+    shareDetail,
+    getUnzipTaskList,
+    getPackTaskList,
+    searchShareFiles
 };

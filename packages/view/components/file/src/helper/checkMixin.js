@@ -60,9 +60,7 @@ export default {
             });
         },
         doUnselectAll() {
-            this.fileManager.isCheckAll = false;
-            this.fileManager.checked = [];
-            this.fileManager.checkedMap = {};
+            this.fileManager.resetCheck();
         },
         syncRowCheckStatus() {
             this.$nextTick(() => {

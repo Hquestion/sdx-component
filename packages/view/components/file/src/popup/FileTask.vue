@@ -25,7 +25,7 @@
                     label="文件复制"
                     name="COPY"
                 >
-                    <TaskFileCopy ref="copyTask" />
+                    <TaskFileCopy ref="copyTask" @init-show="handleInitShow"/>
                 </el-tab-pane>
                 <el-tab-pane
                     label="文件删除"
@@ -33,6 +33,12 @@
                     ref="deleteTask"
                     v-if="false"
                 />
+                <el-tab-pane
+                    label="解压缩"
+                    name="UNZIP"
+                >
+                    <TaskFileUnzip ref="unzipTask" @init-show="handleInitShow"/>
+                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
@@ -43,19 +49,29 @@ import SdxvExpandCollapseToggler from './ExpandCollapseToggler';
 import SdxvTaskFileUpload from './TaskFileUpload';
 import MessageBox from '@sdx/ui/components/message-box';
 import TaskFileCopy from './TaskFileCopy';
+import TaskFileUnzip from './TaskFileUnzip';
 const TAB_REF_MAP = {
     UPLOAD: 'uploadTask',
     COPY: 'copyTask',
-    DELETE: 'deleteTask'
+    DELETE: 'deleteTask',
+    UNZIP: 'unzipTask'
 };
+import { deleteTaskType } from '@sdx/utils/src/api/file';
+
 export default {
     name: 'SdxvFileTask',
     components: {
         TaskFileCopy,
+        TaskFileUnzip,
         SdxvTaskFileUpload,
         SdxvExpandCollapseToggler
     },
     inject: ['fileManager'],
+    provide() {
+        return {
+            taskPop: this
+        };
+    },
     data() {
         return {
             expanded: false,
@@ -84,6 +100,9 @@ export default {
                 title: '您确定要取消所有未完成的任务吗？'
             }).then(() => {
                 // todo 取消上传或者取消拷贝任务
+                ['uploadTask', 'copyTask', 'unzipTask'].forEach(item => {
+                    this.$refs[item].deleteAllTasks();
+                });
                 this._visible = false;
             });
         },
@@ -92,13 +111,15 @@ export default {
             this.checkToClose();
         },
         checkToClose() {
-            const refs = ['uploadTask', 'copyTask'];
+            const refs = ['uploadTask', 'copyTask', 'unzipTask'];
             let isEmpty = true;
             refs.forEach(ref => {
                 if (!this.$refs[ref].isEmpty()) {
                     isEmpty = false;
                 }
             });
+            // 暂时不关闭弹框
+            isEmpty = false;
             isEmpty && (this._visible = false);
         },
         checkTab(tab) {
@@ -106,6 +127,11 @@ export default {
             this.currentTab = tab;
             const vm = this.$refs[TAB_REF_MAP[tab]];
             vm.init && vm.init();
+        },
+        handleInitShow(tab) {
+            if (!this.isInit) {
+                this.checkTab(tab);
+            }
         }
     },
     watch: {

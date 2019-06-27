@@ -6,7 +6,7 @@
         <OperationBar ref="operationBar" />
         <BreadcrumbBar />
         <FileTable ref="fileTable" />
-        <SdxvFileTask :visible.sync="taskVisible" />
+        <SdxvFileTask :visible.sync="taskVisible" ref="fileTask"/>
     </SdxuContentPanel>
 </template>
 
@@ -16,8 +16,8 @@ import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 
-import { getFilesList, searchFiles, getMyShare, getMyAcceptedShare } from '@sdx/utils/src/api/file';
-import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap, MY_SHARE_PATH, PROJECT_SHARE_PATH, ACCEPTED_SHARE_PATH } from './helper/fileListTool';
+import { getFilesList, searchFiles, getMyShare, getMyAcceptedShare, getProjectShare, searchShareFiles } from '@sdx/utils/src/api/file';
+import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap, PROJECT_SHARE_PATH } from './helper/fileListTool';
 import BreadcrumbBar from './BreadcrumbBar';
 import SdxvFileTask from './popup/FileTask';
 
@@ -95,10 +95,13 @@ export default {
             this.fileList = [];
             this.total = 0;
             this.loadedTotal = 0;
+            this.searchKey = '';
+            this.resetCheck();
+        },
+        resetCheck() {
             this.checked = [];
             this.checkedMap = {};
             this.isCheckAll = false;
-            this.searchKey = '';
         },
         enterDirectory(dir) {
             this.resetFlags();
@@ -162,7 +165,7 @@ export default {
             this.searchKey = key;
             this.currentPath = dir;
             this.isRoot = dir === '/';
-            this.rootKind = '';
+            // this.rootKind = '';
             // 修改为加载中，准备获取数据
             this.loading = true;
             this.db.list.clear();
@@ -242,36 +245,58 @@ export default {
                 });
             }
         },
-        loadMyShare() {
-            return getMyShare({
-                start: (this.pageIndex - 1) * this.pageSize + 1,
-                count: this.pageSize,
+        loadShare(kind, start, count) {
+            let map = {
+                [rootKinds.MY_SHARE]: getMyShare,
+                [rootKinds.ACCEPTED_SHARE]: getMyAcceptedShare,
+                [rootKinds.PROJECT_SHARE]: getProjectShare,
+            };
+            return map[kind]({
+                start: start || (this.pageIndex - 1) * this.pageSize + 1,
+                count: count || this.pageSize,
                 path: '',
                 orderBy: this.orderBy,
                 order: this.order
             });
         },
-        loadAcceptedShare() {
-            return getMyAcceptedShare({
-                start: (this.pageIndex - 1) * this.pageSize + 1,
-                count: this.pageSize,
-                path: '',
-                orderBy: this.orderBy,
-                order: this.order
-            });
+        loadMyShare(start, count) {
+            return this.loadShare(rootKinds.MY_SHARE, start, count);
         },
-        loadProjectShare() {
-
+        loadAcceptedShare(start, count) {
+            return this.loadShare(rootKinds.ACCEPTED_SHARE, start, count);
+        },
+        loadProjectShare(start, count) {
+            return this.loadShare(rootKinds.PROJECT_SHARE, start, count);
         },
         loadSearchResult() {
-            return searchFiles({
-                start: (this.pageIndex - 1) * this.pageSize + 1,
-                count: this.pageSize,
-                path: this.currentPath,
-                orderBy: this.orderBy,
-                order: this.order,
-                keyword: this.searchKey
-            });
+            if (this.isShareRoot()) {
+                return this.loadShare(this.rootKind, 1, -1).then(res => {
+                    const files = res.children;
+                    let paths = [], uuids = [];
+                    files.forEach(file => {
+                        paths.push(file.path);
+                        uuids.push(file.userId);
+                    });
+                    return searchShareFiles({
+                        uuids: uuids,
+                        paths: paths,
+                        keyword: this.searchKey
+                    });
+                });
+            } else {
+                let path = this.currentPath;
+                if (this.rootKind !== '') {
+                    path = '/' + this.currentPath.split('/').slice(2).join('/');
+                }
+                return searchFiles({
+                    start: (this.pageIndex - 1) * this.pageSize + 1,
+                    count: this.pageSize,
+                    path,
+                    orderBy: this.orderBy,
+                    order: this.order,
+                    keyword: this.searchKey
+                });
+            }
         },
         async getRenderList(offset, limit) {
             // 获取需要渲染到列表中的数据

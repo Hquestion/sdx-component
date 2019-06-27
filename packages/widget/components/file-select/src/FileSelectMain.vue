@@ -22,6 +22,7 @@
                     :checkable="checkable"
                     :check-type="checkType"
                     :querystring="key"
+                    ref="fileComp"
                 />
             </SdxuScroll>
         </div>
@@ -52,6 +53,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import SdxuScroll from '@sdx/ui/components/scroll';
 import FileSelectTree from './FileSelectTree';
 import FileSelectSearch from './FileSelectSearch';
+import debounce from '@sdx/utils/src/helper/debounce';
 export default {
     name: 'SdxwFileSelectMain',
     components: {
@@ -113,6 +115,19 @@ export default {
         onConfirm() {
             this.$emit('input', this.checked);
             this.$emit('confirm');
+        },
+        reset() {
+            this.key = '';
+        }
+    },
+    watch: {
+        key(val) {
+            if (!val || !val.trim()) return;
+            (debounce(() => {
+                if (this.activeComp === 'FileSelectSearch') {
+                    this.$refs.fileComp.refresh && this.$refs.fileComp.refresh(true);
+                }
+            }, 500))();
         }
     }
 };

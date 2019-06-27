@@ -6,7 +6,7 @@ export const rootKinds = {
 
 export const MY_SHARE_PATH = '/fe-fixed-my-share';
 export const ACCEPTED_SHARE_PATH = '/fe-fixed-accepted-share';
-export const PROJECT_SHARE_PATH = '//fe-fixed-project-share';
+export const PROJECT_SHARE_PATH = '/fe-fixed-project-share';
 
 export const rootKindPathMap = {
     [rootKinds.MY_SHARE]: MY_SHARE_PATH,
@@ -99,10 +99,15 @@ export const fixedRows = [
     {name: fixedRowsNameMap[PROJECT_SHARE_PATH], isFile: false, path: PROJECT_SHARE_PATH, fixed: true, key: fixedRowsKeyMap[PROJECT_SHARE_PATH]}
 ];
 
-export function getFileBtn(file, rootKind) {
+export function getFileBtn(file, rootKind, isShareRoot) {
     if (file.fixed) return [];
     if (rootKind) {
-        return ROOT_FILE_BTN_MAP[rootKind];
+        // 我的共享子目录下没有可操作按钮
+        if (!isShareRoot && rootKind === rootKinds.MY_SHARE) {
+            return [];
+        } else {
+            return ROOT_FILE_BTN_MAP[rootKind];
+        }
     } else {
         const baseButton = [iconButtonTypes.DOWNLOAD, iconButtonTypes.MOVE, iconButtonTypes.RENAME, iconButtonTypes.DELETE, iconButtonTypes.PATH];
         baseButton.unshift(iconButtonTypes.SHARE);

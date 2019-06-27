@@ -6,7 +6,7 @@ import VueClipboard from 'vue-clipboard2';
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
-import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail, pack } from '@sdx/utils/src/api/file';
+import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail, pack, shareBatch } from '@sdx/utils/src/api/file';
 import { unlock } from '@sdx/utils/src/lockScroll';
 import { isString } from '@sdx/utils/src/helper/tool';
 
@@ -116,11 +116,13 @@ export default {
             if (this.toMoveOrCopyRow) {
                 // 移动单个路径
                 move(this.toMoveOrCopyRow.path, target.path).then(() => {
+                    this.moveVisible = false;
                     this.fileManager.enterDirectory(this.fileManager.currentPath);
                 });
             } else {
                 if (this.fileManager.checked.length > 0) {
                     move(this.fileManager.checked.map(item => item.path), target.path).then(() => {
+                        this.moveVisible = false;
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
                     });
                 }
@@ -129,13 +131,16 @@ export default {
         handleCopy(target) {
             if (this.toMoveOrCopyRow) {
                 copy([this.toMoveOrCopyRow.path], target.path).then(res => {
-                    // todo 展示拷贝弹框
-
+                    this.moveVisible = false;
+                    this.fileManager.resetCheck();
+                    this.fileManager.$refs.fileTask.checkTab('COPY');
                 });
             } else {
                 if (this.fileManager.checked.length > 0) {
                     copy(this.fileManager.checked.map(item => item.path), target.path).then(() => {
-                        // todo 展示拷贝弹框
+                        this.moveVisible = false;
+                        this.fileManager.resetCheck();
+                        this.fileManager.$refs.fileTask.checkTab('COPY');
                     });
                 }
             }
@@ -143,10 +148,10 @@ export default {
         handleCancelMove() {
             this.toMoveOrCopyRow = null;
         },
-        unzip(row) {
+        unzip(row, targetPath) {
             if (!row) return;
-            unzip(row.path).then(res => {
-                // todo 展示解压任务弹框
+            unzip(row.path, this.fileManager.currentPath).then(res => {
+                this.fileManager.$refs.fileTask.checkTab('UNZIP');
             });
         },
         download(row) {
@@ -222,7 +227,16 @@ export default {
                 }
             } else {
                 // 批量共享
-
+                return shareBatch({
+                    paths: this.fileManager.checked.map(item => item.path),
+                    isGlobal: shareType === 'PUBLIC',
+                    users,
+                    groups
+                }).then(res => {
+                    this.fileManager.checked.forEach((item, index) => {
+                        this.updateCachedShareId(item.path, res[index]);
+                    });
+                });
             }
         },
         cancelShare(row) {
@@ -231,7 +245,6 @@ export default {
             }).then(() => {
                 if (row) {
                     shareCancel(row.fileShareId).then(res => {
-                        // todo 更新这些记录的shareDetailId
                         this.updateCachedShareId(row);
                         Message.success('取消分享成功');
                     });
@@ -240,14 +253,17 @@ export default {
                         this.updateCachedShareId(this.fileManager.checked);
                         Message.success('取消分享成功');
                         // 清空选中的项
-                        this.fileManager.checked = [];
-                        this.fileManager.checkedMap = {};
-                        this.fileManager.isCheckAll = false;
+                        this.fileManager.resetCheck();
                     });
                 }
             });
         },
         updateCachedShareId(rows, shareId = '') {
+            // 暂且暴力处理，如果需要优化，需要在请除fileShareId后，删除此条记录，以刷新页面
+            if (!shareId) {
+                this.fileManager.enterDirectory(this.fileManager.currentPath);
+                return;
+            }
             if (typeof rows === 'object') {
                 if (!Array.isArray(rows)) {
                     rows = [rows];

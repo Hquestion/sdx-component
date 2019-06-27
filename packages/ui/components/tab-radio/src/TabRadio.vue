@@ -12,12 +12,14 @@
 </template>
 
 <script>
+import emitter from '@sdx/utils/src/mixins/emitter';
 export default {
     name: 'SdxuTabRadioItem',
     data() {
         return {};
     },
     inject: ['active'],
+    mixins: [emitter],
     props: {
         name: {
             type: String,
@@ -33,6 +35,12 @@ export default {
         handleClick() {
             this.active.name = this.name;
         }
+    },
+    mounted() {
+        this.dispatch('SdxuTabRadioGroup', 'sdxu.tab-radio.add');
+    },
+    destroyed() {
+        this.dispatch('SdxuTabRadioGroup', 'sdxu.tab-radio.minus');
     }
 };
 </script>

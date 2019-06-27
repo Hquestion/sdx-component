@@ -141,7 +141,7 @@ export default {
         },
         handleProgress(e, file, files) {
             this.fileManager.uploadingFiles = files;
-            this.fileManager.taskVisible = true;
+            this.fileManager.$refs.fileTask.checkTab('UPLOAD');
         },
         removeUpload(file) {
             this.$refs.fileUploader.handleRemove(file);

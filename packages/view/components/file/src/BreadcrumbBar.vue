@@ -15,6 +15,7 @@
 <script>
 import { getPathName } from './helper/fileListTool';
 import EllipseBreadcrumb from './EllipseBreadcrumb';
+import { MY_SHARE_PATH, ACCEPTED_SHARE_PATH, PROJECT_SHARE_PATH } from './helper/fileListTool';
 
 export default {
     name: 'BreadcrumbBar',
@@ -28,13 +29,24 @@ export default {
         EllipseBreadcrumb
     },
     methods: {
-        buildBreadcrumb(val = '') {
+        buildBreadcrumb(val = '', startPath = '') {
+            let startPathNameMap = {};
+            if (startPath) {
+                let startPathList = startPath.split('/');
+                let startName = startPathList[startPathList.length - 1];
+                startPathNameMap = {
+                    [startName]: startPath
+                };
+                val = val.replace(startPath, `/${startName}`);
+            }
             let list = val.split('/').slice(1);
             let pathObjArr = list.map((item, index) => {
-                return {
-                    name: getPathName(item),
-                    path: '/' + list.slice(0, index + 1).join('/')
-                };
+                let name = getPathName(item);
+                let path = '/' + list.slice(0, index + 1).join('/');
+                if (index === 0 && startPathNameMap[name]) {
+                    path = startPathNameMap[name];
+                }
+                return { name, path };
             });
             pathObjArr.unshift({
                 name: '全部文件',
@@ -49,12 +61,17 @@ export default {
             return pathObjArr;
         },
         handleNav(item) {
-            window.console.log(this.$route);
+
             const routeObj = {
                 name: this.$route.name,
+                query: {}
             };
             if (item.path) {
                 routeObj.query = {path: item.path};
+            }
+            if (this.fileManager.rootKind !== '' && ![MY_SHARE_PATH, ACCEPTED_SHARE_PATH, PROJECT_SHARE_PATH].includes(item.path)) {
+                routeObj.query.startPath = this.$route.query.startPath;
+                routeObj.query.ownerId = this.$route.query.ownerId;
             }
             this.$router.replace(routeObj);
         }
@@ -75,7 +92,8 @@ export default {
     watch: {
         $route(val, oldval) {
             if (val.query.path !==  oldval.query.path || val.query.search !== oldval.query.search) {
-                this.list = this.buildBreadcrumb(val.query.path);
+                let startPath = this.$route.query.startPath || '';
+                this.list = this.buildBreadcrumb(val.query.path, startPath);
             }
         }
     }

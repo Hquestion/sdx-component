@@ -129,4 +129,10 @@ module.exports = [
         functionName: 'fileShareBatch.handler',
         filePath: './compose/fileShareBatch.js'
     },
+    {
+        apiId: '/fe-compose/api/v1/model-deploy',
+        method: 'POST',
+        functionName: 'modelDeploy.handler',
+        filePath: './compose/modelDeploy.js'
+    },
 ];

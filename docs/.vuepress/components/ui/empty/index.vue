@@ -1,7 +1,6 @@
 <template>
     <div class="index">
         <SdxuEmpty></SdxuEmpty>
-        <SdxuEmpty>自定义的什么内容都没有</SdxuEmpty>
     </div>
 </template>
 

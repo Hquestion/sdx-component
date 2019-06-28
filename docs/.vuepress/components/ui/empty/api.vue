@@ -1,6 +1,6 @@
 <template>
     <div class="api">
-        <CommonApi :apiData="slotData" title="Slots" type="slot"/>
+        <CommonApi :apiData="attrData" title="Attributes" />
     </div>
 </template>
 
@@ -10,11 +10,28 @@
         name: 'ButtonApi',
         data() {
             return {
-                slotData: [
+                attrData: [
                     {
-                        params: 'default',
-                        describe: '默认插槽，一段文字或者其他任意内容。默认为"暂无内容"'
-                    }
+                        params: 'empty-type',
+                        describe: 'icon类型',
+                        type: 'string',
+                        optionValue: 'noData / noSearchResult / noNetwork /noFound / 支持icon类名',
+                        defaultValue: 'noData',
+                    },
+                    {
+                        params: 'empty-content',
+                        describe: 'icon对应内容',
+                        type: 'string',
+                        optionValue: '四种对应内容不需要传 / 传icon类名，需要传内容',
+                        defaultValue: '暂无数据哦',
+                    },
+                    {
+                        params: 'size',
+                        describe: '尺寸',
+                        type: 'string',
+                        optionValue: 'small / normal / large',
+                        defaultValue: 'normal',
+                    },
                 ]
             }
         },

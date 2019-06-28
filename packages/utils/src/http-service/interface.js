@@ -1,4 +1,5 @@
 import axios from './api';
+import qs from 'qs';
 
 function get (url, params = {}, config) {
     if (!url) return;
@@ -6,6 +7,9 @@ function get (url, params = {}, config) {
         method: 'get',
         url,
         params,
+        paramsSerializer: function(params) {
+            return qs.stringify(params, {arrayFormat: 'repeat'});
+        },
         ...config
     });
 }
@@ -36,6 +40,9 @@ function remove (url, params = {}, config) {
         method: 'delete',
         url,
         params,
+        paramsSerializer: function(params) {
+            return qs.stringify(params, {arrayFormat: 'repeat'});
+        },
         ...config
     });
 }

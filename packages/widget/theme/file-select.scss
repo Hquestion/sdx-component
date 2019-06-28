@@ -47,12 +47,13 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @include block('file-select-search', $bem-namespace-widget) {
     height: 100%;
+    width: 100%;
     overflow: hidden;
     & /deep/ .el-checkbox {
         margin-right: 0;
     }
     @include element('list') {
-
+        width: 100%;
     }
     @include element('item') {
         display: flex;
@@ -60,6 +61,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         align-items: center;
         font-size: $sdx-file-select-node-font-size;
         height: $sdx-file-select-node-height;
+    }
+    @include element('item-name-box') {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 160px;
     }
     @include element('item-checkbox') {
         width: $sdx-file-select-node-font-size;
@@ -72,6 +79,13 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
     @include element('item-name') {
         margin-left: $sdx-file-select-node-icon-text-margin;
+    }
+    @include element('item-path') {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100px;
+        margin-left: 10px;
     }
 }
 

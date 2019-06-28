@@ -8,7 +8,7 @@
                 v-model="checked"
                 :indeterminate="isIndeterminate"
             >
-                <span>已选中{{ fileManager.checked.length }}</span>个文件/文件夹
+                已选中{{ fileManager.checked.length }}个文件/文件夹
             </el-checkbox>
         </div>
         <SdxuTable
@@ -17,7 +17,7 @@
             :reverse-selection="true"
             :row-key="setRowKey"
             :data="fileManager.renderFiles"
-            :default-sort="{prop: fileManager.orderBy, order: 'ascending'}"
+            :default-sort="{prop: fileManager.orderBy, order: 'descending'}"
             @sort-change="handleSortChange"
             :show-header="fileManager.checked.length === 0"
             @select="handleSelect"
@@ -29,61 +29,25 @@
             v-loading="fileManager.loading"
         >
             <el-table-column
-                v-if="!fileManager.isProjectRoot()"
                 type="selection"
                 :selectable="canRowCheck"
+                v-show="!fileManager.isProjectRoot()"
             />
             <el-table-column
                 label="文件名"
-                sortable="custom"
+                :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="name"
                 :sort-orders="['ascending', 'descending']"
+                v-if="true"
             >
                 <template #default="{row}">
-                    <span
-                        class="sdxv-file__item"
-                        :class="{'is-no-zip-file': row.isFile && row.fileExtension !== '.zip'}"
-                    >
-                        <svg
-                            class="sdxv-file__item-icon"
-                            aria-hidden="true"
-                        >
-                            <use :xlink:href="'#' + getFileIcon(row)" />
-                        </svg>
-                        <div class="sdxv-file__item-name">
-                            <span v-if="isEditingRow(row)">
-                                <SdxuInput
-                                    v-model="tempRowName"
-                                    :inline="true"
-                                />
-                                <i
-                                    class="sdx-icon sdx-icon-circle-outline accept-icon"
-                                    @click="saveEdit"
-                                />
-                                <i
-                                    class="sdx-icon sdx-icon-remove-outline cancel-icon"
-                                    @click="cancelEdit"
-                                />
-                            </span>
-                            <ElPopover
-                                v-else-if="row.fileExtension === '.zip'"
-                                trigger="click"
-                                @show="handleZipPreviewShown"
-                                placement="right"
-                            >
-                                <div style="max-height: 400px;">
-                                    <ElScrollbar class="sdxv-file__item-name-scroller">
-                                        <SdxwFileSelectTree :checkable="false" :root-path="row.path" :load-fn-wrap="zipPreviewFnWrap"/>
-                                    </ElScrollbar>
-                                </div>
-                                <span slot="reference"> {{ row.name }} </span>
-                            </ElPopover>
-                            <span
-                                v-else
-                                @click="handlePathNameClick(row)"
-                            >{{ row.name }}</span>
-                        </div>
-                    </span>
+                    <FileName
+                        :row="row"
+                        v-model="tempRowName"
+                        @save-rename="saveEdit"
+                        @cancel-rename="cancelEdit"
+                        @name-click="handlePathNameClick"
+                    />
                 </template>
             </el-table-column>
             <el-table-column
@@ -92,24 +56,62 @@
                 prop="path"
                 width="240"
                 v-if="fileManager.isSearch"
-            />
+            >
+                <template #default="{row}">
+                    <div
+                        style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"
+                        :title="row.path"
+                    >
+                        {{ row.path }}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
+                label="文件路径"
+                :sortable="false"
+                prop="path"
+                width="360"
+                v-if="fileManager.rootKind === rootKinds.MY_SHARE"
+            >
+                <template #default="{row}">
+                    <div
+                        style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"
+                        :title="row.path"
+                    >
+                        {{ row.path }}
+                    </div>
+                </template>
+            </el-table-column>
             <el-table-column
                 label="大小"
-                sortable="custom"
+                :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="size"
                 width="180"
                 :sort-orders="['ascending', 'descending']"
+                v-if="!fileManager.isProjectRoot() && fileManager.rootKind !== rootKinds.MY_SHARE"
             >
                 <template #default="{row}">
                     {{ row.size | byteFormatter }}
                 </template>
             </el-table-column>
             <el-table-column
-                label="更新时间"
-                sortable="custom"
+                label="用户名"
+                :sortable="false"
+                prop="size"
+                width="180"
+                v-if="fileManager.rootKind === rootKinds.ACCEPTED_SHARE"
+            >
+                <template #default="{row}">
+                    {{ row.user.fullName }}
+                </template>
+            </el-table-column>
+            <el-table-column
+                :label="fileManager.rootKind === rootKinds.ACCEPTED_SHARE ? '共享时间': '更新时间'"
+                :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="updatedAt"
                 width="240"
                 :sort-orders="['ascending', 'descending']"
+                v-if="fileManager.rootKind !== rootKinds.MY_SHARE"
             >
                 <template #default="{row}">
                     {{ row.updatedAt | dateFormatter }}
@@ -156,7 +158,6 @@ import ElTableColumn from 'element-ui/lib/table-column';
 import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import MessageBox from '@sdx/ui/components/message-box';
-import SdxuInput from '@sdx/ui/components/input';
 import SdxwShareSetting from '@sdx/widget/components/share-setting';
 
 import { lock, unlock } from '@sdx/utils/src/lockScroll';
@@ -166,11 +167,11 @@ import dayjs from 'dayjs';
 
 import SdxvFolderSelect from './popup/FolderSelect';
 import { getFileIcon, getFileBtn } from './helper/fileListTool';
-import { zipPreview } from '@sdx/utils/src/api/file';
 import Loadmore from './helper/loadmore';
 import checkMixin from './helper/checkMixin';
 import OperationHandlerMixin from './helper/operationHandlerMixin';
-import FileSelect from '@sdx/widget/components/file-select';
+import { rootKindPathMap, rootKinds } from './helper/fileListTool';
+import FileName from './FileName';
 
 const ROW_HEIGHT = 52;
 let isFirstSort = true;
@@ -178,23 +179,28 @@ let isFirstSort = true;
 export default {
     name: 'FileTable',
     inject: ['fileManager'],
+    provide() {
+        return {
+            fileTable: this
+        };
+    },
     mixins: [Loadmore, checkMixin, OperationHandlerMixin, transformFilter],
     components: {
+        FileName,
         SdxwShareSetting,
         SdxvFolderSelect,
-        SdxuInput,
         ElTableColumn,
         SdxuTable,
         SdxuIconButtonGroup,
-        SdxuIconButton,
-        SdxwFileSelectTree: FileSelect.FileSelectTree
+        SdxuIconButton
     },
     data() {
         return {
             topCount: 0,
             containerCount: 0,
             editingRow: null,
-            tempRowName: '新建文件夹'
+            tempRowName: '新建文件夹',
+            rootKinds
         };
     },
     computed: {
@@ -224,7 +230,7 @@ export default {
                 isFile: false,
                 mimeType: 'text/directory',
                 fileExtension: '',
-                fileShareDetailId: '',
+                fileShareId: '',
                 createdAt: dayjs().toISOString(),
                 updatedAt: dayjs().toISOString(),
                 size: 0
@@ -232,32 +238,56 @@ export default {
 
             this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
             lock(this.$el.querySelector('.el-table__body-wrapper'));
-            setTimeout(() => {
-                if (this.fileManager.isRoot) {
-                    this.fileManager.renderFiles.splice(this.fileManager.fixedRows.length, 0, emptyRow);
-                } else {
-                    this.fileManager.renderFiles.unshift(emptyRow);
-                }
-                this.editingRow = emptyRow;
-                this.tempRowName = emptyRow.name;
+            this.$nextTick(() => {
                 setTimeout(() => {
-                    lock(this.$el.querySelector('.el-table__body-wrapper'));
-                }, 0);
-            }, 10);
+                    if (this.fileManager.isRoot) {
+                        this.fileManager.renderFiles.splice(this.fileManager.fixedRows.length, 0, emptyRow);
+                    } else {
+                        this.fileManager.renderFiles.unshift(emptyRow);
+                    }
+                    this.editingRow = emptyRow;
+                    this.tempRowName = emptyRow.name;
+                    setTimeout(() => {
+                        lock(this.$el.querySelector('.el-table__body-wrapper'));
+                    }, 0);
+                }, 100);
+            });
         },
         handlePathNameClick(row) {
             if (!row.isFile) {
                 unlock(this.$el.querySelector('.el-table__body-wrapper'));
-                this.$router.push({
-                    name: this.$route.name,
-                    query: {
-                        path: row.path
+                if (this.fileManager.rootKind !== '') {
+                    let query;
+                    if (this.fileManager.isShareRoot()) {
+                        query = {
+                            path: rootKindPathMap[this.fileManager.rootKind] + row.path,
+                            startPath: row.path,
+                            ownerId: row.userId || row.user && row.user.uuid
+                        };
+                    } else {
+                        let path = rootKindPathMap[this.fileManager.rootKind] + row.path;
+                        if (this.fileManager.rootKind === rootKinds.PROJECT_SHARE) {
+                            path = rootKindPathMap[this.fileManager.rootKind] + (this.$route.query.startPath || '') + row.path;
+                        }
+                        query = {
+                            path: path,
+                            startPath: this.$route.query.startPath,
+                            ownerId: row.userId
+                        };
                     }
-                });
+                    this.$router.push({
+                        name: this.$route.name,
+                        query
+                    });
+                } else {
+                    this.$router.push({
+                        name: this.$route.name,
+                        query: {
+                            path: row.path
+                        }
+                    });
+                }
             }
-        },
-        isEditingRow(row) {
-            return this.editingRow && (row.path === this.editingRow.path);
         },
         saveEdit() {
             // todo: 保存修改,然后清空editingRow,刷新列表
@@ -278,7 +308,7 @@ export default {
             this.tempRowName = '';
         },
         getFileBtn(file) {
-            return getFileBtn(file, this.fileManager.rootKind);
+            return getFileBtn(file, this.fileManager.rootKind, this.fileManager.isShareRoot());
         },
         getFileIcon(file) {
             return getFileIcon(file);
@@ -296,6 +326,7 @@ export default {
                 isFirstSort = false;
                 return;
             }
+            if (this.fileManager.isSearch) return;
             if (this.fileManager.orderBy === prop && this.fileManager.order === orderMap[order]) {
                 return;
             }
@@ -329,12 +360,6 @@ export default {
                 this.$refs.fileTable.$children[0].doLayout();
                 this.syncRowCheckStatus();
             });
-        },
-        handleZipPreviewShown() {
-            // todo 有什么要做优化的吗？没有的话可以删掉
-        },
-        zipPreviewFnWrap(rootPath, nodePath, userId) {
-            return () => zipPreview({ path: rootPath, pathInZip: nodePath, userId }).then(res => res.files);
         },
         loadMore(direction, scrollDistance, isReachBottom) {
             let isScrollDown = false;
@@ -370,7 +395,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@sdx/utils/src/theme-common/var";
 .sdxv-file-table {
     height: calc(100% - 80px);
     overflow: hidden;
@@ -381,51 +405,5 @@ export default {
         padding-left: 10px;
         line-height: 58px;
     }
-    .sdxv-file__item {
-        display: block;
-        overflow: hidden;
-        &:hover {
-            span {
-                color: $sdx-primary-color;
-                cursor: pointer;
-            }
-        }
-        &.is-no-zip-file {
-            &:hover {
-                span {
-                    color: $sdx-text-regular-color;
-                    cursor: default;
-                }
-            }
-        }
-        .sdxv-file__item-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 14px;
-            vertical-align: middle;
-        }
-        .sdxv-file__item-name {
-            display: inline-block;
-            .sdx-icon {
-                margin-left: $sdx-margin / 2;
-                font-size: $sdx-h1-font-size;
-                display: inline-block;
-                vertical-align: middle;
-                &.accept-icon {
-                    color: $sdx-primary-color;
-                }
-                &.cancel-icon {
-                    color: $sdx-text-holder-color;
-                }
-            }
-        }
-    }
 }
-</style>
-<style lang="scss">
-    .sdxv-file__item-name-scroller {
-        & /deep/ .el-scrollbar__wrap {
-            max-height: 400px !important;
-        }
-    }
 </style>

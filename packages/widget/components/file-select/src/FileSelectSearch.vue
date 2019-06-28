@@ -24,11 +24,10 @@
         <SdxuLazyList
             :load="loadData"
             item-key="path"
-            store-name="xxxx"
-            store-keys="path,name,isFile,userId,createdAt,mineType"
             :item-height="36"
             item-class="sdxw-file-select-search__item"
             ref="fileList"
+            class="sdxw-file-select-search__list"
         >
             <template #default="{data}">
                 <el-checkbox
@@ -36,13 +35,16 @@
                     :value="isChecked(data)"
                     @change="(checked) => handleCheckChange(data, checked)"
                 />
-                <svg
-                    class="sdxw-file-select-search__item-icon"
-                    aria-hidden="true"
-                >
-                    <use :xlink:href="'#' + getPathIcon(data)" />
-                </svg>
-                <span class="sdxw-file-select-search__item-name">{{ data.name }}</span>
+                <span class="sdxw-file-select-search__item-name-box">
+                    <svg
+                        class="sdxw-file-select-search__item-icon"
+                        aria-hidden="true"
+                    >
+                        <use :xlink:href="'#' + getPathIcon(data)" />
+                    </svg>
+                    <span class="sdxw-file-select-search__item-name" :title="data.name">{{ data.name }}</span>
+                </span>
+                <span  class="sdxw-file-select-search__item-path" :title="data.path">{{ data.path }}</span>
             </template>
         </SdxuLazyList>
     </div>
@@ -115,16 +117,21 @@ export default {
                 this.pageIndex = 1;
                 this.$refs.fileList.reset();
             }
-            searchFiles({key: this.key}).then(res => {
-                this.renderData = this.renderData.concat(res);
-            });
         },
         loadData(pageIndex) {
-            return searchFiles({key: this.key}).then(res => {
-                return {
-                    data: res.children,
+            return searchFiles({
+                keyword: this.querystring,
+                start: 1,
+                count: 1000,
+                fileExtension: this.accept,
+                onlyDirectory: this.checkType === 'folder',
+                onlyFile: this.checkType === 'file'
+            }).then(res => {
+                window.console.log(res);
+                return ({
+                    data: res.files,
                     total: res.total
-                };
+                });
             });
         },
         isChecked(pathInfo) {

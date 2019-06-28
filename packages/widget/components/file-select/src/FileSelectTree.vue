@@ -142,10 +142,14 @@ export default {
             if (this.loadFnWrap) {
                 promise = this.loadFnWrap(this.rootPath, node.data.path, this.userId)();
             } else {
-                promise = getFilesList({
+                const params = {
                     path,
-                    userId: this.userId
-                }).then(res => {
+                    userId: this.userId,
+                    fileExtension: this.accept,
+                    onlyDirectory: this.checkType === 'folder',
+                    onlyFile: this.checkType === 'file'
+                };
+                promise = getFilesList(params).then(res => {
                     return res.children;
                 });
             }

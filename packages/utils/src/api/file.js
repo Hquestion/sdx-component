@@ -1,6 +1,7 @@
 import httpService from '../http-service';
+import { getProjectList } from './project';
 import shareCenter from '../helper/shareCenter';
-import { FILE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
+import { FILE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, PROJECT_MANAGE_GATEWAY_BASE } from './config';
 import { isString } from '../helper/tool';
 import { asyncJobStatus } from '../const/file';
 import { Notification } from 'element-ui';
@@ -27,7 +28,7 @@ export function getFilesList(params = {}) {
         orderBy,
         order,
         filesystem,
-        fileExtensions: fileExtension.split(','),
+        fileExtensions: fileExtension ? fileExtension.split(',') : undefined,
         onlyDirectory: +onlyDirectory,
         onlyFile: +onlyFile
     });
@@ -62,7 +63,7 @@ export function searchFiles(params) {
         keyword,
         showHidden,
         filesystem,
-        fileExtensions: fileExtension.split(','),
+        fileExtensions:  fileExtension ? fileExtension.split(',') : undefined,
         onlyDirectory: +onlyDirectory,
         onlyFile: +onlyFile
     }).then(res => {
@@ -128,7 +129,9 @@ export function searchShareFiles(params) {
                 _reject();
             });
         })();
-    }, _reject);
+    }, res => {
+        _reject(res);
+    });
     return new Promise((resolve, reject) => {
         _resolve = resolve;
         _reject = reject;
@@ -241,37 +244,58 @@ export function getProjectShare(params) {
         orderBy = 'name',
         order = 'asc'
     } = params;
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-share-profiles`, {
-        userId: userId || userInfo.userId,
-        path,
-        start,
-        count,
-        orderBy,
-        order
+    // return httpService.get(`${COMPOSE_GATEWAY_BASE}project-share-profiles`, {
+    //     userId: userId || userInfo.userId,
+    //     path,
+    //     start,
+    //     count,
+    //     orderBy,
+    //     order
+    // });
+    return getProjectList({
+        type: 'public',
+        start: 1,
+        count: -1
+    }).then(res => {
+        let body = {children: [], childrenCount: res.data.total};
+        body.children = res.data.items.map(item => ({
+            userId: item.uuid,
+            name: item.name,
+            path: `/${item.name}`,
+            filesystem: 'cephfs',
+            isFile: false,
+            mimeType: 'text/directory',
+            fileExtension: '',
+            fileShareId: '',
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt,
+            size: 0
+        }));
+        return body;
     });
 }
 
-export function mkdir(path) {
+export function mkdir(path, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files`, {
-        userId: userInfo.userId,
+        userId: ownerId || userInfo.userId,
         path
     });
 }
 
-export function rename(path, newName) {
+export function rename(path, newName, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/rename`, {
-        userId: userInfo.userId,
+        userId: ownerId || userInfo.userId,
         path,
         newName
     });
 }
 
-export function deletePath(paths) {
+export function deletePath(paths, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/delete`, {
-        userId: userInfo.userId,
+        userId: ownerId || userInfo.userId,
         paths
     });
 }
@@ -295,10 +319,10 @@ export function copy(sourcePaths, targetPath) {
     });
 }
 
-export function zipPreview({ path = '/', pathInZip = '/', start = 1, count = -1 }) {
+export function zipPreview({ path = '/', pathInZip = '/', ownerId, start = 1, count = -1 }) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/preview`, {
-        userId: userInfo.userId,
+        userId: ownerId || userInfo.userId,
         path,
         pathInArchive: pathInZip,
         start,
@@ -306,19 +330,19 @@ export function zipPreview({ path = '/', pathInZip = '/', start = 1, count = -1 
     });
 }
 
-export function unzip(path, targetPath) {
+export function unzip(path, targetPath, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/extract`, {
-        userId: userInfo.userId,
+        userId: ownerId || userInfo.userId,
         path,
         targetPath
     });
 }
 
-export function download(path, filesystem = 'cephfs') {
+export function download(path, ownerId, filesystem = 'cephfs') {
     let userInfo = shareCenter.getUser() || {};
     const origin = location.origin;
-    window.open(`${origin}${FILE_MANAGE_GATEWAY_BASE}files/download?userId=${userInfo.userId}&path=${path}&filesystem=${filesystem}`);
+    window.open(`${origin}${FILE_MANAGE_GATEWAY_BASE}files/download?userId=${ownerId || userInfo.userId}&path=${path}&filesystem=${filesystem}`);
     // return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/download`, {
     //     userId: userInfo.userId,
     //     path,
@@ -326,11 +350,11 @@ export function download(path, filesystem = 'cephfs') {
     // });
 }
 
-export function pack(paths) {
+export function pack(paths, ownerId) {
     let _resolve, _reject;
     let userInfo = shareCenter.getUser() || {};
     httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/pack`, {
-        userId: userInfo.userId,
+        userId: ownerId || userInfo.userId,
         paths,
         targetPath: '/.download/__' + +new Date()
     }).then(res => {

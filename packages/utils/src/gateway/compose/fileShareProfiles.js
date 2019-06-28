@@ -37,6 +37,17 @@ export const handler = wrap(function(ctx, request) {
         }
     });
 
+    ctx.resolveUuids(response, {
+        path: 'children.*.userId',
+        url: 'http://tyk-gateway/user-manager/api/v1/users',
+        result: 'users'
+    });
+
+    ctx.rename(response, 'children.*.userId', 'user');
+
+    // 为保持接口结构一致，这里再次把userId修改回来
+    response.children.forEach(item => item.userId = item.user.uuid);
+
     return ctx.createResponse(200, response);
 
 });

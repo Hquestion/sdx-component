@@ -29,15 +29,16 @@
             v-loading="fileManager.loading"
         >
             <el-table-column
-                v-if="!fileManager.isProjectRoot()"
                 type="selection"
                 :selectable="canRowCheck"
+                v-show="!fileManager.isProjectRoot()"
             />
             <el-table-column
                 label="文件名"
                 :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="name"
                 :sort-orders="['ascending', 'descending']"
+                v-if="true"
             >
                 <template #default="{row}">
                     <FileName
@@ -66,22 +67,51 @@
                 </template>
             </el-table-column>
             <el-table-column
+                label="文件路径"
+                :sortable="false"
+                prop="path"
+                width="360"
+                v-if="fileManager.rootKind === rootKinds.MY_SHARE"
+            >
+                <template #default="{row}">
+                    <div
+                        style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"
+                        :title="row.path"
+                    >
+                        {{ row.path }}
+                    </div>
+                </template>
+            </el-table-column>
+            <el-table-column
                 label="大小"
                 :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="size"
                 width="180"
                 :sort-orders="['ascending', 'descending']"
+                v-if="!fileManager.isProjectRoot() && fileManager.rootKind !== rootKinds.MY_SHARE"
             >
                 <template #default="{row}">
                     {{ row.size | byteFormatter }}
                 </template>
             </el-table-column>
             <el-table-column
-                label="更新时间"
+                label="用户名"
+                :sortable="false"
+                prop="size"
+                width="180"
+                v-if="fileManager.rootKind === rootKinds.ACCEPTED_SHARE"
+            >
+                <template #default="{row}">
+                    {{ row.user.fullName }}
+                </template>
+            </el-table-column>
+            <el-table-column
+                :label="fileManager.rootKind === rootKinds.ACCEPTED_SHARE ? '共享时间': '更新时间'"
                 :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="updatedAt"
                 width="240"
                 :sort-orders="['ascending', 'descending']"
+                v-if="fileManager.rootKind !== rootKinds.MY_SHARE"
             >
                 <template #default="{row}">
                     {{ row.updatedAt | dateFormatter }}
@@ -140,7 +170,7 @@ import { getFileIcon, getFileBtn } from './helper/fileListTool';
 import Loadmore from './helper/loadmore';
 import checkMixin from './helper/checkMixin';
 import OperationHandlerMixin from './helper/operationHandlerMixin';
-import { rootKindPathMap } from './helper/fileListTool';
+import { rootKindPathMap, rootKinds } from './helper/fileListTool';
 import FileName from './FileName';
 
 const ROW_HEIGHT = 52;
@@ -169,7 +199,8 @@ export default {
             topCount: 0,
             containerCount: 0,
             editingRow: null,
-            tempRowName: '新建文件夹'
+            tempRowName: '新建文件夹',
+            rootKinds
         };
     },
     computed: {
@@ -231,11 +262,15 @@ export default {
                         query = {
                             path: rootKindPathMap[this.fileManager.rootKind] + row.path,
                             startPath: row.path,
-                            ownerId: row.userId
+                            ownerId: row.userId || row.user && row.user.uuid
                         };
                     } else {
+                        let path = rootKindPathMap[this.fileManager.rootKind] + row.path;
+                        if (this.fileManager.rootKind === rootKinds.PROJECT_SHARE) {
+                            path = rootKindPathMap[this.fileManager.rootKind] + (this.$route.query.startPath || '') + row.path;
+                        }
                         query = {
-                            path: rootKindPathMap[this.fileManager.rootKind] + row.path,
+                            path: path,
                             startPath: this.$route.query.startPath,
                             ownerId: row.userId
                         };

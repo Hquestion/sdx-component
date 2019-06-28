@@ -1,3 +1,5 @@
+import auth from '@sdx/widget/components/auth';
+
 export const rootKinds = {
     'MY_SHARE': 'MY_SHARE',
     'ACCEPTED_SHARE': 'ACCEPTED_SHARE',
@@ -14,7 +16,6 @@ export const rootKindPathMap = {
     [rootKinds.PROJECT_SHARE]:PROJECT_SHARE_PATH
 };
 
-
 export const BTN_NAMES = {
     SHARE: 'SHARE',
     CANCEL_SHARE: 'CANCEL_SHARE',
@@ -25,6 +26,11 @@ export const BTN_NAMES = {
     DELETE: 'DELETE',
     PATH: 'PATH',
     UNZIP: 'UNZIP'
+};
+
+const authIconButtonMap = {
+    [BTN_NAMES.SHARE]: 'FILE-MANAGER:FILE:SHARE:""',
+    [BTN_NAMES.DOWNLOAD]: 'FILE-MANAGER:FILE:DOWNLOAD:""'
 };
 
 export const iconButtonTypes = {
@@ -106,7 +112,12 @@ export function getFileBtn(file, rootKind, isShareRoot) {
         if (!isShareRoot && rootKind === rootKinds.MY_SHARE) {
             return [];
         } else {
-            return ROOT_FILE_BTN_MAP[rootKind];
+            return ROOT_FILE_BTN_MAP[rootKind].filter(item => {
+                if (authIconButtonMap[item.name]) {
+                    return auth.checkAuth(authIconButtonMap[item.name], 'BUTTON');
+                }
+                return true;
+            });
         }
     } else {
         const baseButton = [iconButtonTypes.DOWNLOAD, iconButtonTypes.MOVE, iconButtonTypes.RENAME, iconButtonTypes.DELETE, iconButtonTypes.PATH];
@@ -114,7 +125,12 @@ export function getFileBtn(file, rootKind, isShareRoot) {
         if (file.fileExtension === '.zip') {
             baseButton.push(iconButtonTypes.UNZIP);
         }
-        return baseButton;
+        return baseButton.filter(item => {
+            if (authIconButtonMap[item.name]) {
+                return auth.checkAuth(authIconButtonMap[item.name], 'BUTTON');
+            }
+            return true;
+        });
     }
 }
 

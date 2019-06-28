@@ -17,7 +17,7 @@ import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 
 import { getFilesList, searchFiles, getMyShare, getMyAcceptedShare, getProjectShare, searchShareFiles } from '@sdx/utils/src/api/file';
-import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap, PROJECT_SHARE_PATH } from './helper/fileListTool';
+import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap, PROJECT_SHARE_PATH, MY_SHARE_PATH, ACCEPTED_SHARE_PATH } from './helper/fileListTool';
 import BreadcrumbBar from './BreadcrumbBar';
 import SdxvFileTask from './popup/FileTask';
 
@@ -49,6 +49,8 @@ export default {
             isRoot: true,
             // 当前路径
             currentPath: '/',
+            // 当前路径的详细信息
+            currentPathMeta: {},
             // 根路径类型，默认为空表示普通文件夹，用于区分我的共享/接收的共享/项目共享
             rootKind: '',
             // 是否处于搜索模式
@@ -83,6 +85,12 @@ export default {
     methods: {
         isProjectRoot() {
             return this.currentPath === PROJECT_SHARE_PATH;
+        },
+        isAcceptedRoot() {
+            return this.currentPath === ACCEPTED_SHARE_PATH;
+        },
+        isMyShareRoot() {
+            return this.currentPath === MY_SHARE_PATH;
         },
         isShareRoot() {
             return !!fixedRowsKeyMap[this.currentPath];
@@ -165,7 +173,7 @@ export default {
             this.searchKey = key;
             this.currentPath = dir;
             this.isRoot = dir === '/';
-            // this.rootKind = '';
+            this.rootKind = getDirRootKind(dir);
             // 修改为加载中，准备获取数据
             this.loading = true;
             this.db.list.clear();
@@ -234,6 +242,9 @@ export default {
             } else {
                 let path = '', ownerId;
                 path = this.currentPath.replace(eval(`/\\${rootKindPathMap[this.rootKind]}(.*)/`), '$1');
+                if (this.rootKind === rootKinds.PROJECT_SHARE) {
+                    path = '/' + path.split('/').slice(2).join('/');
+                }
                 ownerId = this.$route.query.ownerId;
                 return getFilesList({
                     userId: ownerId,
@@ -285,10 +296,13 @@ export default {
                 });
             } else {
                 let path = this.currentPath;
+                let ownerId = '';
                 if (this.rootKind !== '') {
                     path = '/' + this.currentPath.split('/').slice(2).join('/');
+                    ownerId = this.$route.query.ownerId;
                 }
                 return searchFiles({
+                    userId: ownerId,
                     start: (this.pageIndex - 1) * this.pageSize + 1,
                     count: this.pageSize,
                     path,

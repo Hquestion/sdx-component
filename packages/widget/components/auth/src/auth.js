@@ -56,16 +56,20 @@ export const auth = (key, tag) => {
     // 如果关闭鉴权，则跳过鉴权逻辑
     if (!shareCenter.getAuthSwitcher()) return true;
     if (!key) return true;
-    const permissions = getUserRightsByTag(tag);
-    if (key.split(':').length === 3) {
-        key = `${key}:${emptyPlaceholder}`;
+    if (Array.isArray(key)) {
+        return key.some(keyItem => auth(keyItem, tag));
+    } else {
+        const permissions = getUserRightsByTag(tag);
+        if (key.split(':').length === 3) {
+            key = `${key}:${emptyPlaceholder}`;
+        }
+        return permissions.includes(key);
     }
-    return permissions.includes(key);
 };
 
 export default {
     name: 'auth',
-    $auth: auth,
+    checkAuth: auth,
     inserted(el, binding, vnode) {
         vnode = locateNode(vnode);
         const system = getSystem(binding.modifiers);

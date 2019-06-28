@@ -9,6 +9,7 @@ Vue.use(VueClipboard);
 import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail, pack, shareBatch } from '@sdx/utils/src/api/file';
 import { unlock } from '@sdx/utils/src/lockScroll';
 import { isString } from '@sdx/utils/src/helper/tool';
+import { rootKinds } from './fileListTool';
 
 export default {
     data() {
@@ -45,7 +46,7 @@ export default {
         },
         doRenameOrMakePath() {
             if (this.editingRow.path) {
-                rename(this.editingRow.path, this.tempRowName).then(() => {
+                rename(this.editingRow.path, this.tempRowName, this.editingRow.userId).then(() => {
                     unlock(this.$el.querySelector('.el-table__body-wrapper'));
                     this.editingRow = null;
                     this.tempRowName = '';
@@ -57,7 +58,11 @@ export default {
                 let path = this.fileManager.currentPath.lastIndexOf('/') === this.fileManager.currentPath.length
                     ? `${this.fileManager.currentPath}${this.tempRowName}`
                     : `${this.fileManager.currentPath}/${this.tempRowName}`;
-                mkdir(path).then(() => {
+                // 协作项目共享的文件需特殊处理
+                if (this.fileManager.rootKind === rootKinds.PROJECT_SHARE) {
+                    path = '/' + path.split('/').slice(3).join('/');
+                }
+                mkdir(path, this.$route.query.ownerId || '').then(() => {
                     unlock(this.$el.querySelector('.el-table__body-wrapper'));
                     this.editingRow = null;
                     this.tempRowName = '';
@@ -79,7 +84,7 @@ export default {
                     title: `确定要删除文件${row.name}吗？`,
                     content
                 }).then(() => {
-                    deletePath([row.path]).then(() => {
+                    deletePath([row.path], row.userId).then(() => {
                         // 删除之后刷新页面
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
                     });
@@ -95,7 +100,7 @@ export default {
                     title: '确定要删除选中的文件吗？',
                     content
                 }).then(() => {
-                    deletePath(checkedRows.map(item => item.path)).then(() => {
+                    deletePath(checkedRows.map(item => item.path), checkedRows[0].userId).then(() => {
                         // 删除之后刷新页面
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
                     });
@@ -150,22 +155,22 @@ export default {
         },
         unzip(row, targetPath) {
             if (!row) return;
-            unzip(row.path, this.fileManager.currentPath).then(res => {
+            unzip(row.path, this.fileManager.currentPath, row.userId).then(res => {
                 this.fileManager.$refs.fileTask.checkTab('UNZIP');
             });
         },
         download(row) {
             if (row && row.isFile) {
-                download(row.path);
+                download(row.path, row.userId);
             } else {
                 // 打包，然后下载
                 let defer;
                 if (row) {
                     // 打包文件夹
-                    defer = pack([row.path]);
+                    defer = pack([row.path], row.userId);
                 } else {
                     // 打包批量的
-                    defer = pack(this.fileManager.checked.map(item => item.path));
+                    defer = pack(this.fileManager.checked.map(item => item.path), this.fileManager.checked[0].userId);
                 }
                 defer.then(res => {
                     download(res);

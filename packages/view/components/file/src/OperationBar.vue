@@ -81,6 +81,7 @@ import SdxwSearch from '@sdx/widget/components/search-layout';
 import SdxuInput from '@sdx/ui/components/input';
 import batchOperationAuthMixin from './helper/batchOperationAuthMixin';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
+import { rootKinds } from './helper/fileListTool';
 
 export default {
     name: 'OperationBar',
@@ -104,6 +105,10 @@ export default {
             };
             if (this.fileManager.currentPath !== '/') {
                 query.path = this.fileManager.currentPath;
+            }
+            if (this.$route.query.startPath) {
+                query.startPath = this.$route.query.startPath;
+                query.ownerId = this.$route.query.ownerId;
             }
             this.$router.push({
                 name: this.$route.name,
@@ -133,8 +138,8 @@ export default {
         },
         makeUploadParams() {
             return {
-                userId: shareCenter.getUser().uuid,
-                path: this.fileManager.currentPath,
+                userId: this.$route.query.ownerId || shareCenter.getUser().uuid,
+                path: this.fileManager.rootKind === rootKinds.PROJECT_SHARE ? '/' + this.fileManager.currentPath.split('/').slice(3) : this.fileManager.currentPath,
                 filesystem: 'cephfs',
                 overwrite: 0
             };

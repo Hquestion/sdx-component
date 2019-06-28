@@ -43,8 +43,8 @@ export default {
             let pathObjArr = list.map((item, index) => {
                 let name = getPathName(item);
                 let path = '/' + list.slice(0, index + 1).join('/');
-                if (index === 0 && startPathNameMap[name]) {
-                    path = startPathNameMap[name];
+                if (index === 1 && startPathNameMap[name]) {
+                    path = `/${list[0]}${startPathNameMap[name]}`;
                 }
                 return { name, path };
             });

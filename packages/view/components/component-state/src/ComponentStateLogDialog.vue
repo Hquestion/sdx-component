@@ -18,6 +18,7 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxwLogDetail from '@sdx/widget/components/log-detail';
 
 import { getPodLog } from '@sdx/utils/src/api/system';
+import { getTaskList } from '@sdx/utils/src/api/project';
 
 export default {
     name: 'SdxvComponentStateLogDialog',
@@ -30,10 +31,9 @@ export default {
             type: Boolean,
             default: false
         },
-        podId: {
-            type: String,
-            default: '',
-            required: true
+        pod: {
+            type: Object,
+            default: () => ({})
         }
     },
     data() {
@@ -42,7 +42,8 @@ export default {
             end: 1,
             size: 20,
             isLoading: false,
-            logContent: ''
+            logContent: '',
+            startedAt: ''
         };
     },
     computed: {
@@ -65,10 +66,14 @@ export default {
             offset = offset < 1 ? 1 : offset;
             this.isLoading = true;
             try {
-                const data = await getPodLog(this.podId, {
+                const params = {
                     start: offset,
                     count: Math.abs(size)
-                });
+                };
+                if (this.startedAt) {
+                    params.startedAt = this.startedAt;
+                }
+                const data = await getPodLog(this.pod.podId, params);
                 let content = Array.isArray(data.contents) && data.contents.join('');
                 if (size < 0) {
                     this.start = this.start - data.contents.length;
@@ -89,7 +94,10 @@ export default {
                 this.fetchData(this.end, this.size);
             }
         },
-        handleOpenDialog() {
+        async handleOpenDialog() {
+            const data = await getTaskList({ podName: this.pod.podName });
+            const task = data && Array.isArray(data.items) && data.items[0] || null;
+            this.startedAt = task && new Date(task.runningAt).getTime() || '';
             this.fetchData(this.end, this.size);
         },
         handleClose() {
@@ -98,6 +106,7 @@ export default {
             this.size = 20;
             this.isLoading = false;
             this.logContent = '';
+            this.startedAt = '';
         }
     }
 };

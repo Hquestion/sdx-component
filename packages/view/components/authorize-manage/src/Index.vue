@@ -1,19 +1,28 @@
 <template>
     <div class="sdxv-authorize-manage">
-        <SdxuContentPanel>
+        <SdxuContentPanel v-if="defaultName('READ')">
             <div class="sdxv-authorize-manage__header">
                 <div class="sdxv-authorize-manage__handle">
                     <SdxuTabRadioGroup
                         v-model="objectType"
                         @switch="switchTab"
                     >
-                        <SdxuTabRadioItem name="user">
+                        <SdxuTabRadioItem
+                            name="user"
+                            v-auth.user.button="'USER:READ'"
+                        >
                             用户授权列表
                         </SdxuTabRadioItem>
-                        <SdxuTabRadioItem name="group">
+                        <SdxuTabRadioItem
+                            name="group"
+                            v-auth.user.button="'GROUP:READ'"
+                        >
                             用户组授权列表
                         </SdxuTabRadioItem>
-                        <SdxuTabRadioItem name="role">
+                        <SdxuTabRadioItem
+                            name="role"
+                            v-auth.user.button="'ROLE:READ'"
+                        >
                             角色授权列表
                         </SdxuTabRadioItem>
                     </SdxuTabRadioGroup>
@@ -23,6 +32,7 @@
                         @click="addAuthorize"
                         size="small"
                         class="addAuth"
+                        v-if="authtoWrite(objectType)"
                     >
                         <i
                             class="sdx-icon sdx-icon-plus"
@@ -64,6 +74,7 @@
                     <el-table-column
                         style="width: 15%"
                         label="操作"
+                        v-if="authtoWrite(objectType)"
                     >
                         <template
                             slot-scope="scope"
@@ -178,6 +189,7 @@ import FoldLabel from '@sdx/widget/components/fold-label';
 import {  paginate } from '@sdx/utils/src/helper/tool';
 import SdxwUserPicker from '@sdx/widget/components/user-picker';
 import SearchLayout from '@sdx/widget/components/search-layout';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxvAuthorizeManage',
     components: {
@@ -199,6 +211,9 @@ export default {
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
     },
+    directives: {
+        auth
+    },
     data() {
         const objValueValidate = (rule, value, callback) => {
             if(!value) {
@@ -215,7 +230,7 @@ export default {
                 order: 'desc',
                 orderBy: 'createdAt'
             },
-            objectType: 'user',
+            objectType: this.defaultName('READ'), // 'user'
             tableData: [],
             current: 1,
             pageSize: 10,
@@ -245,7 +260,13 @@ export default {
         };
     },
     created() {
-        this.userList();
+        if (this.defaultName('READ') === 'user') {
+            this.userList();
+        } else if (this.defaultName('READ') === 'group') {
+            this.groupList();
+        } else if (this.defaultName('READ') === 'role') {
+            this.roleList();
+        }
         this.getPermissions();
     },
     computed: {
@@ -262,6 +283,25 @@ export default {
         }
     },
     methods: {
+        // 根据权限展示
+        defaultName(type) {
+            let name = '';
+            if(this.$auth(`USER-MANAGER:USER:${type}:""`, 'button')) {
+                name = 'user';
+            } else if(!this.$auth(`USER-MANAGER:USER:${type}:""`, 'button') && this.$auth(`USER-MANAGER:GROUP:${type}:""`, 'button')) {
+                name = 'group';
+            } else if(!this.$auth(`USER-MANAGER:USER:${type}:""`, 'button') && !this.$auth(`USER-MANAGER:GROUP:${type}:""`, 'button') && this.$auth(`USER-MANAGER:ROLE:${type}:""`, 'button') ){
+                name = 'role';
+            } else {
+                name = '';
+            }
+            return name;
+        },
+        // 根据权限展示操作
+        authtoWrite(type) {
+            let TYPE = type.toUpperCase();
+            return this.$auth(`USER-MANAGER:${TYPE}:WRITE:""`, 'button');
+        },
         // 何种类型是否重置页码
         changeObjectType(type,reset) {
             if(type === 'user') {

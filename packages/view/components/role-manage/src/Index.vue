@@ -2,6 +2,7 @@
     <div class="sdxv-role-manage">
         <SdxuContentPanel
             title="角色"
+            v-auth.user.button="'ROLE:READ'"
         >
             <div class="sdxv-role-manage__header">
                 <div class="sdxv-role-manage__handle">
@@ -10,6 +11,7 @@
                         size="small"
                         placement="right"
                         @click="addRole"
+                        v-auth.user.button="'ROLE:WRITE'"
                     >
                         <i
                             class="sdx-icon sdx-icon-plus"
@@ -49,10 +51,6 @@
                         label="角色说明"
                     />
                     <el-table-column
-                        prop="domain"
-                        label="系统类别"
-                    />
-                    <el-table-column
                         prop="createdAt"
                         label="创建时间"
                         sortable
@@ -64,6 +62,7 @@
                     <el-table-column
                         style="width: 15%"
                         label="操作"
+                        v-auth.user.button="'ROLE:WRITE'"
                     >
                         <template
                             slot-scope="scope"
@@ -118,23 +117,20 @@
                             label="角色名:"
                             prop="name"
                         >
-                            <el-input v-model="roleObj.name" />
+                            <SdxuInput
+                                v-model="roleObj.name"
+                                size="small"
+                                placeholder="请输入角色名"
+                            />
                         </el-form-item>
                         <el-form-item
                             label="角色说明:"
                             prop="description"
                         >
-                            <el-input
+                            <SdxuInput
                                 type="textarea"
+                                placeholder="请输入角色说明"
                                 v-model="roleObj.description"
-                            />
-                        </el-form-item>
-                        <el-form-item
-                            label="系统类别:"
-                            prop="domain"
-                        >
-                            <el-input
-                                v-model="roleObj.domain"
                             />
                         </el-form-item>
                     </el-form>
@@ -173,6 +169,9 @@ import FormItem from 'element-ui/lib/form-item';
 import {getRolesList, createRoles, updateRoles, getRolesDetail, removeRoles} from '@sdx/utils/src/api/rolemange';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import SearchLayout from '@sdx/widget/components/search-layout';
+import auth from '@sdx/widget/components/auth';
+import { nameWithChineseValidator,descValidator} from '@sdx/utils/src/helper/validate';
+import { removeSameAttr } from '@sdx/utils/src/helper/tool';
 export default {
     name: 'SdxvRoleManage',
     components: {
@@ -198,7 +197,6 @@ export default {
             roleObj: {
                 name: '',
                 permissions: [],
-                domain: '',
                 description: ''
             },
             searchRoles: {
@@ -217,7 +215,8 @@ export default {
                         transform(value) {
                             return value && ('' + value).trim();
                         }
-                    }
+                    },
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 description: [
                     {
@@ -227,20 +226,17 @@ export default {
                         transform(value) {
                             return value && ('' + value).trim();
                         }
-                    }
-                ],
-                domain: [
-                    {
-                        required: true,
-                        trigger: 'blur',
-                    }
-                ],
+                    },
+                    { validator: descValidator, trigger: 'blur' }
+                ]
             },
-            id: ''
+            id: '',
+            options: [],
+            saveRoleObj: {}
         };
     },
-    props: {
-
+    directives: {
+        auth
     },
     created() {
         this.roleList();
@@ -264,7 +260,6 @@ export default {
             this.roleObj={
                 name: '',
                 permissions: [],
-                domain: '',
                 description: ''
             };
             this.dialogVisible = true;
@@ -278,8 +273,10 @@ export default {
                     this.dialogVisible = true;
                     return false;
                 }
+                // 传变化的值给后端
+                let params = removeSameAttr(this.saveRoleObj, this.roleObj);
                 // 根据是否有id来判断是更新还是新建
-                (this.id ? updateRoles(this.id, this.roleObj) : createRoles( this.roleObj))
+                (this.id ? updateRoles(this.id, params) : createRoles( this.roleObj))
                     .then((data) => {
                         this.dialogVisible = false;
                         this.resetForm();
@@ -300,10 +297,11 @@ export default {
                     this.roleObj = {
                         name: data.name,
                         permissions: [],
-                        domain: data.domain,
                         description: data.description
                     };
                     this.dialogVisible = true;
+
+                    this.saveRoleObj = JSON.parse(JSON.stringify( this.roleObj));
                 });
         },
         searchName() {

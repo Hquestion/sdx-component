@@ -9,7 +9,7 @@ import { Notification } from 'element-ui';
 export function getFilesList(params = {}) {
     let userInfo = shareCenter.getUser() || {};
     const {
-        userId = userInfo.userId,
+        ownerId = userInfo.userId,
         path = '/',
         start = 1,
         count = -1,
@@ -21,7 +21,7 @@ export function getFilesList(params = {}) {
         onlyFile = 0
     } = params;
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files`, {
-        userId: userId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         path,
         start,
         count,
@@ -38,7 +38,7 @@ export function searchFiles(params) {
     let _resolve, _reject;
     let userInfo = shareCenter.getUser() || {};
     const {
-        userId = userInfo.userId,
+        ownerId = userInfo.userId,
         path = '/',
         start = 1,
         count = -1,
@@ -53,7 +53,7 @@ export function searchFiles(params) {
         onlyFile = false
     } = params;
     httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/search`, {
-        userId: userId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         path,
         start,
         count,
@@ -223,12 +223,12 @@ export function getMyShare(params) {
 export function getMyAcceptedShare(params) {
     let userInfo = shareCenter.getUser() || {};
     const {
-        userId = userInfo.userId,
+        ownerId = userInfo.userId,
         start = 1,
         count = -1
     } = params;
     return httpService.get(`${COMPOSE_GATEWAY_BASE}file-share-profiles`, {
-        userId: userId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         start,
         count
     });
@@ -237,7 +237,7 @@ export function getMyAcceptedShare(params) {
 export function getProjectShare(params) {
     let userInfo = shareCenter.getUser() || {};
     const {
-        userId = userInfo.userId,
+        ownerId = userInfo.userId,
         path = params.path || '/',
         start = 1,
         count = -1,
@@ -259,7 +259,7 @@ export function getProjectShare(params) {
     }).then(res => {
         let body = {children: [], childrenCount: res.data.total};
         body.children = res.data.items.map(item => ({
-            userId: item.uuid,
+            ownerId: item.uuid,
             name: item.name,
             path: `/${item.name}`,
             filesystem: 'cephfs',
@@ -278,7 +278,7 @@ export function getProjectShare(params) {
 export function mkdir(path, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files`, {
-        userId: ownerId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         path
     });
 }
@@ -286,7 +286,7 @@ export function mkdir(path, ownerId) {
 export function rename(path, newName, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/rename`, {
-        userId: ownerId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         path,
         newName
     });
@@ -295,7 +295,7 @@ export function rename(path, newName, ownerId) {
 export function deletePath(paths, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/delete`, {
-        userId: ownerId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         paths
     });
 }
@@ -304,7 +304,7 @@ export function move(sourcePaths, targetPath) {
     let userInfo = shareCenter.getUser() || {};
     isString(sourcePaths) && (sourcePaths = [sourcePaths]);
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/move`, {
-        userId: userInfo.userId,
+        ownerId: userInfo.userId,
         sourcePaths,
         targetPath
     });
@@ -313,7 +313,7 @@ export function move(sourcePaths, targetPath) {
 export function copy(sourcePaths, targetPath) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/copy`, {
-        userId: userInfo.userId,
+        ownerId: userInfo.userId,
         sourcePaths,
         targetPath
     });
@@ -322,7 +322,7 @@ export function copy(sourcePaths, targetPath) {
 export function zipPreview({ path = '/', pathInZip = '/', ownerId, start = 1, count = -1 }) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/preview`, {
-        userId: ownerId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         path,
         pathInArchive: pathInZip,
         start,
@@ -333,7 +333,7 @@ export function zipPreview({ path = '/', pathInZip = '/', ownerId, start = 1, co
 export function unzip(path, targetPath, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/extract`, {
-        userId: ownerId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         path,
         targetPath
     });
@@ -342,7 +342,7 @@ export function unzip(path, targetPath, ownerId) {
 export function download(path, ownerId, filesystem = 'cephfs') {
     let userInfo = shareCenter.getUser() || {};
     const origin = location.origin;
-    window.open(`${origin}${FILE_MANAGE_GATEWAY_BASE}files/download?userId=${ownerId || userInfo.userId}&path=${path}&filesystem=${filesystem}`);
+    window.open(`${origin}${FILE_MANAGE_GATEWAY_BASE}files/download?ownerId=${ownerId || userInfo.userId}&path=${path}&filesystem=${filesystem}&disposition=attachment`);
     // return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/download`, {
     //     userId: userInfo.userId,
     //     path,
@@ -354,7 +354,7 @@ export function pack(paths, ownerId) {
     let _resolve, _reject;
     let userInfo = shareCenter.getUser() || {};
     httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/pack`, {
-        userId: ownerId || userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         paths,
         targetPath: '/.download/__' + +new Date()
     }).then(res => {
@@ -393,7 +393,7 @@ export function getAsyncJobList(jobType) {
     return function() {
         let userInfo = shareCenter.getUser() || {};
         return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
-            userId: userInfo.userId,
+            ownerId: userInfo.userId,
             jobType
         });
     };
@@ -418,9 +418,9 @@ export function deleteTask(uuid) {
 
 export function deleteTaskType(jobType) {
     let userInfo = shareCenter.getUser() || {};
-    return httpService.remove(`${FILE_MANAGE_GATEWAY_BASE}jobs/all`, {
+    return httpService.remove(`${FILE_MANAGE_GATEWAY_BASE}jobs`, {
         jobType,
-        userId: userInfo.userId
+        ownerId: userInfo.userId
     });
 }
 

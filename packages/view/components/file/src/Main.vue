@@ -247,7 +247,7 @@ export default {
                 }
                 ownerId = this.$route.query.ownerId;
                 return getFilesList({
-                    userId: ownerId,
+                    ownerId: ownerId,
                     start: (this.pageIndex - 1) * this.pageSize + 1,
                     count: this.pageSize,
                     path: path,
@@ -286,7 +286,7 @@ export default {
                     let paths = [], uuids = [];
                     files.forEach(file => {
                         paths.push(file.path);
-                        uuids.push(file.userId);
+                        uuids.push(file.ownerId);
                     });
                     return searchShareFiles({
                         uuids: uuids,
@@ -302,7 +302,7 @@ export default {
                     ownerId = this.$route.query.ownerId;
                 }
                 return searchFiles({
-                    userId: ownerId,
+                    ownerId: ownerId,
                     start: (this.pageIndex - 1) * this.pageSize + 1,
                     count: this.pageSize,
                     path,
@@ -323,7 +323,7 @@ export default {
     mounted() {
         const db = new Dexie('SdxvFile');
         db.version(1).stores({
-            list: '++,path,userId,name,filesystem,isFile,mimeType,fileExtension,fileShareId,createdAt,updatedAt,size'
+            list: '++,path,ownerId,name,filesystem,isFile,mimeType,fileExtension,fileShareId,createdAt,updatedAt,size'
         });
         this.db = db;
         this.currentPath = this.$route.query.path || '/';

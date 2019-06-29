@@ -96,8 +96,15 @@ export default {
     },
     methods: {
         handleHide() {
+            let hasUnfinishTasks = ['uploadTask', 'copyTask', 'unzipTask'].some(item => {
+                return this.$refs[item].isEmpty && !this.$refs[item].isEmpty() || false;
+            });
+            if(!hasUnfinishTasks) {
+                this._visible = false;
+                return;
+            }
             MessageBox.confirm.warning({
-                title: '您确定要取消所有未完成的任务吗？'
+                title: '您确定要删除所有任务吗？'
             }).then(() => {
                 // todo 取消上传或者取消拷贝任务
                 ['uploadTask', 'copyTask', 'unzipTask'].forEach(item => {

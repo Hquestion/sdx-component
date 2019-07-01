@@ -87,8 +87,7 @@ export default {
             // 用户无此权限时，隐藏节点
             if (!auth(key, tag)) {
                 if (!vnode._isBeingDestroyed && !vnode.isDestroyed) {
-                    vnode.$destroy && vnode.$destroy();
-                    el.remove();
+                    el.style.display = 'none';
                 }
             } else {
                 // if (!vnode._isMounted) {

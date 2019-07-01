@@ -355,8 +355,7 @@ export function pack(paths, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/pack`, {
         ownerId: ownerId || userInfo.userId,
-        paths,
-        targetPath: '/.download/__' + +new Date()
+        paths
     }).then(res => {
         const jobId = res.jobId;
         let timer = null;

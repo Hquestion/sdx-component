@@ -138,7 +138,7 @@ export default {
         },
         makeUploadParams() {
             return {
-                userId: this.$route.query.ownerId || shareCenter.getUser().uuid,
+                ownerId: this.$route.query.ownerId || shareCenter.getUser().uuid,
                 path: this.fileManager.rootKind === rootKinds.PROJECT_SHARE ? '/' + this.fileManager.currentPath.split('/').slice(3) : this.fileManager.currentPath,
                 filesystem: 'cephfs',
                 overwrite: 0

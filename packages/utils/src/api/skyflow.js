@@ -1,5 +1,7 @@
 import httpService from '../http-service';
 import { SKYFLOW_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, SKYFLOW_MANAGE_GATEWAY_BASE_OLD } from './config';
+import readAuths from './config';
+import { authWrapper } from './helper';
 
 const skyflowApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflows`;
 
@@ -7,9 +9,13 @@ const skyflowExecuteApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_executes`;
 
 const skyflowCrontabApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_crontabs`;
 
-export function getSkyflowList(params) {
+export const getSkyflowList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}skyflow-profiles`, params);
-}
+}, readAuths.SKYFLOW_FLOW_READ);
+
+export const getSkyflowListWithAuth = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}skyflow-profiles`, params);
+}, readAuths.SKYFLOW_TEMPLATE_FLOW_READ);
 
 export function getSkyflowTemplates() {
     return httpService.get(`${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_templates`);
@@ -31,13 +37,21 @@ export function getSkyflowInfo(uuid) {
     return httpService.get(`${skyflowApi}/${uuid}`);
 }
 
-export function getGeneralRunningInfo(params) {
+/* export function getGeneralRunningInfo(params) {
     return httpService.get(skyflowExecuteApi, params);
-}
+} */
 
-export function getTimerRunningInfo(params) {
+export const getGeneralRunningInfo = authWrapper(function (params) {
+    return httpService.get(skyflowExecuteApi, params);
+}, readAuths.SKYFLOW_FLOW_RECORD_READ);
+
+/* export function getTimerRunningInfo(params) {
     return httpService.get(skyflowCrontabApi, params);
-}
+} */
+
+export const getTimerRunningInfo = authWrapper(function (params) {
+    return httpService.get(skyflowCrontabApi, params);
+}, readAuths.SKYFLOW_FLOW_RECORD_READ);
 
 export function getTimerSubRunningInfo(params) {
     return httpService.get(`${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_crontab_jobs`, params);

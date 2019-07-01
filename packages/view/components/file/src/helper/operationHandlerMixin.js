@@ -46,7 +46,7 @@ export default {
         },
         doRenameOrMakePath() {
             if (this.editingRow.path) {
-                rename(this.editingRow.path, this.tempRowName, this.editingRow.userId).then(() => {
+                rename(this.editingRow.path, this.tempRowName, this.editingRow.ownerId).then(() => {
                     unlock(this.$el.querySelector('.el-table__body-wrapper'));
                     this.editingRow = null;
                     this.tempRowName = '';
@@ -84,7 +84,7 @@ export default {
                     title: `确定要删除文件${row.name}吗？`,
                     content
                 }).then(() => {
-                    deletePath([row.path], row.userId).then(() => {
+                    deletePath([row.path], row.ownerId).then(() => {
                         // 删除之后刷新页面
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
                     });
@@ -100,7 +100,7 @@ export default {
                     title: '确定要删除选中的文件吗？',
                     content
                 }).then(() => {
-                    deletePath(checkedRows.map(item => item.path), checkedRows[0].userId).then(() => {
+                    deletePath(checkedRows.map(item => item.path), checkedRows[0].ownerId).then(() => {
                         // 删除之后刷新页面
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
                     });
@@ -155,22 +155,22 @@ export default {
         },
         unzip(row, targetPath) {
             if (!row) return;
-            unzip(row.path, this.fileManager.currentPath, row.userId).then(res => {
+            unzip(row.path, this.fileManager.currentPath, row.ownerId).then(res => {
                 this.fileManager.$refs.fileTask.checkTab('UNZIP');
             });
         },
         download(row) {
             if (row && row.isFile) {
-                download(row.path, row.userId);
+                download(row.path, row.ownerId);
             } else {
                 // 打包，然后下载
                 let defer;
                 if (row) {
                     // 打包文件夹
-                    defer = pack([row.path], row.userId);
+                    defer = pack([row.path], row.ownerId);
                 } else {
                     // 打包批量的
-                    defer = pack(this.fileManager.checked.map(item => item.path), this.fileManager.checked[0].userId);
+                    defer = pack(this.fileManager.checked.map(item => item.path), this.fileManager.checked[0].ownerId);
                 }
                 defer.then(res => {
                     download(res);

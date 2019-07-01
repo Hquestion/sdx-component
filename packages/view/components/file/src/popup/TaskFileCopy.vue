@@ -87,7 +87,7 @@
 </template>
 
 <script>
-    import {getCopyTaskList, cancelTask, deleteTask, deleteTaskType} from '@sdx/utils/src/api/file';
+import {getCopyTaskList, cancelTask, deleteTask, deleteTaskType} from '@sdx/utils/src/api/file';
 import SdxuFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
@@ -159,6 +159,7 @@ export default {
             return [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(row.state);
         },
         deleteAllTasks() {
+            if (this.copyFileList.length === 0) return Promise.resolve();
             return deleteTaskType('COPY').then(res => {
                 this.copyFileList = [];
             });

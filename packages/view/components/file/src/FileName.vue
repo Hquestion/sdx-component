@@ -32,6 +32,7 @@
                 <div style="max-height: 400px;">
                     <ElScrollbar class="sdxv-file__item-name-scroller">
                         <SdxwFileSelectTree
+                            :user-id="row.ownerId"
                             :checkable="false"
                             :root-path="row.path"
                             :load-fn-wrap="zipPreviewFnWrap"
@@ -108,8 +109,8 @@ export default {
         cancelEdit() {
             this.$emit('cancel-rename');
         },
-        zipPreviewFnWrap(rootPath, nodePath, userId) {
-            return () => zipPreview({ path: rootPath, pathInZip: nodePath, userId }).then(res => res.files);
+        zipPreviewFnWrap(rootPath, nodePath, ownerId) {
+            return () => zipPreview({ path: rootPath, pathInZip: nodePath, ownerId }).then(res => res.files);
         },
         handlePathNameClick(row) {
             this.$emit('name-click', row);

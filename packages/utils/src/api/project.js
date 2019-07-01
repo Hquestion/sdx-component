@@ -3,6 +3,10 @@ import httpService from '../http-service';
 
 import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_BASE} from './config';
 
+import readAuths from './config';
+import { authWrapper } from './helper';
+
+
 const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 
 const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks`;
@@ -12,9 +16,13 @@ export function getProjectList(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
 }
 
-export function getTaskList(params) {
+/* export function getTaskList(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
-}
+} */
+
+export const getTaskList = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
+}, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
 
 export function getProjectDetail(uuid) {
     return httpService.get(`${projectApi}/${uuid}`);

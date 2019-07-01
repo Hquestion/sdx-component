@@ -5,10 +5,10 @@ import { v4 as uuid } from 'uuid';
 
 /* Common HTTP constants
  */
-const AUTHORIZATION_HEADER = 'Authorization';
-const CONTENT_TYPE_HEADER = 'Content-Type';
-const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
-const REQUEST_ID_HEADER = 'X-Request-Id';
+export const AUTHORIZATION_HEADER = 'Authorization';
+export const CONTENT_TYPE_HEADER = 'Content-Type';
+export const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
+export const REQUEST_ID_HEADER = 'X-Request-Id';
 
 /* Internal Constants
  */

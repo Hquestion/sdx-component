@@ -223,7 +223,7 @@ export default {
                 return;
             }
             const emptyRow = {
-                userId: '',
+                ownerId: '',
                 name: '新建文件夹',
                 path: '',
                 filesystem: 'cephfs',
@@ -262,7 +262,7 @@ export default {
                         query = {
                             path: rootKindPathMap[this.fileManager.rootKind] + row.path,
                             startPath: row.path,
-                            ownerId: row.userId || row.user && row.user.uuid
+                            ownerId: row.ownerId || row.user && row.user.uuid
                         };
                     } else {
                         let path = rootKindPathMap[this.fileManager.rootKind] + row.path;
@@ -272,7 +272,7 @@ export default {
                         query = {
                             path: path,
                             startPath: this.$route.query.startPath,
-                            ownerId: row.userId
+                            ownerId: row.ownerId
                         };
                     }
                     this.$router.push({

@@ -82,6 +82,7 @@ export default {
                 || !this.unzipFileList.some(item => [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(item.state));
         },
         deleteAllTasks() {
+            if (this.unzipFileList.length === 0) return Promise.resolve();
             return deleteTaskType('UNZIP').then(res => {
                 this.unzipFileList = [];
             });

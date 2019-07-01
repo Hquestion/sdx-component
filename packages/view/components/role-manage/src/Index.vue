@@ -91,6 +91,7 @@
                 </SdxuTable>
                 <div class="sdxv-role-manage__pagination">
                     <sdxu-pagination
+                        v-if="total"
                         :current-page.sync="current"
                         :page-size="pageSize"
                         :total="total"

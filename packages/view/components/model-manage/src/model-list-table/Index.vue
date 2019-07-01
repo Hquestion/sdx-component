@@ -355,6 +355,7 @@ export default {
                     item.showDetail = this.modelType !== 'MY_SHARE';
                 });
                 this.total = res.total;
+            }).finally(() => {
                 this.loading = false;
             });
         },

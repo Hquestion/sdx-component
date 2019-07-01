@@ -1,13 +1,13 @@
 <template>
     <div class="sdxv-resource-statistics">
-        <div 
-            v-auth.system.button="'GLOBAL-REASOURCE:READ'" 
+        <div
+            v-auth.system.button="'GLOBAL_RESOURCE:READ'"
             class="sdxv-resource-statistics__item"
         >
             <SdxvPlatformResource />
         </div>
-        <div 
-            v-auth.system.button="'POD-REAL-REASOURCE:READ'" 
+        <div
+            v-auth.system.button="'POD_REAL_RESOURCE:READ'"
             class="sdxv-resource-statistics__item"
         >
             <SdxvUserResourceList
@@ -15,8 +15,8 @@
                 :ranking="true"
             />
         </div>
-        <div 
-            v-auth.system.button="'POD-REAL-REASOURCE:READ'" 
+        <div
+            v-auth.system.button="'POD_REAL_RESOURCE:READ'"
             class="sdxv-resource-statistics__item"
         >
             <SdxvTaskResourceRanking />

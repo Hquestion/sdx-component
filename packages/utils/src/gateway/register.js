@@ -1,5 +1,6 @@
 /**
  * 这里会调用注册网关API的bash脚本
+ * 支持传参指定注定某些接口，将文件名直接跟在后面。如node register.js userProfiles groupProfiles...
  *
  */
 /* eslint-disable */

@@ -32,7 +32,8 @@
     "peerDependencies": {
         "axios": "^0.18.0",
         "vue": "^2.6.10",
-        "dayjs": "^1.8.14"
+        "dayjs": "^1.8.14",
+        "qs": "latest"
     },
     "babel": {
         "presets": [

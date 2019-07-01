@@ -63,7 +63,7 @@ export const auth = (key, tag) => {
         if (key.split(':').length === 3) {
             key = `${key}:${emptyPlaceholder}`;
         }
-        return permissions.includes(key);
+        return permissions.some(p => eval(`/${p}.*/ig`).test(key));
     }
 };
 

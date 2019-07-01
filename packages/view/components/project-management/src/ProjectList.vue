@@ -144,7 +144,7 @@ export default {
                 return -1;
             } else {
                 return 0;
-            }    
+            }
         },
         sortChange() {
             this.initList();
@@ -166,13 +166,13 @@ export default {
                 this.projectList.forEach(item => {
                     const isOwn = getUser().userId === item.owner.uuid;
                     let hasWriteAuth = true;
-                    if (item.isTempalte) hasWriteAuth = auth.$auth('PROJECT-MANAGER:TEMPLATE_PROJECT:WRITE', 'BUTTON');
+                    if (item.isTempalte) hasWriteAuth = auth.checkAuth('PROJECT-MANAGER:TEMPLATE_PROJECT:WRITE', 'BUTTON');
                     item.showEdit = isOwn && hasWriteAuth;
                     item.showRemove = isOwn && hasWriteAuth;
                 });
 
                 // 暂时排序
-                let [templateList, otherList ] = [[], []]; 
+                let [templateList, otherList ] = [[], []];
                 for (let i =0; i< this.projectList.length; i++) {
                     if(this.projectList[i].isTemplate) {
                         templateList.push(this.projectList[i]);

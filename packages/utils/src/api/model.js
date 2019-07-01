@@ -1,11 +1,17 @@
 import httpService from '../http-service';
 import { MODEL_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config.js';
+import readAuths from './config';
+import { authWrapper } from './helper';
 
 const modelApi = `${MODEL_MANAGE_GATEWAY_BASE}models`;
 
-export function getModelList(params) {
+/* export function getModelList(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}model-profiles`, params);
-}
+} */
+
+export const getModelList = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}model-profiles`, params);
+}, readAuths.MODEL_MODEL_READ);
 
 export function getModelInfo(modelId) {
     return httpService.get(`${modelApi}/${modelId}`);
@@ -35,9 +41,13 @@ export function updateModel(uuid, params) {
     return httpService.patch(`${modelApi}/${uuid}`, params);
 }
 
-export function getVersionList(modelId, params) {
+/* export function getVersionList(modelId, params) {
     return httpService.get(`${modelApi}/${modelId}/versions`, params);
-}
+} */
+
+export const getVersionList = authWrapper(function (modelId, params) {
+    return httpService.get(`${modelApi}/${modelId}/versions`, params);
+}, readAuths.MODEL_MODEL_VERSION_READ);
 
 export function removeVersion(modelId, versionId) {
     return httpService.remove(`${modelApi}/${modelId}/versions/${versionId}`);

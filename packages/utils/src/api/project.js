@@ -3,7 +3,6 @@ import httpService from '../http-service';
 import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
 import readAuths from './config';
 import { authWrapper } from './helper';
-import { read } from 'fs';
 
 const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 

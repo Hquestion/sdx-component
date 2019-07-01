@@ -209,7 +209,7 @@ export default {
                 userId: shareCenter.getUser() && shareCenter.getUser().uuid || '',
                 path: '/',
                 filesystem: 'cephfs',
-                overwrite: 0
+                overwrite: 1
             })
         },
         localFileLabel: {

@@ -1,7 +1,7 @@
 
 import httpService from '../http-service';
 
-import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
+import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_BASE} from './config';
 
 const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 
@@ -56,11 +56,11 @@ export function updateTask(uuid,params) {
 
 // 数据集列表
 export function getDataSet(params) {
-    return httpService.get('/v2/dataset/options', params);
+    return httpService.get(`${DATA_MANAGE_GATEWAY_BASE}dataset/options`, params);
 }
 // 数据源列表
 export function getTaskDataSource(params) {
-    return httpService.get('/v2/datasource/taskOptions', params);
+    return httpService.get(`${DATA_MANAGE_GATEWAY_BASE}datasource/taskOptions`, params);
 }
 
 export default {

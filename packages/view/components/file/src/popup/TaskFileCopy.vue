@@ -12,9 +12,9 @@
                 <div class="table-expand-line">
                     <div class="size-remain">
                         <span class="finished-size">
-                            {{ scope.row.extra.copiedBytes | byteFormatter }}
+                            {{ (scope.row.extra.copiedBytes || 0) | byteFormatter }}
                         </span>
-                        /{{ scope.row.extra.totalBytes | byteFormatter }}
+                        /{{ (scope.row.extra.totalBytes || 0) | byteFormatter }}
                     </div>
                     <div class="content">
                         <div class="progerss-warp">
@@ -24,9 +24,9 @@
                             />
                         </div>
                         <div class="progerss-info">
-                            <span class="speed">{{ scope.row.extra.speedPerSecInBytes | byteFormatter }}/s</span>
+                            <span class="speed">{{ (scope.row.extra.speedPerSecInBytes || 0) | byteFormatter }}/s</span>
                             <span class="time-remain">
-                                剩余时间 {{ scope.row.extra.remainingTimeInSec | seconds2HMS }}
+                                剩余时间 {{ (scope.row.extra.remainingTimeInSec || 0) | seconds2HMS }}
                             </span>
                         </div>
                     </div>
@@ -120,6 +120,9 @@ export default {
     methods: {
         init() {
             this.fetchCopyTaskList();
+        },
+        isPending(row) {
+            return row.state === asyncJobStatus.PENDING;
         },
         checkNeedToShow() {},
         startPullCopyTask() {

@@ -91,6 +91,7 @@ export default {
     watch: {
         // 自动 开始/停止 列表拉取
         __needPull(nval) {
+            window.console.log(nval);
             if (nval) {
                 this.startPullUnzipTask();
                 this.$emit('initShow', 'UNZIP');

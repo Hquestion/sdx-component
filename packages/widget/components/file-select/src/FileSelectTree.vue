@@ -15,11 +15,12 @@
 
 <script>
 import clickoutside from 'element-ui/src/utils/clickoutside';
-import { Loading } from 'element-ui';
+import Loading from 'element-ui/lib/loading';
 import Vue from 'vue';
 import { getFilesList } from '@sdx/utils/src/api/file';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 import { getPathIcon } from './utils';
+import ElTree from 'element-ui/packages/tree';
 
 Vue.use(Loading);
 
@@ -29,6 +30,9 @@ export default {
     name: 'SdxwFileSelectTree',
     directives: {
         clickoutside
+    },
+    components: {
+        ElTree
     },
     data() {
         return {
@@ -95,10 +99,14 @@ export default {
                 load: this.fetchFiles,
                 'default-checked-keys': this.selectedNodes,
                 data: this.treeData || [],
+                ...this.treeOptions,
                 props: {
                     label: 'name',
                     children: 'children',
-                    isLeaf: 'isFile',
+                    isLeaf: (data, node) => {
+                        window.console.error(data);
+                        return !!data.isFile;
+                    },
                     disabled: data => {
                         if (this.checkType === 'file') {
                             return !data.isFile;
@@ -111,7 +119,6 @@ export default {
                         }
                     }
                 },
-                ...this.treeOptions
             };
         },
         // 返回 tree 的 ref 引用,可以通过这引用调用 el-tree 的各种方法
@@ -128,6 +135,10 @@ export default {
                     this.$refs.fileTree.setCheckedKeys(val.map(item => typeof item === 'object' ? item[NODE_KEY] : item));
                 }
             }
+        },
+        rootPath(val) {
+            this.$refs.fileTree.root.loaded = false;
+            this.$refs.fileTree.root.loadData();
         }
     },
     methods: {
@@ -198,8 +209,8 @@ export default {
         treeShake() {
             this.$emit('tree-shake');
         },
-        handleCurrentChange() {
-            this.$emit('current-change');
+        handleCurrentChange(data, node) {
+            this.$emit('current-change', data, node);
         },
         // 暴露给外部使用
         setNodeChecked(key, checked, deep) {

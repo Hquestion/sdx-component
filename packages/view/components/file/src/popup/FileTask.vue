@@ -10,7 +10,10 @@
             </div>
             <div class="sdxv-file-task__header-action">
                 <SdxvExpandCollapseToggler :expanded.sync="expanded" />
-                <i class="sdx-icon sdx-icon-check delete-icon" @click="handleHide"/>
+                <i
+                    class="sdx-icon sdx-icon-check delete-icon"
+                    @click="handleHide"
+                />
             </div>
         </div>
         <div class="sdxv-file-task__body">
@@ -19,13 +22,20 @@
                     label="文件上传"
                     name="UPLOAD"
                 >
-                    <SdxvTaskFileUpload ref="uploadTask" @empty="handleUploadFinish" />
+                    <SdxvTaskFileUpload
+                        ref="uploadTask"
+                        @empty="handleUploadFinish"
+                    />
                 </el-tab-pane>
                 <el-tab-pane
                     label="文件复制"
                     name="COPY"
                 >
-                    <TaskFileCopy ref="copyTask" @init-show="handleInitShow"/>
+                    <TaskFileCopy
+                        ref="copyTask"
+                        @initShow="handleInitShow"
+                        @empty="handleUploadFinish"
+                    />
                 </el-tab-pane>
                 <el-tab-pane
                     label="文件删除"
@@ -37,7 +47,11 @@
                     label="解压缩"
                     name="UNZIP"
                 >
-                    <TaskFileUnzip ref="unzipTask" @init-show="handleInitShow"/>
+                    <TaskFileUnzip
+                        ref="unzipTask"
+                        @initShow="handleInitShow"
+                        @empty="handleUploadFinish"
+                    />
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -114,6 +128,7 @@ export default {
             });
         },
         handleUploadFinish() {
+            if (!this.isInit) return;
             this.fileManager.enterDirectory(this.fileManager.currentPath);
             this.checkToClose();
         },
@@ -132,11 +147,13 @@ export default {
         checkTab(tab) {
             this._visible = true;
             this.currentTab = tab;
+            this.isInit = true;
             const vm = this.$refs[TAB_REF_MAP[tab]];
             vm.init && vm.init();
         },
         handleInitShow(tab) {
             if (!this.isInit) {
+                this.isInit = true;
                 this.checkTab(tab);
             }
         }
@@ -153,7 +170,9 @@ export default {
 
 <style lang="scss" scoped>
     @import "~@sdx/utils/src/theme-common/var";
+
     $sdx-file-task-radius: $sdx-border-radius * 2;
+
     .sdxv-file-task {
         width: 600px;
         height: 60px;

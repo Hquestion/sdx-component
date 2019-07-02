@@ -1,7 +1,7 @@
 <template>
     <div class="sdxw-share-form">
         <el-form
-            label-width="110px"
+            :label-width="labelWidth"
             label-position="left"
             :model="shareForm"
             ref="shareSettingForm"
@@ -89,6 +89,10 @@ export default {
         sync: {
             type: Boolean,
             default: true
+        },
+        labelWidth: {
+            type: String,
+            default: '110px'
         }
     },
     methods: {

@@ -11,7 +11,7 @@
         </div>
         <div class="sdxv-info-container__item--value">
             <slot name="value">
-                {{ value }}
+                {{ value || '-' }}
             </slot>
         </div>
     </div>

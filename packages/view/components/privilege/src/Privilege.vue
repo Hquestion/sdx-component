@@ -1,44 +1,160 @@
 <template>
-    <sdxu-content-panel>
-        <div class="sdxv-privilege">
-            <!-- <div class="sdxv-privilege__--bar">
-                <sdxu-tab-radio-group v-model="activeTab">
-                    <sdxu-tab-radio-item name="system">
-                        系统基础权限
-                    </sdxu-tab-radio-item>
-                    <sdxu-tab-radio-item name="custom">
-                        自定义权限
-                    </sdxu-tab-radio-item>
-                </sdxu-tab-radio-group>
-            </div> -->
-            <transition name="fade">
-                <privilege-system v-if="activeTab === 'system'" />
-                <privilege-custom v-else />
-            </transition>
+    <SdxuContentPanel
+        title="权限"
+    >
+        <div v-auth.user.button="'PERMISSION:READ'">
+            <template #right>
+                <div class="sdxv-privilege-system__search">
+                    <sdxu-input
+                        size="small"
+                        type="search"
+                        placeholder="请输入权限名"
+                        v-model="name"
+                    />
+                    <SdxuButton
+                        type="primary"
+                        size="small"
+                        @click="handleSearch"
+                        class="sdxv-privilege-system__search--button"
+                    >
+                        搜索
+                    </SdxuButton>
+                </div>
+            </template>
+            <div class="sdxv-privilege-system">
+                <sdxu-table
+                    class="sdxv-privilege-system__table"
+                    :data="data"
+                    v-loading="loading"
+                >
+                    <el-table-column
+                        label="权限名"
+                        prop="name"
+                    />
+                    <el-table-column
+                        label="标签"
+                    >
+                        <template #default="{ row }">
+                            <sdxw-fold-label-group
+                                :list="row.tags"
+                                mode="inline"
+                            />
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="服务名称"
+                    >
+                        <template #default="{ row }">
+                            {{ splitKey(row.key, 0) }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="资源类别"
+                    >
+                        <template #default="{ row }">
+                            {{ splitKey(row.key, 1) }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="操作类型"
+                    >
+                        <template #default="{ row }">
+                            {{ splitKey(row.key, 2) }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column type="expand">
+                        <template #default="{ row }">
+                            <div class="sdxv-privilege-system__expand">
+                                <span class="sdxv-privilege-system__expand--label">权限说明:</span>
+                                <span class="sdxv-privilege-system__expand--detail">{{ row.description }}</span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </sdxu-table>
+                <div class="sdxv-privilege-system__pagination">
+                    <sdxu-pagination
+                        v-if="total"
+                        :current-page.sync="page"
+                        :page-size="pageSize"
+                        :total="total"
+                        @current-change="handleChangePage"
+                    />
+                </div>
+            </div>
         </div>
-    </sdxu-content-panel>
+    </SdxuContentPanel>
 </template>
 
 <script>
-// import TabRadio from '@sdx/ui/components/tab-radio';
+import SdxuTable from '@sdx/ui/components/table';
+import SdxuPagination from '@sdx/ui/components/pagination';
+import SdxuInput from '@sdx/ui/components/input';
+import FoldLabel from '@sdx/widget/components/fold-label';
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
-import PrivilegeCustom from './PrivilegeCustom';
-import PrivilegeSystem from './PrivilegeSystem';
+import auth from '@sdx/widget/components/auth';
 
+import { getPermissionList } from '@sdx/utils/src/api/permissions';
 
 export default {
     name: 'SdxvPrivilege',
     components: {
-        // [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
-        // [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
-        PrivilegeCustom,
-        PrivilegeSystem,
-        SdxuContentPanel
+        SdxuTable,
+        SdxuPagination,
+        SdxuInput,
+        SdxuContentPanel,
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup
     },
     data() {
         return {
-            activeTab: 'system'
+            pageSize: 10,
+            page: 1,
+            total: 0,
+            data: [],
+            name: '',
+            loading: false
         };
+    },
+    directives: {
+        auth
+    },
+    computed: {
+        querys() {
+            return {
+                name: this.name,
+                start: (this.page - 1) * this.pageSize + 1,
+                count: this.pageSize
+            };
+        }
+    },
+    methods: {
+        fetchData() {
+            this.loading = true;
+            getPermissionList(this.querys).then(data => {
+                this.data = data.permissions;
+                this.total = data.total;
+                this.loading = false;
+            }).catch(() => {
+                this.data = [];
+                this.total = 0;
+                this.loading = false;
+            });
+        },
+        splitKey(key, i) {
+            const list = key.split(':');
+            return list[i] || '';
+        },
+        handleChangePage(page) {
+            this.page = page;
+            this.fetchData();
+        },
+        handleSearch() {
+            this.page = 1;
+            this.fetchData();
+        }
+    },
+    created() {
+        this.fetchData();
     }
 };
 </script>

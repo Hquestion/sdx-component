@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-source-manage-home">
-        <ResourceTemplate />
-        <PlaceholderBlock />
+        <ResourceTemplate v-auth.resource.button="'TEMPLATE:READ'" />
+        <PlaceholderBlock v-auth.resource.button="'TEMPLATE:READ'" />
         <GlobalRulePanel v-auth.resource.button="'GLOBAL_STATE:READ'" />
         <PlaceholderBlock v-auth.resource.button="'GLOBAL_STATE:READ'" />
         <UserRightsPanel v-auth.resource.button="'USER_STATE:READ'" />

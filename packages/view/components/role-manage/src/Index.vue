@@ -2,103 +2,109 @@
     <div class="sdxv-role-manage">
         <SdxuContentPanel
             title="角色"
-            v-auth.user.button="'ROLE:READ'"
         >
-            <div class="sdxv-role-manage__header">
-                <div class="sdxv-role-manage__handle">
-                    <SdxuButton
-                        type="primary"
-                        size="small"
-                        placement="right"
-                        @click="addRole"
-                        v-auth.user.button="'ROLE:WRITE'"
-                    >
-                        <i
-                            class="sdx-icon sdx-icon-plus"
-                        />
-                        新建角色
-                    </sdxubutton>
-                    <SdxwSearchLayout
-                        @search="searchName"
-                        :block="false"
-                        align="right"
-                        style="flex: 1"
-                    >
-                        <SdxwSearchItem>
-                            <SdxuInput
-                                v-model="searchRoles.name"
-                                type="search"
-                                size="small"
-                                :searchable="false"
-                                placeholder="请输入角色名"
-                            />
-                        </SdxwSearchItem>
-                    </SdxwSearchLayout>
-                </div>
-            </div>
-            <div class="sdxv-role-manage__table">
-                <SdxuTable
-                    :data="tableData"
-                    :default-sort="{prop: 'createdAt', order: 'descending'}"
-                    @sort-change="handleSortChange"
+            <div v-auth.user.button="'ROLE:READ'">
+                <div
+                    class="sdxv-role-manage__header"
                 >
-                    <el-table-column
-                        prop="name"
-                        label="角色名"
-                    />
-                    <el-table-column
-                        prop="description"
-                        label="角色说明"
-                    />
-                    <el-table-column
-                        prop="createdAt"
-                        label="创建时间"
-                        sortable
-                    >
-                        <template slot-scope="scope">
-                            {{ dateFormatter(scope.row.createdAt) }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        style="width: 15%"
-                        label="操作"
-                        v-auth.user.button="'ROLE:WRITE'"
-                    >
-                        <template
-                            slot-scope="scope"
-                            class="icon"
+                    <div class="sdxv-role-manage__handle">
+                        <SdxuButton
+                            type="primary"
+                            size="small"
+                            placement="right"
+                            @click="addRole"
+                            v-auth.user.button="'ROLE:WRITE'"
                         >
                             <i
-                                class="sdx-icon sdx-icon-edit icon"
-                                @click="editRole(scope.row.uuid)"
+                                class="sdx-icon sdx-icon-plus"
                             />
-                            <i
-                                class="sdx-icon sdx-icon-delete icon"
-                                @click="removeRole(scope.row.uuid, scope.row.name)"
-                            />
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        type="expand"
+                            新建角色
+                        </sdxubutton>
+                        <SdxwSearchLayout
+                            @search="searchName"
+                            :block="false"
+                            align="right"
+                            style="flex: 1"
+                        >
+                            <SdxwSearchItem>
+                                <SdxuInput
+                                    v-model="searchRoles.name"
+                                    type="search"
+                                    size="small"
+                                    :searchable="false"
+                                    placeholder="请输入角色名"
+                                />
+                            </SdxwSearchItem>
+                        </SdxwSearchLayout>
+                    </div>
+                </div>
+                <div class="sdxv-role-manage__table">
+                    <SdxuTable
+                        :data="tableData"
+                        :default-sort="{prop: 'createdAt', order: 'descending'}"
+                        @sort-change="handleSortChange"
                     >
-                        <template slot-scope="props">
-                            <div class="expand">
-                                <span>角色说明:</span>
-                                <span>{{ props.row.description }}</span>
-                            </div>
-                        </template>
-                    </el-table-column>
-                </SdxuTable>
-                <div class="sdxv-role-manage__pagination">
-                    <sdxu-pagination
-                        v-if="total"
-                        :current-page.sync="current"
-                        :page-size="pageSize"
-                        :total="total"
-                        @current-change="currentChange"
-                    />
+                        <el-table-column
+                            prop="name"
+                            label="角色名"
+                        />
+                        <el-table-column
+                            prop="description"
+                            label="角色说明"
+                        />
+                        <el-table-column
+                            prop="createdAt"
+                            label="创建时间"
+                            sortable
+                        >
+                            <template slot-scope="scope">
+                                {{ dateFormatter(scope.row.createdAt) }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            style="width: 15%"
+                            label="操作"
+                            v-auth.user.button="'ROLE:WRITE'"
+                        >
+                            <template
+                                slot-scope="scope"
+                                class="icon"
+                            >
+                                <i
+                                    class="sdx-icon sdx-icon-edit icon"
+                                    @click="editRole(scope.row.uuid)"
+                                    v-auth.user.button="'ROLE:WRITE'"
+                                />
+                                <i
+                                    class="sdx-icon sdx-icon-delete icon"
+                                    @click="removeRole(scope.row.uuid, scope.row.name)"
+                                    v-auth.user.button="'ROLE:WRITE'"
+                                />
+                            </template>
+                        </el-table-column>
+                        <el-table-column
+                            type="expand"
+                        >
+                            <template slot-scope="props">
+                                <div class="expand">
+                                    <span>角色说明:</span>
+                                    <span>{{ props.row.description }}</span>
+                                </div>
+                            </template>
+                        </el-table-column>
+                    </SdxuTable>
+                    <div class="sdxv-role-manage__pagination">
+                        <sdxu-pagination
+                            v-if="total"
+                            :current-page.sync="current"
+                            :page-size="pageSize"
+                            :total="total"
+                            @current-change="currentChange"
+                        />
+                    </div>
                 </div>
             </div>
+
             <sdxu-dialog
                 :visible.sync="dialogVisible"
                 @open="resetForm()"

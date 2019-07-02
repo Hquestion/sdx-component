@@ -1,7 +1,10 @@
 <template>
-    <sdxu-content-panel title="用户">
+    <sdxu-content-panel
+        title="用户"
+    >
         <div
             class="sdxv-user-manage"
+            v-auth.user.button="'USER:READ'"
         >
             <div
                 class="sdxv-user-manage__title"
@@ -71,20 +74,22 @@
                 </el-table-column>
                 <el-table-column
                     label="操作"
-                    v-auth.user.button="'USER:WRITE'"
                 >
                     <template slot-scope="scope">
                         <sdxu-icon-button
                             @click="handleJoinGroup(scope.row)"
                             class="sdx-icon sdx-icon-zu2"
+                            v-auth.user.button="'USER:WRITE'"
                         />
                         <sdxu-icon-button
                             @click="handleEditUser(scope.row)"
                             class="sdx-icon sdx-icon-edit"
+                            v-auth.user.button="'USER:WRITE'"
                         />
                         <sdxu-icon-button
                             @click="handleDeleteUser(scope.row)"
                             class="sdx-icon sdx-icon-delete"
+                            v-auth.user.button="'USER:WRITE'"
                         />
                     </template>
                 </el-table-column>

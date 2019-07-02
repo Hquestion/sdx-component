@@ -1,5 +1,8 @@
 <template>
-    <div class="sdxv-privilege-system">
+    <div
+        class="sdxv-privilege-system"
+        v-auth.user.button="'PERMISSION:READ'"
+    >
         <sdxu-input
             class="sdxv-privilege-system__search"
             size="small"
@@ -76,6 +79,7 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuInput from '@sdx/ui/components/input';
 import FoldLabel from '@sdx/widget/components/fold-label';
+import auth from '@sdx/widget/components/auth';
 
 import { getPermissionList } from '@sdx/utils/src/api/permissions';
 
@@ -97,6 +101,9 @@ export default {
             name: '',
             loading: false
         };
+    },
+    directives: {
+        auth
     },
     computed: {
         querys() {

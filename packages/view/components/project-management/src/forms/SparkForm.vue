@@ -45,7 +45,7 @@
                 <el-select
                     v-model="params.imageId"
                     size="small"
-                    placeholder="请输入运行环境"
+                    placeholder="请选择运行环境"
                 >
                     <el-option
                         v-for="item in imageOptions"
@@ -87,13 +87,15 @@
             >
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
-                    :accept="'.jar'"
+                    accept="'.jar'， '.py'， '.zip'， '.egg'"
                     :string-model="true"
+                    check-type="file"
                 />
             </el-form-item>
             <el-form-item
                 prop="mainClass"
                 label="主类名称:"
+                v-if="params.sourcePaths[0] && params.sourcePaths[0].includes('.jar')"
             >
                 <SdxuInput
                     v-model="params.mainClass"

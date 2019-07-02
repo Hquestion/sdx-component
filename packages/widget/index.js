@@ -16,6 +16,7 @@ import TaskStopDialog from './components/task-stop-dialog';
 import CodeEditor from './components/code-editor';
 import ResourceConfig from './components/resource-config';
 import Auth from './components/auth';
+import ShareForm from './components/share-form';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
@@ -35,7 +36,8 @@ const SdxWidget = {
     TaskStopDialog,
     CodeEditor,
     ResourceConfig,
-    Auth
+    Auth,
+    ShareForm
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -56,6 +58,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     CodeEditor.install(vue);
     ResourceConfig.install(vue);
     vue.use(Auth);
+    vue.use(ShareForm);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

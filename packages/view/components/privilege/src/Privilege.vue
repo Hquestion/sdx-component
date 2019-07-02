@@ -2,84 +2,88 @@
     <SdxuContentPanel
         title="权限"
     >
-        <div v-auth.user.button="'PERMISSION:READ'">
-            <template #right>
-                <div class="sdxv-privilege-system__search">
-                    <sdxu-input
-                        size="small"
-                        type="search"
-                        placeholder="请输入权限名"
-                        v-model="name"
-                    />
-                    <SdxuButton
-                        type="primary"
-                        size="small"
-                        @click="handleSearch"
-                        class="sdxv-privilege-system__search--button"
-                    >
-                        搜索
-                    </SdxuButton>
-                </div>
-            </template>
-            <div class="sdxv-privilege-system">
-                <sdxu-table
-                    class="sdxv-privilege-system__table"
-                    :data="data"
-                    v-loading="loading"
+        <template #right>
+            <div
+                class="sdxv-privilege-system__search"
+                v-auth.user.button="'PERMISSION:READ'"
+            >
+                <sdxu-input
+                    size="small"
+                    type="search"
+                    placeholder="请输入权限名"
+                    v-model="name"
+                />
+                <SdxuButton
+                    type="primary"
+                    size="small"
+                    @click="handleSearch"
+                    class="sdxv-privilege-system__search--button"
                 >
-                    <el-table-column
-                        label="权限名"
-                        prop="name"
-                    />
-                    <el-table-column
-                        label="标签"
-                    >
-                        <template #default="{ row }">
-                            <sdxw-fold-label-group
-                                :list="row.tags"
-                                mode="inline"
-                            />
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="服务名称"
-                    >
-                        <template #default="{ row }">
-                            {{ splitKey(row.key, 0) }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="资源类别"
-                    >
-                        <template #default="{ row }">
-                            {{ splitKey(row.key, 1) }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="操作类型"
-                    >
-                        <template #default="{ row }">
-                            {{ splitKey(row.key, 2) }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column type="expand">
-                        <template #default="{ row }">
-                            <div class="sdxv-privilege-system__expand">
-                                <span class="sdxv-privilege-system__expand--label">权限说明:</span>
-                                <span class="sdxv-privilege-system__expand--detail">{{ row.description }}</span>
-                            </div>
-                        </template>
-                    </el-table-column>
-                </sdxu-table>
-                <div class="sdxv-privilege-system__pagination">
-                    <sdxu-pagination
-                        v-if="total"
-                        :current-page.sync="page"
-                        :page-size="pageSize"
-                        :total="total"
-                        @current-change="handleChangePage"
-                    />
-                </div>
+                    搜索
+                </SdxuButton>
+            </div>
+        </template>
+        <div
+            class="sdxv-privilege-system"
+            v-auth.user.button="'PERMISSION:READ'"
+        >
+            <sdxu-table
+                class="sdxv-privilege-system__table"
+                :data="data"
+                v-loading="loading"
+            >
+                <el-table-column
+                    label="权限名"
+                    prop="name"
+                />
+                <el-table-column
+                    label="标签"
+                >
+                    <template #default="{ row }">
+                        <sdxw-fold-label-group
+                            :list="row.tags"
+                            mode="inline"
+                        />
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="服务名称"
+                >
+                    <template #default="{ row }">
+                        {{ splitKey(row.key, 0) }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="资源类别"
+                >
+                    <template #default="{ row }">
+                        {{ splitKey(row.key, 1) }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    label="操作类型"
+                >
+                    <template #default="{ row }">
+                        {{ splitKey(row.key, 2) }}
+                    </template>
+                </el-table-column>
+                <el-table-column type="expand">
+                    <template #default="{ row }">
+                        <div class="sdxv-privilege-system__expand">
+                            <span class="sdxv-privilege-system__expand--label">权限说明:</span>
+                            <span class="sdxv-privilege-system__expand--detail">{{ row.description }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
+            </sdxu-table>
+            <div class="sdxv-privilege-system__pagination">
+                <sdxu-pagination
+                    v-if="total"
+                    :current-page.sync="page"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="handleChangePage"
+                />
             </div>
         </div>
     </SdxuContentPanel>

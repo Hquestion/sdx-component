@@ -1,6 +1,8 @@
 
 import httpService from '../http-service';
-import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE} from './config';
+
+import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_BASE} from './config';
+
 import readAuths from './config';
 import { authWrapper } from './helper';
 
@@ -51,8 +53,9 @@ export function stopTask(uuid, params) {
 export function createTask(params) {
     return httpService.post(taskApi, params);
 }
+
 export function getTaskDetail(uuid) {
-    return httpService.get(`${taskApi}/${uuid}`);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-detail`, {uuid});
 }
 export function updateTask(uuid,params) {
     return httpService.patch(`${taskApi}/${uuid}`, params);
@@ -60,11 +63,11 @@ export function updateTask(uuid,params) {
 
 // 数据集列表
 export function getDataSet(params) {
-    return httpService.get('/v2/dataset/options', params);
+    return httpService.get(`${DATA_MANAGE_GATEWAY_BASE}dataset/options`, params);
 }
 // 数据源列表
 export function getTaskDataSource(params) {
-    return httpService.get('/v2/datasource/taskOptions', params);
+    return httpService.get(`${DATA_MANAGE_GATEWAY_BASE}datasource/taskOptions`, params);
 }
 
 export default {

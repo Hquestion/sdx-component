@@ -35,13 +35,20 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include modifier('label') {
             flex: none;
             width: 140px;
-            text-align: end;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
         }
 
         @include modifier('value') {
             flex: auto;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
+            .sdxw-fold-label {
+                padding: 0;
+                text-align: left;
+                height: inherit;
+            }
         }
 
         @include state('multi-line') {

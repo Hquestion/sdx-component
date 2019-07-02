@@ -6,7 +6,6 @@ import { PROJECT_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_
 import readAuths from './config';
 import { authWrapper } from './helper';
 
-
 const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 
 const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks`;

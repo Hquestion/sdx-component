@@ -20,6 +20,7 @@
                 v-model="checked"
                 @cancel="handleCancel"
                 @confirm="handleConfirm"
+                ref="selectMain"
             />
             <div
                 slot="reference"
@@ -117,6 +118,7 @@ export default {
             this.$refs.filePopover.doClose();
         },
         handleHide() {
+            this.$refs.selectMain.reset();
             if (this.preventHideEvent) return;
             this.dispatch('ElFormItem', 'el.form.blur');
         }

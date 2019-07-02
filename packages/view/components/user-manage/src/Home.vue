@@ -12,6 +12,7 @@
                         type="primary"
                         icon="sdx-icon sdx-icon-plus"
                         size="small"
+                        v-auth.user.button="'USER:WRITE'"
                     >
                         新建用户
                     </SdxuButton>
@@ -70,6 +71,7 @@
                 </el-table-column>
                 <el-table-column
                     label="操作"
+                    v-auth.user.button="'USER:WRITE'"
                 >
                     <template slot-scope="scope">
                         <sdxu-icon-button
@@ -144,6 +146,7 @@ import UserDetail from './components/UserDetail';
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import SearchLayout from '@sdx/widget/components/search-layout';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+import auth from '@sdx/widget/components/auth';
 export default {
     name:'SdxvUserManage',
     mixins: [transformFilter],
@@ -167,6 +170,9 @@ export default {
             toJoinUser: {},
             searched: false
         };
+    },
+    directives: {
+        auth
     },
     methods:{
         //关闭新建用户弹框

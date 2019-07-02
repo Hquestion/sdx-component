@@ -5,10 +5,10 @@ import { v4 as uuid } from 'uuid';
 
 /* Common HTTP constants
  */
-const AUTHORIZATION_HEADER = 'Authorization';
-const CONTENT_TYPE_HEADER = 'Content-Type';
-const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
-const REQUEST_ID_HEADER = 'X-Request-Id';
+export const AUTHORIZATION_HEADER = 'Authorization';
+export const CONTENT_TYPE_HEADER = 'Content-Type';
+export const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
+export const REQUEST_ID_HEADER = 'X-Request-Id';
 
 /* Internal Constants
  */
@@ -223,7 +223,11 @@ class Context {
             const query = [];
             Object.entries(data).forEach(entry => {
                 if (Array.isArray(entry[1])) {
-                    entry[1].forEach(value => query.push(entry[0] + '=' + value));
+                    if (entry[1].length === 0) {
+                        query.push(entry[0] + '=');
+                    } else {
+                        entry[1].forEach(value => query.push(entry[0] + '=' + value));
+                    }
                 } else {
                     query.push(entry[0] + '=' + entry[1]);
                 }
@@ -241,12 +245,12 @@ class Context {
 
     /**
      * Send a request.
-     *
      * @param request The request to send
+     * @param preventError Prevent the default error handler, return an empty Object as response
      * @returns {*} A dictionary or an array returned by the backend service, if successful
      * @throws RequestError When the request fails with HTTP status < 200 or >= 400
      */
-    sendRequest(request) {
+    sendRequest(request, preventError) {
         const batch = {
             'requests': [request],
             'suppress_parallel_execution': true
@@ -261,7 +265,11 @@ class Context {
         }
 
         if (response.code < 200 || response.code >= 400) {
-            throw new RequestError(response.code, response.body);
+            if (!preventError) {
+                throw new RequestError(response.code, response.body);
+            } else {
+                return {};
+            }
         }
 
         return JSON.parse(response.body);

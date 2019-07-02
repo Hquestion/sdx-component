@@ -8,6 +8,7 @@
                     icon="sdx-icon sdx-icon-plus"
                     size="small"
                     @click="createGroup"
+                    v-auth.user.button="'GROUP:WRITE'"
                 >
                     新建用户组
                 </sdxu-button>
@@ -57,7 +58,10 @@
                         {{ row.createdAt | dateFormatter }}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column
+                    label="操作"
+                    v-auth.user.button="'GROUP:WRITE'"
+                >
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--operation">
                             <SdxuIconButton
@@ -87,6 +91,7 @@
             </sdxu-table>
             <div class="sdxv-user-group__pagination">
                 <sdxu-pagination
+                    v-if="total"
                     :current-page.sync="page"
                     :page-size="pageSize"
                     :total="total"
@@ -115,6 +120,7 @@ import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { getGroups, deleteGroup } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+import auth from '@sdx/widget/components/auth';
 
 export default {
     name: 'SdxvUserGroup',
@@ -130,11 +136,14 @@ export default {
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
         SdxuIconButton
     },
+    directives: {
+        auth
+    },
     data() {
         return {
             pageSize: 10,
             page: 1,
-            total: 100,
+            total: 0,
             groups: [],
             name: '',
             createVisible: false,
@@ -181,7 +190,7 @@ export default {
         handleDelete(row) {
             SdxuMessageBox.confirm({
                 title: `确定要删除${row.name}用户组吗？`,
-                content: '用户组确定删除后补课恢复哦'
+                content: '用户组确定删除后不可恢复哦'
             }).then(() => {
                 // todo: 请求接口
                 deleteGroup(row.uuid).then(() => {

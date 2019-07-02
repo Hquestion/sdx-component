@@ -9,20 +9,21 @@
             check-type="file"
             v-model="files"
             :string-model="true"
-            accept="image/png;.py"
+            accept=".py"
         />
         <!--        <SdxuLazyList :load="loadData" item-key="uuid" store-name="file" store-keys="uuid,name" :item-height="50" style="height: 400px;">-->
         <!--            <template #default="{data}">-->
         <!--                <div >{{data.name}}</div>-->
         <!--            </template>-->
         <!--        </SdxuLazyList>-->
-        <SdxuButton @click="editorVisible = true" v-auth.user.button="authFn" auth="USER:ACCESS">打开代码编辑器</SdxuButton>
+        <SdxuButton @click="editorVisible = true" v-auth.user.button="'USER:ACCESxS'" auth="USER:ACCESS">打开代码编辑器</SdxuButton>
         <SdxwCodeEditor
             :visible.sync="editorVisible"
             title="组件代码编辑"
             v-model="code"
             :save-handler="handleSave"
         />
+        <HelloWorld  v-auth.user.button="'USER:ACCESxS'" auth="USER:ACCESS"></HelloWorld>
     </div>
 </template>
 
@@ -34,10 +35,12 @@ import SdxwFileSelectMain from '@sdx/widget/components/file-select/src/FileSelec
 import SdxwCodeEditor from '@sdx/widget/components/code-editor/src/CodeEditor';
 
 import SdxuButton from '@sdx/ui/components/button';
+import HelloWorld from '../components/HelloWorld';
 
 export default {
     name: 'Home',
     components: {
+        HelloWorld,
         SdxuButton,
         SdxwCodeEditor,
         // SdxuLazyList,
@@ -56,7 +59,8 @@ export default {
                 '\n' +
                 'from celery import Celery\n' +
                 '\n' +
-                'from api.management.dockerBuilderManager import DockerBuilderManager'
+                'from api.management.dockerBuilderManager import DockerBuilderManager',
+            visible: true
         };
     },
     methods: {
@@ -86,6 +90,11 @@ export default {
             console.log(arguments);
             return this.authFn;
         }
+    },
+    mounted() {
+        setTimeout(() => {
+            this.visible = false;
+        }, 10000);
     }
 };
 </script>

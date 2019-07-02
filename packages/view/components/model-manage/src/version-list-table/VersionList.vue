@@ -85,6 +85,12 @@
                             title="查看详情"
                         />
                         <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'publish')"
+                            icon="sdx-icon sdx-quxiaofenxiang"
+                            title="发布"
+                            v-if="scope.row.showPublish"
+                        />
+                        <sdxu-icon-button
                             @click="handleOperation(scope.row, 'edit')"
                             icon="sdx-icon sdx-icon-edit"
                             title="编辑"
@@ -107,12 +113,6 @@
                             icon="sdx-icon sdx-ceshi"
                             title="测试"
                             v-if="scope.row.showTest"
-                        />
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'publish')"
-                            icon="sdx-icon sdx-quxiaofenxiang"
-                            title="发布"
-                            v-if="scope.row.showPublish"
                         />
                     </sdxu-icon-button-group>
                 </template>
@@ -283,6 +283,7 @@ export default {
                     }
                 });
                 this.total = res.total;
+            }).finally(() => {
                 this.loading = false;
             });
         },

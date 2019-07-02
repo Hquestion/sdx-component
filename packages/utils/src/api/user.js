@@ -1,7 +1,8 @@
 import httpService from '../http-service';
 import {getRolesList} from './rolemange';
 import { COMPOSE_GATEWAY_BASE, USER_SERVICE_GATEWAY_BASE } from './config';
-
+import readAuths from './config';
+import { authWrapper } from './helper';
 
 
 export function changePassword(uuid, params) {
@@ -16,13 +17,21 @@ export function getGroupDetail(uuid) {
     return httpService.get(`${USER_SERVICE_GATEWAY_BASE}groups/${uuid}`);
 }
 
-export function getSimpleUserList(params) {
+/* export function getSimpleUserList(params) {
     return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/`, params);
-}
+} */
 
-export function getUserList(params) {
+export const getSimpleUserList = authWrapper(function (params) {
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/`, params);
+}, readAuths.USER_USER_READ);
+
+/* export function getUserList(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}user-profiles`, params);
-}
+} */
+
+export const getUserList = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}user-profiles`, params);
+}, readAuths.USER_USER_READ);
 
 /**
  * 删除用户
@@ -77,9 +86,13 @@ export function deleteGroup(uuid) {
     return httpService.remove(`${USER_SERVICE_GATEWAY_BASE}groups/${uuid}`);
 }
 
-export function getGroups(params) {
+/* export function getGroups(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}group-profiles`, params);
 }
+ */
+export const getGroups = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}group-profiles`, params);
+}, readAuths.USER_GROUP_READ);
 
 export function getUserRoleGroupByName(name, type) {
     const pagination = { start: 1, count: type === 'all' ? 5 : 10 };

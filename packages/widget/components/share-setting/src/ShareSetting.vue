@@ -15,11 +15,18 @@
                 label="共享至全局："
                 v-auth.button="authMap[sourceKind]"
             >
-                <el-switch
+                <el-radio
                     v-model="shareForm.shareType"
-                    active-value="PUBLIC"
-                    inactive-value="PRIVATE"
-                />
+                    label="PUBLIC"
+                >
+                    是
+                </el-radio>
+                <el-radio
+                    v-model="shareForm.shareType"
+                    label="PRIVATE"
+                >
+                    否
+                </el-radio>
             </el-form-item>
             <el-form-item
                 label="用户/用户组："
@@ -39,7 +46,7 @@ import Dialog from '@sdx/ui/components/dialog';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
-import ElSwitch from 'element-ui/lib/switch';
+import ElRadio from 'element-ui/lib/radio';
 import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxwShareSetting',
@@ -73,7 +80,7 @@ export default {
         [Dialog.name]: Dialog,
         ElForm,
         ElFormItem,
-        ElSwitch
+        ElRadio
     },
     props: {
         visible: {

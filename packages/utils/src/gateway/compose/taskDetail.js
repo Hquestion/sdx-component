@@ -19,11 +19,18 @@ export let handler = wrap(function(ctx, request) {
             url: 'http://tyk-gateway/fe-compose/api/v1/project-detail-batch',
             result: 'items',
             errorReplaceKey: 'uuid'
+        },
+        {
+            path: 'imageId',
+            url: 'http://tyk-gateway/image-manager/api/v1/images',
+            result: 'data',
+            errorReplaceKey: 'uuid'
         }
     );
 
     ctx.rename(task, 'ownerId', 'owner');
     ctx.rename(task, 'projectId', 'project');
+    ctx.rename(task, 'imageId', 'image');
 
     return ctx.createResponse(200, task);
 });

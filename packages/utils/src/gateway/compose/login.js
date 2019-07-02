@@ -1,4 +1,5 @@
 import wrap from '../wrap';
+import { AUTHORIZATION_HEADER, CONTENT_TYPE_APPLICATION_JSON, CONTENT_TYPE_HEADER } from '../wrap';
 
 /* Acquire an OAuth2 token, retrieve the logged-in user, and resolve the roles, groups and permissions of that user.
    Examples:
@@ -10,12 +11,18 @@ export let handler = wrap(function(ctx, request) {
         'http://tyk-gateway/user-manager/api/v1/tokens',
         JSON.parse(request.Body)));
 
+    // Set Authorization headers in request after token created
+    request.Headers = request.Headers || {};
+    request.Headers[AUTHORIZATION_HEADER] = [`${authToken.tokenType} ${authToken.accessToken}`];
+    request.Headers[CONTENT_TYPE_HEADER] = [CONTENT_TYPE_APPLICATION_JSON];
+
     // Resolve user entity
     ctx.resolveUuids(authToken,
         {
             path: 'uuid',
             url: 'http://tyk-gateway/user-manager/api/v1/users',
-            result: 'users'
+            result: 'users',
+            errorReplaceKey: 'uuid'
         }
     );
     ctx.rename(authToken, 'uuid', 'user');

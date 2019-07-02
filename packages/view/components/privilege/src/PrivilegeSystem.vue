@@ -30,7 +30,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="系统类别"
+                label="服务名称"
             >
                 <template #default="{ row }">
                     {{ splitKey(row.key, 0) }}
@@ -61,10 +61,11 @@
         </sdxu-table>
         <div class="sdxv-privilege-system__pagination">
             <sdxu-pagination
+                v-if="total"
                 :current-page.sync="page"
                 :page-size="pageSize"
                 :total="total"
-                @current-change="handleChangePage" 
+                @current-change="handleChangePage"
             />
         </div>
     </div>
@@ -91,7 +92,7 @@ export default {
         return {
             pageSize: 10,
             page: 1,
-            total: 100,
+            total: 0,
             data: [],
             name: '',
             loading: false
@@ -122,7 +123,7 @@ export default {
         splitKey(key, i) {
             const list = key.split(':');
             return list[i] || '';
-        }, 
+        },
         handleChangePage(page) {
             this.page = page;
             this.fetchData();

@@ -57,7 +57,11 @@
                 prop="type"
                 label="任务类型"
                 min-width="150px"
-            />
+            >
+                <template #default="{ row }">
+                    {{ TASK_TYPE_LABEL[row.type] }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="任务状态"
                 min-width="100px"
@@ -120,7 +124,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="user.name"
+                prop="owner.username"
                 label="创建人"
                 min-width="100px"
             />
@@ -182,7 +186,7 @@ import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
 
-import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE } from '@sdx/utils/src/const/task';
+import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, TASK_TYPE_LABEL } from '@sdx/utils/src/const/task';
 import taskMixin from '@sdx/utils/src/mixins/task';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import { getTaskList } from '@sdx/utils/src/api/project';
@@ -218,12 +222,14 @@ export default {
         }
     },
     data() {
+        // todo: 下拉框数据需要从接口请求
         this.STATE_TYPE = STATE_TYPE;
         this.STATE_TYPE_LABEL = STATE_TYPE_LABEL;
         this.STATE_MAP_FOLD_LABEL_TYPE = STATE_MAP_FOLD_LABEL_TYPE;
+        this.TASK_TYPE_LABEL = TASK_TYPE_LABEL;
         this.taskTypeList = Object.values(TASK_TYPE).map(item => {
             return {
-                label: item,
+                label: TASK_TYPE_LABEL[item],
                 value: item
             };
         });
@@ -233,7 +239,7 @@ export default {
         });
         this.taskStateList = Object.values(STATE_TYPE).map(item => {
             return {
-                label: item,
+                label: STATE_TYPE_LABEL[item],
                 value: item
             };
         });
@@ -285,6 +291,7 @@ export default {
             }).catch(() => {
                 this.taskResourceList = [];
                 this.total = 0;
+                this.loading = false;
             });
         },
         stateIcon(state) {

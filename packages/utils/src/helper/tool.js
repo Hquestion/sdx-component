@@ -39,3 +39,14 @@ export function removeBlankAttr(object) {
         }
     }
 }
+
+export function removeSameAttr(oObj,nObj) {
+    let [keys, res] = [Object.keys(nObj), nObj];
+    for(let i =0; i< keys.length; i++) {
+        let name = keys[i];
+        if(oObj[name] === nObj[name]) {
+            delete res[name];
+        }
+    }
+    return res;
+}

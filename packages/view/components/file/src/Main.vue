@@ -6,7 +6,7 @@
         <OperationBar ref="operationBar" />
         <BreadcrumbBar />
         <FileTable ref="fileTable" />
-        <SdxvFileTask :visible.sync="taskVisible" />
+        <SdxvFileTask :visible.sync="taskVisible" ref="fileTask"/>
     </SdxuContentPanel>
 </template>
 
@@ -16,8 +16,8 @@ import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 
-import { getFilesList, searchFiles } from '@sdx/utils/src/api/file';
-import { rootKinds, fixedRows, fixedRowsNameMap, getDirRootKind } from './helper/fileListTool';
+import { getFilesList, searchFiles, getMyShare, getMyAcceptedShare, getProjectShare, searchShareFiles } from '@sdx/utils/src/api/file';
+import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap, PROJECT_SHARE_PATH, MY_SHARE_PATH, ACCEPTED_SHARE_PATH } from './helper/fileListTool';
 import BreadcrumbBar from './BreadcrumbBar';
 import SdxvFileTask from './popup/FileTask';
 
@@ -49,6 +49,8 @@ export default {
             isRoot: true,
             // 当前路径
             currentPath: '/',
+            // 当前路径的详细信息
+            currentPathMeta: {},
             // 根路径类型，默认为空表示普通文件夹，用于区分我的共享/接收的共享/项目共享
             rootKind: '',
             // 是否处于搜索模式
@@ -57,7 +59,7 @@ export default {
             loading: false,
             // 排序信息
             orderBy: 'updatedAt',
-            order: 'asc',
+            order: 'desc',
             fixedRows,
             taskVisible: false,
             uploadingFiles: []
@@ -82,7 +84,16 @@ export default {
     },
     methods: {
         isProjectRoot() {
-            return this.currentPath === '/fe-fixed-project-share';
+            return this.currentPath === PROJECT_SHARE_PATH;
+        },
+        isAcceptedRoot() {
+            return this.currentPath === ACCEPTED_SHARE_PATH;
+        },
+        isMyShareRoot() {
+            return this.currentPath === MY_SHARE_PATH;
+        },
+        isShareRoot() {
+            return !!fixedRowsKeyMap[this.currentPath];
         },
         resetFlags() {
             // 重置页码
@@ -92,10 +103,13 @@ export default {
             this.fileList = [];
             this.total = 0;
             this.loadedTotal = 0;
+            this.searchKey = '';
+            this.resetCheck();
+        },
+        resetCheck() {
             this.checked = [];
             this.checkedMap = {};
             this.isCheckAll = false;
-            this.searchKey = '';
         },
         enterDirectory(dir) {
             this.resetFlags();
@@ -112,14 +126,14 @@ export default {
 
             let defer;
             const deferMap = {
-                [rootKinds.MY_SHARE]: this.loadFileList,
-                [rootKinds.ACCEPTED_SHARE]: this.loadFileList,
-                [rootKinds.PROJECT_SHARE]: this.loadFileList
+                [rootKinds.MY_SHARE]: this.loadMyShare,
+                [rootKinds.ACCEPTED_SHARE]: this.loadAcceptedShare,
+                [rootKinds.PROJECT_SHARE]: this.loadProjectShare
             };
             if (this.rootKind === '') {
                 defer = this.loadFileList();
             } else {
-                defer = deferMap[this.rootKind]();
+                defer = (this.isShareRoot() ? deferMap[this.rootKind] : this.loadFileList)();
             }
             return defer.then(res => {
                 let fileList = res.children;
@@ -159,7 +173,7 @@ export default {
             this.searchKey = key;
             this.currentPath = dir;
             this.isRoot = dir === '/';
-            this.rootKind = '';
+            this.rootKind = getDirRootKind(dir);
             // 修改为加载中，准备获取数据
             this.loading = true;
             this.db.list.clear();
@@ -217,23 +231,86 @@ export default {
             }
         },
         loadFileList() {
-            return getFilesList({
-                start: (this.pageIndex - 1) * this.pageSize,
-                count: this.pageSize,
-                path: this.currentPath,
+            if (this.rootKind === '') {
+                return getFilesList({
+                    start: (this.pageIndex - 1) * this.pageSize + 1,
+                    count: this.pageSize,
+                    path: this.currentPath,
+                    orderBy: this.orderBy,
+                    order: this.order
+                });
+            } else {
+                let path = '', ownerId;
+                path = this.currentPath.replace(eval(`/\\${rootKindPathMap[this.rootKind]}(.*)/`), '$1');
+                if (this.rootKind === rootKinds.PROJECT_SHARE) {
+                    path = '/' + path.split('/').slice(2).join('/');
+                }
+                ownerId = this.$route.query.ownerId;
+                return getFilesList({
+                    ownerId: ownerId,
+                    start: (this.pageIndex - 1) * this.pageSize + 1,
+                    count: this.pageSize,
+                    path: path,
+                    orderBy: this.orderBy,
+                    order: this.order
+                });
+            }
+        },
+        loadShare(kind, start, count) {
+            let map = {
+                [rootKinds.MY_SHARE]: getMyShare,
+                [rootKinds.ACCEPTED_SHARE]: getMyAcceptedShare,
+                [rootKinds.PROJECT_SHARE]: getProjectShare,
+            };
+            return map[kind]({
+                start: start || (this.pageIndex - 1) * this.pageSize + 1,
+                count: count || this.pageSize,
+                path: '',
                 orderBy: this.orderBy,
                 order: this.order
             });
         },
+        loadMyShare(start, count) {
+            return this.loadShare(rootKinds.MY_SHARE, start, count);
+        },
+        loadAcceptedShare(start, count) {
+            return this.loadShare(rootKinds.ACCEPTED_SHARE, start, count);
+        },
+        loadProjectShare(start, count) {
+            return this.loadShare(rootKinds.PROJECT_SHARE, start, count);
+        },
         loadSearchResult() {
-            return searchFiles({
-                start: (this.pageIndex - 1) * this.pageSize,
-                count: this.pageSize,
-                path: this.currentPath,
-                orderBy: this.orderBy,
-                order: this.order,
-                keyword: this.searchKey
-            });
+            if (this.isShareRoot()) {
+                return this.loadShare(this.rootKind, 1, -1).then(res => {
+                    const files = res.children;
+                    let paths = [], uuids = [];
+                    files.forEach(file => {
+                        paths.push(file.path);
+                        uuids.push(file.ownerId);
+                    });
+                    return searchShareFiles({
+                        uuids: uuids,
+                        paths: paths,
+                        keyword: this.searchKey
+                    });
+                });
+            } else {
+                let path = this.currentPath;
+                let ownerId = '';
+                if (this.rootKind !== '') {
+                    path = '/' + this.currentPath.split('/').slice(2).join('/');
+                    ownerId = this.$route.query.ownerId;
+                }
+                return searchFiles({
+                    ownerId: ownerId,
+                    start: (this.pageIndex - 1) * this.pageSize + 1,
+                    count: this.pageSize,
+                    path,
+                    orderBy: this.orderBy,
+                    order: this.order,
+                    keyword: this.searchKey
+                });
+            }
         },
         async getRenderList(offset, limit) {
             // 获取需要渲染到列表中的数据
@@ -246,7 +323,7 @@ export default {
     mounted() {
         const db = new Dexie('SdxvFile');
         db.version(1).stores({
-            list: '++,path,userId,name,filesystem,isFile,mimeType,fileExtension,fileShareDetailId,createdAt,updatedAt,size'
+            list: '++,path,ownerId,name,filesystem,isFile,mimeType,fileExtension,fileShareId,createdAt,updatedAt,size'
         });
         this.db = db;
         this.currentPath = this.$route.query.path || '/';

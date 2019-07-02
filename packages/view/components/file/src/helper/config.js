@@ -14,9 +14,11 @@ export const copyTaskStatusMap = {
         status: '',
         type: 'finish'
     },
-    ERROR: {
+    FAILURE: {
         label: '拷贝失败',
         status: 'warning',
         type: 'error'
     }
 };
+
+

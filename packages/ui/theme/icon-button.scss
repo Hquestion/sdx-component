@@ -7,6 +7,9 @@
     & + .sdxu-icon-button {
         margin-left: $sdx-margin + 10px;
     }
+    &[style*='display: none'] + .sdxu-icon-button {
+        margin-left: 0;
+    }
     @include modifier('small') {
         font-size: $sdx-help-font-size;
     }

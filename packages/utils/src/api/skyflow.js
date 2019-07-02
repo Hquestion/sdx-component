@@ -109,29 +109,29 @@ export function getDatasetList() {
 /**
  * 获取平台组件列表
  */
-export function getPlatformComponentList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/platform');
+export function getPlatformComponentList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/platform', { processType });
 }
 
 /**
  * 获取收藏组件列表
  */
-export function getFavoriteComponentList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/favorite');
+export function getFavoriteComponentList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/favorite', { processType });
 }
 
 /**
  * 获取公共组件列表
  */
-export function getPublicComponentList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/public/');
+export function getPublicComponentList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/public/', { processType });
 }
 
 /**
  * 获取自定义组件列表
  */
-export function getCustomComponentList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/custom');
+export function getCustomComponentList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/custom', { processType });
 }
 
 /**
@@ -193,8 +193,9 @@ export function getRunTimeOptions() {
  * 根据名称搜索组件
  * @param {String} name component-name
  */
-export function searchComponents(name) {
+export function searchComponents(processType, name) {
     return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component', {
+        processType,
         name
     });
 }

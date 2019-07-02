@@ -29,6 +29,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     .el-form-item.is-success .el-textarea__inner:focus {
         border-color: $sdxu-input-border-color-success;
     }
+    .el-input__suffix {
+        right: 12px;
+    }
 
     @include element('icon') {
         @include state('clickable') {
@@ -50,6 +53,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
         @include element('icon') {
             line-height: $sdxu-input-height-small;
+            font-size: 15px;
         }
     }
 
@@ -60,6 +64,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
         @include element('icon') {
             line-height: $sdxu-input-height-regular;
+            font-size: 16px;
         }
     }
 

@@ -148,6 +148,7 @@
             :default-users="shareUsers"
             :default-groups="shareGroups"
             :handler="doShare"
+            source-kind="file"
         />
     </div>
 </template>

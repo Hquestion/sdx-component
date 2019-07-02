@@ -101,9 +101,9 @@ function handler(resp, preventDefaultNotify) {
         preventDefaultError = resp.config.preventError;
     if (specialCodeHandler) {
         if (specialCodeHandler[httpCode]) {
-            specialCodeHandler[httpCode].apply(null, [httpCode, code, resp]);
+            specialCodeHandler[httpCode](httpCode, code, resp);
         } else if (specialCodeHandler[code]) {
-            specialCodeHandler[httpCode].apply(null, [httpCode, code, resp]);
+            specialCodeHandler[httpCode](httpCode, code, resp);
         }
     }
     if (preventDefaultError) {
@@ -119,8 +119,9 @@ function handler(resp, preventDefaultNotify) {
     });
 }
 
-handler.register = (errorCodeMap, specialCodeHandler, i18nInstance) => {
+handler.register = (errorCodeMap, customCodeHandler, i18nInstance) => {
     errorMessageMap = errorCodeMap;
+    specialCodeHandler = customCodeHandler;
     defaultErrorMap = errorMessageMap.default || [];
     reqErrorMap = reqErrorMap.req || [];
     i18nInstance && (i18n = i18nInstance);

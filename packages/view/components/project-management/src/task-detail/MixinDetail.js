@@ -68,8 +68,11 @@ export default {
             }
         },
         dealTime(startTime, endTime) {
+            if (!startTime) {
+                return '';
+            }
             let t1 = startTime; // this.task.running_at
-            let t2 = endTime; // this.task.stopped_at
+            let t2 = endTime || new Date(); // this.task.stopped_at
             let usedTime = (new Date(t2)).valueOf() - (new Date(t1)).valueOf(); // 两个时间戳相差的毫秒数
             usedTime = usedTime < 0 ? 0 : usedTime;
             let days = Math.floor(usedTime / (24 * 3600 * 1000));

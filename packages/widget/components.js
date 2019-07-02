@@ -17,5 +17,6 @@ module.exports = {
     'task-stop-dialog': './components/task-stop-dialog/index.js',
     'code-editor': './components/code-editor/index.js',
     'resource-config': './components/resource-config/index.js',
-    'auth': './components/auth/index.js'
+    'auth': './components/auth/index.js',
+    'share-form': './components/share-form/index.js'
 };

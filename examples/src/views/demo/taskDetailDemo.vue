@@ -16,10 +16,10 @@ export default {
             task: {
                 name: 'jupyter',
                 state: 'RUNNING',
-                user: {
+                owner: {
                     name: 'creator'
                 },
-                description: 'xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高觉得是浪费感觉啊都说了割发代首',
+                description: 'xxxxdsfsfsaf阿迪沙发发烧的xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高xxxxdsfsfsaf阿迪沙发发烧的发烧发烧发烧到了风急浪高发烧发烧发烧到了风急浪高觉得是浪费感觉啊都说了割发代首',
                 image: {
                     name: 'sadfasfljlkjlfkjasklga'
                 },

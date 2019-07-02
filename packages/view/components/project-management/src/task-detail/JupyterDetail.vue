@@ -4,7 +4,10 @@
             v-if="task.state === STATE_TYPE.RUNNING"
             #base-info-right
         >
-            <SdxuButton @click="dialogVisible = true">
+            <SdxuButton
+                v-auth.project.button="'TASK:SAVE_IMAGE'"
+                @click="dialogVisible = true"
+            >
                 另存为镜像
             </SdxuButton>
             <SdxvSaveAsDialog
@@ -30,7 +33,7 @@
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
                 label="创建人"
-                :value="task.user.name"
+                :value="task.owner && task.owner.username || ''"
             />
             <SdxvBaseInfoItem
                 label="任务描述"
@@ -41,7 +44,7 @@
         <template #running-info>
             <SdxvBaseInfoItem
                 label="运行环境"
-                :value="task.image.name"
+                :value="task.image && task.image.name || ''"
             />
             <SdxvBaseInfoItem
                 label="实例个数"
@@ -57,7 +60,7 @@
             />
             <SdxvBaseInfoItem
                 label="运行时长"
-                :value="dealTime(task.runningAt, task.stoppedAt || new Date())"
+                :value="dealTime(task.runningAt, task.stoppedAt)"
             />
             <SdxvBaseInfoItem
                 v-if="task.externalUrl"
@@ -138,10 +141,14 @@
 
 <script>
 import MixinDetail from './MixinDetail';
+import auth from '@sdx/widget/components/auth';
 
 export default {
     name: 'SdxvJupyterDetail',
     mixins: [MixinDetail],
+    directives: {
+        auth
+    },
     data() {
         return {
             dialogVisible: false

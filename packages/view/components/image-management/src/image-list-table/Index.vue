@@ -401,7 +401,10 @@ export default {
                     break;
                 case 'extend':
                     this.$router.push({
-                        path: `basicbuild/${row.uuid}`
+                        name: 'basicbuild',
+                        params: {
+                            imageId: row.uuid
+                        }
                     });
                     break;
                 case 'remove':

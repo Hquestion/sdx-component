@@ -120,13 +120,13 @@ export default {
         handleMove(target) {
             if (this.toMoveOrCopyRow) {
                 // 移动单个路径
-                move(this.toMoveOrCopyRow.path, target.path).then(() => {
+                move(this.toMoveOrCopyRow.path, target.path, target.ownerId, this.toMoveOrCopyRow.ownerId).then(() => {
                     this.moveVisible = false;
                     this.fileManager.enterDirectory(this.fileManager.currentPath);
                 });
             } else {
                 if (this.fileManager.checked.length > 0) {
-                    move(this.fileManager.checked.map(item => item.path), target.path).then(() => {
+                    move(this.fileManager.checked.map(item => item.path), target.path, target.ownerId, this.fileManager.checked[0].ownerId).then(() => {
                         this.moveVisible = false;
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
                     });
@@ -135,14 +135,14 @@ export default {
         },
         handleCopy(target) {
             if (this.toMoveOrCopyRow) {
-                copy([this.toMoveOrCopyRow.path], target.path).then(res => {
+                copy([this.toMoveOrCopyRow.path], target.path, target.ownerId, this.toMoveOrCopyRow.ownerId).then(res => {
                     this.moveVisible = false;
                     this.fileManager.resetCheck();
                     this.fileManager.$refs.fileTask.checkTab('COPY');
                 });
             } else {
                 if (this.fileManager.checked.length > 0) {
-                    copy(this.fileManager.checked.map(item => item.path), target.path).then(() => {
+                    copy(this.fileManager.checked.map(item => item.path), target.path, target.ownerId, this.fileManager.checked[0].ownerId).then(() => {
                         this.moveVisible = false;
                         this.fileManager.resetCheck();
                         this.fileManager.$refs.fileTask.checkTab('COPY');

@@ -55,7 +55,7 @@ export default {
     },
     computed: {
         __needPull() {
-            return !this.isEmpty();
+            return !this.isTaskEmpty();
         }
     },
     methods: {
@@ -77,7 +77,7 @@ export default {
                     this.unzipFileList = data.jobs;
                 });
         },
-        isEmpty() {
+        isTaskEmpty() {
             return this.unzipFileList.length === 0
                 || !this.unzipFileList.some(item => [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(item.state));
         },
@@ -100,7 +100,7 @@ export default {
             }
         },
         unzipFileList() {
-            if (this.isEmpty()) {
+            if (this.isTaskEmpty()) {
                 this.$emit('empty');
             }
         }

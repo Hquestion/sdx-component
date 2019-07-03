@@ -111,7 +111,7 @@ export default {
     methods: {
         handleHide() {
             let hasUnfinishTasks = ['uploadTask', 'copyTask', 'unzipTask'].some(item => {
-                return this.$refs[item].isEmpty && !this.$refs[item].isEmpty() || false;
+                return this.$refs[item].isListEmpty && !this.$refs[item].isListEmpty() || false;
             });
             if(!hasUnfinishTasks) {
                 this._visible = false;
@@ -136,7 +136,7 @@ export default {
             const refs = ['uploadTask', 'copyTask', 'unzipTask'];
             let isEmpty = true;
             refs.forEach(ref => {
-                if (!this.$refs[ref].isEmpty()) {
+                if (!this.$refs[ref].isTaskEmpty()) {
                     isEmpty = false;
                 }
             });

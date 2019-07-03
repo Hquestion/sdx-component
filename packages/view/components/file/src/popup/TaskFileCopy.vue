@@ -114,7 +114,7 @@ export default {
     },
     computed: {
         __needPull() {
-            return !this.isEmpty();
+            return !this.isTaskEmpty();
         }
     },
     methods: {
@@ -154,9 +154,12 @@ export default {
                 this.fetchCopyTaskList();
             });
         },
-        isEmpty() {
+        isTaskEmpty() {
             return this.copyFileList.length === 0
                 || !this.copyFileList.some(item => [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(item.state));
+        },
+        isListEmpty() {
+            return this.copyFileList.length === 0;
         },
         isProcessing(row) {
             return [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(row.state);
@@ -179,7 +182,7 @@ export default {
             }
         },
         copyFileList() {
-            if (this.isEmpty()) {
+            if (this.isTaskEmpty()) {
                 this.$emit('empty');
             }
         }

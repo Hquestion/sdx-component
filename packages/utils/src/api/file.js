@@ -300,22 +300,24 @@ export function deletePath(paths, ownerId) {
     });
 }
 
-export function move(sourcePaths, targetPath) {
+export function move(sourcePaths, targetPath, targetOwnerId, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     isString(sourcePaths) && (sourcePaths = [sourcePaths]);
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/move`, {
-        ownerId: userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         sourcePaths,
-        targetPath
+        targetPath,
+        targetOwnerId: targetOwnerId || userInfo.userId
     });
 }
 
-export function copy(sourcePaths, targetPath) {
+export function copy(sourcePaths, targetPath, targetOwnerId, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/copy`, {
-        ownerId: userInfo.userId,
+        ownerId: ownerId || userInfo.userId,
         sourcePaths,
-        targetPath
+        targetPath,
+        targetOwnerId: targetOwnerId || userInfo.userId
     });
 }
 

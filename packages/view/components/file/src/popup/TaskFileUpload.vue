@@ -117,8 +117,11 @@ export default {
             }
             return label;
         },
-        isEmpty() {
+        isTaskEmpty() {
             return this.list.every(item => item.status === 'success' || item.status === 'error');
+        },
+        isListEmpty() {
+            return this.list.length === 0;
         },
         deleteAllTasks() {
             this.list.forEach(file => this.handleCancelUpload(file));
@@ -129,7 +132,7 @@ export default {
             deep: true,
             immediate: false,
             handler() {
-                if (this.isEmpty()) {
+                if (this.isTaskEmpty()) {
                     this.$emit('empty');
                 }
             }

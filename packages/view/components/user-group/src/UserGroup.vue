@@ -2,7 +2,10 @@
     <sdxu-panel
         title="用户组"
     >
-        <div class="sdxv-user-group">
+        <div
+            class="sdxv-user-group"
+            v-auth.user.button="'GROUP:READ'"
+        >
             <div class="sdxv-user-group__bar">
                 <sdxu-button
                     icon="sdx-icon sdx-icon-plus"
@@ -23,7 +26,7 @@
                             class="sdxv-user-group__bar--input"
                             type="search"
                             :searchable="true"
-                            placeholder="请输入权限名"
+                            placeholder="请输入用户组名"
                             size="small"
                             v-model="name"
                         />
@@ -60,7 +63,6 @@
                 </el-table-column>
                 <el-table-column
                     label="操作"
-                    v-auth.user.button="'GROUP:WRITE'"
                 >
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--operation">
@@ -68,9 +70,11 @@
                                 icon="sdx-icon sdx-icon-edit"
                                 @click="handleEdit(row)"
                                 title="编辑"
+                                v-auth.user.button="'GROUP:WRITE'"
                             />
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-delete"
+                                v-auth.user.button="'GROUP:WRITE'"
                                 @click="handleDelete(row)"
                                 title="删除"
                             />

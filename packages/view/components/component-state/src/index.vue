@@ -1,5 +1,8 @@
 <template>
-    <div class="sdxv-components-state">
+    <div
+        class="sdxv-components-state"
+        v-auth.system.button="'POD_STATE:READ'"
+    >
         <SdxuContentPanel>
             <SdxuTabRadioGroup
                 v-model="type"
@@ -22,6 +25,7 @@ import TabRadio from '@sdx/ui/components/tab-radio';
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
 
 import SdxvComponentStateList from './ComponentStateList';
+import auth from '@sdx/widget/components/auth';
 
 export default {
     name: 'SdxvComponentsState',
@@ -30,6 +34,9 @@ export default {
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         SdxvComponentStateList,
         SdxuContentPanel
+    },
+    directives: {
+        auth
     },
     data() {
         return {

@@ -60,7 +60,7 @@
             </el-form-item>
             <el-form-item
                 label="协作者/组："
-                v-show="!projectForm.isTemplate"
+                v-if="!projectForm.isTemplate"
                 v-auth.project.button="'COOPERATE_PROJECT:CREATE'"
             >
                 <sdxw-select-group-user

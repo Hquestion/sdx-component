@@ -236,7 +236,7 @@ export default {
 
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval };
+            this.params = { ...this.params, ...nval, ...{imageId:nval.image.uuid}};
             this.cpuObj = {
                 cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
                 memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),

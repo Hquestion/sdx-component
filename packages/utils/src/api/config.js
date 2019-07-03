@@ -9,6 +9,7 @@ export const SKYFLOW_MANAGE_GATEWAY_BASE = '/skyflow-manager/api/v1/';
 export const SKYFLOW_MANAGE_GATEWAY_BASE_OLD = '/skyflow-manager/v2/';
 export const SYSTEM_MANAGE_GETWAY_BASE = '/system-manager/api/v1/';
 export const MODEL_MANAGE_GATEWAY_BASE = '/model-manager/api/v1/';
+export const DATA_MANAGE_GATEWAY_BASE = '/data-manager/api/v1/';
 
 
 // read auth consts

@@ -92,6 +92,7 @@
                     v-model="params.datasets"
                     size="small"
                     placeholder="请选择数据集"
+                    multiple
                 >
                     <el-option
                         v-for="item in datasetsOptions"
@@ -256,7 +257,7 @@ export default {
     },
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval };
+            this.params = { ...this.params, ...nval,...{imageId:nval.image.uuid}};
             this.cpuObj = {
                 cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
                 memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),

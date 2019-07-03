@@ -249,7 +249,7 @@ export default {
 
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval };
+            this.params = { ...this.params, ...nval, ...{imageId:nval.image.uuid}};
             this.cpuDriver = {
                 cpu: this.params.resourceConfig.SPARK_DRIVER_CPUS/1000,
                 memory: this.params.resourceConfig.SPARK_DRIVER_MEMORY / (1024*1024*1024),

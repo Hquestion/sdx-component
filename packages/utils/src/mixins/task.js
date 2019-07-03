@@ -46,7 +46,7 @@ export default {
             case 'edit':
                 this.handleEdit(row);
                 break;
-            case 'delete':
+            case 'remove':
                 this.handleDelete(row);
                 break;
             }

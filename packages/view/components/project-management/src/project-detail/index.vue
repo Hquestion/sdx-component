@@ -68,7 +68,17 @@
                             v-for="(item, index) in taskList"
                             :key="index"
                             :meta="item"
-                        />
+                        >
+                            <template #footer>
+                                <SdxuIconButton
+                                    v-for="(el, i) in getOperationList(item, monitor)"
+                                    :key="i"
+                                    :icon="el.icon"
+                                    :title="el.label"
+                                    @click="handleOperation(el.value, item)"
+                                />
+                            </template>
+                        </task-card>
                     </task-card-list>
                 </div>
                 <div class="sdxv-project-detail__footer">
@@ -103,8 +113,10 @@ import TaskIcon from './TaskIcon';
 import Message from 'element-ui/lib/message';
 import { getTaskList, removeTask, startTask, stopTask } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
+import taskMixin from '@sdx/utils/src/mixins/task';
 export default {
     name: 'SdxvProjectDetail',
+    mixins: [taskMixin],
     data() {
         return {
             searchName: '',
@@ -177,6 +189,7 @@ export default {
     },
     created() {
         this.initList();
+        this.fetchDataMinxin = this.initList;
     },
     directives: {
         auth

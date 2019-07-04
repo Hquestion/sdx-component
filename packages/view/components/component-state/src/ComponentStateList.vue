@@ -91,6 +91,8 @@ import ElOption from 'element-ui/lib/option';
 import { POD_STATE_TYPE } from '@sdx/utils/src/const/task';
 import { getPodsStatus } from '@sdx/utils/src/api/system';
 
+const POLLING_PERIOD = 3 * 1000;
+
 export default {
     name: 'SdxvComponentStateList',
     directives: { auth },
@@ -138,7 +140,8 @@ export default {
             },
             logDialogVisible: false,
             currentPod: {},
-            loading: false
+            loading: false,
+            pollingId: null
         };
     },
     computed: {
@@ -156,11 +159,16 @@ export default {
             return {
                 namespace: this.type === 'base' ? 'kube-system,skydiscovery' : 'skydiscovery-system'
             };
+        },
+        needPolling() {
+            return this.componentList.some(item => ['running', 'pending'].includes(item.status));
         }
     },
     methods: {
-        fetchData() {
-            this.loading = true;
+        fetchData(showLoading = true) {
+            if (showLoading) {
+                this.loading = true;
+            }
             getPodsStatus(this.params).then(data => {
                 this.componentList = data.status_list;
                 this.loading = false;
@@ -185,6 +193,10 @@ export default {
     created() {
         this.fetchData();
     },
+    beforeDestroy() {
+        this.pollingId && clearInterval(this.pollingId);
+        this.pollingId = null;    
+    },
     watch: {
         type() {
             this.searchName = '';
@@ -197,6 +209,17 @@ export default {
             };
             this.componentList = [];
             this.fetchData();
+        },
+        needPolling(nval) {
+            if (nval) {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = setInterval(() => {
+                    this.fetchData(false);
+                }, POLLING_PERIOD);
+            } else {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = null;
+            }
         }
     }
 };

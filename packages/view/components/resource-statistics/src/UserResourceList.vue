@@ -42,7 +42,7 @@
             v-loading="loading"
         >
             <el-table-column
-                prop="owner.username"
+                prop="owner.fullName"
                 label="用户名"
             />
             <el-table-column
@@ -202,7 +202,7 @@ export default {
             this.$router.push({name: 'SdxvUserResourceList'});
         },
         handleSearch() {
-            this.params.username = this.searchName;
+            this.params.username = this.searchName.trim();
             this.page = 1;
         },
         handlePageChange(page) {

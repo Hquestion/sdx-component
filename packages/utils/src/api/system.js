@@ -14,6 +14,15 @@ export function getClusterResourceMonitor(params) {
 }
 
 /**
+ * 获取Pod实时资源使用情况
+ * @param {*} uuid 
+ * @param {*} params 
+ */
+export function getPodResourceStatus(uuid, params) {
+    return httpService.get(`${SYSTEM_MANAGE_GETWAY_BASE}resources/${uuid}`, params);
+}
+
+/**
  * Pod日志查询
  * @param {*} params
  */
@@ -48,6 +57,7 @@ export function getPodStatusByPodId(uuid, params) {
 
 export default {
     getClusterResourceMonitor,
+    getPodResourceStatus,
     getPodLog,
     getPodsStatus,
     getPodStatusByPodId

@@ -56,7 +56,7 @@ export default {
             try {
                 // 任务类型为jupyter或container_dev且状态不为新建则弹出框
                 if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINERDEV].includes(row.type) && row.state !== STATE_TYPE.CREATED) {
-                    isSelectAutoImage = await SdxwTaskStartDialog({ visible: true });
+                    isSelectAutoImage = await SdxwTaskStartDialog({ visible: true, image: row.image, autoImage: row.autoImage });
                 }
 
                 await startTask(row.uuid, { isAuto: isSelectAutoImage });

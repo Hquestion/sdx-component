@@ -144,7 +144,7 @@
             <el-table-column
                 label="操作"
                 fixed="right"
-                min-width="120px"
+                min-width="130px"
             >
                 <template #default="{ row }">
                     <SdxuIconButtonGroup>

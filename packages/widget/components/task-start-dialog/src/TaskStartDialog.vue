@@ -24,7 +24,7 @@
                     v-if="image"
                     :label="false"
                 >
-                    基础镜像: {{ image.image_name }}
+                    基础镜像: {{ image.name }}
                 </el-radio>
             </el-radio-group>
         </div>

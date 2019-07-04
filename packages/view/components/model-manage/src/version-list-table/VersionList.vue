@@ -86,7 +86,7 @@
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'publish')"
-                            icon="sdx-icon sdx-quxiaofenxiang"
+                            icon="sdx-icon sdx-fabu"
                             title="发布"
                             v-if="scope.row.showPublish"
                         />

@@ -71,7 +71,7 @@
                         >
                             <template #footer>
                                 <SdxuIconButton
-                                    v-for="(el, i) in getOperationList(item, monitor)"
+                                    v-for="(el, i) in getOperationList(item)"
                                     :key="i"
                                     :icon="el.icon"
                                     :title="el.label"

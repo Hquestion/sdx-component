@@ -1,6 +1,8 @@
 import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
 import LogInfo from './src/task-detail/common/LogInfo';
+import DataSourceSelect from './src/forms/DataSourceSelect';
+import BaseForm from './src/forms/BaseForm';
 
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';
@@ -92,4 +94,4 @@ const viewRouter = {
     register
 };
 
-export default { ProjectManagement, viewRouter };
+export default { ProjectManagement, DataSourceSelect, BaseForm, viewRouter };

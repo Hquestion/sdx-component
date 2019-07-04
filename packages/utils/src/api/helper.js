@@ -1,4 +1,4 @@
-import auth from '@sdx/widget/components/auth';
+import auth from '@sdx/widget/lib/auth';
 
 export function authWrapper(fn, authKey = '',  authTag = 'API') {
     return function(...rest) {

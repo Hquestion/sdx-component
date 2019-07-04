@@ -1,9 +1,9 @@
-import { OPERATION_INFO, STATE_TYPE_OPERATION, MONITOR_ALLOW_OPERATION, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION } from '@sdx/utils/src/const/task';
-import { startTask, stopTask, removeTask } from '@sdx/utils/src/api/project';
-import SdxwTaskStartDialog from '@sdx/widget/components/task-start-dialog';
-import SdxwTaskStopDialog from '@sdx/widget/components/task-stop-dialog';
-import SdxuMessageBox from '@sdx/ui/components/message-box';
-import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import { OPERATION_INFO, STATE_TYPE_OPERATION, MONITOR_ALLOW_OPERATION, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION } from '../const/task';
+import { startTask, stopTask, removeTask } from '../api/project';
+import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
+import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
+import SdxuMessageBox from '@sdx/ui/lib/message-box';
+import { getUser } from '../helper/shareCenter';
 
 export default {
     data() {

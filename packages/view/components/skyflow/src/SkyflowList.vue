@@ -233,7 +233,7 @@ export default {
             getSkyflowList(params).then(res => {
                 this.workflowList = res.items;
                 this.workflowList.forEach(item => {
-                    if (item.user === getUser().userId) {
+                    if (item.user && item.user.uuid === getUser().userId) {
                         item.editable = true;
                         item.removable = true;
                     }
@@ -249,7 +249,13 @@ export default {
                 getSkyflowTemplates().then(res => {
                     this.templateOptions = res.items;
                     if (this.templateOptions && this.templateOptions.length) {
-                        this.templateType = this.templateOptions[0].name;
+                        if (this.$route.query.templateType === 'traffic' && this.templateOptions.find(item => item.name === '轨道交通模板')) {
+                            this.templateType = '轨道交通模板';
+                        } else if (this.$route.query.templateType === 'wind' && this.templateOptions.find(item => item.name === '风电模板')) {
+                            this.templateType = '风电模板';
+                        } else {
+                            this.templateType = this.templateOptions[0].name;
+                        }
                     }
                     resolve();
                 });
@@ -269,7 +275,7 @@ export default {
             getSkyflowListWithAuth(params).then(res => {
                 this.templatesList = res.items;
                 this.templatesList.forEach(item => {
-                    if (item.user === getUser().userId) {
+                    if (item.user && item.user.uuid === getUser().userId) {
                         item.editable = true;
                         item.removable = true;
                     }

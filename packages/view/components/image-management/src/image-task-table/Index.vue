@@ -1,7 +1,10 @@
 <template>
-    <div class="sdxv-image-task">
+    <div
+        class="sdxv-image-task"
+        v-loading="loading"
+    >
         <SdxuTable
-            :data="tableData"  
+            :data="tableData"
             @sort-change="handleSortChange"
             :default-sort="{prop: 'createdAt', order: 'descending'}"
         >
@@ -79,6 +82,7 @@
         </SdxuTable>
         <div class="pagination">
             <sdxu-pagination
+                v-if="total"
                 :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
@@ -127,6 +131,7 @@ export default {
             currentImageBuilder: {},
             showBuildLogDialog: false,
             currentImageBuilderId: '',
+            loading: false
         };
     },
     props: {
@@ -163,6 +168,8 @@ export default {
                 .then(data =>{
                     this.tableData = data.data;
                     this.total = data.total;
+                }).finally(() => {
+                    this.loading = false;
                 });
         },
         deleteImageTask(id) {MessageBox.confirm.error({
@@ -174,7 +181,7 @@ export default {
                 .then(()=> {
                     this.initImageTaskList();
                 });
-        });    
+        });
         },
         currentChange(val) {
             this.current = val;
@@ -182,6 +189,7 @@ export default {
         },
         initImageTaskList(reset) {
             if (reset) this.current = 1;
+            this.loading = true;
             const params = {
                 name: this.name,
                 ...paginate(this.current, this.pageSize),
@@ -210,7 +218,7 @@ export default {
             this.showBuildLogDialog = true;
         },
     },
-    
+
 };
 </script>
 

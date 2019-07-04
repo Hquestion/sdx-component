@@ -98,7 +98,7 @@ export default {
 
 <style lang='scss' scoped>
 .join-group{
-    width: 460px;
+    width: 100%;
     display: flex;
     /deep/ .sdxu-transfer__moveicon{
         width: 40px;

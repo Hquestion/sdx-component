@@ -31,9 +31,10 @@ export default {
     methods: {
         buildBreadcrumb(val = '', startPath = '') {
             let startPathNameMap = {};
+            let startName;
             if (startPath) {
                 let startPathList = startPath.split('/');
-                let startName = startPathList[startPathList.length - 1];
+                startName = startPathList[startPathList.length - 1];
                 startPathNameMap = {
                     [startName]: startPath
                 };
@@ -43,8 +44,8 @@ export default {
             let pathObjArr = list.map((item, index) => {
                 let name = getPathName(item);
                 let path = '/' + list.slice(0, index + 1).join('/');
-                if (index === 1 && startPathNameMap[name]) {
-                    path = `/${list[0]}${startPathNameMap[name]}`;
+                if(startName) {
+                    path = path.replace(eval(`/${startName}/`), startPathNameMap[startName].slice(1));
                 }
                 return { name, path };
             });

@@ -193,8 +193,11 @@ export default {
                 this.loading = false;
             }).then(res => {
                 this.$nextTick(() => {
-                    this.$refs.fileTable.calcViewportVisible();
+                    this.$refs.fileTable && this.$refs.fileTable.calcViewportVisible();
                 });
+            }, err => {
+                this.loading = false;
+                window.console.error(err);
             });
         },
         loadNextPage() {

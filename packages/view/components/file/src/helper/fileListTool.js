@@ -84,7 +84,7 @@ export const iconButtonTypes = {
 export const ROOT_FILE_BTN_MAP = {
     [rootKinds.MY_SHARE]: [iconButtonTypes.CANCEL_SHARE],
     [rootKinds.ACCEPTED_SHARE]: [iconButtonTypes.DOWNLOAD, iconButtonTypes.COPY, iconButtonTypes.PATH],
-    [rootKinds.PROJECT_SHARE]: [iconButtonTypes.DOWNLOAD, iconButtonTypes.COPY, iconButtonTypes.RENAME, iconButtonTypes.DELETE, iconButtonTypes.PATH]
+    [rootKinds.PROJECT_SHARE]: [iconButtonTypes.DOWNLOAD, iconButtonTypes.MOVE, iconButtonTypes.RENAME, iconButtonTypes.DELETE, iconButtonTypes.PATH]
 };
 
 export const fixedRowsNameMap = {

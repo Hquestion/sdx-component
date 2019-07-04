@@ -60,6 +60,9 @@ export const auth = (key, tag) => {
         return key.some(keyItem => auth(keyItem, tag));
     } else {
         const permissions = getUserRightsByTag(tag);
+        if (permissions.some(item => /SYSTEM:ALL:ADMIN:/ig.test(item))) {
+            return true;
+        }
         if (key.split(':').length === 3) {
             key = `${key}:${emptyPlaceholder}`;
         }

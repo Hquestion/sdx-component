@@ -25,6 +25,20 @@ export let handler = wrap(function(ctx, request) {
             url: 'http://tyk-gateway/image-manager/api/v1/images',
             result: 'data',
             errorReplaceKey: 'uuid'
+        },
+        {
+            path: 'datasets.*',
+            url: 'http://tyk-gateway/data-manager/api/v1/dataset',
+            result: 'data.items',
+            errorReplaceKey: 'uuid',
+            resultIdKey: 'dataset'
+        },
+        {
+            path: 'datasources.*',
+            url: 'http://tyk-gateway/data-manager/api/v1/datasource',
+            result: 'data.items',
+            errorReplaceKey: 'uuid',
+            resultIdKey: 'datasource_id'
         }
     );
 

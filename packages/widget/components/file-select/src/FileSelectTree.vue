@@ -99,12 +99,10 @@ export default {
                 load: this.fetchFiles,
                 'default-checked-keys': this.selectedNodes,
                 data: this.treeData || [],
-                ...this.treeOptions,
                 props: {
                     label: 'name',
                     children: 'children',
                     isLeaf: (data, node) => {
-                        window.console.error(data);
                         return !!data.isFile;
                     },
                     disabled: data => {
@@ -119,6 +117,7 @@ export default {
                         }
                     }
                 },
+                ...this.treeOptions,
             };
         },
         // 返回 tree 的 ref 引用,可以通过这引用调用 el-tree 的各种方法

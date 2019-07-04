@@ -7,6 +7,12 @@
         height: 100%;
         .sdxu-content-panel__main {
             height: 100%;
+            overflow-y: auto;
+        }
+        &.is-header {
+            .sdxu-content-panel__main {
+                height: calc(100% - 56px);
+            }
         }
     }
     @include state('header') {

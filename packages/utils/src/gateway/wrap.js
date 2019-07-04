@@ -226,10 +226,11 @@ class Context {
                     if (entry[1].length === 0) {
                         query.push(entry[0] + '=');
                     } else {
-                        entry[1].forEach(value => query.push(entry[0] + '=' + value));
+                        // url上传递中文时，后端识别异常，这里做一下编码处理，同时防止一些特殊字符
+                        entry[1].forEach(value => query.push(entry[0] + '=' + encodeURIComponent(value)));
                     }
                 } else {
-                    query.push(entry[0] + '=' + entry[1]);
+                    query.push(entry[0] + '=' + encodeURIComponent(entry[1]));
                 }
             });
             if (query.length > 0) {
@@ -413,12 +414,14 @@ class Context {
     resolveUuids(object, ...patterns) {
         const requests = [];
         const resultKeys = {};
+        const resultIdKeys = {};
         patterns.forEach(pattern => {
             const uuids = new Set();
             const path = pattern.path;
             const paths = pattern.paths;
             const url = pattern.url;
             const result = pattern.result;
+            resultIdKeys[url] = pattern.resultIdKey || 'uuid';
             if (result !== undefined) {
                 resultKeys[url] = result;
             }
@@ -450,10 +453,10 @@ class Context {
                         resultKeys[url].split('.').forEach(key => body = body[key]);
                     }
                     if (Array.isArray(body)) {
-                        this.info('array body from batch get: ' + body);
+                        this.info('array body from batch get: ' + JSON.stringify(body));
                         body.forEach(element => {
-                            if (element.uuid !== undefined) {
-                                results[element.uuid] = element;
+                            if (element[resultIdKeys[url]] !== undefined) {
+                                results[element[resultIdKeys[url]]] = element;
                             }
                         });
                     } else {
@@ -468,7 +471,7 @@ class Context {
                 const path = pattern.path;
                 const paths = pattern.paths;
                 const errorReplaceKey = pattern.errorReplaceKey;
-                const replacer = (element, value) => (results[value] || errorReplaceKey && {[errorReplaceKey]: value});
+                const replacer = (element, value) => (results[value] || errorReplaceKey && {[errorReplaceKey] : value});
                 if (path !== undefined) {
                     scanObject(object, path, replacer);
                 }

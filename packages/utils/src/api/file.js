@@ -20,7 +20,7 @@ export function getFilesList(params = {}) {
         onlyDirectory = 0,
         onlyFile = 0
     } = params;
-    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files`, {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}file-profiles`, {
         ownerId: ownerId || userInfo.userId,
         path,
         start,
@@ -317,7 +317,8 @@ export function copy(sourcePaths, targetPath, targetOwnerId, ownerId) {
         ownerId: ownerId || userInfo.userId,
         sourcePaths,
         targetPath,
-        targetOwnerId: targetOwnerId || userInfo.userId
+        targetOwnerId: targetOwnerId || userInfo.userId,
+        fsync: true
     });
 }
 

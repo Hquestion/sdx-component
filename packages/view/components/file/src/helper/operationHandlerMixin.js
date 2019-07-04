@@ -164,16 +164,18 @@ export default {
                 download(row.path, row.ownerId);
             } else {
                 // 打包，然后下载
-                let defer;
+                let defer, ownerId;
                 if (row) {
                     // 打包文件夹
-                    defer = pack([row.path], row.ownerId);
+                    ownerId = row.ownerId;
+                    defer = pack([row.path], ownerId);
                 } else {
                     // 打包批量的
-                    defer = pack(this.fileManager.checked.map(item => item.path), this.fileManager.checked[0].ownerId);
+                    ownerId = this.fileManager.checked[0].ownerId;
+                    defer = pack(this.fileManager.checked.map(item => item.path), ownerId);
                 }
                 defer.then(res => {
-                    download(res);
+                    download(res, ownerId);
                 });
             }
         },

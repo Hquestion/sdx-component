@@ -29,10 +29,14 @@
 </template>
 
 <script>
+import SdxuScroll from '@sdx/ui/components/scroll';
 export default {
     name: 'SdxuContentPanel',
     data() {
         return {};
+    },
+    components: {
+        SdxuScroll
     },
     props: {
         title: {

@@ -120,6 +120,7 @@
             <el-table-column
                 label="操作"
                 width="180"
+                v-if="!fileManager.isProjectRoot()"
             >
                 <template #default="{row}">
                     <SdxuIconButtonGroup>
@@ -397,7 +398,7 @@ export default {
 
 <style lang="scss" scoped>
 .sdxv-file-table {
-    height: calc(100% - 80px);
+    height: calc(100% - 88px);
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {
         display: none;

@@ -44,11 +44,11 @@
                     type="search"
                     size="small"
                     placeholder="请输入任务名"
-                    style="margin-right: 10px;"
                 />
                 <sdxu-button
                     size="small"
                     @click="searchTask"
+                    style="margin: 0 10px;"
                 >
                     搜索
                 </sdxu-button>
@@ -129,7 +129,7 @@ export default {
             loading: false,
             taskOptions: [
                 {
-                    name: '开发工具',
+                    name: '模型开发',
                     tasks: [
                         {
                             name: 'Jupyter',
@@ -139,17 +139,7 @@ export default {
                     ]
                 },
                 {
-                    name: '自定义容器',
-                    tasks: [
-                        {
-                            name: 'ContainerDev',
-                            class: 'icon-docker',
-                            type: 'CONTAINERDEV'
-                        }
-                    ]
-                },
-                {
-                    name: '建模任务',
+                    name: '模型训练',
                     tasks: [
                         {
                             name: 'Python',
@@ -176,14 +166,30 @@ export default {
                             name: 'TensorFlow自动并行',
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_AUTO_DIST'
-                        },
+                        }
+                    ]
+                },
+                {
+                    name: '模型评估',
+                    tasks: [
+
                         {
                             name: 'TensorBoard',
                             class: 'icon-tensorboard',
                             type: 'TENSORBOARD'
                         }
                     ]
-                }
+                },
+                {
+                    name: '自定义容器',
+                    tasks: [
+                        {
+                            name: 'ContainerDev',
+                            class: 'icon-docker',
+                            type: 'CONTAINERDEV'
+                        }
+                    ]
+                },
             ]
         };
     },

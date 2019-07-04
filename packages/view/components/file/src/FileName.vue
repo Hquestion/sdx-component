@@ -119,7 +119,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     @import "~@sdx/utils/src/theme-common/var";
     .sdxv-file__item {
         display: block;
@@ -160,8 +160,6 @@ export default {
             }
         }
     }
-</style>
-<style lang="scss">
     .sdxv-file__item-name-scroller {
         & /deep/ .el-scrollbar__wrap {
             max-height: 400px !important;

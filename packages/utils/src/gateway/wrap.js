@@ -471,7 +471,13 @@ class Context {
                 const path = pattern.path;
                 const paths = pattern.paths;
                 const errorReplaceKey = pattern.errorReplaceKey;
-                const replacer = (element, value) => (results[value] || errorReplaceKey && {[errorReplaceKey] : value});
+                const replacer = (element, value) => {
+                    // replace the result when value is exist.In some case, path does not exist in the result
+                    if (value) {
+                        return results[value] || errorReplaceKey && {[errorReplaceKey]: value};
+                    }
+                    return undefined;
+                };
                 if (path !== undefined) {
                     scanObject(object, path, replacer);
                 }

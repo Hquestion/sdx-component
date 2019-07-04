@@ -46,10 +46,10 @@ export default {
         this.init();
         // 监听slot中TabRadio的变化，初始化
         this.$on('sdxu.tab-radio.add', () => {
-            this.init();
+            this.$nextTick(() => this.init());
         });
         this.$on('sdxu.tab-radio.minus', () => {
-            this.init();
+            this.$nextTick(() => this.init());
         });
     },
     watch: {

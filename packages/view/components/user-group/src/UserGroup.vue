@@ -48,7 +48,7 @@
                     <template #default="{ row }">
                         <sdxw-fold-label-group
                             :list="row.roles.map(item => item.name)"
-                            mode="inline"
+                            mode="list"
                             type="default"
                         />
                     </template>

@@ -29,7 +29,7 @@
                     size="small"
                     @click="handleCommit"
                 >
-                    确认
+                    {{ commitTitle }}
                 </SdxuButton>
             </div>
         </SdxuContentPanel>
@@ -56,6 +56,10 @@ export default {
             type: String,
             default: ''
         },
+        commitTitle: {
+            type: String,
+            default: '确认'
+        }
     },
     data() {
         return {

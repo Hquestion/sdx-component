@@ -215,7 +215,7 @@ export default {
             ],
             states: [
                 {
-                    label: '已创建',
+                    label: '创建中',
                     value: 'CREATED'
                 },
                 {
@@ -223,7 +223,7 @@ export default {
                     value: 'BUILDING'
                 },
                 {
-                    label: '已构建',
+                    label: '构建完成',
                     value: 'BUILDED'
                 },
                 {

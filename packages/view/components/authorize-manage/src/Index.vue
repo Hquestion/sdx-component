@@ -63,16 +63,21 @@
                     <el-table-column
                         :prop="objectType === 'user' ? 'fullName' : 'name'"
                         :label="tabName"
+                        width="300px"
                     />
                     <el-table-column
                         label="权限"
                     >
                         <template slot-scope="scope">
-                            <SdxuTextTooltip :content="scope.row.permissions" content-key="name" tip-type="inline-block" />
+                            <SdxuTextTooltip
+                                :content="scope.row.permissions"
+                                content-key="name"
+                                tip-type="inline-block"
+                            />
                         </template>
                     </el-table-column>
                     <el-table-column
-                        style="width: 15%"
+                        width="400px"
                         label="操作"
                         v-if="authtoWrite(objectType)"
                     >

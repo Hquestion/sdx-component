@@ -56,7 +56,10 @@
                     </SdxwSearchItem>
                 </SdxwSearchLayout>
             </div>
-            <div class="sdxv-authorize-manage__table">
+            <div
+                class="sdxv-authorize-manage__table"
+                v-loading="permissionLoading"
+            >
                 <SdxuTable
                     :data="tableData"
                 >
@@ -264,6 +267,7 @@ export default {
                 ],
 
             },
+            permissionLoading:false
         };
     },
     created() {
@@ -360,33 +364,42 @@ export default {
             let params={...this.searchPermissions, ...paginate(this.current, this.pageSize),
                 fullName: this.searchPermissions.name, username: this.searchPermissions.name};
             delete  params.name;
+            this.permissionLoading = true;
             getUserProfilesList(params)
                 .then(data => {
                     this.tableData = data.users;
                     this.total = data.total;
-
+                    this.permissionLoading = false;
+                }, () => {
+                    this.permissionLoading = false;
                 });
         },
         groupList(reset,orderBy) {
             if(orderBy) this.searchPermissions.orderBy = orderBy;
             if (reset) this.current = 1;
             let params={...this.searchPermissions, ...paginate(this.current, this.pageSize)};
+            this.permissionLoading = true;
             getGroupProfilesList(params)
                 .then(data => {
                     this.tableData = data.groups;
                     this.total = data.total;
-
+                    this.permissionLoading = false;
+                }, () => {
+                    this.permissionLoading = false;
                 });
         },
         roleList(reset,orderBy) {
             if (reset) this.current = 1;
             if(orderBy) this.searchPermissions.orderBy = orderBy;
             let params={...this.searchPermissions, ...paginate(this.current, this.pageSize)};
+            this.permissionLoading = true;
             getRoleProfilesList(params)
                 .then(data => {
                     this.tableData = data.roles;
                     this.total = data.total;
-
+                    this.permissionLoading = false;
+                }, () => {
+                    this.permissionLoading = false;
                 });
         },
         // tab切换

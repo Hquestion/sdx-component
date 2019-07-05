@@ -48,7 +48,7 @@
                     <template #default="{ row }">
                         <sdxw-fold-label-group
                             :list="row.roles.map(item => item.name)"
-                            mode="inline"
+                            mode="list"
                             type="default"
                         />
                     </template>
@@ -120,6 +120,7 @@ import SdxuMessageBox from '@sdx/ui/components/message-box';
 import SdxuInput from '@sdx/ui/components/input';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
+import SearchLayout from '@sdx/widget/components/search-layout';
 
 import { getGroups, deleteGroup } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
@@ -138,7 +139,9 @@ export default {
         SdxuInput,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
-        SdxuIconButton
+        SdxuIconButton,
+        [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem
     },
     directives: {
         auth
@@ -153,19 +156,16 @@ export default {
             createVisible: false,
             editVisible: false,
             deleteVisible: false,
-            groupMeta: undefined,
-            searched: false
+            groupMeta: undefined
         };
     },
     computed: {
         querys() {
             let info = {
                 start: (this.page - 1) * this.pageSize + 1,
-                count: this.pageSize
+                count: this.pageSize,
+                name: this.name
             };
-            if (this.searched) {
-                info.name = this.name;
-            }
             return info;
         }
     },

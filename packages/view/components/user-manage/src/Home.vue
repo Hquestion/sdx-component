@@ -59,7 +59,7 @@
                     <template slot-scope="scope">
                         <SdxwFoldLabelGroup
                             :list="scope.row.roleNames"
-                            mode="inline"
+                            mode="list"
                             type="default"
                         />
                     </template>

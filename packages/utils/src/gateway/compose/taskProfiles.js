@@ -43,16 +43,19 @@ export let handler = wrap(function(ctx, request) {
             errorReplaceKey: 'uuid'
         },
         {
-            path: 'items.*.imageId',
+            paths: ['items.*.imageId', 'items.*.autoImageId'],
             url: 'http://tyk-gateway/image-manager/api/v1/images',
             result: 'data',
             errorReplaceKey: 'uuid'
         }
     );
 
+    ctx.info('task profiles result: ' + JSON.stringify(projects));
+
     ctx.rename(projects, 'items.*.ownerId', 'owner');
     ctx.rename(projects, 'items.*.projectId', 'project');
     ctx.rename(projects, 'items.*.imageId', 'image');
+    ctx.rename(projects, 'items.*.autoImageId', 'autoImage');
 
     return ctx.createResponse(200, projects);
 });

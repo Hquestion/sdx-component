@@ -29,6 +29,10 @@ export function updateWorkflow(uuid, params) {
     return httpService.patch(`${skyflowApi}/${uuid}`, params);
 }
 
+export function getPreviewPath(params) {
+    return httpService.get(`${skyflowApi}/execute/preview`, params);
+}
+
 export function removeWorkflow(uuid) {
     return httpService.remove(`${skyflowApi}/${uuid}`);
 }

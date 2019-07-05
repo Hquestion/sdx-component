@@ -14,7 +14,7 @@ export let handler = wrap(function(ctx, request) {
             //     code: result.code,
             //     url: result.relative_url
             // });
-            resp.items.push(null);
+            // resp.items.push(null);
         } else {
             let body = JSON.parse(result.body);
             resp.items.push(body.data);

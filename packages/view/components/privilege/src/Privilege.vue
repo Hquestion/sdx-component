@@ -42,7 +42,7 @@
                     <template #default="{ row }">
                         <sdxw-fold-label-group
                             :list="row.tags"
-                            mode="inline"
+                            mode="list"
                         />
                     </template>
                 </el-table-column>

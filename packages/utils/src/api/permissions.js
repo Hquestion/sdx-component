@@ -3,14 +3,14 @@ import readAuths from './config';
 import { authWrapper } from './helper';
 
 import { USER_SERVICE_GATEWAY_BASE } from './config';
-const permissionsBaseUrl = `${USER_SERVICE_GATEWAY_BASE}/permissions/`;
+const permissionsBaseUrl = `${USER_SERVICE_GATEWAY_BASE}permissions`;
 
 export function createPermission(params) {
     return httpService.post(permissionsBaseUrl, params);
 }
 
 export function removePermission(uuid) {
-    return httpService.remove(permissionsBaseUrl + uuid);
+    return httpService.remove(`${permissionsBaseUrl}/${uuid}`);
 }
 
 export function updatePermission(params) {
@@ -26,5 +26,5 @@ export const getPermissionList = authWrapper(function (params) {
 }, readAuths.USER_PERMISSION_READ);
 
 export function getPermissionDetail(uuid) {
-    return httpService.get(permissionsBaseUrl + uuid);
+    return httpService.get(`${permissionsBaseUrl}/${uuid}`);
 }

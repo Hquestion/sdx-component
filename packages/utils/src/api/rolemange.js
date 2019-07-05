@@ -3,7 +3,7 @@ import { USER_SERVICE_GATEWAY_BASE } from './config';
 import readAuths from './config';
 import { authWrapper } from './helper';
 
-const rolesApi = `${USER_SERVICE_GATEWAY_BASE}roles/`;
+const rolesApi = `${USER_SERVICE_GATEWAY_BASE}roles`;
 
 
 // 角色
@@ -20,13 +20,13 @@ export function createRoles(params) {
 }
 
 export function updateRoles(uuid, params) {
-    return httpService.patch(rolesApi + uuid, params);
+    return httpService.patch(`${rolesApi}/${uuid}`, params);
 }
 
 export function getRolesDetail(uuid) {
-    return httpService.get(rolesApi + uuid);
+    return httpService.get(`${rolesApi}/${uuid}`);
 }
 
 export function removeRoles(uuid) {
-    return httpService.remove(rolesApi + uuid);
+    return httpService.remove(`${rolesApi}/${uuid}`);
 }

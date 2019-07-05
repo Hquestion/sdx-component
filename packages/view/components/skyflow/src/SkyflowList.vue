@@ -43,7 +43,7 @@
                 <SdxuSortButton
                     title="按创建时间排序"
                     @sortChange="sortChange"
-                    :order="order"
+                    :order.sync="order"
                 />
             </div>
             <div class="sdxv-skyflow__tool--right">
@@ -208,8 +208,7 @@ export default {
         switchTemplateType(tempalteType) {
             this.templatesListWithType = this.templatesList.filter(item => item.skyflowTemplate === tempalteType);
         },
-        sortChange(order) {
-            this.order =  order;
+        sortChange() {
             this.initList();
         },
         searchWorkflow() {

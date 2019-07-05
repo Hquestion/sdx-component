@@ -23,6 +23,18 @@ export function isFunction(value) {
     return typeof value === 'function';
 }
 
+export function isArray(value) {
+    return Array.isArray(value);
+}
+
+export function isStringArray(value) {
+    return isArray(value) && value.length > 0 && isString(value[0]);
+}
+
+export function isObjectArray(value) {
+    return isArray(value) && value.length > 0 && isObject(value[0]);
+}
+
 export function paginate(pageIndex, pageSize) {
     return ({
         start: (pageIndex - 1) * pageSize + 1,

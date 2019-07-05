@@ -68,7 +68,7 @@
                         label="权限"
                     >
                         <template slot-scope="scope">
-                            <SdxwFoldLabelGroup :list="scope.row.permissions.map(item => item.name)" />
+                            <SdxuTextTooltip :content="scope.row.permissions" content-key="name" tip-type="inline-block" />
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -175,6 +175,7 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuTransfer from '@sdx/ui/components/transfer';
 import SdxuUserAvatar from '@sdx/ui/components/user-avatar';
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import Select from 'element-ui/lib/select';
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
@@ -210,6 +211,7 @@ export default {
         SdxuUserAvatar,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
+        SdxuTextTooltip
     },
     directives: {
         auth
@@ -255,7 +257,7 @@ export default {
                 tags: [
                     { required: true, message: '请设置权限设置', trigger: 'blue' }
                 ],
-                
+
             },
         };
     },
@@ -329,7 +331,7 @@ export default {
                     .then(()=> {
                         this.roleList(reset, orderBy);
                     });
-            }  
+            }
         },
         // 权限列表
         getPermissions() {
@@ -449,7 +451,7 @@ export default {
                 title: `确定删除授权${name}吗？`,
                 content: '删除后不可恢复哦',
                 type: 'alert'
-            }).then(() => { 
+            }).then(() => {
                 this.updatePermissions(this.objectType, id, []);
             }, () => {
 

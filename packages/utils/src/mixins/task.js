@@ -96,7 +96,7 @@ export default {
         },
         handleEdit(row) {
             // todo:
-            this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.projectId}`);
+            this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.project.uuid}`);
         },
         async handleDelete(row) {
             try {

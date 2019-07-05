@@ -1,9 +1,9 @@
-import { OPERATION_INFO, STATE_TYPE_OPERATION, MONITOR_ALLOW_OPERATION, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION } from '@sdx/utils/src/const/task';
-import { startTask, stopTask, removeTask } from '@sdx/utils/src/api/project';
-import SdxwTaskStartDialog from '@sdx/widget/components/task-start-dialog';
-import SdxwTaskStopDialog from '@sdx/widget/components/task-stop-dialog';
-import SdxuMessageBox from '@sdx/ui/components/message-box';
-import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import { OPERATION_INFO, STATE_TYPE_OPERATION, MONITOR_ALLOW_OPERATION, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION } from '../const/task';
+import { startTask, stopTask, removeTask } from '../api/project';
+import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
+import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
+import SdxuMessageBox from '@sdx/ui/lib/message-box';
+import { getUser } from '../helper/shareCenter';
 
 export default {
     data() {
@@ -15,7 +15,8 @@ export default {
     methods: {
         getOperationList(row, isMonitor = false) {
             const currentUser = getUser();
-            let isOwnerTask = currentUser && currentUser.userId === row.ownerId;
+            const ownerId = row.owner && row.owner.uuid || '';
+            let isOwnerTask = currentUser && currentUser.userId === ownerId;
             let list = STATE_TYPE_OPERATION[row.state];
             if (isMonitor) {
                 list = list.filter(item => {
@@ -45,7 +46,7 @@ export default {
             case 'edit':
                 this.handleEdit(row);
                 break;
-            case 'delete':
+            case 'remove':
                 this.handleDelete(row);
                 break;
             }
@@ -55,7 +56,7 @@ export default {
             try {
                 // 任务类型为jupyter或container_dev且状态不为新建则弹出框
                 if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINERDEV].includes(row.type) && row.state !== STATE_TYPE.CREATED) {
-                    isSelectAutoImage = await SdxwTaskStartDialog({ visible: true });
+                    isSelectAutoImage = await SdxwTaskStartDialog({ visible: true, image: row.image, autoImage: row.autoImage });
                 }
 
                 await startTask(row.uuid, { isAuto: isSelectAutoImage });
@@ -95,7 +96,7 @@ export default {
         },
         handleEdit(row) {
             // todo:
-            this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.projectId}`);
+            this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.project.uuid}`);
         },
         async handleDelete(row) {
             try {

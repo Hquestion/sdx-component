@@ -5,10 +5,10 @@ import { v4 as uuid } from 'uuid';
 
 /* Common HTTP constants
  */
-const AUTHORIZATION_HEADER = 'Authorization';
-const CONTENT_TYPE_HEADER = 'Content-Type';
-const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
-const REQUEST_ID_HEADER = 'X-Request-Id';
+export const AUTHORIZATION_HEADER = 'Authorization';
+export const CONTENT_TYPE_HEADER = 'Content-Type';
+export const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
+export const REQUEST_ID_HEADER = 'X-Request-Id';
 
 /* Internal Constants
  */
@@ -223,9 +223,14 @@ class Context {
             const query = [];
             Object.entries(data).forEach(entry => {
                 if (Array.isArray(entry[1])) {
-                    entry[1].forEach(value => query.push(entry[0] + '=' + value));
+                    if (entry[1].length === 0) {
+                        query.push(entry[0] + '=');
+                    } else {
+                        // url上传递中文时，后端识别异常，这里做一下编码处理，同时防止一些特殊字符
+                        entry[1].forEach(value => query.push(entry[0] + '=' + encodeURIComponent(value)));
+                    }
                 } else {
-                    query.push(entry[0] + '=' + entry[1]);
+                    query.push(entry[0] + '=' + encodeURIComponent(entry[1]));
                 }
             });
             if (query.length > 0) {
@@ -241,12 +246,12 @@ class Context {
 
     /**
      * Send a request.
-     *
      * @param request The request to send
+     * @param preventError Prevent the default error handler, return an empty Object as response
      * @returns {*} A dictionary or an array returned by the backend service, if successful
      * @throws RequestError When the request fails with HTTP status < 200 or >= 400
      */
-    sendRequest(request) {
+    sendRequest(request, preventError) {
         const batch = {
             'requests': [request],
             'suppress_parallel_execution': true
@@ -261,7 +266,11 @@ class Context {
         }
 
         if (response.code < 200 || response.code >= 400) {
-            throw new RequestError(response.code, response.body);
+            if (!preventError) {
+                throw new RequestError(response.code, response.body);
+            } else {
+                return {};
+            }
         }
 
         return JSON.parse(response.body);
@@ -405,12 +414,14 @@ class Context {
     resolveUuids(object, ...patterns) {
         const requests = [];
         const resultKeys = {};
+        const resultIdKeys = {};
         patterns.forEach(pattern => {
             const uuids = new Set();
             const path = pattern.path;
             const paths = pattern.paths;
             const url = pattern.url;
             const result = pattern.result;
+            resultIdKeys[url] = pattern.resultIdKey || 'uuid';
             if (result !== undefined) {
                 resultKeys[url] = result;
             }
@@ -442,10 +453,10 @@ class Context {
                         resultKeys[url].split('.').forEach(key => body = body[key]);
                     }
                     if (Array.isArray(body)) {
-                        this.info('array body from batch get: ' + body);
+                        this.info('array body from batch get: ' + JSON.stringify(body));
                         body.forEach(element => {
-                            if (element.uuid !== undefined) {
-                                results[element.uuid] = element;
+                            if (element[resultIdKeys[url]] !== undefined) {
+                                results[element[resultIdKeys[url]]] = element;
                             }
                         });
                     } else {
@@ -460,7 +471,13 @@ class Context {
                 const path = pattern.path;
                 const paths = pattern.paths;
                 const errorReplaceKey = pattern.errorReplaceKey;
-                const replacer = (element, value) => (results[value] || errorReplaceKey && {[errorReplaceKey]: value});
+                const replacer = (element, value) => {
+                    // replace the result when value is exist.In some case, path does not exist in the result
+                    if (value) {
+                        return results[value] || errorReplaceKey && {[errorReplaceKey]: value};
+                    }
+                    return undefined;
+                };
                 if (path !== undefined) {
                     scanObject(object, path, replacer);
                 }

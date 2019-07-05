@@ -43,7 +43,7 @@
                 <SdxuSortButton
                     title="按创建时间排序"
                     @sortChange="sortChange"
-                    :order="order"
+                    :order.sync="order"
                 />
             </div>
             <div class="sdxv-skyflow__tool--right">
@@ -66,8 +66,10 @@
         <sdxu-content-panel
             style="margin-bottom: 30px;"
             title="模板"
+            v-loading="templatesLoading"
+            v-auth.skyflow.button="'TEMPLATE_FLOW:READ'"
         >
-            <div v-if="templatesList.length">
+            <div v-if="templatesList.length || !templatesLoaded">
                 <SdxuTabRadioGroup
                     v-model="templateType"
                     style="margin-bottom: 10px;"
@@ -83,7 +85,6 @@
                 </SdxuTabRadioGroup>
                 <SdxuScroll style="height: 230px;">
                     <sdxv-workflow-card-list
-                        v-loading="templatesLoading"
                         class="sdxv-skyflow__template-cards"
                     >
                         <sdxv-workflow-card
@@ -101,29 +102,33 @@
         </sdxu-content-panel>
         <sdxu-content-panel
             title="私有与共享"
+            v-auth.skyflow.button="'FLOW:READ'"
         >
-            <div>
-                <sdxv-workflow-card-list v-loading="workflowsLoading">
-                    <sdxv-workflow-card
-                        @operate="handleOperate"
-                        v-for="(item, index) in workflowList"
-                        :key="index"
-                        :meta="item"
-                        :edit-able="item.editable"
-                        :delete-able="item.removable"
+            <div v-if="workflowList.length || !workflowsLoaded">
+                <div>
+                    <sdxv-workflow-card-list v-loading="workflowsLoading">
+                        <sdxv-workflow-card
+                            @operate="handleOperate"
+                            v-for="(item, index) in workflowList"
+                            :key="index"
+                            :meta="item"
+                            :edit-able="item.editable"
+                            :delete-able="item.removable"
+                        />
+                    </sdxv-workflow-card-list>
+                </div>
+                <div class="sdxv-skyflow__panel-footer">
+                    <div />
+                    <sdxu-pagination
+                        v-if="total"
+                        :current-page.sync="current"
+                        :page-size="pageSize"
+                        :total="total"
+                        @current-change="currentChange"
                     />
-                </sdxv-workflow-card-list>
+                </div>
             </div>
-            <div class="sdxv-skyflow__panel-footer">
-                <div />
-                <sdxu-pagination
-                    v-if="total"
-                    :current-page.sync="current"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="currentChange"
-                />
-            </div>
+            <SdxuEmpty v-else />
         </sdxu-content-panel>
         <sdxv-create-workflow
             :visible.sync="createWorkflowVisible"
@@ -146,7 +151,7 @@ import Empty from '@sdx/ui/components/empty';
 import MessageBox from '@sdx/ui/components/message-box';
 import SearchLayout from '@sdx/widget/components/search-layout';
 import Message from 'element-ui/lib/message';
-import { getSkyflowTemplates, getSkyflowList, removeWorkflow } from '@sdx/utils/src/api/skyflow';
+import { getSkyflowTemplates, getSkyflowList, removeWorkflow, getSkyflowListWithAuth } from '@sdx/utils/src/api/skyflow';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import SortButton from '@sdx/ui/components/sort-button';
@@ -169,6 +174,8 @@ export default {
             templatesList: [],
             templatesListWithType: [],
             templatesLoading: false,
+            templatesLoaded: false,
+            workflowsLoaded: false,
             workflowsLoading: false,
             editingWorkflow: null,
             templateType: '',
@@ -201,8 +208,7 @@ export default {
         switchTemplateType(tempalteType) {
             this.templatesListWithType = this.templatesList.filter(item => item.skyflowTemplate === tempalteType);
         },
-        sortChange(order) {
-            this.order =  order;
+        sortChange() {
             this.initList();
         },
         searchWorkflow() {
@@ -215,6 +221,7 @@ export default {
         },
         initWorkflowsList() {
             this.workflowsLoading = true;
+            this.workflowsLoaded = false;
             const params = {
                 name: this.searchName,
                 ...paginate(this.current, this.pageSize),
@@ -225,13 +232,15 @@ export default {
             getSkyflowList(params).then(res => {
                 this.workflowList = res.items;
                 this.workflowList.forEach(item => {
-                    if (item.user === getUser().userId) {
+                    if (item.user && item.user.uuid === getUser().userId) {
                         item.editable = true;
                         item.removable = true;
                     }
                 });
                 this.total = res.total;
+            }).finally(() => {
                 this.workflowsLoading = false;
+                this.workflowsLoaded = true;
             });
         },
         initTemplates() {
@@ -239,7 +248,13 @@ export default {
                 getSkyflowTemplates().then(res => {
                     this.templateOptions = res.items;
                     if (this.templateOptions && this.templateOptions.length) {
-                        this.templateType = this.templateOptions[0].name;
+                        if (this.$route.query.templateType === 'traffic' && this.templateOptions.find(item => item.name === '轨道交通模板')) {
+                            this.templateType = '轨道交通模板';
+                        } else if (this.$route.query.templateType === 'wind' && this.templateOptions.find(item => item.name === '风电模板')) {
+                            this.templateType = '风电模板';
+                        } else {
+                            this.templateType = this.templateOptions[0].name;
+                        }
                     }
                     resolve();
                 });
@@ -247,6 +262,7 @@ export default {
         },
         initTemplatesList() {
             this.templatesLoading = true;
+            this.templatesLoaded = false;
             const params = {
                 name: this.searchName,
                 start: 1,
@@ -255,16 +271,18 @@ export default {
                 orderBy: 'createdAt',
                 isTemplate: true
             };
-            getSkyflowList(params).then(res => {
+            getSkyflowListWithAuth(params).then(res => {
                 this.templatesList = res.items;
                 this.templatesList.forEach(item => {
-                    if (item.user === getUser().userId) {
+                    if (item.user && item.user.uuid === getUser().userId) {
                         item.editable = true;
                         item.removable = true;
                     }
                 });
-                this.templatesLoading = false;
                 this.templatesListWithType = this.templatesList.filter(item => item.skyflowTemplate === this.templateType);
+            }).finally(() => {
+                this.templatesLoading = false;
+                this.templatesLoaded = true;
             });
         },
         handleOperate(operation) {

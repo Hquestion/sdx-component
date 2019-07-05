@@ -10,7 +10,10 @@
             </div>
             <div class="sdxv-file-task__header-action">
                 <SdxvExpandCollapseToggler :expanded.sync="expanded" />
-                <i class="sdx-icon sdx-icon-check delete-icon" @click="handleHide"/>
+                <i
+                    class="sdx-icon sdx-icon-check delete-icon"
+                    @click="handleHide"
+                />
             </div>
         </div>
         <div class="sdxv-file-task__body">
@@ -19,13 +22,20 @@
                     label="文件上传"
                     name="UPLOAD"
                 >
-                    <SdxvTaskFileUpload ref="uploadTask" @empty="handleUploadFinish" />
+                    <SdxvTaskFileUpload
+                        ref="uploadTask"
+                        @empty="handleUploadFinish"
+                    />
                 </el-tab-pane>
                 <el-tab-pane
                     label="文件复制"
                     name="COPY"
                 >
-                    <TaskFileCopy ref="copyTask" />
+                    <TaskFileCopy
+                        ref="copyTask"
+                        @initShow="handleInitShow"
+                        @empty="handleUploadFinish"
+                    />
                 </el-tab-pane>
                 <el-tab-pane
                     label="文件删除"
@@ -33,6 +43,16 @@
                     ref="deleteTask"
                     v-if="false"
                 />
+                <el-tab-pane
+                    label="解压缩"
+                    name="UNZIP"
+                >
+                    <TaskFileUnzip
+                        ref="unzipTask"
+                        @initShow="handleInitShow"
+                        @empty="handleUploadFinish"
+                    />
+                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
@@ -43,14 +63,29 @@ import SdxvExpandCollapseToggler from './ExpandCollapseToggler';
 import SdxvTaskFileUpload from './TaskFileUpload';
 import MessageBox from '@sdx/ui/components/message-box';
 import TaskFileCopy from './TaskFileCopy';
+import TaskFileUnzip from './TaskFileUnzip';
+const TAB_REF_MAP = {
+    UPLOAD: 'uploadTask',
+    COPY: 'copyTask',
+    DELETE: 'deleteTask',
+    UNZIP: 'unzipTask'
+};
+import { deleteTaskType } from '@sdx/utils/src/api/file';
+
 export default {
     name: 'SdxvFileTask',
     components: {
         TaskFileCopy,
+        TaskFileUnzip,
         SdxvTaskFileUpload,
         SdxvExpandCollapseToggler
     },
     inject: ['fileManager'],
+    provide() {
+        return {
+            taskPop: this
+        };
+    },
     data() {
         return {
             expanded: false,
@@ -75,26 +110,52 @@ export default {
     },
     methods: {
         handleHide() {
+            let hasUnfinishTasks = ['uploadTask', 'copyTask', 'unzipTask'].some(item => {
+                return this.$refs[item].isListEmpty && !this.$refs[item].isListEmpty() || false;
+            });
+            if(!hasUnfinishTasks) {
+                this._visible = false;
+                return;
+            }
             MessageBox.confirm.warning({
-                title: '您确定要取消所有未完成的任务吗？'
+                title: '您确定要删除所有任务吗？'
             }).then(() => {
                 // todo 取消上传或者取消拷贝任务
+                ['uploadTask', 'copyTask', 'unzipTask'].forEach(item => {
+                    this.$refs[item].deleteAllTasks();
+                });
                 this._visible = false;
             });
         },
         handleUploadFinish() {
+            if (!this.isInit) return;
             this.fileManager.enterDirectory(this.fileManager.currentPath);
             this.checkToClose();
         },
         checkToClose() {
-            const refs = ['uploadTask', 'copyTask'];
+            const refs = ['uploadTask', 'copyTask', 'unzipTask'];
             let isEmpty = true;
             refs.forEach(ref => {
-                if (!this.$refs[ref].isEmpty()) {
+                if (!this.$refs[ref].isTaskEmpty()) {
                     isEmpty = false;
                 }
             });
+            // 暂时不关闭弹框
+            isEmpty = false;
             isEmpty && (this._visible = false);
+        },
+        checkTab(tab) {
+            this._visible = true;
+            this.currentTab = tab;
+            this.isInit = true;
+            const vm = this.$refs[TAB_REF_MAP[tab]];
+            vm.init && vm.init();
+        },
+        handleInitShow(tab) {
+            if (!this.isInit) {
+                this.isInit = true;
+                this.checkTab(tab);
+            }
         }
     },
     watch: {
@@ -109,7 +170,9 @@ export default {
 
 <style lang="scss" scoped>
     @import "~@sdx/utils/src/theme-common/var";
+
     $sdx-file-task-radius: $sdx-border-radius * 2;
+
     .sdxv-file-task {
         width: 600px;
         height: 60px;

@@ -1,5 +1,7 @@
 import httpService from '../http-service';
 import { SKYFLOW_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, SKYFLOW_MANAGE_GATEWAY_BASE_OLD } from './config';
+import readAuths from './config';
+import { authWrapper } from './helper';
 
 const skyflowApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflows`;
 
@@ -7,9 +9,13 @@ const skyflowExecuteApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_executes`;
 
 const skyflowCrontabApi = `${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_crontabs`;
 
-export function getSkyflowList(params) {
+export const getSkyflowList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}skyflow-profiles`, params);
-}
+}, readAuths.SKYFLOW_FLOW_READ);
+
+export const getSkyflowListWithAuth = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}skyflow-profiles`, params);
+}, readAuths.SKYFLOW_TEMPLATE_FLOW_READ);
 
 export function getSkyflowTemplates() {
     return httpService.get(`${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_templates`);
@@ -23,6 +29,10 @@ export function updateWorkflow(uuid, params) {
     return httpService.patch(`${skyflowApi}/${uuid}`, params);
 }
 
+export function getPreviewPath(params) {
+    return httpService.get(`${skyflowApi}/execute/preview`, params);
+}
+
 export function removeWorkflow(uuid) {
     return httpService.remove(`${skyflowApi}/${uuid}`);
 }
@@ -31,13 +41,21 @@ export function getSkyflowInfo(uuid) {
     return httpService.get(`${skyflowApi}/${uuid}`);
 }
 
-export function getGeneralRunningInfo(params) {
+/* export function getGeneralRunningInfo(params) {
     return httpService.get(skyflowExecuteApi, params);
-}
+} */
 
-export function getTimerRunningInfo(params) {
+export const getGeneralRunningInfo = authWrapper(function (params) {
+    return httpService.get(skyflowExecuteApi, params);
+}, readAuths.SKYFLOW_FLOW_RECORD_READ);
+
+/* export function getTimerRunningInfo(params) {
     return httpService.get(skyflowCrontabApi, params);
-}
+} */
+
+export const getTimerRunningInfo = authWrapper(function (params) {
+    return httpService.get(skyflowCrontabApi, params);
+}, readAuths.SKYFLOW_FLOW_RECORD_READ);
 
 export function getTimerSubRunningInfo(params) {
     return httpService.get(`${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_crontab_jobs`, params);
@@ -95,29 +113,29 @@ export function getDatasetList() {
 /**
  * 获取平台组件列表
  */
-export function getPlatformComponentList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/platform');
+export function getPlatformComponentList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/platform', { processType });
 }
 
 /**
  * 获取收藏组件列表
  */
-export function getFavoriteComponentList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/favorite');
+export function getFavoriteComponentList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/favorite', { processType });
 }
 
 /**
  * 获取公共组件列表
  */
-export function getPublicComponentList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/public/');
+export function getPublicComponentList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/public/', { processType });
 }
 
 /**
  * 获取自定义组件列表
  */
-export function getCustomComponentList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/custom');
+export function getCustomComponentList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component/custom', { processType });
 }
 
 /**
@@ -179,8 +197,9 @@ export function getRunTimeOptions() {
  * 根据名称搜索组件
  * @param {String} name component-name
  */
-export function searchComponents(name) {
+export function searchComponents(processType, name) {
     return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/component', {
+        processType,
         name
     });
 }

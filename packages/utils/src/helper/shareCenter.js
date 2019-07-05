@@ -23,8 +23,11 @@ export function getUserAllPermissions(user) {
     if (!user) return [];
     if (!user.allPermissions) {
         let allPermissions = user.permissions.slice();
-        user.roles.forEach(item => !allPermissions.find(p => p.uuid === item.uuid) && allPermissions.push(item));
-        user.groups.forEach(item => !allPermissions.find(p => p.uuid === item.uuid) && allPermissions.push(item));
+        let rolePermissions = [], groupsPermissions = [];
+        user.roles.forEach(item => rolePermissions = rolePermissions.concat(item.permissions));
+        user.groups.forEach(item => groupsPermissions = groupsPermissions.concat(item.permissions));
+        rolePermissions.forEach(item => !allPermissions.find(p => p.uuid === item.uuid) && allPermissions.push(item));
+        groupsPermissions.forEach(item => !allPermissions.find(p => p.uuid === item.uuid) && allPermissions.push(item));
         return allPermissions;
     }
     return user.allPermissions;

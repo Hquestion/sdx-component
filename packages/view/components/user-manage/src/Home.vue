@@ -1,7 +1,10 @@
 <template>
-    <sdxu-content-panel title="用户">
+    <sdxu-content-panel
+        title="用户"
+    >
         <div
             class="sdxv-user-manage"
+            v-auth.user.button="'USER:READ'"
         >
             <div
                 class="sdxv-user-manage__title"
@@ -12,6 +15,7 @@
                         type="primary"
                         icon="sdx-icon sdx-icon-plus"
                         size="small"
+                        v-auth.user.button="'USER:WRITE'"
                     >
                         新建用户
                     </SdxuButton>
@@ -55,7 +59,7 @@
                     <template slot-scope="scope">
                         <SdxwFoldLabelGroup
                             :list="scope.row.roleNames"
-                            mode="inline"
+                            mode="list"
                             type="default"
                         />
                     </template>
@@ -75,14 +79,17 @@
                         <sdxu-icon-button
                             @click="handleJoinGroup(scope.row)"
                             class="sdx-icon sdx-icon-zu2"
+                            v-auth.user.button="'USER:WRITE'"
                         />
                         <sdxu-icon-button
                             @click="handleEditUser(scope.row)"
                             class="sdx-icon sdx-icon-edit"
+                            v-auth.user.button="'USER:WRITE'"
                         />
                         <sdxu-icon-button
                             @click="handleDeleteUser(scope.row)"
                             class="sdx-icon sdx-icon-delete"
+                            v-auth.user.button="'USER:WRITE'"
                         />
                     </template>
                 </el-table-column>
@@ -144,6 +151,7 @@ import UserDetail from './components/UserDetail';
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import SearchLayout from '@sdx/widget/components/search-layout';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+import auth from '@sdx/widget/components/auth';
 export default {
     name:'SdxvUserManage',
     mixins: [transformFilter],
@@ -167,6 +175,9 @@ export default {
             toJoinUser: {},
             searched: false
         };
+    },
+    directives: {
+        auth
     },
     methods:{
         //关闭新建用户弹框

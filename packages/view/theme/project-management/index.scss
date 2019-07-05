@@ -24,7 +24,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import './project-detail/project-detail.scss';
 
 @include block('project-router', $bem-namespace-view) {
-    height: 100%;
+    min-height: 100%;
 }
 @include block('project-management', $bem-namespace-view) {
     height: 100%;

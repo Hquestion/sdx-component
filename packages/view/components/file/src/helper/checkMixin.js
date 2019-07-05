@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         canRowCheck(row, index) {
-            return !row.fixed && !!row.path;
+            return !row.fixed && !!row.path && !this.fileManager.isProjectRoot();
         },
         handleSelect(selection, row) {
             let checkedIndex = this.fileManager.checkedMap[row.path];
@@ -42,6 +42,7 @@ export default {
             }
         },
         handleSelectAll() {
+            if (this.fileManager.isProjectRoot()) return;
             if (this.fileManager.isCheckAll) {
                 this.doUnselectAll();
             } else {
@@ -60,9 +61,7 @@ export default {
             });
         },
         doUnselectAll() {
-            this.fileManager.isCheckAll = false;
-            this.fileManager.checked = [];
-            this.fileManager.checkedMap = {};
+            this.fileManager.resetCheck();
         },
         syncRowCheckStatus() {
             this.$nextTick(() => {

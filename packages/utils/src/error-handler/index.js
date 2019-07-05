@@ -4,6 +4,7 @@ import {t} from '../locale';
 // 默认一个简单的i18n处理，在应用中注入i18n
 let i18n = { t };
 let errorMessageMap = {};
+let specialCodeHandler = {};
 
 let defaultErrorMap = errorMessageMap.default || [];
 let reqErrorMap = errorMessageMap.req || [];
@@ -98,6 +99,13 @@ function handler(resp, preventDefaultNotify) {
         url = resp.config.url,
         method = resp.config.method,
         preventDefaultError = resp.config.preventError;
+    if (specialCodeHandler) {
+        if (specialCodeHandler[httpCode]) {
+            specialCodeHandler[httpCode](httpCode, code, resp);
+        } else if (specialCodeHandler[code]) {
+            specialCodeHandler[httpCode](httpCode, code, resp);
+        }
+    }
     if (preventDefaultError) {
         return;
     }
@@ -111,8 +119,9 @@ function handler(resp, preventDefaultNotify) {
     });
 }
 
-handler.register = (errorCodeMap, i18nInstance) => {
+handler.register = (errorCodeMap, customCodeHandler, i18nInstance) => {
     errorMessageMap = errorCodeMap;
+    specialCodeHandler = customCodeHandler;
     defaultErrorMap = errorMessageMap.default || [];
     reqErrorMap = reqErrorMap.req || [];
     i18nInstance && (i18n = i18nInstance);

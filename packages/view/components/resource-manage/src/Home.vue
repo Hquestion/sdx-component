@@ -1,10 +1,10 @@
 <template>
     <div class="sdxv-source-manage-home">
-        <ResourceTemplate />
-        <PlaceholderBlock />
-        <GlobalRulePanel v-auth.resource.button="'GLOBAL-STATE:READ'" />
-        <PlaceholderBlock v-auth.resource.button="'GLOBAL-STATE:READ'" />
-        <UserRightsPanel v-auth.resource.button="'USER-STATE:READ'" />
+        <ResourceTemplate v-auth.resource.button="'TEMPLATE:READ'" />
+        <PlaceholderBlock v-auth.resource.button="'TEMPLATE:READ'" />
+        <GlobalRulePanel v-auth.resource.button="'GLOBAL_STATE:READ'" />
+        <PlaceholderBlock v-auth.resource.button="'GLOBAL_STATE:READ'" />
+        <UserRightsPanel v-auth.resource.button="'USER_STATE:READ'" />
     </div>
 </template>
 

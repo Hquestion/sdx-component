@@ -384,6 +384,7 @@ export default {
                     }
                 });
                 this.total = res.total;
+            }).finally(() => {
                 this.loading = false;
             });
         },

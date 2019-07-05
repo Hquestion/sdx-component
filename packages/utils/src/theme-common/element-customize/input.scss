@@ -1,0 +1,6 @@
+@import '~element-ui/packages/theme-chalk/src/input.scss';
+
+.el-input--small .el-input__inner {
+    height: 36px;
+    line-height: 36px;
+}

@@ -44,9 +44,11 @@ Vue.use(SdxUI);
 ```
 
 ## SCSS定制
-
-无，根据默认主题
-
+```scss
+$sdu-empty-small-size: 100px !default;
+$sdu-empty-normal-size: 200px !default;
+$sdu-empty-large-size: 300px !default;
+```
 ## API
 
 <ui-empty-api></ui-empty-api>

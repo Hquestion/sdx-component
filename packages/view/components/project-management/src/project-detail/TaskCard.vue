@@ -31,7 +31,8 @@
             <div
                 class="sdxv-task-card__footer--operation"
             >
-                <i
+                <slot name="footer" />
+                <!-- <i
                     v-if="operations.indexOf('start') > -1"
                     class="sdx-icon sdx-icon-yunxing"
                     title="运行"
@@ -60,7 +61,7 @@
                     class="sdx-icon sdx-icon-delete"
                     title="删除"
                     @click="$emit('operate', {item: meta, type: 'remove'})"
-                />
+                /> -->
             </div>
         </footer>
     </div>

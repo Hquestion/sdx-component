@@ -42,9 +42,15 @@
                 <template slot-scope="scope">
                     <div
                         class="handle-bar"
-                        v-show="scope.row.status === 'success' || scope.row.status === 'error'"
+                        v-if="scope.row.status === 'success' || scope.row.status === 'error'"
                     >
                         <SdxuIconButton icon="sdx-icon sdx-icon-delete" title="删除" @click="handleCancelUpload(scope.row)" />
+                    </div>
+                    <div
+                        class="handle-bar"
+                        v-else
+                    >
+                        <SdxuIconButton icon="sdx-icon sdx-tingzhi" title="停止" @click="handleCancelUpload(scope.row)" />
                     </div>
                 </template>
             </el-table-column>
@@ -111,16 +117,22 @@ export default {
             }
             return label;
         },
-        isEmpty() {
+        isTaskEmpty() {
             return this.list.every(item => item.status === 'success' || item.status === 'error');
+        },
+        isListEmpty() {
+            return this.list.length === 0;
+        },
+        deleteAllTasks() {
+            this.list.forEach(file => this.handleCancelUpload(file));
         }
     },
     watch: {
         list: {
             deep: true,
             immediate: false,
-            handler(val) {
-                if (val.every(item => item.status === 'success' || item.status === 'error')) {
+            handler() {
+                if (this.isTaskEmpty()) {
                     this.$emit('empty');
                 }
             }

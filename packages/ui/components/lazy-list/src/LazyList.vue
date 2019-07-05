@@ -6,7 +6,8 @@
         >
             <div
                 class="sdxu-lazy-list__container"
-                :style="{height: total*itemHeight + 'px'}"
+                :style="{height: loadedCount*itemHeight + 'px'}"
+                v-loading="loading"
             >
                 <div
                     class="sdxu-lazy-list__top-holder"
@@ -28,21 +29,22 @@
                     class="sdxu-lazy-list__bottom-holder"
                     :style="{height: bottomHeight}"
                 >
-                    <div
-                        class="sdxu-lazy-list__loading"
-                        v-show="loading"
-                    >
-                        <i class="sdx-icon sdx-icon-loading" />加载中...
-                    </div>
+                    <!--                    <div-->
+                    <!--                        class="sdxu-lazy-list__loading"-->
+                    <!--                        v-show="loading"-->
+                    <!--                    >-->
+                    <!--                        <i class="sdx-icon sdx-icon-loading" />加载中...-->
+                    <!--                    </div>-->
                 </div>
+                <SdxuEmpty v-show="!loading && list.length === 0" />
             </div>
         </SdxuScroll>
     </div>
 </template>
 
 <script>
-import Dexie from 'dexie';
 import SdxuScroll from '@sdx/ui/components/scroll';
+import SdxuEmpty from '@sdx/ui/components/empty';
 import throttle from '@sdx/utils/src/helper/throttle';
 export default {
     name: 'SdxuLazyList',
@@ -52,13 +54,15 @@ export default {
             topCount: 0,
             renderCount: 0,
             renderData: [],
+            list: [],
             pageIndex: 1,
             loadedCount: 0,
             loading: false
         };
     },
     components: {
-        SdxuScroll
+        SdxuScroll,
+        SdxuEmpty
     },
     props: {
         load: {
@@ -78,14 +82,6 @@ export default {
             type: Number,
             default: 0,
             required: true
-        },
-        storeKeys: {
-            type: String,
-            default: ''
-        },
-        storeName: {
-            type: String,
-            default: ''
         }
     },
     computed: {
@@ -98,36 +94,24 @@ export default {
     },
     methods: {
         init() {
-            this.initDB();
             this.initList();
         },
         reset() {
             this.pageIndex = 1;
-            this.db[this.storeName].clear();
+            this.list = [];
+            this.loadedCount = 0;
             this.initList();
-        },
-        initDB() {
-            const db = new Dexie('SdxulazyList' + +new Date());
-            db.version(1).stores({
-                [this.storeName]: '++,' + this.storeKeys
-            });
-            // db[this.storeName].clear();
-            this.db = db;
         },
         initList(pageIndex = this.pageIndex) {
             this.pageIndex = pageIndex;
             this.loading = true;
             return this.load(pageIndex).then(({data, total}) => {
-                this.db[this.storeName].bulkAdd(data).then(() => {
-                    this.calcCount();
-                    this.loading = false;
-                }, err => {
-                    this.loading = false;
-                    // eslint-disable-next-line
-                    console.error(err);
-                });
+                window.console.log(arguments);
+                this.list = this.list.concat(data);
                 this.total = total;
                 this.loadedCount += data.length;
+                this.calcCount();
+                this.loading = false;
             }, () => {
                 this.loading = false;
             });
@@ -138,7 +122,8 @@ export default {
             const viewportHeight = target.offsetHeight;
             const scrollTop = this.$refs.scrollbar.getPosition().scrollTop;
             const topCount = Math.floor(scrollTop / this.itemHeight);
-            const bottomCount = Math.floor((listHeight - scrollTop - viewportHeight) / this.itemHeight);
+            let bottomCount = Math.floor((listHeight - scrollTop - viewportHeight) / this.itemHeight);
+            bottomCount = bottomCount < 0 ? 0 : bottomCount;
             let renderCount = this.total - topCount - bottomCount;
             this.topCount = topCount;
             if (renderCount + topCount > this.loadedCount) {
@@ -147,7 +132,7 @@ export default {
             this.renderCount = renderCount;
         },
         async generateRenderData() {
-            this.renderData = Object.freeze(await this.db[this.storeName].offset(this.topCount).limit(this.renderCount).toArray());
+            this.renderData = Object.freeze(this.list.slice(this.topCount, this.topCount + this.renderCount));
         },
         handleScroll() {
             throttle(() => {
@@ -172,10 +157,17 @@ export default {
         },
         renderCount() {
             this.generateRenderData();
+        },
+        list() {
+            this.calcCount();
+            this.generateRenderData();
         }
     },
     mounted() {
         this.init();
+        this.$nextTick(() => {
+            this.calcCount();
+        });
     }
 };
 </script>

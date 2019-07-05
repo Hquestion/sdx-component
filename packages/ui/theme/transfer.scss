@@ -11,14 +11,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     justify-content: space-between;
     width: $sdxu-transfer-width;
     .boxStyle {
-        width: $sdxu-transfer-default-width;
+        width: calc(50% - 20px);
         height: $sdxu-transfer-default-height;
         border: 1px solid $sdxu-button-default-border-color;
         box-sizing: border-box;
     }
     .sdxu-input {
         margin: $sdxu-transfer-margin-small;
-        width: $sdxu-transfer-width-input;
+        //width: $sdxu-transfer-width-input;
     }
     @include element('left') {
             @extend .boxStyle;
@@ -54,7 +54,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
     @include element('moveicon') {
         height: $sdxu-transfer-default-height;
-        line-height: $sdxu-transfer-default-height;   
+        line-height: $sdxu-transfer-default-height;
         i {
             cursor:pointer;
             border-radius: 100%;
@@ -66,7 +66,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 background: $sdxu-transfer-background-icon-move;
                 color: $sdxu-transfer-color-icon-move;
             }
-        }   
+        }
     }
     @include element('right') {
         @extend .boxStyle;
@@ -79,7 +79,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         justify-content: baseline;
         align-content: flex-start;
         height: $sdxu-transfer-height-tagbox;
-        .el-tag{   
+        .el-tag{
             margin: 0 $sdxu-transfer-margin-tag $sdxu-transfer-margin-tag 0;
             color: $sdx-text-regular-color;
             border: none;
@@ -88,7 +88,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         & /deep/ .el-tag {
             @include state('group') {
                 background: $sdxu-transfer-background-taggroup;
-                
+
             }
             @include state('user') {
                 background: $sdxu-transfer-background-taguser;

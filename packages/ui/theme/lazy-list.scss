@@ -1,5 +1,8 @@
 @include block('lazy-list', $bem-namespace-ui) {
     height: 100%;
+    @include element('container') {
+        height: 100%;
+    }
     @include element('top-holder') {
         background: rgba($sdx-none-color, .1);
     }

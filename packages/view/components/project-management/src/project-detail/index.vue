@@ -34,6 +34,7 @@
         <sdxu-content-panel
             class="sdxv-project-detail__task-list"
             title="任务列表"
+            v-loading="loading"
         >
             <div
                 slot="right"
@@ -44,11 +45,11 @@
                     type="search"
                     size="small"
                     placeholder="请输入任务名"
-                    style="margin-right: 10px;"
                 />
                 <sdxu-button
                     size="small"
                     @click="searchTask"
+                    style="margin: 0 10px;"
                 >
                     搜索
                 </sdxu-button>
@@ -62,13 +63,23 @@
                 <div
                     class="sdxv-project-detail__content"
                 >
-                    <task-card-list v-loading="loading">
+                    <task-card-list>
                         <task-card
                             @operate="handleOperate"
                             v-for="(item, index) in taskList"
                             :key="index"
                             :meta="item"
-                        />
+                        >
+                            <template #footer>
+                                <SdxuIconButton
+                                    v-for="(el, i) in getOperationList(item)"
+                                    :key="i"
+                                    :icon="el.icon"
+                                    :title="el.label"
+                                    @click="handleOperation(el.value, item)"
+                                />
+                            </template>
+                        </task-card>
                     </task-card-list>
                 </div>
                 <div class="sdxv-project-detail__footer">
@@ -94,17 +105,19 @@ import Button from '@sdx/ui/components/button';
 import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
 import SortButton from '@sdx/ui/components/sort-button';
-import MessageBox from '@sdx/ui/components/message-box';
+// import MessageBox from '@sdx/ui/components/message-box';
 import Empty from '@sdx/ui/components/empty';
 import TaskCard from './TaskCard';
 import TaskCardList from './TaskCardList';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import TaskIcon from './TaskIcon';
-import Message from 'element-ui/lib/message';
-import { getTaskList, removeTask, startTask, stopTask } from '@sdx/utils/src/api/project';
+// import Message from 'element-ui/lib/message';
+import { getTaskList } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
+import taskMixin from '@sdx/utils/src/mixins/task';
 export default {
     name: 'SdxvProjectDetail',
+    mixins: [taskMixin],
     data() {
         return {
             searchName: '',
@@ -115,9 +128,10 @@ export default {
             orderBy: 'createdAt',
             taskList: [],
             loading: false,
+            refreshTimer: null,
             taskOptions: [
                 {
-                    name: '开发工具',
+                    name: '模型开发',
                     tasks: [
                         {
                             name: 'Jupyter',
@@ -127,17 +141,7 @@ export default {
                     ]
                 },
                 {
-                    name: '自定义容器',
-                    tasks: [
-                        {
-                            name: 'ContainerDev',
-                            class: 'icon-docker',
-                            type: 'CONTAINERDEV'
-                        }
-                    ]
-                },
-                {
-                    name: '建模任务',
+                    name: '模型训练',
                     tasks: [
                         {
                             name: 'Python',
@@ -164,22 +168,42 @@ export default {
                             name: 'TensorFlow自动并行',
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_AUTO_DIST'
-                        },
+                        }
+                    ]
+                },
+                {
+                    name: '模型评估',
+                    tasks: [
+
                         {
                             name: 'TensorBoard',
                             class: 'icon-tensorboard',
                             type: 'TENSORBOARD'
                         }
                     ]
-                }
+                },
+                {
+                    name: '自定义容器',
+                    tasks: [
+                        {
+                            name: 'ContainerDev',
+                            class: 'icon-docker',
+                            type: 'CONTAINERDEV'
+                        }
+                    ]
+                },
             ]
         };
     },
     created() {
-        this.initList();
+        this.initList(true);
+        this.fetchDataMinxin = this.initList;
     },
     directives: {
         auth
+    },
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
     },
     components: {
         [ContentPanel.name]: ContentPanel,
@@ -195,7 +219,7 @@ export default {
     },
     methods: {
         searchTask() {
-            this.initList();
+            this.initList(true);
         },
         createTask(task) {
             this.$router.push(
@@ -208,8 +232,8 @@ export default {
                 }
             );
         },
-        initList() {
-            this.loading = true;
+        initList(showLoading) {
+            this.loading = showLoading ? true : false;
             const params = {
                 name: this.searchName,
                 ...paginate(this.current, this.pageSize),
@@ -221,87 +245,90 @@ export default {
                 this.taskList = res.items;
                 this.total = res.total;
                 this.loading = false;
+                if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
+                    if (!this.refreshTimer) {
+                        this.refreshTimer = setInterval(this.initList, 3000, false);
+                    }
+                } else {
+                    clearInterval(this.refreshTimer);
+                }
             });
         },
         currentChange(val) {
             this.current = val;
-            this.initList();
+            this.initList(true);
         },
-        sortChange(order) {
-            this.order = order;
-            this.initList();
-        },
-        handleOperate(operation) {
-            // console.log('operation', operation);
-            switch(operation.type) {
-            case 'start':
-                MessageBox({
-                    title: '确定运行该任务吗？',
-                    content: ''
-                }).then(() => {
-                    startTask(operation.item.uuid).then(() => {
-                        Message({
-                            message: '运行成功',
-                            type: 'success'
-                        });
-                        this.initList();
-                    });
-                }).catch(() => {});
-                break;
-            case 'kill':
-                MessageBox({
-                    title: '确定停止该任务吗？',
-                    content: ''
-                }).then(() => {
-                    stopTask(operation.item.uuid).then(() => {
-                        Message({
-                            message: '停止成功',
-                            type: 'success'
-                        });
-                        this.initList();
-                    });
-                }).catch(() => {});
-                break;
-            case 'detail':
-                this.$router.push({
-                    name: 'TaskInfo',
-                    params: {
-                        type: operation.item.type,
-                        taskId: operation.item.uuid
-                    }
-                });
-                break;
-            case 'edit':
-                this.$router.push({
-                    name: 'EditTask',
-                    params: {
-                        type: operation.item.type,
-                        taskId: operation.item.uuid,
-                        projectId: this.$route.params.id
-                    }
-                });
-                break;
-            case 'remove':
-                MessageBox({
-                    title: '确定删除吗？',
-                    content: '删除后将不可恢复'
-                }).then(() => {
-                    removeTask(operation.item.uuid).then(() => {
-                        Message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        this.initList();
-                    });
-                }).catch(() => {});
-                break;
-            default:
-                break;
-            }
+        sortChange() {
+            this.initList(true);
         }
+        // handleOperate(operation) {
+        //     // console.log('operation', operation);
+        //     switch(operation.type) {
+        //     case 'start':
+        //         MessageBox({
+        //             title: '确定运行该任务吗？',
+        //             content: ''
+        //         }).then(() => {
+        //             startTask(operation.item.uuid).then(() => {
+        //                 Message({
+        //                     message: '运行成功',
+        //                     type: 'success'
+        //                 });
+        //                 this.initList(true);
+        //             });
+        //         }).catch(() => {});
+        //         break;
+        //     case 'kill':
+        //         MessageBox({
+        //             title: '确定停止该任务吗？',
+        //             content: ''
+        //         }).then(() => {
+        //             stopTask(operation.item.uuid).then(() => {
+        //                 Message({
+        //                     message: '停止成功',
+        //                     type: 'success'
+        //                 });
+        //                 this.initList(true);
+        //             });
+        //         }).catch(() => {});
+        //         break;
+        //     case 'detail':
+        //         this.$router.push({
+        //             name: 'TaskInfo',
+        //             params: {
+        //                 type: operation.item.type,
+        //                 taskId: operation.item.uuid
+        //             }
+        //         });
+        //         break;
+        //     case 'edit':
+        //         this.$router.push({
+        //             name: 'EditTask',
+        //             params: {
+        //                 type: operation.item.type,
+        //                 taskId: operation.item.uuid,
+        //                 projectId: this.$route.params.id
+        //             }
+        //         });
+        //         break;
+        //     case 'remove':
+        //         MessageBox({
+        //             title: '确定删除吗？',
+        //             content: '删除后将不可恢复'
+        //         }).then(() => {
+        //             removeTask(operation.item.uuid).then(() => {
+        //                 Message({
+        //                     message: '删除成功',
+        //                     type: 'success'
+        //                 });
+        //                 this.initList(true);
+        //             });
+        //         }).catch(() => {});
+        //         break;
+        //     default:
+        //         break;
+        //     }
+        // }
     }
 };
 </script>
-
-<style scoped lang="scss">
-</style>

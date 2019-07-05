@@ -45,7 +45,7 @@
                 <el-select
                     v-model="params.imageId"
                     size="small"
-                    placeholder="请输入运行环境"
+                    placeholder="请选择运行环境"
                 >
                     <el-option
                         v-for="item in imageOptions"
@@ -111,6 +111,7 @@
                     v-model="params.sourcePaths"
                     :accept="'.py'"
                     :string-model="true"
+                    check-type="file"
                 />
             </el-form-item>
             <el-form-item
@@ -300,7 +301,7 @@ export default {
 
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval };
+            this.params = { ...this.params, ...nval, ...{imageId:nval.image.uuid}};
             this.cpuMain = {
                 cpu: this.params.resourceConfig.TF_MASTER_CPUS/1000,
                 memory: this.params.resourceConfig.TF_MASTER_MEMORY / (1024*1024*1024),

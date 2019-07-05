@@ -2,12 +2,16 @@
     <sdxu-panel
         title="用户组"
     >
-        <div class="sdxv-user-group">
+        <div
+            class="sdxv-user-group"
+            v-auth.user.button="'GROUP:READ'"
+        >
             <div class="sdxv-user-group__bar">
                 <sdxu-button
                     icon="sdx-icon sdx-icon-plus"
                     size="small"
                     @click="createGroup"
+                    v-auth.user.button="'GROUP:WRITE'"
                 >
                     新建用户组
                 </sdxu-button>
@@ -22,7 +26,7 @@
                             class="sdxv-user-group__bar--input"
                             type="search"
                             :searchable="true"
-                            placeholder="请输入权限名"
+                            placeholder="请输入用户组名"
                             size="small"
                             v-model="name"
                         />
@@ -44,7 +48,7 @@
                     <template #default="{ row }">
                         <sdxw-fold-label-group
                             :list="row.roles.map(item => item.name)"
-                            mode="inline"
+                            mode="list"
                             type="default"
                         />
                     </template>
@@ -57,16 +61,20 @@
                         {{ row.createdAt | dateFormatter }}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column
+                    label="操作"
+                >
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--operation">
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-edit"
                                 @click="handleEdit(row)"
                                 title="编辑"
+                                v-auth.user.button="'GROUP:WRITE'"
                             />
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-delete"
+                                v-auth.user.button="'GROUP:WRITE'"
                                 @click="handleDelete(row)"
                                 title="删除"
                             />
@@ -87,6 +95,7 @@
             </sdxu-table>
             <div class="sdxv-user-group__pagination">
                 <sdxu-pagination
+                    v-if="total"
                     :current-page.sync="page"
                     :page-size="pageSize"
                     :total="total"
@@ -111,10 +120,12 @@ import SdxuMessageBox from '@sdx/ui/components/message-box';
 import SdxuInput from '@sdx/ui/components/input';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
+import SearchLayout from '@sdx/widget/components/search-layout';
 
 import { getGroups, deleteGroup } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+import auth from '@sdx/widget/components/auth';
 
 export default {
     name: 'SdxvUserGroup',
@@ -128,31 +139,33 @@ export default {
         SdxuInput,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
-        SdxuIconButton
+        SdxuIconButton,
+        [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem
+    },
+    directives: {
+        auth
     },
     data() {
         return {
             pageSize: 10,
             page: 1,
-            total: 100,
+            total: 0,
             groups: [],
             name: '',
             createVisible: false,
             editVisible: false,
             deleteVisible: false,
-            groupMeta: undefined,
-            searched: false
+            groupMeta: undefined
         };
     },
     computed: {
         querys() {
             let info = {
                 start: (this.page - 1) * this.pageSize + 1,
-                count: this.pageSize
+                count: this.pageSize,
+                name: this.name
             };
-            if (this.searched) {
-                info.name = this.name;
-            }
             return info;
         }
     },

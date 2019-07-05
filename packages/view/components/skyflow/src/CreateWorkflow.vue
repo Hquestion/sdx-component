@@ -74,19 +74,10 @@
                 </el-radio>
             </el-form-item>
             <el-form-item
-                label="协作者/组："
-                v-show="!workflowForm.isTemplate"
-                v-auth.skyflow.button="'FLOW:SHARE'"
-            >
-                <sdxw-select-group-user
-                    :users.sync="selectedUsers"
-                    :groups.sync="selectedGroups"
-                />
-            </el-form-item>
-            <el-form-item
                 label="模板种类："
                 prop="skyflowTemplate"
                 v-if="workflowForm.isTemplate"
+                key="skyflowTemplate"
             >
                 <el-select
                     v-model="workflowForm.skyflowTemplate"
@@ -102,6 +93,17 @@
                         :value="item.name"
                     />
                 </el-select>
+            </el-form-item>
+            <el-form-item
+                label="协作者/组："
+                v-if="!workflowForm.isTemplate"
+                v-auth.skyflow.button="'FLOW:SHARE'"
+                key="share"
+            >
+                <sdxw-select-group-user
+                    :users.sync="selectedUsers"
+                    :groups.sync="selectedGroups"
+                />
             </el-form-item>
         </el-form>
         <SdxuScroll

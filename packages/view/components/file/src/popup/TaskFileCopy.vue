@@ -10,24 +10,23 @@
         <el-table-column type="expand">
             <template slot-scope="scope">
                 <div class="table-expand-line">
-                    <div> {{ scope.row.currentCopy.sourcePath }} </div>
                     <div class="size-remain">
                         <span class="finished-size">
-                            {{ scope.row.currentCopy.copiedBytes | byteFormatter }}
+                            {{ (scope.row.extra.copiedBytes || 0) | byteFormatter }}
                         </span>
-                        /{{ scope.row.currentCopy.totalBytes | byteFormatter }}
+                        /{{ (scope.row.extra.totalBytes || 0) | byteFormatter }}
                     </div>
                     <div class="content">
                         <div class="progerss-warp">
                             <el-progress
                                 :show-text="false"
-                                :percentage="scope.row.currentCopy.progressInPerentage || 0"
+                                :percentage="scope.row.extra.progressInPercentage || 0"
                             />
                         </div>
                         <div class="progerss-info">
-                            {{ scope.row.currentCopy.speedBytesPerSec | byteFormatter }}/s
+                            <span class="speed">{{ (scope.row.extra.speedPerSecInBytes || 0) | byteFormatter }}/s</span>
                             <span class="time-remain">
-                                剩余时间 {{ scope.row.currentCopy.remainingTimeInSec | seconds2HMS }}
+                                剩余时间 {{ (scope.row.extra.remainingTimeInSec || 0) | seconds2HMS }}
                             </span>
                         </div>
                     </div>
@@ -39,16 +38,16 @@
             min-width="90"
             header-align="left"
             align="left"
-            prop="currentCopy.sourcePath"
+            prop="args.path"
             show-overflow-tooltip
         />
         <el-table-column
             label="目标"
             min-width="90"
-            prop="currentCopy.targetPath"
+            prop="args.targetPath"
             header-align="left"
             align="left"
-            show-overflow-tooltip
+            :show-overflow-tooltip="true"
         />
         <el-table-column
             label="状态"
@@ -59,9 +58,9 @@
             <template slot-scope="scope">
                 <SdxuFoldLabel
                     :plain="true"
-                    :label="copyTaskStatusMap[scope.row.status] && copyTaskStatusMap[scope.row.status].label"
-                    :status="copyTaskStatusMap[scope.row.status] && copyTaskStatusMap[scope.row.status].status"
-                    :type="copyTaskStatusMap[scope.row.status] && copyTaskStatusMap[scope.row.status].type"
+                    :label="copyTaskStatusMap[scope.row.state] && copyTaskStatusMap[scope.row.state].label"
+                    :status="copyTaskStatusMap[scope.row.state] && copyTaskStatusMap[scope.row.state].status"
+                    :type="copyTaskStatusMap[scope.row.state] && copyTaskStatusMap[scope.row.state].type"
                 />
             </template>
         </el-table-column>
@@ -75,6 +74,12 @@
                 <SdxuIconButton
                     icon="sdx-icon sdx-tingzhi"
                     @click="handleStopTask(scope.row.jobId)"
+                    v-show="isProcessing(scope.row)"
+                />
+                <SdxuIconButton
+                    icon="sdx-icon sdx-icon-delete"
+                    @click="handleDeleteTask(scope.row.jobId)"
+                    v-show="!isProcessing(scope.row)"
                 />
             </template>
         </el-table-column>
@@ -82,12 +87,13 @@
 </template>
 
 <script>
-import { getCopyTaskList, cancelCopyTask } from '@sdx/utils/src/api/file';
+import {getCopyTaskList, cancelTask, deleteTask, deleteTaskType} from '@sdx/utils/src/api/file';
 import SdxuFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { copyTaskStatusMap } from '../helper/config';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+import { asyncJobStatus } from '@sdx/utils/src/const/file';
 
 const PULL_TIME = 2 * 1000; // 查询间隔 2秒
 
@@ -98,40 +104,27 @@ export default {
         SdxuIconButton
     },
     mixins: [transformFilter],
+    inject: ['taskPop'],
     data() {
         return {
-            copyFileList: [
-                // {
-                //     jobId: '1',
-                //     ownerId: '1',
-                //     status: 'PROCESSING',
-                //     totalCount: 2,
-                //     finishCount: 1,
-                //     copyEntries: [
-                //         {sourcePath: '/dir/file1', targetPath: '/dir/file2'}
-                //     ],
-                //     currentCopy: {
-                //         index: 2,
-                //         sourcePath: '/dir/file1',
-                //         targetPath: '/dir/file2',
-                //         progressInPerentage: 50,
-                //         remainingTimeInSec: 20,
-                //         totalBytes: 20048,
-                //         copiedBytes: 1002,
-                //         speedBytesPerSec: 1024
-                //     }
-                // }
-            ],
+            copyFileList: [],
             total: 0,
             copyTaskStatusMap
         };
     },
     computed: {
         __needPull() {
-            return this.copyFileList.some(item => item.state && item.state.need_pull);
+            return !this.isTaskEmpty();
         }
     },
     methods: {
+        init() {
+            this.fetchCopyTaskList();
+        },
+        isPending(row) {
+            return row.state === asyncJobStatus.PENDING;
+        },
+        checkNeedToShow() {},
         startPullCopyTask() {
             this.timeInterval = setInterval(() => {
                 this.fetchCopyTaskList();
@@ -144,15 +137,38 @@ export default {
         fetchCopyTaskList() {
             return getCopyTaskList()
                 .then(data => {
-                    this.copyFileList = data.items || [];
+                    this.copyFileList = data.jobs || [];
                 });
         },
         // 停止拷贝任务
         handleStopTask(_id) {
-            return cancelCopyTask(_id);
+            return cancelTask(_id).then(() => {
+                this.stopPullCopyTask();
+                this.fetchCopyTaskList();
+            });
         },
-        isEmpty() {
-            return !this.copyFileList.length;
+        handleDeleteTask(_id) {
+            // todo 删除task
+            return deleteTask(_id).then(() => {
+                this.stopPullCopyTask();
+                this.fetchCopyTaskList();
+            });
+        },
+        isTaskEmpty() {
+            return this.copyFileList.length === 0
+                || !this.copyFileList.some(item => [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(item.state));
+        },
+        isListEmpty() {
+            return this.copyFileList.length === 0;
+        },
+        isProcessing(row) {
+            return [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(row.state);
+        },
+        deleteAllTasks() {
+            if (this.copyFileList.length === 0) return Promise.resolve();
+            return deleteTaskType('COPY').then(res => {
+                this.copyFileList = [];
+            });
         }
     },
     watch: {
@@ -160,20 +176,20 @@ export default {
         __needPull(nval) {
             if (nval) {
                 this.startPullCopyTask();
-                this.$emit('initShow', 'copy');
+                this.$emit('initShow', 'COPY');
             } else {
                 this.stopPullCopyTask();
             }
         },
-        copyFileList(val) {
-            if (val.length === 0) {
+        copyFileList() {
+            if (this.isTaskEmpty()) {
                 this.$emit('empty');
             }
         }
     },
-    created() {
+    mounted() {
         // 先刷一下,看有没有拷贝任务
-        this.fetchCopyTaskList();
+        this.init();
     },
     beforeDestroy() {
         // 销毁前清理定时器
@@ -191,16 +207,19 @@ export default {
             border-top: 1px solid #dedede !important;
             .table-expand-line {
                 position: relative;
-                padding: 20px 0;
+                padding: 15px 20px 10px 58px;
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-start;
                 align-items: center;
-                padding-left: 58px;
                 background: #fff;
+                .size-remain {
+                    width: 100px;
+                }
                 .content {
                     display: block;
                     line-height: 25px;
                     width: 240px;
+                    margin-left: 50px;
                     .progerss-warp {
                         line-height: 25px;
                         .el-progress {
@@ -212,11 +231,11 @@ export default {
                         width: 100%;
                         height: 25px;
                         line-height: 25px;
-                        .finished-size {
+                        .speed {
                             color: $sdx-primary-color;
                         }
                         .time-remain {
-                            float: right;
+                            margin-left: 10px;
                         }
                     }
                 }

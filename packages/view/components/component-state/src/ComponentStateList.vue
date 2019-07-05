@@ -34,7 +34,7 @@
                 prop="podName"
             />
             <el-table-column
-                label="Namespace"
+                label="命名空间"
                 prop="namespace"
             />
             <el-table-column
@@ -42,15 +42,18 @@
                 prop="status"
             />
             <el-table-column
-                label="node"
+                label="节点"
                 prop="nodeName"
             />
-            <el-table-column label="操作">
+            <el-table-column 
+                v-auth.system.button="'POD-LOG:READ'"
+                label="操作"
+            >
                 <template #default="{ row }">
                     <SdxuIconButton
                         icon="sdx-icon sdx-chakanrizhi"
                         title="日志"
-                        @click="handleViewLog(row.podId)"
+                        @click="handleViewLog(row)"
                     />
                 </template>
             </el-table-column>
@@ -67,7 +70,7 @@
         </div>
         <SdxvComponentStateLogDialog
             :visible.sync="logDialogVisible"
-            :pod-id="currentPodId"
+            :pod="currentPod"
         />
     </div>
 </template>
@@ -79,6 +82,7 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxvComponentStateLogDialog from './ComponentStateLogDialog';
+import auth from '@sdx/widget/components/auth';
 
 import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
@@ -87,8 +91,11 @@ import ElOption from 'element-ui/lib/option';
 import { POD_STATE_TYPE } from '@sdx/utils/src/const/task';
 import { getPodsStatus } from '@sdx/utils/src/api/system';
 
+const POLLING_PERIOD = 3 * 1000;
+
 export default {
     name: 'SdxvComponentStateList',
+    directives: { auth },
     components: {
         [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
@@ -132,8 +139,9 @@ export default {
                 status: ''
             },
             logDialogVisible: false,
-            currentPodId: '',
-            loading: false
+            currentPod: {},
+            loading: false,
+            pollingId: null
         };
     },
     computed: {
@@ -151,11 +159,16 @@ export default {
             return {
                 namespace: this.type === 'base' ? 'kube-system,skydiscovery' : 'skydiscovery-system'
             };
+        },
+        needPolling() {
+            return this.componentList.some(item => ['running', 'pending'].includes(item.status));
         }
     },
     methods: {
-        fetchData() {
-            this.loading = true;
+        fetchData(showLoading = true) {
+            if (showLoading) {
+                this.loading = true;
+            }
             getPodsStatus(this.params).then(data => {
                 this.componentList = data.status_list;
                 this.loading = false;
@@ -164,9 +177,9 @@ export default {
                 this.loading = false;
             });
         },
-        handleViewLog(podId) {
+        handleViewLog(pod) {
             this.logDialogVisible = true;
-            this.currentPodId = podId;
+            this.currentPod = pod;
         },
         handleSearch() {
             this.page = 1;
@@ -180,6 +193,10 @@ export default {
     created() {
         this.fetchData();
     },
+    beforeDestroy() {
+        this.pollingId && clearInterval(this.pollingId);
+        this.pollingId = null;    
+    },
     watch: {
         type() {
             this.searchName = '';
@@ -192,6 +209,17 @@ export default {
             };
             this.componentList = [];
             this.fetchData();
+        },
+        needPolling(nval) {
+            if (nval) {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = setInterval(() => {
+                    this.fetchData(false);
+                }, POLLING_PERIOD);
+            } else {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = null;
+            }
         }
     }
 };

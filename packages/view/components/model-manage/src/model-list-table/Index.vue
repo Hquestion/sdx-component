@@ -304,6 +304,9 @@ export default {
             if (this.shareForm.shareType !== 'PUBLIC') {
                 this.shareForm.users = users;
                 this.shareForm.groups = groups;
+                this.shareForm.isPublic = false;
+            } else {
+                this.shareForm.isPublic = true;
             }
             if (this.editingModel) {
                 // 编辑模型
@@ -355,6 +358,7 @@ export default {
                     item.showDetail = this.modelType !== 'MY_SHARE';
                 });
                 this.total = res.total;
+            }).finally(() => {
                 this.loading = false;
             });
         },

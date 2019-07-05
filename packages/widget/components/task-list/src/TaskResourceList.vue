@@ -57,7 +57,11 @@
                 prop="type"
                 label="任务类型"
                 min-width="150px"
-            />
+            >
+                <template #default="{ row }">
+                    {{ TASK_TYPE_LABEL[row.type] }}
+                </template>
+            </el-table-column>
             <el-table-column
                 label="任务状态"
                 min-width="100px"
@@ -120,7 +124,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="user.name"
+                prop="owner.fullName"
                 label="创建人"
                 min-width="100px"
             />
@@ -140,7 +144,7 @@
             <el-table-column
                 label="操作"
                 fixed="right"
-                min-width="120px"
+                min-width="130px"
             >
                 <template #default="{ row }">
                     <SdxuIconButtonGroup>
@@ -182,10 +186,12 @@ import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
 
-import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE } from '@sdx/utils/src/const/task';
+import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, TASK_TYPE_LABEL, TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
 import taskMixin from '@sdx/utils/src/mixins/task';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import { getTaskList } from '@sdx/utils/src/api/project';
+
+const POLLING_PERIOD = 3 * 1000;
 
 export default {
     name: 'SdxwTaskResourceList',
@@ -218,12 +224,14 @@ export default {
         }
     },
     data() {
+        // todo: 下拉框数据需要从接口请求
         this.STATE_TYPE = STATE_TYPE;
         this.STATE_TYPE_LABEL = STATE_TYPE_LABEL;
         this.STATE_MAP_FOLD_LABEL_TYPE = STATE_MAP_FOLD_LABEL_TYPE;
+        this.TASK_TYPE_LABEL = TASK_TYPE_LABEL;
         this.taskTypeList = Object.values(TASK_TYPE).map(item => {
             return {
-                label: item,
+                label: TASK_TYPE_LABEL[item],
                 value: item
             };
         });
@@ -233,7 +241,7 @@ export default {
         });
         this.taskStateList = Object.values(STATE_TYPE).map(item => {
             return {
-                label: item,
+                label: STATE_TYPE_LABEL[item],
                 value: item
             };
         });
@@ -260,7 +268,8 @@ export default {
                 states: '',
                 type: ''
             },
-            loading: false
+            loading: false,
+            pollingId: null
         };
     },
     computed: {
@@ -273,11 +282,18 @@ export default {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });
+        },
+        needPolling() {
+            return this.taskResourceList.some(item => {
+                return TASK_POLLING_STATE_TYPE.includes(item.state);
+            });
         }
     },
     methods: {
-        fetchData() {
-            this.loading = true;
+        fetchData(showLoading = true) {
+            if (showLoading) { 
+                this.loading = true;
+            }
             getTaskList(this.queryParams).then(data => {
                 this.taskResourceList = data.items;
                 this.total = data.total;
@@ -285,6 +301,7 @@ export default {
             }).catch(() => {
                 this.taskResourceList = [];
                 this.total = 0;
+                this.loading = false;
             });
         },
         stateIcon(state) {
@@ -300,7 +317,7 @@ export default {
             this.page = page;
         },
         handleSearch() {
-            this.params.name = this.searchName;
+            this.params.name = this.searchName.trim();
             this.params.states = this.taskState;
             this.params.type = this.taskType;
             this.page = 1;
@@ -327,10 +344,25 @@ export default {
         this.fetchData();
         this.fetchDataMinxin = this.fetchData;
     },
+    beforeDestroy() {
+        this.pollingId && clearInterval(this.pollingId);
+        this.pollingId = null;    
+    },
     watch: {
         queryParams() {
             this.fetchData();
-        }
+        },
+        needPolling(nval) {
+            if (nval) {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = setInterval(() => {
+                    this.fetchData(false);
+                }, POLLING_PERIOD);
+            } else {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = null;
+            }
+        } 
     }
 };
 </script>

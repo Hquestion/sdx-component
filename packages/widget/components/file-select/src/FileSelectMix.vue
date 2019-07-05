@@ -206,10 +206,10 @@ export default {
         uploadParams: {
             type: Object,
             default: () => ({
-                userId: shareCenter.getUser().uuid,
+                ownerId: shareCenter.getUser() && shareCenter.getUser().uuid || '',
                 path: '/',
                 filesystem: 'cephfs',
-                overwrite: 0
+                overwrite: 1
             })
         },
         localFileLabel: {

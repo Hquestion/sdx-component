@@ -1,9 +1,9 @@
 @include block('log-detail', $bem-namespace-widget) {
     height: 60vh;
+    background-color: $sdx-log-background;
 
     @include element('content') {
         padding: $sdx-padding;
-        background-color: $sdx-log-background;
         text-align: left;
         border-radius:2px;
         word-break: break-word;

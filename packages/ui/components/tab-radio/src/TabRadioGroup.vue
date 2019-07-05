@@ -7,6 +7,7 @@
 <script>
 export default {
     name: 'SdxuTabRadioGroup',
+    componentName: 'SdxuTabRadioGroup',
     data() {
         return {
             active: {
@@ -43,6 +44,13 @@ export default {
     },
     mounted() {
         this.init();
+        // 监听slot中TabRadio的变化，初始化
+        this.$on('sdxu.tab-radio.add', () => {
+            this.$nextTick(() => this.init());
+        });
+        this.$on('sdxu.tab-radio.minus', () => {
+            this.$nextTick(() => this.init());
+        });
     },
     watch: {
         'active.name'(val, oldval) {
@@ -51,15 +59,11 @@ export default {
                 // 抛出switch事件，便于在切换时做一些操作
                 this.$emit('switch', val);
             }
-        },
-        'value': {
-            immediate: true,
-            handler() {
-                if (this._isMounted) {
-                    this.init();
-                }
-            }
         }
+    },
+    beforeDestroy() {
+        this.$off('sdxu.tab-radio.add');
+        this.$off('sdxu.tab-radio.minus');
     }
 };
 </script>

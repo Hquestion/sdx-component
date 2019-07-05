@@ -124,7 +124,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="owner.username"
+                prop="owner.fullName"
                 label="创建人"
                 min-width="100px"
             />
@@ -186,10 +186,12 @@ import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
 
-import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, TASK_TYPE_LABEL } from '@sdx/utils/src/const/task';
+import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, TASK_TYPE_LABEL, TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
 import taskMixin from '@sdx/utils/src/mixins/task';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import { getTaskList } from '@sdx/utils/src/api/project';
+
+const POLLING_PERIOD = 3 * 1000;
 
 export default {
     name: 'SdxwTaskResourceList',
@@ -266,7 +268,8 @@ export default {
                 states: '',
                 type: ''
             },
-            loading: false
+            loading: false,
+            pollingId: null
         };
     },
     computed: {
@@ -279,11 +282,18 @@ export default {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });
+        },
+        needPolling() {
+            return this.taskResourceList.some(item => {
+                return TASK_POLLING_STATE_TYPE.includes(item.state);
+            });
         }
     },
     methods: {
-        fetchData() {
-            this.loading = true;
+        fetchData(showLoading = true) {
+            if (showLoading) { 
+                this.loading = true;
+            }
             getTaskList(this.queryParams).then(data => {
                 this.taskResourceList = data.items;
                 this.total = data.total;
@@ -307,7 +317,7 @@ export default {
             this.page = page;
         },
         handleSearch() {
-            this.params.name = this.searchName;
+            this.params.name = this.searchName.trim();
             this.params.states = this.taskState;
             this.params.type = this.taskType;
             this.page = 1;
@@ -334,10 +344,25 @@ export default {
         this.fetchData();
         this.fetchDataMinxin = this.fetchData;
     },
+    beforeDestroy() {
+        this.pollingId && clearInterval(this.pollingId);
+        this.pollingId = null;    
+    },
     watch: {
         queryParams() {
             this.fetchData();
-        }
+        },
+        needPolling(nval) {
+            if (nval) {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = setInterval(() => {
+                    this.fetchData(false);
+                }, POLLING_PERIOD);
+            } else {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = null;
+            }
+        } 
     }
 };
 </script>

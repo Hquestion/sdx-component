@@ -102,5 +102,9 @@ export const OPERATION_INFO = {
     }
 };
 
+
 export const MONITOR_ALLOW_OPERATION = ['start', 'detail', 'kill'];
+
 export const NON_OWNER_TASK_OPERATION = ['detail'];
+
+export const TASK_POLLING_STATE_TYPE = [STATE_TYPE.LAUNCHING, STATE_TYPE.KILLING, STATE_TYPE.RUNNING];

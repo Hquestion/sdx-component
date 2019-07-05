@@ -57,11 +57,7 @@
                     label="角色"
                 >
                     <template slot-scope="scope">
-                        <SdxwFoldLabelGroup
-                            :list="scope.row.roleNames"
-                            mode="list"
-                            type="default"
-                        />
+                        <SdxuTextTooltip :content="scope.row.roleNames" tip-type="inline-block" />
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -152,6 +148,7 @@ import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import SearchLayout from '@sdx/widget/components/search-layout';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 export default {
     name:'SdxvUserManage',
     mixins: [transformFilter],
@@ -282,6 +279,7 @@ export default {
         JoinGroup,
         UserDetail,
         SdxuIconButton,
+        SdxuTextTooltip,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
     }

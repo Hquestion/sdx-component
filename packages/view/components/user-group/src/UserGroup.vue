@@ -46,11 +46,7 @@
                     label="角色"
                 >
                     <template #default="{ row }">
-                        <sdxw-fold-label-group
-                            :list="row.roles.map(item => item.name)"
-                            mode="list"
-                            type="default"
-                        />
+                        <SdxuTextTooltip :content="row.roles" content-key="name" tip-type="inline-block" />
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -120,6 +116,7 @@ import SdxuMessageBox from '@sdx/ui/components/message-box';
 import SdxuInput from '@sdx/ui/components/input';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 
 import { getGroups, deleteGroup } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
@@ -138,7 +135,8 @@ export default {
         SdxuInput,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
-        SdxuIconButton
+        SdxuIconButton,
+        SdxuTextTooltip
     },
     directives: {
         auth

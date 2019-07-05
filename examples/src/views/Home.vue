@@ -24,6 +24,16 @@
             :save-handler="handleSave"
         />
         <HelloWorld  v-auth.user.button="'USER:ACCESxS'" auth="USER:ACCESS"></HelloWorld>
+        <SdxuTextTooltip content="1111111111111111111111"></SdxuTextTooltip>
+        <el-tooltip content="1111111111111111">
+            <el-button>222</el-button>
+        </el-tooltip>
+        <div>
+            <el-tooltip content="Bottom center" placement="bottom" effect="light">
+                <el-button>Light</el-button>
+                <div slot="content">woshineirong</div>
+            </el-tooltip>
+        </div>
     </div>
 </template>
 
@@ -35,7 +45,9 @@ import SdxwFileSelectMain from '@sdx/widget/components/file-select/src/FileSelec
 import SdxwCodeEditor from '@sdx/widget/components/code-editor/src/CodeEditor';
 
 import SdxuButton from '@sdx/ui/components/button';
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import HelloWorld from '../components/HelloWorld';
+import ElTooltip from 'element-ui/packages/tooltip';
 
 export default {
     name: 'Home',
@@ -45,7 +57,9 @@ export default {
         SdxwCodeEditor,
         // SdxuLazyList,
         SdxFilePop,
-        SdxwFileSelectMain
+        SdxwFileSelectMain,
+        SdxuTextTooltip,
+        ElTooltip
     },
     data() {
         return {

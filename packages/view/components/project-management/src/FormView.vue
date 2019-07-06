@@ -12,6 +12,8 @@
 
 <script>
 import { getTaskDetail } from '@sdx/utils/src/api/project';
+import { TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
+const POLLING_PERIOD = 3 * 1000;
 
 export default {
     props: {
@@ -24,7 +26,8 @@ export default {
     data() {
         return {
             task: null,
-            kindSingleInstance: false
+            kindSingleInstance: false,
+            pollingId: null
         };
     },
     computed: {
@@ -38,7 +41,7 @@ export default {
         },
         // 是否需要状态拉取
         needPull() {
-            return this.task && this.task.state.need_pull;
+            return TASK_POLLING_STATE_TYPE.includes(this.task && this.task.state || '');
         }
     },
     methods: {
@@ -52,19 +55,24 @@ export default {
         },
     },
     watch: {
-       
-    },
-    activated() {
-      
+        needPull(nval) {
+            if (nval) {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = setInterval(() => {
+                    this.getTaskInfo();
+                }, POLLING_PERIOD);
+            } else {
+                this.pollingId && clearInterval(this.pollingId);
+                this.pollingId = null;
+            }
+        }
     },
     created() {
         this.getTaskInfo();
     },
     beforeDestroy() {
-      
-    },
-    deactivated() {
-     
+        this.pollingId && clearInterval(this.pollingId);
+        this.pollingId = null;    
     }
 };
 </script>

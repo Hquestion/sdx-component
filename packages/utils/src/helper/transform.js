@@ -67,6 +67,10 @@ export function byteToGB(byte) {
     return Math.floor(byte / Math.pow(1024, 3));
 }
 
+export function byteToMB(byte) {
+    return Math.floor(byte / Math.pow(1024, 2));
+}
+
 export function gbToByte(gb) {
     return gb * Math.pow(1024, 3);
 }

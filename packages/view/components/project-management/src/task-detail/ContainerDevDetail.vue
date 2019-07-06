@@ -34,7 +34,7 @@
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
                 label="创建人"
-                :value="task.owner && task.owner.username || ''"
+                :value="task.owner && task.owner.fullName || ''"
             />
             <SdxvBaseInfoItem
                 label="任务描述"

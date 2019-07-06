@@ -10,6 +10,7 @@
                 icon="sdx-icon-plus"
                 size="small"
                 @click="createVersion"
+                v-if="isModelOwner"
                 v-auth.model.button="'MODEL_VERSION:CREATE'"
             >
                 新增模型版本

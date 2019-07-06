@@ -21,6 +21,8 @@ import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap,
 import BreadcrumbBar from './BreadcrumbBar';
 import SdxvFileTask from './popup/FileTask';
 
+console.log(searchShareFiles.cancelTimer);
+
 export default {
     name: 'SdxvFileMain',
     data() {
@@ -288,7 +290,7 @@ export default {
                     const files = res.children;
                     let paths = [], uuids = [];
                     files.forEach(file => {
-                        paths.push(file.path);
+                        paths.push(this.rootKind === rootKinds.PROJECT_SHARE ? '/' : file.path);
                         uuids.push(file.ownerId);
                     });
                     return searchShareFiles({
@@ -301,8 +303,14 @@ export default {
                 let path = this.currentPath;
                 let ownerId = '';
                 if (this.rootKind !== '') {
-                    path = '/' + this.currentPath.split('/').slice(2).join('/');
-                    ownerId = this.$route.query.ownerId;
+                    // 协作项目的第一级为虚假目录，替换成/
+                    if (this.rootKind === rootKinds.PROJECT_SHARE) {
+                        path = '/' + this.currentPath.split('/').slice(3).join('/');
+                        ownerId = this.$route.query.ownerId;
+                    } else {
+                        path = '/' + this.currentPath.split('/').slice(2).join('/');
+                        ownerId = this.$route.query.ownerId;
+                    }
                 }
                 return searchFiles({
                     ownerId: ownerId,
@@ -364,6 +372,8 @@ export default {
     // },
     watch: {
         $route(val, oldval) {
+            searchFiles.cancelTimer();
+            searchShareFiles.cancelTimer();
             this.currentPath = val.query.path || '/';
             if (val.query.search) {
                 this.enterSearch(this.currentPath, val.query.search);

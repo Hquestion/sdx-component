@@ -13,7 +13,7 @@
         >
             新建特权
         </SdxuButton>
-        <div class="user-rights-list">
+        <div class="user-rights-list" v-loading="loading">
             <template v-if="userRightsList.length > 0">
                 <SdxuTable :data="userRightsList">
                     <el-table-column
@@ -108,7 +108,8 @@ export default {
             total: 0,
             editVisible: false,
             userRightsDetail: undefined,
-            isView: false
+            isView: false,
+            loading: false
         };
     },
     components: {
@@ -150,6 +151,7 @@ export default {
             this.getList(this.pageIndex);
         },
         getList(pageIndex) {
+            this.loading = true;
             const start = (pageIndex - 1) * this.pageSize + 1;
             return getResourceConfigs(start, this.pageSize).then(res => {
                 this.userRightsList = res.items || [];
@@ -157,6 +159,8 @@ export default {
             }, () => {
                 this.userRightsList = [];
                 this.total = 0;
+            }).finally(() => {
+                this.loading = false;
             });
         },
         currentChange(val) {

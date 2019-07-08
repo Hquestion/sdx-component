@@ -37,6 +37,7 @@
                 :data="groups"
                 class="sdxv-user-group__table"
                 :default-sort="{prop: 'createAt', order: 'descending'}"
+                v-loading="loading"
             >
                 <el-table-column
                     label="用户组名"
@@ -154,7 +155,8 @@ export default {
             createVisible: false,
             editVisible: false,
             deleteVisible: false,
-            groupMeta: undefined
+            groupMeta: undefined,
+            loading: false
         };
     },
     computed: {
@@ -169,10 +171,13 @@ export default {
     },
     methods: {
         fetchData(currentPage) {
+            this.loading = true;
             currentPage && (this.page = currentPage);
             getGroups(this.querys).then(data => {
                 this.groups = data.groups;
                 this.total = data.total;
+            }).finally(() => {
+                this.loading = false;
             });
         },
         handleSearch() {

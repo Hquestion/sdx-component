@@ -2,6 +2,7 @@
     <div
         class="rule-form"
         :class="[`rule-form--${mode}`]"
+        v-loading="loading"
     >
         <el-form
             :model="params"
@@ -149,7 +150,8 @@ export default {
                 maxCpuTime: 0,
             },
             resourceTmplList: [],
-            defaultConfig: {}
+            defaultConfig: {},
+            loading: false
         };
     },
     components: {
@@ -227,6 +229,7 @@ export default {
             });
         },
         initResourceConfigDetail() {
+            this.loading = true;
             getResourceConfigDetail(this.userId).then(res => {
                 const heavyTaskArr = [];
                 heavyTaskArr[0] = res.heavyTaskThreshold;
@@ -234,6 +237,8 @@ export default {
                 res.heavyTaskArr = heavyTaskArr;
                 this.params = Object.assign(this.params, res);
                 this.defaultConfig = deepCopy(this.params);
+            }).finally(() => {
+                this.loading = false;
             });
         },
         save() {

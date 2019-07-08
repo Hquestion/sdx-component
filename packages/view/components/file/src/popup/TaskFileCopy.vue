@@ -165,6 +165,7 @@ export default {
             return [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(row.state);
         },
         deleteAllTasks() {
+            this.stopPullCopyTask();
             if (this.copyFileList.length === 0) return Promise.resolve();
             return deleteTaskType('COPY').then(res => {
                 this.copyFileList = [];

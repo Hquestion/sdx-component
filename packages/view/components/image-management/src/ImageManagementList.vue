@@ -183,13 +183,11 @@ export default {
                 'PYTHON',
                 'SPARK',
                 'TENSORFLOW',
-                'TENSORFLOW_SERVING',
-                'SPARK_SERVING',
-                'PMML_SERVING',
+                'TENSORFLOW_DEPLOYMENT',
+                'SPARK_DEPLOYMENT',
+                'PMML_DEPLOYMENT',
                 'CONTAINER_DEV',
-                'OTHER' ,
-                'H2O',
-                'NVIDIA_DIGITS'
+                'OTHER'
             ],
             buildTypes: [
                 {
@@ -304,6 +302,7 @@ export default {
                 break;
             case 'private':
                 this.shareType = 'PRIVATE';
+                this.isOwner = 'true';
                 break;
             case 'myShare':
                 this.shareType = 'PUBLIC';

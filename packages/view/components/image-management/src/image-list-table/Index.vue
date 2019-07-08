@@ -298,13 +298,9 @@ export default {
             this.selectedImages = selection;
         },
         confirmEdit(users, groups, shareType) {
-            this.shareForm.shareType = shareType;
-            this.shareForm.users = [];
-            this.shareForm.groups = [];
-            if (this.shareForm.shareType !== 'PUBLIC') {
-                this.shareForm.users = users;
-                this.shareForm.groups = groups;
-            }
+            this.shareForm.shareType = (shareType === 'PUBLIC' || users.length || groups.length) ? 'PUBLIC' : 'PRIVATE';
+            this.shareForm.users = users;
+            this.shareForm.groups = groups;
             if (this.editingImage) {
                 // 编辑镜像
                 updateImage(this.editingImage.uuid, this.shareForm).then(() => {
@@ -349,8 +345,8 @@ export default {
             };
             removeBlankAttr(params);
             const currentUser = getUser();
-            if (this.isOwner) {
-                if (this.isOwner === 'true') {
+            if (this.isOwner || this.imageKind === 'all') {
+                if (this.isOwner === 'true' || this.imageKind === 'all') {
                     params.ownerId = currentUser.userId || '';
                 } else {
                     params.excludeOwnerId = currentUser.userId || '';
@@ -403,6 +399,7 @@ export default {
                     Object.assign(this.shareForm, row);
                     this.shareForm.users = this.shareForm.users || [];
                     this.shareForm.groups = this.shareForm.groups || [];
+                    if (this.shareForm.users.length || this.shareForm.groups.length) this.shareForm.shareType = 'PRIVATE';
                     break;
                 case 'extend':
                     this.$router.push({

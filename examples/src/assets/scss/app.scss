@@ -1,5 +1,8 @@
 $ilv-primary-color: #f00;
 
+
+@import url("//unpkg.com/element-ui@2.7.2/lib/theme-chalk/index.css");
+
 @import "~@sdx/ui/theme/index.scss";
 @import "~@sdx/utils/src/theme-common/element-customize/form.scss";
 @import "~@sdx/utils/src/theme-common/element-customize/input-number.scss";

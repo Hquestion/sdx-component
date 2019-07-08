@@ -20,6 +20,7 @@ import LazyList from './components/lazy-list';
 import IconButtonGroup from './components/icon-button-group';
 import RadialProgress from './components/radial-progress';
 import SortButton from './components/sort-button';
+import TextTooltip from './components/text-tooltip';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxUI = {
@@ -44,7 +45,8 @@ const SdxUI = {
     LazyList,
     IconButtonGroup,
     RadialProgress,
-    SortButton
+    SortButton,
+    TextTooltip
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -70,6 +72,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     IconButtonGroup.install(vue);
     RadialProgress.install(vue);
     SortButton.install(vue);
+    TextTooltip.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

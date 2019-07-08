@@ -35,6 +35,7 @@
                 :type="item.type"
                 :count="item.count"
                 @delete="handleDeleteTpl(item, index)"
+                v-loading="loading"
             />
         </div>
         <CreateCpuTemplate
@@ -65,7 +66,8 @@ export default {
         return {
             templateList: [],
             createGPUTplVisible: false,
-            createCPUTplVisible: false
+            createCPUTplVisible: false,
+            loading: false
         };
     },
     components: {
@@ -80,6 +82,7 @@ export default {
             this.getTemplateList();
         },
         getTemplateList() {
+            this.loading = true;
             getResourceTmplList().then(res => {
                 this.templateList = res.items.map(item => {
                     let count = [];
@@ -94,6 +97,8 @@ export default {
                         meta: item
                     };
                 });
+            }).finally(() => {
+                this.loading = false;
             });
         },
         handleDeleteTpl(item, index) {

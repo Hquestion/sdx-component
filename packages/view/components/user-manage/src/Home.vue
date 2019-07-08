@@ -43,6 +43,7 @@
                 borer
                 :data="tableData"
                 @row-click="openDetails"
+                v-loading="loading"
             >
                 <el-table-column
                     prop="username"
@@ -57,11 +58,7 @@
                     label="角色"
                 >
                     <template slot-scope="scope">
-                        <SdxwFoldLabelGroup
-                            :list="scope.row.roleNames"
-                            mode="list"
-                            type="default"
-                        />
+                        <SdxuTextTooltip :content="scope.row.roleNames" tip-type="inline-block" />
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -152,6 +149,7 @@ import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import SearchLayout from '@sdx/widget/components/search-layout';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 export default {
     name:'SdxvUserManage',
     mixins: [transformFilter],
@@ -173,7 +171,8 @@ export default {
             toEditUser: {},
             toViewUser: {},
             toJoinUser: {},
-            searched: false
+            searched: false,
+            loading: false
         };
     },
     directives: {
@@ -232,6 +231,7 @@ export default {
             });
         },
         getUsers(currentPage){
+            this.loading = true;
             currentPage && (this.current = currentPage);
             let params = {
                 start: (this.current - 1) * this.pageSize + 1,
@@ -248,6 +248,8 @@ export default {
                         item.roleNames = item.roles.map(item => item.name);
                     });
                     this.tableData = res.users;
+                }).finally(() => {
+                    this.loading = false;
                 });
         },
         //显示用户组
@@ -282,6 +284,7 @@ export default {
         JoinGroup,
         UserDetail,
         SdxuIconButton,
+        SdxuTextTooltip,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
     }

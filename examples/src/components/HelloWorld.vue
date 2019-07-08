@@ -14,7 +14,6 @@ export default {
         }
     },
     mounted() {
-        this.msg = '222';
         console.log('hello mounted!!');
     }
 };

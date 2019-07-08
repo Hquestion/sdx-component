@@ -30,7 +30,7 @@ export const handler = wrap(function(ctx, request) {
     let response = {children: [], childrenCount: shares.total};
     result.forEach(item => {
         if(item.code < 200 || item.code >= 300) {
-            response.children.push(null);
+            // response.children.push(null);
         } else {
             let body = JSON.parse(item.body);
             response.children.push(body);

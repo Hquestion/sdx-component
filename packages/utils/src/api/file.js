@@ -91,12 +91,17 @@ export function searchFiles(params) {
                 _reject();
             });
         })();
+        searchFiles.cancelTimer = function() {
+            clearTimeout(timer);
+        };
     }, _reject);
     return new Promise((resolve, reject) => {
         _resolve = resolve;
         _reject = reject;
     });
 }
+
+searchFiles.cancelTimer = function() {};
 
 export function searchShareFiles(params) {
     let userInfo = shareCenter.getUser() || {};
@@ -107,6 +112,9 @@ export function searchShareFiles(params) {
     }).then(res => {
         let jobId = res.jobId;
         let timer = null;
+        searchShareFiles.cancelTimer = function() {
+            clearTimeout(timer);
+        };
         (function pullJob() {
             getJobDetail(jobId).then(res => {
                 if (res.state === asyncJobStatus.SUCCESS || res.state === asyncJobStatus.FAILURE) {
@@ -137,6 +145,8 @@ export function searchShareFiles(params) {
         _reject = reject;
     });
 }
+
+searchShareFiles.cancelTimer = function() {};
 
 export function share(params) {
     let userInfo = shareCenter.getUser() || {};

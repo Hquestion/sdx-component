@@ -49,6 +49,9 @@ export default {
         },
         canDelete() {
             return this.fileManager.checked.length > 0 && ![rootKinds.ACCEPTED_SHARE, rootKinds.MY_SHARE].includes(this.fileManager.rootKind) && !this.isProjectRoot();
+        },
+        canSearch() {
+            return !this.isProjectRoot();
         }
     }
 };

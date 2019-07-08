@@ -37,6 +37,7 @@
                 :data="groups"
                 class="sdxv-user-group__table"
                 :default-sort="{prop: 'createAt', order: 'descending'}"
+                v-loading="loading"
             >
                 <el-table-column
                     label="用户组名"
@@ -46,11 +47,7 @@
                     label="角色"
                 >
                     <template #default="{ row }">
-                        <sdxw-fold-label-group
-                            :list="row.roles.map(item => item.name)"
-                            mode="list"
-                            type="default"
-                        />
+                        <SdxuTextTooltip :content="row.roles" content-key="name" tip-type="inline-block" />
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -121,6 +118,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SearchLayout from '@sdx/widget/components/search-layout';
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 
 import { getGroups, deleteGroup } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
@@ -141,7 +139,8 @@ export default {
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
         SdxuIconButton,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
-        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
+        SdxuTextTooltip
     },
     directives: {
         auth
@@ -156,7 +155,8 @@ export default {
             createVisible: false,
             editVisible: false,
             deleteVisible: false,
-            groupMeta: undefined
+            groupMeta: undefined,
+            loading: false
         };
     },
     computed: {
@@ -171,10 +171,13 @@ export default {
     },
     methods: {
         fetchData(currentPage) {
+            this.loading = true;
             currentPage && (this.page = currentPage);
             getGroups(this.querys).then(data => {
                 this.groups = data.groups;
                 this.total = data.total;
+            }).finally(() => {
+                this.loading = false;
             });
         },
         handleSearch() {

@@ -54,7 +54,14 @@
                         <el-table-column
                             prop="description"
                             label="角色说明"
-                        />
+                        >
+                            <template slot-scope="scope">
+                                <SdxuTextTooltip
+                                    :content="scope.row.description"
+                                    content-key="description"
+                                />
+                            </template>
+                        </el-table-column>
                         <el-table-column
                             prop="createdAt"
                             label="创建时间"
@@ -83,16 +90,6 @@
                                     @click="removeRole(scope.row.uuid, scope.row.name)"
                                     v-auth.user.button="'ROLE:WRITE'"
                                 />
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            type="expand"
-                        >
-                            <template slot-scope="props">
-                                <div class="expand">
-                                    <span>角色说明:</span>
-                                    <span>{{ props.row.description }}</span>
-                                </div>
                             </template>
                         </el-table-column>
                     </SdxuTable>
@@ -182,6 +179,7 @@ import SearchLayout from '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
 import { nameWithChineseValidator,descValidator} from '@sdx/utils/src/helper/validate';
 import { removeSameAttr } from '@sdx/utils/src/helper/tool';
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 export default {
     name: 'SdxvRoleManage',
     components: {
@@ -195,6 +193,7 @@ export default {
         [ContentPanel.name]: ContentPanel,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
+        SdxuTextTooltip
     },
     data() {
         return {

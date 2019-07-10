@@ -83,9 +83,11 @@
                         <div class="sdxv-user-group__table--expand">
                             <span class="sdxv-user-group__table--expand-label">组员:</span>
                             <sdxw-fold-label-group
-                                :list="row.roles.map(item => item.name)"
+                                v-if="row.users && row.users.length > 0"
+                                :list="row.users.map(item => item.fullName)"
                                 type="default"
                             />
+                            <span v-else>暂无用户</span>
                         </div>
                     </template>
                 </el-table-column>

@@ -5,7 +5,7 @@
         v-model="__value"
         filterable
         multiple
-        placeholder="请选择"
+        placeholder="请选择数据源"
     >
         <el-option
             v-for="option in options"

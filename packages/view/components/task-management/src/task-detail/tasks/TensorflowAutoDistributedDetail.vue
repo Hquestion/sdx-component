@@ -40,6 +40,10 @@
                 :value="task.args"
             />
             <SdxvBaseInfoItem
+                label="训练输出目录"
+                :value="task.outputPaths[0]"
+            />
+            <SdxvBaseInfoItem
                 label="启动时间"
                 :value="task.runningAt"
             />
@@ -54,6 +58,18 @@
         </template>
         <template #resource-info>
             <div class="sdxv-info-container is-background">
+                <SdxvBaseInfoItem
+                    label="主节点CPU"
+                    :value="milliCoreToCore(task.resourceConfig.TF_MASTER_CPUS) + '核'"
+                    :strip="true"
+                />
+                <SdxvBaseInfoItem
+                    label="主节点内存"
+                    :value="byteToGb(task.resourceConfig.TF_MASTER_MEMORY) + 'GB'"
+                    :strip="true"
+                />
+            </div>
+            <div class="sdxv-info-container">
                 <SdxvBaseInfoItem
                     label="参数服务器CPU"
                     :value="milliCoreToCore(task.resourceConfig.TF_PS_CPUS) + '核'"
@@ -70,7 +86,7 @@
                     :strip="true"
                 />
             </div>
-            <div class="sdxv-info-container">
+            <div class="sdxv-info-container is-background">
                 <SdxvBaseInfoItem
                     label="计算节点CPU"
                     :value="milliCoreToCore(task.resourceConfig.TF_WORKER_CPUS) + '核'"
@@ -94,9 +110,10 @@
             </div>
         </template>
         <template #log-info>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没Log日志哦"
+            <SdxuEmpty
+                v-if="!hasLog"
+                empty-content="暂时还没日志哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvLogList
                 v-else
@@ -104,9 +121,10 @@
             />
         </template>
         <template #realtime-monitor>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没实时监控哦"
+            <SdxuEmpty
+                v-if="!hasRealMonitor"
+                empty-content="暂时还没实时监控哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo
                 v-else
@@ -120,7 +138,7 @@
 import MixinDetail from './MixinDetail';
 
 export default {
-    name: 'SdxvTensorflowDistributedDetail',
+    name: 'SdxvTensorflowAutoDistributedDetail',
     mixins: [MixinDetail]
 };
 </script>

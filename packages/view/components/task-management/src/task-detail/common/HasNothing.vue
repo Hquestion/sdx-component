@@ -18,7 +18,7 @@
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 
 export default {
-    name: 'SdxvHasNothing',
+    name: 'SdxuEmpty',
     props: {
         tips: {
             type: String,

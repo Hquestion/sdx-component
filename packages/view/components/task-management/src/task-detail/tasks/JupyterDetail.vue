@@ -106,9 +106,10 @@
             </div>
         </template>
         <template #data-info>
-            <SdxvHasNothing
+            <SdxuEmpty
                 v-if="task.datasources && !task.datasources.length && task.datasets && !task.datasets.length"
-                tips="暂时还没数据信息哦"
+                empty-content="暂时还没数据信息哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvDataInfo
                 v-else
@@ -117,9 +118,10 @@
             />
         </template>
         <template #log-info>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没Log日志哦"
+            <SdxuEmpty
+                v-if="!hasLog"
+                empty-content="暂时还没日志哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvLogList
                 v-else
@@ -127,9 +129,10 @@
             />
         </template>
         <template #realtime-monitor>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没实时监控哦"
+            <SdxuEmpty
+                v-if="!hasRealMonitor"
+                empty-content="暂时还没实时监控哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo
                 v-else

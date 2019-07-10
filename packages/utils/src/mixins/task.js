@@ -91,12 +91,18 @@ export default {
             }
         },
         handleDetail(row) {
-            // todo:
-            this.$router.push(`/sdxv-project-manage/taskInfo/${row.type}/${row.uuid}`);
+            if (this.$$handleDetail) {
+                this.$$handleDetail(row);
+            } else {
+                this.$router.push(`/sdxv-task-management/sdxv-task-detail/${row.uuid}`);
+            }
         },
         handleEdit(row) {
-            // todo:
-            this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.project.uuid}`);
+            if (this.$$handleEdit) {
+                this.$$handleEdit(row);
+            } else {
+                this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.project.uuid}`);
+            }
         },
         async handleDelete(row) {
             try {

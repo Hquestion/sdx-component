@@ -40,10 +40,6 @@
                 :value="task.args"
             />
             <SdxvBaseInfoItem
-                label="训练输出目录"
-                :value="task.outputPaths[0]"
-            />
-            <SdxvBaseInfoItem
                 label="启动时间"
                 :value="task.runningAt"
             />
@@ -57,62 +53,29 @@
             />
         </template>
         <template #resource-info>
-            <div class="sdxv-info-container is-background">
-                <SdxvBaseInfoItem
-                    label="主节点CPU"
-                    :value="milliCoreToCore(task.resourceConfig.TF_MASTER_CPUS) + '核'"
-                    :strip="true"
-                />
-                <SdxvBaseInfoItem
-                    label="主节点内存"
-                    :value="byteToGb(task.resourceConfig.TF_MASTER_MEMORY) + 'GB'"
-                    :strip="true"
-                />
-            </div>
             <div class="sdxv-info-container">
                 <SdxvBaseInfoItem
-                    label="参数服务器CPU"
-                    :value="milliCoreToCore(task.resourceConfig.TF_PS_CPUS) + '核'"
+                    label="CPU"
+                    :value="milliCoreToCore(task.resourceConfig.EXECUTOR_CPUS) + '核'"
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
-                    label="参数服务器内存"
-                    :value="byteToGb(task.resourceConfig.TF_PS_MEMORY) + 'GB'"
+                    label="GPU"
+                    :value="task.resourceConfig.EXECUTOR_GPUS + '块'"
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
-                    label="参数服务器实例个数"
-                    :value="task.resourceConfig.TF_EXECUTOR_INSTANCES + '个'"
-                    :strip="true"
-                />
-            </div>
-            <div class="sdxv-info-container is-background">
-                <SdxvBaseInfoItem
-                    label="计算节点CPU"
-                    :value="milliCoreToCore(task.resourceConfig.TF_WORKER_CPUS) + '核'"
-                    :strip="true"
-                />
-                <SdxvBaseInfoItem
-                    label="计算节点内存"
-                    :value="byteToGb(task.resourceConfig.TF_WORKER_MEMORY) + 'GB'"
-                    :strip="true"
-                />
-                <SdxvBaseInfoItem
-                    label="计算节点GPU"
-                    :value="task.resourceConfig.TF_WORKER_GPUS + '块'"
-                    :strip="true"
-                />
-                <SdxvBaseInfoItem
-                    label="计算节点实例个数"
-                    :value="task.resourceConfig.TF_EXECUTOR_INSTANCES + '个'"
+                    label="内存"
+                    :value="byteToGb(task.resourceConfig.EXECUTOR_MEMORY) + 'GB'"
                     :strip="true"
                 />
             </div>
         </template>
         <template #log-info>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没Log日志哦"
+            <SdxuEmpty
+                v-if="!hasLog"
+                empty-content="暂时还没日志哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvLogList
                 v-else
@@ -120,9 +83,10 @@
             />
         </template>
         <template #realtime-monitor>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没实时监控哦"
+            <SdxuEmpty
+                v-if="!hasRealMonitor"
+                empty-content="暂时还没实时监控哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo
                 v-else
@@ -136,7 +100,7 @@
 import MixinDetail from './MixinDetail';
 
 export default {
-    name: 'SdxvTensorflowAutoDistributedDetail',
+    name: 'SdxvPythonDetail',
     mixins: [MixinDetail]
 };
 </script>

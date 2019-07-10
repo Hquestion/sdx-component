@@ -1,12 +1,11 @@
 import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
-import LogInfo from './src/task-detail/common/LogInfo';
 import DataSourceSelect from './src/forms/DataSourceSelect';
 import BaseForm from './src/forms/BaseForm';
+import { TaskDetailView, TaskLogInfo} from '@sdx/view/components/task-management/index';
 
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';
-import * as details from './src/task-detail';
 import ProjectDetail from './src/project-detail/index.vue';
 
 ProjectManagement.install = vue => {
@@ -37,6 +36,24 @@ const routeCfg = [
                 }
             },
             {
+                path: 'sdxv-project-task-detail/:taskId',
+                name: 'SdxvProjectTaskDetail',
+                component: TaskDetailView,
+                props: true,
+                meta: {
+                    breadcrumb: '任务详情'
+                }
+            },
+            {
+                path: 'sdxv-project-task-log/:method/:podId',
+                name: 'SdxvProjectTaskLog',
+                props: true,
+                component: TaskLogInfo,
+                meta: {
+                    breadcrumb: '日志详情'
+                }
+            },
+            {
                 path: 'createTask/:type/:projectId',
                 component: FormView,
                 name: 'CreateTask',
@@ -61,25 +78,6 @@ const routeCfg = [
                 }) => ({
                     formComp: forms[params.type]
                 })
-            }, {
-                path: 'taskInfo/:type/:taskId',
-                name: 'TaskInfo',
-                component: FormView,
-                meta: {
-                    breadcrumb: '任务详情'
-                },
-                props: ({
-                    params
-                }) => ({
-                    formComp: details[params.type]
-                })
-            },{
-                path: 'logInfo/:method/:podId',
-                component: LogInfo,
-                meta: {
-                    breadcrumb: '日志详情'
-                },
-                props: true
             }
         ]
     }

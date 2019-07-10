@@ -28,16 +28,8 @@
         </template>
         <template #running-info>
             <SdxvBaseInfoItem
-                label="源代码"
-                :value="task.sourcePaths[0]"
-            />
-            <SdxvBaseInfoItem
                 label="运行环境"
                 :value="task.image && task.image.name || ''"
-            />
-            <SdxvBaseInfoItem
-                label="启动参数"
-                :value="task.args"
             />
             <SdxvBaseInfoItem
                 label="启动时间"
@@ -55,26 +47,39 @@
         <template #resource-info>
             <div class="sdxv-info-container">
                 <SdxvBaseInfoItem
-                    label="CPU"
-                    :value="milliCoreToCore(task.resourceConfig.EXECUTOR_CPUS) + '核'"
+                    label="驱动器CPU"
+                    :value="milliCoreToCore(task.resourceConfig.SPARK_DRIVER_CPUS) + '核'"
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
-                    label="GPU"
-                    :value="task.resourceConfig.EXECUTOR_GPUS + '块'"
+                    label="驱动器内存"
+                    :value="byteToGb(task.resourceConfig.SPARK_DRIVER_MEMORY) + 'GB'"
+                    :strip="true"
+                />
+            </div>
+            <div class="sdxv-info-container">
+                <SdxvBaseInfoItem
+                    label="执行器CPU"
+                    :value="milliCoreToCore(task.resourceConfig.SPARK_EXECUTOR_CPUS) + '核'"
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
-                    label="内存"
-                    :value="byteToGb(task.resourceConfig.EXECUTOR_MEMORY) + 'GB'"
+                    label="执行器内存"
+                    :value="byteToGb(task.resourceConfig.SPARK_EXECUTOR_MEMORY) + 'GB'"
+                    :strip="true"
+                />
+                <SdxvBaseInfoItem
+                    label="执行器实例数"
+                    :value="task.resourceConfig.SPARK_EXECUTOR_INSTANCES + '个'"
                     :strip="true"
                 />
             </div>
         </template>
         <template #log-info>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没Log日志哦"
+            <SdxuEmpty
+                v-if="!hasLog"
+                empty-content="暂时还没日志哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvLogList
                 v-else
@@ -82,9 +87,10 @@
             />
         </template>
         <template #realtime-monitor>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没实时监控哦"
+            <SdxuEmpty
+                v-if="!hasRealMonitor"
+                empty-content="暂时还没实时监控哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo
                 v-else
@@ -98,7 +104,7 @@
 import MixinDetail from './MixinDetail';
 
 export default {
-    name: 'SdxvTensorflowDetail',
+    name: 'SdxvDataServiceDetail',
     mixins: [MixinDetail]
 };
 </script>

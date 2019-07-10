@@ -95,7 +95,12 @@ export default {
             }
         },
         async handleOpenDialog() {
-            const data = await getTaskList({ podName: this.pod.podName });
+            let data = null;
+            try {
+                data = await getTaskList({ podName: this.pod.podName });
+            } catch(e) {
+                data = null;
+            }
             const task = data && Array.isArray(data.items) && data.items[0] || null;
             this.startedAt = task && new Date(task.runningAt).getTime() || '';
             this.fetchData(this.end, this.size);

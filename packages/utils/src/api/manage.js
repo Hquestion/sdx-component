@@ -1,9 +1,9 @@
 import httpService from '../http-service';
 import { COMPOSE_GATEWAY_BASE } from './config';
 
-const userProfilesApi = `${COMPOSE_GATEWAY_BASE}user-profiles/`;
-const groupProfilesApi = `${COMPOSE_GATEWAY_BASE}group-profiles/`;
-const roleProfilesApi = `${COMPOSE_GATEWAY_BASE}role-profiles/`;
+const userProfilesApi = `${COMPOSE_GATEWAY_BASE}user-profiles`;
+const groupProfilesApi = `${COMPOSE_GATEWAY_BASE}group-profiles`;
+const roleProfilesApi = `${COMPOSE_GATEWAY_BASE}role-profiles`;
 
 // 授权
 

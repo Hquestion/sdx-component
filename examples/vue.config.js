@@ -17,6 +17,7 @@ module.exports = {
             alias: config.alias
         }
     },
+    transpileDependencies: ['element-ui'],
     devServer: {
         writeToDisk: false,
         port: 3300,

@@ -34,6 +34,7 @@
         <sdxu-content-panel
             class="sdxv-project-detail__task-list"
             title="任务列表"
+            v-loading="loading"
         >
             <div
                 slot="right"
@@ -62,7 +63,7 @@
                 <div
                     class="sdxv-project-detail__content"
                 >
-                    <task-card-list v-loading="loading">
+                    <task-card-list>
                         <task-card
                             @operate="handleOperate"
                             v-for="(item, index) in taskList"
@@ -104,14 +105,14 @@ import Button from '@sdx/ui/components/button';
 import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
 import SortButton from '@sdx/ui/components/sort-button';
-import MessageBox from '@sdx/ui/components/message-box';
+// import MessageBox from '@sdx/ui/components/message-box';
 import Empty from '@sdx/ui/components/empty';
 import TaskCard from './TaskCard';
 import TaskCardList from './TaskCardList';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import TaskIcon from './TaskIcon';
-import Message from 'element-ui/lib/message';
-import { getTaskList, removeTask, startTask, stopTask } from '@sdx/utils/src/api/project';
+// import Message from 'element-ui/lib/message';
+import { getTaskList } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
 import taskMixin from '@sdx/utils/src/mixins/task';
 export default {
@@ -127,6 +128,7 @@ export default {
             orderBy: 'createdAt',
             taskList: [],
             loading: false,
+            refreshTimer: null,
             taskOptions: [
                 {
                     name: '模型开发',
@@ -194,11 +196,14 @@ export default {
         };
     },
     created() {
-        this.initList();
+        this.initList(true);
         this.fetchDataMinxin = this.initList;
     },
     directives: {
         auth
+    },
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
     },
     components: {
         [ContentPanel.name]: ContentPanel,
@@ -214,7 +219,7 @@ export default {
     },
     methods: {
         searchTask() {
-            this.initList();
+            this.initList(true);
         },
         createTask(task) {
             this.$router.push(
@@ -227,8 +232,8 @@ export default {
                 }
             );
         },
-        initList() {
-            this.loading = true;
+        initList(showLoading) {
+            this.loading = showLoading ? true : false;
             const params = {
                 name: this.searchName,
                 ...paginate(this.current, this.pageSize),
@@ -240,87 +245,90 @@ export default {
                 this.taskList = res.items;
                 this.total = res.total;
                 this.loading = false;
+                if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
+                    if (!this.refreshTimer) {
+                        this.refreshTimer = setInterval(this.initList, 3000, false);
+                    }
+                } else {
+                    clearInterval(this.refreshTimer);
+                }
             });
         },
         currentChange(val) {
             this.current = val;
-            this.initList();
+            this.initList(true);
         },
-        sortChange(order) {
-            this.order = order;
-            this.initList();
-        },
-        handleOperate(operation) {
-            // console.log('operation', operation);
-            switch(operation.type) {
-            case 'start':
-                MessageBox({
-                    title: '确定运行该任务吗？',
-                    content: ''
-                }).then(() => {
-                    startTask(operation.item.uuid).then(() => {
-                        Message({
-                            message: '运行成功',
-                            type: 'success'
-                        });
-                        this.initList();
-                    });
-                }).catch(() => {});
-                break;
-            case 'kill':
-                MessageBox({
-                    title: '确定停止该任务吗？',
-                    content: ''
-                }).then(() => {
-                    stopTask(operation.item.uuid).then(() => {
-                        Message({
-                            message: '停止成功',
-                            type: 'success'
-                        });
-                        this.initList();
-                    });
-                }).catch(() => {});
-                break;
-            case 'detail':
-                this.$router.push({
-                    name: 'TaskInfo',
-                    params: {
-                        type: operation.item.type,
-                        taskId: operation.item.uuid
-                    }
-                });
-                break;
-            case 'edit':
-                this.$router.push({
-                    name: 'EditTask',
-                    params: {
-                        type: operation.item.type,
-                        taskId: operation.item.uuid,
-                        projectId: this.$route.params.id
-                    }
-                });
-                break;
-            case 'remove':
-                MessageBox({
-                    title: '确定删除吗？',
-                    content: '删除后将不可恢复'
-                }).then(() => {
-                    removeTask(operation.item.uuid).then(() => {
-                        Message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        this.initList();
-                    });
-                }).catch(() => {});
-                break;
-            default:
-                break;
-            }
+        sortChange() {
+            this.initList(true);
         }
+        // handleOperate(operation) {
+        //     // console.log('operation', operation);
+        //     switch(operation.type) {
+        //     case 'start':
+        //         MessageBox({
+        //             title: '确定运行该任务吗？',
+        //             content: ''
+        //         }).then(() => {
+        //             startTask(operation.item.uuid).then(() => {
+        //                 Message({
+        //                     message: '运行成功',
+        //                     type: 'success'
+        //                 });
+        //                 this.initList(true);
+        //             });
+        //         }).catch(() => {});
+        //         break;
+        //     case 'kill':
+        //         MessageBox({
+        //             title: '确定停止该任务吗？',
+        //             content: ''
+        //         }).then(() => {
+        //             stopTask(operation.item.uuid).then(() => {
+        //                 Message({
+        //                     message: '停止成功',
+        //                     type: 'success'
+        //                 });
+        //                 this.initList(true);
+        //             });
+        //         }).catch(() => {});
+        //         break;
+        //     case 'detail':
+        //         this.$router.push({
+        //             name: 'TaskInfo',
+        //             params: {
+        //                 type: operation.item.type,
+        //                 taskId: operation.item.uuid
+        //             }
+        //         });
+        //         break;
+        //     case 'edit':
+        //         this.$router.push({
+        //             name: 'EditTask',
+        //             params: {
+        //                 type: operation.item.type,
+        //                 taskId: operation.item.uuid,
+        //                 projectId: this.$route.params.id
+        //             }
+        //         });
+        //         break;
+        //     case 'remove':
+        //         MessageBox({
+        //             title: '确定删除吗？',
+        //             content: '删除后将不可恢复'
+        //         }).then(() => {
+        //             removeTask(operation.item.uuid).then(() => {
+        //                 Message({
+        //                     message: '删除成功',
+        //                     type: 'success'
+        //                 });
+        //                 this.initList(true);
+        //             });
+        //         }).catch(() => {});
+        //         break;
+        //     default:
+        //         break;
+        //     }
+        // }
     }
 };
 </script>
-
-<style scoped lang="scss">
-</style>

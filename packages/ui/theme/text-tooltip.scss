@@ -1,0 +1,40 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import '~element-ui/packages/theme-chalk/src/base';
+@import '~element-ui/packages/theme-chalk/src/popover';
+
+@include block('text-tooltip', $bem-namespace-ui) {
+    @include element('item') {
+        display: inline-block;
+    }
+    @include element('popper') {
+        display: inline-block;
+        max-width: 600px;
+        min-width: 50px;
+        max-height: 400px;
+        border: 1px solid $sdx-primary-color;
+        .popper__arrow, .popper__arrow::before {
+            bottom: -6px;
+            margin-left: -6px;
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-color: transparent;
+            border-style: solid;
+            border-width: 6px;
+            border-top-color: $sdx-primary-color;
+            position: absolute;
+        }
+        &[x-placement^="bottom"] .popper__arrow::before {
+            top: -6px;
+            content: '';
+            border-bottom-color: $sdx-primary-color;
+            border-top-color: transparent;
+        }
+    }
+    @include element('main') {
+        display: inline-block;
+        max-width: 100%;
+    }
+}

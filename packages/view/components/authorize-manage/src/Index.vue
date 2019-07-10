@@ -56,23 +56,31 @@
                     </SdxwSearchItem>
                 </SdxwSearchLayout>
             </div>
-            <div class="sdxv-authorize-manage__table">
+            <div
+                class="sdxv-authorize-manage__table"
+                v-loading="permissionLoading"
+            >
                 <SdxuTable
                     :data="tableData"
                 >
                     <el-table-column
                         :prop="objectType === 'user' ? 'fullName' : 'name'"
                         :label="tabName"
+                        width="300px"
                     />
                     <el-table-column
                         label="权限"
                     >
                         <template slot-scope="scope">
-                            <SdxwFoldLabelGroup :list="scope.row.permissions.map(item => item.name)" />
+                            <SdxuTextTooltip
+                                :content="scope.row.permissions"
+                                content-key="name"
+                                tip-type="inline-block"
+                            />
                         </template>
                     </el-table-column>
                     <el-table-column
-                        style="width: 15%"
+                        width="400px"
                         label="操作"
                         v-if="authtoWrite(objectType)"
                     >
@@ -175,6 +183,7 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuTransfer from '@sdx/ui/components/transfer';
 import SdxuUserAvatar from '@sdx/ui/components/user-avatar';
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import Select from 'element-ui/lib/select';
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
@@ -210,6 +219,7 @@ export default {
         SdxuUserAvatar,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
+        SdxuTextTooltip
     },
     directives: {
         auth
@@ -255,8 +265,9 @@ export default {
                 tags: [
                     { required: true, message: '请设置权限设置', trigger: 'blue' }
                 ],
-                
+
             },
+            permissionLoading:false
         };
     },
     created() {
@@ -329,7 +340,7 @@ export default {
                     .then(()=> {
                         this.roleList(reset, orderBy);
                     });
-            }  
+            }
         },
         // 权限列表
         getPermissions() {
@@ -353,33 +364,42 @@ export default {
             let params={...this.searchPermissions, ...paginate(this.current, this.pageSize),
                 fullName: this.searchPermissions.name, username: this.searchPermissions.name};
             delete  params.name;
+            this.permissionLoading = true;
             getUserProfilesList(params)
                 .then(data => {
                     this.tableData = data.users;
                     this.total = data.total;
-
+                    this.permissionLoading = false;
+                }, () => {
+                    this.permissionLoading = false;
                 });
         },
         groupList(reset,orderBy) {
             if(orderBy) this.searchPermissions.orderBy = orderBy;
             if (reset) this.current = 1;
             let params={...this.searchPermissions, ...paginate(this.current, this.pageSize)};
+            this.permissionLoading = true;
             getGroupProfilesList(params)
                 .then(data => {
                     this.tableData = data.groups;
                     this.total = data.total;
-
+                    this.permissionLoading = false;
+                }, () => {
+                    this.permissionLoading = false;
                 });
         },
         roleList(reset,orderBy) {
             if (reset) this.current = 1;
             if(orderBy) this.searchPermissions.orderBy = orderBy;
             let params={...this.searchPermissions, ...paginate(this.current, this.pageSize)};
+            this.permissionLoading = true;
             getRoleProfilesList(params)
                 .then(data => {
                     this.tableData = data.roles;
                     this.total = data.total;
-
+                    this.permissionLoading = false;
+                }, () => {
+                    this.permissionLoading = false;
                 });
         },
         // tab切换
@@ -449,7 +469,7 @@ export default {
                 title: `确定删除授权${name}吗？`,
                 content: '删除后不可恢复哦',
                 type: 'alert'
-            }).then(() => { 
+            }).then(() => {
                 this.updatePermissions(this.objectType, id, []);
             }, () => {
 

@@ -38,7 +38,10 @@
                         </SdxwSearchLayout>
                     </div>
                 </div>
-                <div class="sdxv-role-manage__table">
+                <div
+                    class="sdxv-role-manage__table"
+                    v-loading="roleLoading"
+                >
                     <SdxuTable
                         :data="tableData"
                         :default-sort="{prop: 'createdAt', order: 'descending'}"
@@ -239,7 +242,8 @@ export default {
             },
             id: '',
             options: [],
-            saveRoleObj: {}
+            saveRoleObj: {},
+            roleLoading: false
         };
     },
     directives: {
@@ -256,10 +260,14 @@ export default {
             this.roleList();
         },
         roleList() {
+            this.roleLoading = true;
             getRolesList(this.searchRoles)
                 .then(data =>{
                     this.tableData = data.roles;
                     this.total = data.total;
+                    this.roleLoading = false;
+                }, () => {
+                    this.roleLoading = false;
                 });
         },
         addRole() {

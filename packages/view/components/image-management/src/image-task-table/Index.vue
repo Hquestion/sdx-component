@@ -62,19 +62,19 @@
                     <SdxuIconButton
                         icon="sdx-icon sdx-baobijiao"
                         title="比较"
-                        v-if="scope.row.operations.includes('diff')"
+                        v-if="scope.row.showDiff"
                         @click="handleShowCompareDialog(scope.row)"
                     />
                     <SdxuIconButton
                         icon="sdx-icon sdx-chakanrizhi"
                         title="查看日志"
-                        v-if="scope.row.operations.includes('log')"
+                        v-if="scope.row.showLog"
                         @click="handelShowBuilderLog(scope.row.uuid)"
                     />
                     <SdxuIconButton
                         icon="sdx-icon sdx-icon-delete"
                         title="删除"
-                        v-if="scope.row.operations.includes('remove')"
+                        v-if="scope.row.showRemove"
                         @click="deleteImageTask(scope.row.uuid)"
                     />
                 </template>
@@ -112,6 +112,7 @@ import {imageTaskLabel} from '@sdx/utils/src/const/relation';
 import PackageDetailCompareDialog from '../PackageDetailCompareDialog';
 import BuildLogDialog from '../BuildLogDialog';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'ImageTaskTable',
     data() {
@@ -152,6 +153,7 @@ export default {
             default: ''
         }
     },
+
     components: {
         SdxuTable,
         SdxuIconButton,
@@ -163,11 +165,18 @@ export default {
     methods: {
         dateFormatter,
         taskList(params) {
+            const currentUser = getUser();
             removeBlankAttr(params);
             getImageTaskList(params)
                 .then(data =>{
                     this.tableData = data.data;
                     this.total = data.total;
+                    this.tableData.forEach(item => {
+                        const isOwnImage = (item.owner && item.owner.uuid) === currentUser.userId;
+                        item.showDiff = isOwnImage && item.buildType === 'ONLINE';
+                        item.showRemove = isOwnImage && (item.state.label === 'FAILED' || item.state.label  === 'FINISHED');
+                        item.showLog = isOwnImage;
+                    });
                 }).finally(() => {
                     this.loading = false;
                 });

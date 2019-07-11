@@ -23,9 +23,9 @@
             <template slot-scope="scope">
                 <SdxuFoldLabel
                     :plain="true"
-                    :label="copyTaskStatusMap[scope.row.state] && copyTaskStatusMap[scope.row.state].label"
-                    :status="copyTaskStatusMap[scope.row.state] && copyTaskStatusMap[scope.row.state].status"
-                    :type="copyTaskStatusMap[scope.row.state] && copyTaskStatusMap[scope.row.state].type"
+                    :label="unzipTaskStatusMap[scope.row.state] && unzipTaskStatusMap[scope.row.state].label"
+                    :status="unzipTaskStatusMap[scope.row.state] && unzipTaskStatusMap[scope.row.state].status"
+                    :type="unzipTaskStatusMap[scope.row.state] && unzipTaskStatusMap[scope.row.state].type"
                 />
             </template>
         </el-table-column>
@@ -36,7 +36,7 @@
 import { getUnzipTaskList } from '@sdx/utils/src/api/file';
 import SdxuFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuTable from '@sdx/ui/components/table';
-import { copyTaskStatusMap } from '../helper/config';
+import { unzipTaskStatusMap } from '../helper/config';
 import { asyncJobStatus } from '@sdx/utils/src/const/file';
 import { deleteTaskType } from '@sdx/utils/src/api/file';
 
@@ -50,7 +50,7 @@ export default {
     data() {
         return {
             unzipFileList: [],
-            copyTaskStatusMap
+            unzipTaskStatusMap
         };
     },
     computed: {
@@ -81,10 +81,13 @@ export default {
             return this.unzipFileList.length === 0
                 || !this.unzipFileList.some(item => [asyncJobStatus.PROCESSING, asyncJobStatus.PENDING].includes(item.state));
         },
+        isListEmpty() {
+            return this.unzipFileList.length === 0;
+        },
         deleteAllTasks() {
             this.stopPullUnzipTask();
             if (this.unzipFileList.length === 0) return Promise.resolve();
-            return deleteTaskType('UNZIP').then(res => {
+            return deleteTaskType('UNPACK').then(res => {
                 this.unzipFileList = [];
             });
         }

@@ -18,7 +18,6 @@
             <el-form-item
                 label="用户组名"
                 prop="name"
-                required
             >
                 <SdxuInput
                     placeholder="请输入组名"
@@ -28,7 +27,6 @@
             <el-form-item
                 label="角色"
                 prop="roles"
-                required
             >
                 <el-select
                     v-model="params.roles"
@@ -58,7 +56,8 @@ import ElOption from 'element-ui/lib/option';
 
 import { getRolesList } from '@sdx/utils/src/api/rolemange';
 import { createGroup, updateGroups } from '@sdx/utils/src/api/user';
-
+import { commonNameValidator } from '@sdx/utils/src/helper/validate';
+import { removeSameAttr } from '@sdx/utils/src/helper/tool';
 export default {
     name: 'CreateUserGroup',
     components: {
@@ -84,6 +83,7 @@ export default {
                         message: '请输入用户组名',
                         trigger: 'blur'
                     },
+                    { validator: commonNameValidator, trigger: 'blur' },
                 ],
                 roles: [
                     {
@@ -92,7 +92,8 @@ export default {
                         trigger: 'change'
                     },
                 ]
-            }
+            },
+            saveGroupObj: {}
         };
     },
     computed: {
@@ -141,10 +142,12 @@ export default {
                 let promise;
                 const groupData = {
                     name: this.params.name,
-                    roles: this.params.roles
+                    roles: this.params.roles.map(item => typeof item === 'string' ? item : item.uuid)
                 };
+                // 传变化的值给后端
+                let params = removeSameAttr(this.saveGroupObj, groupData);
                 if (this.params.uuid) {
-                    promise = updateGroups(this.params.uuid, groupData);
+                    promise = updateGroups(this.params.uuid, params);
                 } else {
                     groupData.permissions = [];
                     promise = createGroup(groupData);
@@ -166,6 +169,10 @@ export default {
             handler(val) {
                 if (val) {
                     this.params = Object.assign(this.params, val);
+                    this.saveGroupObj = JSON.parse(JSON.stringify({
+                        name: this.params.name,
+                        roles: this.params.roles
+                    }));
                 } else {
                     this.params = {
                         uuid: '',

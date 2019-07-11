@@ -130,6 +130,12 @@ module.exports = [
         filePath: './compose/fileShareBatch.js'
     },
     {
+        apiId: '/fe-compose/api/v1/file-share-search-job-profiles',
+        method: 'GET',
+        functionName: 'fileShareSearchJobProfiles.handler',
+        filePath: './compose/fileShareSearchJobProfiles.js'
+    },
+    {
         apiId: '/fe-compose/api/v1/model-deploy',
         method: 'POST',
         functionName: 'modelDeploy.handler',

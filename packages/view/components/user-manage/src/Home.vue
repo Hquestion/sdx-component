@@ -44,6 +44,8 @@
                 :data="tableData"
                 @row-click="openDetails"
                 v-loading="loading"
+                :default-sort="{prop: 'createdAt', order: 'descending'}"
+                @sort-change="handleSortChange"
             >
                 <el-table-column
                     prop="username"
@@ -58,11 +60,15 @@
                     label="角色"
                 >
                     <template slot-scope="scope">
-                        <SdxuTextTooltip :content="scope.row.roleNames" tip-type="inline-block" />
+                        <SdxuTextTooltip
+                            :content="scope.row.roleNames"
+                            tip-type="inline-block"
+                        />
                     </template>
                 </el-table-column>
                 <el-table-column
                     label="创建时间"
+                    prop="createdAt"
                     sortable
                 >
                     <template #default="{row}">
@@ -172,7 +178,9 @@ export default {
             toViewUser: {},
             toJoinUser: {},
             searched: false,
-            loading: false
+            loading: false,
+            order: 'desc',
+            orderBy: 'createdAt'
         };
     },
     directives: {
@@ -235,7 +243,9 @@ export default {
             currentPage && (this.current = currentPage);
             let params = {
                 start: (this.current - 1) * this.pageSize + 1,
-                count: this.pageSize
+                count: this.pageSize,
+                order: this.order,
+                orderBy: this.orderBy
             };
             if (this.searched) {
                 params.username = this.searchKey;
@@ -268,7 +278,15 @@ export default {
             } else {
                 this.getUsers(1);
             }
-        }
+        },
+        handleSortChange({order}) {
+            if (!order) {
+                return;
+            }
+            this.order =
+                    order === 'descending' ? 'desc' : 'asc';
+            this.getUsers();
+        },
     },
     mounted(){
         this.getUsers();

@@ -248,6 +248,7 @@ export default {
             if (type && row.uuid) {
                 switch (type) {
                 case 'canvas':
+                    window.open(`${window.location.origin}/#/editor/${this.$route.params.id}/${row.uuid}`);
                     break;
                 case 'copy':
                     this.createWorkflowVisible = true;

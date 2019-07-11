@@ -5,9 +5,6 @@ import ElementUI from 'element-ui';
 
 const localVue = createLocalVue();
 
-
-// import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
-jest.mock('@sdx/utils/src/theme-common/iconfont/iconfont.js');
 localVue.use(ElementUI);
 
 

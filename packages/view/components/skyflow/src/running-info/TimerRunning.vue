@@ -414,6 +414,7 @@ export default {
                     }).catch(() => {});
                     break;
                 case 'canvas':
+                    window.open(`${window.location.origin}/#/editor/${this.$route.params.id}/${this.expandingRow.uuid}`);
                     break;
                 default:
                     break;

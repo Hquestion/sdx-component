@@ -24,7 +24,7 @@
             >
                 上传
             </SdxwFileSelect>
-            <SdxuButton v-if="canDownload()" @click="handleDownload">
+            <SdxuButton v-if="canDownload()" @click="handleDownload" :loading="fileManager.$refs.fileTable.btnStatus.batchDownloading.length > 0">
                 下载
             </SdxuButton>
             <SdxuButton v-if="canShare()" @click="handleShare">

@@ -26,12 +26,14 @@
                 <el-radio
                     v-model="workflowForm.processType"
                     label="PATCH"
+                    :disabled="isEditing"
                 >
                     批处理
                 </el-radio>
                 <el-radio
                     v-model="workflowForm.processType"
                     label="STREAM"
+                    :disabled="isEditing"
                 >
                     流处理
                 </el-radio>

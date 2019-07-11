@@ -47,7 +47,8 @@ export const iconButtonTypes = {
     DOWNLOAD: {
         icon: 'sdx-icon sdx-icon--download',
         title: '下载',
-        name: BTN_NAMES.DOWNLOAD
+        name: BTN_NAMES.DOWNLOAD,
+        loading: false
     },
     COPY: {
         icon: 'sdx-icon sdx-kaobei',

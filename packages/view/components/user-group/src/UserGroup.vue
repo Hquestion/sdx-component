@@ -36,8 +36,9 @@
             <sdxu-table
                 :data="groups"
                 class="sdxv-user-group__table"
-                :default-sort="{prop: 'createAt', order: 'descending'}"
+                :default-sort="{prop: 'createdAt', order: 'descending'}"
                 v-loading="loading"
+                @sort-change="handleSortChange"
             >
                 <el-table-column
                     label="用户组名"
@@ -47,10 +48,15 @@
                     label="角色"
                 >
                     <template #default="{ row }">
-                        <SdxuTextTooltip :content="row.roles" content-key="name" tip-type="inline-block" />
+                        <SdxuTextTooltip
+                            :content="row.roles"
+                            content-key="name"
+                            tip-type="inline-block"
+                        />
                     </template>
                 </el-table-column>
                 <el-table-column
+                    prop="createdAt"
                     label="创建时间"
                     sortable
                 >
@@ -158,7 +164,9 @@ export default {
             editVisible: false,
             deleteVisible: false,
             groupMeta: undefined,
-            loading: false
+            loading: false,
+            order: 'desc',
+            orderBy: 'createdAt'
         };
     },
     computed: {
@@ -166,12 +174,22 @@ export default {
             let info = {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize,
-                name: this.name
+                name: this.name,
+                order: this.order,
+                orderBy: this.orderBy
             };
             return info;
         }
     },
     methods: {
+        handleSortChange({order}) {
+            if (!order) {
+                return;
+            }
+            this.order =
+                    order === 'descending' ? 'desc' : 'asc';
+            this.fetchData();
+        },
         fetchData(currentPage) {
             this.loading = true;
             currentPage && (this.page = currentPage);

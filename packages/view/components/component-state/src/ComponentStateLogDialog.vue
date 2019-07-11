@@ -18,7 +18,6 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxwLogDetail from '@sdx/widget/components/log-detail';
 
 import { getPodLog } from '@sdx/utils/src/api/system';
-import { getTaskList } from '@sdx/utils/src/api/project';
 
 export default {
     name: 'SdxvComponentStateLogDialog',
@@ -42,8 +41,7 @@ export default {
             end: 1,
             size: 20,
             isLoading: false,
-            logContent: '',
-            startedAt: ''
+            logContent: ''
         };
     },
     computed: {
@@ -70,10 +68,7 @@ export default {
                     start: offset,
                     count: Math.abs(size)
                 };
-                if (this.startedAt) {
-                    params.startedAt = this.startedAt;
-                }
-                const data = await getPodLog(this.pod.podId, params);
+                const data = await getPodLog(this.pod.podName, params);
                 let content = Array.isArray(data.contents) && data.contents.join('');
                 if (size < 0) {
                     this.start = this.start - data.contents.length;
@@ -94,15 +89,7 @@ export default {
                 this.fetchData(this.end, this.size);
             }
         },
-        async handleOpenDialog() {
-            let data = null;
-            try {
-                data = await getTaskList({ podName: this.pod.podName });
-            } catch(e) {
-                data = null;
-            }
-            const task = data && Array.isArray(data.items) && data.items[0] || null;
-            this.startedAt = task && new Date(task.runningAt).getTime() || '';
+        handleOpenDialog() {
             this.fetchData(this.end, this.size);
         },
         handleClose() {
@@ -111,7 +98,6 @@ export default {
             this.size = 20;
             this.isLoading = false;
             this.logContent = '';
-            this.startedAt = '';
         }
     }
 };

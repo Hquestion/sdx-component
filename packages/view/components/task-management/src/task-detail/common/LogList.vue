@@ -46,7 +46,7 @@ export default {
         handleGotoLogPage(podId, method) {
             this.$router.push({name: 'SdxvTaskManagementTaskLog', params: {
                 method: method,
-                podId: podId
+                podName: podId
             }});
         }
     }

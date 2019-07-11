@@ -6,7 +6,7 @@ export const handler = wrap(function(ctx, request) {
         request.Params));
 
     let isMyShare = request.Params.ownerId && !!request.Params.ownerId[0];
-    let isAcceptedShare =  request.Params.ownerId && !!request.Params.ownerId[0];
+    let isAcceptedShare =  request.Params.userId && !!request.Params.userId[0];
     let result;
     ctx.info('file share start result: ' + JSON.stringify(shares));
     if (isMyShare) {
@@ -14,9 +14,8 @@ export const handler = wrap(function(ctx, request) {
             'http://tyk-gateway/file-manager/api/v1/files',
             {ownerId: [item.ownerId], path: [item.path]}
         ));
-        ctx.info('file share requests: ' + JSON.stringify(requests));
         result = ctx.sendRequests(...requests);
-    } else {
+    } else if(isAcceptedShare) {
         // 暂时先同样处理，性能较差
         const requests = shares.shares.map(item => ctx.createGetRequest(
             'http://tyk-gateway/file-manager/api/v1/files',

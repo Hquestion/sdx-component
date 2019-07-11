@@ -5,6 +5,7 @@ import { FILE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, PROJECT_MANAGE_GATEWAY_
 import { isString } from '../helper/tool';
 import { asyncJobStatus } from '../const/file';
 import { Notification } from 'element-ui';
+import {getSimpleUserList} from './user';
 
 export function getFilesList(params = {}) {
     let userInfo = shareCenter.getUser() || {};
@@ -116,7 +117,7 @@ export function searchShareFiles(params) {
             clearTimeout(timer);
         };
         (function pullJob() {
-            getJobDetail(jobId).then(res => {
+            getShareSearchJobProfiles(jobId).then(res => {
                 if (res.state === asyncJobStatus.SUCCESS || res.state === asyncJobStatus.FAILURE) {
                     clearTimeout(timer);
                     if (res.state === asyncJobStatus.SUCCESS) {
@@ -238,7 +239,7 @@ export function getMyAcceptedShare(params) {
         count = -1
     } = params;
     return httpService.get(`${COMPOSE_GATEWAY_BASE}file-share-profiles`, {
-        ownerId: ownerId || userInfo.userId,
+        userId: ownerId || userInfo.userId,
         start,
         count
     });
@@ -327,8 +328,7 @@ export function copy(sourcePaths, targetPath, targetOwnerId, ownerId) {
         ownerId: ownerId || userInfo.userId,
         sourcePaths,
         targetPath,
-        targetOwnerId: targetOwnerId || userInfo.userId,
-        fsync: true
+        targetOwnerId: targetOwnerId || userInfo.userId
     });
 }
 
@@ -355,7 +355,7 @@ export function unzip(path, targetPath, ownerId) {
 export function download(path, ownerId, filesystem = 'cephfs') {
     let userInfo = shareCenter.getUser() || {};
     const origin = location.origin;
-    window.open(`${origin}${FILE_MANAGE_GATEWAY_BASE}files/download?ownerId=${ownerId || userInfo.userId}&path=${path}&filesystem=${filesystem}&disposition=attachment`);
+    location.href =`${origin}${FILE_MANAGE_GATEWAY_BASE}files/download?ownerId=${ownerId || userInfo.userId}&path=${path}&filesystem=${filesystem}&disposition=attachment`;
     // return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/download`, {
     //     userId: userInfo.userId,
     //     path,
@@ -415,6 +415,12 @@ export const getPackTaskList = getAsyncJobList('PACK');
 export const getCopyTaskList = getAsyncJobList('COPY');
 export const getDelTaskList = getAsyncJobList('DELETE');
 export const getUnzipTaskList = getAsyncJobList('UNPACK');
+
+export function getShareSearchJobProfiles(id) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}file-share-search-job-profiles`, {
+        jobId: id
+    });
+}
 
 export function getJobDetail(id) {
     return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}jobs/${id}`);

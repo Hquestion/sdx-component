@@ -4,6 +4,8 @@
  * 如需要其他共享数据，同样在这里注册即可
  * 注册的参数支持函数，暴露一个函数给外部其他组件调用
  */
+import { registerI18n } from '../locale';
+
 let AUTH_ON = true;
 let user;
 
@@ -12,6 +14,9 @@ export function setup(opt) {
     user = opt.user || user;
     if(opt.authSwitch === 'OFF') {
         AUTH_ON = false;
+    }
+    if (opt.i18n) {
+        registerI18n(opt.i18n);
     }
 }
 

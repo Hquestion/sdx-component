@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import MixinDetail from '../../../project-management/src/task-detail/MixinDetail';
+import MixinDetail from '../../../task-management/src/task-detail/MixinDetail';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import Button from '@sdx/ui/components/button';
 import { getVersionInfo, getVersionToken } from '@sdx/utils/src/api/model';

@@ -65,7 +65,6 @@
                 >
                     <task-card-list>
                         <task-card
-                            @operate="handleOperate"
                             v-for="(item, index) in taskList"
                             :key="index"
                             :meta="item"
@@ -260,7 +259,10 @@ export default {
         },
         sortChange() {
             this.initList(true);
-        }
+        },
+        // $$handleDetail(task) {
+        //     this.$router.push({name: 'SdxvProjectTaskDetail', params: {taskId: task.uuid}});
+        // }
         // handleOperate(operation) {
         //     // console.log('operation', operation);
         //     switch(operation.type) {

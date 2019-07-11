@@ -1,20 +1,5 @@
 <template>
     <SdxvDetailContainer>
-        <template
-            v-if="task.state === STATE_TYPE.RUNNING"
-            #base-info-right
-        >
-            <SdxuButton
-                v-auth.project.button="'TASK:SAVE_IMAGE'"
-                @click="dialogVisible = true"
-            >
-                另存为镜像
-            </SdxuButton>
-            <SdxvSaveAsDialog
-                :visible.sync="dialogVisible"
-                :task="task"
-            />
-        </template>
         <template #base-info>
             <SdxvBaseInfoItem
                 label="任务名称"
@@ -33,7 +18,7 @@
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
                 label="创建人"
-                :value="task.owner && task.owner.username || ''"
+                :value="task.owner && task.owner.fullName || ''"
             />
             <SdxvBaseInfoItem
                 label="任务描述"
@@ -43,12 +28,16 @@
         </template>
         <template #running-info>
             <SdxvBaseInfoItem
+                label="源代码"
+                :value="task.sourcePaths[0]"
+            />
+            <SdxvBaseInfoItem
                 label="运行环境"
                 :value="task.image && task.image.name || ''"
             />
             <SdxvBaseInfoItem
-                label="实例个数"
-                :value="task.resourceConfig.EXECUTOR_INSTANCES"
+                label="启动参数"
+                :value="task.args"
             />
             <SdxvBaseInfoItem
                 label="启动时间"
@@ -62,32 +51,9 @@
                 label="运行时长"
                 :value="dealTime(task.runningAt, task.stoppedAt)"
             />
-            <SdxvBaseInfoItem
-                v-if="task.externalUrl"
-                label="外部链接"
-            >
-                <template
-                    #value
-                >
-                    <span
-                        class="sdxv-task-detail__external"
-                        :plain="true"
-                        @click="goJupyter('lab?')"
-                    >
-                        Jupyter lab
-                    </span>
-                    <span
-                        class="sdxv-task-detail__external"
-                        :plain="true"
-                        @click="goJupyter('tree?')"
-                    >
-                        Jupyter notebook
-                    </span>
-                </template>
-            </SdxvBaseInfoItem>
         </template>
         <template #resource-info>
-            <div class="sdxv-info-container is-resource">
+            <div class="sdxv-info-container">
                 <SdxvBaseInfoItem
                     label="CPU"
                     :value="milliCoreToCore(task.resourceConfig.EXECUTOR_CPUS) + '核'"
@@ -105,21 +71,11 @@
                 />
             </div>
         </template>
-        <template #data-info>
-            <SdxvHasNothing
-                v-if="task.datasources && !task.datasources.length && task.datasets && !task.datasets.length"
-                tips="暂时还没数据信息哦"
-            />
-            <SdxvDataInfo
-                v-else
-                :datasources="task.datasources"
-                :datasets="task.datasets"
-            />
-        </template>
         <template #log-info>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没Log日志哦"
+            <SdxuEmpty
+                v-if="!hasLog"
+                empty-content="暂时还没日志哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvLogList
                 v-else
@@ -127,9 +83,10 @@
             />
         </template>
         <template #realtime-monitor>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没实时监控哦"
+            <SdxuEmpty
+                v-if="!hasRealMonitor"
+                empty-content="暂时还没实时监控哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo
                 v-else
@@ -141,24 +98,10 @@
 
 <script>
 import MixinDetail from './MixinDetail';
-import auth from '@sdx/widget/components/auth';
 
 export default {
-    name: 'SdxvJupyterDetail',
-    mixins: [MixinDetail],
-    directives: {
-        auth
-    },
-    data() {
-        return {
-            dialogVisible: false
-        };
-    },
-    methods: {
-        goJupyter(param) {
-            window.open(`${this.task.external_url}/${param}`);
-        }
-    }
+    name: 'SdxvPythonDetail',
+    mixins: [MixinDetail]
 };
 </script>
 

@@ -181,8 +181,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     margin: $sdx-margin / 2;
     background-color:  #F2F6FC;
     width: 280px;
+    height: 40px;
     display: flex;
     justify-content: center;
+    align-items: center;
+    color: $sdx-primary-color;
 }
 
 @include block('has-nothing', $bem-namespace-view) {

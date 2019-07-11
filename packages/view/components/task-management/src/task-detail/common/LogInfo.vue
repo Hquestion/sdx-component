@@ -39,6 +39,7 @@ import ElSwitch from 'element-ui/lib/switch';
 import ElMessage from 'element-ui/lib/message';
 
 import { getPodLog } from '@sdx/utils/src/api/system';
+import { getTaskList } from '@sdx/utils/src/api/project';
 
 const AUTO_PULL_INTERVAL = 3000;
 
@@ -50,7 +51,7 @@ export default {
         ElSwitch
     },
     props: {
-        podId: {
+        podName: {
             type: String,
             default: ''
         },
@@ -68,7 +69,8 @@ export default {
             autoPull: false,
             followScroll: false,
             autoPullInstance: null,
-            logContent: ''
+            logContent: '',
+            startedAt: ''
         };
     },
     methods: {
@@ -77,11 +79,15 @@ export default {
             offset = size < 0 ? offset + size : offset;
             offset = offset < 1 ? 1 : offset;
             this.isLoading = true;
+            const params = {
+                start: offset,
+                count: Math.abs(size)
+            };
+            if (this.startedAt) {
+                params.startedAt = this.startedAt;
+            }
             try {
-                const data = await getPodLog(this.podId, {
-                    start: offset,
-                    count: Math.abs(size)
-                });
+                const data = await getPodLog(this.podName, params);
                 let content = Array.isArray(data.contents) && data.contents.join('');
                 if (size < 0) {
                     this.start = this.start - data.contents.length;
@@ -148,26 +154,43 @@ export default {
         async getCodeInfo() {
             // tail 查看时的初始化方法，先查询最新日志
             // 获取日志长度
-            const data = await getPodLog(this.podId, {
-                start: 1,
-                count: Math.abs(1)
+            try {
+                const data = await getPodLog(this.podName, {
+                    start: 1,
+                    count: 1
+                });
+                this.start = this.end = data.total + 1;
+                this.getBackwardLog();
+            } catch(e) {
+                // todo:
+            }
+        },
+        getTaskInfo() {
+            return new Promise(resolve => {
+                getTaskList({ podName: this.podName }).then(data => {
+                    const task = data && Array.isArray(data.items) && data.items[0] || null;
+                    this.startedAt = task && new Date(task.runningAt).getTime() || '';
+                    resolve();
+                }).catch(() => {
+                    resolve();
+                });
             });
-            this.start = this.end = data.total + 1;
-            this.getBackwardLog();
         }
     },
     created() {
-        if (this.method === 'head') {
-            this.getForwardLog();
-        } else {
-            this.getCodeInfo();
-            if (this.followScroll) {
-                this.gotoBottom();
+        this.getTaskInfo().then(() => {
+            if (this.method === 'head') {
+                this.getForwardLog();
+            } else {
+                this.getCodeInfo();
+                if (this.followScroll) {
+                    this.gotoBottom();
+                }
+                if (this.autoPull) {
+                    this.startAutoPull();
+                }
             }
-            if (this.autoPull) {
-                this.startAutoPull();
-            }
-        }
+        });
     },
     watch: {
         autoPull(nval) {

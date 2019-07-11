@@ -2,7 +2,7 @@
     <SdxuContentPanel
         title="权限"
     >
-        <template #right>
+        <template>
             <div
                 class="sdxv-privilege-system__search"
                 v-auth.user.button="'PERMISSION:READ'"
@@ -37,6 +37,17 @@
                     prop="name"
                 />
                 <el-table-column
+                    prop="description"
+                    label="权限说明"
+                >
+                    <template slot-scope="scope">
+                        <SdxuTextTooltip
+                            :content="scope.row.description"
+                            content-key="description"
+                        />
+                    </template>
+                </el-table-column>
+                <el-table-column
                     label="标签"
                 >
                     <template #default="{ row }">
@@ -67,14 +78,6 @@
                         {{ splitKey(row.key, 2) }}
                     </template>
                 </el-table-column>
-                <el-table-column type="expand">
-                    <template #default="{ row }">
-                        <div class="sdxv-privilege-system__expand">
-                            <span class="sdxv-privilege-system__expand--label">权限说明:</span>
-                            <span class="sdxv-privilege-system__expand--detail">{{ row.description }}</span>
-                        </div>
-                    </template>
-                </el-table-column>
             </sdxu-table>
             <div class="sdxv-privilege-system__pagination">
                 <sdxu-pagination
@@ -96,7 +99,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import auth from '@sdx/widget/components/auth';
-
+import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import { getPermissionList } from '@sdx/utils/src/api/permissions';
 
 export default {
@@ -107,7 +110,8 @@ export default {
         SdxuInput,
         SdxuContentPanel,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
-        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
+        SdxuTextTooltip
     },
     data() {
         return {

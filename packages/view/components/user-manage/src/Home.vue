@@ -43,6 +43,7 @@
                 borer
                 :data="tableData"
                 @row-click="openDetails"
+                v-loading="loading"
             >
                 <el-table-column
                     prop="username"
@@ -170,7 +171,8 @@ export default {
             toEditUser: {},
             toViewUser: {},
             toJoinUser: {},
-            searched: false
+            searched: false,
+            loading: false
         };
     },
     directives: {
@@ -229,6 +231,7 @@ export default {
             });
         },
         getUsers(currentPage){
+            this.loading = true;
             currentPage && (this.current = currentPage);
             let params = {
                 start: (this.current - 1) * this.pageSize + 1,
@@ -245,6 +248,8 @@ export default {
                         item.roleNames = item.roles.map(item => item.name);
                     });
                     this.tableData = res.users;
+                }).finally(() => {
+                    this.loading = false;
                 });
         },
         //显示用户组

@@ -37,6 +37,7 @@
                 :data="groups"
                 class="sdxv-user-group__table"
                 :default-sort="{prop: 'createAt', order: 'descending'}"
+                v-loading="loading"
             >
                 <el-table-column
                     label="用户组名"
@@ -82,9 +83,11 @@
                         <div class="sdxv-user-group__table--expand">
                             <span class="sdxv-user-group__table--expand-label">组员:</span>
                             <sdxw-fold-label-group
-                                :list="row.roles.map(item => item.name)"
+                                v-if="row.users && row.users.length > 0"
+                                :list="row.users.map(item => item.fullName)"
                                 type="default"
                             />
+                            <span v-else>暂无用户</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -154,7 +157,8 @@ export default {
             createVisible: false,
             editVisible: false,
             deleteVisible: false,
-            groupMeta: undefined
+            groupMeta: undefined,
+            loading: false
         };
     },
     computed: {
@@ -169,10 +173,13 @@ export default {
     },
     methods: {
         fetchData(currentPage) {
+            this.loading = true;
             currentPage && (this.page = currentPage);
             getGroups(this.querys).then(data => {
                 this.groups = data.groups;
                 this.total = data.total;
+            }).finally(() => {
+                this.loading = false;
             });
         },
         handleSearch() {

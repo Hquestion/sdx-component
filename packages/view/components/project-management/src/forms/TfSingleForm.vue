@@ -112,7 +112,7 @@ import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask } from '@sdx/utils/src/api/project';
-import { cNameValidate } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator , descValidator} from '@sdx/utils/src/helper/validate';
 export default {
     name: 'TfSingleForm',
     components: {
@@ -175,7 +175,13 @@ export default {
                             return value && ('' + value).trim();
                         }
                     },
-                    { validator: cNameValidate, trigger: 'blur' }
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
                 ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
@@ -236,7 +242,7 @@ export default {
 
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval, ...{imageId:nval.image.uuid}};
+            this.params = { ...this.params, ...nval};
             this.cpuObj = {
                 cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
                 memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),

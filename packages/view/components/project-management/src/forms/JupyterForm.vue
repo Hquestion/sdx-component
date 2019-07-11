@@ -116,7 +116,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { getProjectDetail, createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
-import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import DataSourceSelect from './DataSourceSelect';
 export default {
     name: 'JupyterForm',
@@ -183,6 +183,12 @@ export default {
                         }
                     },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
                 ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
@@ -257,7 +263,7 @@ export default {
     },
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval,...{imageId:nval.image.uuid}};
+            this.params = { ...this.params, ...nval};
             this.cpuObj = {
                 cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
                 memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),

@@ -71,7 +71,7 @@
                 :sortable="false"
                 prop="path"
                 width="360"
-                v-if="fileManager.rootKind === rootKinds.MY_SHARE"
+                v-if="fileManager.rootKind === rootKinds.MY_SHARE && !fileManager.isSearch"
             >
                 <template #default="{row}">
                     <div
@@ -88,7 +88,7 @@
                 prop="size"
                 width="180"
                 :sort-orders="['ascending', 'descending']"
-                v-if="!fileManager.isProjectRoot() && fileManager.rootKind !== rootKinds.MY_SHARE"
+                v-if="!fileManager.isProjectRoot() && fileManager.rootKind !== rootKinds.MY_SHARE || fileManager.isSearch"
             >
                 <template #default="{row}">
                     {{ row.size | byteFormatter }}
@@ -111,7 +111,7 @@
                 prop="updatedAt"
                 width="240"
                 :sort-orders="['ascending', 'descending']"
-                v-if="fileManager.rootKind !== rootKinds.MY_SHARE"
+                v-if="fileManager.rootKind !== rootKinds.MY_SHARE || fileManager.isSearch"
             >
                 <template #default="{row}">
                     {{ row.updatedAt | dateFormatter }}

@@ -18,7 +18,7 @@
                 prop="size"
             >
                 <template slot-scope="scope">
-                    {{ scope.row.size }}
+                    {{ scope.row.size | byteFormatter }}
                 </template>
             </el-table-column>
             <el-table-column
@@ -62,6 +62,7 @@
 import SdxuTable from '@sdx/ui/components/table';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
+import transformMixin from '@sdx/utils/src/mixins/transformFilter';
 export default {
     name: 'SdxvTaskFileUpload',
     components: {
@@ -69,6 +70,7 @@ export default {
         SdxwFoldLabel: SdxwFoldLabel.FoldLabel,
         SdxuIconButton
     },
+    mixins: [transformMixin],
     inject: ['fileManager'],
     data() {
         return {

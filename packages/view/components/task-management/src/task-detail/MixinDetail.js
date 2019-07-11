@@ -3,19 +3,15 @@ import SdxvLogList from './common/LogList';
 import SdxvBaseInfoItem from './common/BaseInfoItem';
 import SdxvSaveAsDialog from './common/SaveAsDialog';
 import SdxvDataInfo from './common/DataInfo';
-import SdxvHasNothing from './common/HasNothing';
 import SdxvMonitorInfo from './common/MonitorInfo';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuButton from '@sdx/ui/components/button';
-import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL } from '@sdx/utils/src/const/task';
+import SdxuEmpty from '@sdx/ui/components/empty';
+import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, TASK_TYPE, TASK_TYPE_LABEL } from '@sdx/utils/src/const/task';
 import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 
 export default {
     props: {
-        projectId: {
-            type: String,
-            default: ''
-        },
         task: {
             type: Object,
             default: null
@@ -28,25 +24,67 @@ export default {
         SdxvSaveAsDialog,
         SdxvBaseInfoItem,
         SdxvDataInfo,
-        SdxvHasNothing,
         SdxvMonitorInfo,
+        SdxuEmpty,
         [SdxwFoldLabel.FoldLabel.name]: SdxwFoldLabel.FoldLabel
     },
     data() {
         this.STATE_TYPE = STATE_TYPE;
         this.STATE_TYPE_LABEL = STATE_TYPE_LABEL;
         this.STATE_MAP_FOLD_LABEL_TYPE = STATE_MAP_FOLD_LABEL_TYPE;
+        this.TASK_TYPE_LABEL = TASK_TYPE_LABEL;
         return {};
     },
     computed: {
         stateIcon() {
             let icon = '';
-            if ([STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state)) {
+            if (!this.task) {
+                icon = '';
+            } else if ([STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state)) {
                 icon = 'loading';
             } else if ([STATE_TYPE.FAILED, STATE_TYPE.LAUNCH_ABNORMAL].includes(this.task.state)) {
                 icon = 'warning';
             }
             return icon;
+        },
+        hasRealMonitor() {
+            return this.task && this.task.state === STATE_TYPE.RUNNING && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
+        },
+        hasLog() {
+            return this.task && ![STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.CREATED, STATE_TYPE.LAUNCHING].includes(this.task.state) && this.task.pods.length > 0;
+        },
+        hasDataInfo() {
+            return this.task && ((this.task.datasources && this.task.datasources.length > 0) || (this.task.datasets && this.task.datasets.length > 0));
+        },
+        isModelTask() {
+            return this.task && [TASK_TYPE.TENSORFLOW_SERVING, TASK_TYPE.SPARK_SERVING, TASK_TYPE.PMML_SERVING].includes(this.task.type);
+        },
+        isSPARK() {
+            return this.task && this.task === TASK_TYPE.SPARK;
+        },
+        isPYTHON() {
+            return this.task && this.task === TASK_TYPE.PYTHON;
+        },
+        isJUPYTER() {
+            return this.task && this.task === TASK_TYPE.JUPYTER;
+        },
+        isTENSORBOARD() {
+            return this.task && this.task === TASK_TYPE.TENSORBOARD;
+        },
+        isTENSORFLOW() {
+            return this.task && this.task === TASK_TYPE.TENSORFLOW;
+        },
+        isTENSORFLOW_DIST() {
+            return this.task && this.task === TASK_TYPE.TENSORFLOW_DIST;
+        },
+        isTENSORFLOW_AUTO_DIST() {
+            return this.task && this.task === TASK_TYPE.TENSORFLOW_AUTO_DIST;
+        },
+        isCONTAINERDEV() {
+            return this.task && this.task === TASK_TYPE.CONTAINERDEV;
+        },
+        isDATASET_SERVICE() {
+            return this.task && this.task === TASK_TYPE.DATASET_SERVICE;
         }
     },
     methods: {

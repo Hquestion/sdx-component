@@ -84,11 +84,11 @@
                 /> 
             </el-form-item>
             <el-form-item
-                prop="instances.TF_EXECUTOR_INSTANCES"
+                prop="resourceConfig.TF_EXECUTOR_INSTANCES"
                 label="参数服务器/计算节点实例个数:"
             >
                 <el-input-number
-                    v-model="params.instances.TF_EXECUTOR_INSTANCES"
+                    v-model="params.resourceConfig.TF_EXECUTOR_INSTANCES"
                     :min="1"
                     :max="InputNumberMax"
                 />
@@ -148,7 +148,7 @@ import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask ,updateTask} from '@sdx/utils/src/api/project';
-import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 export default {
     name: 'TfAutoDistributedForm',
     components: {
@@ -210,10 +210,7 @@ export default {
                 },
                 sourcePaths: [],
                 args: '',
-                outputPaths: [],
-                instances: {
-                    TF_EXECUTOR_INSTANCES: 1
-                }
+                outputPaths: []
             },
             imageOptions: [],
             cpuMain: {},
@@ -228,6 +225,12 @@ export default {
                         }
                     },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
                 ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
@@ -244,10 +247,10 @@ export default {
                 outputPaths: [
                     { required: true, message: '请选择训练输出目录', trigger: 'blur' }
                 ],
-                'instances.TF_EXECUTOR_INSTANCES': [
+                'resourceConfig.TF_EXECUTOR_INSTANCES': [
                     { required: true, message: '请输入参数服务器/计算节点实例个数',trigger: 'change' }
                 ],
-                // 'instances.TF_PS_INSTANCES': [
+                // 'resourceConfig.TF_PS_INSTANCES': [
                 //     { required: true, message: '请输入参数服务器实例个数',trigger: 'change' }
                 // ],
             }
@@ -287,10 +290,7 @@ export default {
         },
         commit() {
             this.$refs.tfautodistributed.validate().then(() => {
-                this.params.resourceConfig = Object.assign({},  this.params.resourceConfig , {
-                    'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
-                });
-                createTask(this.params)
+                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
                     .then (() => {
                         this.$router.go(-1);
                     });
@@ -301,7 +301,7 @@ export default {
 
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval, ...{imageId:nval.image.uuid}};
+            this.params = { ...this.params, ...nval};
             this.cpuMain = {
                 cpu: this.params.resourceConfig.TF_MASTER_CPUS/1000,
                 memory: this.params.resourceConfig.TF_MASTER_MEMORY / (1024*1024*1024),
@@ -325,7 +325,7 @@ export default {
         },
         cpuMain(val) {
             this.params.resourceConfig = { 
-                'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
+                'TF_EXECUTOR_INSTANCES': this.params.resourceConfig.TF_EXECUTOR_INSTANCES,
                 'TF_WORKER_CPUS': this.params.resourceConfig.TF_WORKER_CPUS,
                 'TF_PS_CPUS': this.params.resourceConfig.TF_PS_CPUS,
                 'TF_MASTER_CPUS':  val.cpu*1000,
@@ -338,7 +338,7 @@ export default {
         },
         cpuService(val) {
             this.params.resourceConfig = { 
-                'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
+                'TF_EXECUTOR_INSTANCES': this.params.resourceConfig.TF_EXECUTOR_INSTANCES,
                 'TF_WORKER_CPUS': this.params.resourceConfig.TF_WORKER_CPUS,
                 'TF_PS_CPUS':  val.cpu*1000,
                 'TF_MASTER_CPUS':  this.params.resourceConfig.TF_MASTER_CPUS,
@@ -351,7 +351,7 @@ export default {
         },
         cpuCompute(val) {
             this.params.resourceConfig = { 
-                'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
+                'TF_EXECUTOR_INSTANCES': this.params.resourceConfig.TF_EXECUTOR_INSTANCES,
                 'TF_WORKER_CPUS': val.cpu*1000,
                 'TF_PS_CPUS': this.params.resourceConfig.TF_PS_CPUS,
                 'TF_MASTER_CPUS':  this.params.resourceConfig.TF_MASTER_CPUS,
@@ -364,7 +364,7 @@ export default {
         },
         gpuObj(val) {
             this.params.resourceConfig = { 
-                'TF_EXECUTOR_INSTANCES': this.params.instances.TF_EXECUTOR_INSTANCES,
+                'TF_EXECUTOR_INSTANCES': this.params.resourceConfig.TF_EXECUTOR_INSTANCES,
                 'TF_WORKER_CPUS': this.params.resourceConfig.TF_WORKER_CPUS,
                 'TF_PS_CPUS': this.params.resourceConfig.TF_PS_CPUS,
                 'TF_MASTER_CPUS':  this.params.resourceConfig.TF_MASTER_CPUS,

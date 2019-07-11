@@ -48,6 +48,7 @@ import SdxvChartProcess from './ChartProcess';
 
 import { getResourceStates } from '@sdx/utils/src/api/resource';
 import { getTaskList } from '@sdx/utils/src/api/project';
+import { getClusterResourceMonitor } from '@sdx/utils/src/api/system';
 import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 import { STATE_TYPE } from '@sdx/utils/src/const/task';
 
@@ -70,25 +71,29 @@ export default {
                 gpu: 0,
                 memory: 0
             },
-            gpuModelAllocations: [],
+            gpuModelAllocations: {},
             gpuModelUsedMap: {}
         };
     },
     methods: {
         fetchData() {
-            // todo: 轮询？？？
             // 平台资源使用量 参数
             const params = {
                 groupBy: 'NAMESPACE',
                 states: `${STATE_TYPE.RUNNING},${STATE_TYPE.LAUNCHING},${STATE_TYPE.KILLING}`
             };
-            Promise.all([getResourceStates(true), getTaskList(params)]).then(([allocations, usedInfoList]) => {
+            Promise.all([getClusterResourceMonitor(), getTaskList(params)]).then(([clusterResource, usedInfoList]) => {
+                const total = clusterResource && clusterResource.total || {
+                    cpu: 0,
+                    gpu: 0,
+                    memory: 0,
+                    gpuModels: []
+                };
+                const gpuModels = {};
                 this.allocations = {
-                    cpu: parseMilli(allocations.cpu),
-                    gpu: allocations.gpus.reduce((sum, item) => {
-                        return sum + item.count;
-                    }, 0),
-                    memory: byteToGB(allocations.memory)
+                    cpu: total.cpu,
+                    gpu: total.gpu,
+                    memory: byteToGB(total.memory)
                 };
                 let usedInfo = usedInfoList && usedInfoList.items.length > 0 ? usedInfoList.items[0].quota : {
                     cpu: 0,
@@ -102,11 +107,29 @@ export default {
                     }, 0),
                     memory: byteToGB(usedInfo.memory)
                 };
-                this.gpuModelAllocations = allocations.gpus;
+                total.gpuModels.forEach(item => {
+                    if (gpuModels.hasOwnProperty(item)) {
+                        gpuModels[item]++;
+                    } else {
+                        gpuModels[item] = 1;
+                    }
+                });
+                this.gpuModelAllocations = gpuModels;
+                console.error(this.gpuModelAllocations);
                 this.gpuModelUsedMap = usedInfo.gpus;
             }).catch(() => {
-                this.gpuModelAllocations = [];
+                this.gpuModelAllocations = {};
                 this.gpuModelUsedMap = {};
+                this.allocations = {
+                    cpu: 0,
+                    gpu: 0,
+                    memory: 0
+                };
+                this.used = {
+                    cpu: 0,
+                    gpu: 0,
+                    memory: 0
+                };
             });
         }
     },

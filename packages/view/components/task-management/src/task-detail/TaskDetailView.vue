@@ -1,44 +1,31 @@
 <template>
-    <div class="form">
-        <component
-            v-if="taskId && task || projectId"
-            :is="formComp"
-            :project-id="projectId"
-            :kind-single-instance="kindSingleInstance"
-            :task="task"
-        />
-    </div>
+    <TaskDetail :task="task" />
 </template>
 
 <script>
-import { getTaskDetailBackEnd } from '@sdx/utils/src/api/project';
+import { getTaskDetail } from '@sdx/utils/src/api/project';
 import { TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
+import TaskDetail from './TaskDetail';
 const POLLING_PERIOD = 3 * 1000;
 
 export default {
+    name: 'TaskDetailView',
+    components: {
+        TaskDetail
+    },
     props: {
-        // 通过router注入,组件实例
-        formComp: {
-            type: Object,
-            default: null
+        taskId: {
+            type: String,
+            required: true
         }
     },
     data() {
         return {
             task: null,
-            kindSingleInstance: false,
             pollingId: null
         };
     },
     computed: {
-        // 新建任务的时候会有这个参数
-        projectId() {
-            return this.$route.params.projectId;
-        },
-        // 编辑任务的时候会有这个参数
-        taskId() {
-            return this.$route.params.taskId;
-        },
         // 是否需要状态拉取
         needPull() {
             return TASK_POLLING_STATE_TYPE.includes(this.task && this.task.state || '');
@@ -47,9 +34,11 @@ export default {
     methods: {
         getTaskInfo() {
             if (this.taskId) {
-                getTaskDetailBackEnd(this.taskId)
+                getTaskDetail(this.taskId)
                     .then(data => {
                         this.task = data;
+                    }).catch(e => {
+                        this.task = null;
                     });
             }
         },
@@ -78,7 +67,4 @@ export default {
 </script>
 
 <style lang="scss">
-.form {
-    height: 100%;
-}
 </style>

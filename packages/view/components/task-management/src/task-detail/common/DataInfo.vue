@@ -1,6 +1,9 @@
 <template>
     <div class="sdxv-data-info">
-        <div class="sdxv-data-info__container">
+        <div 
+            v-if="datasources.length" 
+            class="sdxv-data-info__container"
+        >
             <span class="sdxv-data-info__container--title">数据源信息</span>
             <div class="sdxv-data-info__container--content">
                 <div
@@ -24,7 +27,10 @@
                 </div>
             </div>
         </div>
-        <div class="sdxv-data-info__container">
+        <div 
+            v-if="datasets.length" 
+            class="sdxv-data-info__container"
+        >
             <span class="sdxv-data-info__container--title">数据集</span>
             <div class="sdxv-data-info__container--content">
                 <div
@@ -32,12 +38,7 @@
                     :key="i"
                     class="sdxv-data-dataset"
                 >
-                    <SdxuButton
-                        :plain="true"
-                        @click="handleGotoDataset(item)"
-                    >
-                        {{ item.name }}
-                    </SdxuButton>
+                    {{ item.name }}
                 </div>
             </div>
         </div>
@@ -45,13 +46,9 @@
 </template>
 
 <script>
-import SdxuButton from '@sdx/ui/components/button';
 
 export default {
     name: 'SdxvDataInfo',
-    components: {
-        SdxuButton
-    },
     props: {
         datasources: {
             type: Array,

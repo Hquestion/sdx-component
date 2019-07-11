@@ -142,7 +142,7 @@ export default {
                 let promise;
                 const groupData = {
                     name: this.params.name,
-                    roles: this.params.roles
+                    roles: this.params.roles.map(item => typeof item === 'string' ? item : item.uuid)
                 };
                 // 传变化的值给后端
                 let params = removeSameAttr(this.saveGroupObj, groupData);

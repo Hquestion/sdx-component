@@ -29,10 +29,20 @@ export default {
             supportMove: true,
             shareVisible: false,
             shareUsers: [],
-            shareGroups: []
+            shareGroups: [],
+            btnStatus: {
+                downloading: [],
+                batchDownloading: []
+            }
         };
     },
     methods: {
+        mapLoadingStatus(btn, row) {
+            const loadingMap = {
+                [BTN_NAMES.DOWNLOAD]: () => this.btnStatus.downloading
+            };
+            return !!(loadingMap[btn.name] && loadingMap[btn.name]().find(item => item.path === row.path));
+        },
         rename(row) {
             if (this.editingRow && !this.editingRow.path) {
                 MessageBox.alert.warning({
@@ -167,14 +177,18 @@ export default {
                 let defer, ownerId;
                 if (row) {
                     // 打包文件夹
+                    this.btnStatus.downloading.push(row);
                     ownerId = row.ownerId;
                     defer = pack([row.path], ownerId);
                 } else {
                     // 打包批量的
+                    this.btnStatus.batchDownloading = this.btnStatus.batchDownloading.concat(this.fileManager.checked);
                     ownerId = this.fileManager.checked[0].ownerId;
                     defer = pack(this.fileManager.checked.map(item => item.path), ownerId);
                 }
                 defer.then(res => {
+                    this.btnStatus.downloading = [];
+                    this.btnStatus.batchDownloading = [];
                     download(res, ownerId);
                 });
             }

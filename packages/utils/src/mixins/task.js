@@ -4,6 +4,7 @@ import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
 import { getUser } from '../helper/shareCenter';
+import { t } from '../locale';
 
 export default {
     data() {
@@ -63,7 +64,6 @@ export default {
                 this.fetchDataMinxin && this.fetchDataMinxin();
             } catch (e) {
                 // cancel
-                // todo:
             }
         },
         async handleKill(row) {
@@ -78,7 +78,7 @@ export default {
                     });
                 } else {
                     await SdxuMessageBox.warning({
-                        title: '确定要终止选中的任务吗？',
+                        title: t('view.task.stopTask'),
                         content: ''
                     });
                 }
@@ -87,7 +87,6 @@ export default {
                 this.fetchDataMinxin && this.fetchDataMinxin();
             } catch(e) {
                 // cancel
-                // todo:
             }
         },
         handleDetail(row) {
@@ -107,7 +106,7 @@ export default {
         async handleDelete(row) {
             try {
                 await SdxuMessageBox.warning({
-                    title: '此操作将会永久删除该任务，是否继续？',
+                    title: t('view.task.deleteTask'),
                     content: ''
                 });
 
@@ -116,7 +115,6 @@ export default {
                 });
             } catch (e) {
                 // cancel
-                // todo:
             }
         }
     }

@@ -5,21 +5,21 @@
                 class="sdxv-package-list__bar--search"
                 type="search"
                 @input="emitResultCount=false"
-                placeholder="请输入包名称搜索"
+                :placeholder="t('view.image.SearchPackagePlaceholder')"
                 v-model="packageName"
                 size="small"
             />
             <div class="sdxv-package-list__bar--source">
-                <span>源类型: </span>
+                <span>{{ t('view.image.SourceType') }}: </span>
                 <el-select
                     v-model="sourceType" 
                     size="medium"
                 >
                     <el-option
-                        v-for="(v, k) in SOURCE_TYPE"
-                        :key="k"
-                        :label="k"
-                        :value="v"
+                        v-for="(item, i) in sourceTypeList"
+                        :key="i"
+                        :label="item.label"
+                        :value="item.value"
                     />
                 </el-select>
             </div>
@@ -29,7 +29,7 @@
                 type="primary"
                 size="small"
             >
-                搜索
+                {{ t('Search') }}
             </sdxu-button>
         </div>
         <div class="sdxv-package-list__table">
@@ -39,30 +39,30 @@
             >
                 <el-table-column
                     prop="name"
-                    label="包名称"
+                    :label="t('view.image.PackageName')"
                 />
                 <el-table-column
                     prop="sourceType"
-                    label="源类型"
+                    :label="t('view.image.SourceType')"
                 />
                 <el-table-column
                     prop="version"
-                    label="版本"
+                    :label="t('view.image.Version')"
                 />
                 <el-table-column
                     v-if="operatable"
-                    label="操作"
+                    :label="t('Operation')"
                 >
                     <template #default="{ row }">
                         <sdxu-icon-button
                             icon="sdx-icon sdx-shengji"
                             @click="handleUpgrade(row)"
-                            title="升级"
+                            :title="t('Upgrade')"
                         />
                         <sdxu-icon-button
                             icon="sdx-icon sdx-icon-delete"
                             @click="handleDelete(row)"
-                            title="删除"
+                            :title="t('Delete')"
                         />
                     </template>
                 </el-table-column>
@@ -95,9 +95,11 @@ import PackageUpgradeDialog from './PackageUpgradeDialog';
 
 import { SOURCE_TYPE, VERSION_TYPE, SOURCE_URL_TYPE } from '@sdx/utils/src/const/image';
 import { getPackagesByUuid } from '@sdx/utils/src/api/image';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvPackageList',
+    mixins: [locale],
     components: {
         SdxuInput,
         SdxuButton,
@@ -124,7 +126,16 @@ export default {
         }
     },
     data() {
-        this.SOURCE_TYPE = Object.assign({'全部': ''}, SOURCE_TYPE);
+        const sourceTypeList = Object.values(SOURCE_TYPE).map(item => {
+            return {
+                label: item,
+                value: item
+            };
+        });
+        sourceTypeList.unshift({
+            label: this.t('ALL'),
+            value: ''
+        });
         this.VERSION_TYPE = VERSION_TYPE;
         this.SOURCE_URL_TYPE = SOURCE_URL_TYPE;
         return {
@@ -137,7 +148,8 @@ export default {
             upgradeDialog: false,
             emitResultCount: false,
             currentPackage: null,
-            loading: false
+            loading: false,
+            sourceTypeList: sourceTypeList
         };
     },
     computed: {

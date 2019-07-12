@@ -117,7 +117,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import {DOCKER_IMAGE_KIND_LIST} from '@sdx/utils/src/const/relation';
 import {buildTar,buildImagefile} from '@sdx/utils/src/api/image';
 import SdxuButton from '@sdx/ui/components/button';
-import {imageNameValidate, imageVersionValidate} from '@sdx/utils/src/helper/validate';
+import {nameStartWithLowerCaseValidator, commonNameValidator} from '@sdx/utils/src/helper/validate';
 import FileSelect from '@sdx/widget/components/file-select';
 import Iconinfo from './Iconinfo';
 import auth from '@sdx/widget/components/auth';
@@ -144,7 +144,7 @@ export default {
                         }
                     },
                     {
-                        validator: imageNameValidate,
+                        validator: nameStartWithLowerCaseValidator,
                         trigger: 'blur'
                     }
                 ],
@@ -158,7 +158,7 @@ export default {
                         }
                     },
                     {
-                        validator: imageVersionValidate,
+                        validator: commonNameValidator,
                         trigger: 'blur'
                     }
                 ],

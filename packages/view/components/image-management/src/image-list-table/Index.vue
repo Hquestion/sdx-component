@@ -151,7 +151,7 @@ import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import ImageDetail from './PackageDetailDialog';
-import { Message } from 'element-ui';
+import Message from 'element-ui/lib/message';
 import ShareSetting from '@sdx/widget/components/share-setting';
 import Filters from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';

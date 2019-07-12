@@ -1,6 +1,6 @@
 <template>
     <sdxu-content-panel
-        title="基于此构建"
+        :title="t('view.image.BuildBaseThis')"
         class="sdxv-image-build-basic"
     >
         <el-form
@@ -12,30 +12,30 @@
             class="sdxv-image-build-basic__form"
         >
             <el-form-item
-                label="镜像名称:"
+                :label="t('view.image.ImageName') + ':'"
                 prop="name"
             >
                 <div class="sdxv-image-build-basic__name">
                     <span class="sdxv-image-build-basic__name--prefix">{{ name_prefix }}</span>
                     <sdxu-input
                         v-model="imageInfo.name"
-                        placeholder="请输入镜像名称"
+                        :placeholder="t('view.image.ImageNameInputPlaceholder')"
                         size="small"
                         class="sdxv-image-build-basic__name--input"
                     />
                 </div>
             </el-form-item>
             <el-form-item
-                label="镜像版本号:"
+                :label="t('view.image.ImageVersion') + ':'"
                 prop="version"
             >
                 <sdxu-input
                     v-model="imageInfo.version"
-                    placeholder="请输入镜像版本号"
+                    :placeholder="t('view.image.ImageVersionInputPlaceholder')"
                     size="small"
                 />
             </el-form-item>
-            <el-form-item label="包变更:">
+            <el-form-item :label="t('view.image.PackageChange') + ':'">
                 <sdxv-package-list
                     :image-id="imageId"
                     :search="search"
@@ -54,10 +54,10 @@
                             size="small"
                             @click.native.stop="showAddPackageForm = !showAddPackageForm"
                         >
-                            新增包
+                            {{ t('view.image.AddNewPackage') }}
                         </sdxu-button>
                         <div class="sdxv-image-build-basic__add-package--icon">
-                            <span>{{ showAddPackageForm ? "收起" : "展开" }}</span>
+                            <span>{{ showAddPackageForm ? t('retract') : t('expand') }}</span>
                             <i
                                 class="sdx-icon sdx-icon-arrow-down"
                                 :class="{ 'is-reverse': showAddPackageForm }"
@@ -74,7 +74,7 @@
                     </transition>
                 </div>
             </el-form-item>
-            <el-form-item label="包变更详情:">
+            <el-form-item :label="t('view.image.PackageChangeDetail') + ':'">
                 <sdxv-modified-package-list
                     :install-packages="imageInfo.installPackages"
                     :uninstall-packages="imageInfo.uninstallPackages"
@@ -88,14 +88,14 @@
                     @click="handleCancel"
                     size="small"
                 >
-                    取消
+                    {{ t('Cancel') }}
                 </sdxu-button>
                 <sdxu-button
                     @click="handleSaveAndBuild" 
                     size="small"
                     :disabled="!hasChangedPackages"
                 >
-                    保存并构建
+                    {{ t('view.image.SaveAndBuild') }}
                 </sdxu-button>
             </el-form-item>
         </el-form>
@@ -113,9 +113,11 @@ import { Form, FormItem } from 'element-ui';
 
 import { getImage, buildImageBasic } from '@sdx/utils/src/api/image';
 import { imageNameValidate, imageVersionValidate } from '@sdx/utils/src/helper/validate';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvImageBuildBasic',
+    mixins: [locale],
     components: {
         SdxuContentPanel,
         SdxuInput,
@@ -150,7 +152,7 @@ export default {
             imageInfoRules: {
                 name: [{
                     required: true,
-                    message: '镜像名称不能为空',
+                    message: this.t('view.image.ImageNameNotBeNull'),
                     trigger: 'blur'
                 },
                 {
@@ -159,7 +161,7 @@ export default {
                 }],
                 version: [{
                     required: true,
-                    message: '镜像版本号不能为空',
+                    message: this.t('view.image.ImageVersionNotBeNull'),
                     trigger: 'blur'
                 },
                 {

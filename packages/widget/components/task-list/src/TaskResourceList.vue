@@ -5,15 +5,15 @@
             @search="handleSearch"
             @reset="handleReset"
         >
-            <SdxwSearchItem label="名称搜索:">
+            <SdxwSearchItem :label="t('view.task.searchName') + ':'">
                 <SdxuInput
                     v-model="searchName"
                     type="search"
                     size="small"
-                    placeholder="请输入任务名称、项目名称或创建人"
+                    :placeholder="t('view.task.searchPlaceholder')"
                 />
             </SdxwSearchItem>
-            <SdxwSearchItem label="任务类型:">
+            <SdxwSearchItem :label="t('view.task.taskType') + ':'">
                 <el-select
                     v-model="taskType"
                     size="medium"
@@ -21,12 +21,12 @@
                     <el-option
                         v-for="item in taskTypeList"
                         :key="item.value"
-                        :label="item.label"
+                        :label="t(item.label)"
                         :value="item.value"
                     />
                 </el-select>
             </SdxwSearchItem>
-            <SdxwSearchItem label="任务状态:">
+            <SdxwSearchItem :label="t('view.task.taskState') + ':'">
                 <el-select
                     v-model="taskState"
                     size="medium"
@@ -34,7 +34,7 @@
                     <el-option
                         v-for="item in taskStateList"
                         :key="item.value"
-                        :label="item.label"
+                        :label="t(item.label)"
                         :value="item.value"
                     />
                 </el-select>
@@ -49,21 +49,21 @@
         >
             <el-table-column
                 prop="name"
-                label="任务名称"
+                :label="t('view.task.taskName')"
                 fixed
                 min-width="150px"
             />
             <el-table-column
                 prop="type"
-                label="任务类型"
+                :label="t('view.task.taskType')"
                 min-width="150px"
             >
                 <template #default="{ row }">
-                    {{ TASK_TYPE_LABEL[row.type] }}
+                    {{ t(TASK_TYPE_LABEL[row.type]) }}
                 </template>
             </el-table-column>
             <el-table-column
-                label="任务状态"
+                :label="t('view.task.taskState')"
                 min-width="100px"
             >
                 <template #default="{ row }">
@@ -72,13 +72,13 @@
                         :type="STATE_MAP_FOLD_LABEL_TYPE[row.state]"
                         :status="stateIcon(row.state)"
                     >
-                        {{ STATE_TYPE_LABEL[row.state] }}
+                        {{ t(STATE_TYPE_LABEL[row.state]) }}
                     </SdxwFoldLabel>
                 </template>
             </el-table-column>
             <el-table-column
-                label="所属项目"
-                min-width="150px"
+                :label="t('view.task.taskProject')"
+                min-width="160px"
             >
                 <template #default="{ row }">
                     <span v-if="monitor">{{ row.project.name }}</span>
@@ -91,7 +91,7 @@
             </el-table-column>
             <el-table-column
                 prop="CPU"
-                label="已使用CPU（核）"
+                :label="t('view.task.cpuUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="160px"
@@ -102,7 +102,7 @@
             </el-table-column>
             <el-table-column
                 prop="MEMORY"
-                label="已使用内存（GB）"
+                :label="t('view.task.memoryUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="170px"
@@ -113,7 +113,7 @@
             </el-table-column>
             <el-table-column
                 prop="GPU"
-                label="已使用GPU（块）"
+                :label="t('view.task.gpuUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="170px"
@@ -125,12 +125,12 @@
             </el-table-column>
             <el-table-column
                 prop="owner.fullName"
-                label="创建人"
+                :label="t('Creator')"
                 min-width="100px"
             />
             <el-table-column
                 prop="createdAt"
-                label="创建时间"
+                :label="t('CreatedTime')"
                 :sortable="ranking ? false : 'custom'"
                 :sort-orders="sortOrders"
                 min-width="200px"
@@ -142,7 +142,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="操作"
+                :label="t('Operation')"
                 fixed="right"
                 min-width="130px"
             >
@@ -188,6 +188,7 @@ import ElOption from 'element-ui/lib/option';
 
 import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, TASK_TYPE_LABEL, TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
 import taskMixin from '@sdx/utils/src/mixins/task';
+import locale from '@sdx/utils/src/mixins/locale';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import { getTaskList } from '@sdx/utils/src/api/project';
 
@@ -195,7 +196,7 @@ const POLLING_PERIOD = 3 * 1000;
 
 export default {
     name: 'SdxwTaskResourceList',
-    mixins: [taskMixin],
+    mixins: [taskMixin, locale],
     components: {
         SdxuTable,
         SdxuIconButton,
@@ -236,7 +237,7 @@ export default {
             };
         });
         this.taskTypeList.unshift({
-            label: '全部',
+            label: 'ALL',
             value: ''
         });
         this.taskStateList = Object.values(STATE_TYPE).map(item => {
@@ -246,7 +247,7 @@ export default {
             };
         });
         this.taskStateList.unshift({
-            label: '全部',
+            label: 'ALL',
             value: ''
         });
         return {

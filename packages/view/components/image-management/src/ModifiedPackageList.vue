@@ -4,30 +4,30 @@
             <sdxu-table :data="dataList">
                 <el-table-column
                     prop="name"
-                    label="包名称"
+                    :label="t('view.image.PackageName')"
                 />
                 <el-table-column
                     prop="sourceType"
-                    label="源类型"
+                    :label="t('view.image.SourceType')"
                 />
                 <el-table-column
                     prop="version"
-                    label="版本"
+                    :label="t('view.image.Version')"
                 />
-                <el-table-column label="变更类型">
+                <el-table-column :label="t('view.image.ChangeType')">
                     <template #default="{ row }">
                         <span>{{ row.modify.desc }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     v-if="operatable"
-                    label="操作"
+                    :label="t('Operation')"
                 >
                     <template #default="{ row }">
                         <sdxu-icon-button
                             icon="sdx-icon sdx-quxiao"
                             @click="handleRevert(row)"
-                            title="撤销"
+                            :title="t('Revert')"
                         />
                     </template>
                 </el-table-column>
@@ -50,9 +50,11 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import { TableColumn } from 'element-ui';
 import { VERSION_TYPE, SOURCE_URL_TYPE } from '@sdx/utils/src/const/image';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvModifiedPackageList',
+    mixins: [locale],
     components: {
         SdxuIconButton,
         SdxuTable,
@@ -96,12 +98,12 @@ export default {
                         : item.version;
                 ret.sourceUrl =
                     item.sourceUrlType === SOURCE_URL_TYPE.DEFAULT
-                        ? '默认'
+                        ? this.t('view.image.Default')
                         : item.sourceUrl;
                 ret.modify = {
                     type: 'installPackages',
                     index,
-                    desc: '新增'
+                    desc: this.t('view.image.NewlyAdded')
                 };
                 return ret;
             });
@@ -110,7 +112,7 @@ export default {
                 ret.modify = {
                     type: 'uninstallPackages',
                     index,
-                    desc: '删除'
+                    desc: this.t('Delete')
                 };
                 return ret;
             });
@@ -123,7 +125,7 @@ export default {
                 ret.modify = {
                     type: 'upgradePackages',
                     index,
-                    desc: '升级'
+                    desc: this.t('Upgrade')
                 };
                 return ret;
             });

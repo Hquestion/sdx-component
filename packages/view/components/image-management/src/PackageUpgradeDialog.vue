@@ -1,7 +1,7 @@
 <template>
     <sdxu-dialog
         :visible.sync="dialogVisible"
-        title="升级"
+        :title="t('Upgrade')"
         @confirm="handleConfirm"
         @cancel="handleCancel"
         class="sdxv-package-upgrade-dialog"
@@ -15,7 +15,7 @@
             class="sdxv-package-upgrade-dialog__form"
         >
             <el-form-item
-                label="升级至:"
+                :label="t('view.image.UpgradeTo') + ':'"
                 prop="versionType"
             >
                 <div>
@@ -23,7 +23,7 @@
                         v-model="currentPackage.versionType"
                         :label="VERSION_TYPE.LATEST"
                     >
-                        最新版本
+                        {{ t('view.image.LastestVersion') }}
                     </el-radio>
                 </div>
                 <div class="sdxv-package-upgrade-dialog__form--item">
@@ -31,7 +31,7 @@
                         v-model="currentPackage.versionType"
                         :label="VERSION_TYPE.USER_DEFINED"
                     >
-                        自定义版本
+                        {{ t('view.image.CustomVersion') }}
                     </el-radio>
                     <sdxu-input
                         v-model="currentPackage.version"
@@ -50,9 +50,11 @@ import SdxuInput from '@sdx/ui/components/input';
 import { Form, FormItem } from 'element-ui';
 
 import { VERSION_TYPE } from '@sdx/utils/src/const/image';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvPackageUpgradeDialog',
+    mixins: [locale],
     components: {
         SdxuDialog,
         SdxuInput,

@@ -2,7 +2,7 @@
     <sdxu-dialog
         :visible.sync="dialogVisible"
         :no-footer="true"
-        title="日志详情"
+        :title="t('view.image.LogDetail')"
         @open="handleOpenDialog"
         @close="handleCloseDialog"
         class="sdxv-build-log"
@@ -18,9 +18,11 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxwLogDetail from '@sdx/widget/components/log-detail';
 
 import { getImageBuildLog } from '@sdx/utils/src/api/image';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvBuildLogDialog',
+    mixins: [locale],
     components: {
         SdxuDialog,
         SdxwLogDetail

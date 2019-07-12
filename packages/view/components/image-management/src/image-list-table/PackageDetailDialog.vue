@@ -15,9 +15,11 @@
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxvPackageList from '../PackageList';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvPackageDetailDialog',
+    mixins: [locale],
     components: {
         SdxuDialog,
         SdxvPackageList
@@ -38,7 +40,7 @@ export default {
     },
     computed: {
         title() {
-            return `基础镜像${this.basicImageName}包详情`;
+            return `${this.t('view.image.BasicImage')}${this.basicImageName}${this.t('view.image.PackageDetail')}`;
         },
         dialogVisible: {
             get() {

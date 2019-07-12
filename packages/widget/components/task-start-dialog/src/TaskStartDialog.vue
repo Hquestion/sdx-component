@@ -7,7 +7,7 @@
             <div class="sdxw-task-start-dialog__tip">
                 <i class="sdx-icon sdx-icon-warning" />
                 <span>
-                    请选择启动的镜像
+                    {{ t('view.task.selectImage') }}
                 </span>
             </div>
             <el-radio-group
@@ -18,13 +18,13 @@
                     v-if="autoImage"
                     :label="true"
                 >
-                    中间镜像: {{ autoImage.image_update_time }}
+                    {{ t('view.task.TemporalImage') }}: {{ autoImage.image_update_time }}
                 </el-radio>
                 <el-radio
                     v-if="image"
                     :label="false"
                 >
-                    基础镜像: {{ image.name }}
+                    {{ t('view.task.BasicImage') }}: {{ image.name }}
                 </el-radio>
             </el-radio-group>
         </div>
@@ -36,14 +36,14 @@
                 @click="handleCancel"
                 size="small"
             >
-                取 消
+                {{ t('Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="handleConfirm"
             >
-                确 认
+                {{ t('Confirm') }}
             </SdxuButton>
         </template>
     </SdxuDialog>
@@ -54,6 +54,7 @@ import ElRadio from 'element-ui/lib/radio';
 import ElRadioGroup from 'element-ui/lib/radio-group';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuButton from '@sdx/ui/components/button';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxwTaskStartDialog',
@@ -63,6 +64,7 @@ export default {
         SdxuDialog,
         SdxuButton
     },
+    mixins: [locale],
     props: {
         visible: {
             type: Boolean,

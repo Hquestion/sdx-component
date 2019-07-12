@@ -7,9 +7,7 @@
             @mousewheel.native="handleMouseWheel"
             ref="scroll"
         >
-            <div class="sdxw-log-detail__content">
-                {{ content }}
-            </div>
+            <span class="sdxw-log-detail__content">{{ content }}</span>
         </SdxuScroll>
     </div>
 </template>

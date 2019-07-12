@@ -1,7 +1,7 @@
 <template>
     <SdxvDetailContainer>
         <template
-            v-if="task && task.state === STATE_TYPE.RUNNING"
+            v-if="showSaveAsImage"
             #base-info-right
         >
             <SdxuButton
@@ -28,7 +28,7 @@
                         :type="task && STATE_MAP_FOLD_LABEL_TYPE[task.state] || ''"
                         :status="stateIcon"
                     >
-                        {{ task && STATE_TYPE_LABEL[task.state] || '-' }}
+                        {{ task && t(STATE_TYPE_LABEL[task.state]) || '-' }}
                     </SdxwFoldLabel>
                 </template>
             </SdxvBaseInfoItem>
@@ -39,7 +39,7 @@
             <SdxvBaseInfoItem
                 v-if="isModelTask"
                 label="任务类型"
-                :value="TASK_TYPE_LABEL[task.type]"
+                :value="t(TASK_TYPE_LABEL[task.type])"
             />
             <SdxvBaseInfoItem
                 label="任务描述"
@@ -204,7 +204,7 @@
                     />
                 </div>
             </template>
-            <template v-else-if="isDATASET_SERVICE || isSPARK">
+            <template v-else-if="isDATA_SERVICE || isSPARK">
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         label="驱动器CPU"
@@ -295,11 +295,12 @@
 
 <script>
 import MixinDetail from './MixinDetail';
+import locale from '@sdx/utils/src/mixins/locale';
 import auth from '@sdx/widget/components/auth';
 
 export default {
     name: 'SdxvTaskDetail',
-    mixins: [MixinDetail],
+    mixins: [MixinDetail, locale],
     directives: {
         auth
     },

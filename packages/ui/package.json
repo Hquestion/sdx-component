@@ -1,6 +1,6 @@
 {
     "name": "@sdx/ui",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "iluvatar基础组件库",
     "keywords": [
         "ui"
@@ -38,7 +38,7 @@
         "vuescroll": "^4.12.2"
     },
     "dependencies": {
-        "@sdx/utils": "^1.1.0",
+        "@sdx/utils": "^1.1.1",
         "dexie": "^2.0.4"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"

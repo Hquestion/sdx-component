@@ -2,7 +2,7 @@ import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
 import DataSourceSelect from './src/forms/DataSourceSelect';
 import BaseForm from './src/forms/BaseForm';
-import { TaskDetailView, TaskLogInfo} from '@sdx/view/components/task-management/index';
+import { TaskDetailView, TaskLogInfo} from '../task-management';
 
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';

@@ -21,11 +21,13 @@
                 </div>
             </div>
         </div>
-        <IconButton
-            class="delete"
-            icon="iconfont sdx-icon-delete"
-            @click.stop="handleDelete"
-        />
+        <div v-auth.resource.button="'TEMPLATE:WRITE'">
+            <IconButton
+                class="delete"
+                icon="iconfont sdx-icon-delete"
+                @click.stop="handleDelete"
+            />
+        </div>
     </div>
 </template>
 

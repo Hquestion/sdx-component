@@ -38,6 +38,15 @@ export const BUILD_TYPE = {
     TASK: 'TASK'                    //任务转存
 };
 
+// 构建类型 - 文字
+export const BUILD_TYPE_LABEL = {
+    BASIC: '基础镜像',
+    ONLINE: '在线构建',
+    TAR: '基于tar构建',
+    DOCKERFILE: '基于DockerFile构建',
+    TASK: '任务转存'
+};
+
 // 源地址类型
 export const SOURCE_URL_TYPE = {
     DEFAULT:  'DEFAULT',            //默认包源

@@ -231,6 +231,16 @@ export function tagValidator(rule, value, callback) {
     }
 }
 
+export function tagArrayValidator(rule, value, callback) {
+    const reg = new ValidateReg({min:1, max:10}, {chinese: true, at: false, space: false, underline: false, dash: false, dot: false}).generate();
+    value.forEach(item => {
+        if (!reg.test(item)) {
+            callback('请填写1到10位，英文字母、数字、中文组成的字符串');
+        }
+    });
+    callback();
+}
+
 // ------------------------------------------------------------------------------------
 
 // /^[a-zA-Z][a-zA-Z0-9_\-\\.]{0,63}$/i 请填写4到20位,字母开头,数字、字母、下划线、点组成的字符串

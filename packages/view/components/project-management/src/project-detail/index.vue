@@ -195,7 +195,7 @@ export default {
         };
     },
     created() {
-        this.initList(true);
+        this.initList();
         this.fetchDataMinxin = this.initList;
     },
     directives: {
@@ -218,7 +218,7 @@ export default {
     },
     methods: {
         searchTask() {
-            this.initList(true);
+            this.initList();
         },
         createTask(task) {
             this.$router.push(
@@ -231,8 +231,8 @@ export default {
                 }
             );
         },
-        initList(showLoading) {
-            this.loading = showLoading ? true : false;
+        initList(hideLoading) {
+            this.loading = hideLoading ? false : true;
             const params = {
                 name: this.searchName,
                 ...paginate(this.current, this.pageSize),
@@ -246,7 +246,7 @@ export default {
                 this.loading = false;
                 if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
                     if (!this.refreshTimer) {
-                        this.refreshTimer = setInterval(this.initList, 3000, false);
+                        this.refreshTimer = setInterval(this.initList, 3000, true);
                     }
                 } else {
                     clearInterval(this.refreshTimer);
@@ -255,14 +255,11 @@ export default {
         },
         currentChange(val) {
             this.current = val;
-            this.initList(true);
+            this.initList();
         },
         sortChange() {
-            this.initList(true);
-        },
-        // $$handleDetail(task) {
-        //     this.$router.push({name: 'SdxvProjectTaskDetail', params: {taskId: task.uuid}});
-        // }
+            this.initList();
+        }
         // handleOperate(operation) {
         //     // console.log('operation', operation);
         //     switch(operation.type) {
@@ -276,7 +273,7 @@ export default {
         //                     message: '运行成功',
         //                     type: 'success'
         //                 });
-        //                 this.initList(true);
+        //                 this.initList();
         //             });
         //         }).catch(() => {});
         //         break;
@@ -290,7 +287,7 @@ export default {
         //                     message: '停止成功',
         //                     type: 'success'
         //                 });
-        //                 this.initList(true);
+        //                 this.initList();
         //             });
         //         }).catch(() => {});
         //         break;
@@ -323,7 +320,7 @@ export default {
         //                     message: '删除成功',
         //                     type: 'success'
         //                 });
-        //                 this.initList(true);
+        //                 this.initList();
         //             });
         //         }).catch(() => {});
         //         break;

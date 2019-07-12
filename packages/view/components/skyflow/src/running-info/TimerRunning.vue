@@ -356,7 +356,7 @@ export default {
                     item.showRun = this.isOwnWorkflow && item.state === 'stopped';
                     item.showEdit = this.isOwnWorkflow && (item.state === 'cronRunning' || item.state === 'stopped');
                     item.showRemove = this.isOwnWorkflow;
-                    item.showShutdown = this.isOwnWorkflow && item.state === 'cronRunning';
+                    item.showShutdown = this.isOwnWorkflow && (item.state === 'cronRunning' || item.state === 'succeeded');
                     item.label = {};
                     switch(item.state) {
                     case 'succeeded':

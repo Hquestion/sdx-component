@@ -84,7 +84,7 @@ import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
 import ElSelect from 'element-ui/lib/select';
 import { getLabels, createModel, updateModel } from '@sdx/utils/src/api/model';
-import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator, descValidator, tagArrayValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'CreateModel',
     data() {
@@ -110,6 +110,7 @@ export default {
                 ],
                 labels: [
                     { required: true, message: '请选择模型标签', trigger: 'change' },
+                    { validator: tagArrayValidator, trigger: 'change' }
                 ]
             },
             needRefresh: false

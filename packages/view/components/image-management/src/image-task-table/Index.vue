@@ -21,7 +21,7 @@
                 label="镜像种类"
             />
             <el-table-column
-                prop="buildType"
+                prop="buildTypeText"
                 label="构建方式"
             />
             <el-table-column
@@ -113,6 +113,7 @@ import PackageDetailCompareDialog from '../PackageDetailCompareDialog';
 import BuildLogDialog from '../BuildLogDialog';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import { BUILD_TYPE_LABEL } from '@sdx/utils/src/const/image';
 export default {
     name: 'ImageTaskTable',
     data() {
@@ -132,7 +133,8 @@ export default {
             currentImageBuilder: {},
             showBuildLogDialog: false,
             currentImageBuilderId: '',
-            loading: false
+            loading: false,
+            refreshTimer: null
         };
     },
     props: {
@@ -153,7 +155,9 @@ export default {
             default: ''
         }
     },
-
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
+    },
     components: {
         SdxuTable,
         SdxuIconButton,
@@ -176,7 +180,15 @@ export default {
                         item.showDiff = isOwnImage && item.buildType === 'ONLINE';
                         item.showRemove = isOwnImage && (item.state.label === 'FAILED' || item.state.label  === 'FINISHED');
                         item.showLog = isOwnImage;
+                        item.buildTypeText = BUILD_TYPE_LABEL[item.buildType];
                     });
+                    if (this.tableData.length && this.tableData.find(item => item.state.needPull)) {
+                        if (!this.refreshTimer) {
+                            this.refreshTimer = setInterval(this.initImageTaskList, 3000, false, true);
+                        }
+                    } else {
+                        clearInterval(this.refreshTimer);
+                    }
                 }).finally(() => {
                     this.loading = false;
                 });
@@ -196,9 +208,9 @@ export default {
             this.current = val;
             this.initImageTaskList();
         },
-        initImageTaskList(reset) {
+        initImageTaskList(reset, hideLoading) {
             if (reset) this.current = 1;
-            this.loading = true;
+            this.loading = hideLoading ? false : true;
             const params = {
                 name: this.name,
                 ...paginate(this.current, this.pageSize),
@@ -207,6 +219,7 @@ export default {
                 state:this.state,
                 order: this.searchTask.order,
                 orderBy: this.searchTask.orderBy,
+                ownerId: getUser().userId
             };
             removeBlankAttr(params);
             this.taskList(params);

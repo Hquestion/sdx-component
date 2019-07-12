@@ -27,28 +27,31 @@
                 class="sdxv-image-management__nav-menu"
                 v-if="projectType === 'image'"
             >
-                <el-menu
-                    default-active="all"
-                    mode="horizontal"
-                    @select="selectImageKind"
-                    background-color="#fff"
+                <el-tabs
+                    v-model="activeName"
+                    @tab-click="selectImageKind"
                 >
-                    <el-menu-item index="all">
-                        全部
-                    </el-menu-item>
-                    <el-menu-item index="basic">
-                        基础镜像
-                    </el-menu-item>
-                    <el-menu-item index="private">
-                        私有镜像
-                    </el-menu-item>
-                    <el-menu-item index="myShare">
-                        我的共享
-                    </el-menu-item>
-                    <el-menu-item index="otherShare">
-                        他人共享
-                    </el-menu-item>
-                </el-menu>
+                    <el-tab-pane
+                        label="全部"
+                        name="all"
+                    />
+                    <el-tab-pane
+                        label="基础镜像"
+                        name="basic"
+                    />
+                    <el-tab-pane
+                        label="私有镜像"
+                        name="private"
+                    />
+                    <el-tab-pane
+                        label="我的共享"
+                        name="myShare"
+                    />
+                    <el-tab-pane
+                        label="他人共享"
+                        name="otherShare"
+                    />
+                </el-tabs>
             </div>
             <div class="sdxv-image-management__filter">
                 <sdxw-search-layout
@@ -160,7 +163,9 @@ import TabRadio from '@sdx/ui/components/tab-radio';
 import ImageListTable from './image-list-table/Index';
 import ContentPanel from '@sdx/ui/components/content-panel';
 import Button from '@sdx/ui/components/button';
-import { Menu, MenuItem, Select } from 'element-ui';
+import ElSelect from 'element-ui/lib/select';
+import ElTabs from 'element-ui/lib/tabs';
+import ElTabPane from 'element-ui/lib/tab-pane';
 import Input from '@sdx/ui/components/input';
 import ImageTaskTable from './image-task-table/Index';
 import SearchLayout from  '@sdx/widget/components/search-layout';
@@ -177,6 +182,7 @@ export default {
             imageKind: 'all',
             isOwner: '',
             taskType: '',
+            activeName: 'all',
             state: '',
             imageTypes: [
                 'JUPYTER',
@@ -243,9 +249,9 @@ export default {
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         [Button.name]: Button,
-        [Menu.name]: Menu,
-        [Select.name]: Select,
-        [MenuItem.name]: MenuItem,
+        ElSelect,
+        ElTabs,
+        ElTabPane,
         [Input.name]: Input,
         ImageListTable,
         [ContentPanel.name]: ContentPanel,
@@ -293,10 +299,10 @@ export default {
                 }
             });
         },
-        selectImageKind(key) {
+        selectImageKind(tab) {
             this.resetVariables();
-            this.imageKind = key;
-            switch (key) {
+            this.imageKind = tab.name;
+            switch (tab.name) {
             case 'basic':
                 this.buildType = 'BASIC';
                 break;

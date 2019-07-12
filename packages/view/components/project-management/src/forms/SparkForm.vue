@@ -87,7 +87,7 @@
             >
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
-                    accept="'.jar'， '.py'， '.zip'， '.egg'"
+                    accept=".jar,.py,.zip,.egg"
                     :string-model="true"
                     check-type="file"
                 />

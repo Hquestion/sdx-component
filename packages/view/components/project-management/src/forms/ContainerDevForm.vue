@@ -114,7 +114,7 @@ import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import {  createTask, updateTask, getDataSet, getProjectDetail} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
-import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import DataSourceSelect from './DataSourceSelect';
 export default {
@@ -181,6 +181,12 @@ export default {
                         }
                     },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
                 ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
@@ -253,7 +259,7 @@ export default {
 
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval, ...{imageId:nval.image.uuid}};
+            this.params = { ...this.params, ...nval};
             this.cpuObj = {
                 cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
                 memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),

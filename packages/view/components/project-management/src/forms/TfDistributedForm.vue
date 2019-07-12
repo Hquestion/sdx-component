@@ -78,21 +78,21 @@
                 /> 
             </el-form-item>
             <el-form-item
-                prop="instances.TF_PS_INSTANCES"
+                prop="resourceConfig.TF_PS_INSTANCES"
                 label="参数服务器实例个数:"
             >
                 <el-input-number
-                    v-model="params.instances.TF_PS_INSTANCES"
+                    v-model="params.resourceConfig.TF_PS_INSTANCES"
                     :min="1"
                     :max="InputNumberMax"
                 />
             </el-form-item>
             <el-form-item
-                prop="instances.TF_WORKER_INSTANCES"
+                prop="resourceConfig.TF_WORKER_INSTANCES"
                 label="计算节点实例个数:"
             >
                 <el-input-number
-                    v-model="params.instances.TF_WORKER_INSTANCES"
+                    v-model="params.resourceConfig.TF_WORKER_INSTANCES"
                     :min="1"
                     :max="InputNumberMax"
                 />
@@ -133,7 +133,7 @@ import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask } from '@sdx/utils/src/api/project';
-import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'TfDistributedForm',
     components: {
@@ -193,11 +193,7 @@ export default {
                     'GPU_MODEL': ''
                 },
                 sourcePaths: [],
-                args: '',
-                instances: {
-                    TF_WORKER_INSTANCES: 1,
-                    TF_PS_INSTANCES: 1
-                }
+                args: ''
             },
             imageOptions: [],
             cpuService: {},
@@ -212,6 +208,12 @@ export default {
                     },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
+                ],
                 imageId: [
                     { required: true, message: '请选择运行环境', trigger: 'change' }
                 ],
@@ -224,10 +226,10 @@ export default {
                 sourcePaths: [
                     { required: true, message: '请选择源代码', trigger: 'blur' }
                 ],
-                'instances.TF_WORKER_INSTANCES': [
+                'resourceConfig.TF_WORKER_INSTANCES': [
                     { required: true, message: '请输入计算节点实例个数',trigger: 'change' }
                 ],
-                'instances.TF_PS_INSTANCES': [
+                'resourceConfig.TF_PS_INSTANCES': [
                     { required: true, message: '请输入参数服务器实例个数',trigger: 'change' }
                 ],
             }
@@ -267,10 +269,6 @@ export default {
         },
         commit() {
             this.$refs.tfdistributed.validate().then(() => {
-                this.params.resourceConfig = Object.assign({},  this.params.resourceConfig , {
-                    'TF_WORKER_INSTANCES': this.params.instances.TF_WORKER_INSTANCES,
-                    'TF_PS_INSTANCES': this.params.instances.TF_PS_INSTANCES,
-                });
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
                     .then (() => {
                         this.$router.go(-1);
@@ -281,7 +279,7 @@ export default {
 
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval , ...{imageId:nval.image.uuid}};
+            this.params = { ...this.params, ...nval };
             this.cpuService = {
                 cpu: this.params.resourceConfig.TF_PS_CPUS/1000,
                 memory: this.params.resourceConfig.TF_PS_MEMORY / (1024*1024*1024),
@@ -300,9 +298,9 @@ export default {
         },
         cpuService(val) {
             this.params.resourceConfig = { 
-                'TF_WORKER_INSTANCES': this.params.instances.TF_WORKER_INSTANCES,
+                'TF_WORKER_INSTANCES': this.params.resourceConfig.TF_WORKER_INSTANCES,
                 'TF_WORKER_CPUS': this.params.resourceConfig.TF_WORKER_CPUS,
-                'TF_PS_INSTANCES': this.params.instances.TF_PS_INSTANCES,
+                'TF_PS_INSTANCES': this.params.resourceConfig.TF_PS_INSTANCES,
                 'TF_PS_CPUS': val.cpu*1000,
                 'TF_WORKER_GPUS': this.params.resourceConfig.TF_WORKER_GPUS,
                 'TF_WORKER_MEMORY': this.params.resourceConfig.TF_WORKER_MEMORY,
@@ -312,9 +310,9 @@ export default {
         },
         cpuCompute(val) {
             this.params.resourceConfig = { 
-                'TF_WORKER_INSTANCES': this.params.instances.TF_WORKER_INSTANCES,
+                'TF_WORKER_INSTANCES': this.params.resourceConfig.TF_WORKER_INSTANCES,
                 'TF_WORKER_CPUS': val.cpu*1000,
-                'TF_PS_INSTANCES': this.params.instances.TF_PS_INSTANCES,
+                'TF_PS_INSTANCES': this.params.resourceConfig.TF_PS_INSTANCES,
                 'TF_PS_CPUS':  this.params.resourceConfig.TF_PS_CPUS,
                 'TF_WORKER_GPUS': this.params.resourceConfig.TF_WORKER_GPUS,
                 'TF_WORKER_MEMORY': val.memory * 1024* 1024*1024,
@@ -324,9 +322,9 @@ export default {
         },
         gpuObj(val) {
             this.params.resourceConfig = { 
-                'TF_WORKER_INSTANCES': this.params.instances.TF_WORKER_INSTANCES,
+                'TF_WORKER_INSTANCES': this.params.resourceConfig.TF_WORKER_INSTANCES,
                 'TF_WORKER_CPUS': this.params.resourceConfig.TF_WORKER_CPUS,
-                'TF_PS_INSTANCES': this.params.instances.TF_PS_INSTANCES,
+                'TF_PS_INSTANCES': this.params.resourceConfig.TF_PS_INSTANCES,
                 'TF_PS_CPUS':  this.params.resourceConfig.TF_PS_CPUS,
                 'TF_WORKER_GPUS': val.count,
                 'TF_WORKER_MEMORY': this.params.resourceConfig.TF_WORKER_MEMORY,

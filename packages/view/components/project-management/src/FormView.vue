@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { getTaskDetail } from '@sdx/utils/src/api/project';
+import { getTaskDetailBackEnd } from '@sdx/utils/src/api/project';
 import { TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
 const POLLING_PERIOD = 3 * 1000;
 
@@ -47,7 +47,7 @@ export default {
     methods: {
         getTaskInfo() {
             if (this.taskId) {
-                getTaskDetail(this.taskId)
+                getTaskDetailBackEnd(this.taskId)
                     .then(data => {
                         this.task = data;
                     });

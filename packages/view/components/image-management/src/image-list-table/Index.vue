@@ -59,8 +59,8 @@
                 label="镜像种类"
             />
             <el-table-column
-                prop="buildType"
-                key="buildType"
+                prop="buildTypeText"
+                key="buildTypeText"
                 label="构建方式"
                 v-if="imageKind !== 'basic'"
             />
@@ -155,6 +155,7 @@ import { Message } from 'element-ui';
 import ShareSetting from '@sdx/widget/components/share-setting';
 import Filters from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';
+import { BUILD_TYPE_LABEL } from '@sdx/utils/src/const/image';
 export default {
     name: 'ImageListTable',
     data() {
@@ -365,6 +366,7 @@ export default {
                             fullName : 'system'
                         };
                     }
+                    item.buildTypeText = BUILD_TYPE_LABEL[item.buildType];
                 });
                 this.total = res.total;
                 this.loading = false;

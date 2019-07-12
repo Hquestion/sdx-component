@@ -21,7 +21,7 @@
                 label="镜像种类"
             />
             <el-table-column
-                prop="buildType"
+                prop="buildTypeText"
                 label="构建方式"
             />
             <el-table-column
@@ -113,6 +113,7 @@ import PackageDetailCompareDialog from '../PackageDetailCompareDialog';
 import BuildLogDialog from '../BuildLogDialog';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import { BUILD_TYPE_LABEL } from '@sdx/utils/src/const/image';
 export default {
     name: 'ImageTaskTable',
     data() {
@@ -179,6 +180,7 @@ export default {
                         item.showDiff = isOwnImage && item.buildType === 'ONLINE';
                         item.showRemove = isOwnImage && (item.state.label === 'FAILED' || item.state.label  === 'FINISHED');
                         item.showLog = isOwnImage;
+                        item.buildTypeText = BUILD_TYPE_LABEL[item.buildType];
                     });
                     if (this.tableData.length && this.tableData.find(item => item.state.needPull)) {
                         if (!this.refreshTimer) {

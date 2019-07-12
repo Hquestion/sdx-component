@@ -160,6 +160,7 @@ import FileSelect from '@sdx/widget/components/file-select';
 import ResourceConfig from '../../../project-management/src/forms/ResourceConfig';
 import { getFrameworks, createVersion, updateVersion, startVersion } from '@sdx/utils/src/api/model';
 import { getImageList } from '@sdx/utils/src/api/image';
+import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'CreateVersion',
     data() {
@@ -184,6 +185,13 @@ export default {
             versionInfoFormRule: {
                 name: [
                     { required: true, message: '请输入版本名称', trigger: 'blur' },
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
                 ],
                 framework: [
                     { required: true, message: '请选择版本类型', trigger: 'change' },

@@ -84,6 +84,7 @@ import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
 import ElSelect from 'element-ui/lib/select';
 import { getLabels, createModel, updateModel } from '@sdx/utils/src/api/model';
+import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'CreateModel',
     data() {
@@ -99,11 +100,11 @@ export default {
             modelInfoFormRule: {
                 name: [
                     { required: true, message: '请输入模型名称', trigger: 'blur' },
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 description: [
                     {
-                        max: 256,
-                        message: '最多输入256个字符',
+                        validator: descValidator,
                         trigger: 'blur'
                     }
                 ],

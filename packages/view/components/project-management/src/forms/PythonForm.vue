@@ -83,7 +83,7 @@
             >
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
-                    :accept="'.py'"
+                    accept=".py,.zip"
                     :string-model="true"
                     check-type="file"
                 />

@@ -177,6 +177,7 @@ export default {
             pageSize: 10,
             order: '',
             orderBy: '',
+            refreshTimer: null,
             loading: false,
             createDialogVisible: false,
             testDialogVisible: false,
@@ -207,6 +208,9 @@ export default {
         auth
     },
     mixins: [TimerFilter],
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
+    },
     methods: {
         dialogClose(needRefresh) {
             this.editingVersion = null;
@@ -230,8 +234,8 @@ export default {
                 this.initVersionList();
             }
         },
-        initVersionList() {
-            this.loading = true;
+        initVersionList(hideLoading) {
+            this.loading = hideLoading ? false : true;
             const params = {
                 name: this.name,
                 ...paginate(this.current, this.pageSize),
@@ -284,6 +288,13 @@ export default {
                     }
                 });
                 this.total = res.total;
+                if (this.versionList.length && this.versionList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
+                    if (!this.refreshTimer) {
+                        this.refreshTimer = setInterval(this.initVersionList, 3000, true);
+                    }
+                } else {
+                    clearInterval(this.refreshTimer);
+                }
             }).finally(() => {
                 this.loading = false;
             });

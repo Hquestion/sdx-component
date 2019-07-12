@@ -132,7 +132,8 @@ export default {
             currentImageBuilder: {},
             showBuildLogDialog: false,
             currentImageBuilderId: '',
-            loading: false
+            loading: false,
+            refreshTimer: null
         };
     },
     props: {
@@ -153,7 +154,9 @@ export default {
             default: ''
         }
     },
-
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
+    },
     components: {
         SdxuTable,
         SdxuIconButton,
@@ -177,6 +180,13 @@ export default {
                         item.showRemove = isOwnImage && (item.state.label === 'FAILED' || item.state.label  === 'FINISHED');
                         item.showLog = isOwnImage;
                     });
+                    if (this.tableData.length && this.tableData.find(item => item.state.needPull)) {
+                        if (!this.refreshTimer) {
+                            this.refreshTimer = setInterval(this.initImageTaskList, 3000, false, true);
+                        }
+                    } else {
+                        clearInterval(this.refreshTimer);
+                    }
                 }).finally(() => {
                     this.loading = false;
                 });
@@ -196,9 +206,9 @@ export default {
             this.current = val;
             this.initImageTaskList();
         },
-        initImageTaskList(reset) {
+        initImageTaskList(reset, hideLoading) {
             if (reset) this.current = 1;
-            this.loading = true;
+            this.loading = hideLoading ? false : true;
             const params = {
                 name: this.name,
                 ...paginate(this.current, this.pageSize),
@@ -207,6 +217,7 @@ export default {
                 state:this.state,
                 order: this.searchTask.order,
                 orderBy: this.searchTask.orderBy,
+                ownerId: getUser().userId
             };
             removeBlankAttr(params);
             this.taskList(params);

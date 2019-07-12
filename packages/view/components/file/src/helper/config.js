@@ -21,4 +21,27 @@ export const copyTaskStatusMap = {
     }
 };
 
+export const unzipTaskStatusMap = {
+    PROCESSING: {
+        label: '解压中',
+        status: 'loading',
+        type: 'create'
+    },
+    PENDING: {
+        label: '等待中',
+        status: 'loading',
+        type: 'primary'
+    },
+    SUCCESS: {
+        label: '已完成',
+        status: '',
+        type: 'finish'
+    },
+    FAILURE: {
+        label: '解压失败',
+        status: 'warning',
+        type: 'error'
+    }
+};
+
 

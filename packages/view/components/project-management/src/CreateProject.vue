@@ -14,7 +14,7 @@
         </div>
         <el-form
             label-width="110px"
-            label-position="left"
+            label-position="right"
             :model="projectForm"
             ref="projectForm"
             :rules="projectFormRule"
@@ -143,6 +143,7 @@ import { Form, FormItem, Message, Radio, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
 import { updateProject, getProjectList, createProject } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
+import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'SdxvCreateProject',
     data() {
@@ -156,7 +157,17 @@ export default {
             },
             projectFormRule: {
                 name: [
-                    { required: true, message: '请输入项目名称', trigger: 'blur' }
+                    { required: true, message: '请输入项目名称', trigger: 'blur' },
+                    {
+                        validator: nameWithChineseValidator,
+                        trigger: 'blur'
+                    }
+                ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
                 ]
             },
             title: '新建项目',

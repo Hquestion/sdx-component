@@ -65,10 +65,7 @@ export default {
                     name: 'Skytsdbsdms'
                 }],
                 pods: [{
-                    'name':'jupyter-12325345',
-                    'state':'',
-                    'reason': '',
-                    'startTime': ''
+                    'name':'ddf22857-4a1c-11e9-ad36-d094667446bd'
                 }, {
                     'name': 'jupyter-36435234523'
                 }]

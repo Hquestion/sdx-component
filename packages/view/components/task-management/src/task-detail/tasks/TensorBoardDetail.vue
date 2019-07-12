@@ -1,25 +1,9 @@
 <template>
     <SdxvDetailContainer>
-        <template
-            v-if="task.state === STATE_TYPE.RUNNING"
-            #base-info-right
-        >
-            <SdxuButton
-                v-auth.project.button="'TASK:SAVE_IMAGE'"
-                @click="dialogVisible = true"
-            >
-                另存为镜像
-            </SdxuButton>
-            <SdxvSaveAsDialog
-                :visible.sync="dialogVisible"
-                :task="task"
-            />
-        </template>
         <template #base-info>
             <SdxvBaseInfoItem
                 label="任务名称"
                 :value="task.name"
-                :multi-line="true"
             />
             <SdxvBaseInfoItem label="任务状态">
                 <template #value>
@@ -34,11 +18,12 @@
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
                 label="创建人"
-                :value="task.owner && task.owner.username || ''"
+                :value="task.owner && task.owner.fullName || ''"
             />
             <SdxvBaseInfoItem
                 label="任务描述"
                 :value="task.description"
+                :multi-line="true"
             />
         </template>
         <template #running-info>
@@ -47,12 +32,8 @@
                 :value="task.image && task.image.name || ''"
             />
             <SdxvBaseInfoItem
-                label="IP"
-                :value="task.ip"
-            />
-            <SdxvBaseInfoItem
-                label="端口"
-                :value="task.assignedPort"
+                label="日志目录"
+                :value="task.logPaths[0]"
             />
             <SdxvBaseInfoItem
                 label="启动时间"
@@ -66,22 +47,6 @@
                 label="运行时长"
                 :value="dealTime(task.runningAt, task.stoppedAt)"
             />
-            <SdxvBaseInfoItem
-                v-if="task.externalUrl"
-                label="页面终端"
-            >
-                <template
-                    #value
-                >
-                    <span
-                        class="sdxv-task-detail__external"
-                        :plain="true"
-                        @click="goTerminal()"
-                    >
-                        {{ task.externalUrl }}
-                    </span>
-                </template>
-            </SdxvBaseInfoItem>
         </template>
         <template #resource-info>
             <div class="sdxv-info-container">
@@ -91,32 +56,17 @@
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
-                    label="GPU"
-                    :value="task.resourceConfig.EXECUTOR_GPUS + '块'"
-                    :strip="true"
-                />
-                <SdxvBaseInfoItem
                     label="内存"
                     :value="byteToGb(task.resourceConfig.EXECUTOR_MEMORY) + 'GB'"
                     :strip="true"
                 />
             </div>
         </template>
-        <template #data-info>
-            <SdxvHasNothing
-                v-if="!task.datasources.length && !task.datasets.length"
-                tips="暂时还没数据信息哦"
-            />
-            <SdxvDataInfo
-                v-else
-                :datasources="task.datasources"
-                :datasets="task.datasets"
-            />
-        </template>
         <template #log-info>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没Log日志哦"
+            <SdxuEmpty
+                v-if="!hasLog"
+                empty-content="暂时还没日志哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvLogList
                 v-else
@@ -124,9 +74,10 @@
             />
         </template>
         <template #realtime-monitor>
-            <SdxvHasNothing
-                v-if="!task.pods.length"
-                tips="暂时还没实时监控哦"
+            <SdxuEmpty
+                v-if="!hasRealMonitor"
+                empty-content="暂时还没实时监控哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo
                 v-else
@@ -138,25 +89,10 @@
 
 <script>
 import MixinDetail from './MixinDetail';
-import auth from '@sdx/widget/components/auth';
 
 export default {
-    name: 'SdxvContainerDevDetail',
-    mixins: [MixinDetail],
-    directives: {
-        auth
-    },
-    data() {
-        return {
-            dialogVisible: false
-        };
-    },
-    methods: {
-        goTerminal() {
-            window.open(this.task.external_url);
-        }
-    }
-
+    name: 'SdxvTensorBoardDetail',
+    mixins: [MixinDetail]
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-log-list">
         <div
-            v-for="(item, i) in logList"
+            v-for="(item, i) in pods"
             :key="i"
             class="sdxv-log-list__item"
         >
@@ -42,24 +42,12 @@ export default {
             default: () => []
         }
     },
-    data() {
-        return {
-            // todo: 待删除
-            logList: [{
-                taskId: 'sfasfasf',
-                name: 'test1'
-            }, {
-                taskId: 'sfasf',
-                name: 'test2'
-            }, {
-                taskId: 'sdfsag',
-                name: 'test3'
-            }]
-        };
-    },
     methods: {
         handleGotoLogPage(podId, method) {
-            this.$router.push(`/sdxv-project-manage/logInfo/${method}/${podId}`);
+            this.$router.push({name: 'SdxvTaskManagementTaskLog', params: {
+                method: method,
+                podName: podId
+            }});
         }
     }
 };

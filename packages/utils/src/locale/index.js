@@ -31,14 +31,26 @@ function registerI18n(i18nInstance) {
 }
 
 function i18nHandler() {
-    const vuei18n = Object.getPrototypeOf(this).$t || (i18n && i18n.t);
-    if (typeof vuei18n === 'function' && (!!this.$i18n || !!i18n)) {
-        if (!merged) {
-            merged = true;
-            defaultLang = (this.$i18n || i18n).locale;
-            (this.$i18n || i18n).mergeLocaleMessage(defaultLang, getLangMessage(defaultLang));
+    if (this) {
+        const vuei18n = Object.getPrototypeOf(this).$t || (i18n && i18n.t);
+        if (typeof vuei18n === 'function' && (!!this.$i18n || !!i18n)) {
+            if (!merged) {
+                merged = true;
+                defaultLang = (this.$i18n || i18n).locale;
+                (this.$i18n || i18n).mergeLocaleMessage(defaultLang, getLangMessage(defaultLang));
+            }
+            return vuei18n.apply(this, arguments);
         }
-        return vuei18n.apply(this, arguments);
+    } else {
+        const vuei18n = i18n && i18n.t;
+        if (typeof vuei18n === 'function') {
+            if (!merged) {
+                merged = true;
+                defaultLang = i18n.locale;
+                i18n.mergeLocaleMessage(defaultLang, getLangMessage(defaultLang));
+            }
+            return vuei18n.apply(this, arguments);
+        }
     }
 }
 

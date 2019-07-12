@@ -14,7 +14,7 @@
         </div>
         <el-form
             label-width="130px"
-            label-position="left"
+            label-position="right"
             :model="workflowForm"
             ref="workflowForm"
             :rules="workflowFormRule"
@@ -198,6 +198,7 @@ import { updateWorkflow, getSkyflowList, createWorkflow, getSkyflowTemplates } f
 import ElSelect from 'element-ui/lib/select';
 import Scroll from '@sdx/ui/components/scroll';
 import auth from '@sdx/widget/components/auth';
+import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 export default {
     name: 'SdxvCreateWorkflow',
     data() {
@@ -214,7 +215,11 @@ export default {
             },
             workflowFormRule: {
                 name: [
-                    { required: true, message: '请输入工作流名称', trigger: 'blur' }
+                    { required: true, message: '请输入工作流名称', trigger: 'blur' },
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                description: [
+                    { validator: descValidator, trigger: 'blur' }
                 ],
                 skyflowTemplate: [
                     { required: true, message: '请选择模板种类', trigger: 'change' }

@@ -21,8 +21,6 @@ import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap,
 import BreadcrumbBar from './BreadcrumbBar';
 import SdxvFileTask from './popup/FileTask';
 
-console.log(searchShareFiles.cancelTimer);
-
 export default {
     name: 'SdxvFileMain',
     data() {

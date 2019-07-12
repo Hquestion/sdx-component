@@ -9,8 +9,8 @@ export default {
     name: 'SdxvChartGPU',
     props: {
         allocations: {
-            type: Array,
-            default: () => []
+            type: Object,
+            default: () => ({})
         },
         used: {
             type: Object,
@@ -24,18 +24,21 @@ export default {
         };
     },
     computed: {
+        gpuModelKeys() {
+            return Object.keys(this.allocations);
+        },
         allocationList() {
-            return this.allocations.map(item => {
+            return this.gpuModelKeys.map(item => {
                 return {
-                    name: item.label,
-                    value: item.count
+                    name: item,
+                    value: this.allocations[item]
                 };
             });
         },
         usedList() {
             const list = [];
-            this.allocations.map((item, i) => {
-                let value = this.used[item.label] || 0;
+            this.gpuModelKeys.map((item, i) => {
+                let value = this.used[item] || 0;
                 list.push({
                     name: '已使用',
                     value: value,
@@ -43,7 +46,7 @@ export default {
                 });
                 list.push({
                     name: '未使用',
-                    value: item.count - value,
+                    value: this.allocations[item] - value,
                     itemStyle: { color: this.color[i], opacity: 0.5 }
                 });
             });
@@ -85,8 +88,11 @@ export default {
         this.initChart();
     },
     watch: {
-        allocations() {
-            this.initChart();
+        allocations: {
+            deep: true, 
+            handler() {
+                this.initChart();
+            }
         },
         used() {
             this.initChart();

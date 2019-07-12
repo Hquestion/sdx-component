@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { nameValidate } from '../validate';
+import { commonNameValidator } from '@sdx/utils/src/helper/validate';
 import SdxuInput from '@sdx/ui/components/input';
 import { addUser } from '@sdx/utils/src/api/user';
 import { getRolesList} from '@sdx/utils/src/api/rolemange';
@@ -134,7 +134,7 @@ export default {
             rules: {
                 username: [
                     {required: true,message: '请输入用户名',trigger: 'blur'},
-                    { validator: nameValidate, trigger: 'blur' },
+                    { validator: commonNameValidator, trigger: 'blur' },
                 ],
                 fullName: [
                     { required: true, message: '请输入显示名', trigger: 'blur' }

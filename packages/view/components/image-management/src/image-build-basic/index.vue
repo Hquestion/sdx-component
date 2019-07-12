@@ -93,6 +93,7 @@
                 <sdxu-button
                     @click="handleSaveAndBuild" 
                     size="small"
+                    :disabled="!hasChangedPackages"
                 >
                     保存并构建
                 </sdxu-button>
@@ -171,6 +172,9 @@ export default {
     computed: {
         name_prefix() {
             return this.baseInfo.name + '_'; 
+        },
+        hasChangedPackages() {
+            return !!(this.imageInfo.installPackages.length || this.imageInfo.uninstallPackages.length || this.imageInfo.upgradePackages.length);
         }
     },
     methods: {

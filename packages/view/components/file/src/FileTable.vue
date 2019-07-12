@@ -91,7 +91,8 @@
                 v-if="!fileManager.isProjectRoot() && fileManager.rootKind !== rootKinds.MY_SHARE || fileManager.isSearch"
             >
                 <template #default="{row}">
-                    {{ row.size | byteFormatter }}
+                    <span v-if="row.size && row.size > 0">{{ row.size | byteFormatter }}</span>
+                    <span v-else>-</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -129,6 +130,7 @@
                             :icon="item.icon"
                             :title="item.title"
                             :key="index"
+                            :loading="mapLoadingStatus(item, row)"
                             @click="handleFileAction(row, item)"
                         />
                     </SdxuIconButtonGroup>

@@ -65,7 +65,6 @@
                 >
                     <task-card-list>
                         <task-card
-                            @operate="handleOperate"
                             v-for="(item, index) in taskList"
                             :key="index"
                             :meta="item"

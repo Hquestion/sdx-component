@@ -39,7 +39,11 @@ function i18nHandler() {
                 defaultLang = (this.$i18n || i18n).locale;
                 (this.$i18n || i18n).mergeLocaleMessage(defaultLang, getLangMessage(defaultLang));
             }
-            return vuei18n.apply(this, arguments);
+            if (Object.getPrototypeOf(this).$t) {
+                return vuei18n.apply(this, arguments);
+            } else {
+                return i18n.t(arguments[0], arguments[1]);
+            }
         }
     } else {
         const vuei18n = i18n && i18n.t;
@@ -49,7 +53,7 @@ function i18nHandler() {
                 defaultLang = i18n.locale;
                 i18n.mergeLocaleMessage(defaultLang, getLangMessage(defaultLang));
             }
-            return vuei18n.apply(this, arguments);
+            return i18n.t(arguments[0], arguments[1]);
         }
     }
 }

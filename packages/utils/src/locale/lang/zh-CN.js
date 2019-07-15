@@ -1,7 +1,8 @@
 export default {
     ui: {
         button: {
-            ok: '确定'
+            ok: '确定',
+            cancel: '取消'
         },
         messageBox: {
             prompt: '提示'
@@ -15,6 +16,15 @@ export default {
             password:'密码',
             groups:'加入组',
             role:'角色'
+        },
+        changePassword: {
+            title: '修改密码',
+            oldPwd: '旧密码：',
+            newPwd: '新密码：',
+            confirmNewPwd: '确认新密码：'
         }
+    },
+    general: {
+        requiredInfo: '请输入必填信息！'
     }
 };

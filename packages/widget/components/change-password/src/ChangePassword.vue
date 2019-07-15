@@ -8,7 +8,7 @@
         <div
             slot="title"
         >
-            <span>修改密码</span>
+            <span>{{ t('widget.changePassword.title') }}</span>
         </div>
         <el-form
             label-width="110px"
@@ -18,7 +18,7 @@
             :rules="changePwdFormRule"
         >
             <el-form-item
-                label="旧密码："
+                :label="t('widget.changePassword.oldPwd')"
                 prop="oldPasswd"
             >
                 <sdxu-input
@@ -28,7 +28,7 @@
                 />
             </el-form-item>
             <el-form-item
-                label="新密码："
+                :label="t('widget.changePassword.newPwd')"
                 prop="newPasswd"
             >
                 <sdxu-input
@@ -39,7 +39,7 @@
                 />
             </el-form-item>
             <el-form-item
-                label="确认新密码："
+                :label="t('widget.changePassword.confirmNewPwd')"
                 prop="repeatNewPasswd"
             >
                 <sdxu-input
@@ -57,14 +57,14 @@
                 size="small"
                 @click="cancel"
             >
-                取消
+                {{ t('ui.button.cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="confirm"
             >
-                确认
+                {{ t('ui.button.ok') }}
             </SdxuButton>
         </div>
     </sdxu-dialog>
@@ -76,6 +76,8 @@ import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import { Form, FormItem, Message } from 'element-ui';
 import { userApi } from '@sdx/utils/src/api';
+import locale from '@sdx/utils/src/mixins/locale';
+import {passwordValidator} from '@sdx/utils/src/helper/validate';
 export default {
     name: 'SdxwChangePassword',
     data() {
@@ -89,37 +91,20 @@ export default {
             changePwdFormRule: {
                 oldPasswd: [
                     { required: true, message: '请输入旧密码', trigger: 'blur' },
-                    {
-                        min: 6,
-                        max: 20,
-                        message: '密码长度在 6 到 20 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: this.validatePwd, trigger: 'blur' }
+                    { validator: passwordValidator, trigger: 'blur' }
                 ],
                 newPasswd: [
                     { required: true, message: '请输入新密码', trigger: 'blur' },
-                    {
-                        min: 6,
-                        max: 20,
-                        message: '密码长度在 6 到 20 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: this.validatePwd, trigger: 'blur' }
+                    { validator: passwordValidator, trigger: 'blur' }
                 ],
                 repeatNewPasswd: [
                     { required: true, message: '请确认新密码', trigger: 'blur' },
-                    {
-                        min: 6,
-                        max: 20,
-                        message: '密码长度在 6 到 20 个字符',
-                        trigger: 'blur'
-                    },
-                    { validator: this.validatePwd, trigger: 'blur' }
+                    { validator: passwordValidator, trigger: 'blur' }
                 ]
             },
         };
     },
+    mixins:[locale],
     components: {
         [Dialog.name]: Dialog,
         [Form.name]: Form,
@@ -159,14 +144,6 @@ export default {
             };
             this.$emit('update:visible', false);
             this.$emit('close');
-        },
-        validatePwd(rule, value, callback) {
-            const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)(?![\x21-\x2f\x3a-\x40\x5b-\x60\x7B-\x7F]+$)[a-zA-Z0-9\x21-\x2f\x3a-\x40\x5b-\x60\x7B-\x7F]{6,20}$/;
-            if (value && reg.test(value)) {
-                callback();
-            } else {
-                callback(new Error('密码由字母、数字及特殊符号（除空格）组成且至少包含2种'));
-            }
         },
         cancel() {
             this.dialogVisible = false;

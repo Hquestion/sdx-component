@@ -21,7 +21,10 @@
                     <span>{{ users.username }}</span>
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.fullname')">
-                    <span v-if="theme == 'user'" style="word-break: break-all;">
+                    <span
+                        v-if="theme == 'user'"
+                        style="word-break: break-all;"
+                    >
                         {{ users.fullName }}
                     </span>
                     <div

@@ -178,11 +178,11 @@ export function nickNameValidator(rule, value, callback) {
 }
 
 export function passwordValidator(rule, value, callback) {
-    const reg = new ValidateReg({min:6, max:16}, {other: true}).generate();
+    const reg = new ValidateReg({min:6, max:16}, {other: true, chinese: false, space: false}).generate();
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写6到16位字符串');
+        callback('请填写6到16位，英文字母、数字及特殊符号组成的字符串');
     }
 }
 

@@ -1,7 +1,8 @@
 export default {
     ui: {
         button: {
-            ok: 'OK'
+            ok: 'OK',
+            cancel: 'Cancel'
         }
     },
     widget: {
@@ -12,6 +13,15 @@ export default {
             password:'password',
             groups:'groups',
             role:'role'
+        },
+        changePassword: {
+            title: 'Change Password',
+            oldPwd: 'Old Password:',
+            newPwd: 'New Password:',
+            confirmNewPwd: 'Confirm New Password:'
         }
+    },
+    general: {
+        requiredInfo: 'Please fill out all required fields!'
     }
 };

@@ -83,6 +83,8 @@ export default {
         guessUser(name, cb) {
             getUserRoleGroupByName(name, this.type).then(res => {
                 cb(res);
+            }, () => {
+                cb([]);
             });
         },
         handleSelect(item) {

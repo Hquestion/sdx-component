@@ -18,7 +18,12 @@ export default {
             title: 'Change Password',
             oldPwd: 'Old Password:',
             newPwd: 'New Password:',
-            confirmNewPwd: 'Confirm New Password:'
+            confirmNewPwd: 'Confirm New Password:',
+            needOldPwd: 'Please enter old password',
+            needNewPwd: 'Please enter new password',
+            needConfirmPwd: 'Please confirm new password',
+            needSamePwd: 'Please make sure two new passwords are the same',
+            changeSuccess: 'Password is successfully changed!'
         },
         projectCard: {
             Template: 'Template',

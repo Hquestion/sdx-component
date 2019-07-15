@@ -90,15 +90,15 @@ export default {
             },
             changePwdFormRule: {
                 oldPasswd: [
-                    { required: true, message: '请输入旧密码', trigger: 'blur' },
+                    { required: true, message: this.t('widget.changePassword.needOldPwd'), trigger: 'blur' },
                     { validator: passwordValidator, trigger: 'blur' }
                 ],
                 newPasswd: [
-                    { required: true, message: '请输入新密码', trigger: 'blur' },
+                    { required: true, message: this.t('widget.changePassword.needNewPwd'), trigger: 'blur' },
                     { validator: passwordValidator, trigger: 'blur' }
                 ],
                 repeatNewPasswd: [
-                    { required: true, message: '请确认新密码', trigger: 'blur' },
+                    { required: true, message: this.t('widget.changePassword.needConfirmPwd'), trigger: 'blur' },
                     { validator: passwordValidator, trigger: 'blur' }
                 ]
             },
@@ -151,12 +151,12 @@ export default {
         confirm() {
             this.$refs.changePwdForm.validate(valid => {
                 if (!valid) {
-                    Message.error('请输入必填信息');
+                    Message.error(this.t('general.requiredInfo'));
                 } else {
                     if (
                         this.changePwdForm.newPasswd !== this.changePwdForm.repeatNewPasswd
                     ) {
-                        Message.error('请确保两次输入的密码一致。');
+                        Message.error(this.t('widget.changePassword.needSamePwd'));
                         return;
                     }
                     const params = {
@@ -168,7 +168,7 @@ export default {
                     } else {
                         userApi.changePassword(this.userInfoData.userId, params).then(() => {
                             Message({
-                                message: '密码修改成功！',
+                                message: this.t('widget.changePassword.changeSuccess'),
                                 type: 'success'
                             });
                             this.$emit('on-success');

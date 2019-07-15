@@ -21,7 +21,12 @@ export default {
             title: '修改密码',
             oldPwd: '旧密码：',
             newPwd: '新密码：',
-            confirmNewPwd: '确认新密码：'
+            confirmNewPwd: '确认新密码：',
+            needOldPwd: '请输入旧密码',
+            needNewPwd: '请输入新密码',
+            needConfirmPwd: '请确认新密码',
+            needSamePwd: '请确保两次输入的密码一致',
+            changeSuccess: '密码修改成功！'
         },
         projectCard: {
             Template: '模板',

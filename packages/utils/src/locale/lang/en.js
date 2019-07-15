@@ -124,6 +124,19 @@ export default {
                 detail: 'detail',
                 edit: 'edit',
                 remove: 'remove'
+            },
+            form: {
+                create: 'Create',
+                edit: 'Edit',
+                task: 'Task',
+                Please_enter_the_task_name: 'Please enter the task name',
+                Please_enter_a_task_description: 'Please enter a task description',
+                Please_select_the_operating_environment: 'Please select the operating environment',
+                ResourceAllocation: 'Resource Allocation',
+                DataSource: 'Datasource',
+                Please_select_the_dataset: 'Please select the dataset',
+                CPU_Memory_resources_need_to_be_configured: 'CPU/Memory resources need to be configured',
+                GPU_resources_need_to_be_configured: 'GPU resources need to be configured',
             }
             
         },

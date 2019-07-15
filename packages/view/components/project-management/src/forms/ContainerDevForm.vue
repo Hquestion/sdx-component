@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? '编辑':'新建'}ContainerDev任务`"
+        :title="`${params.uuid ? $t('view.task.form.edit') : $t('view.task.form.create')} ContainerDev ${$t('view.task.form.task')}`"
         class="form-containerdev"
         :label-width="100"
         icon="sdx-icon-docker"
@@ -17,36 +17,36 @@
         >
             <el-form-item
                 prop="name"
-                label="任务名称:"
+                :label="`${$t('view.task.taskName')}:`"
             >
                 <SdxuInput
                     v-model="params.name"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入任务名称"
+                    :placeholder="$t('view.task.form.Please_enter_the_task_name')"
                 />
             </el-form-item>
             <el-form-item
                 prop="description"
-                label="任务描述:"
+                :label="`${$t('view.task.TaskDescription')}:`"
             >
                 <SdxuInput
                     type="textarea"
                     :searchable="true"
                     v-model="params.description"
                     size="small"
-                    placeholder="请输入任务描述"
+                    :placeholder="$t('view.task.form.Please_enter_a_task_description')"
                 />
             </el-form-item>
             <el-form-item
                 prop="imageId"
-                label="运行环境:"
+                :label="`${$t('view.task.RuntimeEnvironment')}:`"
             >
                 <el-select
                     v-model="params.imageId"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入任务描述"
+                    :placeholder="$t('view.task.form.Please_select_the_operating_environment')"
                 >
                     <el-option
                         v-for="item in imageOptions"
@@ -58,7 +58,7 @@
             </el-form-item>
             <el-form-item
                 prop="resourceConfig"
-                label="资源配置:"
+                :label="`${$t('view.task.form.ResourceAllocation')}:`"
             >
                 <i class="icon">*</i>
                 <SdxwResourceConfig
@@ -81,18 +81,18 @@
             <el-form-item
                 v-if="!cooperation"
                 prop="datasources"
-                label="数据源:"
+                :label="`${$t('view.task.form.DataSource')}:`"
             >
                 <data-source-select v-model="params.datasources" />
             </el-form-item>
             <el-form-item
                 prop="datasets"
-                label="数据集:"
+                :label="`${$t('view.task.DataSet')}:`"
             >
                 <el-select
                     v-model="params.datasets"
                     size="small"
-                    placeholder="请选择数据集"
+                    :placeholder="$t('view.task.form.Please_select_the_dataset')"
                     multiple
                 >
                     <el-option
@@ -139,15 +139,15 @@ export default {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
                 if(value.EXECUTOR_CPUS === 0) {
-                    callback(new Error('需要配置CPU/内存资源'));
+                    callback(new Error(this.$t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else if (value.EXECUTOR_GPUS === 0) {
-                    callback(new Error('需要配置GPU资源'));
+                    callback(new Error(this.$t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
                 if(value.EXECUTOR_CPUS === 0) {
-                    callback(new Error('需要配置CPU/内存资源'));
+                    callback(new Error(this.$t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }

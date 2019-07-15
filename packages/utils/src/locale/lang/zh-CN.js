@@ -127,6 +127,18 @@ export default {
                 detail: '查看',
                 edit: '编辑',
                 remove: '删除'
+            },
+            form: {
+                create: '新建',
+                edit: '编辑',
+                task: '任务',
+                Please_enter_the_task_name: '请输入任务名称',
+                Please_enter_a_task_description: '请输入任务描述',
+                Please_select_the_operating_environment: '请选择运行环境',
+                ResourceAllocation: '资源配置',
+                DataSource: '数据源',
+                Please_select_the_dataset: '请选择数据集',
+                CPU_Memory_resources_need_to_be_configured: '需要配置CPU/内存资源'
             }
         },
         monitor: {

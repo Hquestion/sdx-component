@@ -22,7 +22,7 @@
                     type="default"
                     @click="handleCancel"
                 >
-                    取消
+                    {{ $t('Cancel') }}
                 </SdxuButton>
                 <SdxuButton
                     type="primary"

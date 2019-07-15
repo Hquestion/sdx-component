@@ -188,7 +188,35 @@ export default {
             }
         },
         image: {
-
+            // 镜像列表
+            ImageList: '镜像列表',
+            BuildTaskList: '构建任务列表',
+            BuildBasedOnFile: '基于文件构建',
+            ImageKind: {
+                Basic: '基础镜像',
+                Private: '私有镜像',
+                MyShare: '我的共享',
+                OtherShare: '他人共享',
+            },
+            SearchImageName: '镜像名称：',
+            SearchImageKind: '镜像种类：',
+            SearchImageState: '状态：',
+            SearchBuildType: '构建方式：',
+            BuildTypes: {
+                Basic: '基础镜像',
+                Online: '在线构建',
+                Tar: '基于tar构建',
+                Dockerfile: '基于DockerFile构建',
+                Task: '任务转存',
+            },
+            States: {
+                Created: '已创建',
+                Building: '构建中',
+                Builded: '构建完成',
+                Uploading: '上传中',
+                Failed: '已失败',
+                Finished: '已完成',
+            },
             PackageName: '包名称',
             SearchPackagePlaceholder: '请输入包名称搜索',
             SourceType: '源类型',

@@ -6,10 +6,10 @@
                 @switch="switchProjectType"
             >
                 <SdxuTabRadioItem name="image">
-                    镜像列表
+                    {{ t('view.image.ImageList') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="task">
-                    构建任务列表
+                    {{ t('view.image.BuildTaskList') }}
                 </SdxuTabRadioItem>
             </SdxuTabRadioGroup>
             <SdxuButton
@@ -19,7 +19,7 @@
                 @click="goFileBuild"
                 v-auth.image.button="'IMAGE_BUILDER:BUILD_BASIC'"
             >
-                基于文件构建
+                {{ t('view.image.BuildBasedOnFile') }}
             </SdxuButton>
         </div>
         <div>
@@ -32,23 +32,23 @@
                     @tab-click="selectImageKind"
                 >
                     <el-tab-pane
-                        label="全部"
+                        :label="t('ALL')"
                         name="all"
                     />
                     <el-tab-pane
-                        label="基础镜像"
+                        :label="t('view.image.ImageKind.Basic')"
                         name="basic"
                     />
                     <el-tab-pane
-                        label="私有镜像"
+                        :label="t('view.image.ImageKind.Private')"
                         name="private"
                     />
                     <el-tab-pane
-                        label="我的共享"
+                        :label="t('view.image.ImageKind.MyShare')"
                         name="myShare"
                     />
                     <el-tab-pane
-                        label="他人共享"
+                        :label="t('view.image.ImageKind.OtherShare')"
                         name="otherShare"
                     />
                 </el-tabs>
@@ -58,23 +58,23 @@
                     @search="search"
                     @reset="reset"
                     style="width: 100%"
-                    label-width="72px"
+                    label-width="100px"
                 >
-                    <sdxw-search-item label="镜像名称:">
+                    <sdxw-search-item :label="t('view.image.SearchImageName')">
                         <sdxu-input
                             v-model="searchName"
                             type="search"
                             size="small"
-                            placeholder="请输入镜像名称"
+                            :placeholder="t('view.image.ImageNameInputPlaceholder')"
                         />
                     </sdxw-search-item>
-                    <sdxw-search-item label="镜像种类:">
+                    <sdxw-search-item :label="t('view.image.SearchImageKind')">
                         <el-select
                             v-model="imageType"
                             size="medium"
                         >
                             <el-option
-                                label="全部"
+                                :label="t('ALL')"
                                 value=""
                             />
                             <el-option
@@ -86,7 +86,7 @@
                         </el-select>
                     </sdxw-search-item>
                     <sdxw-search-item
-                        label="状态:"
+                        :label="t('view.image.SearchImageState')"
                         v-show="projectType === 'task'"
                     >
                         <el-select
@@ -94,7 +94,7 @@
                             size="medium"
                         >
                             <el-option
-                                label="全部"
+                                :label="t('ALL')"
                                 value=""
                             />
                             <el-option
@@ -106,7 +106,7 @@
                         </el-select>
                     </sdxw-search-item>
                     <sdxw-search-item
-                        label="构建方式:"
+                        :label="t('view.image.SearchBuildType')"
                         v-show="imageKind !== 'basic'"
                     >
                         <el-select
@@ -114,7 +114,7 @@
                             size="medium"
                         >
                             <el-option
-                                label="全部"
+                                :label="t('ALL')"
                                 value=""
                             />
                             <el-option
@@ -170,6 +170,8 @@ import Input from '@sdx/ui/components/input';
 import ImageTaskTable from './image-task-table/Index';
 import SearchLayout from  '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
+import {t} from '@sdx/utils/src/locale';
 export default {
     name: 'SdxvImageManage',
     data() {
@@ -197,54 +199,55 @@ export default {
             ],
             buildTypes: [
                 {
-                    label: '基础镜像',
+                    label: t('view.image.BuildTypes.Basic'),
                     value: 'BASIC'
                 },
                 {
-                    label: '在线构建',
+                    label: t('view.image.BuildTypes.Online'),
                     value: 'ONLINE'
                 },
                 {
-                    label: '基于tar构建',
+                    label: t('view.image.BuildTypes.Tar'),
                     value: 'TAR'
                 },
                 {
-                    label: '基于DockerFile构建',
+                    label: t('view.image.BuildTypes.Dockerfile'),
                     value: 'DOCKERFILE'
                 },
                 {
-                    label: '任务转存',
+                    label: t('view.image.BuildTypes.Task'),
                     value: 'TASK'
                 }
             ],
             states: [
                 {
-                    label: '创建中',
+                    label: t('view.image.States.Created'),
                     value: 'CREATED'
                 },
                 {
-                    label: '构建中',
+                    label: t('view.image.States.Building'),
                     value: 'BUILDING'
                 },
                 {
-                    label: '构建完成',
+                    label: t('view.image.States.Builded'),
                     value: 'BUILDED'
                 },
                 {
-                    label: '上传中',
+                    label: t('view.image.States.Uploading'),
                     value: 'UPLOADING'
                 },
                 {
-                    label: '已失败',
+                    label: t('view.image.States.Failed'),
                     value: 'FAILED'
                 },
                 {
-                    label: '已完成',
+                    label: t('view.image.States.Finished'),
                     value: 'FINISHED'
                 }
             ]
         };
     },
+    mixins: [locale],
     components: {
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,

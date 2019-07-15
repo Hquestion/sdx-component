@@ -186,6 +186,35 @@ export default {
             }
         },
         image: {
+            // 镜像列表
+            ImageList: 'Images List',
+            BuildTaskList: 'Build Tasks',
+            BuildBasedOnFile: 'Build Based On File',
+            ImageKind: {
+                Basic: 'Basic Images',
+                Private: 'Private Images',
+                MyShare: 'My Sharing',
+                OtherShare: 'Others Sharing',
+            },
+            SearchImageName: 'Image Name:',
+            SearchImageKind: 'Image Type:',
+            SearchImageState: 'State:',
+            SearchBuildType: 'Build Type:',
+            BuildTypes: {
+                Basic: 'Basic Image',
+                Online: 'Online',
+                Tar: 'Build Based On Tar',
+                Dockerfile: 'Build Based On Dockerfile',
+                Task: 'Task',
+            },
+            States: {
+                Created: 'Created',
+                Building: 'Building',
+                Builded: 'Built',
+                Uploading: 'Uploading',
+                Failed: 'Failed',
+                Finished: 'Finished',
+            },
             PackageName: 'Package Name',
             SearchPackagePlaceholder: 'Please enter package name search',
             SourceType: 'Source Type',

@@ -11,7 +11,7 @@
             class="sdxv-resource-statistics__item"
         >
             <SdxvUserResourceList
-                title="用户资源使用Top10"
+                :title="t('view.monitor.resourceStatistic.UserResourceUsageTop10')"
                 :ranking="true"
             />
         </div>
@@ -29,9 +29,11 @@ import SdxvPlatformResource from './PlatformResource';
 import SdxvTaskResourceRanking from './TaskResourceRanking';
 import SdxvUserResourceList from './UserResourceList';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvResourceStatisticsIndex',
+    mixins: [locale],
     directives: { auth },
     components: {
         SdxvPlatformResource,

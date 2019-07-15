@@ -74,7 +74,7 @@
                                     v-for="(el, i) in getOperationList(item)"
                                     :key="i"
                                     :icon="el.icon"
-                                    :title="el.label"
+                                    :title="t(el.label)"
                                     @click="handleOperation(el.value, item)"
                                 />
                             </template>
@@ -114,9 +114,10 @@ import TaskIcon from './TaskIcon';
 import { getTaskList } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
 import taskMixin from '@sdx/utils/src/mixins/task';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvProjectDetail',
-    mixins: [taskMixin],
+    mixins: [taskMixin, locale],
     data() {
         return {
             searchName: '',

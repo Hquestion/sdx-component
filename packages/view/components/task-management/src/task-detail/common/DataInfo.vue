@@ -4,7 +4,7 @@
             v-if="datasources.length" 
             class="sdxv-data-info__container"
         >
-            <span class="sdxv-data-info__container--title">数据源信息</span>
+            <span class="sdxv-data-info__container--title">{{ t('view.task.DataSourceInformation') }}</span>
             <div class="sdxv-data-info__container--content">
                 <div
                     v-for="(item, i) in datasources"
@@ -31,7 +31,7 @@
             v-if="datasets.length" 
             class="sdxv-data-info__container"
         >
-            <span class="sdxv-data-info__container--title">数据集</span>
+            <span class="sdxv-data-info__container--title">{{ t('view.task.DataSet') }}</span>
             <div class="sdxv-data-info__container--content">
                 <div
                     v-for="(item, i) in datasets"
@@ -46,9 +46,11 @@
 </template>
 
 <script>
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvDataInfo',
+    mixins: [locale],
     props: {
         datasources: {
             type: Array,
@@ -57,11 +59,6 @@ export default {
         datasets: {
             type: Array,
             default: () => []
-        }
-    },
-    methods: {
-        handleGotoDataset(item) {
-            // todo:
         }
     }
 };

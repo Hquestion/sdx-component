@@ -64,9 +64,11 @@ export default {
                 this.fetchDataMinxin && this.fetchDataMinxin();
             } catch (e) {
                 // cancel
+                window.console.error(e);
             }
         },
         async handleKill(row) {
+            let that = this;
             let isSaveImage = false;
             try {
                 // 任务类型为jupyter或container_dev且状态为运行中则弹出框
@@ -78,7 +80,7 @@ export default {
                     });
                 } else {
                     await SdxuMessageBox.warning({
-                        title: t('view.task.stopTask'),
+                        title: t.call(that, 'view.task.stopTask'),
                         content: ''
                     });
                 }
@@ -104,9 +106,10 @@ export default {
             }
         },
         async handleDelete(row) {
+            let that = this;
             try {
                 await SdxuMessageBox.warning({
-                    title: t('view.task.deleteTask'),
+                    title: t.call(that, 'view.task.deleteTask'),
                     content: ''
                 });
 
@@ -115,6 +118,7 @@ export default {
                 });
             } catch (e) {
                 // cancel
+                window.console.error(e);
             }
         }
     }

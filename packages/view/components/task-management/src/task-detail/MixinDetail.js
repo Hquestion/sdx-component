@@ -127,15 +127,28 @@ export default {
             let leave3 = leave2 % (60 * 1000);
             let second = Math.floor(leave3 / 1000);
             let time = '';
-            if (days > 0) {
-                time = `${days}天${hours}时${minutes}分${second}秒`;
-            } else if (days === 0 && hours > 0) {
-                time = `${hours}时${minutes}分${second}秒`;
-            } else if (days === 0 && hours === 0 && minutes > 0) {
-                time = `${minutes}分${second}秒`;
-            } else {
-                time = `${second}秒`;
+            
+            if (days > 1) {
+                time += `${days}${this.t('Days')}`;
+            } else if (days === 1) {
+                time += `${days}${this.t('Day')}`;
             }
+            if (hours > 1) {
+                time += `${days}${this.t('Hours')}`;
+            } else if (hours === 1) {
+                time += `${days}${this.t('Hour')}`;
+            }
+            if (minutes > 1) {
+                time += `${days}${this.t('Minutes')}`;
+            } else if (minutes === 1) {
+                time += `${days}${this.t('Minute')}`;
+            }
+            if (second > 1) {
+                time += `${days}${this.t('Seconds')}`;
+            } else if (second === 1) {
+                time += `${days}${this.t('Second')}`;
+            }
+
             return time;
         },
         byteToGb(byte) {

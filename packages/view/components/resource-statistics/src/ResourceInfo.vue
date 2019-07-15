@@ -6,7 +6,7 @@
         </div>
         <div class="sdxv-resource-info__content">
             <div class="sdxv-resource-info__content--item">
-                <span>已使用</span><span>{{ used }}</span>
+                <span>{{ t('view.monitor.resourceStatistic.Used') }}</span><span>{{ used }}</span>
             </div>
             <div class="sdxv-resource-info__content--item">
                 <span>{{ totalDesc }}</span><span>{{ total }}</span>
@@ -16,9 +16,11 @@
 </template>
 
 <script>
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvResourceInfo',
+    mixins: [locale],
     props: {
         type: {
             type: String,
@@ -41,19 +43,19 @@ export default {
             return this.type === 'cpu' 
                 ? 'CPU' 
                 : this.type === 'gpu' 
-                    ? 'GPU' : '内存';
+                    ? 'GPU' : this.t('view.monitor.resourceStatistic.Memory');
         },
         unit() {
             return this.type === 'cpu' 
-                ? '(核)' 
+                ? `(${this.t('view.monitor.resourceStatistic.Memory')})` 
                 : this.type === 'gpu' 
-                    ? '(块)' : '(GB)';
+                    ? `(${this.t('view.monitor.resourceStatistic.Block')})` : '(GB)';
         },
         totalDesc() {
             return this.type === 'cpu' 
-                ? '总核数' 
+                ? this.t('view.monitor.resourceStatistic.CPUTotal')
                 : this.type === 'gpu' 
-                    ? '总块数' : '总资源';
+                    ? this.t('view.monitor.resourceStatistic.GPUTotal') : this.t('view.monitor.resourceStatistic.MemoryTotal');
         }
     }
 };

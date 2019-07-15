@@ -36,6 +36,7 @@
             <sdxu-table
                 :data="packageList"
                 v-loading="loading"
+                :empty-text="t('NoData')"
             >
                 <el-table-column
                     prop="name"

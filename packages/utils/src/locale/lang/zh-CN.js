@@ -37,10 +37,17 @@ export default {
                 Edit: '编辑',
                 Delete: '删除'
             }
+        },
+        shareSetting: {
+            title: '共享设置',
+            shareGlobal: '共享至全局：',
+            userGroup: '用户/用户组：'
         }
     },
     general: {
-        requiredInfo: '请输入必填信息！'
+        requiredInfo: '请输入必填信息！',
+        yes: '是',
+        no: '否'
     },
     view: {
         task: {
@@ -109,6 +116,7 @@ export default {
             }
         },
         image: {
+
             PackageName: '包名称',
             SearchPackagePlaceholder: '请输入包名称搜索',
             SourceType: '源类型',

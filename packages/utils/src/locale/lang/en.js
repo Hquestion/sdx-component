@@ -34,10 +34,17 @@ export default {
                 Edit: 'Edit',
                 Delete: 'Delete'
             }
+        },
+        shareSetting: {
+            title: 'Share Setting',
+            shareGlobal: 'Share To All:',
+            userGroup: 'User/User Group:'
         }
     },
     general: {
-        requiredInfo: 'Please fill out all required fields!'
+        requiredInfo: 'Please fill out all required fields!',
+        yes: 'Yes',
+        no: 'No'
     },
     view: {
         task: {

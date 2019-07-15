@@ -1,6 +1,6 @@
 <template>
     <SdxuDialog
-        title="日志"
+        :title="t('Log')"
         :visible.sync="dialogVisible"
         :no-footer="true"
         @open="handleOpenDialog"
@@ -18,9 +18,11 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxwLogDetail from '@sdx/widget/components/log-detail';
 
 import { getPodLog } from '@sdx/utils/src/api/system';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvComponentStateLogDialog',
+    mixins: [locale],
     components: {
         SdxuDialog,
         SdxwLogDetail
@@ -39,7 +41,7 @@ export default {
         return {
             start: 1,
             end: 1,
-            size: 20,
+            size: 100,
             isLoading: false,
             logContent: ''
         };
@@ -95,7 +97,7 @@ export default {
         handleClose() {
             this.start = 1;
             this.end = 1;
-            this.size = 20;
+            this.size = 100;
             this.isLoading = false;
             this.logContent = '';
         }

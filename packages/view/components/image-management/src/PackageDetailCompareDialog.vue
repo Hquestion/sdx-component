@@ -1,6 +1,6 @@
 <template>
     <sdxu-dialog
-        title="包详情比较"
+        :title="t('view.image.ComparisonsOfPackageDetails')"
         :visible.sync="dialogVisible"
         :no-footer="true"
     >
@@ -15,7 +15,7 @@
                     />
                 </div>
                 <div class="sdxv-package-compare__item">
-                    <span class="sdxv-package-compare__item--title">变更详情</span>
+                    <span class="sdxv-package-compare__item--title">{{ t('view.image.ChangeDetail') }}</span>
                     <sdxv-modified-package-list
                         :install-packages="imageBuilder.installPackages"
                         :uninstall-packages="imageBuilder.uninstallPackages"
@@ -33,9 +33,11 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxvPackageList from './PackageList';
 import SdxvModifiedPackageList from './ModifiedPackageList';
 import SdxuScroll from '@sdx/ui/components/scroll';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvPackageDetailCompareDialog',
+    mixins: [locale],
     components: {
         SdxuDialog,
         SdxvPackageList,
@@ -62,7 +64,7 @@ export default {
             }
         },
         title() {
-            return `基础镜像${this.basicImageName}包详情`;
+            return `${this.t('view.image.BasicImage')}${this.basicImageName}${this.t('view.image.PackageDetail')}`;
         },
         imageId() {
             return this.imageBuilder.baseImage && this.imageBuilder.baseImage.uuid || '';

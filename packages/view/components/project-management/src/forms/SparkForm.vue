@@ -87,7 +87,7 @@
             >
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
-                    accept="'.jar'， '.py'， '.zip'， '.egg'"
+                    accept=".jar,.py,.zip,.egg"
                     :string-model="true"
                     check-type="file"
                 />
@@ -129,6 +129,7 @@ import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask} from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'SparkForm',
     components: {
@@ -230,7 +231,8 @@ export default {
             const params = {
                 imageType: 'SPARK',
                 start: 1,
-                count: -1
+                count: -1,
+                ownerId: getUser().userId || ''
             };
             getImageList(params)
                 .then(data => {

@@ -41,7 +41,7 @@
 import SdxwFileSelectMain from './FileSelectMain';
 import SdxuButton from '@sdx/ui/components/button';
 import emitter from '@sdx/utils/src/mixins/emitter';
-import { Popover } from 'element-ui';
+import Popover from 'element-ui/lib/popover';
 export default {
     name: 'SdxwFileSelectPop',
     mixins: [emitter],

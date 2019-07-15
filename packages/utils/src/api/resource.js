@@ -13,11 +13,12 @@ import { authWrapper } from './helper';
     });
 } */
 
-export const getResourceTmplList = authWrapper(function (start = 1, count = -1, templateType) {
+export const getResourceTmplList = authWrapper(function (start = 1, count = -1, templateType, params) {
     return httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_templates`, {
         start,
         count,
-        templateType
+        templateType,
+        ...params
     });
 }, readAuths.RESOURCE_TEMPLATE_READ);
 

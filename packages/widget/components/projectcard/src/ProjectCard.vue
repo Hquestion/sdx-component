@@ -13,7 +13,7 @@
             <span
                 v-if="meta.isTemplate"
                 class="sdxw-project-card__header--type"
-            >模板</span>
+            >{{ t('widget.projectCard.Template') }}</span>
         </header>
         <main class="sdxw-project-card__main">
             <div class="sdxw-project-card__info">
@@ -33,7 +33,7 @@
             >
                 <i class="sdx-icon sdx-icon-detail" />
                 <slot name="operationName">
-                    <span>选择模板</span>
+                    <span>{{ t('widget.projectCard.SelectTemplate') }}</span>
                 </slot>
             </div>
             <div
@@ -43,7 +43,7 @@
             >
                 <i class="sdx-icon sdx-icon-detail" />
                 <slot name="operationName">
-                    <span>选择项目</span>
+                    <span>{{ t('widget.projectCard.SelectProject') }}</span>
                 </slot>
             </div>
             <div
@@ -53,19 +53,19 @@
                 <i
                     v-if="viewAble"
                     class="sdx-icon sdx-icon-detail"
-                    title="查看详情"
+                    :title="t('widget.projectCard.title.ViewDetail')"
                     @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
                 />
                 <i
                     v-if="editAble"
                     class="sdx-icon sdx-icon-edit"
-                    title="编辑"
+                    :title="t('widget.projectCard.title.Edit')"
                     @click="$emit('operate', {id: meta.uuid, type: 'edit'})"
                 />
                 <i
                     v-if="deleteAble"
                     class="sdx-icon sdx-icon-delete"
-                    title="删除"
+                    :title="t('widget.projectCard.title.Delete')"
                     @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
                 />
             </div>
@@ -84,6 +84,7 @@
 
 <script>
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxwProjectCard',
     props: {
@@ -105,12 +106,13 @@ export default {
         },
         operateType: {
             type: String,
-            default: 'rud',
+            default: 'rud', // 读改删
             validator: function (value) {
                 return ['rud', 'template', 'project'].includes(value);
             }
         }
     },
+    mixins: [locale],
     data() {
         return {
             showMask: false

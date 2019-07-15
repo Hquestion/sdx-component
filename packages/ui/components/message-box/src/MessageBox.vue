@@ -37,7 +37,7 @@
                             type="primary"
                             @click="handleConfirm"
                         >
-                            确定
+                            {{ t('ui.button.ok') }}
                         </SdxuButton>
                     </div>
                 </div>
@@ -48,6 +48,7 @@
 
 <script>
 import Button from '@sdx/ui/components/button';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxuMessageBox',
     data() {
@@ -63,6 +64,7 @@ export default {
     components: {
         [Button.name]: Button
     },
+    mixins: [locale],
     props: {
         title: {
             type: String,

@@ -3,6 +3,7 @@
     background-color: $sdx-log-background;
 
     @include element('content') {
+        display: block;
         padding: $sdx-padding;
         text-align: left;
         border-radius:2px;

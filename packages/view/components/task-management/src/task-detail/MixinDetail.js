@@ -60,31 +60,34 @@ export default {
             return this.task && [TASK_TYPE.TENSORFLOW_SERVING, TASK_TYPE.SPARK_SERVING, TASK_TYPE.PMML_SERVING].includes(this.task.type);
         },
         isSPARK() {
-            return this.task && this.task === TASK_TYPE.SPARK;
+            return this.task && this.task.type === TASK_TYPE.SPARK;
         },
         isPYTHON() {
-            return this.task && this.task === TASK_TYPE.PYTHON;
+            return this.task && this.task.type === TASK_TYPE.PYTHON;
         },
         isJUPYTER() {
-            return this.task && this.task === TASK_TYPE.JUPYTER;
+            return this.task && this.task.type === TASK_TYPE.JUPYTER;
         },
         isTENSORBOARD() {
-            return this.task && this.task === TASK_TYPE.TENSORBOARD;
+            return this.task && this.task.type === TASK_TYPE.TENSORBOARD;
         },
         isTENSORFLOW() {
-            return this.task && this.task === TASK_TYPE.TENSORFLOW;
+            return this.task && this.task.type === TASK_TYPE.TENSORFLOW;
         },
         isTENSORFLOW_DIST() {
-            return this.task && this.task === TASK_TYPE.TENSORFLOW_DIST;
+            return this.task && this.task.type === TASK_TYPE.TENSORFLOW_DIST;
         },
         isTENSORFLOW_AUTO_DIST() {
-            return this.task && this.task === TASK_TYPE.TENSORFLOW_AUTO_DIST;
+            return this.task && this.task.type === TASK_TYPE.TENSORFLOW_AUTO_DIST;
         },
         isCONTAINERDEV() {
-            return this.task && this.task === TASK_TYPE.CONTAINERDEV;
+            return this.task && this.task.type === TASK_TYPE.CONTAINERDEV;
         },
-        isDATASET_SERVICE() {
-            return this.task && this.task === TASK_TYPE.DATASET_SERVICE;
+        isDATA_SERVICE() {
+            return this.task && this.task.type === TASK_TYPE.DATA_SERVICE;
+        },
+        showSaveAsImage() {
+            return (this.isJUPYTER || this.isCONTAINERDEV) && this.task.state === STATE_TYPE.RUNNING;
         }
     },
     methods: {

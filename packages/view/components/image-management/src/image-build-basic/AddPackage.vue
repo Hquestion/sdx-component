@@ -9,19 +9,19 @@
             @submit.native.prevent
         >
             <el-form-item
-                label="包名称:"
+                :label="t('view.image.PackageName') + ':'"
                 prop="name"
             >
                 <div class="sdxv-add-package__form--item">
                     <sdxu-input
                         v-model="packageInfo.name"
-                        placeholder="请输入包名称"
+                        :placeholder="t('view.image.SearchPackagePlaceholder')"
                         @input="handleAddPackageNameChange"
                     />
                 </div>
             </el-form-item>
             <el-form-item
-                label="源类型:"
+                :label="t('view.image.SourceType') + ':'"
                 prop="sourceType"
             >
                 <div class="sdxv-add-package__form--item">
@@ -39,7 +39,7 @@
                 </div>
             </el-form-item>
             <el-form-item
-                label="源URL:"
+                :label="t('view.image.SourceUrl') + ':'"
                 prop="sourceUrlType"
                 required
             >
@@ -48,13 +48,13 @@
                     @change="handleURLTypeChange"
                 >
                     <el-radio :label="SOURCE_URL_TYPE.DEFAULT">
-                        默认
+                        {{ t('view.image.Default') }}
                     </el-radio>
                     <el-radio :label="SOURCE_URL_TYPE.SELECTED">
-                        预置URL
+                        {{ t('view.image.PresetUrl') }}
                     </el-radio>
                     <el-radio :label="SOURCE_URL_TYPE.USER_DEFINED">
-                        自定义URL
+                        {{ t('view.image.CustomUrl') }}
                     </el-radio>
                 </el-radio-group>
                 <el-select
@@ -71,11 +71,11 @@
                 <sdxu-input
                     v-else-if="packageInfo.sourceUrlType === SOURCE_URL_TYPE.USER_DEFINED"
                     v-model="packageInfo.sourceUrl"
-                    placeholder="请填写源URL"
+                    :placeholder="t('view.image.CustomInputPlaceholder')"
                 />
             </el-form-item>
             <el-form-item
-                label="版本:"
+                :label="t('view.image.Version') + ':'"
                 prop="versionType"
                 required
             >
@@ -84,10 +84,10 @@
                     @change="handleVersionTypeChange"
                 >
                     <el-radio :label="VERSION_TYPE.LATEST">
-                        最新版本
+                        {{ t('view.image.LastestVersion') }}
                     </el-radio>
                     <el-radio :label="VERSION_TYPE.USER_DEFINED">
-                        自定义版本
+                        {{ t('view.image.CustomVersion') }}
                     </el-radio>
                 </el-radio-group>
                 <div
@@ -96,7 +96,7 @@
                 >
                     <sdxu-input
                         v-model="packageInfo.version"
-                        placeholder="请填写版本号"
+                        :placeholder="t('view.image.PackageVersionInputPlaceholder')"
                     />
                 </div>
             </el-form-item>
@@ -107,14 +107,14 @@
                         size="small"
                         @click="handleCommitUpdate"
                     >
-                        确认添加
+                        {{ t('view.image.ConfirmAdd') }}
                     </sdxu-button>
                 </div>
             </el-form-item>
         </el-form>
         <el-alert
             class="sdxv-add-package__warning-tips"
-            title="发现已经存在类似的包,请优先选择升级已有包!"
+            :title="t('view.image.SimilarPackageTip')"
             type="warning"
             :closable="false"
             v-show="packageInfo.name && queryCount"
@@ -129,9 +129,11 @@ import SdxuButton from '@sdx/ui/components/button';
 
 import { SOURCE_TYPE, VERSION_TYPE, SOURCE_URL_TYPE } from '@sdx/utils/src/const/image';
 import { getSourceRepos } from '@sdx/utils/src/api/image';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvAddPackage',
+    mixins: [locale],
     components: {
         [Form.name]: Form,
         [FormItem.name]: FormItem,

@@ -26,6 +26,10 @@ function getLang() {
     return defaultLang;
 }
 
+function getI18n() {
+    return i18n;
+}
+
 function registerI18n(i18nInstance) {
     i18n = i18nInstance;
 }
@@ -73,5 +77,5 @@ function t(key, langOpt) {
     return key;
 }
 
-export {setLang, getLang, t, registerI18n};
-export default {setLang, getLang, t, registerI18n};
+export {setLang, getLang, t, registerI18n, getI18n};
+export default {setLang, getLang, t, registerI18n, getI18n};

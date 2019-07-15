@@ -1,7 +1,10 @@
 <template>
     <div class="sdxv-modified-list">
         <div class="sdxv-modified-list__table">
-            <sdxu-table :data="dataList">
+            <sdxu-table 
+                :data="dataList" 
+                :empty-text="t('NoData')"
+            >
                 <el-table-column
                     prop="name"
                     :label="t('view.image.PackageName')"

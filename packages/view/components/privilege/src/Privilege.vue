@@ -1,6 +1,6 @@
 <template>
     <SdxuContentPanel
-        title="权限"
+        :title="t('view.authority.Authority')"
     >
         <template>
             <div
@@ -10,7 +10,7 @@
                 <sdxu-input
                     size="small"
                     type="search"
-                    placeholder="请输入权限名"
+                    :placeholder="t('view.authority.authorityInputPlaceholder')"
                     v-model="name"
                 />
                 <SdxuButton
@@ -19,7 +19,7 @@
                     @click="handleSearch"
                     class="sdxv-privilege-system__search--button"
                 >
-                    搜索
+                    {{ t('Search') }}
                 </SdxuButton>
             </div>
         </template>
@@ -31,14 +31,15 @@
                 class="sdxv-privilege-system__table"
                 :data="data"
                 v-loading="loading"
+                :empty-text="t('NoData')"
             >
                 <el-table-column
-                    label="权限名"
+                    :label="t('view.authority.AuthorityName')"
                     prop="name"
                 />
                 <el-table-column
                     prop="description"
-                    label="权限说明"
+                    :label="t('view.authority.AuthorityDescription')"
                 >
                     <template slot-scope="scope">
                         <SdxuTextTooltip
@@ -48,7 +49,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="标签"
+                    :label="t('Tag')"
                 >
                     <template #default="{ row }">
                         <sdxw-fold-label-group
@@ -58,21 +59,21 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="服务名称"
+                    :label="t('view.authority.ServiceName')"
                 >
                     <template #default="{ row }">
                         {{ splitKey(row.key, 0) }}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="资源类别"
+                    :label="t('view.authority.ResourceCategory')"
                 >
                     <template #default="{ row }">
                         {{ splitKey(row.key, 1) }}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="操作类型"
+                    :label="t('view.authority.OperationType')"
                 >
                     <template #default="{ row }">
                         {{ splitKey(row.key, 2) }}
@@ -101,9 +102,11 @@ import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import auth from '@sdx/widget/components/auth';
 import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import { getPermissionList } from '@sdx/utils/src/api/permissions';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvPrivilege',
+    mixins: [locale],
     components: {
         SdxuTable,
         SdxuPagination,

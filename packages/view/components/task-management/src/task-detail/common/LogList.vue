@@ -13,7 +13,7 @@
                     size="small"
                     @click="handleGotoLogPage(item.name, 'tail')"
                 >
-                    tail查看
+                    {{ t('view.task.TailView') }}
                 </SdxuButton>
                 <SdxuButton
                     :plain="true"
@@ -21,7 +21,7 @@
                     size="small"
                     @click="handleGotoLogPage(item.name, 'head')"
                 >
-                    head查看
+                    {{ t('view.task.HeadView') }}
                 </SdxuButton>
             </div>
         </div>
@@ -30,9 +30,11 @@
 
 <script>
 import SdxuButton from '@sdx/ui/components/button';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvLogList',
+    mixins: [locale],
     components: {
         SdxuButton
     },

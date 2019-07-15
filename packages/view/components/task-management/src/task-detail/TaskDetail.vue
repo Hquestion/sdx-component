@@ -8,7 +8,7 @@
                 v-auth.project.button="'TASK:SAVE_IMAGE'"
                 @click="dialogVisible = true"
             >
-                另存为镜像
+                {{ t('view.task.SaveAsImage') }}
             </SdxuButton>
             <SdxvSaveAsDialog
                 :visible.sync="dialogVisible"
@@ -17,11 +17,11 @@
         </template>
         <template #base-info>
             <SdxvBaseInfoItem
-                label="任务名称"
+                :label="t('view.task.taskName')"
                 :value="task && task.name || ''"
                 :multi-line="true"
             />
-            <SdxvBaseInfoItem label="任务状态">
+            <SdxvBaseInfoItem :label="t('view.task.taskState')">
                 <template #value>
                     <SdxwFoldLabel
                         :plain="true"
@@ -33,52 +33,52 @@
                 </template>
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
-                label="创建人"
+                :label="t('Creator')"
                 :value="task && task.owner && task.owner.fullName || ''"
             />
             <SdxvBaseInfoItem
                 v-if="isModelTask"
-                label="任务类型"
+                :label="t('view.task.taskType')"
                 :value="t(TASK_TYPE_LABEL[task.type])"
             />
             <SdxvBaseInfoItem
-                label="任务描述"
+                :label="t('view.task.TaskDescription')"
                 :value="task && task.description || ''"
             />
         </template>
         <template #running-info>
             <SdxvBaseInfoItem
                 v-if="isSPARK"
-                label="主类名称"
+                :label="t('view.task.MainClassName')"
                 :value="task.mainClass"
             />
             <SdxvBaseInfoItem
                 v-if="isPYTHON || isSPARK || isTENSORFLOW_AUTO_DIST || isTENSORFLOW || isTENSORFLOW_DIST"
-                label="源代码"
+                :label="t('view.task.SourceCode')"
                 :value="task.sourcePaths[0]"
             />
             <SdxvBaseInfoItem
-                label="运行环境"
+                :label="t('view.task.RuntimeEnvironment')"
                 :value="task && task.image && task.image.name || ''"
             />
             <SdxvBaseInfoItem
                 v-if="isTENSORBOARD"
-                label="日志目录"
+                :label="t('view.task.LogDirectory')"
                 :value="task.logPaths[0]"
             />
             <SdxvBaseInfoItem
                 v-if="isJUPYTER"
-                label="实例个数"
+                :label="t('view.task.InstanceCount')"
                 :value="task.resourceConfig.EXECUTOR_INSTANCES"
             />
             <SdxvBaseInfoItem
                 v-if="isPYTHON || isSPARK || isTENSORFLOW_AUTO_DIST || isTENSORFLOW || isTENSORFLOW_DIST"
-                label="启动参数"
+                :label="t('view.task.StartupParameter')"
                 :value="task.args"
             />
             <SdxvBaseInfoItem
                 v-if="isTENSORFLOW_AUTO_DIST"
-                label="训练输出目录"
+                :label="t('view.task.TrainingOutputDirectory')"
                 :value="task.outputPaths[0]"
             />
             <SdxvBaseInfoItem
@@ -88,24 +88,24 @@
             />
             <SdxvBaseInfoItem
                 v-if="isCONTAINERDEV"
-                label="端口"
+                :label="t('view.task.Port')"
                 :value="task.assignedPort"
             />
             <SdxvBaseInfoItem
-                label="启动时间"
+                :label="t('view.task.StartupTime')"
                 :value="task && task.runningAt || ''"
             />
             <SdxvBaseInfoItem
-                label="停止时间"
+                :label="t('view.task.StopTime')"
                 :value="task && task.stoppedAt || ''"
             />
             <SdxvBaseInfoItem
-                label="运行时长"
+                :label="t('view.task.RunningTime')"
                 :value="task ? dealTime(task.runningAt, task.stoppedAt) : ''"
             />
             <SdxvBaseInfoItem
                 v-if="isCONTAINERDEV"
-                label="页面终端"
+                :label="t('view.task.PageTerminal')"
             >
                 <template
                     #value
@@ -125,7 +125,7 @@
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
                 v-if="isJUPYTER"
-                label="外部链接"
+                :label="t('view.task.ExternalLinks')"
             >
                 <template
                     #value
@@ -154,51 +154,51 @@
                     class="sdxv-info-container is-background"
                 >
                     <SdxvBaseInfoItem
-                        label="主节点CPU"
+                        :label="t('view.task.MainNodeCPU')"
                         :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_MASTER_CPUS : 0) + '核'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="主节点内存"
+                        :label="t('view.task.MainNodeMemory')"
                         :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.TF_MASTER_MEMORY : 0) + 'GB'"
                         :strip="true"
                     />
                 </div>
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
-                        label="参数服务器CPU"
+                        :label="t('view.task.ParametricServerCPU')"
                         :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_PS_CPUS : 0) + '核'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="参数服务器内存"
+                        :label="t('view.task.ParametricServerMemory')"
                         :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.TF_PS_MEMORY : 0) + 'GB'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="参数服务器实例个数"
+                        :label="t('view.task.ParametricServerInstanceCount')"
                         :value="task && task.resourceConfig ? task.resourceConfig.TF_EXECUTOR_INSTANCES : 0 + '个'"
                         :strip="true"
                     />
                 </div>
                 <div class="sdxv-info-container is-background">
                     <SdxvBaseInfoItem
-                        label="计算节点CPU"
+                        :label="t('view.task.ComputationalNodeCPU')"
                         :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_WORKER_CPUS : 0) + '核'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="计算节点内存"
+                        :label="t('view.task.ComputationalNodeMemory')"
                         :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.TF_WORKER_MEMORY : 0) + 'GB'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="计算节点GPU"
+                        :label="t('view.task.ComputationalNodeGPU')"
                         :value="task && task.resourceConfig ? task.resourceConfig.TF_WORKER_GPUS : 0 + '块'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="计算节点实例个数"
+                        :label="t('view.task.ComputationalNodeInstanceCount')"
                         :value="task && task.resourceConfig ? task.resourceConfig.TF_EXECUTOR_INSTANCES : 0 + '个'"
                         :strip="true"
                     />
@@ -207,29 +207,29 @@
             <template v-else-if="isDATA_SERVICE || isSPARK">
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
-                        label="驱动器CPU"
+                        :label="t('view.task.DriverCPU')"
                         :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.SPARK_DRIVER_CPUS : 0) + '核'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="驱动器内存"
+                        :label="t('view.task.DriverMemory')"
                         :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.SPARK_DRIVER_MEMORY : 0) + 'GB'"
                         :strip="true"
                     />
                 </div>
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
-                        label="执行器CPU"
+                        :label="t('view.task.ExectorCPU')"
                         :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_CPUS : 0) + '核'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="执行器内存"
+                        :label="t('view.task.ExectorMemory')"
                         :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_MEMORY : 0) + 'GB'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="执行器实例数"
+                        :label="t('view.task.ExectorInstanceCount')"
                         :value="task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_INSTANCES : 0 + '个'"
                         :strip="true"
                     />
@@ -249,7 +249,7 @@
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
-                        label="内存"
+                        :label="t('view.task.Memory')"
                         :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.EXECUTOR_MEMORY : 0) + 'GB'"
                         :strip="true"
                     />
@@ -259,7 +259,7 @@
         <template #data-info>
             <SdxuEmpty
                 v-if="!hasDataInfo"
-                empty-content="暂时还没数据信息哦"
+                :empty-content="t('view.task.NoDataInfo')"
                 empty-type="sdx-wushuju"
             />
             <SdxvDataInfo
@@ -271,7 +271,7 @@
         <template #log-info>
             <SdxuEmpty
                 v-if="!hasLog"
-                empty-content="暂时还没日志哦"
+                :empty-content="t('view.task.NoLog')"
                 empty-type="sdx-wushuju"
             />
             <SdxvLogList
@@ -282,7 +282,7 @@
         <template #realtime-monitor>
             <SdxuEmpty
                 v-if="!hasRealMonitor"
-                empty-content="暂时还没实时监控哦"
+                :empty-content="t('view.task.NoRealMonitor')"
                 empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo

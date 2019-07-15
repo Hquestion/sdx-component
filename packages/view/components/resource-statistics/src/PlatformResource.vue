@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-platform-resource">
         <div class="sdxv-platform-resource__title">
-            <span>平台资源</span>
+            <span>{{ t('view.monitor.resourceStatistic.PlatformResources') }}</span>
         </div>
         <div class="sdxv-platform-resource__chart">
             <div class="sdxv-platform-resource__chart--item">
@@ -46,14 +46,15 @@ import SdxvChartGPU from './ChartGPU';
 import SdxvResourceInfo from './ResourceInfo';
 import SdxvChartProcess from './ChartProcess';
 
-import { getResourceStates } from '@sdx/utils/src/api/resource';
 import { getTaskList } from '@sdx/utils/src/api/project';
 import { getClusterResourceMonitor } from '@sdx/utils/src/api/system';
 import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 import { STATE_TYPE } from '@sdx/utils/src/const/task';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvPlatformResource',
+    mixins: [locale],
     components: {
         SdxvChartGPU,
         SdxvResourceInfo,
@@ -115,7 +116,6 @@ export default {
                     }
                 });
                 this.gpuModelAllocations = gpuModels;
-                console.error(this.gpuModelAllocations);
                 this.gpuModelUsedMap = usedInfo.gpus;
             }).catch(() => {
                 this.gpuModelAllocations = {};

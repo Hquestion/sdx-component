@@ -1,6 +1,6 @@
 <template>
     <SdxuContentPanel
-        :title="method + '日志'"
+        :title="method + t('Log')"
         class="sdxv-log-info"
     >
         <template
@@ -9,13 +9,13 @@
         >
             <div class="sdxv-log-info__switch">
                 <div class="sdxv-log-info__switch--item">
-                    <span>自动拉取：</span>
+                    <span>{{ t('view.task.AutoPull') }}：</span>
                     <el-switch
                         v-model="autoPull"
                     />
                 </div>
                 <div class="sdxv-log-info__switch--item">
-                    <span>滚动跟随：</span>
+                    <span>{{ t('view.task.RollingFollow') }}：</span>
                     <el-switch
                         v-model="followScroll"
                     />
@@ -40,11 +40,13 @@ import ElMessage from 'element-ui/lib/message';
 
 import { getPodLog } from '@sdx/utils/src/api/system';
 import { getTaskList } from '@sdx/utils/src/api/project';
+import locale from '@sdx/utils/src/mixins/locale';
 
 const AUTO_PULL_INTERVAL = 3000;
 
 export default {
     name: 'SdxvLogInfo',
+    mixins: [locale],
     components: {
         SdxuContentPanel,
         SdxwLogDetail,
@@ -109,7 +111,7 @@ export default {
                 this.fetchData(this.start, -this.size);
             } else {
                 ElMessage.warning({
-                    message: '已经到达日志头部'
+                    message: this.t('view.task.ReachedTheHeadOfLog')
                 });
             }
         },
@@ -191,6 +193,9 @@ export default {
                 }
             }
         });
+    },
+    beforeDestroy() {
+        this.stopAutoPull();
     },
     watch: {
         autoPull(nval) {

@@ -4,7 +4,7 @@
         v-loading="isLoading"
     >
         <div class="sdxv-monitor-info__select">
-            <span>请选择实例：</span>
+            <span>{{ t('view.task.SelectAnInstance') }}：</span>
             <el-select
                 v-model="currentPod"
                 size="small"
@@ -45,6 +45,7 @@ import Option from 'element-ui/lib/option';
 import echarts from 'echarts';
 import { dateFormatter, byteToMB } from '@sdx/utils/src/helper/transform';
 import { getPodResourceStatus } from '@sdx/utils/src/api/system';
+import locale from '@sdx/utils/src/mixins/locale';
 
 const CHART_DEFAULT_OPTION = {
     // 监t图的基本配置
@@ -133,6 +134,7 @@ const POLLING_PERIOD = 3 * 1000;
 
 export default {
     name: 'SdxvMonitorInfo',
+    mixins: [locale],
     components: {
         [Select.name]: Select,
         [Option.name]: Option
@@ -189,7 +191,7 @@ export default {
             // 整理 cpu 使用
             this.usedCpuSeriesData = [
                 {
-                    name: 'cpu使用率',
+                    name: this.t('view.task.CPUUsageRate'),
                     type: 'line',
                     itemStyle: {
                         color: '#4781F8',
@@ -203,7 +205,7 @@ export default {
             // 整理 mem 使用
             this.usedMemSeriesData = [
                 {
-                    name: '内存使用量',
+                    name: this.t('view.task.MemoryUsage'),
                     type: 'line',
                     itemStyle: {
                         color: '#9E5BF8',
@@ -217,7 +219,7 @@ export default {
             // 整理 gpu 使用
             this.usedGpuSeriesData = [
                 {
-                    name: 'gpu使用率',
+                    name: this.t('view.task.GPUUsageRate'),
                     type: 'line',
                     itemStyle: {
                         color: '#4781F8',
@@ -231,7 +233,7 @@ export default {
             // 整理 gpuMem 使用
             this.usedGpuMemSeriesData = [
                 {
-                    name: '显存使用量',
+                    name: this.t('view.task.GPUMemoryUsage'),
                     type: 'line',
                     itemStyle: {
                         color: '#9E5BF8',
@@ -272,19 +274,19 @@ export default {
             // let data = this[`${name}SeriesData`];
             switch (name) {
             case 'usedCpu':
-                text = 'CPU平均使用率';
+                text = this.t('view.task.CPUUsageRate');
                 yAxisName = '(%)';
                 break;
             case 'usedMem':
-                text = '内存使用量';
+                text = this.t('view.task.MemoryUsage');
                 yAxisName = '(MB)';
                 break;
             case 'usedGpu':
-                text = 'GPU平均使用率';
+                text = this.t('view.task.GPUUsageRate');
                 yAxisName = '(%)';
                 break;
             case 'usedGpuMem':
-                text = 'GPU-显存使用量';
+                text = this.t('view.task.GPUMemoryUsage');
                 yAxisName = '(MB)';
             }
             return {

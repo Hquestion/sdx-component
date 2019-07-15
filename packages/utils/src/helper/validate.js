@@ -31,7 +31,7 @@ ValidateReg.characterMap = {
     lowerCase: 'a-z',
     upperCase: 'A-Z',
     letter: 'a-zA-Z',
-    number: '1-9',
+    number: '0-9',
     chinese: '\\u4e00-\\u9fa5',
     space: '\\s',
     underline: '_',

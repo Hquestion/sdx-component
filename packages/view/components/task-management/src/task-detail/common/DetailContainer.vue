@@ -1,6 +1,6 @@
 <template>
     <div class="sdxv-task-detail">
-        <SdxuContentPanel title="基本信息">
+        <SdxuContentPanel :title="t('view.task.BasicInformation')">
             <template #right>
                 <slot name="base-info-right" />
             </template>
@@ -10,32 +10,32 @@
                 </div>
             </template>
         </SdxuContentPanel>
-        <SdxuContentPanel title="运行信息">
+        <SdxuContentPanel :title="t('view.task.RunningInformation')">
             <template #default>
                 <div class="sdxv-info-container">
                     <slot name="running-info" />
                 </div>
             </template>
         </SdxuContentPanel>
-        <SdxuContentPanel title="资源信息">
+        <SdxuContentPanel :title="t('view.task.ResourceInformation')">
             <template #default>
                 <slot name="resource-info" />
             </template>
         </SdxuContentPanel>
         <SdxuContentPanel
             v-if="$slots['data-info']"
-            title="数据信息"
+            :title="t('view.task.DataInformation')"
         >
             <template #default>
                 <slot name="data-info" />
             </template>
         </SdxuContentPanel>
-        <SdxuContentPanel title="Log日志">
+        <SdxuContentPanel :title="t('Log')">
             <template #default>
                 <slot name="log-info" />
             </template>
         </SdxuContentPanel>
-        <SdxuContentPanel title="实时监控">
+        <SdxuContentPanel :title="t('view.task.RealTimeMonitor')">
             <template #default>
                 <slot name="realtime-monitor" />
             </template>
@@ -45,9 +45,11 @@
 
 <script>
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvDetailContainer',
+    mixins: [locale],
     components: {
         SdxuContentPanel
     }

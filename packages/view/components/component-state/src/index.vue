@@ -9,10 +9,10 @@
                 class="sdxv-components-state__tab"
             >
                 <SdxuTabRadioItem name="base">
-                    基础组件
+                    {{ t('view.monitor.componentState.BasicComponents') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="system">
-                    微服务组件
+                    {{ t('view.monitor.componentState.MicroserviceComponents') }}
                 </SdxuTabRadioItem>
             </SdxuTabRadioGroup>
             <SdxvComponentStateList :type="type" />
@@ -26,9 +26,11 @@ import SdxuContentPanel from '@sdx/ui/components/content-panel';
 
 import SdxvComponentStateList from './ComponentStateList';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvComponentsState',
+    mixins: [locale],
     components: {
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,

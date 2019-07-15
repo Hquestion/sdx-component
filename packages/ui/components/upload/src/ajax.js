@@ -29,7 +29,7 @@ function getError(action, option, xhr) {
         url: action,
         method: 'post'
     };
-    err.data = xhr.response;
+    err.data = xhr.response && JSON.parse(xhr.response);
     return err;
 }
 

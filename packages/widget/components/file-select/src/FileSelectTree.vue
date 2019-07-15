@@ -135,7 +135,15 @@ export default {
                 }
             }
         },
-        rootPath(val) {
+        rootPath() {
+            this.$refs.fileTree.root.loaded = false;
+            this.$refs.fileTree.root.loadData();
+        },
+        checkType() {
+            this.$refs.fileTree.root.loaded = false;
+            this.$refs.fileTree.root.loadData();
+        },
+        accept() {
             this.$refs.fileTree.root.loaded = false;
             this.$refs.fileTree.root.loadData();
         }

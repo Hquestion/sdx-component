@@ -1,6 +1,6 @@
 <template>
     <SdxuDialog
-        title="另存为镜像"
+        :title="t('view.task.SaveAsImage')"
         :visible.sync="dialogVisible"
         @confirm="handleConfirm"
         @cancel="handleCancel"
@@ -16,30 +16,30 @@
             class="sdxv-saveas-dialog"
         >
             <el-form-item
-                label="镜像名称："
+                :label="t('view.image.ImageName')+ ':'"
                 prop="name"
             >
                 <div class="sdxv-saveas-dialog__name">
                     <span class="sdxv-saveas-dialog__name--prefix">{{ name_prefix }}</span>
                     <SdxuInput
                         v-model="formData.name"
-                        placeholder="请输入镜像名称"
+                        :placeholder="t('view.image.ImageNameInputPlaceholder')"
                         size="small"
                         class="sdxv-saveas-dialog__name--input"
                     />
                 </div>
             </el-form-item>
             <el-form-item
-                label="镜像版本号："
+                :label="t('view.image.ImageVersion')+ ':'"
                 prop="version"
             >
                 <SdxuInput
                     v-model="formData.version"
-                    placeholder="请输入镜像版本号"
+                    :placeholder="t('view.image.ImageVersionInputPlaceholder')"
                     size="small" 
                 />
             </el-form-item>
-            <el-form-item label="镜像类型：">
+            <el-form-item :label="t('view.image.ImageType')+ ':'">
                 {{ task.kind }}
             </el-form-item>
         </el-form>
@@ -51,11 +51,13 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuInput from '@sdx/ui/components/input';
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
+import locale from '@sdx/utils/src/mixins/locale';
 
 import { itemNameValidate, tagNameValidate } from '@sdx/utils/src/helper/validate';
 
 export default {
     name: 'SdxvSaveAsDialog',
+    mixins: [locale],
     components: {
         SdxuDialog,
         SdxuInput,
@@ -81,7 +83,7 @@ export default {
             rules: {
                 name: [{
                     required: true,
-                    message: '镜像名称不能为空',
+                    message: this.t('view.image.ImageNameNotBeNull'),
                     trigger: 'blur'
                 }, {
                     validator: itemNameValidate,
@@ -89,7 +91,7 @@ export default {
                 }],
                 version: [{
                     required: true,
-                    message: '镜像版本号不能为空',
+                    message: this.t('view.image.ImageVersionNotBeNull'),
                     trigger: 'blur'
                 }, {
                     validator: tagNameValidate,

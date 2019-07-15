@@ -28,6 +28,7 @@
         <SdxuTable
             :data="dataList"
             v-loading="loading"
+            :empty-text="t('NoData')"
         >
             <el-table-column
                 :label="t('view.monitor.componentState.PodName')"
@@ -200,7 +201,7 @@ export default {
         this.fetchData();
     },
     beforeDestroy() {
-        this.pollingId && clearInterval(this.pollingId);
+        clearInterval(this.pollingId);
         this.pollingId = null;    
     },
     watch: {
@@ -218,12 +219,12 @@ export default {
         },
         needPolling(nval) {
             if (nval) {
-                this.pollingId && clearInterval(this.pollingId);
+                clearInterval(this.pollingId);
                 this.pollingId = setInterval(() => {
                     this.fetchData(false);
                 }, POLLING_PERIOD);
             } else {
-                this.pollingId && clearInterval(this.pollingId);
+                clearInterval(this.pollingId);
                 this.pollingId = null;
             }
         }

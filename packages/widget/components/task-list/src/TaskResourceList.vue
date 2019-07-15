@@ -46,6 +46,7 @@
             @sort-change="handleSortChange"
             :default-sort="defaultSort"
             v-loading="loading"
+            :empty-text="t('NoData')"
         >
             <el-table-column
                 prop="name"
@@ -152,7 +153,7 @@
                             v-for="(item, i) in getOperationList(row, monitor)"
                             :key="i"
                             :icon="item.icon"
-                            :title="item.label"
+                            :title="t(item.label)"
                             @click="handleOperation(item.value, row)"
                         />
                     </SdxuIconButtonGroup>

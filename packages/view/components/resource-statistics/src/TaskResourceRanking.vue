@@ -1,14 +1,14 @@
 <template>
     <SdxuContentPanel
         class="sdxv-task-resource-ranking"
-        title="任务资源使用Top10"
+        :title="t('view.monitor.resourceStatistic.TaskResourceUsageTop10')"
     >
         <template #right>
             <div
                 class="sdxv-task-resource-ranking__more"
                 @click="handGotoTasksList"
             >
-                <span>全部</span>
+                <span>{{ t('All') }}</span>
                 <i class="sdx-icon sdx-icon-arrow-right" />
             </div>
         </template>
@@ -25,9 +25,11 @@ import SdxvTaskResourceList from '@sdx/widget/components/task-list';
 
 
 import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE } from '@sdx/utils/src/const/task';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvTaskResourceRanking',
+    mixins: [locale],
     components: {
         SdxuContentPanel,
         SdxvTaskResourceList

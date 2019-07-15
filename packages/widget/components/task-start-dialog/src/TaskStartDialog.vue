@@ -58,13 +58,13 @@ import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxwTaskStartDialog',
+    mixins: [locale],
     components: {
         ElRadio,
         ElRadioGroup,
         SdxuDialog,
         SdxuButton
     },
-    mixins: [locale],
     props: {
         visible: {
             type: Boolean,

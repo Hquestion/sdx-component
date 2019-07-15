@@ -98,23 +98,35 @@ export function getUserRoleGroupByName(name, type) {
     const pagination = { start: 1, count: type === 'all' ? 5 : 10 };
     let deferArr = [];
     if (type === 'user') {
-        deferArr.push(getSimpleUserList({username: name, fullName: name, ...pagination}));
+        deferArr.push(getSimpleUserList({username: name, fullName: name, ...pagination}).then(users => {
+            return users.users.map(item => ({...{name: item.fullName, uuid: item.uuid}, gtype: 'user'}));
+        }));
     } else if (type === 'role') {
-        deferArr.push(getRolesList({name, ...pagination}));
+        deferArr.push(getRolesList({name, ...pagination}).then(roles => {
+            return roles.roles.map(item => ({...item, gtype: 'role'}));
+        }));
     } else if (type === 'group') {
-        deferArr.push(getGroups({name, ...pagination}));
+        deferArr.push(getGroups({name, ...pagination}).then(groups => {
+            return groups.groups.map(item => ({...item, gtype: 'group'}));
+        }));
     } else {
         deferArr = [
-            getUserList({name, ...pagination}),
-            getRolesList({name, ...pagination}),
-            getGroups({name, ...pagination})
+            getUserList({name, ...pagination}).then(users => {
+                return users.users.map(item => ({...{name: item.fullName, uuid: item.uuid}, gtype: 'user'}));
+            }),
+            getRolesList({name, ...pagination}).then(roles => {
+                return roles.roles.map(item => ({...item, gtype: 'role'}));
+            }),
+            getGroups({name, ...pagination}).then(groups => {
+                return groups.groups.map(item => ({...item, gtype: 'group'}));
+            })
         ];
     }
     return new Promise((resolve, reject) => {
         Promise.all(deferArr).then(([users, roles, groups]) => {
-            const usersList = (users && users.users || []).map(item => ({...{name: item.fullName, uuid: item.uuid}, gtype: 'user'}));
-            const rolesList = (roles && roles.roles || []).map(item => ({...item, gtype: 'role'}));
-            const groupsList = (groups && groups.groups || []).map(item => ({...item, gtype: 'group'}));
+            const usersList = (users || []);
+            const rolesList = (roles || []);
+            const groupsList = (groups || []);
             resolve([...usersList, ...rolesList, ...groupsList]);
         }, reject);
     });

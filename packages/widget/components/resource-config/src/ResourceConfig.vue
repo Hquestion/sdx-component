@@ -174,19 +174,23 @@ export default {
                 };
             });
             return GPU;
+        },
+        getResourceList (start, count, type, params) {
+            getResourceTmplList(start, count, type, params)
+                .then(data => {
+                    for (let i= 0; i<data.items.length; i++) {
+                        if(type === 'CPU') {
+                            this.resourceCPU.push(data.items[i]);
+                        } else if (type === 'GPU') {
+                            this.resourceGPU.push(data.items[i]);
+                        }
+                    }
+                });
         }
     },
     created() {
-        getResourceTmplList()
-            .then(data=> {
-                for (let i= 0; i<data.items.length; i++) {
-                    if(data.items[i].templateType === 'CPU') {
-                        this.resourceCPU.push(data.items[i]);
-                    } else if (data.items[i].templateType === 'GPU') {
-                        this.resourceGPU.push(data.items[i]);
-                    }
-                }
-            });
+        this.getResourceList(1, -1, 'CPU', {order: 'asc', orderBy:'cpu'});
+        this.getResourceList(1, -1, 'GPU', {order: 'asc', orderBy: 'gpu'});
 
     }
 };

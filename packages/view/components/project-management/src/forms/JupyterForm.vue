@@ -118,6 +118,7 @@ import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { getProjectDetail, createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import DataSourceSelect from './DataSourceSelect';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'JupyterForm',
     components: {
@@ -243,7 +244,8 @@ export default {
             const params = {
                 imageType: 'JUPYTER',
                 start: 1,
-                count: -1
+                count: -1,
+                ownerId: getUser().userId || ''
             };
             getImageList(params)
                 .then(data => {

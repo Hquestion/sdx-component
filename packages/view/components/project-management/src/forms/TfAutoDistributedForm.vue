@@ -149,6 +149,7 @@ import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask ,updateTask} from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'TfAutoDistributedForm',
     components: {
@@ -279,7 +280,8 @@ export default {
             const params = {
                 imageType: 'TENSORFLOW',
                 start: 1,
-                count: -1
+                count: -1,
+                ownerId: getUser().userId || ''
             };
             getImageList(params)
                 .then(data => {

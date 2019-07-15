@@ -8,7 +8,7 @@
         ]"
         v-show="visible"
         :title="title"
-        @click.stop="handlerClick"
+        @click="handlerClick"
         v-loading="loading"
     >
         <i :class="[icon]" />

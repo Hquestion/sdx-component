@@ -7,13 +7,13 @@
             size="small"
         >
             <el-table-column
-                label="文件名"
+                :label="t('view.file.FileName')"
                 min-width="90"
                 prop="name"
                 show-overflow-tooltip
             />
             <el-table-column
-                label="大小"
+                :label="t('Size')"
                 min-width="40"
                 prop="size"
             >
@@ -22,7 +22,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="状态"
+                :label="t('Status')"
                 min-width="120"
             >
                 <template slot-scope="scope">
@@ -36,7 +36,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="操作"
+                :label="t('Operation')"
                 min-width="40"
             >
                 <template slot-scope="scope">
@@ -44,13 +44,13 @@
                         class="handle-bar"
                         v-if="scope.row.status === 'success' || scope.row.status === 'error'"
                     >
-                        <SdxuIconButton icon="sdx-icon sdx-icon-delete" title="删除" @click="handleCancelUpload(scope.row)" />
+                        <SdxuIconButton icon="sdx-icon sdx-icon-delete" :title="t('Delete')" @click="handleCancelUpload(scope.row)" />
                     </div>
                     <div
                         class="handle-bar"
                         v-else
                     >
-                        <SdxuIconButton icon="sdx-icon sdx-tingzhi" title="停止" @click="handleCancelUpload(scope.row)" />
+                        <SdxuIconButton icon="sdx-icon sdx-tingzhi" :title="t('Stop')" @click="handleCancelUpload(scope.row)" />
                     </div>
                 </template>
             </el-table-column>
@@ -63,6 +63,7 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import transformMixin from '@sdx/utils/src/mixins/transformFilter';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvTaskFileUpload',
     components: {
@@ -70,7 +71,7 @@ export default {
         SdxwFoldLabel: SdxwFoldLabel.FoldLabel,
         SdxuIconButton
     },
-    mixins: [transformMixin],
+    mixins: [transformMixin, locale],
     inject: ['fileManager'],
     data() {
         return {
@@ -93,11 +94,11 @@ export default {
             this.fileManager.$refs.operationBar.$refs.fileUploader.handleRemove(row);
         },
         getRowLabel(row) {
-            let label = '上传中';
+            let label = this.t('view.file.Uploading');
             if (row.status === 'success') {
-                label = '已完成';
+                label = this.t('view.file.Finish');
             } else if (row.status === 'error'){
-                label = '上传失败';
+                label = this.t('view.file.UploadFail');
             }
             return label;
         },

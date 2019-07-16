@@ -20,7 +20,7 @@
                     size="small"
                     @click="handleSearch"
                 >
-                    搜索
+                    {{ t('Search') }}
                 </SdxuButton>
                 <SdxuButton
                     size="small"
@@ -30,7 +30,7 @@
                     :plain="true"
                     v-if="$slots.default.length > 2"
                 >
-                    重置
+                    {{ t('Reset') }}
                 </SdxuButton>
             </div>
         </el-form>
@@ -44,7 +44,7 @@
                 :plain="true"
                 @click="showItem"
             >
-                {{ singlerow ? "展开" : "收起" }}
+                {{ singlerow ? t('expand') : t('retract') }}
                 <i
                     :class="['sdx-icon',singlerow ? 'sdx-icon-arrow-down' : 'sdx-icon-arrow-up']"
                 />
@@ -58,8 +58,10 @@ import SdxuButton from '@sdx/ui/components/button';
 
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxwSearchLayout',
+    mixins: [locale],
     data() {
         return {
             elWidthValue: 0,

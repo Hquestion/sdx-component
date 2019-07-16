@@ -6,7 +6,7 @@
             @close="close"
         >
             <div slot="title">
-                编辑用户
+                {{ t('view.userManage.EditUser') }}
             </div>
             <el-form
                 :model="user"
@@ -17,22 +17,22 @@
             >
                 <div class="userform">
                     <el-form-item
-                        label="用户名："
+                        :label="t('view.userManage.Username') + '：'"
                         prop="username"
                     >
                         <span>{{ user.username }}</span>
                     </el-form-item>
                     <el-form-item
-                        label="显示名："
+                        :label="t('view.userManage.FullName') + '：'"
                         prop="fullName"
                     >
                         <sdxu-input
                             v-model="user.fullName"
-                            placeholder="请输入显示名"
+                            :placeholder="t('view.userManage.PleaseInputFullName')"
                         />
                     </el-form-item>
                     <el-form-item
-                        label="角色："
+                        :label="t('view.userManage.Role') + '：'"
                         prop="roles"
                     >
                         <el-select
@@ -40,7 +40,7 @@
                             v-model="user.roles"
                             value-key="uuid"
                             multiple
-                            placeholder="请选择用户角色"
+                            :placeholder="t('view.userManage.PleaseInputRole')"
                         >
                             <el-option
                                 v-for="item in roles"
@@ -51,26 +51,26 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item
-                        label="激活："
+                        :label="t('view.userManage.Activation') + '：'"
                     >
                         <el-radio-group
                             v-model="user.isActive"
                         >
                             <el-radio :label="true">
-                                是
+                                {{ t('Yes') }}
                             </el-radio>
                             <el-radio :label="false">
-                                否
+                                {{ t('No') }}
                             </el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item
-                        label="有效期："
+                        :label="t('view.userManage.ExpiryDate') + '：'"
                         class="self-item"
                     >
                         <el-select
                             class="sdxv-user-manage__userform--select"
-                            placeholder="请选择有效期"
+                            :placeholder="t('view.userManage.PleaseSelectExpireDate')"
                             v-model="user.expireOpt"
                         >
                             <el-option
@@ -88,13 +88,13 @@
                     type="default"
                     @click="close"
                 >
-                    取 消
+                    {{ t('Cancel') }}
                 </sdxu-button>
                 <sdxu-button
                     type="primary"
                     @click="confirm"
                 >
-                    确定
+                    {{ t('Confirm') }}
                 </sdxu-button>
             </div>
         </sdxu-dialog>
@@ -102,8 +102,10 @@
 </template>
 
 <script>
-import { nameValidate, cNameValidate } from '../validate';
+import { commonNameValidator } from '@sdx/utils/src/helper/validate';
 import SdxuInput from '@sdx/ui/components/input';
+import SdxuDialog from '@sdx/ui/components/dialog';
+import SdxuButton from '@sdx/ui/components/button';
 import { updataUser } from '@sdx/utils/src/api/user';
 import { getRolesList} from '@sdx/utils/src/api/rolemange';
 import ElSelect from 'element-ui/lib/select';
@@ -113,22 +115,24 @@ import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import { EXPIRES_OPTION } from '../config';
 import { minAbsIndex } from '@sdx/utils/src/helper/math';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name:'EditUser',
+    mixins: [locale],
     data () {
         return {
             visible:true,
             rules: {
                 username: [
-                    {required: true,message: '请输入用户名',trigger: 'blur'},
-                    { validator: nameValidate, trigger: 'blur' },
+                    {required: true,message: this.t('view.userManage.PleaseInputUsername'),trigger: 'blur'},
+                    { validator: commonNameValidator, trigger: 'blur' },
                 ],
                 fullName: [
-                    { required: true, message: '请输入显示名', trigger: 'blur' }
+                    { required: true, message: this.t('view.userManage.PleaseInputFullName'), trigger: 'blur' }
                 ],
                 roles: [
-                    { required: true, message: '请选择角色', trigger: 'change' }
+                    { required: true, message: this.t('view.userManage.PleaseInputRole'), trigger: 'change' }
                 ]
             },
             roles:[],
@@ -190,7 +194,7 @@ export default {
                         window.console.log(Object.assign({}, this.meta, newUserInfo));
                         this.$emit('refresh', true);
                         this.$message({
-                            message: '修改成功',
+                            message: this.t('view.userManage.UpdateSuccess'),
                             type: 'success'
                         });
                         this.close();
@@ -215,7 +219,9 @@ export default {
         ElRadioGroup,
         ElRadio,
         ElFormItem,
-        ElForm
+        ElForm,
+        SdxuDialog,
+        SdxuButton
     },
     mounted() {
         this._getRolesList();

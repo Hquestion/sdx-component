@@ -1,7 +1,5 @@
 <template>
-    <sdxu-panel
-        title="用户组"
-    >
+    <sdxu-panel :title="t('view.userManage.UserGroup')">
         <div
             class="sdxv-user-group"
             v-auth.user.button="'GROUP:READ'"
@@ -13,7 +11,7 @@
                     @click="createGroup"
                     v-auth.user.button="'GROUP:WRITE'"
                 >
-                    新建用户组
+                    {{ t('view.userManage.NewGroup') }}
                 </sdxu-button>
                 <SdxwSearchLayout
                     @search="handleSearch"
@@ -26,7 +24,7 @@
                             class="sdxv-user-group__bar--input"
                             type="search"
                             :searchable="true"
-                            placeholder="请输入用户组名"
+                            :placeholder="t('view.userManage.PleaseInputGroupName')"
                             size="small"
                             v-model="name"
                         />
@@ -41,11 +39,11 @@
                 @sort-change="handleSortChange"
             >
                 <el-table-column
-                    label="用户组名"
+                    :label="t('view.userManage.UserGroupName')"
                     prop="name"
                 />
                 <el-table-column
-                    label="角色"
+                    :label="t('view.userManage.Role')"
                 >
                     <template #default="{ row }">
                         <SdxuTextTooltip
@@ -57,7 +55,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="createdAt"
-                    label="创建时间"
+                    :label="t('view.userManage.CreatedAt')"
                     sortable
                 >
                     <template #default="{row}">
@@ -65,21 +63,21 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="操作"
+                    :label="t('Operation')"
                 >
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--operation">
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-edit"
                                 @click="handleEdit(row)"
-                                title="编辑"
+                                :title="t('Edit')"
                                 v-auth.user.button="'GROUP:WRITE'"
                             />
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-delete"
                                 v-auth.user.button="'GROUP:WRITE'"
                                 @click="handleDelete(row)"
-                                title="删除"
+                                :title="t('Delete')"
                             />
                         </div>
                     </template>
@@ -87,13 +85,13 @@
                 <el-table-column type="expand">
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--expand">
-                            <span class="sdxv-user-group__table--expand-label">组员:</span>
+                            <span class="sdxv-user-group__table--expand-label">{{ t('view.userManage.GroupMembers') }}:</span>
                             <sdxw-fold-label-group
                                 v-if="row.users && row.users.length > 0"
                                 :list="row.users.map(item => item.fullName)"
                                 type="default"
                             />
-                            <span v-else>暂无用户</span>
+                            <span v-else>{{ t('view.userManage.NoMembers') }}</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -132,10 +130,11 @@ import { getGroups, deleteGroup } from '@sdx/utils/src/api/user';
 import CreateUserGroup from './CreateUserGroup';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvUserGroup',
-    mixins: [transformFilter],
+    mixins: [transformFilter, locale],
     components: {
         CreateUserGroup,
         SdxuPanel,
@@ -216,8 +215,8 @@ export default {
         },
         handleDelete(row) {
             SdxuMessageBox.confirm({
-                title: `确定要删除${row.name}用户组吗？`,
-                content: '用户组确定删除后不可恢复哦'
+                title: `${this.t('view.userManage.ConfirmToDelete')}${row.name}${this.t('view.userManage.UserGroup')}${this.t('view.userManage.ConfirmHelper')}`,
+                content: this.t('view.file.CantRecoveryAfterDel')
             }).then(() => {
                 // todo: 请求接口
                 deleteGroup(row.uuid).then(() => {

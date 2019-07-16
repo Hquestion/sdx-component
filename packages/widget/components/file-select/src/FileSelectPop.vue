@@ -29,7 +29,7 @@
             >
                 <slot>
                     <SdxuButton size="small">
-                        选择文件
+                        {{ t('widget.fileSelect.SelectFile') }}
                     </SdxuButton>
                 </slot>
             </div>
@@ -42,9 +42,10 @@ import SdxwFileSelectMain from './FileSelectMain';
 import SdxuButton from '@sdx/ui/components/button';
 import emitter from '@sdx/utils/src/mixins/emitter';
 import Popover from 'element-ui/lib/popover';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxwFileSelectPop',
-    mixins: [emitter],
+    mixins: [emitter, locale],
     components: {
         SdxuButton,
         SdxwFileSelectMain,

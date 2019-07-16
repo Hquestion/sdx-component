@@ -21,6 +21,7 @@ import { getFilesList } from '@sdx/utils/src/api/file';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 import { getPathIcon } from './utils';
 import ElTree from 'element-ui/packages/tree';
+import locale from '@sdx/utils/src/mixins/locale';
 
 Vue.use(Loading);
 
@@ -31,6 +32,7 @@ export default {
     directives: {
         clickoutside
     },
+    mixins: [locale],
     components: {
         ElTree
     },
@@ -93,7 +95,7 @@ export default {
                 'show-checkbox': this.checkable,
                 'highlight-current': true,
                 'node-key': NODE_KEY,
-                'empty-text': '没有文件',
+                'empty-text': this.t('NoFile'),
                 accordion: true,
                 lazy: true,
                 load: this.fetchFiles,
@@ -153,6 +155,18 @@ export default {
         fetchFiles(node, resolve) {
             this.isTreeLoading = true;
             let path = this.rootPath;
+            // rootPath为根目录时，需要在第一层展示根目录
+            if (path === '/' && node.level === 0) {
+                this.isTreeLoading = false;
+                return resolve([
+                    {
+                        name: '/',
+                        path: '/',
+                        isFile: false,
+                        ownerId: this.userId
+                    }
+                ]);
+            }
             if (node.level > 0) {
                 path = node.data.path;
             }

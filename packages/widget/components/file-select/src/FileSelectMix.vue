@@ -13,7 +13,7 @@
                 :disabled="disableCheck"
                 @dropdown-hide="emitBlurOnFormItem"
             >
-                <slot>选择文件</slot>
+                <slot>{{ t('widget.file.SelectFile') }}</slot>
                 <template slot="dropdown">
                     <SdxuButton
                         type="text"
@@ -93,7 +93,9 @@
             <span
                 class="sdxw-file-select__accept-tip"
                 v-show="accept"
-            >请选择{{ accept }}类型的文件</span>
+            >
+                {{ t('widget.fileSelect.PleaseSelect') }}{{ accept }}{{ t('widget.file.TypeFiles') }}
+            </span>
         </div>
         <SdxuUploadList
             class="sdxw-file-select__files"
@@ -112,9 +114,11 @@ import SdxwFileSelectPop from './FileSelectPop';
 import emitter from '@sdx/utils/src/mixins/emitter';
 import errorHandler from '@sdx/utils/src/error-handler';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
+import locale from '@sdx/utils/src/mixins/locale';
+import { t } from '@sdx/utils/src/locale';
 export default {
     name: 'SdxwFileSelect',
-    mixins: [emitter],
+    mixins: [emitter, locale],
     components: {
         SdxwFileSelectPop,
         SdxuButton,
@@ -214,15 +218,15 @@ export default {
         },
         localFileLabel: {
             type: String,
-            default: '本地文件'
+            default: t('widget.file.LocaleFile')
         },
         localFolderLabel: {
             type: String,
-            default: '本地文件夹'
+            default: t('widget.file.LocaleFolder')
         },
         platformFileLabel: {
             type: String,
-            default: '平台文件'
+            default: t('widget.file.PlatformFile')
         },
         icon: {
             type: String,
@@ -318,8 +322,8 @@ export default {
                         this.onExceedMaxSizeDir(file);
                     } else {
                         this.$notify.error({
-                            title: '存在超大文件',
-                            message: '超大文件(大于200MB)将不会上传'
+                            title: this.t('widget.fileSelect.ExistLargeFiles'),
+                            message: this.t('widget.fileSelect.LargeFileNotUpload')
                         });
                     }
                     // this.handleRemove(file);
@@ -337,8 +341,8 @@ export default {
         },
         onExceed() {
             this.$notify.error({
-                title: '文件过多',
-                message: `最多选择${this.realLimit}个文件`
+                title: this.t('widget.fileSelect.TooManyFiles'),
+                message: `${this.t('widget.fileSelect.SelectMax')}${this.realLimit}${this.t('widget.fileSelect.Files')}`
             });
         },
         onFileError(err, file, fileList) {

@@ -5,10 +5,10 @@
             @close="close"
         >
             <div slot="title">
-                加入组设置
+                {{ t('view.userManage.JoinGroupSetting') }}
             </div>
             <div class="join-group">
-                <p>用户组：</p>
+                <p>{{ t('view.userManage.UserGroup') }}：</p>
                 <SdxuTransfer
                     :data="data"
                     :tags.sync="tags"
@@ -21,13 +21,13 @@
                     type="default"
                     @click="close"
                 >
-                    取 消
+                    {{ t('Cancel') }}
                 </sdxu-button>
                 <sdxu-button
                     type="primary"
                     @click="confirm"
                 >
-                    确定
+                    {{ t('Confirm') }}
                 </sdxu-button>
             </div>
         </sdxu-dialog>
@@ -37,8 +37,12 @@
 <script>
 import SdxuTransfer from '@sdx/ui/components/transfer';
 import { getGroups, updataUser } from '@sdx/utils/src/api/user';
+import SdxuDialog from '@sdx/ui/components/dialog';
+import SdxuButton from '@sdx/ui/components/button';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name:'JoinGroup',
+    mixins: [locale],
     data () {
         return {
             groupVisible:true,
@@ -73,7 +77,7 @@ export default {
                 groups: this.tags.map(item => item.uuid)
             }).then(()=>{
                 this.$message({
-                    message: '修改成功',
+                    message: this.t('view.userManage.UpdateSuccess'),
                     type: 'success'
                 });
             });
@@ -83,7 +87,9 @@ export default {
 
     },
     components: {
-        SdxuTransfer
+        SdxuTransfer,
+        SdxuDialog,
+        SdxuButton
     },
     watch :{
         groupVisible(nVal) {

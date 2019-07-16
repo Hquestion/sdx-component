@@ -1,21 +1,23 @@
+import { t } from '@sdx/utils/src/locale';
+
 export const copyTaskStatusMap = {
     PROCESSING: {
-        label: '拷贝中',
+        label: t('view.file.Copying'),
         status: 'loading',
         type: 'create'
     },
     PENDING: {
-        label: '等待中',
+        label: t('view.file.Pending'),
         status: 'loading',
         type: 'primary'
     },
     SUCCESS: {
-        label: '已完成',
+        label: t('view.file.Finish'),
         status: '',
         type: 'finish'
     },
     FAILURE: {
-        label: '拷贝失败',
+        label: t('view.file.CopyFail'),
         status: 'warning',
         type: 'error'
     }
@@ -23,22 +25,22 @@ export const copyTaskStatusMap = {
 
 export const unzipTaskStatusMap = {
     PROCESSING: {
-        label: '解压中',
+        label: t('view.file.Unziping'),
         status: 'loading',
         type: 'create'
     },
     PENDING: {
-        label: '等待中',
+        label: t('view.file.Pending'),
         status: 'loading',
         type: 'primary'
     },
     SUCCESS: {
-        label: '已完成',
+        label: t('view.file.Finish'),
         status: '',
         type: 'finish'
     },
     FAILURE: {
-        label: '解压失败',
+        label: t('view.file.UnzipFail'),
         status: 'warning',
         type: 'error'
     }

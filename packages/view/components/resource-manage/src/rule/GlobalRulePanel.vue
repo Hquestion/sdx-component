@@ -1,8 +1,8 @@
 <template>
     <SdxuContentPanel
         class="global-rule-panel"
-        title="全局规则设置"
-        subtitle="规则适用对象为单个用户"
+        :title="t('view.resourceManage.GlobalRuleSetting')"
+        :subtitle="t('view.resourceManage.RuleTip')"
     >
         <div
             class="edit-icon"
@@ -28,16 +28,16 @@
                     type="default"
                     @click="cancel"
                 >
-                    取消
+                    {{ t('Cancel') }}
                 </SdxuButton>
                 <SdxuButton
                     type="default"
                     v-show="false"
                 >
-                    重置默认
+                    {{ t('Reset') }}
                 </SdxuButton>
                 <SdxuButton @click="save">
-                    保存修改
+                    {{ t('view.resourceManage.Save') }}
                 </SdxuButton>
             </div>
         </div>
@@ -50,8 +50,10 @@ import Button from '@sdx/ui/components/button';
 import IconButton from '@sdx/ui/components/icon-button';
 import RuleForm from './RuleForm';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'GlobalRulePanel',
+    mixins: [locale],
     data() {
         return {
             mode: 'read'

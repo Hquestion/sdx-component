@@ -215,6 +215,19 @@ export default {
                 Failed: 'Failed',
                 Finished: 'Finished',
             },
+            Columns: {
+                imageName: 'Image Name',
+                version: 'Version',
+                imageType: 'Image Type',
+                buildType: 'Build Type',
+                creator: 'Creator',
+                createdAt: 'Created Time',
+            },
+            imagesToShare: 'Please select images to share',
+            imagesToRemove: 'Please select images to remove',
+            imagesToCancelShare: 'Please select images to cancel sharing',
+            imageRemoveConfirm: 'Are you sure to remove selected images?',
+            imageCancelShareConfirm: 'Are you sure to cancel sharing selected images?',
             PackageName: 'Package Name',
             SearchPackagePlaceholder: 'Please enter package name search',
             SourceType: 'Source Type',
@@ -283,5 +296,12 @@ export default {
     Days: 'Days',
     Hours: 'Hours',
     Minutes: 'Minutes',
-    Seconds: 'Seconds'
+    Seconds: 'Seconds',
+    ConfirmRemove: 'Operation can not be reverted after removing',
+    ShareAll: 'Share All',
+    CancelShare: 'Cancel Sharing',
+    Detail: 'Show Detail',
+    OperationSuccess: 'Operation succeeded',
+    SettingSuccess: 'Setting succeeded',
+    RemoveSuccess: 'Remove succeeded'
 };

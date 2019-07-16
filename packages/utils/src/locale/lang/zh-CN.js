@@ -217,6 +217,19 @@ export default {
                 Failed: '已失败',
                 Finished: '已完成',
             },
+            Columns: {
+                imageName: '镜像名称',
+                version: '版本号',
+                imageType: '镜像种类',
+                buildType: '构建方式',
+                creator: '创建人',
+                createdAt: '创建时间',
+            },
+            imagesToShare: '请先选择需要共享的镜像',
+            imagesToRemove: '请先选择需要删除的镜像',
+            imagesToCancelShare: '请先选择需要取消共享的镜像',
+            imageRemoveConfirm: '确定要删除选中的镜像吗？',
+            imageCancelShareConfirm: '确定要取消共享选中的镜像吗？',
             PackageName: '包名称',
             SearchPackagePlaceholder: '请输入包名称搜索',
             SourceType: '源类型',
@@ -285,5 +298,12 @@ export default {
     Days: '天',
     Hours: '时',
     Minutes: '分钟',
-    Seconds: '秒'
+    Seconds: '秒',
+    ConfirmRemove: '删除后将不可恢复',
+    ShareAll: '全部共享',
+    CancelShare: '取消共享',
+    Detail: '查看详情',
+    OperationSuccess: '操作成功',
+    SettingSuccess: '设置成功',
+    RemoveSuccess: '删除成功'
 };

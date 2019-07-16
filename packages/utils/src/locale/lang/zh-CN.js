@@ -138,7 +138,24 @@ export default {
                 ResourceAllocation: '资源配置',
                 DataSource: '数据源',
                 Please_select_the_dataset: '请选择数据集',
-                CPU_Memory_resources_need_to_be_configured: '需要配置CPU/内存资源'
+                Please_select_the_data_source: '请选择数据源',
+                CPU_Memory_resources_need_to_be_configured: '需要配置CPU/内存资源',
+                GPU_resources_need_to_be_configured: '需要配置GPU资源',
+                Start_up_parameter_holder: '请输入创建的参数，~/ 代表家目录， ./ 代表代码所在的目录',
+                Please_select_the_source_code: '请选择源代码',
+                Driver_CPU_memory_needs_to_be_configured: '需要配置驱动器CPU/内存',
+                Executor_CPU_memory_needs_to_be_configured: '需要配置执行器CPU/内存',
+                Please_enter_the_number_of_instances: '请输入实例个数',
+                Please_enter_the_name_of_the_main_class: '请输入主类名称',
+                Please_select_the_log_directory: '请选择日志目录',
+                ParametricServer: '参数服务器',
+                Parameter_server_CPU_Memory_need_to_be_configured: '需要配置参数服务器CPU/内存',
+                Computing_node_CPU_Memory_need_to_be_configured: '需要配置计算节点CPU/内存',
+                Computing_node_GPU_needs_to_be_configured: '需要配置计算节点GPU',
+                Please_select_the_training_output_directory: '请选择训练输出目录',
+                Please_enter_the_parameter_server_calculate_the_number_of_node_instances: '请输入参数服务器/计算节点实例个数',
+                Please_enter_the_number_of_calculated_node_instances: '请输入计算节点实例个数',
+                Please_enter_the_number_of_parameter_server_instances: '请输入参数服务器实例个数'
             }
         },
         monitor: {

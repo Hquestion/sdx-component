@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? $t('view.task.form.edit') : $t('view.task.form.create')} ContainerDev ${$t('view.task.form.task')}`"
+        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
         class="form-containerdev"
         :label-width="100"
         icon="sdx-icon-docker"
@@ -17,36 +17,36 @@
         >
             <el-form-item
                 prop="name"
-                :label="`${$t('view.task.taskName')}:`"
+                :label="`${t('view.task.taskName')}:`"
             >
                 <SdxuInput
                     v-model="params.name"
                     :searchable="true"
                     size="small"
-                    :placeholder="$t('view.task.form.Please_enter_the_task_name')"
+                    :placeholder="t('view.task.form.Please_enter_the_task_name')"
                 />
             </el-form-item>
             <el-form-item
                 prop="description"
-                :label="`${$t('view.task.TaskDescription')}:`"
+                :label="`${t('view.task.TaskDescription')}:`"
             >
                 <SdxuInput
                     type="textarea"
                     :searchable="true"
                     v-model="params.description"
                     size="small"
-                    :placeholder="$t('view.task.form.Please_enter_a_task_description')"
+                    :placeholder="t('view.task.form.Please_enter_a_task_description')"
                 />
             </el-form-item>
             <el-form-item
                 prop="imageId"
-                :label="`${$t('view.task.RuntimeEnvironment')}:`"
+                :label="`${t('view.task.RuntimeEnvironment')}:`"
             >
                 <el-select
                     v-model="params.imageId"
                     :searchable="true"
                     size="small"
-                    :placeholder="$t('view.task.form.Please_select_the_operating_environment')"
+                    :placeholder="t('view.task.form.Please_select_the_operating_environment')"
                 >
                     <el-option
                         v-for="item in imageOptions"
@@ -58,7 +58,7 @@
             </el-form-item>
             <el-form-item
                 prop="resourceConfig"
-                :label="`${$t('view.task.form.ResourceAllocation')}:`"
+                :label="`${t('view.task.form.ResourceAllocation')}:`"
             >
                 <i class="icon">*</i>
                 <SdxwResourceConfig
@@ -81,18 +81,18 @@
             <el-form-item
                 v-if="!cooperation"
                 prop="datasources"
-                :label="`${$t('view.task.form.DataSource')}:`"
+                :label="`${t('view.task.form.DataSource')}:`"
             >
                 <data-source-select v-model="params.datasources" />
             </el-form-item>
             <el-form-item
                 prop="datasets"
-                :label="`${$t('view.task.DataSet')}:`"
+                :label="`${t('view.task.DataSet')}:`"
             >
                 <el-select
                     v-model="params.datasets"
                     size="small"
-                    :placeholder="$t('view.task.form.Please_select_the_dataset')"
+                    :placeholder="t('view.task.form.Please_select_the_dataset')"
                     multiple
                 >
                     <el-option
@@ -118,8 +118,10 @@ import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/va
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'ContainerDevForm',
+    mixins: [locale],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -139,15 +141,15 @@ export default {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
                 if(value.EXECUTOR_CPUS === 0) {
-                    callback(new Error(this.$t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
+                    callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else if (value.EXECUTOR_GPUS === 0) {
-                    callback(new Error(this.$t('view.task.form.GPU_resources_need_to_be_configured')));
+                    callback(new Error(this.t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
                 if(value.EXECUTOR_CPUS === 0) {
-                    callback(new Error(this.$t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
+                    callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
@@ -176,7 +178,7 @@ export default {
             gpuObj: {},
             rules:  {
                 name: [
-                    { required: true, message: '请输入任务名称', trigger: 'blur',
+                    { required: true, message: this.t('view.task.form.Please_enter_the_task_name'), trigger: 'blur',
                         transform(value) {
                             return value && ('' + value).trim();
                         }
@@ -190,7 +192,7 @@ export default {
                     }
                 ],
                 imageId: [
-                    { required: true, message: '请选择运行环境', trigger: 'change' }
+                    { required: true, message: this.t('view.task.form.Please_select_the_operating_environment'), trigger: 'change' }
                 ],
                 resourceConfig: [
                     {

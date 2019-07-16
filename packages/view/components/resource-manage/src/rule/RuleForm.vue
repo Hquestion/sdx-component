@@ -10,10 +10,10 @@
             label-width="185px"
         >
             <el-form-item
-                label="同时运行的任务总数"
+                :label="t('view.resourceManage.maxConcurrentTasks')"
                 prop="maxConcurrentTasks"
             >
-                <span>小于等于</span>
+                <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
                 <SdxuInput
                     :inline="true"
                     type="number"
@@ -27,17 +27,17 @@
                 >
                     {{ params.maxConcurrentTasks }}
                 </InputReadonly>
-                <span>个</span>
+                <span>{{ t('view.resourceManage.NumberUnit') }}</span>
             </el-form-item>
             <el-form-item
-                label="同时运行的高资源任务总数"
+                :label="t('view.resourceManage.TotalConcurrentHighResourceTasks')"
                 prop="heavyTaskArr"
             >
-                <span>资源设置大于等于</span>
+                <span>{{ t('view.resourceManage.MoreOrEqual') }}</span>
                 <ElSelect
                     v-if="!readonly"
                     v-model="cpuTplInput"
-                    placeholder="请选择"
+                    :placeholder="t('view.resourceManage.PleaseSelect')"
                 >
                     <ElOption
                         v-for="(item, index) in resourceTmplList"
@@ -52,7 +52,7 @@
                 >
                     {{ params.heavyTaskArr[0] | cpuTplFriendly }}
                 </InputReadonly>
-                <span>的任务总数小于等于</span>
+                <span>{{ t('view.resourceManage.CountOfTotalTasksLessOrEqual') }}</span>
                 <SdxuInput
                     :inline="true"
                     type="number"
@@ -66,13 +66,13 @@
                 >
                     {{ params.heavyTaskArr[1] }}
                 </InputReadonly>
-                <span>个</span>
+                <span>{{ t('view.resourceManage.NumberUnit') }}</span>
             </el-form-item>
             <el-form-item
-                label="同时占用GPU总数"
+                :label="t('view.resourceManage.GPUsOccupied')"
                 prop="maxGpus"
             >
-                <span>小于等于</span>
+                <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
                 <SdxuInput
                     :inline="true"
                     type="number"
@@ -85,13 +85,13 @@
                 >
                     {{ params.maxGpus }}
                 </InputReadonly>
-                <span>块</span>
+                <span>{{ t('view.resourceManage.PieceUnit') }}</span>
             </el-form-item>
             <el-form-item
-                label="单个GPU任务运行时长"
+                :label="t('view.resourceManage.GpuTaskRunDuration')"
                 prop="maxGpuTime"
             >
-                <span>小于等于</span>
+                <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
                 <SdxuInput
                     :inline="true"
                     type="number"
@@ -104,13 +104,13 @@
                 >
                     {{ params.maxGpuTime | secToHour }}
                 </InputReadonly>
-                <span>小时</span>
+                <span>{{ t('view.resourceManage.HourUnit') }}</span>
             </el-form-item>
             <el-form-item
-                label="单个非GPU任务运行时长"
+                :label="t('view.resourceManage.NonGroupTaskRunDuration')"
                 prop="maxCpuTime"
             >
-                <span>小于等于</span>
+                <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
                 <SdxuInput
                     :inline="true"
                     type="number"
@@ -123,7 +123,7 @@
                 >
                     {{ params.maxCpuTime | secToDay }}
                 </InputReadonly>
-                <span>天</span>
+                <span>{{ t('view.resourceManage.DayUnit') }}</span>
             </el-form-item>
         </el-form>
     </div>
@@ -135,11 +135,14 @@ import InputReadonly from './InputReadonly';
 
 import { deepCopy } from '@sdx/utils/src/helper/tool';
 import { getResourceConfigDetail, getResourceTmplList, saveResourceConfig } from '@sdx/utils/src/api/resource';
-import { Select, Form, FormItem } from 'element-ui';
+import { Form, FormItem } from 'element-ui';
+import Select from 'element-ui/lib/select';
 import { byteToGB, secToHour, secToDay, cpuTplFriendly, hourToSec, dayToSec, parseMilli } from '@sdx/utils/src/helper/transform';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'RuleForm',
+    mixins: [locale],
     data() {
         return {
             params: {

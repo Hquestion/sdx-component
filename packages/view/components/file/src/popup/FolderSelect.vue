@@ -2,10 +2,10 @@
     <SdxuDialog
         class="sdxv-folder-select"
         :visible.sync="_visible"
-        title="复制/移动"
+        :title="t('view.file.MoveOrCopy')"
         @close="$emit('cancel')"
     >
-        <span slot="title">复制/移动</span>
+        <span slot="title">{{ t('view.file.MoveOrCopy') }}</span>
         <div style="height: 50vh">
             <SdxuScroll>
                 <SdxwFileSelectTree
@@ -28,16 +28,16 @@
                 @click="newFolder"
                 :disabled="!newable"
             >
-                新建文件夹
+                {{ $t('view.file.NewFolder') }}
             </SdxuButton>
             <SdxuButton
                 @click="$emit('move', currentNode().node.data)"
                 v-if="supportMove"
             >
-                移动
+                {{ $t('view.file.Move') }}
             </SdxuButton>
             <SdxuButton @click="$emit('copy', currentNode().node.data)">
-                复制
+                {{ $t('view.file.Copy') }}
             </SdxuButton>
         </template>
     </SdxuDialog>
@@ -48,6 +48,7 @@ import SdxwFileSelect from '@sdx/widget/components/file-select';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuButton from '@sdx/ui/components/button';
 import { mkdir } from '@sdx/utils/src/api/file';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvFolderSelect',
@@ -56,6 +57,7 @@ export default {
             newable: false
         };
     },
+    mixins: [locale],
     components: {
         SdxuButton,
         SdxuDialog,
@@ -86,7 +88,7 @@ export default {
             let node = this.$refs.fileSelectTree.$refs.fileTree.currentNode;
             this.$refs.fileSelectTree.$refs.fileTree.append({
                 path: '',
-                name: '新建文件夹',
+                name: this.t('view.file.NewFolder'),
                 isFile: false,
                 parentPath: this.currentNode().node.data.path
             }, node.node);

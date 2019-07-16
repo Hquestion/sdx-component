@@ -6,7 +6,7 @@
             @close="close"
         >
             <div slot="title">
-                新建用户
+                {{ t('view.userManage.NewUser') }}
             </div>
             <el-form
                 :model="user"
@@ -17,45 +17,45 @@
             >
                 <div class="userform">
                     <el-form-item
-                        label="用户名："
+                        :label="t('view.userManage.Username') + '：'"
                         prop="username"
                     >
                         <sdxu-input
                             v-model="user.username"
-                            placeholder="请输入用户名"
+                            :placeholder="t('view.userManage.PleaseInputUsername')"
                         />
                     </el-form-item>
                     <el-form-item
-                        label="显示名："
+                        :label="t('view.userManage.FullName') + '：'"
                         prop="fullName"
                     >
                         <sdxu-input
                             v-model="user.fullName"
-                            placeholder="请输入显示名"
+                            :placeholder="t('view.userManage.PleaseInputFullName')"
                         />
                     </el-form-item>
                     <el-form-item
-                        label="密码："
+                        :label="t('view.userManage.Password') + '：'"
                         prop="password"
                     >
                         <sdxu-input
                             type="password"
                             v-model="user.password"
                             password-visibleness
-                            placeholder="请输入密码"
+                            :placeholder="t('view.userManage.PleaseInputPassword')"
                         >
                             <i class="sdx-icon sdx-icon-eye-open" />
                         </sdxu-input>
                     </el-form-item>
                     <el-form-item
-                        label="角色："
+                        :label="t('view.userManage.Role') + '：'"
                         prop="roles"
                     >
                         <el-select
                             class="sdxv-user-manage__userform--select"
                             v-model="user.roles"
                             multiple
-                            placeholder="请选择用户角色"
+                            :placeholder="t('view.userManage.PleaseInputRole')"
                         >
                             <el-option
                                 v-for="item in roles"
@@ -66,26 +66,26 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item
-                        label="激活："
+                        :label="t('view.userManage.Activation') + '：'"
                     >
                         <el-radio-group
                             v-model="user.isActive"
                         >
                             <el-radio :label="true">
-                                是
+                                {{ t('Yes') }}
                             </el-radio>
                             <el-radio :label="false">
-                                否
+                                {{ t('No') }}
                             </el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item
-                        label="有效期："
+                        :label="t('view.userManage.ExpiryDate') + '：'"
                         class="self-item"
                     >
                         <el-select
                             class="sdxv-user-manage__userform--select"
-                            placeholder="请选择有效期"
+                            :placeholder="t('view.userManage.PleaseSelectExpireDate')"
                             v-model="user.expire_at"
                         >
                             <el-option
@@ -103,13 +103,13 @@
                     type="default"
                     @click="close"
                 >
-                    取 消
+                    {{ t('Cancel') }}
                 </sdxu-button>
                 <sdxu-button
                     type="primary"
                     @click="confirm"
                 >
-                    确定
+                    {{ t('Confirm') }}
                 </sdxu-button>
             </div>
         </sdxu-dialog>
@@ -119,31 +119,35 @@
 <script>
 import { commonNameValidator } from '@sdx/utils/src/helper/validate';
 import SdxuInput from '@sdx/ui/components/input';
+import SdxuDialog from '@sdx/ui/components/dialog';
+import SdxuButton from '@sdx/ui/components/button';
 import { addUser } from '@sdx/utils/src/api/user';
 import { getRolesList} from '@sdx/utils/src/api/rolemange';
 import ElSelect from 'element-ui/lib/select';
 import { EXPIRES_OPTION } from '../config';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     props: {
 
     },
+    mixins: [locale],
     data () {
         return {
             addUserVisible:true,
             EXPIRES_OPTION,
             rules: {
                 username: [
-                    {required: true,message: '请输入用户名',trigger: 'blur'},
+                    {required: true,message: this.t('view.userManage.PleaseInputUsername'),trigger: 'blur'},
                     { validator: commonNameValidator, trigger: 'blur' },
                 ],
                 fullName: [
-                    { required: true, message: '请输入显示名', trigger: 'blur' }
+                    { required: true, message: this.t('view.userManage.PleaseInputFullName'), trigger: 'blur' }
                 ],
                 password: [
-                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { required: true, message: this.t('view.userManage.PleaseInputPassword'), trigger: 'blur' },
                 ],
                 role: [
-                    { required: true, message: '请选择角色', trigger: 'change' }
+                    { required: true, message: this.t('view.userManage.PleaseInputRole'), trigger: 'change' }
                 ]
             },
             user: {
@@ -182,7 +186,7 @@ export default {
                     })
                         .then( (res => {
                             this.$message({
-                                message: '创建成功',
+                                message: this.t('view.userManage.NewSuccess'),
                                 type: 'success'
                             });
                             this.$emit('refresh');
@@ -204,7 +208,9 @@ export default {
     },
     components: {
         SdxuInput,
-        ElSelect
+        ElSelect,
+        SdxuDialog,
+        SdxuButton
     },
     mounted() {
         this._getRolesList();

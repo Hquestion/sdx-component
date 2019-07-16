@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? '编辑':'新建'}Tensorflow分布式任务`"
+        :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} ${t('view.task.type.TENSORFLOW_DIST')} ${t('view.task.form.task')}`"
         class="form-tfdistributed"
         :label-width="160"
         icon="sdx-icon-tensorboard"
@@ -17,35 +17,35 @@
         >
             <el-form-item
                 prop="name"
-                label="任务名称:"
+                :label="`${t('view.task.taskName')}:`"
             >
                 <SdxuInput
                     v-model="params.name"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入任务名称"
+                    :placeholder="t('view.task.form.Please_enter_the_task_name')"
                 />
             </el-form-item>
             <el-form-item
                 prop="description"
-                label="任务描述:"
+                :label="`${t('view.task.TaskDescription')}:`"
             >
                 <SdxuInput
                     type="textarea"
                     :searchable="true"
                     v-model="params.description"
                     size="small"
-                    placeholder="请输入任务描述"
+                    :placeholder="t('view.task.form.Please_enter_a_task_description')"
                 />
             </el-form-item>
             <el-form-item
                 prop="imageId"
-                label="运行环境:"
+                :label="`${t('view.task.RuntimeEnvironment')}:`"
             >
                 <el-select
                     v-model="params.imageId"
                     size="small"
-                    placeholder="请选择运行环境"
+                    :placeholder="t('view.task.form.Please_select_the_operating_environment')"
                 >
                     <el-option
                         v-for="item in imageOptions"
@@ -57,7 +57,7 @@
             </el-form-item>
             <el-form-item
                 prop="resourceConfig"
-                label="资源配置:"
+                :label="`${t('view.task.form.ResourceAllocation')}:`"
             >
                 <i class="icon">*</i>
                 <SdxwResourceConfig
@@ -79,7 +79,7 @@
             </el-form-item>
             <el-form-item
                 prop="resourceConfig.TF_PS_INSTANCES"
-                label="参数服务器实例个数:"
+                :label="`${t('view.task.ParametricServerInstanceCount')}:`"
             >
                 <el-input-number
                     v-model="params.resourceConfig.TF_PS_INSTANCES"
@@ -89,7 +89,7 @@
             </el-form-item>
             <el-form-item
                 prop="resourceConfig.TF_WORKER_INSTANCES"
-                label="计算节点实例个数:"
+                :label="`${t('view.task.ComputationalNodeInstanceCount')}:`"
             >
                 <el-input-number
                     v-model="params.resourceConfig.TF_WORKER_INSTANCES"
@@ -99,7 +99,7 @@
             </el-form-item>
             <el-form-item
                 prop="sourcePaths"
-                label="源代码:"
+                :label="`${t('view.task.SourceCode')}:`"
                 :string-model="true"
             >
                 <SdxwFileSelect
@@ -111,13 +111,13 @@
             </el-form-item>
             <el-form-item
                 prop="args"
-                label="启动参数:"
+                :label="`${t('view.task.StartupParameter')}:`"
             >
                 <SdxuInput
                     v-model="params.args"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入创建的参数，~/ 代表家目录， ./ 代表代码所在的目录"
+                    :placeholder="`${t('view.task.form.Start_up_parameter_holder')}`"
                 />
             </el-form-item>
         </el-form>
@@ -135,8 +135,10 @@ import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask } from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'TfDistributedForm',
+    mixins: [locale],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -157,19 +159,19 @@ export default {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
                 if(value.TF_PS_CPUS === 0) {
-                    callback(new Error('需要配置参数服务器CPU/内存'));
+                    callback(new Error(this.t('view.task.form.Parameter_server_CPU_Memory_need_to_be_configured')));
                 } else if (value.TF_WORKER_CPUS === 0) {
-                    callback(new Error('需要配置计算节点CPU/内存'));
+                    callback(new Error(this.t('view.task.form.Computing_node_CPU_Memory_need_to_be_configured')));
                 } else if (value.TF_WORKER_GPUS === 0){
-                    callback(new Error('需要配置计算节点GPU'));
+                    callback(new Error(this.t('view.task.form.Computing_node_GPU_needs_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
                 if(value.TF_PS_CPUS === 0) {
-                    callback(new Error('需要配置参数服务器CPU/内存'));
+                    callback(new Error(this.t('view.task.form.Parameter_server_CPU_Memory_need_to_be_configured')));
                 } else if (value.TF_WORKER_CPUS === 0) {
-                    callback(new Error('需要配置计算节点CPU/内存'));
+                    callback(new Error(this.t('view.task.form.Computing_node_CPU_Memory_need_to_be_configured')));
                 } else {
                     callback();
                 }
@@ -202,7 +204,7 @@ export default {
             gpuObj: {},
             rules:  {
                 name: [
-                    { required: true, message: '请输入任务名称', trigger: 'blur',
+                    { required: true, message: this.t('view.task.form.Please_enter_the_task_name'), trigger: 'blur',
                         transform(value) {
                             return value && ('' + value).trim();
                         }
@@ -216,7 +218,7 @@ export default {
                     }
                 ],
                 imageId: [
-                    { required: true, message: '请选择运行环境', trigger: 'change' }
+                    { required: true, message: this.t('view.task.form.Please_select_the_operating_environment'), trigger: 'change' }
                 ],
                 resourceConfig: [
                     {
@@ -225,13 +227,13 @@ export default {
                     }
                 ],
                 sourcePaths: [
-                    { required: true, message: '请选择源代码', trigger: 'blur' }
+                    { required: true, message: this.t('view.task.form.Please_select_the_source_code'), trigger: 'blur' }
                 ],
                 'resourceConfig.TF_WORKER_INSTANCES': [
-                    { required: true, message: '请输入计算节点实例个数',trigger: 'change' }
+                    { required: true, message: this.t('view.task.form.Please_enter_the_number_of_calculated_node_instances'),trigger: 'change' }
                 ],
                 'resourceConfig.TF_PS_INSTANCES': [
-                    { required: true, message: '请输入参数服务器实例个数',trigger: 'change' }
+                    { required: true, message: this.t('view.task.form.Please_enter_the_number_of_parameter_server_instances'),trigger: 'change' }
                 ],
             }
         };

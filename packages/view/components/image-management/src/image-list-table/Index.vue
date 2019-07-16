@@ -37,6 +37,7 @@
             class="sdxv-image-list__table"
             @selection-change="selectionChange"
             @sort-change="sortChange"
+            :default-sort="{prop: 'createdAt', order: 'descending'}"
         >
             <el-table-column
                 type="selection"
@@ -77,6 +78,7 @@
                 key="createdAt"
                 label="创建时间"
                 sortable="custom"
+                prop="createdAt"
             >
                 <template slot-scope="scope">
                     {{ scope.row.createdAt | dateFormatter }}
@@ -221,9 +223,6 @@ export default {
         [Button.name]: Button,
         [ImageDetail.name]: ImageDetail,
         [ShareSetting.name]: ShareSetting
-    },
-    mounted() {
-        this.initImageList();
     },
     mixins: [Filters],
     methods: {

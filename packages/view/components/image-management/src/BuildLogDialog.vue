@@ -7,7 +7,7 @@
         @close="handleCloseDialog"
         class="sdxv-build-log"
     >
-        <SdxwLogDetail
+        <SdxuLogDetail
             :content="logInfo"
         />
     </sdxu-dialog>
@@ -15,7 +15,7 @@
 
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
-import SdxwLogDetail from '@sdx/widget/components/log-detail';
+import SdxuLogDetail from '@sdx/ui/components/log-detail';
 
 import { getImageBuildLog } from '@sdx/utils/src/api/image';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -25,7 +25,7 @@ export default {
     mixins: [locale],
     components: {
         SdxuDialog,
-        SdxwLogDetail
+        SdxuLogDetail
     },
     props: {
         visible: {

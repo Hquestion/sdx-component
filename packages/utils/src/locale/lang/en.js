@@ -86,6 +86,7 @@ export default {
             AutoPull: 'Auto Pull',
             RollingFollow: 'Rolling Follow',
             ReachedTheHeadOfLog: 'Has reached the log head',
+            NoNewLogsYet: 'No new logs yet',
             BasicInformation: 'Basic Information',
             RunningInformation: 'Running Information',
             ResourceInformation: 'Resource Information',

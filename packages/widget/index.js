@@ -9,7 +9,7 @@ import SearchLayout from './components/search-layout';
 import FileSelect from './components/file-select';
 import UserPicker from './components/user-picker';
 import ShareSetting from './components/share-setting';
-import LogDetail from './components/log-detail';
+import PodLog from './components/pod-log';
 import TaskResourceList from './components/task-list';
 import TaskStartDialog from './components/task-start-dialog';
 import TaskStopDialog from './components/task-stop-dialog';
@@ -31,7 +31,7 @@ const SdxWidget = {
     UserPicker,
     ShareSetting,
     TaskResourceList,
-    LogDetail,
+    PodLog,
     TaskStartDialog,
     TaskStopDialog,
     CodeEditor,
@@ -51,7 +51,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     FileSelect.install(vue);
     UserPicker.install(vue);
     ShareSetting.install(vue);
-    LogDetail.install(vue);
+    PodLog.install(vue);
     TaskResourceList.install(vue);
     TaskStartDialog.install(vue);
     TaskStopDialog.install(vue);

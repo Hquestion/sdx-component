@@ -89,6 +89,7 @@ export default {
             AutoPull: '自动拉取',
             RollingFollow: '滚动跟随',
             ReachedTheHeadOfLog: '已经到达日志头部',
+            NoNewLogsYet: '暂时没有新的日志',
             BasicInformation: '基本信息',
             RunningInformation: '运行信息',
             ResourceInformation: '资源信息',
@@ -112,7 +113,7 @@ export default {
                 PMML_SERVING: 'PMML模型服务'
             },
             state: {
-                CREATED: '创建',
+                CREATED: '创建成功',
                 LAUNCHING: '启动中',
                 LAUNCH_ABNORMAL: '启动异常',
                 RUNNING: '运行中',

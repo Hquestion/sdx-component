@@ -281,7 +281,7 @@ export default {
                 Task: '任务转存',
             },
             States: {
-                Created: '已创建',
+                Created: '创建中',
                 Building: '构建中',
                 Builded: '构建完成',
                 Uploading: '上传中',

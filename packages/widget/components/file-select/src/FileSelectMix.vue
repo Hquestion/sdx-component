@@ -13,7 +13,7 @@
                 :disabled="disableCheck"
                 @dropdown-hide="emitBlurOnFormItem"
             >
-                <slot>{{ t('widget.file.SelectFile') }}</slot>
+                <slot>{{ t('widget.fileSelect.SelectFile') }}</slot>
                 <template slot="dropdown">
                     <SdxuButton
                         type="text"
@@ -94,7 +94,7 @@
                 class="sdxw-file-select__accept-tip"
                 v-show="accept"
             >
-                {{ t('widget.fileSelect.PleaseSelect') }}{{ accept }}{{ t('widget.file.TypeFiles') }}
+                {{ t('widget.fileSelect.PleaseSelect') }}{{ accept }}{{ t('widget.fileSelect.TypeFiles') }}
             </span>
         </div>
         <SdxuUploadList
@@ -218,15 +218,15 @@ export default {
         },
         localFileLabel: {
             type: String,
-            default: t('widget.file.LocaleFile')
+            default: () => t('widget.fileSelect.LocaleFile')
         },
         localFolderLabel: {
             type: String,
-            default: t('widget.file.LocaleFolder')
+            default: () => t('widget.fileSelect.LocaleFolder')
         },
         platformFileLabel: {
             type: String,
-            default: t('widget.file.PlatformFile')
+            default: () => t('widget.fileSelect.PlatformFile')
         },
         icon: {
             type: String,

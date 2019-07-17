@@ -115,7 +115,7 @@ export default {
             }
         },
         title() {
-            return this.meta ? (this.readonly ? this.t('CheckUserRights') : this.t('EditUserRights')) : this.t('NewUserRights') ;
+            return this.meta ? (this.readonly ? this.t('view.resourceManage.CheckUserRights') : this.t('view.resourceManage.EditUserRights')) : this.t('view.resourceManage.NewUserRights') ;
         }
     },
     methods: {

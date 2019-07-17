@@ -46,7 +46,7 @@
             @sort-change="handleSortChange"
             :default-sort="defaultSort"
             v-loading="loading"
-            :empty-text="t('NoData')"
+            :empty-text="t('sdxCommon.NoData')"
         >
             <el-table-column
                 prop="name"
@@ -126,12 +126,12 @@
             </el-table-column>
             <el-table-column
                 prop="owner.fullName"
-                :label="t('Creator')"
+                :label="t('sdxCommon.Creator')"
                 min-width="100px"
             />
             <el-table-column
                 prop="createdAt"
-                :label="t('CreatedTime')"
+                :label="t('sdxCommon.CreatedTime')"
                 :sortable="ranking ? false : 'custom'"
                 :sort-orders="sortOrders"
                 min-width="200px"
@@ -143,7 +143,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Operation')"
+                :label="t('sdxCommon.Operation')"
                 fixed="right"
                 min-width="140px"
             >
@@ -293,7 +293,7 @@ export default {
     },
     methods: {
         fetchData(showLoading = true) {
-            if (showLoading) { 
+            if (showLoading) {
                 this.loading = true;
             }
             getTaskList(this.queryParams).then(data => {
@@ -348,7 +348,7 @@ export default {
     },
     beforeDestroy() {
         this.pollingId && clearInterval(this.pollingId);
-        this.pollingId = null;    
+        this.pollingId = null;
     },
     watch: {
         queryParams() {
@@ -364,7 +364,7 @@ export default {
                 this.pollingId && clearInterval(this.pollingId);
                 this.pollingId = null;
             }
-        } 
+        }
     }
 };
 </script>

@@ -73,7 +73,7 @@
                         </el-table-column>
                         <el-table-column
                             style="width: 15%"
-                            :label="t('Operation')"
+                            :label="t('sdxCommon.Operation')"
                             v-auth.user.button="'ROLE:WRITE'"
                         >
                             <template
@@ -148,14 +148,14 @@
                         size="small"
                         @click="dialogCancel"
                     >
-                        {{ t('Cancel') }}
+                        {{ t('sdxCommon.Cancel') }}
                     </sdxubutton>
                     <SdxuButton
                         type="primary"
                         size="small"
                         @click="dialogConfirm"
                     >
-                        {{ t('Confirm') }}
+                        {{ t('sdxCommon.Confirm') }}
                     </sdxubutton>
                 </div>
             </sdxu-dialog>

@@ -1,9 +1,9 @@
 <template>
     <div class="sdxv-modified-list">
         <div class="sdxv-modified-list__table">
-            <sdxu-table 
-                :data="dataList" 
-                :empty-text="t('NoData')"
+            <sdxu-table
+                :data="dataList"
+                :empty-text="t('sdxCommon.NoData')"
             >
                 <el-table-column
                     prop="name"
@@ -24,13 +24,13 @@
                 </el-table-column>
                 <el-table-column
                     v-if="operatable"
-                    :label="t('Operation')"
+                    :label="t('sdxCommon.Operation')"
                 >
                     <template #default="{ row }">
                         <sdxu-icon-button
                             icon="sdx-icon sdx-quxiao"
                             @click="handleRevert(row)"
-                            :title="t('Revert')"
+                            :title="t('sdxCommon.Revert')"
                         />
                     </template>
                 </el-table-column>
@@ -115,7 +115,7 @@ export default {
                 ret.modify = {
                     type: 'uninstallPackages',
                     index,
-                    desc: this.t('Delete')
+                    desc: this.t('sdxCommon.Delete')
                 };
                 return ret;
             });
@@ -128,7 +128,7 @@ export default {
                 ret.modify = {
                     type: 'upgradePackages',
                     index,
-                    desc: this.t('Upgrade')
+                    desc: this.t('sdxCommon.Upgrade')
                 };
                 return ret;
             });

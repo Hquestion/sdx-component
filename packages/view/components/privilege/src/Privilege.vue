@@ -19,7 +19,7 @@
                     @click="handleSearch"
                     class="sdxv-privilege-system__search--button"
                 >
-                    {{ t('Search') }}
+                    {{ t('sdxCommon.Search') }}
                 </SdxuButton>
             </div>
         </template>
@@ -31,7 +31,7 @@
                 class="sdxv-privilege-system__table"
                 :data="data"
                 v-loading="loading"
-                :empty-text="t('NoData')"
+                :empty-text="t('sdxCommon.NoData')"
             >
                 <el-table-column
                     :label="t('view.authority.AuthorityName')"
@@ -49,7 +49,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    :label="t('Tag')"
+                    :label="t('sdxCommon.Tag')"
                 >
                     <template #default="{ row }">
                         <sdxw-fold-label-group

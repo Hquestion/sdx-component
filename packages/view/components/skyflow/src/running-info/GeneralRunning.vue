@@ -39,6 +39,8 @@
             <el-table-column
                 key="executeStart"
                 label="执行开始时间"
+                sortable="custom"
+                prop="executeStart"
             >
                 <template slot-scope="scope">
                     <div>
@@ -49,6 +51,8 @@
             <el-table-column
                 key="executeEnd"
                 label="执行结束时间"
+                prop="executeEnd"
+                sortable="custom"
             >
                 <template slot-scope="scope">
                     <div>
@@ -58,6 +62,7 @@
             </el-table-column>
             <el-table-column
                 key="executeTime"
+                prop="executeTime"
                 label="执行时长"
                 sortable="custom"
             >
@@ -177,7 +182,7 @@ export default {
             this.editingWorkflow = null;
         },
         sortChange(sort) {
-            this.orderBy = 'executeTime';
+            this.orderBy = sort.prop;
             if (sort && sort.order) {
                 this.order = sort.order === 'ascending' ? 'asc' : 'desc';
                 this.initList();

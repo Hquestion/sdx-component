@@ -20,7 +20,7 @@
                     size="small"
                     @click="handleSearch"
                 >
-                    {{ t('Search') }}
+                    {{ t('sdxCommon.Search') }}
                 </SdxuButton>
                 <SdxuButton
                     size="small"
@@ -30,7 +30,7 @@
                     :plain="true"
                     v-if="$slots.default.length > 2"
                 >
-                    {{ t('Reset') }}
+                    {{ t('sdxCommon.Reset') }}
                 </SdxuButton>
             </div>
         </el-form>
@@ -44,7 +44,7 @@
                 :plain="true"
                 @click="showItem"
             >
-                {{ singlerow ? t('expand') : t('retract') }}
+                {{ singlerow ? t('sdxCommon.expand') : t('sdxCommon.retract') }}
                 <i
                     :class="['sdx-icon',singlerow ? 'sdx-icon-arrow-down' : 'sdx-icon-arrow-up']"
                 />

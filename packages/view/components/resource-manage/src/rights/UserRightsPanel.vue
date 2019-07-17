@@ -28,7 +28,7 @@
                             {{ row.createdAt | dateFormatter }}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="t('Operation')">
+                    <el-table-column :label="t('sdxCommon.Operation')">
                         <template slot-scope="scope">
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-eye-open"

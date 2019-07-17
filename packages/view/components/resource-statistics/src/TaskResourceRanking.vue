@@ -8,7 +8,7 @@
                 class="sdxv-task-resource-ranking__more"
                 @click="handGotoTasksList"
             >
-                <span>{{ t('All') }}</span>
+                <span>{{ t('sdxCommon.ALL') }}</span>
                 <i class="sdx-icon sdx-icon-arrow-right" />
             </div>
         </template>
@@ -39,7 +39,7 @@ export default {
         this.STATE_TYPE_LABEL = STATE_TYPE_LABEL;
         this.STATE_MAP_FOLD_LABEL_TYPE = STATE_MAP_FOLD_LABEL_TYPE;
         return {
-            
+
         };
     },
     methods: {

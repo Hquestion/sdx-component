@@ -28,13 +28,13 @@
                     type="default"
                     @click="cancel"
                 >
-                    {{ t('Cancel') }}
+                    {{ t('sdxCommon.Cancel') }}
                 </SdxuButton>
                 <SdxuButton
                     type="default"
                     v-show="false"
                 >
-                    {{ t('Reset') }}
+                    {{ t('sdxCommon.Reset') }}
                 </SdxuButton>
                 <SdxuButton @click="save">
                     {{ t('view.resourceManage.Save') }}

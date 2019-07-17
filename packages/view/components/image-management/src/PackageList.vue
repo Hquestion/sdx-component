@@ -12,7 +12,7 @@
             <div class="sdxv-package-list__bar--source">
                 <span>{{ t('view.image.SourceType') }}: </span>
                 <el-select
-                    v-model="sourceType" 
+                    v-model="sourceType"
                     size="medium"
                 >
                     <el-option
@@ -29,14 +29,14 @@
                 type="primary"
                 size="small"
             >
-                {{ t('Search') }}
+                {{ t('sdxCommon.Search') }}
             </sdxu-button>
         </div>
         <div class="sdxv-package-list__table">
             <sdxu-table
                 :data="packageList"
                 v-loading="loading"
-                :empty-text="t('NoData')"
+                :empty-text="t('sdxCommon.NoData')"
             >
                 <el-table-column
                     prop="name"
@@ -52,18 +52,18 @@
                 />
                 <el-table-column
                     v-if="operatable"
-                    :label="t('Operation')"
+                    :label="t('sdxCommon.Operation')"
                 >
                     <template #default="{ row }">
                         <sdxu-icon-button
                             icon="sdx-icon sdx-shengji"
                             @click="handleUpgrade(row)"
-                            :title="t('Upgrade')"
+                            :title="t('sdxCommon.Upgrade')"
                         />
                         <sdxu-icon-button
                             icon="sdx-icon sdx-icon-delete"
                             @click="handleDelete(row)"
-                            :title="t('Delete')"
+                            :title="t('sdxCommon.Delete')"
                         />
                     </template>
                 </el-table-column>
@@ -134,7 +134,7 @@ export default {
             };
         });
         sourceTypeList.unshift({
-            label: this.t('ALL'),
+            label: this.t('sdxCommon.ALL'),
             value: ''
         });
         this.VERSION_TYPE = VERSION_TYPE;

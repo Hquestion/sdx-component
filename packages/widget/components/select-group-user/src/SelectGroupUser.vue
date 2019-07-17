@@ -56,10 +56,12 @@ export default {
         if (!this.mode) {
             // 选择用户和组
             const res = await getGroups(params);
+            // 拿到所有的组及下面的用户
             res.groups.forEach(group => {
                 this.treeData.push({
                     uuid: group.uuid,
                     label: group.name,
+                    isGroup: true,
                     children: []
                 });
                 group.users.forEach(user => {
@@ -67,6 +69,17 @@ export default {
                     if (item) {
                         item.children.push({
                             uuid: group.uuid + '/' + user.uuid,
+                            label: user.fullName
+                        });
+                    }
+                });
+            });
+            // 过滤拿到所有没有组的用户
+            getUserList(params).then((res) => {
+                res.users.forEach(user => {
+                    if (!user.groups.length) {
+                        this.treeData.push({
+                            uuid: '/' + user.uuid,
                             label: user.fullName
                         });
                     }
@@ -81,6 +94,7 @@ export default {
                 this.treeData.forEach(group => {
                     this.tmpDefaultKeys.push(group.uuid + '/' + user);
                 });
+                this.tmpDefaultKeys.push('/' + user);
             });
         } else if (this.mode === 'group') {
             // 只选择组
@@ -113,7 +127,6 @@ export default {
                 }
             });
         }
-
     },
     props: {
         mode: {

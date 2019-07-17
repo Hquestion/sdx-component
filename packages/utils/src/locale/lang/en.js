@@ -8,6 +8,13 @@ export default {
             noData: 'No Data',
             noSearchResult: 'No Search Results',
             ErrorInYourPage: 'Error In This Page!'
+        },
+        transfer: {
+            moveAll: 'Move all',
+            deleteAll: 'Delete all'
+        },
+        panel: {
+            noContent: 'No Content'
         }
     },
     widget: {
@@ -486,6 +493,26 @@ export default {
             NewGroup: 'New @:(view.userManage.UserGroup)',
             GroupMembers: 'Group Members',
             NoMembers: 'No Members'
+        },
+        authorizeManage: {
+            user_authorization_list: 'User Authorization List',
+            user_group_authorization_list: 'User Group Authorization List',
+            role_authorization_list: 'Role Authorization List',
+            new_authorization: 'New Authorization',
+            editorial_authorization: 'Editorial Authorization',
+            authorized_object: 'Authorized object',
+            permission_settings: 'Permission settings',
+            please_enter_the_authorization_object: 'Please enter the authorization object',
+            please_set_permission_settings: 'Please set permission settings',
+            please_enter_the_user_group_name: 'Please enter the user group name',
+            please_enter_the_role_name: 'Please enter the role name',
+            role_name: 'Role Name',
+            new_roles: 'New roles',
+            role_description: 'Role Description',
+            editorial_role: 'Editorial role',
+            please_enter_a_role_description: 'Please enter a role description',
+            determine_the_deletion_role: 'Determine the deletion role',
+            this_action_deletes_the_authorization_items: 'This action deletes the authorization items associated with this role at the same time',
         }
     },
     ALL: 'ALL',

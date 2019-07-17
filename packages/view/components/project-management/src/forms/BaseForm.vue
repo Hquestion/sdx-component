@@ -60,7 +60,7 @@ export default {
         },
         commitTitle: {
             type: String,
-            default: t('Confirm')
+            default: () => t('Confirm')
         }
     },
     data() {

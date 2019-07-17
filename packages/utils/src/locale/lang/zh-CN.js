@@ -378,7 +378,7 @@ export default {
             offline: '下线',
             test: '测试',
             states: {
-                created: '已创建',
+                created: '创建成功',
                 running: '运行中',
                 launching: '启动中',
                 failed: '失败',

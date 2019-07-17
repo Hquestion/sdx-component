@@ -2,11 +2,11 @@
     <SdxvDetailContainer class="sdxv-version-detail">
         <template #base-info>
             <SdxvBaseInfoItem
-                label="版本名称"
+                :label="t('view.model.versionDetail.name')"
                 :value="versionInfo.name"
                 :multi-line="true"
             />
-            <SdxvBaseInfoItem label="版本状态">
+            <SdxvBaseInfoItem :label="t('view.model.versionDetail.state')">
                 <template #value>
                     <SdxwFoldLabel
                         plain
@@ -18,26 +18,26 @@
                 </template>
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
-                label="版本类型"
+                :label="t('view.model.versionDetail.framework')"
                 :value="versionInfo.framework"
             />
             <SdxvBaseInfoItem
-                label="创建人"
+                :label="t('view.model.versionDetail.creator')"
                 :value="versionInfo.name"
             />
             <SdxvBaseInfoItem
-                label="版本描述"
+                :label="t('view.model.versionDetail.description')"
                 :value="versionInfo.description"
                 multi-line
             />
         </template>
         <template #running-info>
             <SdxvBaseInfoItem
-                label="运行环境"
+                :label="t('view.model.versionDetail.runtimeImage')"
                 :value="versionInfo.runtimeImage || ''"
             />
             <SdxvBaseInfoItem
-                label="调用次数"
+                :label="t('view.model.versionDetail.callNum')"
                 :value="versionInfo.api_call_num || ''"
             />
             <SdxvBaseInfoItem
@@ -45,15 +45,15 @@
                 :value="versionInfo.restApi || ''"
             />
             <SdxvBaseInfoItem
-                label="启动时间"
+                :label="t('view.model.versionDetail.startTime')"
                 :value="versionInfo.startedAtFormatted || ''"
             />
             <SdxvBaseInfoItem
-                label="停止时间"
+                :label="t('view.model.versionDetail.stopTime')"
                 :value="versionInfo.stoppedAtFormatted || ''"
             />
             <SdxvBaseInfoItem
-                label="运行时长"
+                :label="t('view.model.versionDetail.runningLength')"
                 :value="dealTime(versionInfo.startedAt, versionInfo.stoppedAt || new Date())"
             />
             <SdxvBaseInfoItem
@@ -70,7 +70,7 @@
                         :loading="loading"
                         style="line-height: 20px;"
                     >
-                        获取Key
+                        {{ t('view.model.versionDetail.getKey') }}
                     </SdxuButton>
                     <div
                         v-else
@@ -84,16 +84,16 @@
             <div class="sdxv-info-container">
                 <SdxvBaseInfoItem
                     label="CPU"
-                    :value="milliCoreToCore(versionInfo.runtimeResource && versionInfo.runtimeResource.cpu) + '核'"
+                    :value="milliCoreToCore(versionInfo.runtimeResource && versionInfo.runtimeResource.cpu) + t('view.model.versionDetail.core')"
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
                     label="GPU"
-                    :value="versionInfo.runtimeResource && versionInfo.runtimeResource.gpu + '块'"
+                    :value="versionInfo.runtimeResource && versionInfo.runtimeResource.gpu + t('view.model.versionDetail.piece')"
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
-                    label="内存"
+                    :label="t('view.model.versionDetail.memory')"
                     :value="byteToGb(versionInfo.runtimeResource && versionInfo.runtimeResource.memory) + 'GB'"
                     :strip="true"
                 />
@@ -102,7 +102,7 @@
         <template #log-info>
             <SdxuEmpty
                 v-if="!(versionInfo.pods && versionInfo.pods.length)"
-                empty-content="暂时还没Log日志哦"
+                :empty-content="t('view.model.versionDetail.noLog')"
                 empty-type="sdx-wushuju"
             />
             <SdxvLogList
@@ -113,7 +113,7 @@
         <template #realtime-monitor>
             <SdxuEmpty
                 v-if="!(versionInfo.pods && versionInfo.pods.length)"
-                empty-content="暂时还没实时监控哦"
+                :empty-content="t('view.model.versionDetail.noMonitor')"
                 empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo
@@ -130,9 +130,10 @@ import FoldLabel from '@sdx/widget/components/fold-label';
 import Button from '@sdx/ui/components/button';
 import { getVersionInfo, getVersionToken } from '@sdx/utils/src/api/model';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'VersionDetail',
-    mixins: [MixinDetail],
+    mixins: [MixinDetail, locale],
     data() {
         return {
             versionInfo: {},
@@ -170,32 +171,32 @@ export default {
                 this.versionInfo.stoppedAtFormatted = dateFormatter(this.versionInfo.stoppedAt);
                 switch(this.versionInfo.state) {
                 case 'CREATED':
-                    this.versionInfo.label.text = '新建';
+                    this.versionInfo.label.text = this.t('view.model.states.created');
                     this.versionInfo.label.type = 'create';
                     this.versionInfo.label.status = '';
                     break;
                 case 'RUNNING':
-                    this.versionInfo.label.text = '运行中';
+                    this.versionInfo.label.text = this.t('view.model.states.running');
                     this.versionInfo.label.type = 'running';
                     this.versionInfo.label.status = 'loading';
                     break;
                 case 'LAUNCHING':
-                    this.versionInfo.label.text = '启动中';
+                    this.versionInfo.label.text = this.t('view.model.states.launching');
                     this.versionInfo.label.type = 'processing';
                     this.versionInfo.label.status = 'loading';
                     break;
                 case 'FAILED':
-                    this.versionInfo.label.text = '失败';
+                    this.versionInfo.label.text = this.t('view.model.states.failed');
                     this.versionInfo.label.type = 'error';
                     this.versionInfo.label.status = 'warning';
                     break;
                 case 'KILLING':
-                    this.versionInfo.label.text = '终止中';
+                    this.versionInfo.label.text = this.t('view.model.states.killing');
                     this.versionInfo.label.type = 'dying';
                     this.versionInfo.label.status = 'loading';
                     break;
                 case 'KILLED':
-                    this.versionInfo.label.text = '已终止';
+                    this.versionInfo.label.text = this.t('view.model.states.killed');
                     this.versionInfo.label.type = 'die';
                     this.versionInfo.label.status = '';
                     break;

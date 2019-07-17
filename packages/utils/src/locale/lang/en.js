@@ -263,6 +263,98 @@ export default {
             LogDetail: 'Log Detail',
             ImageType: 'Image Type'
         },
+        model: {
+            tabs: {
+                all: 'All Models',
+                private: 'Private Models',
+                myShare: 'My Sharing Models',
+                otherShare: 'Other Sharing Models'
+            },
+            createModel: 'Create Model',
+            editModel: 'Edit Model',
+            searchModelName: 'Please enter model name',
+            modelDescription: 'Please enter model description',
+            selectLabel: 'Please select model label',
+            createModelForm: {
+                name: 'Model Name:',
+                description: 'Model Description:',
+                label: 'Model Label:'
+            },
+            modelColumns: {
+                name: 'Model Name',
+                description: 'Model Description',
+                label: 'Labels',
+                creator: 'Creator',
+                createdTime: 'Created Time'
+            },
+            modelsToShare: 'Please select models to share',
+            modelsToRemove: 'Please select models to remove',
+            modelsToCancelShare: 'Please select models to cancel sharing',
+            modelRemoveConfirm: 'Are you sure to remove selected models?',
+            modelCancelShareConfirm: 'Are you sure to cancel sharing selected models',
+            versionList: 'Model Versions',
+            createVersion: 'Create Version',
+            versionColumns: {
+                name: 'Version Name',
+                description: 'Version Description',
+                framework: 'Version Framework',
+                state: 'State',
+                createdTime: 'Created Time'
+            },
+            publish: 'Publish',
+            offline: 'Shut Down',
+            test: 'Test',
+            states: {
+                created: 'Created',
+                running: 'Running',
+                launching: 'Launching',
+                failed: 'Failed',
+                killing: 'Killing',
+                killed: 'Killed'
+            },
+            versionRemoveConfirm: 'Are you sure to remove the model version?',
+            versionOfflineConfirm: 'Are you sure to shut down the model version?',
+            versionDetail: {
+                name: 'Version Name',
+                state: 'State',
+                framework: 'Version Framework',
+                creator: 'Creator',
+                description: 'Description',
+                runtimeImage: 'Runtime Image',
+                callNum: 'Called Times',
+                startTime: 'Started Time',
+                stopTime: 'Stopped Time',
+                runningLength: 'Runtime',
+                getKey: 'Fetch Key',
+                memory: 'Memory',
+                core: 'Core(s)',
+                piece: 'Piece(s)',
+                noLog: 'No log info',
+                noMonitor: 'No realtime monitor info'
+            },
+            getParamFormat: 'Fetch params format',
+            testVersion: 'Test Model Version',
+            enterParam: 'Please enter params',
+            apiUrl: 'Api Url:',
+            input: 'Input:',
+            result: 'Result:',
+            createVersionForm: {
+                name: 'Version Name:',
+                framework: 'Framework:',
+                description: 'Description:',
+                runtimeImage: 'Runtime Image:',
+                runtimeResource: 'Runtime Resource:',
+                modelPath: 'Model Path:'
+            },
+            enterName: 'Please enter version name',
+            enterFramework: 'Please select version framework',
+            enterDescription: 'Please enter description',
+            enterImage: 'Please select runtime image',
+            enterResource: 'Please select runtime resource',
+            enterModelPath: 'Please select model path',
+            publishVersion: 'Publish Version',
+            editVersion: 'Edit Version'
+        },
         authority: {
             Authority: 'Authority',
             authorityInputPlaceholder: 'Please enter the authority name',
@@ -303,5 +395,8 @@ export default {
     Detail: 'Show Detail',
     OperationSuccess: 'Operation succeeded',
     SettingSuccess: 'Setting succeeded',
-    RemoveSuccess: 'Remove succeeded'
+    RemoveSuccess: 'Removing succeeded',
+    UpdateSuccess: 'Updating succeeded',
+    CreateSuccess: 'Creating succeeded',
+    Edit: 'Edit'
 };

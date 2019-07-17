@@ -265,6 +265,98 @@ export default {
             LogDetail: '日志详情',
             ImageType: '镜像类型'
         },
+        model: {
+            tabs: {
+                all: '全部列表',
+                private: '私有模型列表',
+                myShare: '我的共享列表',
+                otherShare: '他人共享列表'
+            },
+            createModel: '新建模型',
+            editModel: '编辑模型',
+            searchModelName: '请输入模型名称',
+            modelDescription: '请输入模型描述',
+            selectLabel: '请选择模型标签',
+            createModelForm: {
+                name: '模型名称：',
+                description: '模型描述：',
+                label: '模型标签：'
+            },
+            modelColumns: {
+                name: '模型名称',
+                description: '模型描述',
+                label: '模型标签',
+                creator: '创建人',
+                createdTime: '创建时间'
+            },
+            modelsToShare: '请先选择需要共享的模型',
+            modelsToRemove: '请先选择需要删除的模型',
+            modelsToCancelShare: '请先选择需要取消共享的模型',
+            modelRemoveConfirm: '确定要删除选中的模型吗？',
+            modelCancelShareConfirm: '确定要取消共享选中的模型吗？',
+            versionList: '模型版本列表',
+            createVersion: '新增模型版本',
+            versionColumns: {
+                name: '版本名称',
+                description: '版本描述',
+                framework: '版本类型',
+                state: '状态',
+                createdTime: '创建时间'
+            },
+            publish: '发布',
+            offline: '下线',
+            test: '测试',
+            states: {
+                created: '已创建',
+                running: '运行中',
+                launching: '启动中',
+                failed: '失败',
+                killing: '终止中',
+                killed: '已终止'
+            },
+            versionRemoveConfirm: '确定要删除该模型版本吗？',
+            versionOfflineConfirm: '确定要下线该模型版本吗？',
+            versionDetail: {
+                name: '版本名称',
+                state: '版本状态',
+                framework: '版本类型',
+                creator: '创建人',
+                description: '版本描述',
+                runtimeImage: '运行环境',
+                callNum: '调用次数',
+                startTime: '启动时间',
+                stopTime: '停止时间',
+                runningLength: '运行时长',
+                getKey: '获取Key',
+                memory: '内存',
+                core: '核',
+                piece: '块',
+                noLog: '暂时还没Log日志哦',
+                noMonitor: '暂时还没实时监控哦'
+            },
+            getParamFormat: '获取入参格式',
+            testVersion: '测试模型版本',
+            enterParam: '请输入参数',
+            apiUrl: 'API地址：',
+            input: '输入：',
+            result: '返回结果：',
+            createVersionForm: {
+                name: '版本名称：',
+                framework: '版本类型：',
+                description: '版本描述：',
+                runtimeImage: '发布环境：',
+                runtimeResource: '资源环境：',
+                modelPath: '模型路径：'
+            },
+            enterName: '请输入版本名称',
+            enterFramework: '请选择版本类型',
+            enterDescription: '请输入版本描述',
+            enterImage: '请选择发布环境',
+            enterResource: '请选择资源环境',
+            enterModelPath: '请选择模型路径',
+            publishVersion: '发布版本',
+            editVersion: '编辑版本'
+        },
         authority: {
             Authority: '权限',
             authorityInputPlaceholder: '请输入权限名',
@@ -305,5 +397,8 @@ export default {
     Detail: '查看详情',
     OperationSuccess: '操作成功',
     SettingSuccess: '设置成功',
-    RemoveSuccess: '删除成功'
+    RemoveSuccess: '删除成功',
+    UpdateSuccess: '更新成功',
+    CreateSuccess: '创建成功',
+    Edit: '编辑'
 };

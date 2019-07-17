@@ -1,7 +1,7 @@
 <template>
     <sdxu-content-panel
         class="sdxv-version-list"
-        title="模型版本列表"
+        :title="t('view.model.versionList')"
         v-loading="loading"
     >
         <div slot="right">
@@ -13,7 +13,7 @@
                 v-if="isModelOwner"
                 v-auth.model.button="'MODEL_VERSION:CREATE'"
             >
-                新增模型版本
+                {{ t('view.model.createVersion') }}
             </SdxuButton>
         </div>
         <sdxu-table
@@ -23,12 +23,12 @@
         >
             <el-table-column
                 prop="name"
-                label="版本名称"
+                :label="t('view.model.versionColumns.name')"
                 key="name"
             />
             <el-table-column
                 key="description"
-                label="版本描述"
+                :label="t('view.model.versionColumns.description')"
             >
                 <template slot-scope="scope">
                     <div
@@ -44,11 +44,11 @@
             <el-table-column
                 key="framework"
                 prop="framework"
-                label="版本类型"
+                :label="t('view.model.versionColumns.framework')"
             />
             <el-table-column
                 key="state"
-                label="状态"
+                :label="t('view.model.versionColumns.state')"
             >
                 <template slot-scope="scope">
                     <SdxwFoldLabel
@@ -67,7 +67,7 @@
             />
             <el-table-column
                 key="createdAt"
-                label="创建时间"
+                :label="t('view.model.versionColumns.createdTime')"
                 sortable="custom"
             >
                 <template slot-scope="scope">
@@ -75,7 +75,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="操作"
+                :label="t('Operation')"
                 key="operation"
             >
                 <template slot-scope="scope">
@@ -83,36 +83,36 @@
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'detail')"
                             icon="sdx-icon sdx-icon-tickets"
-                            title="查看详情"
+                            :title="t('Detail')"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'publish')"
                             icon="sdx-icon sdx-fabu"
-                            title="发布"
+                            :title="t('view.model.publish')"
                             v-if="scope.row.showPublish"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'edit')"
                             icon="sdx-icon sdx-icon-edit"
-                            title="编辑"
+                            :title="t('Edit')"
                             v-if="scope.row.showEdit"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'remove')"
                             icon="sdx-icon sdx-icon-delete"
-                            title="删除"
+                            :title="t('Delete')"
                             v-if="scope.row.showRemove"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'shutdown')"
                             icon="sdx-icon sdx-xiaxian"
-                            title="下线"
+                            :title="t('view.model.offline')"
                             v-if="scope.row.showShutdown"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'test')"
                             icon="sdx-icon sdx-ceshi"
-                            title="测试"
+                            :title="t('view.model.test')"
                             v-if="scope.row.showTest"
                         />
                     </sdxu-icon-button-group>
@@ -167,6 +167,7 @@ import TestVersion from './TestVersion';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import auth from '@sdx/widget/components/auth';
 import TimerFilter from '@sdx/utils/src/mixins/transformFilter';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'VersionListTable',
     data() {
@@ -207,7 +208,7 @@ export default {
     directives: {
         auth
     },
-    mixins: [TimerFilter],
+    mixins: [TimerFilter, locale],
     beforeDestroy () {
         clearInterval(this.refreshTimer);
     },
@@ -254,32 +255,32 @@ export default {
                     item.label = {};
                     switch(item.state) {
                     case 'CREATED':
-                        item.label.text = '新建';
+                        item.label.text = this.t('view.model.states.created');
                         item.label.type = 'create';
                         item.label.status = '';
                         break;
                     case 'RUNNING':
-                        item.label.text = '运行中';
+                        item.label.text = this.t('view.model.states.running');
                         item.label.type = 'running';
                         item.label.status = 'loading';
                         break;
                     case 'LAUNCHING':
-                        item.label.text = '启动中';
+                        item.label.text = this.t('view.model.states.launching');
                         item.label.type = 'processing';
                         item.label.status = 'loading';
                         break;
                     case 'FAILED':
-                        item.label.text = '失败';
+                        item.label.text = this.t('view.model.states.failed');
                         item.label.type = 'error';
                         item.label.status = 'warning';
                         break;
                     case 'KILLING':
-                        item.label.text = '终止中';
+                        item.label.text = this.t('view.model.states.killing');
                         item.label.type = 'dying';
                         item.label.status = 'loading';
                         break;
                     case 'KILLED':
-                        item.label.text = '已终止';
+                        item.label.text = this.t('view.model.states.killed');
                         item.label.type = 'die';
                         item.label.status = '';
                         break;
@@ -317,12 +318,12 @@ export default {
                     break;
                 case 'remove':
                     MessageBox({
-                        title: '确定要删除该模型版本吗？',
-                        content: '删除后将不可恢复'
+                        title: this.t('view.model.versionRemoveConfirm'),
+                        content: this.t('ConfirmRemove')
                     }).then(() => {
                         removeVersion(this.$route.params.modelId, row.uuid).then(() => {
                             Message({
-                                message: '删除成功',
+                                message: this.t('RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initVersionList();
@@ -335,12 +336,12 @@ export default {
                     break;
                 case 'shutdown':
                     MessageBox({
-                        title: '确定要下线该模型版本吗？',
+                        title: this.t('view.model.versionOfflineConfirm'),
                         status: 'warning'
                     }).then(() => {
                         shutdownVersion(this.$route.params.modelId, row.uuid).then(() => {
                             Message({
-                                message: '操作成功',
+                                message: this.t('OperationSuccess'),
                                 type: 'success'
                             });
                             this.initVersionList();

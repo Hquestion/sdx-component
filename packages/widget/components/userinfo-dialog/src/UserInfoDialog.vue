@@ -21,7 +21,10 @@
                     <span>{{ users.username }}</span>
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.fullname')">
-                    <span v-if="theme == 'user'" style="word-break: break-all;">
+                    <span
+                        v-if="theme == 'user'"
+                        style="word-break: break-all;"
+                    >
                         {{ users.fullName }}
                     </span>
                     <div
@@ -43,7 +46,7 @@
                         :list="roleNames"
                         type="default"
                     />
-                    <span v-else>暂无角色</span>
+                    <span v-else>{{ t('widget.userInfo.noRole') }}</span>
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.groups')">
                     <SdxwFoldLabelGroup
@@ -52,7 +55,7 @@
                         :list="groupNames"
                         type="default"
                     />
-                    <span v-else>暂未加入用户组</span>
+                    <span v-else>{{ t('widget.userInfo.noGroup') }}</span>
                 </el-form-item>
             </el-form>
         </sdxu-dialog>

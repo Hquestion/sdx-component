@@ -10,10 +10,10 @@
                 <template #value>
                     <SdxwFoldLabel
                         plain
-                        :type="versionInfo.label.type"
-                        :status="versionInfo.label.status"
+                        :type="versionInfo.label && versionInfo.label.type"
+                        :status="versionInfo.label && versionInfo.label.status"
                     >
-                        {{ versionInfo.label.text }}
+                        {{ versionInfo.label && versionInfo.label.text }}
                     </SdxwFoldLabel>
                 </template>
             </SdxvBaseInfoItem>
@@ -34,29 +34,32 @@
         <template #running-info>
             <SdxvBaseInfoItem
                 label="运行环境"
-                :value="versionInfo.runtimeImage"
+                :value="versionInfo.runtimeImage || ''"
             />
             <SdxvBaseInfoItem
                 label="调用次数"
-                :value="versionInfo.apiCallNum"
+                :value="versionInfo.api_call_num || ''"
             />
             <SdxvBaseInfoItem
                 label="REST API"
-                :value="versionInfo.restApi"
+                :value="versionInfo.restApi || ''"
             />
             <SdxvBaseInfoItem
                 label="启动时间"
-                :value="versionInfo.startedAt"
+                :value="versionInfo.startedAtFormatted || ''"
             />
             <SdxvBaseInfoItem
                 label="停止时间"
-                :value="versionInfo.stoppedAt"
+                :value="versionInfo.stoppedAtFormatted || ''"
             />
             <SdxvBaseInfoItem
                 label="运行时长"
                 :value="dealTime(versionInfo.startedAt, versionInfo.stoppedAt || new Date())"
             />
-            <SdxvBaseInfoItem label="Key">
+            <SdxvBaseInfoItem
+                label="Key"
+                style="word-break: break-all;"
+            >
                 <template #value>
                     <SdxuButton
                         v-if="!key"
@@ -65,10 +68,13 @@
                         size="small"
                         @click="getToken"
                         :loading="loading"
+                        style="line-height: 20px;"
                     >
                         获取Key
                     </SdxuButton>
-                    <div v-else>
+                    <div
+                        v-else
+                    >
                         {{ key }}
                     </div>
                 </template>
@@ -78,25 +84,26 @@
             <div class="sdxv-info-container">
                 <SdxvBaseInfoItem
                     label="CPU"
-                    :value="milliCoreToCore(versionInfo.runtimeResource.cpu) + '核'"
+                    :value="milliCoreToCore(versionInfo.runtimeResource && versionInfo.runtimeResource.cpu) + '核'"
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
                     label="GPU"
-                    :value="versionInfo.runtimeResource.gpu + '块'"
+                    :value="versionInfo.runtimeResource && versionInfo.runtimeResource.gpu + '块'"
                     :strip="true"
                 />
                 <SdxvBaseInfoItem
                     label="内存"
-                    :value="byteToGb(versionInfo.runtimeResource.memory) + 'GB'"
+                    :value="byteToGb(versionInfo.runtimeResource && versionInfo.runtimeResource.memory) + 'GB'"
                     :strip="true"
                 />
             </div>
         </template>
         <template #log-info>
-            <SdxvHasNothing
-                v-if="!versionInfo.pods.length"
-                tips="暂时还没Log日志哦"
+            <SdxuEmpty
+                v-if="!(versionInfo.pods && versionInfo.pods.length)"
+                empty-content="暂时还没Log日志哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvLogList
                 v-else
@@ -104,9 +111,10 @@
             />
         </template>
         <template #realtime-monitor>
-            <SdxvHasNothing
-                v-if="!versionInfo.pods.length"
-                tips="暂时还没实时监控哦"
+            <SdxuEmpty
+                v-if="!(versionInfo.pods && versionInfo.pods.length)"
+                empty-content="暂时还没实时监控哦"
+                empty-type="sdx-wushuju"
             />
             <SdxvMonitorInfo
                 v-else
@@ -121,6 +129,7 @@ import MixinDetail from '../../../task-management/src/task-detail/MixinDetail';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import Button from '@sdx/ui/components/button';
 import { getVersionInfo, getVersionToken } from '@sdx/utils/src/api/model';
+import { dateFormatter } from '@sdx/utils/src/helper/transform';
 export default {
     name: 'VersionDetail',
     mixins: [MixinDetail],
@@ -128,11 +137,15 @@ export default {
         return {
             versionInfo: {},
             loading: false,
-            key: ''
+            key: '',
+            refreshTimer: null
         };
     },
     created() {
         this.init();
+    },
+    beforeDestroy() {
+        clearInterval(this.refreshTimer);
     },
     methods: {
         getToken() {
@@ -145,8 +158,16 @@ export default {
         init() {
             getVersionInfo(this.$route.params.modelId, this.$route.params.versionId).then(res => {
                 this.versionInfo = res;
-                this.versionInfo.pods = [];
                 this.versionInfo.label = {};
+                if (this.versionInfo.state === 'LAUNCHING' || this.versionInfo.state === 'RUNNING' || this.versionInfo.state === 'KILLING') {
+                    if (!this.refreshTimer) {
+                        this.refreshTimer = setInterval(this.init, 3000);
+                    }
+                } else {
+                    clearInterval(this.refreshTimer);
+                }
+                this.versionInfo.startedAtFormatted = dateFormatter(this.versionInfo.startedAt);
+                this.versionInfo.stoppedAtFormatted = dateFormatter(this.versionInfo.stoppedAt);
                 switch(this.versionInfo.state) {
                 case 'CREATED':
                     this.versionInfo.label.text = '新建';

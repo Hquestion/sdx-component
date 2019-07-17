@@ -205,13 +205,6 @@ export default {
                 ],
                 modelPath: [
                     { required: true, message: '请选择模型路径', trigger: 'blur' },
-                ],
-                description: [
-                    {
-                        max: 256,
-                        message: '最多输入256个字符',
-                        trigger: 'change'
-                    }
                 ]
             },
             needRefresh: false

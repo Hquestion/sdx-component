@@ -7,7 +7,7 @@
         class="del-file-list"
     >
         <el-table-column
-            label="文件名"
+            :label="t('view.file.FileName')"
             min-width="150"
             header-align="left"
             align="left"
@@ -15,7 +15,7 @@
             show-overflow-tooltip
         />
         <el-table-column
-            label="状态"
+            :label="t('Status')"
             min-width="150"
             header-align="left"
             align="left"
@@ -39,6 +39,7 @@ import SdxuTable from '@sdx/ui/components/table';
 import { unzipTaskStatusMap } from '../helper/config';
 import { asyncJobStatus } from '@sdx/utils/src/const/file';
 import { deleteTaskType } from '@sdx/utils/src/api/file';
+import locale from '@sdx/utils/src/mixins/locale';
 
 const PULL_TIME = 2 * 1000; // 查询间隔 2秒
 
@@ -47,6 +48,7 @@ export default {
         SdxuTable,
         SdxuFoldLabel: SdxuFoldLabel.FoldLabel
     },
+    mixins: [locale],
     data() {
         return {
             unzipFileList: [],

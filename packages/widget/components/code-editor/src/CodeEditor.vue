@@ -5,7 +5,7 @@
         size="normal"
         :visible.sync="_visible"
         :title="title"
-        confirm-label="保存并发布"
+        :confirm-label="t('widget.codeEditor.SaveAndRelease')"
         @open="syncCode"
     >
         <codemirror
@@ -19,6 +19,8 @@
 import SdxuDialog from '@sdx/ui/components/dialog';
 import { codemirror } from 'vue-codemirror-lite';
 import { isFunction } from '@sdx/utils/src/helper/tool';
+import { t } from '@sdx/utils/src/locale';
+import locale from '@sdx/utils/src/mixins/locale';
 
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/show-hint.css');
@@ -42,6 +44,7 @@ export default {
             }
         };
     },
+    mixins: [locale],
     components: {
         SdxuDialog,
         codemirror
@@ -53,7 +56,7 @@ export default {
         },
         title: {
             type: String,
-            default: '代码编辑器'
+            default: t('widget.codeEditor.CodeEditor')
         },
         saveHandler: {
             type: Function,

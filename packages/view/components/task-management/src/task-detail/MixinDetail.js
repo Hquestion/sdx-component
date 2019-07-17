@@ -9,6 +9,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import SdxuEmpty from '@sdx/ui/components/empty';
 import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, TASK_TYPE, TASK_TYPE_LABEL } from '@sdx/utils/src/const/task';
 import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
+import { t } from '@sdx/utils/src/locale';
 
 export default {
     props: {
@@ -127,32 +128,32 @@ export default {
             let leave3 = leave2 % (60 * 1000);
             let second = Math.floor(leave3 / 1000);
             let time = '';
-            
+
             if (days > 1) {
-                time += `${days}${this.t('Days')}`;
+                time += `${days}${t('Days')}`;
             } else if (days === 1) {
-                time += `${days}${this.t('Day')}`;
+                time += `${days}${t('Day')}`;
             }
             if (hours > 1) {
-                time += `${days}${this.t('Hours')}`;
+                time += `${hours}${t('Hours')}`;
             } else if (hours === 1) {
-                time += `${days}${this.t('Hour')}`;
+                time += `${hours}${t('Hour')}`;
             }
             if (minutes > 1) {
-                time += `${days}${this.t('Minutes')}`;
+                time += `${minutes}${t('Minutes')}`;
             } else if (minutes === 1) {
-                time += `${days}${this.t('Minute')}`;
+                time += `${minutes}${t('Minute')}`;
             }
             if (second > 1) {
-                time += `${days}${this.t('Seconds')}`;
+                time += `${second}${t('Seconds')}`;
             } else if (second === 1) {
-                time += `${days}${this.t('Second')}`;
+                time += `${second}${t('Second')}`;
             }
 
             return time;
         },
         byteToGb(byte) {
-            return byteToGB(byte); 
+            return byteToGB(byte);
         },
         milliCoreToCore(millicore) {
             return parseMilli(millicore);

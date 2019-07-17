@@ -142,7 +142,7 @@ export default {
     methods: {
         getInputFormat() {
             getVersionInputFormat(this.$route.params.modelId, this.version.uuid).then(res => {
-                this.inputFormat = res.input;
+                this.inputFormat = res.inputs;
             });
         },
         getToken() {

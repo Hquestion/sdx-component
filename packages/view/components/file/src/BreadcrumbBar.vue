@@ -7,7 +7,7 @@
             />
         </div>
         <div class="loaded-tip">
-            已加载<span>{{ fileManager.loadedTotal }}</span>条，共{{ fileManager.total }}条
+            {{ t('view.file.Loaded') }}<span>{{ fileManager.loadedTotal }}</span>{{ t('view.file.Items') }}，{{ t('view.file.Totally') }}{{ fileManager.total }}{{ t('view.file.Items') }}
         </div>
     </div>
 </template>
@@ -16,10 +16,12 @@
 import { getPathName } from './helper/fileListTool';
 import EllipseBreadcrumb from './EllipseBreadcrumb';
 import { MY_SHARE_PATH, ACCEPTED_SHARE_PATH, PROJECT_SHARE_PATH } from './helper/fileListTool';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'BreadcrumbBar',
     inject: ['fileManager'],
+    mixins: [locale],
     data() {
         return {
             list: []
@@ -50,12 +52,12 @@ export default {
                 return { name, path };
             });
             pathObjArr.unshift({
-                name: '全部文件',
+                name: this.t('view.file.AllFiles'),
                 path: ''
             });
             if (this.$route.query.search) {
                 pathObjArr.push({
-                    name: '搜索结果',
+                    name: this.t('view.file.SearchResults'),
                     path: ''
                 });
             }

@@ -54,6 +54,7 @@ import { zipPreview } from '@sdx/utils/src/api/file';
 import { getFileIcon } from './helper/fileListTool';
 import SdxuInput from '@sdx/ui/components/input';
 import FileSelect from '@sdx/widget/components/file-select';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'FileName',
@@ -65,6 +66,7 @@ export default {
             default: null
         }
     },
+    mixins: [locale],
     props: {
         row: {
             type: Object,
@@ -78,7 +80,7 @@ export default {
     data() {
         return {
             getFileIcon,
-            newName: '新建文件夹'
+            newName: this.t('view.file.NewFolder')
         };
     },
     components: {

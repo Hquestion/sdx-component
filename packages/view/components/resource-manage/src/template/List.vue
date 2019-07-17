@@ -1,7 +1,7 @@
 <template>
     <SdxuContentPanel
         class="list"
-        title="资源模板"
+        :title="t('view.resourceManage.ResourceTemplate')"
     >
         <div slot="right">
             <SdxuButton
@@ -11,19 +11,19 @@
                 placement="right"
                 v-auth.resource.button="'TEMPLATE:WRITE'"
             >
-                新建模板
+                {{ t('view.resourceManage.newTemplate') }}
                 <template slot="dropdown">
                     <SdxuButton
                         type="text"
                         @click="createCPUTplVisible=true"
                     >
-                        CPU/内存模板
+                        {{ t('view.resourceManage.CpuTemplate') }}
                     </SdxuButton>
                     <SdxuButton
                         type="text"
                         @click="createGPUTplVisible=true"
                     >
-                        GPU模板
+                        {{ t('view.resourceManage.GpuTemplate') }}
                     </SdxuButton>
                 </template>
             </SdxuButton>
@@ -59,9 +59,11 @@ import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 
 import {deleteResourceTmpl, getResourceTmplList} from '@sdx/utils/src/api/resource';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'List',
+    mixins: [locale],
     data() {
         return {
             templateList: [],

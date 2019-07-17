@@ -37,6 +37,7 @@
             class="sdxv-model-list__table"
             @selection-change="selectionChange"
             @sort-change="sortChange"
+            :default-sort="{prop: 'createdAt', order: 'descending'}"
         >
             <el-table-column
                 type="selection"
@@ -82,6 +83,7 @@
             </el-table-column>
             <el-table-column
                 key="createdAt"
+                prop="createdAt"
                 :label="t('view.model.modelColumns.createdTime')"
                 sortable="custom"
             >

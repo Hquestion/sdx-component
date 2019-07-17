@@ -129,6 +129,7 @@ import MixinDetail from '../../../task-management/src/task-detail/MixinDetail';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import Button from '@sdx/ui/components/button';
 import { getVersionInfo, getVersionToken } from '@sdx/utils/src/api/model';
+import {getTaskDetail} from '@sdx/utils/src/api/project';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
 export default {
@@ -160,6 +161,11 @@ export default {
             getVersionInfo(this.$route.params.modelId, this.$route.params.versionId).then(res => {
                 this.versionInfo = res;
                 this.versionInfo.label = {};
+                if (this.versionInfo.serviceId) {
+                    getTaskDetail(this.versionInfo.serviceId).then(res => {
+                        this.versionInfo.pods = res.pods;
+                    });
+                }
                 if (this.versionInfo.state === 'LAUNCHING' || this.versionInfo.state === 'RUNNING' || this.versionInfo.state === 'KILLING') {
                     if (!this.refreshTimer) {
                         this.refreshTimer = setInterval(this.init, 3000);

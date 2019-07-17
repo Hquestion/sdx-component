@@ -20,6 +20,7 @@
             :data="versionList"
             class="sdxv-version-list__table"
             @sort-change="sortChange"
+            :default-sort="{prop: 'createdAt', order: 'descending'}"
         >
             <el-table-column
                 prop="name"
@@ -67,6 +68,7 @@
             />
             <el-table-column
                 key="createdAt"
+                prop="createdAt"
                 :label="t('view.model.versionColumns.createdTime')"
                 sortable="custom"
             >

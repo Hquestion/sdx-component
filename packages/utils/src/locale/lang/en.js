@@ -392,8 +392,8 @@ export default {
             Items: ' items',
             AllFiles: '@:(ALL) @:(view.file.File)',
             SearchResults: '@:(Search) Results',
-            AlreadyChecked: 'Already Checked',
-            FileOrFolder: '个@:(view.file.File)/@:(view.file.Folder)',
+            AlreadyChecked: 'Already Checked ',
+            FileOrFolder: ' @:(view.file.File)s/@:(view.file.Folder)s',
             InPath: 'Path',
             FilePath: 'File Path',
             UserName: 'Username',
@@ -525,7 +525,7 @@ export default {
     Size: 'Size',
     Stop: 'Stop',
     Reset: 'Reset',
-    Yes: '是',
-    No: '否',
+    Yes: 'Yes',
+    No: 'No',
     Edit: 'Edit'
 };

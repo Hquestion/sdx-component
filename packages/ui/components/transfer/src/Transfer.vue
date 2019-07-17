@@ -30,7 +30,7 @@
                     :plain="true"
                     @click="moveAllTag"
                 >
-                    移动全部
+                    {{ t('ui.transfer.moveAll') }}
                 </SdxuButton>
             </div>
         </div>
@@ -61,7 +61,7 @@
                     :plain="true"
                     @click="removeAllTag"
                 >
-                    删除全部
+                    {{ t('ui.transfer.deleteAll') }}
                 </SdxuButton>
             </div>
         </div>
@@ -73,8 +73,10 @@ import {Tree, Tag, Scrollbar} from 'element-ui';
 import Button from '@sdx/ui/components/button';
 import Input from '@sdx/ui/components/input';
 import SdxuScroll from '@sdx/ui/components/scroll';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxuTransfer',
+    mixins: [locale],
     props: {
         data: {
             type: Array,

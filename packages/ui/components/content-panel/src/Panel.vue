@@ -1,5 +1,8 @@
 <template>
-    <div class="sdxu-content-panel" :class="{'sdxu-content-panel--fullscreen': fullscreen, 'is-header' : title || $slots.right || $slots.title}">
+    <div
+        class="sdxu-content-panel"
+        :class="{'sdxu-content-panel--fullscreen': fullscreen, 'is-header' : title || $slots.right || $slots.title}"
+    >
         <div
             class="sdxu-content-panel__header"
             v-if="title || $slots.right || $slots.title"
@@ -21,7 +24,7 @@
         <div class="sdxu-content-panel__main">
             <slot>
                 <div class="sdxu-content-panel__empty">
-                    暂无内容
+                    {{ t('ui.panel.noContent') }}
                 </div>
             </slot>
         </div>
@@ -30,8 +33,10 @@
 
 <script>
 import SdxuScroll from '@sdx/ui/components/scroll';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxuContentPanel',
+    mixins: [locale],
     data() {
         return {};
     },

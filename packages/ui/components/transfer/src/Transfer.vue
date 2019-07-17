@@ -154,7 +154,7 @@ export default {
                     {
                         name: moveNodes[i].label,
                         [this.treeNodeKey]: moveNodes[i][this.treeNodeKey],
-                        is_group: moveNodes[i].children ? true : false
+                        is_group: moveNodes[i].isGroup ? true : false
                     }
                 );
             }
@@ -183,7 +183,7 @@ export default {
                     {
                         name: this.data[i].label,
                         [this.treeNodeKey]: this.data[i][this.treeNodeKey],
-                        is_group:  this.data[i].children ? true : false
+                        is_group:  this.data[i].isGroup ? true : false
                     }
                 );
                 keys.push(this.data[i][this.treeNodeKey]);

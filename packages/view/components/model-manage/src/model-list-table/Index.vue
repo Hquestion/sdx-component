@@ -11,7 +11,7 @@
                 v-show="modelType === 'PRIVATE'"
                 v-auth.model.button="'MODEL:SHARE'"
             >
-                {{ t('ShareAll') }}
+                {{ t('sdxCommon.ShareAll') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
@@ -20,7 +20,7 @@
                 @click="remove"
                 v-show="modelType === 'PRIVATE'"
             >
-                {{ t('Delete') }}
+                {{ t('sdxCommon.Delete') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
@@ -29,7 +29,7 @@
                 v-show="modelType === 'MY_SHARE'"
                 v-auth.model.button="'MODEL:SHARE'"
             >
-                {{ t('CancelShare') }}
+                {{ t('sdxCommon.CancelShare') }}
             </SdxuButton>
         </div>
         <sdxu-table
@@ -92,7 +92,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Operation')"
+                :label="t('sdxCommon.Operation')"
                 key="operation"
             >
                 <template slot-scope="scope">
@@ -107,25 +107,25 @@
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'detail')"
                             icon="sdx-icon sdx-icon-tickets"
-                            :title="t('Detail')"
+                            :title="t('sdxCommon.Detail')"
                             v-if="scope.row.showDetail"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'remove')"
                             icon="sdx-icon sdx-icon-delete"
-                            :title="t('Delete')"
+                            :title="t('sdxCommon.Delete')"
                             v-if="scope.row.showRemove"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'edit')"
                             icon="sdx-icon sdx-icon-edit"
-                            :title="t('Edit')"
+                            :title="t('sdxCommon.Edit')"
                             v-if="scope.row.showEdit"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'cancelShare')"
                             icon="sdx-icon sdx-quxiaofenxiang"
-                            :title="t('CancelShare')"
+                            :title="t('sdxCommon.CancelShare')"
                             v-if="scope.row.showCancelShare"
                         />
                     </sdxu-icon-button-group>
@@ -254,13 +254,13 @@ export default {
             }
             MessageBox({
                 title: this.t('view.model.modelRemoveConfirm'),
-                content: this.t('ConfirmRemove')
+                content: this.t('sdxCommon.ConfirmRemove')
             }).then(() => {
                 const uuids = [];
                 this.selectedModels.forEach(item => uuids.push(item.uuid));
                 removeGroupModels({ uuids }).then(() => {
                     Message({
-                        message: this.t('RemoveSuccess'),
+                        message: this.t('sdxCommon.RemoveSuccess'),
                         type: 'success'
                     });
                     this.initModelList();
@@ -290,7 +290,7 @@ export default {
                 };
                 updateGroupModels(params).then(() => {
                     Message({
-                        message: this.t('OperationSuccess'),
+                        message: this.t('sdxCommon.OperationSuccess'),
                         type: 'success'
                     });
                     this.initModelList();
@@ -315,7 +315,7 @@ export default {
                 // 编辑模型
                 updateModel(this.editingModel.uuid, this.shareForm).then(() => {
                     Message({
-                        message: this.t('OperationSuccess'),
+                        message: this.t('sdxCommon.OperationSuccess'),
                         type: 'success'
                     });
                     this.editingModel = null;
@@ -331,7 +331,7 @@ export default {
                 };
                 updateGroupModels(params).then(() => {
                     Message({
-                        message: this.t('SettingSuccess'),
+                        message: this.t('sdxCommon.SettingSuccess'),
                         type: 'success'
                     });
                     this.initModelList();
@@ -399,11 +399,11 @@ export default {
                 case 'remove':
                     MessageBox({
                         title: this.t('view.model.modelRemoveConfirm'),
-                        content: this.t('ConfirmRemove')
+                        content: this.t('sdxCommon.ConfirmRemove')
                     }).then(() => {
                         removeModel(row.uuid).then(() => {
                             Message({
-                                message: this.t('RemoveSuccess'),
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initModelList();

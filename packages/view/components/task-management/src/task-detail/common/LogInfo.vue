@@ -1,6 +1,6 @@
 <template>
     <SdxuContentPanel
-        :title="method + t('Log')"
+        :title="method + t('sdxCommon.Log')"
         class="sdxv-log-info"
     >
         <template

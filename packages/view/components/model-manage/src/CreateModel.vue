@@ -62,14 +62,14 @@
                 size="small"
                 @click="cancel"
             >
-                {{ t('Cancel') }}
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="confirm"
             >
-                {{ t('Confirm') }}
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </sdxu-dialog>
@@ -172,7 +172,7 @@ export default {
                     if (this.editingModel) {
                         updateModel(this.editingModel.uuid, this.modelInfoForm).then(() => {
                             Message({
-                                message: this.t('UpdateSuccess'),
+                                message: this.t('sdxCommon.UpdateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;
@@ -181,7 +181,7 @@ export default {
                     } else {
                         createModel(this.modelInfoForm).then(() => {
                             Message({
-                                message: this.t('CreateSuccess'),
+                                message: this.t('sdxCommon.CreateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;

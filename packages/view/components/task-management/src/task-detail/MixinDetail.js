@@ -130,24 +130,24 @@ export default {
             let time = '';
 
             if (days > 1) {
-                time += `${days}${t('Days')}`;
+                time += `${days}${t('sdxCommon.Days')}`;
             } else if (days === 1) {
-                time += `${days}${t('Day')}`;
+                time += `${days}${t('sdxCommon.Day')}`;
             }
             if (hours > 1) {
-                time += `${hours}${t('Hours')}`;
+                time += `${hours}${t('sdxCommon.Hours')}`;
             } else if (hours === 1) {
-                time += `${hours}${t('Hour')}`;
+                time += `${hours}${t('sdxCommon.Hour')}`;
             }
             if (minutes > 1) {
-                time += `${minutes}${t('Minutes')}`;
+                time += `${minutes}${t('sdxCommon.Minutes')}`;
             } else if (minutes === 1) {
-                time += `${minutes}${t('Minute')}`;
+                time += `${minutes}${t('sdxCommon.Minute')}`;
             }
             if (second > 1) {
-                time += `${second}${t('Seconds')}`;
+                time += `${second}${t('sdxCommon.Seconds')}`;
             } else if (second === 1) {
-                time += `${second}${t('Second')}`;
+                time += `${second}${t('sdxCommon.Second')}`;
             }
 
             return time;

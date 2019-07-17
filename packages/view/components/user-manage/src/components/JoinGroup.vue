@@ -21,13 +21,13 @@
                     type="default"
                     @click="close"
                 >
-                    {{ t('Cancel') }}
+                    {{ t('sdxCommon.Cancel') }}
                 </sdxu-button>
                 <sdxu-button
                     type="primary"
                     @click="confirm"
                 >
-                    {{ t('Confirm') }}
+                    {{ t('sdxCommon.Confirm') }}
                 </sdxu-button>
             </div>
         </sdxu-dialog>

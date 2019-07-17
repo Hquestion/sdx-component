@@ -135,14 +135,14 @@
                 size="small"
                 @click="cancel"
             >
-                {{ t('Cancel') }}
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="confirm"
             >
-                {{ t('Confirm') }}
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </sdxu-dialog>
@@ -316,7 +316,7 @@ export default {
                     if (this.isPublishing) {
                         startVersion(this.$route.params.modelId, this.editingVersion.uuid).then(() => {
                             Message({
-                                message: this.t('OperationSuccess'),
+                                message: this.t('sdxCommon.OperationSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;
@@ -331,7 +331,7 @@ export default {
                         this.versionInfoForm.runtimeResource.gpuModel = this.gpuObj.label;
                         updateVersion(this.$route.params.modelId, this.editingVersion.uuid, this.versionInfoForm).then(() => {
                             Message({
-                                message: this.t('UpdateSuccess'),
+                                message: this.t('sdxCommon.UpdateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;
@@ -346,7 +346,7 @@ export default {
                         }
                         createVersion(this.$route.params.modelId, this.versionInfoForm).then(() => {
                             Message({
-                                message: this.t('CreateSuccess'),
+                                message: this.t('sdxCommon.CreateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;

@@ -81,7 +81,7 @@
                     </el-table-column>
                     <el-table-column
                         width="400px"
-                        :label="t('Operation')"
+                        :label="t('sdxCommon.Operation')"
                         v-if="authtoWrite(objectType)"
                     >
                         <template
@@ -160,14 +160,14 @@
                         size="small"
                         @click="dialogCancel"
                     >
-                        {{ t('Cancel') }}
+                        {{ t('sdxCommon.Cancel') }}
                     </SdxuButton>
                     <SdxuButton
                         type="primary"
                         size="small"
                         @click="dialogConfirm"
                     >
-                        {{ t('Confirm') }}
+                        {{ t('sdxCommon.Confirm') }}
                     </SdxuButton>
                 </div>
             </sdxu-dialog>
@@ -283,7 +283,7 @@ export default {
         this.getPermissions();
     },
     computed: {
-        
+
     },
     methods: {
         tabName(holder) {

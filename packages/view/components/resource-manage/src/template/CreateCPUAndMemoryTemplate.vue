@@ -10,7 +10,7 @@
         <el-form
             :model="formData"
             ref="form"
-            label-width="90px"
+            label-width="100px"
         >
             <el-form-item
                 :label="t('view.resourceManage.CpuLabel')"

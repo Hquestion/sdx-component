@@ -95,7 +95,7 @@ export default {
                 'show-checkbox': this.checkable,
                 'highlight-current': true,
                 'node-key': NODE_KEY,
-                'empty-text': this.t('NoFile'),
+                'empty-text': this.t('widget.fileSelect.NoFile'),
                 accordion: true,
                 lazy: true,
                 load: this.fetchFiles,

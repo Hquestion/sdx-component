@@ -12,8 +12,11 @@
                     ]"
                     v-show="visible"
                 >
-                    <div class="sdxu-message-box__icon-close" @click="close">
-                        <i class="sdx-icon sdx-icon-check"></i>
+                    <div
+                        class="sdxu-message-box__icon-close"
+                        @click="close"
+                    >
+                        <i class="sdx-icon sdx-icon-check" />
                     </div>
                     <div class="sdxu-message-box__header">
                         <i
@@ -31,7 +34,7 @@
                             @click="handleCancel"
                             v-if="type==='confirm'"
                         >
-                            取消
+                            {{ t('Cancel') }}
                         </SdxuButton>
                         <SdxuButton
                             type="primary"

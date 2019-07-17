@@ -4,13 +4,17 @@ export default {
             ok: '确定',
             cancel: '取消'
         },
-        messageBox: {
-            prompt: '提示'
-        },
         empty: {
             noData: '暂无数据',
             noSearchResult: '无搜索结果',
             ErrorInYourPage: '您所在的页面出现错误！'
+        },
+        transfer: {
+            moveAll: '移动全部',
+            deleteAll: '删除全部'
+        },
+        panel: {
+            noContent: '暂无内容'
         }
     },
     widget: {
@@ -580,6 +584,26 @@ export default {
             NewGroup: '创建@:(view.userManage.UserGroup)',
             GroupMembers: '组员',
             NoMembers: '暂无用户'
+        },
+        authorizeManage: {
+            user_authorization_list: '用户授权列表',
+            user_group_authorization_list: '用户组授权列表',
+            role_authorization_list: '角色授权列表',
+            new_authorization: '新建授权',
+            editorial_authorization: '编辑授权',
+            authorized_object: '授权对象',
+            permission_settings: '权限设置',
+            please_enter_the_authorization_object: '请输入授权对象',
+            please_set_permission_settings: '请设置权限设置',
+            please_enter_the_user_group_name: '请输入用户组名',
+            please_enter_the_role_name: '请输入角色名',
+            role_name: '角色名',
+            new_roles: '新建角色',
+            role_description: '角色说明',
+            editorial_role: '编辑角色',
+            please_enter_a_role_description: '请输入角色说明',
+            determine_the_deletion_role: '确定删除角色',
+            this_action_deletes_the_authorization_items: '此操作会同时删除与此角色关联的授权项',
         }
     },
     ALL: '全部',

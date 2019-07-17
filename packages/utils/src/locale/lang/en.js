@@ -282,7 +282,7 @@ export default {
                 Task: 'Task',
             },
             States: {
-                Created: 'Created',
+                Created: 'Creating',
                 Building: 'Building',
                 Builded: 'Built',
                 Uploading: 'Uploading',

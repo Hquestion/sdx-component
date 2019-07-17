@@ -22,7 +22,7 @@
                     type="default"
                     @click="handleCancel"
                 >
-                    取消
+                    {{ t('Cancel') }}
                 </SdxuButton>
                 <SdxuButton
                     type="primary"
@@ -40,9 +40,11 @@
 
 import SdxuButton from '@sdx/ui/components/button';
 import ContentPanel from '@sdx/ui/components/content-panel';
-
+import locale from '@sdx/utils/src/mixins/locale';
+import { t } from '@sdx/utils/src/locale';
 export default {
     name: 'BaseForm',
+    mixins: [locale],
     props: {
         title: {
             type: String,
@@ -58,7 +60,7 @@ export default {
         },
         commitTitle: {
             type: String,
-            default: '确认'
+            default: t('Confirm')
         }
     },
     data() {
@@ -77,6 +79,7 @@ export default {
         handleCancel() {
             this.$router.go(-1);
         },
+        t
     },
     created() {
     

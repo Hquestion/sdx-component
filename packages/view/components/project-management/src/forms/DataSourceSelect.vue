@@ -5,7 +5,7 @@
         v-model="__value"
         filterable
         multiple
-        placeholder="请选择数据源"
+        :placeholder="t('view.task.form.Please_select_the_data_source')"
     >
         <el-option
             v-for="option in options"
@@ -39,9 +39,10 @@
 <script>
 
 import { getTaskDataSource} from '@sdx/utils/src/api/project';
-
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'DataSourceSelect',
+    mixins: [locale],
     props: {
         value: {
             type: Array,

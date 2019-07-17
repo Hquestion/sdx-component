@@ -12,8 +12,10 @@
 </template>
 
 <script>
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvExpandCollapseToggler',
+    mixins: [locale],
     data() {
         return {};
     },
@@ -25,7 +27,7 @@ export default {
     },
     computed: {
         label() {
-            return this.expanded ? '收起': '展开';
+            return this.expanded ? this.t('retract'): this.t('expand');
         },
         reverse() {
             return this.expanded;

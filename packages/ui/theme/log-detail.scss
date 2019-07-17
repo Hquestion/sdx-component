@@ -1,0 +1,25 @@
+@include block('log-detail', $bem-namespace-ui) {
+    height: 60vh;
+    background-color: $sdx-log-background;
+
+    @include element('container') {
+
+        @include modifier('content') {
+            display: block;
+            padding: $sdx-padding;
+            text-align: left;
+            border-radius:2px;
+            word-break: break-word;
+            white-space: pre-wrap;
+            font-size: $sdx-log-font-size;
+            line-height: $sdx-log-line-height;
+        }
+
+        @include modifier('pre-loading') {
+            margin-top: 20px;
+        }
+        @include modifier('suf-loading') {
+            
+        }
+    }
+}

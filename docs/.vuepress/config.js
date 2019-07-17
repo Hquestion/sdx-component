@@ -40,6 +40,7 @@ module.exports = {
                         'ui/scroll',
                         'ui/lazyList',
                         'ui/radial-progress',
+                        'ui/log-detail',
                         'ui/sort-button'
                     ]
                 },
@@ -57,12 +58,12 @@ module.exports = {
                         'widget/fileselect',
                         'widget/select-group-user',
                         'widget/share-setting',
-                        'widget/log-detail',
                         'widget/task-list',
                         'widget/task-start-dialog',
                         'widget/task-stop-dialog',
                         'widget/code-edit',
                         'widget/resource-config',
+                        'widget/pod-log',
                     ]
                 },
                 {

@@ -1,9 +1,9 @@
 <template>
-    <SdxwLogDetail :content="content" height="600px" />
+    <SdxuLogDetail :content="content" height="600px" :preLoading="true" :sufLoading="true" />
 </template>
 
 <script>
-import SdxwLogDetail from '@sdx/widget/components/log-detail';
+import SdxuLogDetail from '@sdx/ui/components/log-detail';
 export default {
     name: 'LogDetail',
     data() {
@@ -12,7 +12,7 @@ export default {
         };
     },
     components: {
-        SdxwLogDetail
+        SdxuLogDetail
     }
 }
 </script>

@@ -34,11 +34,13 @@
 <script>
 import MessageBox from '@sdx/ui/components/message-box';
 import IconButton from '@sdx/ui/components/icon-button';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'ResourceCard',
     data() {
         return {};
     },
+    mixins: [locale],
     components: {
         IconButton
     },
@@ -61,18 +63,18 @@ export default {
         },
         cates() {
             if (this.isCPU) {
-                return ['CPU', '内存'];
+                return ['CPU', this.t('view.resourceManage.Memory')];
             } else if (this.isGPU) {
-                return ['GPU', '型号'];
+                return ['GPU', this.t('view.resourceManage.Model')];
             } else{
                 return [];
             }
         },
         unit() {
             if (this.isCPU) {
-                return ['核', 'G'];
+                return [this.t('view.resourceManage.Core'), 'G'];
             } else if (this.isGPU) {
-                return ['块', ''];
+                return [this.t('view.resourceManage.Piece'), ''];
             } else {
                 return [];
             }
@@ -81,8 +83,8 @@ export default {
     methods: {
         handleDelete() {
             MessageBox.confirm.error({
-                title: '确定要删除此资源模板吗？',
-                content: '删除后不可恢复哦'
+                title: this.t('view.resourceManage.ConfirmDeleteTemplate'),
+                content: this.t('view.file.CantRecoveryAfterDel')
             }).then(() => {
                 this.$emit('delete');
             });

@@ -31,6 +31,18 @@ export default {
             type: 'string',
             optionValue: '-',
             defaultValue: '60vh'
+          }, {
+            params: 'preLoading',
+            describe: '日志向前滚动加载动画',
+            type: 'boolean',
+            optionValue: 'true / false',
+            defaultValue: 'false'
+          }, {
+            params: 'sufLoading',
+            describe: '日志向后滚动加载动画',
+            type: 'boolean',
+            optionValue: 'true / false',
+            defaultValue: 'false'
           }
       ],
       eventData: [

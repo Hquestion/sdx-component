@@ -6,7 +6,7 @@
                 @click="createFolder"
                 v-if="canMkdir()"
             >
-                新建文件夹
+                {{ t('view.file.NewFolder') }}
             </SdxuButton>
             <SdxwFileSelect
                 ref="fileUploader"
@@ -14,45 +14,45 @@
                 :inline="true"
                 :limit="-1"
                 dropdown-width="138px"
-                local-file-label="上传文件"
-                local-folder-label="上传文件夹"
+                :local-file-label="t('view.file.UploadFile')"
+                :local-folder-label="t('view.file.UploadFolder')"
                 :upload-params="makeUploadParams()"
                 :on-progress="handleProgress"
                 :on-success="removeUpload"
                 style="margin-left: 20px;margin-right: 20px;"
                 v-if="canUpload()"
             >
-                上传
+                {{ t('view.file.Upload') }}
             </SdxwFileSelect>
             <SdxuButton v-if="canDownload()" @click="handleDownload" :loading="fileManager.$refs.fileTable.btnStatus.batchDownloading.length > 0">
-                下载
+                {{ t('view.file.Download') }}
             </SdxuButton>
             <SdxuButton v-if="canShare()" @click="handleShare">
-                分享
+                {{ t('view.file.Share') }}
             </SdxuButton>
             <SdxuButton v-if="canCancelShare()" @click="handleCancelShare">
-                取消分享
+                {{ t('view.file.CancelShare') }}
             </SdxuButton>
             <SdxuButton
                 type="default"
                 v-if="canCopy()"
                 @click="handleCopy"
             >
-                复制
+                {{ t('view.file.Copy') }}
             </SdxuButton>
             <SdxuButton
                 type="default"
                 v-if="canMove()"
                 @click="handleMove"
             >
-                复制/移动
+                {{ t('view.file.MoveOrCopy') }}
             </SdxuButton>
             <SdxuButton
                 type="default"
                 v-if="canDelete()"
                 @click="handleDelete"
             >
-                删除
+                {{ t('Delete') }}
             </SdxuButton>
         </div>
         <div class="sdxv-operation-bar__search">
@@ -66,7 +66,7 @@
                         type="search"
                         size="small"
                         v-model="fileManager.searchKey"
-                        placeholder="请输入文件名称"
+                        :placeholder="t('view.file.PleaseInputFileName')"
                     />
                 </SdxwSearchItem>
             </SdxwSearchLayout>
@@ -82,6 +82,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import batchOperationAuthMixin from './helper/batchOperationAuthMixin';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import { rootKinds } from './helper/fileListTool';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'OperationBar',
@@ -93,7 +94,7 @@ export default {
         [SdxwSearch.SearchItem.name]: SdxwSearch.SearchItem
     },
     inject: ['fileManager'],
-    mixins: [batchOperationAuthMixin],
+    mixins: [batchOperationAuthMixin, locale],
     data() {
         return {};
     },

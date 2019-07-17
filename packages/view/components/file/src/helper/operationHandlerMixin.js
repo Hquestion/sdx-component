@@ -10,6 +10,8 @@ import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCan
 import { unlock } from '@sdx/utils/src/lockScroll';
 import { isString } from '@sdx/utils/src/helper/tool';
 import { rootKinds } from './fileListTool';
+import { ValidateReg } from '@sdx/utils/src/helper/validate';
+import { t } from '@sdx/utils/src/locale';
 
 export default {
     data() {
@@ -46,8 +48,8 @@ export default {
         rename(row) {
             if (this.editingRow && !this.editingRow.path) {
                 MessageBox.alert.warning({
-                    title: '正在新建文件夹！',
-                    content: '请先完成文件夹创建'
+                    title: t('view.file.YouAreCreatingFolder'),
+                    content: t('view.file.PleaseFinishCreatingBefore')
                 });
                 return;
             }
@@ -55,6 +57,11 @@ export default {
             this.tempRowName = row.name;
         },
         doRenameOrMakePath() {
+            const reg = new ValidateReg({min:1, max:64}, {at: false}).generate();
+            if (!reg.test(this.tempRowName)) {
+                this.$message.error(t('view.file.IncludingIllegalChar'));
+                return;
+            }
             if (this.editingRow.path) {
                 rename(this.editingRow.path, this.tempRowName, this.editingRow.ownerId).then(() => {
                     unlock(this.$el.querySelector('.el-table__body-wrapper'));
@@ -84,14 +91,14 @@ export default {
         },
         deleteRow(row) {
             // 如果传入row，则直接删除row，未传入则获取当前选中的进行删除
-            let content = '确定删除后不可恢复哦';
-            const shareContent = '选中文件已被共享，或包含被共享的文件，如果继续其他用户将无法访问共享内容。';
+            let content = t('view.file.CantRecoveryAfterDel');
+            const shareContent = t('view.file.DeleteShareTip');
             if (row) {
                 if (row.fileShareId) {
                     content = shareContent;
                 }
                 MessageBox.confirm.error({
-                    title: `确定要删除文件${row.name}吗？`,
+                    title: `${t('view.file.ConfirmToDel')}${row.name}${t('view.file.ConfirmConditionalWord')}`,
                     content
                 }).then(() => {
                     deletePath([row.path], row.ownerId).then(() => {
@@ -107,7 +114,7 @@ export default {
                     content = shareContent;
                 }
                 MessageBox.confirm.error({
-                    title: '确定要删除选中的文件吗？',
+                    title: t('view.file.ConfirmToDelAll'),
                     content
                 }).then(() => {
                     deletePath(checkedRows.map(item => item.path), checkedRows[0].ownerId).then(() => {
@@ -196,9 +203,9 @@ export default {
         path(row) {
             // 复制路径到剪贴板
             Vue.prototype.$copyText(row.path).then(() => {
-                Message.success('文件路径已拷贝到剪贴板');
+                Message.success(t('view.file.CopyToClipboard'));
             }, () => {
-                Message.error('文件路径拷贝失败');
+                Message.error(t('view.file.CopyToClipboardFail'));
             });
         },
         share(row) {
@@ -233,7 +240,7 @@ export default {
                         users,
                         groups
                     }).then(res => {
-                        Message.success('分享成功');
+                        Message.success(t('view.file.ShareSuccess'));
                     });
                 } else {
                     return share({
@@ -242,7 +249,7 @@ export default {
                         users,
                         groups
                     }).then(res => {
-                        Message.success('分享成功');
+                        Message.success(t('view.file.ShareSuccess'));
                         this.updateCachedShareId(this.toShareRow, res.uuid);
                     });
                 }
@@ -262,17 +269,17 @@ export default {
         },
         cancelShare(row) {
             MessageBox.confirm.warning({
-                title: '您确定要取消共享选中的文件吗？'
+                title: t('view.file.ConfirmCancelShareTip')
             }).then(() => {
                 if (row) {
                     shareCancel(row.fileShareId).then(res => {
                         this.updateCachedShareId(row);
-                        Message.success('取消分享成功');
+                        Message.success(t('view.file.CancelShareSuccess'));
                     });
                 } else {
                     shareCancel(this.fileManager.checked.map(item => item.fileShareId)).then(res => {
                         this.updateCachedShareId(this.fileManager.checked);
-                        Message.success('取消分享成功');
+                        Message.success(t('view.file.CancelShareSuccess'));
                         // 清空选中的项
                         this.fileManager.resetCheck();
                     });

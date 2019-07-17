@@ -94,6 +94,9 @@ export default {
             RealTimeMonitor: 'Real Time Monitor',
             DataSourceInformation: 'DataSource Information',
             DataSet: 'DataSet',
+            Core: 'Core',
+            Block: 'Block',
+            Count: '',
 
             type: {
                 SPARK: 'SPARK',
@@ -241,6 +244,7 @@ export default {
     },
     ALL: 'ALL',
     all: 'all',
+    All: 'All',
     Creator: 'Creator',
     CreatedTime: 'Created Time',
     Operation: 'Operation',

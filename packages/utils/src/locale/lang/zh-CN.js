@@ -148,6 +148,7 @@ export default {
             AutoPull: '自动拉取',
             RollingFollow: '滚动跟随',
             ReachedTheHeadOfLog: '已经到达日志头部',
+            NoNewLogsYet: '暂时没有新的日志',
             BasicInformation: '基本信息',
             RunningInformation: '运行信息',
             ResourceInformation: '资源信息',
@@ -171,7 +172,7 @@ export default {
                 PMML_SERVING: 'PMML模型服务'
             },
             state: {
-                CREATED: '创建',
+                CREATED: '创建成功',
                 LAUNCHING: '启动中',
                 LAUNCH_ABNORMAL: '启动异常',
                 RUNNING: '运行中',
@@ -186,6 +187,35 @@ export default {
                 detail: '查看',
                 edit: '编辑',
                 remove: '删除'
+            },
+            form: {
+                create: '新建',
+                edit: '编辑',
+                task: '任务',
+                Please_enter_the_task_name: '请输入任务名称',
+                Please_enter_a_task_description: '请输入任务描述',
+                Please_select_the_operating_environment: '请选择运行环境',
+                ResourceAllocation: '资源配置',
+                DataSource: '数据源',
+                Please_select_the_dataset: '请选择数据集',
+                Please_select_the_data_source: '请选择数据源',
+                CPU_Memory_resources_need_to_be_configured: '需要配置CPU/内存资源',
+                GPU_resources_need_to_be_configured: '需要配置GPU资源',
+                Start_up_parameter_holder: '请输入创建的参数，~/ 代表家目录， ./ 代表代码所在的目录',
+                Please_select_the_source_code: '请选择源代码',
+                Driver_CPU_memory_needs_to_be_configured: '需要配置驱动器CPU/内存',
+                Executor_CPU_memory_needs_to_be_configured: '需要配置执行器CPU/内存',
+                Please_enter_the_number_of_instances: '请输入实例个数',
+                Please_enter_the_name_of_the_main_class: '请输入主类名称',
+                Please_select_the_log_directory: '请选择日志目录',
+                ParametricServer: '参数服务器',
+                Parameter_server_CPU_Memory_need_to_be_configured: '需要配置参数服务器CPU/内存',
+                Computing_node_CPU_Memory_need_to_be_configured: '需要配置计算节点CPU/内存',
+                Computing_node_GPU_needs_to_be_configured: '需要配置计算节点GPU',
+                Please_select_the_training_output_directory: '请选择训练输出目录',
+                Please_enter_the_parameter_server_calculate_the_number_of_node_instances: '请输入参数服务器/计算节点实例个数',
+                Please_enter_the_number_of_calculated_node_instances: '请输入计算节点实例个数',
+                Please_enter_the_number_of_parameter_server_instances: '请输入参数服务器实例个数'
             }
         },
         monitor: {

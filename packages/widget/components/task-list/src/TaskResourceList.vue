@@ -145,7 +145,7 @@
             <el-table-column
                 :label="t('Operation')"
                 fixed="right"
-                min-width="130px"
+                min-width="140px"
             >
                 <template #default="{ row }">
                     <SdxuIconButtonGroup>

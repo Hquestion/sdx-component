@@ -23,7 +23,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
     @include element('item') {
         width: 50%;
-        height: 20px;
+        min-height: 20px;
         min-width: 350px;
         display: flex;
         padding: 0 $sdx-padding;
@@ -38,6 +38,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             display: flex;
             justify-content: flex-end;
             align-items: flex-start;
+            word-break: break-all;
         }
 
         @include modifier('value') {

@@ -1,20 +1,19 @@
 <template>
-    <SdxvJupyterDetail :task="task" />
+    <SdxvTaskDetail :task="task" />
 </template>
 
 <script>
-import SdxvJupyterDetail from '@sdx/view/components/project-management/src/task-detail/JupyterDetail';
-import SdxvTensorflowDetail from '@sdx/view/components/project-management/src/task-detail/TensorflowDetail';
+import SdxvTaskDetail from '@sdx/view/components/task-management/src/task-detail/TaskDetail';
 
 export default {
     components: {
-        SdxvJupyterDetail,
-        SdxvTensorflowDetail
+        SdxvTaskDetail
     },
     data() {
         return {
             task: {
                 name: 'jupyter',
+                type: 'JUPYTER',
                 state: 'RUNNING',
                 owner: {
                     name: 'creator'

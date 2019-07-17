@@ -101,12 +101,12 @@
                 <ResourceConfig
                     v-model="versionInfoForm.runtimeResource.gpuObj"
                     type="gpu"
-                    v-if="!editingVersion"
+                    v-if="!editingVersion && isGpuEnt"
                 />
                 <ResourceConfig
                     v-model="gpuObj"
                     type="gpu"
-                    v-else
+                    v-if="editingVersion && isGpuEnt"
                     :read-only="isPublishing"
                 />
             </el-form-item>
@@ -231,6 +231,13 @@ export default {
             this.dialogVisible = nVal;
         }
     },
+    computed: {
+        isGpuEnt() {
+            if (!this.runtimeImageOptions.length) return false;
+            let item = this.runtimeImageOptions.find(item => item.value === this.versionInfoForm.runtimeImage);
+            return item && item.label.includes('gpu');
+        }
+    },
     components: {
         [Dialog.name]: Dialog,
         [Button.name]: Button,
@@ -271,7 +278,7 @@ export default {
                 callback();
                 return;
             }
-            if (value && (!Object.keys(value.cpuObj).length || !Object.keys(value.gpuObj).length)) {
+            if (value && (!Object.keys(value.cpuObj).length || (this.isGpuEnt && !Object.keys(value.gpuObj).length))) {
                 callback(new Error(this.t('view.model.enterResource')));
             } else {
                 callback();
@@ -333,8 +340,10 @@ export default {
                     } else {
                         this.versionInfoForm.runtimeResource.cpu = this.versionInfoForm.runtimeResource.cpuObj.cpu * 1000;
                         this.versionInfoForm.runtimeResource.memory = this.versionInfoForm.runtimeResource.cpuObj.memory * 1024 * 1024 * 1024;
-                        this.versionInfoForm.runtimeResource.gpu = this.versionInfoForm.runtimeResource.gpuObj.count;
-                        this.versionInfoForm.runtimeResource.gpuModel = this.versionInfoForm.runtimeResource.gpuObj.label;
+                        if (this.isGpuEnt) {
+                            this.versionInfoForm.runtimeResource.gpu = this.versionInfoForm.runtimeResource.gpuObj.count;
+                            this.versionInfoForm.runtimeResource.gpuModel = this.versionInfoForm.runtimeResource.gpuObj.label;
+                        }
                         createVersion(this.$route.params.modelId, this.versionInfoForm).then(() => {
                             Message({
                                 message: this.t('CreateSuccess'),

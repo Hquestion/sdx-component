@@ -74,7 +74,7 @@
                     <SdxwResourceConfig
                         v-model="gpuObj"
                         type="gpu"
-                    /> 
+                    />
                 </div>
             </el-form-item>
             <el-form-item
@@ -114,8 +114,10 @@ import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask } from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator , descValidator} from '@sdx/utils/src/helper/validate';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'TfSingleForm',
+    mixins: [locale],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -257,7 +259,7 @@ export default {
             };
         },
         cpuObj(val) {
-            this.params.resourceConfig = { 
+            this.params.resourceConfig = {
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': val.cpu * 1000,
                 'EXECUTOR_GPUS': this.params.resourceConfig.EXECUTOR_GPUS,
@@ -266,7 +268,7 @@ export default {
             };
         },
         gpuObj(val) {
-            this.params.resourceConfig = { 
+            this.params.resourceConfig = {
                 'EXECUTOR_INSTANCES': 1,
                 'EXECUTOR_CPUS': this.params.resourceConfig.EXECUTOR_CPUS,
                 'EXECUTOR_GPUS': val.count,

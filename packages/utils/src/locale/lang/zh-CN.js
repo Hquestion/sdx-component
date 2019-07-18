@@ -258,6 +258,30 @@ export default {
                 }
             }
         },
+        project: {
+            projectList: '项目列表',
+            createProject: '新建项目',
+            editProject: '编辑项目',
+            emptyCreate: '空白创建',
+            templateCreate: '模板创建',
+            copyCreate: '复制创建',
+            sortByCreateTime: '按创建时间排序',
+            enterProjectName: '请输入项目名称',
+            enterProjectDescription: '请输入项目描述',
+            confirmRemove: '确定删除该项目吗？',
+            createForm: {
+                name: '项目名称：',
+                description: '项目描述：',
+                setTemplate: '设为模板：'
+            },
+            selfCreateProject: '自建项目',
+            otherProject: '其他项目',
+            taskList: '任务列表',
+            enterTaskName: '请输入任务名',
+            modelDev: '模型开发',
+            modelTraining: '模型训练',
+            modelAssess: '模型评估'
+        },
         image: {
             // 镜像列表
             ImageList: '镜像列表',
@@ -648,6 +672,7 @@ export default {
         Reset: '重置',
         Yes: '是',
         No: '否',
-        Edit: '编辑'
+        Edit: '编辑',
+        UserGroup: '协作者/组：'
     }
 };

@@ -1,7 +1,7 @@
 <template>
     <sdxu-content-panel
         class="sdxv-project-management"
-        title="项目列表"
+        :title="t('view.project.projectList')"
     >
         <div class="sdxv-project-management__header">
             <div class="sdxv-project-management__header--left">
@@ -11,7 +11,7 @@
                     icon="sdx-icon-plus"
                     v-auth.project.button="'PROJECT:CREATE'"
                 >
-                    新建项目
+                    {{ t('view.project.createProject') }}
                     <template slot="dropdown">
                         <SdxuButton
                             type="text"
@@ -19,7 +19,7 @@
                             block
                             @click="showCreateProject('empty')"
                         >
-                            空白创建
+                            {{ t('view.project.emptyCreate') }}
                         </SdxuButton>
                         <SdxuButton
                             type="text"
@@ -27,7 +27,7 @@
                             block
                             @click="showCreateProject('template')"
                         >
-                            模板创建
+                            {{ t('view.project.templateCreate') }}
                         </SdxuButton>
                         <SdxuButton
                             type="text"
@@ -35,12 +35,12 @@
                             block
                             @click="showCreateProject('project')"
                         >
-                            复制创建
+                            {{ t('view.project.copyCreate') }}
                         </SdxuButton>
                     </template>
                 </sdxu-button>
                 <SdxuSortButton
-                    title="按创建时间排序"
+                    :title="t('view.project.sortByCreateTime')"
                     @sortChange="sortChange"
                     :order.sync="order"
                 />
@@ -56,7 +56,7 @@
                         v-model="searchName"
                         type="search"
                         size="small"
-                        placeholder="请输入项目名"
+                        :placeholder="t('view.project.enterProjectName')"
                     />
                 </SdxwSearchItem>
             </SdxwSearchLayout>
@@ -100,6 +100,7 @@ import SortButton from '@sdx/ui/components/sort-button';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -118,6 +119,7 @@ export default {
     directives: {
         auth
     },
+    mixins: [locale],
     components: {
         [Select.name]: Select,
         [Button.name]: Button,
@@ -193,12 +195,12 @@ export default {
                 switch(operation.type) {
                 case 'delete':
                     MessageBox({
-                        title: '确定删除吗？',
-                        content: '删除后将不可恢复'
+                        title: this.t('view.project.confirmRemove'),
+                        content: this.t('sdxCommon.ConfirmRemove'),
                     }).then(() => {
                         removeProject(operation.id).then(() => {
                             Message({
-                                message: '删除成功',
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initList();

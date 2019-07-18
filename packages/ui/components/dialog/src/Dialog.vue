@@ -155,11 +155,11 @@ export default {
         },
         confirmLabel: {
             type: String,
-            default: t('ui.button.ok')
+            default: () => t('ui.button.ok')
         },
         cancelLabel: {
             type: String,
-            default: t('ui.button.cancel')
+            default: () => t('ui.button.cancel')
         },
         confirmHandler: {
             type: Function,

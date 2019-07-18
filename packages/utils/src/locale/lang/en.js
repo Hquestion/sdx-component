@@ -83,6 +83,23 @@ export default {
             User: 'User',
             Group: 'Group',
             Role: 'Role'
+        },
+        resourceConfig: {
+            Please_select: 'Please select',
+            Core: 'Core',
+            Memory: 'Memory',
+            CPU_Memory: ' CPU/Memory',
+            Driver_CPU_Memory: ' Driver CPU/Memory',
+            Actuator_CPU_Memory: ' Actuator CPU/Memory',
+            Parametric_Server_CPU_Memory: ' Parametric Server CPU/Memory',
+            Computing_Node_CPU_Memory: ' Computing Node CPU/Memory',
+            Computing_Node_GPU: ' Computing Node GPU',
+            Main_Node_CPU_Memory: ' Main Node CPU/Memory',
+            Model: 'Model',
+            Number: 'Number',
+            Piece: 'Piece',
+            Please_select_resource_allocation: 'Please select resource allocation',
+            GPU: ' GPU'
         }
     },
     general: {
@@ -681,6 +698,21 @@ export default {
             imageVersionValidate: 'Please fill in 1-64 characters in length, allowing English letters, numbers,., or-',
             tagNameValidate: 'Please fill in a string of 1-10 digits, letters or numbers beginning, letters, numbers and points.',
             testNumber: 'Please enter a positive integer'
+        },
+        transform: {
+            'day_ago': 'Day ago',
+            'days_ago': 'Days ago',
+            'just': 'Just',
+            'minutes_ago': 'Minutes ago',
+            'minute_ago': 'Minute ago',
+            'week_ago': 'Week ago',
+            'weeks_ago': 'Weeks ago',
+            'months_ago': 'Months ago',
+            'month_ago': 'Month ago',
+            'year_ago': 'Year ago',
+            'years_ago': 'Years ago',
+            'hours_ago': 'Hours ago',
+            'hour_ago': 'Hour ago',
         }
     }
 };

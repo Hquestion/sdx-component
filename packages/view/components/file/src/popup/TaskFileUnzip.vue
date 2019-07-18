@@ -15,7 +15,7 @@
             show-overflow-tooltip
         />
         <el-table-column
-            :label="t('Status')"
+            :label="t('sdxCommon.Status')"
             min-width="150"
             header-align="left"
             align="left"

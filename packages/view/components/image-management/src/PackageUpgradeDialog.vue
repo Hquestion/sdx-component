@@ -1,7 +1,7 @@
 <template>
     <sdxu-dialog
         :visible.sync="dialogVisible"
-        :title="t('Upgrade')"
+        :title="t('sdxCommon.Upgrade')"
         @confirm="handleConfirm"
         @cancel="handleCancel"
         class="sdxv-package-upgrade-dialog"

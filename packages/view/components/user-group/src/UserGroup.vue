@@ -63,21 +63,21 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    :label="t('Operation')"
+                    :label="t('sdxCommon.Operation')"
                 >
                     <template #default="{ row }">
                         <div class="sdxv-user-group__table--operation">
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-edit"
                                 @click="handleEdit(row)"
-                                :title="t('Edit')"
+                                :title="t('sdxCommon.Edit')"
                                 v-auth.user.button="'GROUP:WRITE'"
                             />
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-delete"
                                 v-auth.user.button="'GROUP:WRITE'"
                                 @click="handleDelete(row)"
-                                :title="t('Delete')"
+                                :title="t('sdxCommon.Delete')"
                             />
                         </div>
                     </template>

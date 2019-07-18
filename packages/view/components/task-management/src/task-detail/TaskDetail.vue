@@ -33,7 +33,7 @@
                 </template>
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
-                :label="t('Creator')"
+                :label="t('sdxCommon.Creator')"
                 :value="task && task.owner && task.owner.fullName || ''"
             />
             <SdxvBaseInfoItem
@@ -149,7 +149,7 @@
         </template>
         <template #resource-info>
             <template v-if="isTENSORFLOW_AUTO_DIST || isTENSORFLOW_DIST">
-                <div 
+                <div
                     v-if="!isTENSORFLOW_DIST"
                     class="sdxv-info-container is-background"
                 >

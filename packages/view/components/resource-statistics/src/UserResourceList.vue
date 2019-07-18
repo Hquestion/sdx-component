@@ -12,7 +12,7 @@
                 class="sdxv-user-resource-list__more"
                 @click="handGotoUserResourceList"
             >
-                <span>{{ t('All') }}</span>
+                <span>{{ t('sdxCommon.ALL') }}</span>
                 <i class="sdx-icon sdx-icon-arrow-right" />
             </div>
             <div
@@ -31,7 +31,7 @@
                     @click="handleSearch"
                     class="sdxv-user-resource-list__search--button"
                 >
-                    {{ t('Search') }}
+                    {{ t('sdxCommon.Search') }}
                 </SdxuButton>
             </div>
         </template>
@@ -47,7 +47,7 @@
             />
             <el-table-column
                 prop="owner.createdAt"
-                :label="t('CreatedTime')"
+                :label="t('sdxCommon.CreatedTime')"
             >
                 <template #default="{ row }">
                     <span>

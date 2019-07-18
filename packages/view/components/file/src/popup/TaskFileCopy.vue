@@ -50,7 +50,7 @@
             :show-overflow-tooltip="true"
         />
         <el-table-column
-            :label="t('Status')"
+            :label="t('sdxCommon.Status')"
             min-width="80"
             header-align="left"
             align="left"
@@ -65,7 +65,7 @@
             </template>
         </el-table-column>
         <el-table-column
-            :label="t('Operation')"
+            :label="t('sdxCommon.Operation')"
             min-width="40"
             header-align="left"
             align="left"

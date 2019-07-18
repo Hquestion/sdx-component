@@ -77,7 +77,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Operation')"
+                :label="t('sdxCommon.Operation')"
                 key="operation"
             >
                 <template slot-scope="scope">
@@ -85,7 +85,7 @@
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'detail')"
                             icon="sdx-icon sdx-icon-tickets"
-                            :title="t('Detail')"
+                            :title="t('sdxCommon.Detail')"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'publish')"
@@ -96,13 +96,13 @@
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'edit')"
                             icon="sdx-icon sdx-icon-edit"
-                            :title="t('Edit')"
+                            :title="t('sdxCommon.Edit')"
                             v-if="scope.row.showEdit"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'remove')"
                             icon="sdx-icon sdx-icon-delete"
-                            :title="t('Delete')"
+                            :title="t('sdxCommon.Delete')"
                             v-if="scope.row.showRemove"
                         />
                         <sdxu-icon-button
@@ -321,11 +321,11 @@ export default {
                 case 'remove':
                     MessageBox({
                         title: this.t('view.model.versionRemoveConfirm'),
-                        content: this.t('ConfirmRemove')
+                        content: this.t('sdxCommon.ConfirmRemove')
                     }).then(() => {
                         removeVersion(this.$route.params.modelId, row.uuid).then(() => {
                             Message({
-                                message: this.t('RemoveSuccess'),
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initVersionList();
@@ -343,7 +343,7 @@ export default {
                     }).then(() => {
                         shutdownVersion(this.$route.params.modelId, row.uuid).then(() => {
                             Message({
-                                message: this.t('OperationSuccess'),
+                                message: this.t('sdxCommon.OperationSuccess'),
                                 type: 'success'
                             });
                             this.initVersionList();

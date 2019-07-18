@@ -11,7 +11,7 @@
                 v-show="imageKind === 'private'"
                 v-auth.image.button="'IMAGE:SHARE'"
             >
-                {{ t('ShareAll') }}
+                {{ t('sdxCommon.ShareAll') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
@@ -20,7 +20,7 @@
                 @click="remove"
                 v-if="imageKind === 'private'"
             >
-                {{ t('Delete') }}
+                {{ t('sdxCommon.Delete') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
@@ -29,7 +29,7 @@
                 v-show="imageKind === 'myShare'"
                 v-auth.image.button="'IMAGE:SHARE'"
             >
-                {{ t('CancelShare') }}
+                {{ t('sdxCommon.CancelShare') }}
             </SdxuButton>
         </div>
         <sdxu-table
@@ -85,7 +85,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Operation')"
+                :label="t('sdxCommon.Operation')"
             >
                 <template slot-scope="scope">
                     <sdxu-icon-button
@@ -103,13 +103,13 @@
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'detail')"
                         icon="sdx-icon sdx-icon-tickets"
-                        :title="t('Detail')"
+                        :title="t('sdxCommon.Detail')"
                         v-if="scope.row.showDetail"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'remove')"
                         icon="sdx-icon sdx-icon-delete"
-                        :title="t('Delete')"
+                        :title="t('sdxCommon.Delete')"
                         v-if="scope.row.showRemove"
                     />
                 </template>
@@ -252,13 +252,13 @@ export default {
             }
             MessageBox({
                 title: this.t('view.image.imageRemoveConfirm'),
-                content: this.t('ConfirmRemove')
+                content: this.t('sdxCommon.ConfirmRemove')
             }).then(() => {
                 const uuids = [];
                 this.selectedImages.forEach(item => uuids.push(item.uuid));
                 removeGroupImages({ uuids }).then(() => {
                     Message({
-                        message: this.t('RemoveSuccess'),
+                        message: this.t('sdxCommon.RemoveSuccess'),
                         type: 'success'
                     });
                     this.initImageList();
@@ -288,7 +288,7 @@ export default {
                 };
                 updateGroupImages(params).then(() => {
                     Message({
-                        message: this.t('OperationSuccess'),
+                        message: this.t('sdxCommon.OperationSuccess'),
                         type: 'success'
                     });
                     this.initImageList();
@@ -306,7 +306,7 @@ export default {
                 // 编辑镜像
                 updateImage(this.editingImage.uuid, this.shareForm).then(() => {
                     Message({
-                        message: this.t('SettingSuccess'),
+                        message: this.t('sdxCommon.SettingSuccess'),
                         type: 'success'
                     });
                     this.editingImage = null;
@@ -323,7 +323,7 @@ export default {
                 };
                 updateGroupImages(params).then(() => {
                     Message({
-                        message: this.t('SettingSuccess'),
+                        message: this.t('sdxCommon.SettingSuccess'),
                         type: 'success'
                     });
                     this.initImageList();
@@ -414,11 +414,11 @@ export default {
                 case 'remove':
                     MessageBox({
                         title: this.t('view.image.imageRemoveConfirm'),
-                        content: this.t('ConfirmRemove')
+                        content: this.t('sdxCommon.ConfirmRemove')
                     }).then(() => {
                         removeImage(row.uuid).then(() => {
                             Message({
-                                message: this.t('RemoveSuccess'),
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initImageList();

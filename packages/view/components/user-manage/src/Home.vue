@@ -74,7 +74,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    :label="t('Operation')"
+                    :label="t('sdxCommon.Operation')"
                 >
                     <template slot-scope="scope">
                         <sdxu-icon-button

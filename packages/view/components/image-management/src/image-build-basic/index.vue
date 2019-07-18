@@ -57,7 +57,7 @@
                             {{ t('view.image.AddNewPackage') }}
                         </sdxu-button>
                         <div class="sdxv-image-build-basic__add-package--icon">
-                            <span>{{ showAddPackageForm ? t('retract') : t('expand') }}</span>
+                            <span>{{ showAddPackageForm ? t('sdxCommon.retract') : t('sdxCommon.expand') }}</span>
                             <i
                                 class="sdx-icon sdx-icon-arrow-down"
                                 :class="{ 'is-reverse': showAddPackageForm }"
@@ -88,10 +88,10 @@
                     @click="handleCancel"
                     size="small"
                 >
-                    {{ t('Cancel') }}
+                    {{ t('sdxCommon.Cancel') }}
                 </sdxu-button>
                 <sdxu-button
-                    @click="handleSaveAndBuild" 
+                    @click="handleSaveAndBuild"
                     size="small"
                     :disabled="!hasChangedPackages"
                 >
@@ -173,7 +173,7 @@ export default {
     },
     computed: {
         name_prefix() {
-            return this.baseInfo.name + '_'; 
+            return this.baseInfo.name + '_';
         },
         hasChangedPackages() {
             return !!(this.imageInfo.installPackages.length || this.imageInfo.uninstallPackages.length || this.imageInfo.upgradePackages.length);

@@ -32,7 +32,7 @@
                     @tab-click="selectImageKind"
                 >
                     <el-tab-pane
-                        :label="t('ALL')"
+                        :label="t('sdxCommon.ALL')"
                         name="all"
                     />
                     <el-tab-pane
@@ -74,7 +74,7 @@
                             size="medium"
                         >
                             <el-option
-                                :label="t('ALL')"
+                                :label="t('sdxCommon.ALL')"
                                 value=""
                             />
                             <el-option
@@ -94,7 +94,7 @@
                             size="medium"
                         >
                             <el-option
-                                :label="t('ALL')"
+                                :label="t('sdxCommon.ALL')"
                                 value=""
                             />
                             <el-option
@@ -114,7 +114,7 @@
                             size="medium"
                         >
                             <el-option
-                                :label="t('ALL')"
+                                :label="t('sdxCommon.ALL')"
                                 value=""
                             />
                             <el-option

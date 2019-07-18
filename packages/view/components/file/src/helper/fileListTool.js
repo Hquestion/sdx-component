@@ -68,7 +68,7 @@ export const iconButtonTypes = {
     },
     DELETE: {
         icon: 'sdx-icon sdx-icon-delete',
-        title: t('Delete'),
+        title: t('sdxCommon.Delete'),
         name: BTN_NAMES.DELETE
     },
     PATH: {

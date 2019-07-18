@@ -83,7 +83,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Size')"
+                :label="t('sdxCommon.Size')"
                 :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="size"
                 width="180"
@@ -119,7 +119,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Operation')"
+                :label="t('sdxCommon.Operation')"
                 width="180"
                 v-if="!fileManager.isProjectRoot()"
             >

@@ -34,14 +34,14 @@
                 type="default"
                 size="small"
             >
-                {{ t('Cancel') }}
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="onConfirm"
             >
-                {{ t('Confirm') }}
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </div>

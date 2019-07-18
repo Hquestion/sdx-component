@@ -34,13 +34,13 @@
                             @click="handleCancel"
                             v-if="type==='confirm'"
                         >
-                            {{ t('Cancel') }}
+                            {{ t('sdxCommon.Cancel') }}
                         </SdxuButton>
                         <SdxuButton
                             type="primary"
                             @click="handleConfirm"
                         >
-                            {{ t('ui.button.ok') }}
+                            {{ t('sdxCommon.Confirm') }}
                         </SdxuButton>
                     </div>
                 </div>

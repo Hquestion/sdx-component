@@ -30,7 +30,7 @@
                 <slot name="data-info" />
             </template>
         </SdxuContentPanel>
-        <SdxuContentPanel :title="t('Log')">
+        <SdxuContentPanel :title="t('sdxCommon.Log')">
             <template #default>
                 <slot name="log-info" />
             </template>

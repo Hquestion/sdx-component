@@ -28,7 +28,7 @@
         <SdxuTable
             :data="dataList"
             v-loading="loading"
-            :empty-text="t('NoData')"
+            :empty-text="t('sdxCommon.NoData')"
         >
             <el-table-column
                 :label="t('view.monitor.componentState.PodName')"
@@ -49,14 +49,14 @@
                 :label="t('view.monitor.componentState.Node')"
                 prop="nodeName"
             />
-            <el-table-column 
+            <el-table-column
                 v-auth.system.button="'POD-LOG:READ'"
-                :label="t('Operation')"
+                :label="t('sdxCommon.Operation')"
             >
                 <template #default="{ row }">
                     <SdxuIconButton
                         icon="sdx-icon sdx-chakanrizhi"
-                        :title="t('Log')"
+                        :title="t('sdxCommon.Log')"
                         @click="handleViewLog(row)"
                     />
                 </template>
@@ -202,7 +202,7 @@ export default {
     },
     beforeDestroy() {
         clearInterval(this.pollingId);
-        this.pollingId = null;    
+        this.pollingId = null;
     },
     watch: {
         type() {

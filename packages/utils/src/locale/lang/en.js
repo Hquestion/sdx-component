@@ -662,5 +662,25 @@ export default {
         Yes: 'Yes',
         No: 'No',
         Edit: 'Edit'
+    },
+    utils: {
+        validator: {
+            commonNameValidator: 'Please fill in a string of 1 to 64 bits, English letters, numbers, spaces, underscores, dots and hyphens.',
+            nickNameValidator: 'Please enter 1-64 digits and fill in a string of Chinese characters, English letters, numbers, @, spaces, dots and hyphens.',
+            passwordValidator: 'Please fill in a 6-16 digit string of letters, numbers and special symbols in English.',
+            nameWithChineseValidator: 'Please fill in a string consisting of 1 to 64 bits of Chinese characters, English letters, numbers, spaces, underscores, dots and hyphens.',
+            descValidator: 'Please fill in 0 to 256 bit strings',
+            nameStartWithLowerCaseValidator: 'Please fill in a string of 1 to 64 bits, beginning with lowercase letters, lowercase letters, numbers, underscores, dots and hyphens.',
+            nameStartWithLetterValidator: 'Please fill in a string of letters, numbers, spaces, underscores, dots and hyphens in 1 to 64 bits, beginning with the English alphabet.',
+            tagValidator: 'Please fill in a 1-10 digit string composed of English letters, numbers and Chinese characters.',
+            tagArrayValidator: 'Please fill in a 1-10 digit string composed of English letters, numbers and Chinese characters.',
+            nameValidate: 'Please fill in a string of 4 to 20 digits, beginning with letters, numbers, letters, underscores and dots.',
+            cNameValidate: 'Please fill in a string consisting of 1 to 24 bits of Chinese characters, letters, numbers, @, -, dots and underscores.',
+            itemNameValidate: 'Please fill in a string of 1-24 digits, beginning with lowercase letters, numbers, lowercase letters, dots and underscores.',
+            imageNameValidate: 'Please fill in 1-64 characters in length, beginning with lowercase letters, allowing lowercase letters, numbers,., or-',
+            imageVersionValidate: 'Please fill in 1-64 characters in length, allowing English letters, numbers,., or-',
+            tagNameValidate: 'Please fill in a string of 1-10 digits, letters or numbers beginning, letters, numbers and points.',
+            testNumber: 'Please enter a positive integer'
+        }
     }
 };

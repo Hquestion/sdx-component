@@ -273,6 +273,7 @@ export default {
             SearchImageKind: '镜像种类：',
             SearchImageState: '状态：',
             SearchBuildType: '构建方式：',
+            MirrorVersion: '镜像版本号：',
             BuildTypes: {
                 Basic: '基础镜像',
                 Online: '在线构建',
@@ -295,6 +296,9 @@ export default {
                 buildType: '构建方式',
                 creator: '创建人',
                 createdAt: '创建时间',
+                state: '状态',
+                compare: '比较',
+                viewLog: '查看日志'
             },
             imagesToShare: '请先选择需要共享的镜像',
             imagesToRemove: '请先选择需要删除的镜像',
@@ -334,7 +338,15 @@ export default {
             ChangeType: '变更类型',
             NewlyAdded: '新增',
             LogDetail: '日志详情',
-            ImageType: '镜像类型'
+            ImageType: '镜像类型',
+            delete_the_selected_mirror_task: '确定要删除选中的镜像任务吗？',
+            can_not_be_restored_after_deletion: '确定删除后不可恢复哦',
+            FileAddress: '文件地址',
+            FileAddressColon: '文件地址：',
+            please_enter_the_file_address: '请输入文件地址',
+            in_a_non_networked_environmen: '不联网的环境下，DockerFile中可使用的基础镜像如下表所示：',
+            CorePackage: '核心包',
+            etc: '等'
         },
         model: {
             tabs: {

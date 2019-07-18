@@ -1,26 +1,30 @@
 <template>
     <div class="create-image-base-file_tips">
         <div>
-            不联网的环境下，DockerFile中可使用的基础镜像如下表所示:
+            {{ t('view.image.in_a_non_networked_environmen') }}
         </div>
         <div>
-            <div>基础镜像</div>
+            <div>{{ t('view.image.ImageKind.Basic') }}</div>
             <div>skyintelligent/container_dev_py2.7_gpu_cuda8.0_cudnn6</div>
             <div>skyintelligent/container_dev_py2.7_gpu_cuda9.2_cudnn7</div>
             <div>skyintelligent/container_dev_py3.6_gpu_cuda8.0_cudnn6</div>
-            <div> skyintelligent/container_dev_py3.6_gpu_cuda9.2_cudnn7</div>
+            <div>skyintelligent/container_dev_py3.6_gpu_cuda9.2_cudnn7</div>
         </div>
         <div>
-            <div>核心包</div>
-            <div>python2.7/tensorflow1.8.0/pytorch1.0/conda/R/jupyter-lab/tensorboard等</div>
-            <div>python2.7/tensorflow1.12.0/pytorch1.0/conda/R/jupyter-lab/tensorboard等</div>
-            <div>python3.6/tensorflow1.8.0/pytorch1.0/conda/R/jupyter-lab/tensorboard等</div>
-            <div>python3.6/tensorflow1.12.0/pytorch1.0/conda/R/jupyter-lab/tensorboard等</div>
+            <div>{{ t('view.image.CorePackage') }}</div>
+            <div>python2.7/tensorflow1.8.0/pytorch1.0/conda/R/jupyter-lab/tensorboard {{ t('view.image.etc') }}</div>
+            <div>python2.7/tensorflow1.12.0/pytorch1.0/conda/R/jupyter-lab/tensorboard {{ t('view.image.etc') }}</div>
+            <div>python3.6/tensorflow1.8.0/pytorch1.0/conda/R/jupyter-lab/tensorboard {{ t('view.image.etc') }}</div>
+            <div>python3.6/tensorflow1.12.0/pytorch1.0/conda/R/jupyter-lab/tensorboard {{ t('view.image.etc') }}</div>
         </div>
     </div>
 </template>
 <script>
-export default {};
+import locale from '@sdx/utils/src/mixins/locale';
+export default {
+    name: 'Iconifon',
+    mixins: [locale],
+};
 </script>
 
 <style lang="scss" scoped>

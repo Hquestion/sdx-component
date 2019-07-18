@@ -83,6 +83,23 @@ export default {
             User: '用户',
             Group: '用户组',
             Role: '角色'
+        },
+        resourceConfig: {
+            Please_select: '请选择',
+            Core: '核',
+            Memory: '内存',
+            CPU_Memory: 'CPU/内存',
+            Driver_CPU_Memory: '驱动器CPU/内存',
+            Actuator_CPU_Memory: '执行器CPU/内存',
+            Parametric_Server_CPU_Memory: '参数服务器CPU/内存',
+            Computing_Node_CPU_Memory: '计算节点CPU/内存',
+            Computing_Node_GPU: '计算节点GPU',
+            Main_Node_CPU_Memory: '主节点CPU/内存',
+            Model: '型号',
+            Number: '数量',
+            Piece: '块',
+            Please_select_resource_allocation: '请选择资源配置',
+            GPU: 'GPU'
         }
     },
     general: {
@@ -680,6 +697,21 @@ export default {
             imageVersionValidate: '请填写长度为1-64个字符，允许英文字母、数字、"."、"_"或"-"',
             tagNameValidate: '请填写1-10位，字母或数字开头，字母、数字与点组成的字符串',
             testNumber: '请输入正整数'
+        },
+        transform: {
+            day_ago: '天前',
+            days_ago: '天前',
+            just: '刚刚',
+            minutes_ago: '分钟前',
+            minute_ago: '分钟前',
+            week_ago: '周前',
+            weeks_ago: '周前',
+            months_ago: '月前',
+            month_ago: '月前',
+            year_ago: '年前',
+            years_ago: '年前',
+            hours_ago: '小时前',
+            hour_ago: '小时前',
         }
     }
 };

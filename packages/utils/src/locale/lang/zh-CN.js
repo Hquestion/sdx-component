@@ -488,7 +488,7 @@ export default {
             Loaded: '已加载',
             Totally: '共',
             Items: '条',
-            AllFiles: '@:(sdxCommon.ALL)@:(view.file.File)',
+            AllFiles: '@:(sdxCommon.All)@:(view.file.File)',
             SearchResults: '@:(sdxCommon.Search)结果',
             AlreadyChecked: '已选中',
             FileOrFolder: '个@:(view.file.File)/@:(view.file.Folder)',
@@ -608,6 +608,7 @@ export default {
     },
     sdxCommon: {
         ALL: '全部',
+        All: '全部',
         Creator: '创建人',
         CreatedTime: '创建时间',
         Operation: '操作',

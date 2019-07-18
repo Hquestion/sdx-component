@@ -489,7 +489,7 @@ export default {
             Loaded: 'Loaded ',
             Totally: 'Totally ',
             Items: ' items',
-            AllFiles: '@:(sdxCommon.ALL) @:(view.file.File)',
+            AllFiles: '@:(sdxCommon.All) @:(view.file.File)',
             SearchResults: '@:(sdxCommon.Search) Results',
             AlreadyChecked: 'Already Checked ',
             FileOrFolder: ' @:(view.file.File)s/@:(view.file.Folder)s',
@@ -609,6 +609,7 @@ export default {
     },
     sdxCommon: {
         ALL: 'ALL',
+        All: 'All',
         Creator: 'Creator',
         CreatedTime: 'Created Time',
         Operation: 'Operation',

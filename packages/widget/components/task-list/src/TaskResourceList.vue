@@ -238,7 +238,7 @@ export default {
             };
         });
         this.taskTypeList.unshift({
-            label: 'ALL',
+            label: 'sdxCommon.ALL',
             value: ''
         });
         this.taskStateList = Object.values(STATE_TYPE).map(item => {
@@ -248,7 +248,7 @@ export default {
             };
         });
         this.taskStateList.unshift({
-            label: 'ALL',
+            label: 'sdxCommon.ALL',
             value: ''
         });
         return {

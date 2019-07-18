@@ -97,7 +97,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                label="协作者/组："
+                label="共享设置："
                 v-if="!workflowForm.isTemplate"
                 v-auth.skyflow.button="'FLOW:SHARE'"
                 key="share"

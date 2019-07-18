@@ -358,9 +358,9 @@ export default {
                 this.imageList.forEach(item => {
                     const isOwnImage = (item.owner && item.owner.uuid) === currentUser.userId;
                     item.showEdit = isOwnImage && auth.checkAuth('IMAGE-MANAGER:IMAGE:SHARE', 'BUTTON');
-                    item.showExtend = item.buildType === 'BASIC' && item.packages && item.packages.length;
-                    item.showRemove = isOwnImage && item.buildType !== 'BASIC' && item.shareType === 'PRIVATE';
-                    item.showDetail = (isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE';
+                    item.showExtend = item.buildType === 'BASIC' && item.packages && item.packages.length && (item.imageType === 'JUPYTER' || item.imageType === 'PYTHON' || item.imageType === 'TENSORFLOW' || item.imageType === 'CONTAINER_DEV');
+                    item.showRemove = isOwnImage;
+                    item.showDetail = (item.buildType === 'BASIC' && (item.imageType === 'JUPYTER' || item.imageType === 'PYTHON' || item.imageType === 'TENSORFLOW' || item.imageType === 'CONTAINER_DEV')) || ((isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE');
                     if (item.buildType === 'BASIC') {
                         item.owner = {
                             fullName : 'system'

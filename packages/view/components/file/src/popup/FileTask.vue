@@ -120,7 +120,7 @@ export default {
                 return;
             }
             MessageBox.confirm.warning({
-                title: this.t('file.view.ConfirmToDelAllTasks')
+                title: this.t('view.file.ConfirmToDelAllTasks')
             }).then(() => {
                 // todo 取消上传或者取消拷贝任务
                 ['uploadTask', 'copyTask', 'unzipTask'].forEach(item => {

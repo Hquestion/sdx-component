@@ -674,5 +674,25 @@ export default {
         No: '否',
         Edit: '编辑',
         UserGroup: '协作者/组：'
+    },
+    utils: {
+        validator: {
+            commonNameValidator: '请填写1到64位，英文字母，数字、空格、下划线、点、连字符组成的字符串',
+            nickNameValidator: '请填写1到64位，汉字、英文字母、数字、@、空格、点、连字符组成的字符串',
+            passwordValidator: '请填写6到16位，英文字母、数字及特殊符号组成的字符串',
+            nameWithChineseValidator: '请填写1到64位，汉字、英文字母、数字、空格、下划线、点、连字符组成的字符串',
+            descValidator: '请填写0到256位字符串',
+            nameStartWithLowerCaseValidator: '请填写1到64位，小写字母开头，小写英文字母、数字、下划线、点、连字符组成的字符串',
+            nameStartWithLetterValidator: '请填写1到64位，英文字母开头，英文字母、数字、空格、下划线、点、连字符组成的字符串',
+            tagValidator: '请填写1到10位，英文字母、数字、中文组成的字符串',
+            tagArrayValidator: '请填写1到10位，英文字母、数字、中文组成的字符串',
+            nameValidate: '请填写4到20位，字母开头，数字、字母、下划线、点组成的字符串',
+            cNameValidate: '请填写1到24位，汉字、字母、数字、@、-、点、下划线组成的字符串',
+            itemNameValidate: '请填写1-24位，小写字母开头，数字、小写字母、点与下划线组成的字符串',
+            imageNameValidate: '请填写长度为1-64个字符，小写英文字母开头，允许小写英文字母、数字、"."、"_"或"-"',
+            imageVersionValidate: '请填写长度为1-64个字符，允许英文字母、数字、"."、"_"或"-"',
+            tagNameValidate: '请填写1-10位，字母或数字开头，字母、数字与点组成的字符串',
+            testNumber: '请输入正整数'
+        }
     }
 };

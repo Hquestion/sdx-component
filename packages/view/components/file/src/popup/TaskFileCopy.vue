@@ -42,7 +42,7 @@
             show-overflow-tooltip
         />
         <el-table-column
-            :label="t('view.file.target')"
+            :label="t('view.file.Target')"
             min-width="90"
             prop="args.targetPath"
             header-align="left"

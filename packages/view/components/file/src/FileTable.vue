@@ -204,7 +204,7 @@ export default {
             topCount: 0,
             containerCount: 0,
             editingRow: null,
-            tempRowName: this.t('NewFolder'),
+            tempRowName: this.t('view.file.NewFolder'),
             rootKinds
         };
     },
@@ -229,7 +229,7 @@ export default {
             }
             const emptyRow = {
                 ownerId: '',
-                name: this.t('NewFolder'),
+                name: this.t('view.file.NewFolder'),
                 path: '',
                 filesystem: 'cephfs',
                 isFile: false,

@@ -274,6 +274,7 @@ export default {
             SearchImageKind: 'Image Type:',
             SearchImageState: 'State:',
             SearchBuildType: 'Build Type:',
+            MirrorVersion: 'Image Version:',
             BuildTypes: {
                 Basic: 'Basic Image',
                 Online: 'Online',
@@ -296,6 +297,9 @@ export default {
                 buildType: 'Build Type',
                 creator: 'Creator',
                 createdAt: 'Created Time',
+                state: 'State',
+                compare: 'Compare',
+                viewLog: 'View log'
             },
             imagesToShare: 'Please select images to share',
             imagesToRemove: 'Please select images to remove',
@@ -335,7 +339,15 @@ export default {
             ChangeType: 'Change Type',
             NewlyAdded: 'Newly Added',
             LogDetail: 'Log Detail',
-            ImageType: 'Image Type'
+            ImageType: 'Image Type',
+            delete_the_selected_mirror_task: 'Are you sure you want to delete the selected mirror task?',
+            can_not_be_restored_after_deletion: 'Make sure that it can not be restored after deletion',
+            FileAddress: 'File Address',
+            FileAddressColon: 'File Address:',
+            please_enter_the_file_address: 'Please enter the file address',
+            in_a_non_networked_environmen: 'In a non-networked environment, the basic images available in DockerFile are shown in the following table:',
+            CorePackage: 'Core package',
+            etc: 'etc'
         },
         model: {
             tabs: {

@@ -10,22 +10,22 @@
         >
             <el-table-column
                 prop="name"
-                label="镜像名称"
+                :label="t('view.image.Columns.imageName')"
             />
             <el-table-column
                 prop="version"
-                label="版本号"
+                :label="t('view.image.Columns.version')"
             />
             <el-table-column
                 prop="imageType"
-                label="镜像种类"
+                :label="t('view.image.Columns.imageType')"
             />
             <el-table-column
                 prop="buildTypeText"
-                label="构建方式"
+                :label="t('view.image.Columns.buildType')"
             />
             <el-table-column
-                label="状态"
+                :label="t('view.image.Columns.state')"
                 prop="state"
             >
                 <template
@@ -42,7 +42,7 @@
             </el-table-column>
             <el-table-column
                 prop="createdAt"
-                label="创建时间"
+                :label="t('view.image.Columns.createdAt')"
                 sortable="custom"
             >
                 <template
@@ -53,7 +53,7 @@
             </el-table-column>
             <el-table-column
                 style="width: 15%"
-                label="操作"
+                :label="t('sdxCommon.Operation')"
             >
                 <template
                     slot-scope="scope"
@@ -61,19 +61,19 @@
                 >
                     <SdxuIconButton
                         icon="sdx-icon sdx-baobijiao"
-                        title="比较"
+                        :title="t('view.image.Columns.compare')"
                         v-if="scope.row.showDiff"
                         @click="handleShowCompareDialog(scope.row)"
                     />
                     <SdxuIconButton
                         icon="sdx-icon sdx-chakanrizhi"
-                        title="查看日志"
+                        :title="t('view.image.Columns.viewLog')"
                         v-if="scope.row.showLog"
                         @click="handelShowBuilderLog(scope.row.uuid)"
                     />
                     <SdxuIconButton
                         icon="sdx-icon sdx-icon-delete"
-                        title="删除"
+                        :title="t('sdxCommon.Delete')"
                         v-if="scope.row.showRemove"
                         @click="deleteImageTask(scope.row.uuid)"
                     />
@@ -114,8 +114,10 @@ import BuildLogDialog from '../BuildLogDialog';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import { BUILD_TYPE_LABEL } from '@sdx/utils/src/const/image';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'ImageTaskTable',
+    mixins: [locale],
     data() {
         return {
             tableData: [],
@@ -194,8 +196,8 @@ export default {
                 });
         },
         deleteImageTask(id) {MessageBox.confirm.error({
-            title: '确定要删除选中的镜像任务吗？',
-            content: '确定删除后不可恢复哦',
+            title: this.t('view.image.delete_the_selected_mirror_task'),
+            content: this.t('view.image.can_not_be_restored_after_deletion'),
             type: 'alert'
         }).then(() => {
             removeImageTask(id)

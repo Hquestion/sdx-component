@@ -21,45 +21,44 @@
             v-if="createType === 'empty'"
         >
             <el-form-item
-                label="项目名称："
+                :label="t('view.project.createForm.name')"
                 prop="name"
             >
                 <sdxu-input
                     v-model="projectForm.name"
-                    placeholder="请输入项目名称"
+                    :placeholder="t('view.project.enterProjectName')"
                 />
             </el-form-item>
             <el-form-item
-                label="项目描述："
+                :label="t('view.project.createForm.description')"
                 prop="description"
             >
                 <sdxu-input
                     v-model="projectForm.description"
-                    placeholder="请输入项目描述"
+                    :placeholder="t('view.project.enterProjectDescription')"
                     type="textarea"
                     :rows="3"
                 />
             </el-form-item>
             <el-form-item
-                label="设为模板："
-                v-if="isAdmin"
+                :label="t('view.project.createForm.setTemplate')"
                 v-auth.project.button="'TEMPLATE_PROJECT:CREATE'"
             >
                 <el-radio
                     v-model="projectForm.isTemplate"
                     :label="true"
                 >
-                    是
+                    {{ t('sdxCommon.Yes') }}
                 </el-radio>
                 <el-radio
                     v-model="projectForm.isTemplate"
                     :label="false"
                 >
-                    否
+                    {{ t('sdxCommon.No') }}
                 </el-radio>
             </el-form-item>
             <el-form-item
-                label="协作者/组："
+                :label="t('sdxCommon.UserGroup')"
                 v-if="!projectForm.isTemplate"
                 v-auth.project.button="'COOPERATE_PROJECT:CREATE'"
             >
@@ -83,10 +82,10 @@
                     @switch="switchProjectType"
                 >
                     <SdxuTabRadioItem name="private">
-                        自建项目
+                        {{ t('view.project.selfCreateProject') }}
                     </SdxuTabRadioItem>
                     <SdxuTabRadioItem name="public">
-                        其他项目
+                        {{ t('view.project.otherProject') }}
                     </SdxuTabRadioItem>
                 </SdxuTabRadioGroup>
                 <sdxu-input
@@ -94,7 +93,7 @@
                     searchable
                     type="search"
                     size="small"
-                    placeholder="请输入项目名"
+                    :placeholder="t('view.project.enterProjectName')"
                     @search="filterProjects"
                 />
             </div>
@@ -119,14 +118,14 @@
                 size="small"
                 @click="cancel"
             >
-                取消
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="confirm"
             >
-                确认
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </sdxu-dialog>
@@ -144,6 +143,7 @@ import Transfer from '@sdx/ui/components/transfer';
 import { updateProject, getProjectList, createProject } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvCreateProject',
     data() {
@@ -157,7 +157,7 @@ export default {
             },
             projectFormRule: {
                 name: [
-                    { required: true, message: '请输入项目名称', trigger: 'blur' },
+                    { required: true, message: this.t('view.project.enterProjectName'), trigger: 'blur' },
                     {
                         validator: nameWithChineseValidator,
                         trigger: 'blur'
@@ -170,7 +170,7 @@ export default {
                     }
                 ]
             },
-            title: '新建项目',
+            title: this.t('view.project.createProject'),
             needRefresh: false,
             projectList: [],
             loading: false,
@@ -199,6 +199,7 @@ export default {
     directives: {
         auth
     },
+    mixins: [locale],
     props: {
         visible: {
             type: Boolean,
@@ -221,9 +222,6 @@ export default {
     computed: {
         isEditing() {
             return !!this.data;
-        },
-        isAdmin() {
-            return true;
         }
     },
     created() {
@@ -231,7 +229,7 @@ export default {
             Object.assign(this.projectForm, this.data);
             this.selectedGroups = this.data.groups;
             this.selectedUsers = this.data.users;
-            this.title = '编辑项目';
+            this.title = this.t('view.project.editProject');
         } else if (this.createType === 'template') {
             this.getProjectList('template');
         } else if (this.createType === 'project') {
@@ -254,7 +252,7 @@ export default {
                 };
                 createProject(params).then(() => {
                     Message({
-                        message: '创建成功',
+                        message: this.t('sdxCommon.CreateSuccess'),
                         type: 'success'
                     });
                     this.needRefresh = true;
@@ -286,7 +284,7 @@ export default {
                 if (this.isEditing) {
                     updateProject(this.projectForm.uuid, this.projectForm).then(() => {
                         Message({
-                            message: '更新成功',
+                            message: this.t('sdxCommon.UpdateSuccess'),
                             type: 'success'
                         });
                         this.needRefresh = true;
@@ -295,7 +293,7 @@ export default {
                 } else {
                     createProject(this.projectForm).then(() => {
                         Message({
-                            message: '创建成功',
+                            message: this.t('sdxCommon.CreateSuccess'),
                             type: 'success'
                         });
                         this.needRefresh = true;

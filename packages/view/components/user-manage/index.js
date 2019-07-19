@@ -1,4 +1,5 @@
 import UserManage from './src/Home';
+import { t } from '@sdx/utils/src/locale';
 
 const routeCfg = [
     {
@@ -6,8 +7,9 @@ const routeCfg = [
         name: 'SdxvUserManage',
         component: UserManage,
         meta: {
-            breadcrumb: '用户',
-            system: 'manage'
+            breadcrumb: t('view.userManage.User'),
+            system: 'manage',
+            isRoot: true
         }
     }
 ];

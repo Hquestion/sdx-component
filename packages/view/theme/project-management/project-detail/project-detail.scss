@@ -6,7 +6,6 @@
         @include modifier('content') {
             display: flex;
             align-items: center;
-            flex-wrap: wrap;
         }
     }
     @include element('task-card') {
@@ -38,7 +37,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 155px;
+        min-width: 110px;
+        width: calc(6vw);
         height: 130px;
         margin-top: 20px;
         @include modifier('name') {

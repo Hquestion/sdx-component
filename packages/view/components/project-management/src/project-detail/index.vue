@@ -33,7 +33,7 @@
         </sdxu-content-panel>
         <sdxu-content-panel
             class="sdxv-project-detail__task-list"
-            title="任务列表"
+            :title="t('view.project.taskList')"
             v-loading="loading"
         >
             <div
@@ -44,17 +44,17 @@
                     v-model="searchName"
                     type="search"
                     size="small"
-                    placeholder="请输入任务名"
+                    :placeholder="t('view.project.enterTaskName')"
                 />
                 <sdxu-button
                     size="small"
                     @click="searchTask"
                     style="margin: 0 10px;"
                 >
-                    搜索
+                    {{ t('sdxCommon.Search') }}
                 </sdxu-button>
                 <SdxuSortButton
-                    title="按创建时间排序"
+                    :title="t('view.project.sortByCreateTime')"
                     @sortChange="sortChange"
                     :order.sync="order"
                 />
@@ -104,13 +104,11 @@ import Button from '@sdx/ui/components/button';
 import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
 import SortButton from '@sdx/ui/components/sort-button';
-// import MessageBox from '@sdx/ui/components/message-box';
 import Empty from '@sdx/ui/components/empty';
 import TaskCard from './TaskCard';
 import TaskCardList from './TaskCardList';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import TaskIcon from './TaskIcon';
-// import Message from 'element-ui/lib/message';
 import { getTaskList } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
 import taskMixin from '@sdx/utils/src/mixins/task';
@@ -131,7 +129,7 @@ export default {
             refreshTimer: null,
             taskOptions: [
                 {
-                    name: '模型开发',
+                    name: this.t('view.project.modelDev'),
                     tasks: [
                         {
                             name: 'Jupyter',
@@ -141,7 +139,7 @@ export default {
                     ]
                 },
                 {
-                    name: '模型训练',
+                    name: this.t('view.project.modelTraining'),
                     tasks: [
                         {
                             name: 'Python',
@@ -154,25 +152,25 @@ export default {
                             type: 'SPARK'
                         },
                         {
-                            name: 'TensorFlow单机版',
+                            name: this.t('view.task.type.TENSORFLOW'),
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW'
 
                         },
                         {
-                            name: 'TensorFlow分布式',
+                            name: this.t('view.task.type.TENSORFLOW_DIST'),
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_DIST'
                         },
                         {
-                            name: 'TensorFlow自动并行',
+                            name: this.t('view.task.type.TENSORFLOW_AUTO_DIST'),
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_AUTO_DIST'
                         }
                     ]
                 },
                 {
-                    name: '模型评估',
+                    name: this.t('view.project.modelAssess'),
                     tasks: [
 
                         {
@@ -183,7 +181,7 @@ export default {
                     ]
                 },
                 {
-                    name: '自定义容器',
+                    name: this.t('view.task.type.CONTAINERDEV'),
                     tasks: [
                         {
                             name: 'ContainerDev',

@@ -18,6 +18,10 @@ const routeCfg = [
                 path: 'modelList',
                 name:'modelList',
                 component: ModelManageList,
+                meta: {
+                    breadcrumb: '模型',
+                    isRoot: true
+                }
             },
             {
                 path: 'versionList',

@@ -21,7 +21,9 @@ const routeCfg = [{
         name: 'index',
         component: ResourceStatisticsIndex,
         meta: {
-            system: 'manage'
+            system: 'manage',
+            breadcrumb: '资源统计',
+            isRoot: true,
         }
     }, {
         path: 'all-task-list',

@@ -6,7 +6,8 @@ const routeCfg = [{
     component: SdxvPrivilege,
     meta: {
         breadcrumb: '权限',
-        system: 'manage'
+        system: 'manage',
+        isRoot: true,
     }
 }];
 

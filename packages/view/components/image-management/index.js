@@ -17,6 +17,10 @@ const routeCfg = [
                 path: 'imageList/:tab',
                 name:'imageList',
                 component: ImageManagementList,
+                meta: {
+                    breadcrumb: '镜像管理',
+                    isRoot: true
+                },
             },
             {
                 path: 'filebuild',

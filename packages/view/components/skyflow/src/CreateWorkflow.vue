@@ -21,62 +21,62 @@
             v-if="createType === 'empty'"
         >
             <el-form-item
-                label="工作流处理方式："
+                :label="t('view.skyflow.createForm.processType')"
             >
                 <el-radio
                     v-model="workflowForm.processType"
                     label="PATCH"
                     :disabled="isEditing"
                 >
-                    批处理
+                    {{ t('view.skyflow.createForm.patchProcess') }}
                 </el-radio>
                 <el-radio
                     v-model="workflowForm.processType"
                     label="STREAM"
                     :disabled="isEditing"
                 >
-                    流处理
+                    {{ t('view.skyflow.createForm.streamProcess') }}
                 </el-radio>
             </el-form-item>
             <el-form-item
-                label="工作流名称："
+                :label="t('view.skyflow.createForm.name')"
                 prop="name"
             >
                 <sdxu-input
                     v-model="workflowForm.name"
-                    placeholder="请输入工作流名称"
+                    :placeholder="t('view.skyflow.enterSkyflowName')"
                 />
             </el-form-item>
             <el-form-item
-                label="工作流描述："
+                :label="t('view.skyflow.createForm.description')"
                 prop="description"
             >
                 <sdxu-input
                     v-model="workflowForm.description"
-                    placeholder="请输入工作流描述"
+                    :placeholder="t('view.skyflow.createForm.enterDescription')"
                     type="textarea"
                     :rows="3"
                 />
             </el-form-item>
             <el-form-item
-                label="设为模板："
+                :label="t('view.skyflow.createForm.setAsTemplate')"
                 v-auth.skyflow.button="'TEMPLATE_FLOW:CREATE'"
             >
                 <el-radio
                     v-model="workflowForm.isTemplate"
                     :label="true"
                 >
-                    是
+                    {{ t('sdxCommon.Yes') }}
                 </el-radio>
                 <el-radio
                     v-model="workflowForm.isTemplate"
                     :label="false"
                 >
-                    否
+                    {{ t('sdxCommon.No') }}
                 </el-radio>
             </el-form-item>
             <el-form-item
-                label="模板种类："
+                :label="t('view.skyflow.createForm.templateType')"
                 prop="skyflowTemplate"
                 v-if="workflowForm.isTemplate"
                 key="skyflowTemplate"
@@ -86,7 +86,7 @@
                     filterable
                     allow-create
                     default-first-option
-                    placeholder="请选择模板种类"
+                    :placeholder="t('view.skyflow.createForm.enterTemplateType')"
                 >
                     <el-option
                         v-for="item in skyflowTemplates"
@@ -97,7 +97,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                label="共享设置："
+                :label="t('view.skyflow.createForm.shareSetting')"
                 v-if="!workflowForm.isTemplate"
                 v-auth.skyflow.button="'FLOW:SHARE'"
                 key="share"
@@ -122,10 +122,10 @@
                     v-if="createType === 'workflow'"
                 >
                     <SdxuTabRadioItem name="private">
-                        私有工作流
+                        {{ t('view.skyflow.createForm.privateWorkflow') }}
                     </SdxuTabRadioItem>
                     <SdxuTabRadioItem name="public">
-                        共享工作流
+                        {{ t('view.skyflow.createForm.shareWorkflow') }}
                     </SdxuTabRadioItem>
                 </SdxuTabRadioGroup>
                 <SdxuTabRadioGroup
@@ -146,7 +146,7 @@
                     searchable
                     type="search"
                     size="small"
-                    placeholder="请输入工作流名称"
+                    :placeholder="t('view.skyflow.enterSkyflowName')"
                     @search="filterWorkflows"
                 />
             </div>
@@ -170,7 +170,7 @@
                 size="small"
                 @click="cancel"
             >
-                取消
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
@@ -178,7 +178,7 @@
                 @click="confirm"
                 :loading="loading"
             >
-                确认
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </sdxu-dialog>
@@ -199,6 +199,7 @@ import ElSelect from 'element-ui/lib/select';
 import Scroll from '@sdx/ui/components/scroll';
 import auth from '@sdx/widget/components/auth';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvCreateWorkflow',
     data() {
@@ -215,17 +216,17 @@ export default {
             },
             workflowFormRule: {
                 name: [
-                    { required: true, message: '请输入工作流名称', trigger: 'blur' },
+                    { required: true, message: this.t('view.skyflow.enterSkyflowName'), trigger: 'blur' },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 description: [
                     { validator: descValidator, trigger: 'blur' }
                 ],
                 skyflowTemplate: [
-                    { required: true, message: '请选择模板种类', trigger: 'change' }
+                    { required: true, message: this.t('view.skyflow.createForm.enterTemplateType'), trigger: 'change' }
                 ]
             },
-            title: '新建工作流',
+            title: this.t('view.skyflow.createWorkflow'),
             needRefresh: false,
             workflowList: [],
             loading: false,
@@ -258,6 +259,7 @@ export default {
     directives: {
         auth
     },
+    mixins: [locale],
     props: {
         visible: {
             type: Boolean,
@@ -297,7 +299,7 @@ export default {
             Object.assign(this.workflowForm, this.data);
             this.selectedGroups = this.data.groups;
             this.selectedUsers = this.data.users;
-            this.title = this.isCopying ? '复制工作流' : '编辑工作流';
+            this.title = this.isCopying ? this.t('view.skyflow.copyWorkflow') : this.t('view.skyflow.editWorkflow');
         } else if (this.createType === 'template') {
             this.getWorkflowList('template');
         } else if (this.createType === 'workflow') {
@@ -323,7 +325,7 @@ export default {
                 };
                 createWorkflow(params).then(() => {
                     Message({
-                        message: '创建成功',
+                        message: this.t('sdxCommon.CreateSuccess'),
                         type: 'success'
                     });
                     this.needRefresh = true;
@@ -352,7 +354,7 @@ export default {
         confirm() {
             this.$refs.workflowForm.validate(valid => {
                 if (!valid) {
-                    Message.error('请输入必填信息');
+                    Message.error(this.t('sdxCommon.requiredInfo'));
                 } else {
                     this.loading = true;
                     this.workflowForm.users = [];
@@ -364,7 +366,7 @@ export default {
                     if (this.isEditing && !this.isCopying) {
                         updateWorkflow(this.workflowForm.uuid, this.workflowForm).then(() => {
                             Message({
-                                message: '更新成功',
+                                message: this.t('sdxCommon.UpdateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;
@@ -375,7 +377,7 @@ export default {
                         delete this.workflowForm.uuid;
                         createWorkflow(this.workflowForm).then(() => {
                             Message({
-                                message: '创建成功',
+                                message: this.t('sdxCommon.CreateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;

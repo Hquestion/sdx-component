@@ -1,3 +1,5 @@
+import {t} from '../locale';
+
 /**
  * 镜像相关常量定义
  */
@@ -40,11 +42,11 @@ export const BUILD_TYPE = {
 
 // 构建类型 - 文字
 export const BUILD_TYPE_LABEL = {
-    BASIC: '基础镜像',
-    ONLINE: '在线构建',
-    TAR: '基于tar构建',
-    DOCKERFILE: '基于DockerFile构建',
-    TASK: '任务转存'
+    BASIC: t('view.image.BuildTypes.Basic'),
+    ONLINE: t('view.image.BuildTypes.Online'),
+    TAR: t('view.image.BuildTypes.Tar'),
+    DOCKERFILE: t('view.image.BuildTypes.Dockerfile'),
+    TASK: t('view.image.BuildTypes.Task')
 };
 
 // 源地址类型

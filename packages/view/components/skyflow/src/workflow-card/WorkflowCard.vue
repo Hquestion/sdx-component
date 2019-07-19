@@ -11,7 +11,7 @@
             />
             <span class="sdxv-workflow-card__header--name">{{ meta.name }}</span>
             <span class="sdxv-workflow-card__header--type">
-                <SdxwFoldLabel :type="meta.processType === 'PATCH' ? 'patch' : 'stream'">{{ meta.processType === 'PATCH' ? '批处理' : '流处理' }}</SdxwFoldLabel>
+                <SdxwFoldLabel :type="meta.processType === 'PATCH' ? 'patch' : 'stream'">{{ meta.processType === 'PATCH' ? t('view.skyflow.createForm.patchProcess') : t('view.skyflow.createForm.streamProcess') }}</SdxwFoldLabel>
             </span>
         </header>
         <main class="sdxv-workflow-card__main">
@@ -32,7 +32,7 @@
             >
                 <i class="sdx-icon sdx-icon-detail" />
                 <slot name="operationName">
-                    <span>选择模板</span>
+                    <span>{{ t('view.skyflow.selectTemplate') }}</span>
                 </slot>
             </div>
             <div
@@ -42,7 +42,7 @@
             >
                 <i class="sdx-icon sdx-icon-detail" />
                 <slot name="operationName">
-                    <span>选择工作流</span>
+                    <span>{{ t('view.skyflow.selectWorkflow') }}</span>
                 </slot>
             </div>
             <div
@@ -51,25 +51,25 @@
             >
                 <i
                     class="sdx-icon sdx-huabu"
-                    title="进入画布"
+                    :title="t('view.skyflow.canvas')"
                     @click="$emit('operate', {id: meta.uuid, type: 'canvas'})"
                 />
                 <i
                     class="sdx-icon sdx-icon-tickets"
-                    title="运行记录"
+                    :title="t('view.skyflow.runningInfo')"
                     @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
                 />
                 <i
                     v-if="editAble"
                     class="sdx-icon sdx-icon-edit"
-                    title="编辑"
+                    :title="t('sdxCommon.Edit')"
                     @click="$emit('operate', {item: meta, type: 'edit'})"
                     v-auth.skyflow.button="auth"
                 />
                 <i
                     v-if="deleteAble"
                     class="sdx-icon sdx-icon-delete"
-                    title="删除"
+                    :title="t('sdxCommon.Delete')"
                     @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
                     v-auth.skyflow.button="auth"
                 />
@@ -91,6 +91,7 @@
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvWorkflowCard',
     props: {
@@ -117,6 +118,7 @@ export default {
     directives: {
         auth
     },
+    mixins: [locale],
     data() {
         return {
             showMask: false

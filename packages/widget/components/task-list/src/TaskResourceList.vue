@@ -82,12 +82,12 @@
                 min-width="160px"
             >
                 <template #default="{ row }">
-                    <span v-if="monitor">{{ row.project.name }}</span>
+                    <span v-if="monitor">{{ row.project && row.project.name }}</span>
                     <span
                         v-else
                         @click="handleGotoProject(row.project)"
                         class="sdxw-task-resource-list__table--project-link"
-                    >{{ row.project.name }}</span>
+                    >{{ row.project && row.project.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column

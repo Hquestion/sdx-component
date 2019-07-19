@@ -151,7 +151,7 @@ export default {
         confirm() {
             this.$refs.changePwdForm.validate(valid => {
                 if (!valid) {
-                    Message.error(this.t('general.requiredInfo'));
+                    Message.error(this.t('sdxCommon.requiredInfo'));
                 } else {
                     if (
                         this.changePwdForm.newPasswd !== this.changePwdForm.repeatNewPasswd

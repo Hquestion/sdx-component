@@ -85,11 +85,6 @@ export default {
             Role: '角色'
         }
     },
-    general: {
-        requiredInfo: '请输入必填信息！',
-        yes: '是',
-        no: '否'
-    },
     view: {
         task: {
             stopTask: '确定要终止选中的任务吗？',
@@ -673,7 +668,8 @@ export default {
         Yes: '是',
         No: '否',
         Edit: '编辑',
-        UserGroup: '协作者/组：'
+        UserGroup: '协作者/组：',
+        requiredInfo: '请输入必填信息！',
     },
     utils: {
         validator: {

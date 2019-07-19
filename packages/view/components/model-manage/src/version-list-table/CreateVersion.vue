@@ -311,7 +311,7 @@ export default {
         confirm() {
             this.$refs.versionInfoForm.validate(valid => {
                 if (!valid) {
-                    Message.error(this.t('general.requiredInfo'));
+                    Message.error(this.t('sdxCommon.requiredInfo'));
                 } else {
                     if (this.isPublishing) {
                         startVersion(this.$route.params.modelId, this.editingVersion.uuid).then(() => {

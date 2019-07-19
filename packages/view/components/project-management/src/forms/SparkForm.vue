@@ -63,12 +63,12 @@
                 <SdxwResourceConfig
                     v-model="cpuDriver"
                     type="cpu"
-                    cpulabel="驱动器CPU/内存"
+                    :cpulabel="t('widget.resourceConfig.Driver_CPU_Memory')"
                 />
                 <SdxwResourceConfig
                     v-model="cpuExecute"
                     type="cpu"
-                    cpulabel="执行器CPU/内存"
+                    :cpulabel="t('widget.resourceConfig.Actuator_CPU_Memory')"
                 />
             </el-form-item>
             <el-form-item

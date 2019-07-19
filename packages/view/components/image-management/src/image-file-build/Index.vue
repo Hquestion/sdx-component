@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-image-file">
         <SdxuContentPanel
-            title="基于文件构建"
+            :title="t('view.image.BuildBasedOnFile')"
         >
             <el-radio-group
                 v-model="radio"
@@ -11,13 +11,13 @@
                     label="tar"
                     v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'"
                 >
-                    基于tar文件构建
+                    {{ t('view.image.BuildTypes.Tar') }}
                 </el-radio>
                 <el-radio
                     label="DockerFile"
                     v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'"
                 >
-                    基于DockerFile文件构建
+                    {{ t('view.image.BuildTypes.Dockerfile') }}
                 </el-radio>
             </el-radio-group>
             <el-form
@@ -28,30 +28,29 @@
                 :rules="rules"
             >
                 <el-form-item
-                    label="镜像名称:"
+                    :label="t('view.image.SearchImageName')"
                     prop="name"
                 >
                     <SdxuInput
-                        placeholder="请输入镜像名称"
+                        :placeholder="t('view.image.ImageNameInputPlaceholder')"
                         v-model="params.name"
                     />
                 </el-form-item>
                 <el-form-item
-                    label="镜像版本号:"
+                    :label="t('view.image.MirrorVersion')"
                     prop="version"
                 >
                     <SdxuInput
-                        placeholder="请输入镜像版本号"
+                        :placeholder="t('view.image.ImageVersionInputPlaceholder')"
                         v-model="params.version"
                     />
                 </el-form-item>
                 <el-form-item
-                    label="镜像种类:"
+                    :label="t('view.image.SearchImageKind')"
                     prop="imageType"
                 >
                     <el-select
                         v-model="params.imageType"
-                        placeholder="请选择"
                         style="width: 100%"
                     >
                         <el-option
@@ -63,7 +62,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    :label="radio === 'DockerFile' ? '文件地址' :'文件地址:' "
+                    :label="radio === 'DockerFile' ? t('view.image.FileAddress') :t('view.image.FileAddressColon') "
                     prop="filePath"
                     :class="radio === 'DockerFile' ? 'iconinfo' : ''"
                 >
@@ -78,7 +77,7 @@
                             class="sdx-icon sdx-icon-info"
                             slot="reference"
                         >
-                            <span>:</span>
+                            <span>：</span>
                         </i>
                     </el-popover>
                     <SdxwFileSelect
@@ -96,14 +95,14 @@
                     @click="cancel"
                     size="small"
                 >
-                    取消
+                    {{ t('sdxCommon.Cancel') }}
                 </sdxubutton>
                 <SdxuButton
                     type="primary"
                     @click="savaBuild"
                     size="small"
                 >
-                    保存并构建
+                    {{ t('view.image.SaveAndBuild') }}
                 </sdxubutton>
             </div>
         </SdxuContentPanel>
@@ -121,8 +120,10 @@ import {nameStartWithLowerCaseValidator, commonNameValidator} from '@sdx/utils/s
 import FileSelect from '@sdx/widget/components/file-select';
 import Iconinfo from './Iconinfo';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: '',
+    mixins: [locale],
     data() {
         return {
             radio: this.$auth('IMAGE-MANAGER:IMAGE_BUILDER:BUILD_TAR:""', 'button') ? 'tar' : 'DockerFile',
@@ -137,7 +138,7 @@ export default {
                 name: [
                     {
                         required: true,
-                        message: '镜像名称不能为空',
+                        message: this.t('view.image.ImageNameInputPlaceholder'),
                         trigger: 'blur',
                         transform(value) {
                             return value && ('' + value).trim();
@@ -151,7 +152,7 @@ export default {
                 version: [
                     {
                         required: true,
-                        message: '镜像版本号不能为空',
+                        message: this.t('view.image.ImageVersionInputPlaceholder'),
                         trigger: 'blur',
                         transform(value) {
                             return value && ('' + value).trim();
@@ -168,7 +169,7 @@ export default {
                 filePath: [
                     {
                         required: true,
-                        message: '文件地址不能为空',
+                        message: this.t('view.image.please_enter_the_file_address'),
                         trigger: 'blur'
                     }
                 ]

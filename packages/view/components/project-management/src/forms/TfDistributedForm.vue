@@ -63,17 +63,17 @@
                 <SdxwResourceConfig
                     v-model="cpuService"
                     type="cpu"
-                    cpulabel="参数服务器CPU/内存"
+                    :cpulabel="t('widget.resourceConfig.Parametric_Server_CPU_Memory')"
                 />
                 <SdxwResourceConfig
                     v-model="cpuCompute"
                     type="cpu"
-                    cpulabel="计算节点CPU/内存"
+                    :cpulabel="t('widget.resourceConfig.Computing_Node_CPU_Memory')"
                 />
                 <SdxwResourceConfig
                     v-if="isGpuEnt"
                     v-model="gpuObj"
-                    gpulabel="计算节点GPU"
+                    :gpulabel="t('widget.resourceConfig.Computing_Node_GPU')"
                     type="gpu"
                 /> 
             </el-form-item>

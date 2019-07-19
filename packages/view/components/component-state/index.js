@@ -1,4 +1,5 @@
 import ComponentState from './src/index';
+import { t } from '@sdx/utils/src/locale';
 
 ComponentState.install = vue => {
     vue.component(ComponentState.name, ComponentState);
@@ -9,7 +10,7 @@ const routeCfg = [{
     name: 'SdxvComponentState',
     component: ComponentState,
     meta: {
-        breadcrumb: '组件状态',
+        breadcrumb: t('view.monitor.componentState.ComponentState'),
         system: 'manage',
         isRoot: true,
     }

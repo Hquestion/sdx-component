@@ -2,6 +2,7 @@ import TaskView from './src/index';
 import TaskManagement from './src/TaskManagement';
 import TaskDetailView from './src/task-detail/TaskDetailView';
 import TaskLogInfo from './src/task-detail/common/LogInfo';
+import { t } from '@sdx/utils/src/locale';
 
 TaskManagement.install = vue => {
     vue.component(TaskManagement.name, TaskManagement);
@@ -12,16 +13,13 @@ const routeCfg = [{
     name: 'SdxvTaskManagement',
     component: TaskView,
     redirect: '/sdxv-task-management/sdxv-task-list',
-    meta: {
-        breadcrumb: '任务管理'
-    },
     children: [
         {
             path: 'sdxv-task-list',
             name: 'SdxvTaskList',
             component: TaskManagement,
             meta: {
-                breadcrumb: '任务管理',
+                breadcrumb: t('view.task.TaskManagement'),
                 isRoot: true
             },
         },
@@ -31,16 +29,16 @@ const routeCfg = [{
             component: TaskDetailView,
             props: true,
             meta: {
-                breadcrumb: '任务详情'
+                breadcrumb: t('view.task.TaskDetail')
             }
         },
         {
-            path: 'sdxv-task-log/:method/:podId',
+            path: 'sdxv-task-log/:method/:podName',
             name: 'SdxvTaskManagementTaskLog',
             props: true,
             component: TaskLogInfo,
             meta: {
-                breadcrumb: '日志详情'
+                breadcrumb: t('view.image.LogDetail')
             }
         }
     ]

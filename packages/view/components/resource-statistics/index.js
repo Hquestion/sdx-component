@@ -2,6 +2,7 @@ import ResourceStatistics from './src/index';
 import ResourceStatisticsIndex from './src/ResourceStatistics';
 import AllTaskList from './src/AllTaskList';
 import UserResourceList from './src/UserResourceList';
+import { t } from '@sdx/utils/src/locale';
 
 ResourceStatistics.install = vue => {
     vue.component(ResourceStatistics.name, ResourceStatistics);
@@ -13,7 +14,7 @@ const routeCfg = [{
     redirect: '/sdxv-resource-statistics/index',
     component: ResourceStatistics,
     meta: {
-        breadcrumb: '资源统计',
+        breadcrumb: t('view.monitor.resourceStatistic.ResourceStatistics'),
         system: 'manage'
     },
     children: [{
@@ -22,7 +23,6 @@ const routeCfg = [{
         component: ResourceStatisticsIndex,
         meta: {
             system: 'manage',
-            breadcrumb: '资源统计',
             isRoot: true,
         }
     }, {
@@ -30,7 +30,7 @@ const routeCfg = [{
         name: 'SdxvAllTaskList',
         component: AllTaskList,
         meta: {
-            breadcrumb: '全部任务列表',
+            breadcrumb: t('view.monitor.resourceStatistic.AllTaskList'),
             system: 'manage'
         }
     }, {
@@ -38,7 +38,7 @@ const routeCfg = [{
         name: 'SdxvUserResourceList',
         component: UserResourceList,
         meta: {
-            breadcrumb: '全部用户资源统计',
+            breadcrumb: t('view.monitor.resourceStatistic.AllUserResourceStatistics'),
             system: 'manage'
         }
     }]

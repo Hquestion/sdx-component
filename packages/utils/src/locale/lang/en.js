@@ -180,6 +180,7 @@ export default {
             Core: 'Core',
             Block: 'Block',
             Count: '',
+            TaskDetail: 'Task Detail',
 
             type: {
                 SPARK: 'SPARK',
@@ -261,6 +262,7 @@ export default {
                 AllUserResourceStatistics: 'All User Resource Statistics',
                 userSearchInputPlaceholder: 'Please enter one user name',
                 UserName: 'User Name',
+                ResourceStatistics: 'Resource Statistics'
             },
             componentState: {
                 searchPodPlaceholder: 'Please enter a Pod name',

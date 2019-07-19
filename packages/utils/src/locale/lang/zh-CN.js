@@ -155,10 +155,10 @@ export default {
             NoLog: '暂时还没日志哦',
             NoRealMonitor: '暂时还没实时监控哦',
             SelectAnInstance: '请选择实例',
-            CPUUsageRate: 'cpu使用率',
+            CPUUsageRate: 'CPU使用率',
             MemoryUsage: '内存使用量',
-            GPUUsageRate: 'gpu使用率',
-            GPUMemoryUsage: '显存使用量',
+            GPUUsageRate: 'GPU使用率',
+            GPUMemoryUsage: 'GPU-显存使用量',
             TailView: 'tail查看',
             HeadView: 'head查看',
             AutoPull: '自动拉取',
@@ -175,6 +175,7 @@ export default {
             Core: '核',
             Block: '块',
             Count: '个',
+            TaskDetail: '任务详情',
 
             type: {
                 SPARK: 'SPARK',
@@ -255,6 +256,7 @@ export default {
                 AllUserResourceStatistics: '全部用户资源统计',
                 userSearchInputPlaceholder: '请输入用户名',
                 UserName: '用户名',
+                ResourceStatistics: '资源统计'
             },
             componentState: {
                 searchPodPlaceholder: '请输入Pod名',

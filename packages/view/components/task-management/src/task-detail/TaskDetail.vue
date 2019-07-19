@@ -93,15 +93,15 @@
             />
             <SdxvBaseInfoItem
                 :label="t('view.task.StartupTime')"
-                :value="task && task.runningAt || ''"
+                :value="task && dateFormatter(task.startedAt) || ''"
             />
             <SdxvBaseInfoItem
                 :label="t('view.task.StopTime')"
-                :value="task && task.stoppedAt || ''"
+                :value="task && dateFormatter(task.stoppedAt) || ''"
             />
             <SdxvBaseInfoItem
                 :label="t('view.task.RunningTime')"
-                :value="task ? dealTime(task.runningAt, task.stoppedAt) : ''"
+                :value="task ? dealTime(task.startedAt, task.stoppedAt) : ''"
             />
             <SdxvBaseInfoItem
                 v-if="isCONTAINERDEV"
@@ -155,7 +155,7 @@
                 >
                     <SdxvBaseInfoItem
                         :label="t('view.task.MainNodeCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_MASTER_CPUS : 0) + '核'"
+                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_MASTER_CPUS : 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
@@ -167,7 +167,7 @@
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         :label="t('view.task.ParametricServerCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_PS_CPUS : 0) + '核'"
+                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_PS_CPUS : 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
@@ -177,14 +177,14 @@
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ParametricServerInstanceCount')"
-                        :value="task && task.resourceConfig ? task.resourceConfig.TF_EXECUTOR_INSTANCES : 0 + '个'"
+                        :value="task && task.resourceConfig ? task.resourceConfig.TF_EXECUTOR_INSTANCES : 0 + t('view.task.Count')"
                         :strip="true"
                     />
                 </div>
                 <div class="sdxv-info-container is-background">
                     <SdxvBaseInfoItem
                         :label="t('view.task.ComputationalNodeCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_WORKER_CPUS : 0) + '核'"
+                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_WORKER_CPUS : 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
@@ -194,12 +194,12 @@
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ComputationalNodeGPU')"
-                        :value="task && task.resourceConfig ? task.resourceConfig.TF_WORKER_GPUS : 0 + '块'"
+                        :value="task && task.resourceConfig ? task.resourceConfig.TF_WORKER_GPUS : 0 + t('view.task.Block')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ComputationalNodeInstanceCount')"
-                        :value="task && task.resourceConfig ? task.resourceConfig.TF_EXECUTOR_INSTANCES : 0 + '个'"
+                        :value="task && task.resourceConfig ? task.resourceConfig.TF_EXECUTOR_INSTANCES : 0 + t('view.task.Count')"
                         :strip="true"
                     />
                 </div>
@@ -208,7 +208,7 @@
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         :label="t('view.task.DriverCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.SPARK_DRIVER_CPUS : 0) + '核'"
+                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.SPARK_DRIVER_CPUS : 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
@@ -220,7 +220,7 @@
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         :label="t('view.task.ExectorCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_CPUS : 0) + '核'"
+                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_CPUS : 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
@@ -230,7 +230,7 @@
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ExectorInstanceCount')"
-                        :value="task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_INSTANCES : 0 + '个'"
+                        :value="task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_INSTANCES : 0 + t('view.task.Count')"
                         :strip="true"
                     />
                 </div>
@@ -239,13 +239,13 @@
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         label="CPU"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.EXECUTOR_CPUS : 0) + '核'"
+                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.EXECUTOR_CPUS : 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         v-if="!isTENSORBOARD"
                         label="GPU"
-                        :value="(task && task.resourceConfig ? task.resourceConfig.EXECUTOR_GPUS : 0) + '块'"
+                        :value="(task && task.resourceConfig ? task.resourceConfig.EXECUTOR_GPUS : 0) + t('view.task.Block')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem

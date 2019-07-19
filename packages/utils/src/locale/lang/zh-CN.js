@@ -172,6 +172,9 @@ export default {
             RealTimeMonitor: '实时监控',
             DataSourceInformation: '数据源信息',
             DataSet: '数据集',
+            Core: '核',
+            Block: '块',
+            Count: '个',
 
             type: {
                 SPARK: 'SPARK',

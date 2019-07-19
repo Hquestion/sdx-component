@@ -40,7 +40,7 @@
                 />
             </el-form-item>
             <el-form-item :label="t('view.image.ImageType')+ ':'">
-                {{ task.kind }}
+                {{ task.type }}
             </el-form-item>
         </el-form>
     </SdxuDialog>
@@ -52,6 +52,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
 import locale from '@sdx/utils/src/mixins/locale';
+import { buildImageBasic } from '@sdx/utils/src/api/image';
 
 import { itemNameValidate, tagNameValidate } from '@sdx/utils/src/helper/validate';
 
@@ -110,15 +111,21 @@ export default {
             }
         },
         name_prefix() {
-            return this.task && this.task.base_image_base_name && this.task.base_image_base_name + '_' || '';
+            return this.task && this.task.image && this.task.image.name + '_' || '';
         }
     },
     methods: {
         handleConfirm() {
-            // todo: 
+            buildImageBasic({
+                baseImage: this.task && (this.task.imageId || this.task.image && this.task.image.uuid) || '',
+                name: this.formData.name,
+                version: this.formData.version
+            }).then(data => {
+                console.error(data);
+                // this.dialogVisible = false;
+            });
         },
         handleCancel() {
-            // todo:
             this.dialogVisible = false;
         }
         // todo: 镜像名称重名校验

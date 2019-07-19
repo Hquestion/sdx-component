@@ -4,7 +4,7 @@
         :style="{ height: height }"
     >
         <SdxuScroll
-            @mousewheel.native="handleMouseWheel"
+            @handle-scroll="handleScroll"
             ref="scroll"
         >
             <div class="sdxu-log-detail__container">
@@ -52,7 +52,7 @@ export default {
         }
     },
     methods: {
-        handleMouseWheel: throttle(function(event) {
+        handleScroll() {
             const vueScroll = this.$refs.scroll.$refs.scroll;
             let scrollPosition = vueScroll.getPosition();
             let viewDom = vueScroll.getCurrentviewDom()[0];
@@ -62,11 +62,8 @@ export default {
                 offsetHeight: viewDom.offsetHeight,
                 scrollTop: scrollPosition.scrollTop
             };
-
-            this.$emit('scroll', { scrollInfo, event });
-        }, 1000, {
-            trailing: false
-        })
+            this.$emit('scroll', { scrollInfo });
+        }
     }
 };
 </script>

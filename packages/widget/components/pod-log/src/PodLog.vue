@@ -83,15 +83,16 @@ export default {
             }
             try {
                 const data = await getPodLog(this.podName, params);
-                let content = Array.isArray(data.contents) && data.contents.join('') || '';
+                let content = data && Array.isArray(data.contents) && data.contents.join('') || '';
+                let length  = data && Array.isArray(data.contents) ? data.contents.length : 0;
                 if (size < 0) {
-                    this.start = this.start - data.contents.length;
+                    this.start = this.start - length;
                     this.logContent = content + this.logContent;
                 } else {
-                    this.end = this.end + data.contents.length;
+                    this.end = this.end + length;
                     this.logContent += content;
                 }
-                return data && data.contents && data.contents.length || 0;
+                return length;
             } catch (e) {
                 window.console.error(e);
                 return 0;
@@ -105,7 +106,7 @@ export default {
                 this.preLoading = true;
                 await this.fetchData(this.start, -this.size);
                 this.preLoading = false;
-            } else {
+            } else if (!this._isDestroyed) {
                 ElMessage.warning({
                     message: this.t('view.task.ReachedTheHeadOfLog')
                 });
@@ -118,16 +119,18 @@ export default {
             this.sufLoading = true;
             let logLength = await this.fetchData(this.end, this.size);
             this.sufLoading = false;
-            if (logLength === 0) {
-                ElMessage.warning({
-                    message: this.t('view.task.NoNewLogsYet')
+            if (!this._isDestroyed) {
+                if (logLength === 0) {
+                    ElMessage.warning({
+                        message: this.t('view.task.NoNewLogsYet')
+                    });
+                }
+                this.$nextTick().then(() => {
+                    if (this.followScroll) {
+                        this.gotoBottom();
+                    }
                 });
             }
-            this.$nextTick().then(() => {
-                if (this.followScroll) {
-                    this.gotoBottom();
-                }
-            });
         },
         gotoBottom() {
             this.$refs.scroll.$refs.scroll.scrollTo({
@@ -164,19 +167,19 @@ export default {
             return new Promise(resolve => {
                 getTaskList({ podName: this.podName }).then(data => {
                     const task = data && Array.isArray(data.items) && data.items[0] || null;
-                    this.startedAt = task && new Date(task.runningAt).getTime() || '';
+                    this.startedAt = task && new Date(task.startedAt).getTime() || '';
                     resolve();
                 }).catch(() => {
                     resolve();
                 });
             });
         },
-        handleScroll({ scrollInfo, event }) {
+        handleScroll({ scrollInfo }) {
             let { scrollTop, warpHeight, offsetHeight } = scrollInfo;
-            if (this.method === 'tail' && event.deltaY < 0 && scrollTop === 0) {
+            if (this.method === 'tail' && scrollTop === 0) {
                 // 向前获取日志
                 this.getBackwardLog();
-            } else if (event.deltaY > 0 && scrollTop + warpHeight >= offsetHeight) {
+            } else if (scrollTop + warpHeight >= offsetHeight) {
                 // 向后获取日志
                 this.getForwardLog();
             }
@@ -210,7 +213,6 @@ export default {
                 }
             }
         }
-        
     },
     beforeDestroy() {
         this.stopAutoPull();

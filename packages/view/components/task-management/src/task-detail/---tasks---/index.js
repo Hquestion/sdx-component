@@ -1,9 +1,0 @@
-export { default as PYTHON } from './PythonDetail';
-export { default as SPARK } from './SparkDetail';
-export { default as TENSORFLOW } from './TensorflowDetail';
-export { default as TENSORFLOW_DIST } from './TensorflowDistributedDetail';
-export { default as TENSORFLOW_AUTO_DIST } from './TensorflowAutoDistributedDetail';
-export { default as TENSORBOARD } from './TensorBoardDetail';
-export { default as JUPYTER } from './JupyterDetail';
-export { default as DATASET_SERVICE } from './DataServiceDetail';
-export { default as CONTAINERDEV } from './ContainerDevDetail';

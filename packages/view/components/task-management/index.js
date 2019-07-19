@@ -19,7 +19,11 @@ const routeCfg = [{
         {
             path: 'sdxv-task-list',
             name: 'SdxvTaskList',
-            component: TaskManagement
+            component: TaskManagement,
+            meta: {
+                breadcrumb: '任务管理',
+                isRoot: true
+            },
         },
         {
             path: 'sdxv-task-detail/:taskId',

@@ -19,12 +19,20 @@ const routeCfg = [
             {
                 path: 'skyflow-list',
                 name: 'SdxvSkyflowList',
-                component: SkyflowList
+                component: SkyflowList,
+                meta: {
+                    breadcrumb: 'SkyFlow',
+                    isRoot: true
+                },
             },
             {
                 path: 'running-info/:id',
                 name: 'SdxvRunningInfo',
-                component: RunningInfo
+                component: RunningInfo,
+                meta: {
+                    breadcrumb: '运行记录',
+                    isRoot: false
+                },
             }
         ]
     }

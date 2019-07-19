@@ -438,6 +438,7 @@ export default {
             OperationType: '操作类型'
         },
         file: {
+            FileManage: '文件管理',
             Copying: '拷贝中',
             Pending: '等待中',
             Finish: '已完成',
@@ -503,6 +504,7 @@ export default {
             PleaseInputFileName: '请输入文件名称'
         },
         resourceManage: {
+            ResourceManage: '资源管理',
             newCpuTemplateTitle: '新建@:(view.resourceManage.CpuTemplate)',
             CpuLabel: 'CPU(核)：',
             MemoryLabel: '内存(GB)：',

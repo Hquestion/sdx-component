@@ -439,6 +439,7 @@ export default {
             OperationType: 'Operation Type'
         },
         file: {
+            FileManage: 'File Management',
             Copying: 'Copying',
             Pending: 'Pending',
             Finish: 'Finished',
@@ -504,6 +505,7 @@ export default {
             PleaseInputFileName: 'Please input file name'
         },
         resourceManage: {
+            ResourceManage: 'Resource Management',
             newCpuTemplateTitle: 'New @:(view.resourceManage.CpuTemplate)',
             CpuLabel: 'CPU(Core)：',
             MemoryLabel: 'Memory(GB)：',

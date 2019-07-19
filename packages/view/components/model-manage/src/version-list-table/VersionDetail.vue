@@ -23,7 +23,7 @@
             />
             <SdxvBaseInfoItem
                 :label="t('view.model.versionDetail.creator')"
-                :value="versionInfo.name"
+                :value="creatorName"
             />
             <SdxvBaseInfoItem
                 :label="t('view.model.versionDetail.description')"
@@ -129,7 +129,8 @@ import MixinDetail from '../../../task-management/src/task-detail/MixinDetail';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import Button from '@sdx/ui/components/button';
 import { getVersionInfo, getVersionToken } from '@sdx/utils/src/api/model';
-import {getTaskDetail} from '@sdx/utils/src/api/project';
+import { getTaskDetail } from '@sdx/utils/src/api/project';
+import { getUserSimpleInfo } from '@sdx/utils/src/api/user';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
 export default {
@@ -140,7 +141,8 @@ export default {
             versionInfo: {},
             loading: false,
             key: '',
-            refreshTimer: null
+            refreshTimer: null,
+            creatorName: ''
         };
     },
     created() {
@@ -172,6 +174,11 @@ export default {
                     }
                 } else {
                     clearInterval(this.refreshTimer);
+                }
+                if (!this.creatorName) {
+                    getUserSimpleInfo(this.versionInfo.creatorId).then(res => {
+                        this.creatorName = res.fullName;
+                    });
                 }
                 this.versionInfo.startedAtFormatted = dateFormatter(this.versionInfo.startedAt);
                 this.versionInfo.stoppedAtFormatted = dateFormatter(this.versionInfo.stoppedAt);

@@ -279,6 +279,30 @@ export default {
                 }
             }
         },
+        project: {
+            projectList: 'Projects List',
+            createProject: 'Create Project',
+            editProject: 'Edit Project',
+            emptyCreate: 'Create From Empty',
+            templateCreate: 'Create From Template',
+            copyCreate: 'Create From Existing Projects',
+            sortByCreateTime: 'Sort By Created Time',
+            enterProjectName: 'Please enter project name',
+            enterProjectDescription: 'Please enter project description',
+            confirmRemove: 'Are you sure to remove the project?',
+            createForm: {
+                name: 'Project Name:',
+                description: 'Project Description:',
+                setTemplate: 'Set As Template:'
+            },
+            selfCreateProject: 'My Projects',
+            otherProject: 'Others Sharing Projects',
+            taskList: 'Tasks List',
+            enterTaskName: 'Please enter task name',
+            modelDev: 'Model Development',
+            modelTraining: 'Model Training',
+            modelAssess: 'Model Assessment'
+        },
         image: {
             // 镜像列表
             ImageList: 'Images List',
@@ -471,6 +495,7 @@ export default {
             OperationType: 'Operation Type'
         },
         file: {
+            FileManage: 'File Management',
             Copying: 'Copying',
             Pending: 'Pending',
             Finish: 'Finished',
@@ -536,6 +561,7 @@ export default {
             PleaseInputFileName: 'Please input file name'
         },
         resourceManage: {
+            ResourceManage: 'Resource Management',
             newCpuTemplateTitle: 'New @:(view.resourceManage.CpuTemplate)',
             CpuLabel: 'CPU(Core)：',
             MemoryLabel: 'Memory(GB)：',
@@ -681,7 +707,8 @@ export default {
         Reset: 'Reset',
         Yes: 'Yes',
         No: 'No',
-        Edit: 'Edit'
+        Edit: 'Edit',
+        UserGroup: 'Users/Groups:'
     },
     utils: {
         validator: {

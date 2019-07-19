@@ -9,7 +9,8 @@ const routeCfg = [
         component: RoleManage,
         meta: {
             breadcrumb: '角色',
-            system: 'manage'
+            system: 'manage',
+            isRoot: true
         }
     }
 ];

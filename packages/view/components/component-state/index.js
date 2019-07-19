@@ -10,7 +10,8 @@ const routeCfg = [{
     component: ComponentState,
     meta: {
         breadcrumb: '组件状态',
-        system: 'manage'
+        system: 'manage',
+        isRoot: true,
     }
 }];
 

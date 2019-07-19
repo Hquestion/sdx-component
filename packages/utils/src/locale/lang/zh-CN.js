@@ -102,11 +102,6 @@ export default {
             GPU: 'GPU'
         }
     },
-    general: {
-        requiredInfo: '请输入必填信息！',
-        yes: '是',
-        no: '否'
-    },
     view: {
         task: {
             stopTask: '确定要终止选中的任务吗？',
@@ -277,6 +272,30 @@ export default {
                     unknown: '未知'
                 }
             }
+        },
+        project: {
+            projectList: '项目列表',
+            createProject: '新建项目',
+            editProject: '编辑项目',
+            emptyCreate: '空白创建',
+            templateCreate: '模板创建',
+            copyCreate: '复制创建',
+            sortByCreateTime: '按创建时间排序',
+            enterProjectName: '请输入项目名称',
+            enterProjectDescription: '请输入项目描述',
+            confirmRemove: '确定删除该项目吗？',
+            createForm: {
+                name: '项目名称：',
+                description: '项目描述：',
+                setTemplate: '设为模板：'
+            },
+            selfCreateProject: '自建项目',
+            otherProject: '其他项目',
+            taskList: '任务列表',
+            enterTaskName: '请输入任务名',
+            modelDev: '模型开发',
+            modelTraining: '模型训练',
+            modelAssess: '模型评估'
         },
         image: {
             // 镜像列表
@@ -470,6 +489,7 @@ export default {
             OperationType: '操作类型'
         },
         file: {
+            FileManage: '文件管理',
             Copying: '拷贝中',
             Pending: '等待中',
             Finish: '已完成',
@@ -535,6 +555,7 @@ export default {
             PleaseInputFileName: '请输入文件名称'
         },
         resourceManage: {
+            ResourceManage: '资源管理',
             newCpuTemplateTitle: '新建@:(view.resourceManage.CpuTemplate)',
             CpuLabel: 'CPU(核)：',
             MemoryLabel: '内存(GB)：',
@@ -680,7 +701,9 @@ export default {
         Reset: '重置',
         Yes: '是',
         No: '否',
-        Edit: '编辑'
+        Edit: '编辑',
+        UserGroup: '协作者/组：',
+        requiredInfo: '请输入必填信息！',
     },
     utils: {
         validator: {

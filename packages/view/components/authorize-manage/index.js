@@ -9,6 +9,7 @@ const routeCfg = [
         component: AuthorizeManage,
         meta: {
             breadcrumb: '授权',
+            isRoot: true,
             system: 'manage'
         }
     }

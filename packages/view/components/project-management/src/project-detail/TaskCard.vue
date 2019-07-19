@@ -73,6 +73,7 @@ import Filters from '@sdx/utils/src/mixins/transformFilter';
 import TaskOperations from '@sdx/utils/src/mixins/task';
 import { STATE_MAP_FOLD_LABEL_TYPE } from '@sdx/utils/src/const/task';
 import FoldLabel from '@sdx/widget/components/fold-label';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'TaskCard',
     props: {
@@ -89,7 +90,7 @@ export default {
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         TaskIcon
     },
-    mixins: [Filters, TaskOperations],
+    mixins: [Filters, TaskOperations, locale],
     computed: {
         operations() {
             const operationList = this.getOperationList(this.meta);
@@ -131,35 +132,35 @@ export default {
             switch(this.meta.state) {
             case 'CREATED':
                 taskType.status = '';
-                taskType.statusText = '新建';
+                taskType.statusText = this.t('view.task.state.CREATED');
                 break;
             case 'LAUNCHING':
                 taskType.status = 'loading';
-                taskType.statusText = '启动中';
+                taskType.statusText = this.t('view.task.state.LAUNCHING');
                 break;
             case 'LAUNCH_ABNORMAL':
                 taskType.status = 'warning';
-                taskType.statusText = '启动异常';
+                taskType.statusText = this.t('view.task.state.LAUNCH_ABNORMAL');
                 break;
             case 'RUNNING':
                 taskType.status = 'loading';
-                taskType.statusText = '运行中';
+                taskType.statusText = this.t('view.task.state.RUNNING');
                 break;
             case 'FINISHED':
                 taskType.status = '';
-                taskType.statusText = '已完成';
+                taskType.statusText = this.t('view.task.state.FINISHED');
                 break;
             case 'KILLED':
                 taskType.status = '';
-                taskType.statusText = '已终止';
+                taskType.statusText = this.t('view.task.state.KILLED');
                 break;
             case 'FAILED':
                 taskType.status = 'warning';
-                taskType.statusText = '失败';
+                taskType.statusText = this.t('view.task.state.FAILED');
                 break;
             case 'KILLING':
                 taskType.status = 'loading';
-                taskType.statusText = '终止中';
+                taskType.statusText = this.t('view.task.state.KILLING');
                 break;
             default:
                 break;

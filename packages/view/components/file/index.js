@@ -1,4 +1,5 @@
 import Main from './src/Main';
+import { t } from '@sdx/utils/src/locale';
 
 const routeCfg = [
     {
@@ -6,7 +7,8 @@ const routeCfg = [
         name: 'SdxvFileManage',
         component: Main,
         meta: {
-            breadcrumb: '文件管理'
+            breadcrumb: t('view.file.FileManage'),
+            isRoot: true
         }
     }
 ];

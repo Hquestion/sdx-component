@@ -277,6 +277,12 @@ export default {
             }
         },
         project: {
+            project: 'Project',
+            projectDetail: 'Project Detail',
+            taskDetail: 'Task Detail',
+            logDetail: 'Log Detail',
+            createTask: 'Create Task',
+            editTask: 'Edit Task',
             projectList: 'Projects List',
             createProject: 'Create Project',
             editProject: 'Edit Project',
@@ -469,6 +475,7 @@ export default {
                 myShare: 'My Sharing Models',
                 otherShare: 'Other Sharing Models'
             },
+            model: 'Model',
             createModel: 'Create Model',
             editModel: 'Edit Model',
             searchModelName: 'Please enter model name',
@@ -492,6 +499,7 @@ export default {
             modelRemoveConfirm: 'Are you sure to remove selected models?',
             modelCancelShareConfirm: 'Are you sure to cancel sharing selected models',
             versionList: 'Model Versions',
+            modelVersionDetail: 'Model Version Detail',
             createVersion: 'Create Version',
             versionColumns: {
                 name: 'Version Name',

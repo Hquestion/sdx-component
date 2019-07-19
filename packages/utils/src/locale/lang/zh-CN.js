@@ -276,6 +276,12 @@ export default {
             }
         },
         project: {
+            project: '项目',
+            projectDetail: '项目详情',
+            taskDetail: '任务详情',
+            logDetail: '日志详情',
+            createTask: '新建任务',
+            editTask: '编辑任务',
             projectList: '项目列表',
             createProject: '新建项目',
             editProject: '编辑项目',
@@ -468,6 +474,7 @@ export default {
                 myShare: '我的共享列表',
                 otherShare: '他人共享列表'
             },
+            model: '模型',
             createModel: '新建模型',
             editModel: '编辑模型',
             searchModelName: '请输入模型名称',
@@ -491,6 +498,7 @@ export default {
             modelRemoveConfirm: '确定要删除选中的模型吗？',
             modelCancelShareConfirm: '确定要取消共享选中的模型吗？',
             versionList: '模型版本列表',
+            modelVersionDetail: '模型版本详情',
             createVersion: '新增模型版本',
             versionColumns: {
                 name: '版本名称',
@@ -817,9 +825,5 @@ export default {
             hours_ago: '小时前',
             hour_ago: '小时前',
         }
-    },
-    routes: {
-        authorize: '授权',
-        compState: '组件状态'
     }
 };

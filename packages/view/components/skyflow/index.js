@@ -1,6 +1,7 @@
 import Skyflow from './src/Index.vue';
 import SkyflowList from './src/SkyflowList.vue';
 import RunningInfo from './src/running-info/Index.vue';
+import { t } from '@sdx/utils/src/locale';
 
 Skyflow.install = vue => {
     vue.component(Skyflow.name, Skyflow);
@@ -30,7 +31,7 @@ const routeCfg = [
                 name: 'SdxvRunningInfo',
                 component: RunningInfo,
                 meta: {
-                    breadcrumb: '运行记录',
+                    breadcrumb: t('view.skyflow.runningInfo'),
                     isRoot: false
                 },
             }

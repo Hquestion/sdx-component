@@ -1,11 +1,11 @@
 import SdxvPrivilege from './src/Privilege';
-
+import { t } from '@sdx/utils/src/locale';
 const routeCfg = [{
     path: '/sdxv-privilege',
     name: 'SdxvPrivilege',
     component: SdxvPrivilege,
     meta: {
-        breadcrumb: '权限',
+        breadcrumb: t('view.authority.Authority'),
         system: 'manage',
         isRoot: true,
     }

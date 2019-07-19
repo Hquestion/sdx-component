@@ -221,7 +221,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include modifier('item') {
             flex-grow: 1;
             height: 460px;
-            width: 500px;
+            width: 35%;
         }
     }
 }

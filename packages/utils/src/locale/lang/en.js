@@ -107,7 +107,7 @@ export default {
             stopTask: 'Are you sure you want to terminate the selected task?',
             deleteTask: 'This operation will permanently delete the task. Do you want to continue?',
             killTask: 'This operation will terminate the task. Do you want to continue?',
-            saveIntoImage: 'Save the current task to a image and restore it to the current environment when it is restarted',
+            saveIntoImage: 'Save the current task to an image and restore it to the current environment when it is restarted',
             searchName: 'Name Search',
             searchPlaceholder: 'Please enter a task name, project name, or creator',
             taskType: 'Task Type',
@@ -172,6 +172,10 @@ export default {
             RealTimeMonitor: 'Real Time Monitor',
             DataSourceInformation: 'DataSource Information',
             DataSet: 'DataSet',
+            Core: 'Core',
+            Block: 'Block',
+            Count: '',
+            TaskDetail: 'Task Detail',
 
             type: {
                 SPARK: 'SPARK',
@@ -253,6 +257,7 @@ export default {
                 AllUserResourceStatistics: 'All User Resource Statistics',
                 userSearchInputPlaceholder: 'Please enter one user name',
                 UserName: 'User Name',
+                ResourceStatistics: 'Resource Statistics'
             },
             componentState: {
                 searchPodPlaceholder: 'Please enter a Pod name',
@@ -368,6 +373,7 @@ export default {
         },
         image: {
             // 镜像列表
+            ImageManagement: 'Image Management',
             ImageList: 'Images List',
             BuildTaskList: 'Build Tasks',
             BuildBasedOnFile: 'Build Based On File',
@@ -549,10 +555,10 @@ export default {
             editVersion: 'Edit Version'
         },
         authority: {
-            Authority: 'Authority',
-            authorityInputPlaceholder: 'Please enter the authority name',
-            AuthorityName: 'Authority Name',
-            AuthorityDescription: 'Authority Description',
+            Authority: 'Permission',
+            authorityInputPlaceholder: 'Please enter the Permission name',
+            AuthorityName: 'Permission Name',
+            AuthorityDescription: 'Permission Description',
             ServiceName: 'Service Name',
             ResourceCategory: 'Resource Category',
             OperationType: 'Operation Type'
@@ -726,6 +732,7 @@ export default {
             please_enter_a_role_description: 'Please enter a role description',
             determine_the_deletion_role: 'Determine the deletion role',
             this_action_deletes_the_authorization_items: 'This action deletes the authorization items associated with this role at the same time',
+            authorization: 'Authorization'
         }
     },
     sdxCommon: {

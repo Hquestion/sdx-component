@@ -12,6 +12,7 @@
                     ref="fileSelectTree"
                     :checkable="false"
                     check-type="folder"
+                    :project-enable="true"
                     :tree-options="{expandOnClickNode: false}"
                     @tree-shake="handleTreeShake"
                     @current-change="handleCurrentChange"
@@ -33,10 +34,11 @@
             <SdxuButton
                 @click="$emit('move', currentNode().node.data)"
                 v-if="supportMove"
+                :disabled="!isFolderLegal"
             >
                 {{ $t('view.file.Move') }}
             </SdxuButton>
-            <SdxuButton @click="$emit('copy', currentNode().node.data)">
+            <SdxuButton @click="$emit('copy', currentNode().node.data)" :disabled="!isFolderLegal">
                 {{ $t('view.file.Copy') }}
             </SdxuButton>
         </template>
@@ -54,7 +56,8 @@ export default {
     name: 'SdxvFolderSelect',
     data() {
         return {
-            newable: false
+            newable: false,
+            isFolderLegal: false
         };
     },
     mixins: [locale],
@@ -94,16 +97,31 @@ export default {
             }, node.node);
         },
         currentNode() {
-            return this.$refs.fileSelectTree && this.$refs.fileSelectTree.$refs.fileTree && this.$refs.fileSelectTree.$refs.fileTree.currentNode;
+            let node = this.$refs.fileSelectTree && this.$refs.fileSelectTree.$refs.fileTree && this.$refs.fileSelectTree.$refs.fileTree.currentNode;
+            if (node) {
+                let rootNode = this.$refs.fileSelectTree.getRootNode(node.node);
+                if (rootNode.data.isProjectFiles) {
+                    if (node.node.level === 2) {
+                        node.node.data.path = '/';
+                    }
+                }
+            }
+            return node;
         },
         isCurrentNodeExpand() {
             return this.currentNode() && this.currentNode().expanded;
         },
         handleTreeShake() {
-            this.newable = !this.isCurrentNodeExpand();
+            this.newable = this.isCurrentNodeExpand();
         },
         handleCurrentChange() {
-            this.newable = this.isCurrentNodeExpand();
+            // 触发change事件的时候，currentNode还没有刷新，这时取currentNode会取到之前的，所以这里在$nextTick之后再来取
+            this.$nextTick(() => {
+                this.newable = this.isCurrentNodeExpand();
+                const node = this.currentNode();
+                if(!node) return false;
+                this.isFolderLegal = !node.node.data.selectDisable;
+            });
         },
         handleCancel() {
             this.$refs.fileSelectTree.$refs.fileTree.remove({path: ''});

@@ -155,10 +155,10 @@ export default {
             NoLog: '暂时还没日志哦',
             NoRealMonitor: '暂时还没实时监控哦',
             SelectAnInstance: '请选择实例',
-            CPUUsageRate: 'cpu使用率',
+            CPUUsageRate: 'CPU使用率',
             MemoryUsage: '内存使用量',
-            GPUUsageRate: 'gpu使用率',
-            GPUMemoryUsage: '显存使用量',
+            GPUUsageRate: 'GPU使用率',
+            GPUMemoryUsage: 'GPU-显存使用量',
             TailView: 'tail查看',
             HeadView: 'head查看',
             AutoPull: '自动拉取',
@@ -172,6 +172,10 @@ export default {
             RealTimeMonitor: '实时监控',
             DataSourceInformation: '数据源信息',
             DataSet: '数据集',
+            Core: '核',
+            Block: '块',
+            Count: '个',
+            TaskDetail: '任务详情',
 
             type: {
                 SPARK: 'SPARK',
@@ -252,6 +256,7 @@ export default {
                 AllUserResourceStatistics: '全部用户资源统计',
                 userSearchInputPlaceholder: '请输入用户名',
                 UserName: '用户名',
+                ResourceStatistics: '资源统计'
             },
             componentState: {
                 searchPodPlaceholder: '请输入Pod名',
@@ -367,6 +372,7 @@ export default {
         },
         image: {
             // 镜像列表
+            ImageManagement: '镜像管理',
             ImageList: '镜像列表',
             BuildTaskList: '构建任务列表',
             BuildBasedOnFile: '基于文件构建',
@@ -725,6 +731,7 @@ export default {
             please_enter_a_role_description: '请输入角色说明',
             determine_the_deletion_role: '确定删除角色',
             this_action_deletes_the_authorization_items: '此操作会同时删除与此角色关联的授权项',
+            authorization: '授权'
         }
     },
     sdxCommon: {

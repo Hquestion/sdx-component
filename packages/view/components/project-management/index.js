@@ -25,7 +25,11 @@ const routeCfg = [
             {
                 path: 'project-list',
                 name: 'SdxvProjectList',
-                component: ProjectList
+                component: ProjectList,
+                meta: {
+                    breadcrumb: '项目',
+                    isRoot: true
+                },
             },
             {
                 path: 'project-detail/:id',

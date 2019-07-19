@@ -83,6 +83,23 @@ export default {
             User: 'User',
             Group: 'Group',
             Role: 'Role'
+        },
+        resourceConfig: {
+            Please_select: 'Please select',
+            Core: 'Core',
+            Memory: 'Memory',
+            CPU_Memory: ' CPU/Memory',
+            Driver_CPU_Memory: ' Driver CPU/Memory',
+            Actuator_CPU_Memory: ' Actuator CPU/Memory',
+            Parametric_Server_CPU_Memory: ' Parametric Server CPU/Memory',
+            Computing_Node_CPU_Memory: ' Computing Node CPU/Memory',
+            Computing_Node_GPU: ' Computing Node GPU',
+            Main_Node_CPU_Memory: ' Main Node CPU/Memory',
+            Model: 'Model',
+            Number: 'Number',
+            Piece: 'Piece',
+            Please_select_resource_allocation: 'Please select resource allocation',
+            GPU: ' GPU'
         }
     },
     view: {
@@ -364,6 +381,7 @@ export default {
             SearchImageKind: 'Image Type:',
             SearchImageState: 'State:',
             SearchBuildType: 'Build Type:',
+            MirrorVersion: 'Image Version:',
             BuildTypes: {
                 Basic: 'Basic Image',
                 Online: 'Online',
@@ -372,7 +390,7 @@ export default {
                 Task: 'Task',
             },
             States: {
-                Created: 'Created',
+                Created: 'Creating',
                 Building: 'Building',
                 Builded: 'Built',
                 Uploading: 'Uploading',
@@ -386,6 +404,9 @@ export default {
                 buildType: 'Build Type',
                 creator: 'Creator',
                 createdAt: 'Created Time',
+                state: 'State',
+                compare: 'Compare',
+                viewLog: 'View log'
             },
             imagesToShare: 'Please select images to share',
             imagesToRemove: 'Please select images to remove',
@@ -425,7 +446,15 @@ export default {
             ChangeType: 'Change Type',
             NewlyAdded: 'Newly Added',
             LogDetail: 'Log Detail',
-            ImageType: 'Image Type'
+            ImageType: 'Image Type',
+            delete_the_selected_mirror_task: 'Are you sure you want to delete the selected mirror task?',
+            can_not_be_restored_after_deletion: 'Make sure that it can not be restored after deletion',
+            FileAddress: 'File Address',
+            FileAddressColon: 'File Address:',
+            please_enter_the_file_address: 'Please enter the file address',
+            in_a_non_networked_environmen: 'In a non-networked environment, the basic images available in DockerFile are shown in the following table:',
+            CorePackage: 'Core package',
+            etc: 'etc'
         },
         model: {
             tabs: {
@@ -529,6 +558,7 @@ export default {
             OperationType: 'Operation Type'
         },
         file: {
+            FileManage: 'File Management',
             Copying: 'Copying',
             Pending: 'Pending',
             Finish: 'Finished',
@@ -594,6 +624,7 @@ export default {
             PleaseInputFileName: 'Please input file name'
         },
         resourceManage: {
+            ResourceManage: 'Resource Management',
             newCpuTemplateTitle: 'New @:(view.resourceManage.CpuTemplate)',
             CpuLabel: 'CPU(Core)：',
             MemoryLabel: 'Memory(GB)：',
@@ -764,6 +795,21 @@ export default {
             imageVersionValidate: 'Please fill in 1-64 characters in length, allowing English letters, numbers,., or-',
             tagNameValidate: 'Please fill in a string of 1-10 digits, letters or numbers beginning, letters, numbers and points.',
             testNumber: 'Please enter a positive integer'
+        },
+        transform: {
+            'day_ago': 'Day ago',
+            'days_ago': 'Days ago',
+            'just': 'Just',
+            'minutes_ago': 'Minutes ago',
+            'minute_ago': 'Minute ago',
+            'week_ago': 'Week ago',
+            'weeks_ago': 'Weeks ago',
+            'months_ago': 'Months ago',
+            'month_ago': 'Month ago',
+            'year_ago': 'Year ago',
+            'years_ago': 'Years ago',
+            'hours_ago': 'Hours ago',
+            'hour_ago': 'Hour ago',
         }
     }
 };

@@ -83,6 +83,23 @@ export default {
             User: '用户',
             Group: '用户组',
             Role: '角色'
+        },
+        resourceConfig: {
+            Please_select: '请选择',
+            Core: '核',
+            Memory: '内存',
+            CPU_Memory: 'CPU/内存',
+            Driver_CPU_Memory: '驱动器CPU/内存',
+            Actuator_CPU_Memory: '执行器CPU/内存',
+            Parametric_Server_CPU_Memory: '参数服务器CPU/内存',
+            Computing_Node_CPU_Memory: '计算节点CPU/内存',
+            Computing_Node_GPU: '计算节点GPU',
+            Main_Node_CPU_Memory: '主节点CPU/内存',
+            Model: '型号',
+            Number: '数量',
+            Piece: '块',
+            Please_select_resource_allocation: '请选择资源配置',
+            GPU: 'GPU'
         }
     },
     view: {
@@ -363,6 +380,7 @@ export default {
             SearchImageKind: '镜像种类：',
             SearchImageState: '状态：',
             SearchBuildType: '构建方式：',
+            MirrorVersion: '镜像版本号：',
             BuildTypes: {
                 Basic: '基础镜像',
                 Online: '在线构建',
@@ -371,7 +389,7 @@ export default {
                 Task: '任务转存',
             },
             States: {
-                Created: '已创建',
+                Created: '创建中',
                 Building: '构建中',
                 Builded: '构建完成',
                 Uploading: '上传中',
@@ -385,6 +403,9 @@ export default {
                 buildType: '构建方式',
                 creator: '创建人',
                 createdAt: '创建时间',
+                state: '状态',
+                compare: '比较',
+                viewLog: '查看日志'
             },
             imagesToShare: '请先选择需要共享的镜像',
             imagesToRemove: '请先选择需要删除的镜像',
@@ -424,7 +445,15 @@ export default {
             ChangeType: '变更类型',
             NewlyAdded: '新增',
             LogDetail: '日志详情',
-            ImageType: '镜像类型'
+            ImageType: '镜像类型',
+            delete_the_selected_mirror_task: '确定要删除选中的镜像任务吗？',
+            can_not_be_restored_after_deletion: '确定删除后不可恢复哦',
+            FileAddress: '文件地址',
+            FileAddressColon: '文件地址：',
+            please_enter_the_file_address: '请输入文件地址',
+            in_a_non_networked_environmen: '不联网的环境下，DockerFile中可使用的基础镜像如下表所示：',
+            CorePackage: '核心包',
+            etc: '等'
         },
         model: {
             tabs: {
@@ -468,7 +497,7 @@ export default {
             offline: '下线',
             test: '测试',
             states: {
-                created: '已创建',
+                created: '创建成功',
                 running: '运行中',
                 launching: '启动中',
                 failed: '失败',
@@ -528,6 +557,7 @@ export default {
             OperationType: '操作类型'
         },
         file: {
+            FileManage: '文件管理',
             Copying: '拷贝中',
             Pending: '等待中',
             Finish: '已完成',
@@ -593,6 +623,7 @@ export default {
             PleaseInputFileName: '请输入文件名称'
         },
         resourceManage: {
+            ResourceManage: '资源管理',
             newCpuTemplateTitle: '新建@:(view.resourceManage.CpuTemplate)',
             CpuLabel: 'CPU(核)：',
             MemoryLabel: '内存(GB)：',
@@ -763,6 +794,21 @@ export default {
             imageVersionValidate: '请填写长度为1-64个字符，允许英文字母、数字、"."、"_"或"-"',
             tagNameValidate: '请填写1-10位，字母或数字开头，字母、数字与点组成的字符串',
             testNumber: '请输入正整数'
+        },
+        transform: {
+            day_ago: '天前',
+            days_ago: '天前',
+            just: '刚刚',
+            minutes_ago: '分钟前',
+            minute_ago: '分钟前',
+            week_ago: '周前',
+            weeks_ago: '周前',
+            months_ago: '月前',
+            month_ago: '月前',
+            year_ago: '年前',
+            years_ago: '年前',
+            hours_ago: '小时前',
+            hour_ago: '小时前',
         }
     }
 };

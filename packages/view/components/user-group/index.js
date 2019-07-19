@@ -1,4 +1,5 @@
 import UserGroupManage from './src/UserGroup';
+import { t } from '@sdx/utils/src/locale';
 
 const routeCfg = [
     {
@@ -6,8 +7,9 @@ const routeCfg = [
         name: 'SdxvUserGroupManage',
         component: UserGroupManage,
         meta: {
-            breadcrumb: '用户组',
-            system: 'manage'
+            breadcrumb: t('view.userManage.UserGroup'),
+            system: 'manage',
+            isRoot: true
         }
     }
 ];

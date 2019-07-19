@@ -288,6 +288,8 @@
             <SdxvMonitorInfo
                 v-else
                 :pods="task.pods"
+                :polling="isRunning"
+                :has-gpu="hasGpu"
             />
         </template>
     </SdxvDetailContainer>

@@ -167,7 +167,7 @@ export default {
         confirm() {
             this.$refs.modelInfoForm.validate(valid => {
                 if (!valid) {
-                    Message.error(this.t('general.requiredInfo'));
+                    Message.error(this.t('sdxCommon.requiredInfo'));
                 } else {
                     if (this.editingModel) {
                         updateModel(this.editingModel.uuid, this.modelInfoForm).then(() => {

@@ -19,13 +19,13 @@
                     v-model="shareForm.shareType"
                     label="PUBLIC"
                 >
-                    {{ t('general.yes') }}
+                    {{ t('sdxCommon.Yes') }}
                 </el-radio>
                 <el-radio
                     v-model="shareForm.shareType"
                     label="PRIVATE"
                 >
-                    {{ t('general.no') }}
+                    {{ t('sdxCommon.No') }}
                 </el-radio>
             </el-form-item>
             <el-form-item

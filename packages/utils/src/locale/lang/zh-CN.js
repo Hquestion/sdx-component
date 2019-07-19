@@ -299,6 +299,7 @@ export default {
         },
         image: {
             // 镜像列表
+            ImageManagement: '镜像管理',
             ImageList: '镜像列表',
             BuildTaskList: '构建任务列表',
             BuildBasedOnFile: '基于文件构建',
@@ -657,6 +658,7 @@ export default {
             please_enter_a_role_description: '请输入角色说明',
             determine_the_deletion_role: '确定删除角色',
             this_action_deletes_the_authorization_items: '此操作会同时删除与此角色关联的授权项',
+            authorization: '授权'
         }
     },
     sdxCommon: {

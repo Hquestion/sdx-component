@@ -13,15 +13,13 @@ const routeCfg = [{
     name: 'SdxvTaskManagement',
     component: TaskView,
     redirect: '/sdxv-task-management/sdxv-task-list',
-    meta: {
-        breadcrumb: t('view.task.TaskManagement')
-    },
     children: [
         {
             path: 'sdxv-task-list',
             name: 'SdxvTaskList',
             component: TaskManagement,
             meta: {
+                breadcrumb: t('view.task.TaskManagement'),
                 isRoot: true
             },
         },

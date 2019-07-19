@@ -14,7 +14,6 @@ const routeCfg = [{
     redirect: '/sdxv-resource-statistics/index',
     component: ResourceStatistics,
     meta: {
-        breadcrumb: t('view.monitor.resourceStatistic.ResourceStatistics'),
         system: 'manage'
     },
     children: [{
@@ -23,6 +22,7 @@ const routeCfg = [{
         component: ResourceStatisticsIndex,
         meta: {
             system: 'manage',
+            breadcrumb: t('view.monitor.resourceStatistic.ResourceStatistics'),
             isRoot: true,
         }
     }, {

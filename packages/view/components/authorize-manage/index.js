@@ -1,4 +1,5 @@
 import AuthorizeManage from './src/Index';
+import {t} from '../../../utils/src/locale';
 
 // 路由配置
 
@@ -8,7 +9,7 @@ const routeCfg = [
         name: 'SdxvAuthorizeManage',
         component: AuthorizeManage,
         meta: {
-            breadcrumb: '授权',
+            breadcrumb: t('routes.authorize'),
             isRoot: true,
             system: 'manage'
         }

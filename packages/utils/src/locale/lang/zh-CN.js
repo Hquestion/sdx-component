@@ -810,5 +810,9 @@ export default {
             hours_ago: '小时前',
             hour_ago: '小时前',
         }
+    },
+    routes: {
+        authorize: '授权',
+        compState: '组件状态'
     }
 };

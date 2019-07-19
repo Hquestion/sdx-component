@@ -35,7 +35,10 @@ const routeCfg = [
                     {
                         path: ':modelId',
                         name: 'versionList',
-                        component: VersionList
+                        component: VersionList,
+                        meta: {
+                            breadcrumb: '模型版本列表'
+                        },
                     },
                     {
                         path: ':modelId/:versionId',

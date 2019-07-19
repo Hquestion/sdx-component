@@ -27,10 +27,12 @@
                 ref="usedMem"
             />
             <div
+                v-if="hasGpu"
                 class="sdxv-monitor-info__chart--item"
                 ref="usedGpu"
             />
             <div
+                v-if="hasGpu"
                 class="sdxv-monitor-info__chart--item"
                 ref="usedGpuMem"
             />
@@ -143,6 +145,14 @@ export default {
         pods: {
             type: Array,
             default: () => []
+        },
+        polling: {  // 轮询
+            type: Boolean,
+            default: true
+        },
+        hasGpu: {
+            type: Boolean,
+            default: true
         }
     },
     data() {
@@ -162,7 +172,7 @@ export default {
     },
     computed: {
         needPolling() {
-            return !!this.statList.length;
+            return this.polling && !!this.statList.length;
         }
     },
     methods: {
@@ -216,34 +226,36 @@ export default {
                     )
                 }
             ];
-            // 整理 gpu 使用
-            this.usedGpuSeriesData = [
-                {
-                    name: this.t('view.task.GPUUsageRate'),
-                    type: 'line',
-                    itemStyle: {
-                        color: '#4781F8',
-                        borderWidth: 2
-                    },
-                    data: this.statList.map(item =>
-                        (parseFloat(item.gpu) * 100).toFixed(2)
-                    )
-                }
-            ];
-            // 整理 gpuMem 使用
-            this.usedGpuMemSeriesData = [
-                {
-                    name: this.t('view.task.GPUMemoryUsage'),
-                    type: 'line',
-                    itemStyle: {
-                        color: '#9E5BF8',
-                        borderWidth: 2
-                    },
-                    data: this.statList.map(item =>
-                        parseFloat(byteToMB(item.gpuMemory))
-                    )
-                }
-            ];
+            if (this.hasGpu) {
+                // 整理 gpu 使用
+                this.usedGpuSeriesData = [
+                    {
+                        name: this.t('view.task.GPUUsageRate'),
+                        type: 'line',
+                        itemStyle: {
+                            color: '#4781F8',
+                            borderWidth: 2
+                        },
+                        data: this.statList.map(item =>
+                            (parseFloat(item.gpu) * 100).toFixed(2)
+                        )
+                    }
+                ];
+                // 整理 gpuMem 使用
+                this.usedGpuMemSeriesData = [
+                    {
+                        name: this.t('view.task.GPUMemoryUsage'),
+                        type: 'line',
+                        itemStyle: {
+                            color: '#9E5BF8',
+                            borderWidth: 2
+                        },
+                        data: this.statList.map(item =>
+                            parseFloat(byteToMB(item.gpuMemory))
+                        )
+                    }
+                ];
+            }
 
             // 渲染图表
             this.$nextTick().then(() => {
@@ -253,8 +265,10 @@ export default {
         renderChart() {
             this.renderChartByName('usedCpu');
             this.renderChartByName('usedMem');
-            this.renderChartByName('usedGpu');
-            this.renderChartByName('usedGpuMem');
+            if (this.hasGpu) {
+                this.renderChartByName('usedGpu');
+                this.renderChartByName('usedGpuMem');
+            }
         },
         renderChartByName(name) {
             if (this.chartInstance[name]) {

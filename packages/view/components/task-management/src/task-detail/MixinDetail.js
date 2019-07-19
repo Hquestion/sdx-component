@@ -57,6 +57,9 @@ export default {
         hasDataInfo() {
             return this.task && ((this.task.datasources && this.task.datasources.length > 0) || (this.task.datasets && this.task.datasets.length > 0));
         },
+        isRunning() {
+            return this.task && [STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state);
+        },
         isModelTask() {
             return this.task && [TASK_TYPE.TENSORFLOW_SERVING, TASK_TYPE.SPARK_SERVING, TASK_TYPE.PMML_SERVING].includes(this.task.type);
         },
@@ -89,6 +92,15 @@ export default {
         },
         showSaveAsImage() {
             return (this.isJUPYTER || this.isCONTAINERDEV) && this.task.state === STATE_TYPE.RUNNING;
+        },
+        hasGpu() {
+            let has = false;
+            if (this.task && this.task.resourceConfig) {
+                has = Object.keys(this.task.resourceConfig).some(item => {
+                    return item.includes('GPUS') && this.task.resourceConfig[item] > 0;
+                });
+            }
+            return has;
         }
     },
     methods: {

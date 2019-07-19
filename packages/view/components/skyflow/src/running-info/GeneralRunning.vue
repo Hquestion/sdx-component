@@ -8,13 +8,13 @@
             @sort-change="sortChange"
         >
             <el-table-column
-                label="工作流名称"
+                :label="t('view.skyflow.columns.name')"
                 key="name"
                 prop="name"
             />
             <el-table-column
                 key="executeKind"
-                label="执行方式"
+                :label="t('view.skyflow.columns.executeKind')"
             >
                 <template slot-scope="scope">
                     <div>
@@ -24,7 +24,7 @@
             </el-table-column>
             <el-table-column
                 key="state"
-                label="状态"
+                :label="t('view.skyflow.columns.state')"
             >
                 <template slot-scope="scope">
                     <SdxwFoldLabel
@@ -38,7 +38,7 @@
             </el-table-column>
             <el-table-column
                 key="executeStart"
-                label="执行开始时间"
+                :label="t('view.skyflow.columns.executeStart')"
                 sortable="custom"
                 prop="executeStart"
             >
@@ -50,7 +50,7 @@
             </el-table-column>
             <el-table-column
                 key="executeEnd"
-                label="执行结束时间"
+                :label="t('view.skyflow.columns.executeEnd')"
                 prop="executeEnd"
                 sortable="custom"
             >
@@ -63,7 +63,7 @@
             <el-table-column
                 key="executeTime"
                 prop="executeTime"
-                label="执行时长"
+                :label="t('view.skyflow.columns.executeTime')"
                 sortable="custom"
             >
                 <template slot-scope="scope">
@@ -73,31 +73,31 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="操作"
+                :label="t('sdxCommon.Operation')"
                 key="operation"
             >
                 <template slot-scope="scope">
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'canvas')"
                         icon="sdx-icon sdx-huabu"
-                        title="进入画布"
+                        :title="t('view.skyflow.canvas')"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'copy')"
                         icon="sdx-icon sdx-kaobei"
                         v-if="scope.row.showCopy"
-                        title="复制工作流"
+                        :title="t('view.skyflow.copyWorkflow')"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'shutdown')"
                         icon="sdx-icon sdx-tingzhi"
-                        title="停止运行"
+                        :title="t('sdxCommon.Stop')"
                         v-if="scope.row.showShutdown"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'remove')"
                         icon="sdx-icon sdx-icon-delete"
-                        title="删除"
+                        :title="t('sdxCommon.Delete')"
                         v-if="scope.row.showRemove"
                     />
                 </template>
@@ -135,6 +135,7 @@ import { paginate } from '@sdx/utils/src/helper/tool';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import CreateWorkflow from '../CreateWorkflow';
 import TimeFilter from '@sdx/utils/src/mixins/transformFilter';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'GeneralRunnning',
     data() {
@@ -147,8 +148,8 @@ export default {
             current: 1,
             pageSize: 10,
             executionKinds: {
-                'MANUAL': '手动',
-                'RESUME': '续跑'
+                'MANUAL': this.t('view.skyflow.manual'),
+                'RESUME': this.t('view.skyflow.resume')
             },
             isOwnWorkflow: false,
             createWorkflowVisible: false,
@@ -163,7 +164,7 @@ export default {
         [Pagination.name]: Pagination,
         [CreateWorkflow.name]: CreateWorkflow
     },
-    mixins: [TimeFilter],
+    mixins: [TimeFilter, locale],
     props: {
         searchConditions: {
             type: Object,
@@ -207,32 +208,32 @@ export default {
                     item.label = {};
                     switch(item.state) {
                     case 'running':
-                        item.label.text = '运行中';
+                        item.label.text = this.t('view.task.state.RUNNING');
                         item.label.type = 'running';
                         item.label.status = 'loading';
                         break;
                     case 'launching':
-                        item.label.text = '启动中';
+                        item.label.text = this.t('view.task.state.LAUNCHING');
                         item.label.type = 'processing';
                         item.label.status = 'loading';
                         break;
                     case 'failed':
-                        item.label.text = '失败';
+                        item.label.text = this.t('view.task.state.FAILED');
                         item.label.type = 'error';
                         item.label.status = 'warning';
                         break;
                     case 'stopping':
-                        item.label.text = '终止中';
+                        item.label.text = this.t('view.task.state.KILLING');
                         item.label.type = 'dying';
                         item.label.status = 'loading';
                         break;
                     case 'stopped':
-                        item.label.text = '已终止';
+                        item.label.text = this.t('view.task.state.KILLED');
                         item.label.type = 'die';
                         item.label.status = '';
                         break;
                     case 'succeeded':
-                        item.label.text = '成功';
+                        item.label.text = this.t('view.monitor.componentState.state.succeeded');
                         item.label.type = 'create';
                         item.label.status = '';
                         break;
@@ -261,12 +262,12 @@ export default {
                     break;
                 case 'remove':
                     MessageBox({
-                        title: '确定要删除该执行记录吗？',
-                        content: '删除后将不可恢复'
+                        title: this.t('view.skyflow.removeRuntimeConfirm'),
+                        content: this.t('sdxCommon.ConfirmRemove')
                     }).then(() => {
                         removeGeneralRunningTask(row.uuid).then(() => {
                             Message({
-                                message: '删除成功',
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initList();
@@ -275,12 +276,12 @@ export default {
                     break;
                 case 'shutdown':
                     MessageBox({
-                        title: '确定要终止当前工作流任务吗？',
+                        title: this.t('view.skyflow.shutdownTaskConfirm'),
                         status: 'warning'
                     }).then(() => {
                         shutdownGeneralRunningTask(row.uuid).then(() => {
                             Message({
-                                message: '操作成功',
+                                message: this.t('sdxCommon.OperationSuccess'),
                                 type: 'success'
                             });
                             this.initList();

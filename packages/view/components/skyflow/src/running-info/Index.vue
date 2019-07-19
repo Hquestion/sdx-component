@@ -1,6 +1,6 @@
 <template>
     <sdxu-content-panel
-        title="运行记录"
+        :title="t('view.skyflow.runningInfo')"
         class="sdxv-running-info"
     >
         <div v-if="skyflowInfo.processType === 'PATCH'">
@@ -11,12 +11,12 @@
                 <SdxuTabRadioItem
                     name="general"
                 >
-                    执行记录列表
+                    {{ t('view.skyflow.runningRecordList') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem
                     name="timer"
                 >
-                    定时运行列表
+                    {{ t('view.skyflow.timerRunningList') }}
                 </SdxuTabRadioItem>
             </SdxuTabRadioGroup>
         </div>
@@ -27,39 +27,39 @@
                 style="width: 100%"
             >
                 <span v-if="listType === 'timer'">
-                    <sdxw-search-item label="任务名称：">
+                    <sdxw-search-item :label="t('view.skyflow.taskName')">
                         <sdxu-input
                             v-model="searchConditions.name"
                             type="search"
                             size="small"
-                            placeholder="请输入任务名称"
+                            :placeholder="t('view.skyflow.enterTaskName')"
                         />
                     </sdxw-search-item>
                 </span>
                 <span v-else>
-                    <sdxw-search-item label="执行方式：">
+                    <sdxw-search-item :label="t('view.skyflow.executeKind')">
                         <el-select
                             v-model="searchConditions.executeKind"
-                            placeholder="请选择"
+                            :placeholder="t('view.skyflow.enterExecuteKind')"
                         >
                             <el-option
-                                label="全部"
+                                :label="t('sdxCommon.All')"
                                 value=""
                             />
                             <el-option
-                                label="手动"
+                                :label="t('view.skyflow.manual')"
                                 value="MANUAL"
                             />
                             <el-option
-                                label="续跑"
+                                :label="t('view.skyflow.resume')"
                                 value="RESUME"
                             />
                         </el-select>
                     </sdxw-search-item>
-                    <sdxw-search-item label="工作流状态：">
+                    <sdxw-search-item :label="t('view.skyflow.state')">
                         <el-select
                             v-model="searchConditions.state"
-                            placeholder="请选择"
+                            :placeholder="t('view.skyflow.enterState')"
                         >
                             <el-option
                                 v-for="(item, index) in stateList"
@@ -69,13 +69,13 @@
                             />
                         </el-select>
                     </sdxw-search-item>
-                    <sdxw-search-item label="执行时间：">
+                    <sdxw-search-item :label="t('view.skyflow.timeRange')">
                         <el-date-picker
                             v-model="searchConditions.timeRange"
                             type="datetimerange"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
+                            :range-separator="t('sdxCommon.To')"
+                            :start-placeholder="t('view.skyflow.startDate')"
+                            :end-placeholder="t('view.skyflow.endDate')"
                             align="right"
                         />
                     </sdxw-search-item>
@@ -107,6 +107,7 @@ import ContentPanel from '@sdx/ui/components/content-panel';
 import { getSkyflowInfo } from '@sdx/utils/src/api/skyflow';
 import GeneralRunning from './GeneralRunning';
 import TimerRunning from './TimerRunning';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvSkyflowList',
     data() {
@@ -124,35 +125,36 @@ export default {
             stateList: [
                 {
                     value: '',
-                    label: '全部'
+                    label: this.t('sdxCommon.All')
                 },
                 {
                     value: 'running',
-                    label: '运行中'
+                    label: this.t('view.task.state.RUNNING')
                 },
                 {
                     value: 'launching',
-                    label: '启动中'
+                    label: this.t('view.task.state.LAUNCHING')
                 },
                 {
                     value: 'failed',
-                    label: '失败'
+                    label: this.t('view.task.state.FAILED')
                 },
                 {
                     value: 'stopping',
-                    label: '终止中'
+                    label: this.t('view.task.state.KILLING')
                 },
                 {
                     value: 'stopped',
-                    label: '已终止'
+                    label: this.t('view.task.state.KILLED')
                 },
                 {
                     value: 'succeeded',
-                    label: '成功'
+                    label: this.t('view.monitor.componentState.state.succeeded')
                 }
             ]
         };
     },
+    mixins: [locale],
     components: {
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
@@ -167,8 +169,6 @@ export default {
     },
     created() {
         this.init();
-    },
-    computed: {
     },
     methods: {
         search() {

@@ -3,7 +3,7 @@
         :visible.sync="dialogVisible"
         @close="dialogClose"
         :close-on-click-modal="false"
-        title="定时运行设置"
+        :title="t('view.skyflow.columns.runningSetting')"
         class="sdxv-task-edit"
     >
         <el-form
@@ -14,34 +14,34 @@
             ref="taskForm"
         >
             <el-form-item
-                label="任务名称："
+                :label="t('view.skyflow.taskName')"
             >
                 <sdxu-input
                     v-model="taskForm.crontabName"
-                    placeholder="请输入任务名称"
+                    :placeholder="t('view.skyflow.enterTaskName')"
                     disabled
                 />
             </el-form-item>
             <el-form-item
-                label="触发频率："
+                :label="t('view.skyflow.createForm.triggerFreq')"
                 prop="crontab"
             >
                 <sdxu-input
                     v-model="taskForm.crontab"
-                    placeholder="请输入触发频率"
+                    :placeholder="t('view.skyflow.enterFreq')"
                 />
                 <div class="sdxv-task-edit__tip">
-                    示例：“0 0 * * ？”表示每天0点触发执行。
+                    {{ t('view.skyflow.example') }}
                 </div>
             </el-form-item>
         </el-form>
         <div class="sdxv-task-edit__hint">
             <div style="margin-bottom: 10px;">
-                周期内未执行完时：放弃
+                {{ t('view.skyflow.taskAbort') }}
             </div>
             <div>
                 <el-alert
-                    title="如果下次触发时, 上一轮任务还没有执行完成, 则直接Kill掉当前任务, 启动新一轮任务。"
+                    :title="t('view.skyflow.taskAlert')"
                     type="info"
                     show-icon
                     :closable="false"
@@ -56,14 +56,14 @@
                 size="small"
                 @click="cancel"
             >
-                取消
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="confirm"
             >
-                确认
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </sdxu-dialog>
@@ -76,6 +76,7 @@ import Button from '@sdx/ui/components/button';
 import { Form, FormItem, Message } from 'element-ui';
 import { updateTimerRunningTask } from '@sdx/utils/src/api/skyflow';
 import Alert from 'element-ui/lib/alert';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'TimerRunningTaskEdit',
     data() {
@@ -87,7 +88,7 @@ export default {
             },
             taskFormRule: {
                 crontab: [
-                    { required: true, message: '请输入触发频率', trigger: 'change' }
+                    { required: true, message: this.t('view.skyflow.enterFreq'), trigger: 'change' }
                 ]
             },
             needRefresh: false
@@ -101,6 +102,7 @@ export default {
         [Button.name]: Button,
         [Alert.name]: Alert
     },
+    mixins: [locale],
     props: {
         visible: {
             type: Boolean,
@@ -124,11 +126,11 @@ export default {
         confirm() {
             this.$refs.taskForm.validate(valid => {
                 if (!valid) {
-                    Message.error('请输入必填信息');
+                    Message.error(this.t('sdxCommon.requiredInfo'));
                 } else {
                     updateTimerRunningTask(this.data.uuid, this.taskForm).then(() => {
                         Message({
-                            message: '更新成功',
+                            message: this.t('sdxCommon.UpdateSuccess'),
                             type: 'success'
                         });
                         this.needRefresh = true;

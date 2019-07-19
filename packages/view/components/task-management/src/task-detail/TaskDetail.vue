@@ -93,15 +93,15 @@
             />
             <SdxvBaseInfoItem
                 :label="t('view.task.StartupTime')"
-                :value="task && task.runningAt || ''"
+                :value="task && dateFormatter(task.startedAt) || ''"
             />
             <SdxvBaseInfoItem
                 :label="t('view.task.StopTime')"
-                :value="task && task.stoppedAt || ''"
+                :value="task && dateFormatter(task.stoppedAt) || ''"
             />
             <SdxvBaseInfoItem
                 :label="t('view.task.RunningTime')"
-                :value="task ? dealTime(task.runningAt, task.stoppedAt) : ''"
+                :value="task ? dealTime(task.startedAt, task.stoppedAt) : ''"
             />
             <SdxvBaseInfoItem
                 v-if="isCONTAINERDEV"

@@ -8,7 +8,7 @@ import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuButton from '@sdx/ui/components/button';
 import SdxuEmpty from '@sdx/ui/components/empty';
 import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, TASK_TYPE, TASK_TYPE_LABEL } from '@sdx/utils/src/const/task';
-import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
+import { byteToGB, parseMilli, dateFormatter } from '@sdx/utils/src/helper/transform';
 import { t } from '@sdx/utils/src/locale';
 
 export default {
@@ -49,10 +49,10 @@ export default {
             return icon;
         },
         hasRealMonitor() {
-            return this.task && this.task.state === STATE_TYPE.RUNNING && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
+            return this.task && ![STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.CREATED, STATE_TYPE.LAUNCHING].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
         },
         hasLog() {
-            return this.task && ![STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.CREATED, STATE_TYPE.LAUNCHING].includes(this.task.state) && this.task.pods.length > 0;
+            return this.task && ![STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.CREATED, STATE_TYPE.LAUNCHING].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
         },
         hasDataInfo() {
             return this.task && ((this.task.datasources && this.task.datasources.length > 0) || (this.task.datasets && this.task.datasets.length > 0));
@@ -92,23 +92,6 @@ export default {
         }
     },
     methods: {
-        getTaskAttr(attr, prefix = '', suffix = '') {
-            if (attr === 'run_time') {
-                if (this.task.stoppedAt && this.task.runningAt) {
-                    return this.dealTime(this.task.runningAt, this.task.stoppedAt);
-                } else if (!this.task.stoppedAt && this.task.runningAt) {
-                    return this.dealTime(this.task.runningAt, new Date());
-                }
-            } else if (Array.isArray(attr)){
-                let ret = this.task;
-                attr.forEach(item => {
-                    ret = ret[item];
-                });
-                return prefix + (ret !== undefined ? ret : '') + suffix;
-            } else {
-                return prefix + (this.task[attr] ? this.task[attr] : '') + suffix;
-            }
-        },
         dealTime(startTime, endTime) {
             if (!startTime) {
                 return '';
@@ -157,6 +140,9 @@ export default {
         },
         milliCoreToCore(millicore) {
             return parseMilli(millicore);
+        },
+        dateFormatter(date) {
+            return dateFormatter(date);
         }
     }
 };

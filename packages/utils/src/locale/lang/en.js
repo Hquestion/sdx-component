@@ -112,7 +112,7 @@ export default {
             stopTask: 'Are you sure you want to terminate the selected task?',
             deleteTask: 'This operation will permanently delete the task. Do you want to continue?',
             killTask: 'This operation will terminate the task. Do you want to continue?',
-            saveIntoImage: 'Save the current task to a image and restore it to the current environment when it is restarted',
+            saveIntoImage: 'Save the current task to an image and restore it to the current environment when it is restarted',
             searchName: 'Name Search',
             searchPlaceholder: 'Please enter a task name, project name, or creator',
             taskType: 'Task Type',

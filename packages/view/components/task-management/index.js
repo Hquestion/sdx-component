@@ -35,7 +35,7 @@ const routeCfg = [{
             }
         },
         {
-            path: 'sdxv-task-log/:method/:podId',
+            path: 'sdxv-task-log/:method/:podName',
             name: 'SdxvTaskManagementTaskLog',
             props: true,
             component: TaskLogInfo,

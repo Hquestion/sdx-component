@@ -41,7 +41,7 @@ export default {
                     SPARK_DRIVER_MEMORY: 128849018880,
                     SPARK_DRIVER_CPUS: 4000,
                 },
-                runningAt: '2019-04-04 12:00:00',
+                startedAt: '2019-04-04 12:00:00',
                 stoppedAt: '2019-04-05 12:00:00',
                 externalUrl: 'www.baidu.com',
                 sourcePaths: ['system/code'],

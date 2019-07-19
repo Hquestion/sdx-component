@@ -17,7 +17,7 @@
 import clickoutside from 'element-ui/src/utils/clickoutside';
 import Loading from 'element-ui/lib/loading';
 import Vue from 'vue';
-import { getFilesList } from '@sdx/utils/src/api/file';
+import {getFilesList, getProjectShare} from '@sdx/utils/src/api/file';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 import { getPathIcon } from './utils';
 import ElTree from 'element-ui/packages/tree';
@@ -80,6 +80,10 @@ export default {
         loadFnWrap: {
             type: Function,
             default: undefined
+        },
+        projectEnable: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -109,13 +113,13 @@ export default {
                     },
                     disabled: data => {
                         if (this.checkType === 'file') {
-                            return !data.isFile;
+                            return !data.isFile || !!data.selectDisable;
                         }
                         if (this.checkType === 'folder') {
-                            return !!data.isFile;
+                            return !!data.isFile || !!data.selectDisable;
                         }
                         if (this.checkType === 'all') {
-                            return false;
+                            return !!data.selectDisable || false;
                         }
                     }
                 },
@@ -158,14 +162,25 @@ export default {
             // rootPath为根目录时，需要在第一层展示根目录
             if (path === '/' && node.level === 0) {
                 this.isTreeLoading = false;
-                return resolve([
+                const rootDirs = [
                     {
                         name: '/',
                         path: '/',
                         isFile: false,
                         ownerId: this.userId
                     }
-                ]);
+                ];
+                if (this.projectEnable) {
+                    rootDirs.push({
+                        name: this.t('view.file.CooperationProject'),
+                        path: '/fixed-project-root',
+                        isFile: false,
+                        ownerId: this.userId,
+                        isProjectFiles: true,
+                        selectDisable: true
+                    });
+                }
+                return resolve(rootDirs);
             }
             if (node.level > 0) {
                 path = node.data.path;
@@ -174,16 +189,41 @@ export default {
             if (this.loadFnWrap) {
                 promise = this.loadFnWrap(this.rootPath, node.data.path, this.userId)();
             } else {
-                const params = {
-                    path,
-                    userId: this.userId,
-                    fileExtension: this.accept,
-                    onlyDirectory: this.checkType === 'folder',
-                    onlyFile: this.checkType === 'file'
-                };
-                promise = getFilesList(params).then(res => {
-                    return res.children;
-                });
+                let rootNode = this.getRootNode(node);
+                if (rootNode.data.isProjectFiles) {
+                    // 第一级获取项目列表，后面与获取文件一致
+                    if (node.level === 1) {
+                        promise = getProjectShare({
+                            start: 1,
+                            count: -1,
+                            path: ''
+                        }).then(res => {
+                            return res.children;
+                        });
+                    } else {
+                        const params = {
+                            path: node.level === 2 ? '/' : path,
+                            ownerId: node.data.ownerId,
+                            fileExtension: this.accept,
+                            onlyDirectory: this.checkType === 'folder',
+                            onlyFile: this.checkType === 'file'
+                        };
+                        promise = getFilesList(params).then(res => {
+                            return res.children;
+                        });
+                    }
+                } else {
+                    const params = {
+                        path,
+                        ownerId: this.userId,
+                        fileExtension: this.accept,
+                        onlyDirectory: this.checkType === 'folder',
+                        onlyFile: this.checkType === 'file'
+                    };
+                    promise = getFilesList(params).then(res => {
+                        return res.children;
+                    });
+                }
             }
             return promise.then(res => {
                 this.isTreeLoading = false;
@@ -275,6 +315,12 @@ export default {
                     {data.path ? node.label : newFolder()}
                 </span>
             );
+        },
+        getRootNode(node) {
+            if (node.level === 1 || !node.parent) {
+                return node;
+            }
+            return this.getRootNode(node.parent);
         }
     }
 };

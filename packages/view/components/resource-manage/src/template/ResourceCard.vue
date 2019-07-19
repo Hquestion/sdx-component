@@ -16,7 +16,7 @@
                 <div class="cate-type">
                     {{ cate }}
                 </div>
-                <div class="cate-count">
+                <div class="cate-count" :title="`${count[index]}${unit[index]}`">
                     <span>{{ count[index] }}</span>{{ unit[index] }}
                 </div>
             </div>
@@ -131,6 +131,7 @@ export default {
         .detail {
             margin-left: 10px;
             font-size: 13px;
+            width: calc(100% - 46px);
             .cate-group {
                 line-height: 1.5;
                 display: flex;
@@ -138,11 +139,15 @@ export default {
                 align-items: center;
                 .cate-type {
                     color: $sdx-text-regular-color;
+                    white-space: nowrap;
                 }
                 .cate-count {
                     margin-left: 14px;
                     color: $sdx-text-primary-color;
                     font-size: 14px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
         }

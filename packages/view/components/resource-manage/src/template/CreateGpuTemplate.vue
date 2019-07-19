@@ -10,7 +10,7 @@
         <el-form
             :model="formData"
             ref="form"
-            label-width="90px"
+            label-width="100px"
             :rules="rules"
         >
             <el-form-item
@@ -22,8 +22,8 @@
                     <el-option
                         v-for="(item, i) in GPUList"
                         :key="i"
-                        :label="item.label"
-                        :value="item.label"
+                        :label="item"
+                        :value="item"
                     />
                 </el-select>
             </el-form-item>

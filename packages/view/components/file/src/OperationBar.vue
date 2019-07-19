@@ -52,7 +52,7 @@
                 v-if="canDelete()"
                 @click="handleDelete"
             >
-                {{ t('Delete') }}
+                {{ t('sdxCommon.Delete') }}
             </SdxuButton>
         </div>
         <div class="sdxv-operation-bar__search">

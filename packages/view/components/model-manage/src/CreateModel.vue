@@ -13,27 +13,27 @@
             :rules="modelInfoFormRule"
         >
             <el-form-item
-                label="模型名称："
+                :label="t('view.model.createModelForm.name')"
                 prop="name"
             >
                 <sdxu-input
                     v-model="modelInfoForm.name"
-                    placeholder="请输入模型名称"
+                    :placeholder="t('view.model.searchModelName')"
                 />
             </el-form-item>
             <el-form-item
-                label="模型描述："
+                :label="t('view.model.createModelForm.description')"
                 prop="description"
             >
                 <sdxu-input
                     v-model="modelInfoForm.description"
                     type="textarea"
-                    placeholder="请输入模型描述，最多可输入256个字符"
+                    :placeholder="t('view.model.modelDescription')"
                     :rows="3"
                 />
             </el-form-item>
             <el-form-item
-                label="模型标签："
+                :label="t('view.model.createModelForm.label')"
                 prop="labels"
             >
                 <el-select
@@ -42,7 +42,7 @@
                     filterable
                     allow-create
                     default-first-option
-                    placeholder="请选择模型标签"
+                    :placeholder="t('view.model.selectLabel')"
                     :multiple-limit="2"
                 >
                     <el-option
@@ -62,14 +62,14 @@
                 size="small"
                 @click="cancel"
             >
-                取消
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="confirm"
             >
-                确认
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </sdxu-dialog>
@@ -85,12 +85,13 @@ import Message from 'element-ui/lib/message';
 import ElSelect from 'element-ui/lib/select';
 import { getLabels, createModel, updateModel } from '@sdx/utils/src/api/model';
 import { nameWithChineseValidator, descValidator, tagArrayValidator } from '@sdx/utils/src/helper/validate';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'CreateModel',
     data() {
         return {
             dialogVisible: this.visible,
-            title: '新建模型',
+            title: this.t('view.model.createModel'),
             labelOptions: [],
             modelInfoForm: {
                 name: '',
@@ -99,7 +100,7 @@ export default {
             },
             modelInfoFormRule: {
                 name: [
-                    { required: true, message: '请输入模型名称', trigger: 'blur' },
+                    { required: true, message: this.t('view.model.searchModelName'), trigger: 'blur' },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 description: [
@@ -109,13 +110,14 @@ export default {
                     }
                 ],
                 labels: [
-                    { required: true, message: '请选择模型标签', trigger: 'change' },
+                    { required: true, message: this.t('view.model.selectLabel'), trigger: 'change' },
                     { validator: tagArrayValidator, trigger: 'change' }
                 ]
             },
             needRefresh: false
         };
     },
+    mixins: [locale],
     props: {
         visible: {
             type: Boolean,
@@ -144,7 +146,7 @@ export default {
             this.labelOptions = res.items;
         });
         if (this.editingModel) {
-            this.title = '编辑模型';
+            this.title = this.t('view.model.editModel');
             Object.assign(this.modelInfoForm, this.editingModel);
         }
     },
@@ -165,12 +167,12 @@ export default {
         confirm() {
             this.$refs.modelInfoForm.validate(valid => {
                 if (!valid) {
-                    Message.error('请输入必填信息');
+                    Message.error(this.t('general.requiredInfo'));
                 } else {
                     if (this.editingModel) {
                         updateModel(this.editingModel.uuid, this.modelInfoForm).then(() => {
                             Message({
-                                message: '更新成功',
+                                message: this.t('sdxCommon.UpdateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;
@@ -179,7 +181,7 @@ export default {
                     } else {
                         createModel(this.modelInfoForm).then(() => {
                             Message({
-                                message: '创建成功',
+                                message: this.t('sdxCommon.CreateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;

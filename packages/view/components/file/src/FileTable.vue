@@ -83,7 +83,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Size')"
+                :label="t('sdxCommon.Size')"
                 :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="size"
                 width="180"
@@ -119,7 +119,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Operation')"
+                :label="t('sdxCommon.Operation')"
                 width="180"
                 v-if="!fileManager.isProjectRoot()"
             >
@@ -204,7 +204,7 @@ export default {
             topCount: 0,
             containerCount: 0,
             editingRow: null,
-            tempRowName: this.t('NewFolder'),
+            tempRowName: this.t('view.file.NewFolder'),
             rootKinds
         };
     },
@@ -229,7 +229,7 @@ export default {
             }
             const emptyRow = {
                 ownerId: '',
-                name: this.t('NewFolder'),
+                name: this.t('view.file.NewFolder'),
                 path: '',
                 filesystem: 'cephfs',
                 isFile: false,

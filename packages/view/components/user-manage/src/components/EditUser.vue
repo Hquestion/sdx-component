@@ -57,10 +57,10 @@
                             v-model="user.isActive"
                         >
                             <el-radio :label="true">
-                                {{ t('Yes') }}
+                                {{ t('sdxCommon.Yes') }}
                             </el-radio>
                             <el-radio :label="false">
-                                {{ t('No') }}
+                                {{ t('sdxCommon.No') }}
                             </el-radio>
                         </el-radio-group>
                     </el-form-item>
@@ -88,13 +88,13 @@
                     type="default"
                     @click="close"
                 >
-                    {{ t('Cancel') }}
+                    {{ t('sdxCommon.Cancel') }}
                 </sdxu-button>
                 <sdxu-button
                     type="primary"
                     @click="confirm"
                 >
-                    {{ t('Confirm') }}
+                    {{ t('sdxCommon.Confirm') }}
                 </sdxu-button>
             </div>
         </sdxu-dialog>

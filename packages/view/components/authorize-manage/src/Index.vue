@@ -11,19 +11,19 @@
                             name="user"
                             v-auth.user.button="'USER:READ'"
                         >
-                            用户授权列表
+                            {{ t('view.authorizeManage.user_authorization_list') }}
                         </SdxuTabRadioItem>
                         <SdxuTabRadioItem
                             name="group"
                             v-auth.user.button="'GROUP:READ'"
                         >
-                            用户组授权列表
+                            {{ t('view.authorizeManage.user_group_authorization_list') }}
                         </SdxuTabRadioItem>
                         <SdxuTabRadioItem
                             name="role"
                             v-auth.user.button="'ROLE:READ'"
                         >
-                            角色授权列表
+                            {{ t('view.authorizeManage.role_authorization_list') }}
                         </SdxuTabRadioItem>
                     </SdxuTabRadioGroup>
                     <SdxuButton
@@ -37,7 +37,7 @@
                         <i
                             class="sdx-icon sdx-icon-plus"
                         />
-                        新建授权
+                        {{ t('view.authorizeManage.new_authorization') }}
                     </sdxubutton>
                 </div>
                 <SdxwSearchLayout
@@ -51,7 +51,7 @@
                             :searchable="false"
                             size="small"
                             type="search"
-                            :placeholder="`请输入${tabName}`"
+                            :placeholder="tabName(true)"
                         />
                     </SdxwSearchItem>
                 </SdxwSearchLayout>
@@ -65,11 +65,11 @@
                 >
                     <el-table-column
                         :prop="objectType === 'user' ? 'fullName' : 'name'"
-                        :label="tabName"
+                        :label="tabName()"
                         width="300px"
                     />
                     <el-table-column
-                        label="权限"
+                        :label="t('view.authority.Authority')"
                     >
                         <template slot-scope="scope">
                             <SdxuTextTooltip
@@ -81,7 +81,7 @@
                     </el-table-column>
                     <el-table-column
                         width="400px"
-                        label="操作"
+                        :label="t('sdxCommon.Operation')"
                         v-if="authtoWrite(objectType)"
                     >
                         <template
@@ -112,7 +112,7 @@
                 :visible.sync="dialogVisible"
                 class="sdxv-authorize-model"
                 @closed="closedDialog"
-                :title="`${is_update ? '编辑' : '新建'}授权`"
+                :title="is_update ? t('view.authorizeManage.editorial_authorization') : t('view.authorizeManage.new_authorization')"
                 @open="openDialog"
             >
                 <div>
@@ -127,7 +127,7 @@
                     >
                         <el-form-item
                             prop="objValue"
-                            label="授权对象"
+                            :label="t('view.authorizeManage.authorized_object')"
                         >
                             <SdxuUserAvatar
                                 v-if="is_update"
@@ -140,7 +140,7 @@
                             />
                         </el-form-item>
                         <el-form-item
-                            label="权限设置"
+                            :label="t('view.authorizeManage.permission_settings')"
                             prop="tags"
                         >
                             <SdxuTransfer
@@ -160,14 +160,14 @@
                         size="small"
                         @click="dialogCancel"
                     >
-                        取消
+                        {{ t('sdxCommon.Cancel') }}
                     </SdxuButton>
                     <SdxuButton
                         type="primary"
                         size="small"
                         @click="dialogConfirm"
                     >
-                        确认
+                        {{ t('sdxCommon.Confirm') }}
                     </SdxuButton>
                 </div>
             </sdxu-dialog>
@@ -199,8 +199,10 @@ import {  paginate } from '@sdx/utils/src/helper/tool';
 import SdxwUserPicker from '@sdx/widget/components/user-picker';
 import SearchLayout from '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvAuthorizeManage',
+    mixins: [locale],
     components: {
         SdxuInput,
         SdxuButton,
@@ -227,7 +229,7 @@ export default {
     data() {
         const objValueValidate = (rule, value, callback) => {
             if(!value) {
-                callback(new Error('请输入授权对象'));
+                callback(new Error(this.t('view.authorizeManage.please_enter_the_authorization_object')));
             } else {
                 callback();
             }
@@ -259,11 +261,11 @@ export default {
             updateUuid: '',
             rules:  {
                 objValue: [
-                    { required: true, message: '请输入授权对象', trigger: 'blue'},
+                    { required: true, message: this.t('view.authorizeManage.please_enter_the_authorization_object'), trigger: 'blue'},
                     { validator: objValueValidate, trigger: 'change' }
                 ],
                 tags: [
-                    { required: true, message: '请设置权限设置', trigger: 'blue' }
+                    { required: true, message: this.t('view.authorizeManage.please_set_permission_settings'), trigger: 'blue' }
                 ],
 
             },
@@ -281,19 +283,24 @@ export default {
         this.getPermissions();
     },
     computed: {
-        tabName() {
-            let name ='';
-            if(this.objectType === 'user') {
-                name = '用户名';
-            } else if(this.objectType === 'group') {
-                name = '用户组名';
-            } else if (this.objectType === 'role'){
-                name = '角色名';
-            }
-            return name;
-        }
+
     },
     methods: {
+        tabName(holder) {
+            let [name, holderContent] = ['', ''];
+            if(this.objectType === 'user') {
+                name = this.t('view.monitor.resourceStatistic.UserName');
+                holderContent = this.t('view.monitor.resourceStatistic.userSearchInputPlaceholder');
+            } else if(this.objectType === 'group') {
+                name = this.t('view.userManage.UserGroupName');
+                holderContent = this.t('view.authorizeManage.please_enter_the_user_group_name');
+            } else if (this.objectType === 'role'){
+                name = this.t('view.authorizeManage.role_name');
+                holderContent = this.t('view.authorizeManage.please_enter_the_role_name');
+            }
+            name = holder ? holderContent : name;
+            return name;
+        },
         // 根据权限展示
         defaultName(type) {
             let name = '';

@@ -13,7 +13,7 @@
                 show-overflow-tooltip
             />
             <el-table-column
-                :label="t('Size')"
+                :label="t('sdxCommon.Size')"
                 min-width="40"
                 prop="size"
             >
@@ -22,7 +22,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Status')"
+                :label="t('sdxCommon.Status')"
                 min-width="120"
             >
                 <template slot-scope="scope">
@@ -36,7 +36,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="t('Operation')"
+                :label="t('sdxCommon.Operation')"
                 min-width="40"
             >
                 <template slot-scope="scope">
@@ -44,13 +44,13 @@
                         class="handle-bar"
                         v-if="scope.row.status === 'success' || scope.row.status === 'error'"
                     >
-                        <SdxuIconButton icon="sdx-icon sdx-icon-delete" :title="t('Delete')" @click="handleCancelUpload(scope.row)" />
+                        <SdxuIconButton icon="sdx-icon sdx-icon-delete" :title="t('sdxCommon.Delete')" @click="handleCancelUpload(scope.row)" />
                     </div>
                     <div
                         class="handle-bar"
                         v-else
                     >
-                        <SdxuIconButton icon="sdx-icon sdx-tingzhi" :title="t('Stop')" @click="handleCancelUpload(scope.row)" />
+                        <SdxuIconButton icon="sdx-icon sdx-tingzhi" :title="t('sdxCommon.Stop')" @click="handleCancelUpload(scope.row)" />
                     </div>
                 </template>
             </el-table-column>

@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-role-manage">
         <SdxuContentPanel
-            title="角色"
+            :title="t('widget.userInfo.role')"
         >
             <div v-auth.user.button="'ROLE:READ'">
                 <div
@@ -18,7 +18,7 @@
                             <i
                                 class="sdx-icon sdx-icon-plus"
                             />
-                            新建角色
+                            {{ t('view.authorizeManage.new_roles') }}
                         </sdxubutton>
                         <SdxwSearchLayout
                             @search="searchName"
@@ -32,7 +32,7 @@
                                     type="search"
                                     size="small"
                                     :searchable="false"
-                                    placeholder="请输入角色名"
+                                    :placeholder="t('view.authorizeManage.please_enter_the_role_name')"
                                 />
                             </SdxwSearchItem>
                         </SdxwSearchLayout>
@@ -49,11 +49,11 @@
                     >
                         <el-table-column
                             prop="name"
-                            label="角色名"
+                            :label="t('view.authorizeManage.role_name')"
                         />
                         <el-table-column
                             prop="description"
-                            label="角色说明"
+                            :label="t('view.authorizeManage.role_description')"
                         >
                             <template slot-scope="scope">
                                 <SdxuTextTooltip
@@ -64,7 +64,7 @@
                         </el-table-column>
                         <el-table-column
                             prop="createdAt"
-                            label="创建时间"
+                            :label="t('view.image.Columns.createdAt')"
                             sortable
                         >
                             <template slot-scope="scope">
@@ -73,7 +73,7 @@
                         </el-table-column>
                         <el-table-column
                             style="width: 15%"
-                            label="操作"
+                            :label="t('sdxCommon.Operation')"
                             v-auth.user.button="'ROLE:WRITE'"
                         >
                             <template
@@ -110,7 +110,7 @@
                 @open="resetForm()"
             >
                 <div slot="title">
-                    {{ id ? '编辑角色': '新建角色' }}
+                    {{ id ? t('view.authorizeManage.editorial_role') : t('view.authorizeManage.new_roles') }}
                 </div>
                 <div>
                     <el-form
@@ -121,22 +121,22 @@
                         @submit.native.prevent
                     >
                         <el-form-item
-                            label="角色名:"
+                            :label="`${t('view.authorizeManage.role_name')}:`"
                             prop="name"
                         >
                             <SdxuInput
                                 v-model="roleObj.name"
                                 size="small"
-                                placeholder="请输入角色名"
+                                :placeholder="t('view.authorizeManage.please_enter_the_role_name')"
                             />
                         </el-form-item>
                         <el-form-item
-                            label="角色说明:"
+                            :label="`${t('view.authorizeManage.role_description')}:`"
                             prop="description"
                         >
                             <SdxuInput
                                 type="textarea"
-                                placeholder="请输入角色说明"
+                                :placeholder="t('view.authorizeManage.please_enter_a_role_description')"
                                 v-model="roleObj.description"
                             />
                         </el-form-item>
@@ -148,14 +148,14 @@
                         size="small"
                         @click="dialogCancel"
                     >
-                        取消
+                        {{ t('sdxCommon.Cancel') }}
                     </sdxubutton>
                     <SdxuButton
                         type="primary"
                         size="small"
                         @click="dialogConfirm"
                     >
-                        确定
+                        {{ t('sdxCommon.Confirm') }}
                     </sdxubutton>
                 </div>
             </sdxu-dialog>
@@ -180,8 +180,10 @@ import auth from '@sdx/widget/components/auth';
 import { nameWithChineseValidator,descValidator} from '@sdx/utils/src/helper/validate';
 import { removeSameAttr } from '@sdx/utils/src/helper/tool';
 import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvRoleManage',
+    mixins: [locale],
     components: {
         SdxuInput,
         SdxuButton,
@@ -219,7 +221,7 @@ export default {
                 name: [
                     {
                         required: true,
-                        message: '请输入角色名',
+                        message: this.t('view.authorizeManage.please_enter_the_role_name'),
                         trigger: 'blur',
                         transform(value) {
                             return value && ('' + value).trim();
@@ -230,7 +232,7 @@ export default {
                 description: [
                     {
                         required: true,
-                        message: '请输入角色说明',
+                        message: this.t('view.authorizeManage.please_enter_a_role_description'),
                         trigger: 'blur',
                         transform(value) {
                             return value && ('' + value).trim();
@@ -327,8 +329,8 @@ export default {
         },
         removeRole(id, name) {
             MessageBox.confirm({
-                title: `确定删除角色${name}吗？`,
-                content: '此操作会同时删除与此角色关联的授权项',
+                title: `${this.t('view.authorizeManage.determine_the_deletion_role')} ${name}?`,
+                content: this.t('view.authorizeManage.this_action_deletes_the_authorization_items'),
                 type: 'alert'
             }).then(() => {
                 removeRoles(id)

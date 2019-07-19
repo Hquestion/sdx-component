@@ -1,6 +1,6 @@
 <template>
     <SdxuDialog
-        :title="t('Log')"
+        :title="t('sdxCommon.Log')"
         :visible.sync="dialogVisible"
         :no-footer="true"
         @close="handleClose"

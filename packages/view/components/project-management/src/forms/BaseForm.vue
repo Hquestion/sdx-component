@@ -22,7 +22,7 @@
                     type="default"
                     @click="handleCancel"
                 >
-                    {{ t('Cancel') }}
+                    {{ t('sdxCommon.Cancel') }}
                 </SdxuButton>
                 <SdxuButton
                     type="primary"
@@ -60,14 +60,14 @@ export default {
         },
         commitTitle: {
             type: String,
-            default: t('Confirm')
+            default: () => t('sdxCommon.Confirm')
         }
     },
     data() {
         return {
         };
     },
-   
+
     components: {
         SdxuButton,
         [ContentPanel.name]: ContentPanel,
@@ -82,7 +82,7 @@ export default {
         t
     },
     created() {
-    
+
     }
 };
 </script>

@@ -27,7 +27,7 @@ export default {
     },
     computed: {
         label() {
-            return this.expanded ? this.t('retract'): this.t('expand');
+            return this.expanded ? this.t('sdxCommon.retract'): this.t('sdxCommon.expand');
         },
         reverse() {
             return this.expanded;

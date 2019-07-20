@@ -98,7 +98,7 @@
                 min-width="160px"
             >
                 <template #default="{ row }">
-                    {{ row.quota.cpu / 1000 }}
+                    {{ row.quota && row.quota.cpu / 1000 }}
                 </template>
             </el-table-column>
             <el-table-column
@@ -109,7 +109,7 @@
                 min-width="170px"
             >
                 <template #default="{ row }">
-                    {{ row.quota.memory / (1024 * 1024 * 1024) }}
+                    {{ row.quota && row.quota.memory / (1024 * 1024 * 1024) }}
                 </template>
             </el-table-column>
             <el-table-column
@@ -120,7 +120,7 @@
                 min-width="170px"
             >
                 <template #default="{ row }">
-                    <span v-if="row.quota.gpu > 0">{{ `${row.quota.gpuModel}: ${row.quota.gpu}` }}</span>
+                    <span v-if="row.quota && row.quota.gpu > 0">{{ `${row.quota && row.quota.gpuModel}: ${row.quota && row.quota.gpu}` }}</span>
                     <span v-else>0</span>
                 </template>
             </el-table-column>

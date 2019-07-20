@@ -19,13 +19,13 @@
                         class="sdxv-timer-running__expand-table"
                     >
                         <el-table-column
-                            label="序号"
+                            :label="t('sdxCommon.Index')"
                             key="index"
                             prop="index"
                         />
                         <el-table-column
                             key="startTime"
-                            label="执行开始时间"
+                            :label="t('view.skyflow.columns.executeStart')"
                         >
                             <template slot-scope="prop">
                                 <div>
@@ -35,7 +35,7 @@
                         </el-table-column>
                         <el-table-column
                             key="stopTime"
-                            label="执行结束时间"
+                            :label="t('view.skyflow.columns.executeEnd')"
                         >
                             <template slot-scope="prop">
                                 <div>
@@ -46,12 +46,12 @@
                         <el-table-column
                             key="executeTime"
                             prop="executeTime"
-                            label="执行时长"
+                            :label="t('view.skyflow.columns.executeTime')"
                             sortable="custom"
                         />
                         <el-table-column
                             key="state"
-                            label="状态"
+                            :label="t('view.skyflow.columns.state')"
                         >
                             <template slot-scope="prop">
                                 <SdxwFoldLabel
@@ -64,20 +64,20 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                            label="操作"
+                            :label="t('sdxCommon.Operation')"
                             key="operation"
                         >
                             <template slot-scope="props">
                                 <sdxu-icon-button
                                     @click="handleSubOperation(props.row, 'remove')"
                                     icon="sdx-icon sdx-icon-delete"
-                                    title="删除"
+                                    :title="t('sdxCommon.Delete')"
                                     v-if="isOwnWorkflow"
                                 />
                                 <sdxu-icon-button
                                     @click="handleSubOperation(props.row, 'canvas')"
                                     icon="sdx-icon sdx-huabu"
-                                    title="进入画布"
+                                    :title="t('view.skyflow.canvas')"
                                 />
                             </template>
                         </el-table-column>
@@ -95,18 +95,18 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="任务名称"
+                :label="t('view.skyflow.columns.taskName')"
                 key="crontabName"
                 prop="crontabName"
             />
             <el-table-column
                 key="crontab"
-                label="执行设置"
+                :label="t('view.skyflow.columns.setting')"
                 prop="crontab"
             />
             <el-table-column
                 key="submitAt"
-                label="提交时间"
+                :label="t('view.skyflow.columns.submitTime')"
                 sortable="custom"
             >
                 <template slot-scope="prop">
@@ -117,7 +117,7 @@
             </el-table-column>
             <el-table-column
                 key="state"
-                label="状态"
+                :label="t('view.skyflow.columns.state')"
             >
                 <template slot-scope="prop">
                     <SdxwFoldLabel
@@ -130,7 +130,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="操作"
+                :label="t('sdxCommon.Operation')"
                 key="operation"
             >
                 <template slot-scope="scope">
@@ -139,29 +139,29 @@
                             @click="handleOperation(scope.row, 'run')"
                             icon="sdx-icon sdx-icon-yunxing"
                             v-if="scope.row.showRun"
-                            title="运行"
+                            :title="t('sdxCommon.Run')"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'shutdown')"
                             icon="sdx-icon sdx-tingzhi"
-                            title="停止运行"
+                            :title="t('sdxCommon.Stop')"
                             v-if="scope.row.showShutdown"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'copy')"
                             icon="sdx-icon sdx-kaobei"
-                            title="复制工作流"
+                            :title="t('view.skyflow.copyWorkflow')"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'edit')"
                             icon="sdx-icon sdx-icon-edit"
                             v-if="scope.row.showEdit"
-                            title="定时运行设置"
+                            :title="t('view.skyflow.columns.runningSetting')"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'remove')"
                             icon="sdx-icon sdx-icon-delete"
-                            title="删除"
+                            :title="t('sdxCommon.Delete')"
                             v-if="scope.row.showRemove"
                         />
                     </sdxu-icon-button-group>
@@ -208,6 +208,7 @@ import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import CreateWorkflow from '../CreateWorkflow';
 import TimerRunningTaskEdit from './TimerRunningTaskEdit';
 import TimeFilter from '@sdx/utils/src/mixins/transformFilter';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'TimerRunning',
     data() {
@@ -245,7 +246,7 @@ export default {
             default: () => {}
         }
     },
-    mixins: [TimeFilter],
+    mixins: [TimeFilter, locale],
     created() {
         getSkyflowInfo(this.$route.params.id).then(res => {
             this.skyflowInfo = res;
@@ -297,32 +298,32 @@ export default {
                     item.label = {};
                     switch(item.state) {
                     case 'running':
-                        item.label.text = '运行中';
+                        item.label.text = this.t('view.task.state.RUNNING');
                         item.label.type = 'running';
                         item.label.status = 'loading';
                         break;
                     case 'launching':
-                        item.label.text = '启动中';
+                        item.label.text = this.t('view.task.state.LAUNCHING');
                         item.label.type = 'processing';
                         item.label.status = 'loading';
                         break;
                     case 'failed':
-                        item.label.text = '失败';
+                        item.label.text = this.t('view.task.state.FAILED');
                         item.label.type = 'error';
                         item.label.status = 'warning';
                         break;
                     case 'stopping':
-                        item.label.text = '终止中';
+                        item.label.text = this.t('view.task.state.KILLING');
                         item.label.type = 'dying';
                         item.label.status = 'loading';
                         break;
                     case 'stopped':
-                        item.label.text = '已终止';
+                        item.label.text = this.t('view.task.state.KILLED');
                         item.label.type = 'die';
                         item.label.status = '';
                         break;
                     case 'succeeded':
-                        item.label.text = '成功';
+                        item.label.text = this.t('view.monitor.componentState.state.succeeded');
                         item.label.type = 'create';
                         item.label.status = '';
                         break;
@@ -360,22 +361,22 @@ export default {
                     item.label = {};
                     switch(item.state) {
                     case 'succeeded':
-                        item.label.text = '运行完成';
+                        item.label.text = this.t('view.skyflow.states.succeeded');
                         item.label.type = 'create';
                         item.label.status = '';
                         break;
                     case 'failed':
-                        item.label.text = '运行失败';
+                        item.label.text = this.t('view.skyflow.states.failed');
                         item.label.type = 'error';
                         item.label.status = 'warning';
                         break;
                     case 'cronRunning':
-                        item.label.text = '运行中';
+                        item.label.text = this.t('view.skyflow.states.cronRunning');
                         item.label.type = 'running';
                         item.label.status = 'loading';
                         break;
                     case 'stopped':
-                        item.label.text = '已终止';
+                        item.label.text = this.t('view.skyflow.states.stopped');
                         item.label.type = 'die';
                         item.label.status = '';
                         break;
@@ -401,12 +402,12 @@ export default {
                 switch (type) {
                 case 'remove':
                     MessageBox({
-                        title: '确定要删除该执行记录吗？',
-                        content: '删除后将不可恢复'
+                        title: this.t('view.skyflow.removeRuntimeConfirm'),
+                        content: this.t('sdxCommon.ConfirmRemove')
                     }).then(() => {
                         removeTimerRunningSubTask(row.jobId).then(() => {
                             Message({
-                                message: '删除成功',
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initSubList();
@@ -434,12 +435,12 @@ export default {
                     break;
                 case 'remove':
                     MessageBox({
-                        title: '确定要删除该定时任务吗？',
-                        content: '删除后将不可恢复'
+                        title: this.t('view.skyflow.removeTimerTaskConfirm'),
+                        content: this.t('sdxCommon.ConfirmRemove'),
                     }).then(() => {
                         removeTimerRunningTask(row.uuid).then(() => {
                             Message({
-                                message: '删除成功',
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initList();
@@ -448,12 +449,12 @@ export default {
                     break;
                 case 'shutdown':
                     MessageBox({
-                        title: '确定要停止运行当前定时任务吗？',
+                        title: this.t('view.skyflow.stopTimerTaskConfirm'),
                         status: 'warning'
                     }).then(() => {
                         shutdownTimerRunningTask(row.uuid).then(() => {
                             Message({
-                                message: '操作成功',
+                                message: this.t('sdxCommon.OperationSuccess'),
                                 type: 'success'
                             });
                             this.initList();
@@ -462,12 +463,12 @@ export default {
                     break;
                 case 'run':
                     MessageBox({
-                        title: '确定要运行当前定时任务吗？',
+                        title: this.t('view.skyflow.runTaskConfirm'),
                         status: 'warning'
                     }).then(() => {
                         startTimerRunningTask(row.uuid).then(() => {
                             Message({
-                                message: '操作成功',
+                                message: this.t('sdxCommon.OperationSuccess'),
                                 type: 'success'
                             });
                             this.initList();

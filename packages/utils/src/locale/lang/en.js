@@ -102,11 +102,6 @@ export default {
             GPU: ' GPU'
         }
     },
-    general: {
-        requiredInfo: 'Please fill out all required fields!',
-        yes: 'Yes',
-        no: 'No'
-    },
     view: {
         task: {
             stopTask: 'Are you sure you want to terminate the selected task?',
@@ -282,6 +277,12 @@ export default {
             }
         },
         project: {
+            project: 'Project',
+            projectDetail: 'Project Detail',
+            taskDetail: 'Task Detail',
+            logDetail: 'Log Detail',
+            createTask: 'Create Task',
+            editTask: 'Edit Task',
             projectList: 'Projects List',
             createProject: 'Create Project',
             editProject: 'Edit Project',
@@ -304,6 +305,77 @@ export default {
             modelDev: 'Model Development',
             modelTraining: 'Model Training',
             modelAssess: 'Model Assessment'
+        },
+        skyflow: {
+            skyflowList: 'Workflows List',
+            createWorkflow: 'Create Workflow',
+            copyWorkflow: 'Copy Workflow',
+            editWorkflow: 'Edit Workflow',
+            enterSkyflowName: 'Please enter workflow name',
+            template: 'Template',
+            privateAndShare: 'Private And Share',
+            trafficTemplate: 'Rail Traffic Template',
+            windPower: 'Wind Power Template',
+            removeWorkflowConfirm: 'Are you sure to remove the workflow?',
+            createForm: {
+                processType: 'Workflow Process Type:',
+                patchProcess: 'Patch',
+                streamProcess: 'Stream',
+                name: 'Workflow Name:',
+                description: 'Workflow Description:',
+                enterDescription: 'Please enter workflow description',
+                setAsTemplate: 'Set As Template:',
+                templateType: 'Template Type:',
+                enterTemplateType: 'Please select template type',
+                shareSetting: 'Sharing Setting:',
+                privateWorkflow: 'Private Workflows',
+                shareWorkflow: 'Sharing Workflows',
+                triggerFreq: 'Trigger Frequency:'
+            },
+            selectTemplate: 'Select Template',
+            selectWorkflow: 'Select Workflow',
+            canvas: 'Go To Canvas',
+            runningInfo: 'Running Records',
+            runningRecordList: 'Running Records List',
+            timerRunningList: 'Timer Running List',
+            taskName: 'Task Name:',
+            enterTaskName: 'Please enter task name',
+            executeKind: 'Execute method:',
+            enterExecuteKind: 'Please select execute method',
+            manual: 'Manual',
+            resume: 'Resume',
+            state: 'Workflow state:',
+            enterState: 'Please select workflow state',
+            timeRange: 'Execute Time:',
+            startDate: 'Start Time',
+            endDate: 'End Time',
+            columns: {
+                name: 'Workflow Name',
+                executeKind: 'Execute Method',
+                state: 'State',
+                executeStart: 'Execute Start Time',
+                executeEnd: 'Execute End Time',
+                executeTime: 'Execute Time',
+                taskName: 'Task Name',
+                setting: 'Running Setting',
+                submitTime: 'Submit Time',
+                runningSetting: 'Timer Running Setting'
+            },
+            removeRuntimeConfirm: 'Are you sure to remove the running record?',
+            removeTimerTaskConfirm: 'Are you sure to remove the timer running task?',
+            runTaskConfirm: 'Are you sure to run the timer running task?',
+            stopTimerTaskConfirm: 'Are you sure to stop the timer running task?',
+            shutdownTaskConfirm: 'Are you sure to stop the workflow task?',
+            states: {
+                succeeded: 'Running Finished',
+                failed: 'Running Failed',
+                cronRunning: 'Running',
+                stopped: 'Stopped'
+            },
+            enterFreq: 'Please enter trigger frequency',
+            example: 'For example: "0 0 * * ?" indicates the task will run at 0 oclock every day.',
+            taskAbort: 'When unfinished in a loop: Abort',
+            taskAlert: 'if last run of task were not finished in next trigger, current task will be killed and new run of task will start.'
         },
         image: {
             // 镜像列表
@@ -403,6 +475,7 @@ export default {
                 myShare: 'My Sharing Models',
                 otherShare: 'Other Sharing Models'
             },
+            model: 'Model',
             createModel: 'Create Model',
             editModel: 'Edit Model',
             searchModelName: 'Please enter model name',
@@ -426,6 +499,7 @@ export default {
             modelRemoveConfirm: 'Are you sure to remove selected models?',
             modelCancelShareConfirm: 'Are you sure to cancel sharing selected models',
             versionList: 'Model Versions',
+            modelVersionDetail: 'Model Version Detail',
             createVersion: 'Create Version',
             versionColumns: {
                 name: 'Version Name',
@@ -712,7 +786,11 @@ export default {
         Yes: 'Yes',
         No: 'No',
         Edit: 'Edit',
-        UserGroup: 'Users/Groups:'
+        UserGroup: 'Users/Groups:',
+        requiredInfo: 'Please fill out all required fields!',
+        To: 'To',
+        Index: 'Index',
+        Run: 'Run'
     },
     utils: {
         validator: {

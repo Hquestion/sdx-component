@@ -12,7 +12,7 @@
         color: $sdx-text-minor-color;
         div {
             min-width: $sdxw-resource-label-width;
-            max-width: calc(100% - $sdxw-resource-label-width);
+            max-width: calc(100% - 110px);
             display: inline-block;
             vertical-align: middle;
             span:first-child {

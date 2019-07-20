@@ -7,6 +7,7 @@ import { TaskDetailView, TaskLogInfo} from '../task-management';
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';
 import ProjectDetail from './src/project-detail/index.vue';
+import { t } from '@sdx/utils/src/locale';
 
 ProjectManagement.install = vue => {
     vue.component(ProjectManagement.name, ProjectManagement);
@@ -19,7 +20,7 @@ const routeCfg = [
         redirect: '/sdxv-project-manage/project-list',
         component: ProjectManagement,
         meta: {
-            breadcrumb: '项目'
+            breadcrumb: t('view.project.project')
         },
         children: [
             {
@@ -27,7 +28,7 @@ const routeCfg = [
                 name: 'SdxvProjectList',
                 component: ProjectList,
                 meta: {
-                    breadcrumb: '项目',
+                    breadcrumb: t('view.project.project'),
                     isRoot: true
                 },
             },
@@ -36,7 +37,7 @@ const routeCfg = [
                 name: 'ProjectDetail',
                 component: ProjectDetail,
                 meta: {
-                    breadcrumb: '项目详情'
+                    breadcrumb: t('view.project.projectDetail')
                 }
             },
             {
@@ -45,7 +46,7 @@ const routeCfg = [
                 component: TaskDetailView,
                 props: true,
                 meta: {
-                    breadcrumb: '任务详情'
+                    breadcrumb: t('view.project.taskDetail')
                 }
             },
             {
@@ -54,7 +55,7 @@ const routeCfg = [
                 props: true,
                 component: TaskLogInfo,
                 meta: {
-                    breadcrumb: '日志详情'
+                    breadcrumb: t('view.project.logDetail')
                 }
             },
             {
@@ -62,7 +63,7 @@ const routeCfg = [
                 component: FormView,
                 name: 'CreateTask',
                 meta: {
-                    breadcrumb: '新建任务'
+                    breadcrumb: t('view.project.createTask')
                 },
                 props: ({
                     params
@@ -75,7 +76,7 @@ const routeCfg = [
                 component: FormView,
                 name: 'EditTask',
                 meta: {
-                    breadcrumb: '编辑任务'
+                    breadcrumb: t('view.project.editTask')
                 },
                 props: ({
                     params

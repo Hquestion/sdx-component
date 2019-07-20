@@ -276,6 +276,12 @@ export default {
             }
         },
         project: {
+            project: '项目',
+            projectDetail: '项目详情',
+            taskDetail: '任务详情',
+            logDetail: '日志详情',
+            createTask: '新建任务',
+            editTask: '编辑任务',
             projectList: '项目列表',
             createProject: '新建项目',
             editProject: '编辑项目',
@@ -298,6 +304,77 @@ export default {
             modelDev: '模型开发',
             modelTraining: '模型训练',
             modelAssess: '模型评估'
+        },
+        skyflow: {
+            skyflowList: '工作流列表',
+            createWorkflow: '新建工作流',
+            copyWorkflow: '复制工作流',
+            editWorkflow: '编辑工作流',
+            enterSkyflowName: '请输入工作流名称',
+            template: '模板',
+            privateAndShare: '私有与共享',
+            trafficTemplate: '轨道交通模板',
+            windPower: '风电模板',
+            removeWorkflowConfirm: '确定要删除该工作流吗？',
+            createForm: {
+                processType: '工作流处理方式：',
+                patchProcess: '批处理',
+                streamProcess: '流处理',
+                name: '工作流名称：',
+                description: '工作流描述：',
+                enterDescription: '请输入工作流描述',
+                setAsTemplate: '设为模板：',
+                templateType: '模板种类：',
+                enterTemplateType: '请选择模板种类',
+                shareSetting: '共享设置：',
+                privateWorkflow: '私有工作流',
+                shareWorkflow: '共享工作流',
+                triggerFreq: '触发频率：'
+            },
+            selectTemplate: '选择模板',
+            selectWorkflow: '选择工作流',
+            canvas: '进入画布',
+            runningInfo: '运行记录',
+            runningRecordList: '执行记录列表',
+            timerRunningList: '定时运行列表',
+            taskName: '任务名称：',
+            enterTaskName: '请输入任务名称',
+            executeKind: '执行方式：',
+            enterExecuteKind: '请选择执行方式',
+            manual: '手动',
+            resume: '续跑',
+            state: '工作流状态：',
+            enterState: '请选择工作流状态',
+            timeRange: '执行时间：',
+            startDate: '开始日期',
+            endDate: '结束日期',
+            columns: {
+                name: '工作流名称',
+                executeKind: '执行方式',
+                state: '状态',
+                executeStart: '执行开始时间',
+                executeEnd: '执行结束时间',
+                executeTime: '执行时长',
+                taskName: '任务名称',
+                setting: '执行设置',
+                submitTime: '提交时间',
+                runningSetting: '定时运行设置'
+            },
+            removeRuntimeConfirm: '确定要删除该执行记录吗？',
+            removeTimerTaskConfirm: '确定要删除该定时任务吗？',
+            runTaskConfirm: '确定要运行当前定时任务吗？',
+            stopTimerTaskConfirm: '确定要停止运行当前定时任务吗？',
+            shutdownTaskConfirm: '确定要终止当前工作流任务吗？',
+            states: {
+                succeeded: '运行完成',
+                failed: '运行失败',
+                cronRunning: '运行中',
+                stopped: '已终止'
+            },
+            enterFreq: '请输入触发频率',
+            example: '示例：“0 0 * * ？”表示每天0点触发执行。',
+            taskAbort: '周期内未执行完时：放弃',
+            taskAlert: '如果下次触发时, 上一轮任务还没有执行完成, 则直接Kill掉当前任务, 启动新一轮任务。'
         },
         image: {
             // 镜像列表
@@ -397,6 +474,7 @@ export default {
                 myShare: '我的共享列表',
                 otherShare: '他人共享列表'
             },
+            model: '模型',
             createModel: '新建模型',
             editModel: '编辑模型',
             searchModelName: '请输入模型名称',
@@ -420,6 +498,7 @@ export default {
             modelRemoveConfirm: '确定要删除选中的模型吗？',
             modelCancelShareConfirm: '确定要取消共享选中的模型吗？',
             versionList: '模型版本列表',
+            modelVersionDetail: '模型版本详情',
             createVersion: '新增模型版本',
             versionColumns: {
                 name: '版本名称',
@@ -708,6 +787,9 @@ export default {
         Edit: '编辑',
         UserGroup: '协作者/组：',
         requiredInfo: '请输入必填信息！',
+        To: '至',
+        Index: '序号',
+        Run: '运行'
     },
     utils: {
         validator: {

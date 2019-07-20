@@ -3,6 +3,7 @@ import ModelManage from './src/Index.vue';
 import VersionManage from './src/version-list-table/index.vue';
 import VersionList from './src/version-list-table/VersionList.vue';
 import VersionDetail from './src/version-list-table/VersionDetail.vue';
+import { t } from '@sdx/utils/src/locale';
 
 const routeCfg = [
     {
@@ -11,7 +12,7 @@ const routeCfg = [
         component: ModelManage,
         redirect: '/sdxv-model-manage/modelList',
         meta: {
-            breadcrumb: '模型'
+            breadcrumb: t('view.model.model')
         },
         children: [
             {
@@ -19,7 +20,7 @@ const routeCfg = [
                 name:'modelList',
                 component: ModelManageList,
                 meta: {
-                    breadcrumb: '模型',
+                    breadcrumb: t('view.model.model'),
                     isRoot: true
                 }
             },
@@ -29,20 +30,23 @@ const routeCfg = [
                 redirect: 'versionList/:modelId',
                 component: VersionManage,
                 meta: {
-                    breadcrumb: '模型版本列表'
+                    breadcrumb: t('view.model.versionList')
                 },
                 children: [
                     {
                         path: ':modelId',
                         name: 'versionList',
-                        component: VersionList
+                        component: VersionList,
+                        meta: {
+                            breadcrumb: t('view.model.versionList')
+                        },
                     },
                     {
                         path: ':modelId/:versionId',
                         name: 'versionDetail',
                         component: VersionDetail,
                         meta: {
-                            breadcrumb: '模型版本详情'
+                            breadcrumb: t('view.model.modelVersionDetail')
                         }
                     }
                 ]

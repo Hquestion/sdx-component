@@ -273,11 +273,11 @@ export default {
                 BasicComponents: 'Basic Components',
                 MicroserviceComponents: 'Microservice Components',
                 state: {
-                    running: 'running',
-                    failed: 'failed',
-                    pending: 'pending',
-                    succeeded: 'succeeded',
-                    unknown: 'unknown'
+                    running: 'Running',
+                    failed: 'Failed',
+                    pending: 'Pending',
+                    succeeded: 'Succeeded',
+                    unknown: 'Unknown'
                 }
             }
         },

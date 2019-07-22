@@ -2,6 +2,7 @@
     <SdxuLogDetail
         :pre-loading="preLoading"
         :suf-loading="sufLoading"
+        :loading="loading"
         :content="logContent"
         @scroll="handleScroll"
     />
@@ -67,6 +68,9 @@ export default {
     computed: {
         isLoading() {
             return this.preLoading || this.sufLoading;
+        },
+        loading() {
+            return this.isLoading && this.logContent === '';
         }
     },
     methods: {
@@ -150,13 +154,17 @@ export default {
             this.autoPullInstance = null;
         },
         async getCodeInfo() {
+            const params = {
+                start: 1,
+                count: 1
+            };
+            if (this.startedAt) {
+                params.startedAt = this.startedAt;
+            }
             // tail 查看时的初始化方法，先查询最新日志
             // 获取日志长度
             try {
-                const data = await getPodLog(this.podName, {
-                    start: 1,
-                    count: 1
-                });
+                const data = await getPodLog(this.podName, params);
                 this.start = this.end = data.total + 1;
                 this.getBackwardLog();
             } catch(e) {

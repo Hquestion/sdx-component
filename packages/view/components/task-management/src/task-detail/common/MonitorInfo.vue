@@ -356,7 +356,7 @@ export default {
         currentPod() {
             this.fetchData();
         },
-        needPolling(nval) {
+        polling(nval) {
             if (nval) {
                 this.startPolling();
             } else {

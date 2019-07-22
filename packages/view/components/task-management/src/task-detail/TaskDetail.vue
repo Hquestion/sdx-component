@@ -155,51 +155,51 @@
                 >
                     <SdxvBaseInfoItem
                         :label="t('view.task.MainNodeCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_MASTER_CPUS : 0) + t('view.task.Core')"
+                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.TF_MASTER_CPUS || 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.MainNodeMemory')"
-                        :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.TF_MASTER_MEMORY : 0) + 'GB'"
+                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.TF_MASTER_MEMORY || 0) + 'GB'"
                         :strip="true"
                     />
                 </div>
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         :label="t('view.task.ParametricServerCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_PS_CPUS : 0) + t('view.task.Core')"
+                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.TF_PS_CPUS || 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ParametricServerMemory')"
-                        :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.TF_PS_MEMORY : 0) + 'GB'"
+                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.TF_PS_MEMORY0 || 0) + 'GB'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ParametricServerInstanceCount')"
-                        :value="task && task.resourceConfig ? task.resourceConfig.TF_EXECUTOR_INSTANCES : 0 + t('view.task.Count')"
+                        :value="task && task.resourceConfig && task.resourceConfig.TF_EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
                         :strip="true"
                     />
                 </div>
                 <div class="sdxv-info-container is-background">
                     <SdxvBaseInfoItem
                         :label="t('view.task.ComputationalNodeCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.TF_WORKER_CPUS : 0) + t('view.task.Core')"
+                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.TF_WORKER_CPUS || 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ComputationalNodeMemory')"
-                        :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.TF_WORKER_MEMORY : 0) + 'GB'"
+                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.TF_WORKER_MEMORY || 0) + 'GB'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ComputationalNodeGPU')"
-                        :value="task && task.resourceConfig ? task.resourceConfig.TF_WORKER_GPUS : 0 + t('view.task.Block')"
+                        :value="task && task.resourceConfig && task.resourceConfig.TF_WORKER_GPUS || 0 + t('view.task.Block')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ComputationalNodeInstanceCount')"
-                        :value="task && task.resourceConfig ? task.resourceConfig.TF_EXECUTOR_INSTANCES : 0 + t('view.task.Count')"
+                        :value="task && task.resourceConfig && task.resourceConfig.TF_EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
                         :strip="true"
                     />
                 </div>
@@ -208,29 +208,29 @@
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         :label="t('view.task.DriverCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.SPARK_DRIVER_CPUS : 0) + t('view.task.Core')"
+                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.SPARK_DRIVER_CPUS || 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.DriverMemory')"
-                        :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.SPARK_DRIVER_MEMORY : 0) + 'GB'"
+                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.SPARK_DRIVER_MEMORY || 0) + 'GB'"
                         :strip="true"
                     />
                 </div>
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         :label="t('view.task.ExectorCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_CPUS : 0) + t('view.task.Core')"
+                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.SPARK_EXECUTOR_CPUS || 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ExectorMemory')"
-                        :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_MEMORY : 0) + 'GB'"
+                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.SPARK_EXECUTOR_MEMORY || 0) + 'GB'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ExectorInstanceCount')"
-                        :value="task && task.resourceConfig ? task.resourceConfig.SPARK_EXECUTOR_INSTANCES : 0 + t('view.task.Count')"
+                        :value="task && task.resourceConfig && task.resourceConfig.SPARK_EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
                         :strip="true"
                     />
                 </div>
@@ -239,18 +239,18 @@
                 <div class="sdxv-info-container">
                     <SdxvBaseInfoItem
                         label="CPU"
-                        :value="milliCoreToCore(task && task.resourceConfig ? task.resourceConfig.EXECUTOR_CPUS : 0) + t('view.task.Core')"
+                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.EXECUTOR_CPUS || 0) + t('view.task.Core')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         v-if="!isTENSORBOARD"
                         label="GPU"
-                        :value="(task && task.resourceConfig ? task.resourceConfig.EXECUTOR_GPUS : 0) + t('view.task.Block')"
+                        :value="(task && task.resourceConfig && task.resourceConfig.EXECUTOR_GPUS || 0) + t('view.task.Block')"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.Memory')"
-                        :value="byteToGb(task && task.resourceConfig ? task.resourceConfig.EXECUTOR_MEMORY : 0) + 'GB'"
+                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.EXECUTOR_MEMORY || 0) + 'GB'"
                         :strip="true"
                     />
                 </div>

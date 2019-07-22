@@ -132,7 +132,7 @@ export default {
             };
         });
         this.podStateList.unshift({
-            label: 'all',
+            label: 'sdxCommon.All',
             value: ''
         });
         return {

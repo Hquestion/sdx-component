@@ -1,17 +1,26 @@
 <template>
     <sdxu-content-panel class="sdxv-image-management">
         <div class="sdxv-image-management__header">
-            <SdxuTabRadioGroup
-                v-model="projectType"
-                @switch="switchProjectType"
-            >
-                <SdxuTabRadioItem name="image">
-                    {{ t('view.image.ImageList') }}
-                </SdxuTabRadioItem>
-                <SdxuTabRadioItem name="task">
-                    {{ t('view.image.BuildTaskList') }}
-                </SdxuTabRadioItem>
-            </SdxuTabRadioGroup>
+            <div style="position: relative">
+                <SdxuTabRadioGroup
+                    v-model="projectType"
+                    @switch="switchProjectType"
+                >
+                    <SdxuTabRadioItem name="image">
+                        {{ t('view.image.ImageList') }}
+                    </SdxuTabRadioItem>
+                    <SdxuTabRadioItem name="task">
+                        {{ t('view.image.BuildTaskList') }}
+                    </SdxuTabRadioItem>
+                </SdxuTabRadioGroup>
+                <div
+                    class="sdxv-image-management__header--indicator"
+                    v-if="runningTasks"
+                >
+                    {{ runningTasks }}
+                </div>
+            </div>
+
             <SdxuButton
                 type="primary"
                 icon="sdx-icon-plus"
@@ -172,6 +181,8 @@ import SearchLayout from  '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
 import {t} from '@sdx/utils/src/locale';
+import { getImageTaskList } from '@sdx/utils/src/api/image';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'SdxvImageManage',
     data() {
@@ -185,7 +196,9 @@ export default {
             isOwner: '',
             taskType: '',
             activeName: 'all',
+            refreshTimer: null,
             state: '',
+            runningTasks: 0,
             imageTypes: [
                 'JUPYTER',
                 'PYTHON',
@@ -274,7 +287,29 @@ export default {
             }
         }
     },
+    created() {
+        this.getRunningTask();
+    },
     methods: {
+        getRunningTask() {
+            const params = {
+                ownerId: getUser().userId,
+                state: 'BUILDING',
+                start: 1,
+                count: -1
+            };
+            getImageTaskList(params)
+                .then(data =>{
+                    this.runningTasks = data.total;
+                    if (this.runningTasks) {
+                        if (!this.refreshTimer) {
+                            this.refreshTimer = setInterval(this.getRunningTask, 3000);
+                        }
+                    } else {
+                        clearInterval(this.refreshTimer);
+                    }
+                });
+        },
         search() {
             this.$nextTick(() => {
                 if(this.projectType === 'image') {

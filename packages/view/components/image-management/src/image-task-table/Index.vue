@@ -36,7 +36,7 @@
                         :type="imageTaskLabel[scope.row.state.label]"
                         :status="scope.row.state.needPull ? 'loading' : ''"
                     >
-                        {{ scope.row.state.content }}
+                        {{ t(`view.image.States.${(scope.row.state.label).slice(0, 1) + (scope.row.state.label).slice(1).toLocaleLowerCase()}`) }}
                     </SdxwFoldLabel>
                 </template>
             </el-table-column>

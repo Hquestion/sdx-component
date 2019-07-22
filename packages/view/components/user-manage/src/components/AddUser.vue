@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { commonNameValidator } from '@sdx/utils/src/helper/validate';
+import { commonNameValidator,passwordValidator } from '@sdx/utils/src/helper/validate';
 import SdxuInput from '@sdx/ui/components/input';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuButton from '@sdx/ui/components/button';
@@ -145,6 +145,7 @@ export default {
                 ],
                 password: [
                     { required: true, message: this.t('view.userManage.PleaseInputPassword'), trigger: 'blur' },
+                    { validator: passwordValidator, trigger: 'blur' },
                 ],
                 role: [
                     { required: true, message: this.t('view.userManage.PleaseInputRole'), trigger: 'change' }

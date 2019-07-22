@@ -30,10 +30,10 @@
                         @change="handleSourceTypeChange"
                     >
                         <el-option
-                            v-for="item in SOURCE_TYPE"
-                            :key="item"
-                            :value="item"
-                            :label="item"
+                            v-for="(v, k) in SOURCE_TYPE"
+                            :key="v"
+                            :value="k"
+                            :label="v"
                         />
                     </el-select>
                 </div>

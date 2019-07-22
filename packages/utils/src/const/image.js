@@ -6,8 +6,8 @@ import {t} from '../locale';
 
 // 源类型
 export const SOURCE_TYPE = {
-    PIP: 'PIP',
-    CONDA: 'CONDA'
+    PIP: 'pip',
+    CONDA: 'conda'
 };
 
 // 镜像类型

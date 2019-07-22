@@ -58,7 +58,7 @@ export default {
             return this.task && ((this.task.datasources && this.task.datasources.length > 0) || (this.task.datasets && this.task.datasets.length > 0));
         },
         isRunning() {
-            return this.task && [STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state);
+            return this.task && [STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state);
         },
         isModelTask() {
             return this.task && [TASK_TYPE.TENSORFLOW_SERVING, TASK_TYPE.SPARK_SERVING, TASK_TYPE.PMML_SERVING].includes(this.task.type);

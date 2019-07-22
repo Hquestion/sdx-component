@@ -12,7 +12,11 @@
                 <el-table-column
                     prop="sourceType"
                     :label="t('view.image.SourceType')"
-                />
+                >
+                    <template #default="{ row }">
+                        {{ SOURCE_TYPE[row.sourceType] }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="version"
                     :label="t('view.image.Version')"
@@ -52,7 +56,7 @@ import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import { TableColumn } from 'element-ui';
-import { VERSION_TYPE, SOURCE_URL_TYPE } from '@sdx/utils/src/const/image';
+import { VERSION_TYPE, SOURCE_URL_TYPE, SOURCE_TYPE } from '@sdx/utils/src/const/image';
 import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
@@ -83,6 +87,7 @@ export default {
         }
     },
     data() {
+        this.SOURCE_TYPE = SOURCE_TYPE;
         return {
             page: 1,
             pageSize: 5,

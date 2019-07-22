@@ -124,7 +124,7 @@
                 </template>
             </SdxvBaseInfoItem>
             <SdxvBaseInfoItem
-                v-if="isJUPYTER"
+                v-if="isJUPYTER && isRunning"
                 :label="t('view.task.ExternalLinks')"
             >
                 <template

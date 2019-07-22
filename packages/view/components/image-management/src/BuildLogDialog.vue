@@ -9,6 +9,8 @@
     >
         <SdxuLogDetail
             :content="logInfo"
+            :loading="loading"
+            @scroll="handleScroll"
         />
     </sdxu-dialog>
 </template>
@@ -39,7 +41,8 @@ export default {
     },
     data() {
         return {
-            logInfo: ''
+            logInfo: '',
+            loading: false
         };
     },
     computed: {
@@ -57,8 +60,12 @@ export default {
             const params = {
                 length: -1 // 获取全部日志
             };
+            this.loading = true;
             getImageBuildLog(this.imageBuilderId, params).then(data => {
                 this.logInfo = this.filterIp(data.content);
+                this.loading = false;
+            }).catch(() => {
+                this.loading = false;
             });
         },
         filterIp(content) {
@@ -72,6 +79,12 @@ export default {
         },
         handleCloseDialog() {
             this.logInfo = '';
+        },
+        handleScroll({ scrollInfo }) {
+            let { scrollTop, warpHeight, offsetHeight } = scrollInfo;
+            if (scrollTop + warpHeight >= offsetHeight) {
+                this.fetchLogInfo();
+            }
         }
     }
 };

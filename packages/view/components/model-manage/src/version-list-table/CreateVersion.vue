@@ -121,7 +121,6 @@
                     v-else
                     v-model="versionInfoForm.modelPath"
                     source="ceph"
-                    check-type="folder"
                     :disabled="!!editingVersion"
                     string-model
                 />

@@ -1,6 +1,7 @@
 /**
  * 用户名,群租名通用检查规则,用于element-ui的form组件的rule参数 const reg = /^[a-zA-Z][a-zA-Z0-9_\-\\.]{3,19}$/i;
  */
+import { t } from '../locale';
 
 export function ValidateReg (limit, character, start) {
     this.limit = {
@@ -31,7 +32,7 @@ ValidateReg.characterMap = {
     lowerCase: 'a-z',
     upperCase: 'A-Z',
     letter: 'a-zA-Z',
-    number: '1-9',
+    number: '0-9',
     chinese: '\\u4e00-\\u9fa5',
     space: '\\s',
     underline: '_',
@@ -164,7 +165,7 @@ export function commonNameValidator(rule, value, callback) {
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写1到64位，英文字母，数字、空格、下划线、点、连字符组成的字符串');
+        callback(t('utils.validator.commonNameValidator'));
     }
 }
 
@@ -173,16 +174,16 @@ export function nickNameValidator(rule, value, callback) {
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写1到64位，汉字、英文字母、数字、@、空格、点、连字符组成的字符串');
+        callback(t('utils.validator.nickNameValidator'));
     }
 }
 
 export function passwordValidator(rule, value, callback) {
-    const reg = new ValidateReg({min:6, max:16}, {other: true}).generate();
+    const reg = new ValidateReg({min:6, max:16}, {other: true, chinese: false, space: false}).generate();
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写6到16位字符串');
+        callback(t('utils.validator.passwordValidator'));
     }
 }
 
@@ -191,7 +192,7 @@ export function nameWithChineseValidator(rule, value, callback) {
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写1到64位，汉字、英文字母、数字、空格、下划线、点、连字符组成的字符串');
+        callback(t('utils.validator.nameWithChineseValidator'));
     }
 }
 
@@ -200,7 +201,7 @@ export function descValidator(rule, value, callback) {
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写0到256位字符串');
+        callback(t('utils.validator.descValidator'));
     }
 }
 
@@ -209,7 +210,7 @@ export function nameStartWithLowerCaseValidator(rule, value, callback) {
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写1到64位，小写字母开头，小写英文字母、数字、下划线、点、连字符组成的字符串');
+        callback(t('utils.validator.nameStartWithLowerCaseValidator'));
     }
 }
 
@@ -218,7 +219,7 @@ export function nameStartWithLetterValidator(rule, value, callback) {
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写1到64位，英文字母开头，英文字母、数字、空格、下划线、点、连字符组成的字符串');
+        callback(t('utils.validator.nameStartWithLetterValidator'));
     }
 }
 
@@ -227,8 +228,18 @@ export function tagValidator(rule, value, callback) {
     if (reg.test(value)) {
         callback();
     } else {
-        callback('请填写1到10位，英文字母、数字、中文组成的字符串');
+        callback(t('utils.validator.tagValidator'));
     }
+}
+
+export function tagArrayValidator(rule, value, callback) {
+    const reg = new ValidateReg({min:1, max:10}, {chinese: true, at: false, space: false, underline: false, dash: false, dot: false}).generate();
+    value.forEach(item => {
+        if (!reg.test(item)) {
+            callback(t('utils.validator.tagArrayValidator'));
+        }
+    });
+    callback();
 }
 
 // ------------------------------------------------------------------------------------
@@ -242,7 +253,7 @@ export function nameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写4到20位，字母开头，数字、字母、下划线、点组成的字符串'
+                t('utils.validator.nameValidate')
             )
         );
     }
@@ -255,7 +266,7 @@ export function cNameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写1到24位，汉字、字母、数字、@、-、点、下划线组成的字符串',
+                t('utils.validator.cNameValidate')
             )
         );
     }
@@ -271,7 +282,7 @@ export function itemNameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写1-24位，小写字母开头，数字、小写字母、点与下划线组成的字符串'
+                t('utils.validator.itemNameValidate')
             )
         );
     }
@@ -286,7 +297,7 @@ export function imageNameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写长度为1-64个字符，小写英文字母开头，允许小写英文字母、数字、"."、"_"或"-"'
+                t('utils.validator.imageNameValidate')
             )
         );
     }
@@ -301,7 +312,7 @@ export function imageVersionValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写长度为1-64个字符，允许英文字母、数字、"."、"_"或"-"'
+                t('utils.validator.imageVersionValidate')
             )
         );
     }
@@ -316,7 +327,7 @@ export function itemNameValidate100(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写1-100位，小写字母开头，数字、小写字母、点与下划线组成的字符串'
+                t('utils.validator.itemNameValidate100')
             )
         );
     }
@@ -332,7 +343,7 @@ export function tagNameValidate(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请填写1-10位，字母或数字开头，字母、数字与点组成的字符串'
+                t('utils.validator.tagNameValidate')
             )
         );
     }
@@ -348,7 +359,7 @@ export function testNumber(rule, value, callback) {
     } else {
         callback(
             new Error(
-                '请输入正整数'
+                t('utils.validator.testNumber')
             )
         );
     }

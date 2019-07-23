@@ -6,7 +6,7 @@
     >
         <div class="sdxv-file-task__header">
             <div class="sdxv-file-task__header-title">
-                文件操作列表
+                {{ t('view.file.FileOperationList') }}
             </div>
             <div class="sdxv-file-task__header-action">
                 <SdxvExpandCollapseToggler :expanded.sync="expanded" />
@@ -19,7 +19,7 @@
         <div class="sdxv-file-task__body">
             <el-tabs v-model="currentTab">
                 <el-tab-pane
-                    label="文件上传"
+                    :label="t('view.file.FileUpload')"
                     name="UPLOAD"
                 >
                     <SdxvTaskFileUpload
@@ -28,7 +28,7 @@
                     />
                 </el-tab-pane>
                 <el-tab-pane
-                    label="文件复制"
+                    :label="t('view.file.FileCopy')"
                     name="COPY"
                 >
                     <TaskFileCopy
@@ -38,13 +38,13 @@
                     />
                 </el-tab-pane>
                 <el-tab-pane
-                    label="文件删除"
+                    :label="t('view.file.FileDelete')"
                     name="DELETE"
                     ref="deleteTask"
                     v-if="false"
                 />
                 <el-tab-pane
-                    label="解压缩"
+                    :label="t('view.file.Unzip')"
                     name="UNZIP"
                 >
                     <TaskFileUnzip
@@ -64,6 +64,7 @@ import SdxvTaskFileUpload from './TaskFileUpload';
 import MessageBox from '@sdx/ui/components/message-box';
 import TaskFileCopy from './TaskFileCopy';
 import TaskFileUnzip from './TaskFileUnzip';
+import locale from '@sdx/utils/src/mixins/locale';
 const TAB_REF_MAP = {
     UPLOAD: 'uploadTask',
     COPY: 'copyTask',
@@ -74,6 +75,7 @@ import { deleteTaskType } from '@sdx/utils/src/api/file';
 
 export default {
     name: 'SdxvFileTask',
+    mixins: [locale],
     components: {
         TaskFileCopy,
         TaskFileUnzip,
@@ -118,7 +120,7 @@ export default {
                 return;
             }
             MessageBox.confirm.warning({
-                title: '您确定要删除所有任务吗？'
+                title: this.t('view.file.ConfirmToDelAllTasks')
             }).then(() => {
                 // todo 取消上传或者取消拷贝任务
                 ['uploadTask', 'copyTask', 'unzipTask'].forEach(item => {

@@ -11,7 +11,7 @@
                 v-show="imageKind === 'private'"
                 v-auth.image.button="'IMAGE:SHARE'"
             >
-                全部共享
+                {{ t('sdxCommon.ShareAll') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
@@ -20,7 +20,7 @@
                 @click="remove"
                 v-if="imageKind === 'private'"
             >
-                删除
+                {{ t('sdxCommon.Delete') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
@@ -29,7 +29,7 @@
                 v-show="imageKind === 'myShare'"
                 v-auth.image.button="'IMAGE:SHARE'"
             >
-                取消共享
+                {{ t('sdxCommon.CancelShare') }}
             </SdxuButton>
         </div>
         <sdxu-table
@@ -37,6 +37,7 @@
             class="sdxv-image-list__table"
             @selection-change="selectionChange"
             @sort-change="sortChange"
+            :default-sort="{prop: 'createdAt', order: 'descending'}"
         >
             <el-table-column
                 type="selection"
@@ -45,28 +46,28 @@
             />
             <el-table-column
                 prop="name"
-                label="镜像名称"
+                :label="t('view.image.Columns.imageName')"
                 key="name"
             />
             <el-table-column
                 prop="version"
                 key="version"
-                label="版本号"
+                :label="t('view.image.Columns.version')"
             />
             <el-table-column
                 prop="imageType"
                 key="imageType"
-                label="镜像种类"
+                :label="t('view.image.Columns.imageType')"
             />
             <el-table-column
-                prop="buildType"
-                key="buildType"
-                label="构建方式"
+                prop="buildTypeText"
+                key="buildTypeText"
+                :label="t('view.image.Columns.buildType')"
                 v-if="imageKind !== 'basic'"
             />
             <el-table-column
                 key="owner"
-                label="创建人"
+                :label="t('view.image.Columns.creator')"
                 v-if="imageKind === 'all' || imageKind === 'otherShare'"
             >
                 <template slot-scope="scope">
@@ -75,39 +76,40 @@
             </el-table-column>
             <el-table-column
                 key="createdAt"
-                label="创建时间"
+                :label="t('view.image.Columns.createdAt')"
                 sortable="custom"
+                prop="createdAt"
             >
                 <template slot-scope="scope">
                     {{ scope.row.createdAt | dateFormatter }}
                 </template>
             </el-table-column>
             <el-table-column
-                label="操作"
+                :label="t('sdxCommon.Operation')"
             >
                 <template slot-scope="scope">
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'edit')"
                         icon="sdx-icon sdx-fenxiang"
-                        title="共享设置"
+                        :title="t('widget.shareSetting.title')"
                         v-if="scope.row.showEdit"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'extend')"
                         icon="sdx-icon sdx-kaobei"
-                        title="基于此创建"
+                        :title="t('view.image.BuildBaseThis')"
                         v-if="scope.row.showExtend"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'detail')"
                         icon="sdx-icon sdx-icon-tickets"
-                        title="查看详情"
+                        :title="t('sdxCommon.Detail')"
                         v-if="scope.row.showDetail"
                     />
                     <sdxu-icon-button
                         @click="handleOperation(scope.row, 'remove')"
                         icon="sdx-icon sdx-icon-delete"
-                        title="删除"
+                        :title="t('sdxCommon.Delete')"
                         v-if="scope.row.showRemove"
                     />
                 </template>
@@ -151,10 +153,12 @@ import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import ImageDetail from './PackageDetailDialog';
-import { Message } from 'element-ui';
+import Message from 'element-ui/lib/message';
 import ShareSetting from '@sdx/widget/components/share-setting';
 import Filters from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';
+import { BUILD_TYPE_LABEL } from '@sdx/utils/src/const/image';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'ImageListTable',
     data() {
@@ -221,15 +225,12 @@ export default {
         [ImageDetail.name]: ImageDetail,
         [ShareSetting.name]: ShareSetting
     },
-    mounted() {
-        this.initImageList();
-    },
-    mixins: [Filters],
+    mixins: [Filters, locale],
     methods: {
         share() {
             if (!this.selectedImages.length) {
                 Message({
-                    message: '请先选择需要共享的镜像',
+                    message: this.t('view.image.imagesToShare'),
                     type: 'warning'
                 });
                 return;
@@ -244,20 +245,20 @@ export default {
         remove() {
             if (!this.selectedImages.length) {
                 Message({
-                    message: '请先选择需要删除的镜像',
+                    message: this.t('view.image.imagesToRemove'),
                     type: 'warning'
                 });
                 return;
             }
             MessageBox({
-                title: '确定要删除选中的镜像吗？',
-                content: '删除后将不可恢复'
+                title: this.t('view.image.imageRemoveConfirm'),
+                content: this.t('sdxCommon.ConfirmRemove')
             }).then(() => {
                 const uuids = [];
                 this.selectedImages.forEach(item => uuids.push(item.uuid));
                 removeGroupImages({ uuids }).then(() => {
                     Message({
-                        message: '删除成功',
+                        message: this.t('sdxCommon.RemoveSuccess'),
                         type: 'success'
                     });
                     this.initImageList();
@@ -267,13 +268,13 @@ export default {
         cancelShare() {
             if (!this.selectedImages.length) {
                 Message({
-                    message: '请先选择需要取消共享的镜像',
+                    message: this.t('view.image.imagesToCancelShare'),
                     type: 'warning'
                 });
                 return;
             }
             MessageBox({
-                title: '确定要取消共享选中的镜像吗？'
+                title: this.t('view.image.imageCancelShareConfirm'),
             }).then(() => {
                 const uuids = [];
                 this.selectedImages.forEach(item => uuids.push(item.uuid));
@@ -287,7 +288,7 @@ export default {
                 };
                 updateGroupImages(params).then(() => {
                     Message({
-                        message: '操作成功',
+                        message: this.t('sdxCommon.OperationSuccess'),
                         type: 'success'
                     });
                     this.initImageList();
@@ -298,18 +299,14 @@ export default {
             this.selectedImages = selection;
         },
         confirmEdit(users, groups, shareType) {
-            this.shareForm.shareType = shareType;
-            this.shareForm.users = [];
-            this.shareForm.groups = [];
-            if (this.shareForm.shareType !== 'PUBLIC') {
-                this.shareForm.users = users;
-                this.shareForm.groups = groups;
-            }
+            this.shareForm.shareType = (shareType === 'PUBLIC' || users.length || groups.length) ? 'PUBLIC' : 'PRIVATE';
+            this.shareForm.users = users;
+            this.shareForm.groups = groups;
             if (this.editingImage) {
                 // 编辑镜像
                 updateImage(this.editingImage.uuid, this.shareForm).then(() => {
                     Message({
-                        message: '设置成功',
+                        message: this.t('sdxCommon.SettingSuccess'),
                         type: 'success'
                     });
                     this.editingImage = null;
@@ -326,7 +323,7 @@ export default {
                 };
                 updateGroupImages(params).then(() => {
                     Message({
-                        message: '设置成功',
+                        message: this.t('sdxCommon.SettingSuccess'),
                         type: 'success'
                     });
                     this.initImageList();
@@ -349,8 +346,8 @@ export default {
             };
             removeBlankAttr(params);
             const currentUser = getUser();
-            if (this.isOwner) {
-                if (this.isOwner === 'true') {
+            if (this.isOwner || this.imageKind === 'all') {
+                if (this.isOwner === 'true' || this.imageKind === 'all') {
                     params.ownerId = currentUser.userId || '';
                 } else {
                     params.excludeOwnerId = currentUser.userId || '';
@@ -361,14 +358,15 @@ export default {
                 this.imageList.forEach(item => {
                     const isOwnImage = (item.owner && item.owner.uuid) === currentUser.userId;
                     item.showEdit = isOwnImage && auth.checkAuth('IMAGE-MANAGER:IMAGE:SHARE', 'BUTTON');
-                    item.showExtend = item.buildType === 'BASIC' && item.packages && item.packages.length;
-                    item.showRemove = isOwnImage && item.buildType !== 'BASIC' && item.shareType === 'PRIVATE';
-                    item.showDetail = (isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE';
+                    item.showExtend = item.buildType === 'BASIC' && item.packages && item.packages.length && (item.imageType === 'JUPYTER' || item.imageType === 'PYTHON' || item.imageType === 'TENSORFLOW' || item.imageType === 'CONTAINER_DEV');
+                    item.showRemove = isOwnImage;
+                    item.showDetail = (item.buildType === 'BASIC' && (item.imageType === 'JUPYTER' || item.imageType === 'PYTHON' || item.imageType === 'TENSORFLOW' || item.imageType === 'CONTAINER_DEV')) || ((isOwnImage || item.shareType === 'PUBLIC') && item.buildType === 'ONLINE');
                     if (item.buildType === 'BASIC') {
                         item.owner = {
                             fullName : 'system'
                         };
                     }
+                    item.buildTypeText = BUILD_TYPE_LABEL[item.buildType];
                 });
                 this.total = res.total;
                 this.loading = false;
@@ -403,6 +401,7 @@ export default {
                     Object.assign(this.shareForm, row);
                     this.shareForm.users = this.shareForm.users || [];
                     this.shareForm.groups = this.shareForm.groups || [];
+                    if (this.shareForm.users.length || this.shareForm.groups.length) this.shareForm.shareType = 'PRIVATE';
                     break;
                 case 'extend':
                     this.$router.push({
@@ -414,12 +413,12 @@ export default {
                     break;
                 case 'remove':
                     MessageBox({
-                        title: '确定要删除选中的镜像吗？',
-                        content: '删除后将不可恢复'
+                        title: this.t('view.image.imageRemoveConfirm'),
+                        content: this.t('sdxCommon.ConfirmRemove')
                     }).then(() => {
                         removeImage(row.uuid).then(() => {
                             Message({
-                                message: '删除成功',
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initImageList();

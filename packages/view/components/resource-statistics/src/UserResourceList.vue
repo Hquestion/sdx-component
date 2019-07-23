@@ -1,6 +1,6 @@
 <template>
     <SdxuContentPanel
-        :title="title"
+        :title="title || t('view.monitor.resourceStatistic.AllUserResourceStatistics')"
         class="sdxv-user-resource-list"
     >
         <template
@@ -12,7 +12,7 @@
                 class="sdxv-user-resource-list__more"
                 @click="handGotoUserResourceList"
             >
-                <span>全部</span>
+                <span>{{ t('sdxCommon.ALL') }}</span>
                 <i class="sdx-icon sdx-icon-arrow-right" />
             </div>
             <div
@@ -22,7 +22,7 @@
                 <SdxuInput
                     v-model="searchName"
                     type="search"
-                    placeholder="请输入用户名"
+                    :placeholder="t('view.monitor.resourceStatistic.userSearchInputPlaceholder')"
                     size="small"
                 />
                 <SdxuButton
@@ -31,7 +31,7 @@
                     @click="handleSearch"
                     class="sdxv-user-resource-list__search--button"
                 >
-                    搜索
+                    {{ t('sdxCommon.Search') }}
                 </SdxuButton>
             </div>
         </template>
@@ -43,11 +43,11 @@
         >
             <el-table-column
                 prop="owner.fullName"
-                label="用户名"
+                :label="t('view.monitor.resourceStatistic.UserName')"
             />
             <el-table-column
                 prop="owner.createdAt"
-                label="创建时间"
+                :label="t('sdxCommon.CreatedTime')"
             >
                 <template #default="{ row }">
                     <span>
@@ -57,7 +57,7 @@
             </el-table-column>
             <el-table-column
                 prop="CPU"
-                label="已使用CPU（核）"
+                :label="t('view.task.cpuUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="82px"
@@ -68,7 +68,7 @@
             </el-table-column>
             <el-table-column
                 prop="MEMORY"
-                label="已使用内存（GB）"
+                :label="t('view.task.memoryUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="85px"
@@ -79,7 +79,7 @@
             </el-table-column>
             <el-table-column
                 prop="GPU"
-                label="已使用GPU（块）"
+                :label="t('view.task.gpuUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="82px"
@@ -121,9 +121,11 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 
 import { getTaskList } from '@sdx/utils/src/api/project';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvUserResourceList',
+    mixins: [locale],
     components: {
         SdxuContentPanel,
         SdxuTable,
@@ -135,7 +137,7 @@ export default {
     props: {
         title: {
             type: String,
-            default: '全部用户资源统计'
+            default: ''
         },
         ranking: {
             type: Boolean,

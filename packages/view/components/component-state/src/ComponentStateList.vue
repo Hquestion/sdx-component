@@ -3,15 +3,15 @@
         <SdxwSearchLayout
             @search="handleSearch"
         >
-            <SdxwSearchItem label="Pod名:">
+            <SdxwSearchItem :label="t('view.monitor.componentState.PodName') + ':'">
                 <SdxuInput
                     v-model="searchName"
                     type="search"
                     size="small"
-                    placeholder="请输入Pod名"
+                    :placeholder="t('view.monitor.componentState.searchPodPlaceholder')"
                 />
             </SdxwSearchItem>
-            <SdxwSearchItem label="组件状态:">
+            <SdxwSearchItem :label="t('view.monitor.componentState.ComponentState') + ':'">
                 <el-select
                     v-model="podState"
                     size="medium"
@@ -19,7 +19,7 @@
                     <el-option
                         v-for="(item, i) in podStateList"
                         :key="i"
-                        :label="item.label"
+                        :label="t(item.label)"
                         :value="item.value"
                     />
                 </el-select>
@@ -28,31 +28,35 @@
         <SdxuTable
             :data="dataList"
             v-loading="loading"
+            :empty-text="t('sdxCommon.NoData')"
         >
             <el-table-column
-                label="Pod名称"
+                :label="t('view.monitor.componentState.PodName')"
                 prop="podName"
             />
             <el-table-column
-                label="命名空间"
+                :label="t('view.monitor.componentState.Namespace')"
                 prop="namespace"
             />
             <el-table-column
-                label="状态"
-                prop="status"
-            />
+                :label="t('view.monitor.componentState.ComponentState')"
+            >
+                <template #default="{ row }">
+                    {{ t(POD_STATE_TYPE[row.status]) }}
+                </template>
+            </el-table-column>
             <el-table-column
-                label="节点"
+                :label="t('view.monitor.componentState.Node')"
                 prop="nodeName"
             />
-            <el-table-column 
+            <el-table-column
                 v-auth.system.button="'POD-LOG:READ'"
-                label="操作"
+                :label="t('sdxCommon.Operation')"
             >
                 <template #default="{ row }">
                     <SdxuIconButton
                         icon="sdx-icon sdx-chakanrizhi"
-                        title="日志"
+                        :title="t('sdxCommon.Log')"
                         @click="handleViewLog(row)"
                     />
                 </template>
@@ -90,12 +94,14 @@ import ElOption from 'element-ui/lib/option';
 
 import { POD_STATE_TYPE } from '@sdx/utils/src/const/task';
 import { getPodsStatus } from '@sdx/utils/src/api/system';
+import locale from '@sdx/utils/src/mixins/locale';
 
-const POLLING_PERIOD = 3 * 1000;
+const POLLING_PERIOD = 10 * 1000;
 
 export default {
     name: 'SdxvComponentStateList',
     directives: { auth },
+    mixins: [locale],
     components: {
         [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
@@ -118,6 +124,7 @@ export default {
         }
     },
     data() {
+        this.POD_STATE_TYPE = POD_STATE_TYPE;
         this.podStateList = Object.values(POD_STATE_TYPE).map(item => {
             return {
                 label: item,
@@ -125,7 +132,7 @@ export default {
             };
         });
         this.podStateList.unshift({
-            label: '全部',
+            label: 'sdxCommon.All',
             value: ''
         });
         return {
@@ -194,8 +201,8 @@ export default {
         this.fetchData();
     },
     beforeDestroy() {
-        this.pollingId && clearInterval(this.pollingId);
-        this.pollingId = null;    
+        clearInterval(this.pollingId);
+        this.pollingId = null;
     },
     watch: {
         type() {
@@ -212,12 +219,12 @@ export default {
         },
         needPolling(nval) {
             if (nval) {
-                this.pollingId && clearInterval(this.pollingId);
+                clearInterval(this.pollingId);
                 this.pollingId = setInterval(() => {
                     this.fetchData(false);
                 }, POLLING_PERIOD);
             } else {
-                this.pollingId && clearInterval(this.pollingId);
+                clearInterval(this.pollingId);
                 this.pollingId = null;
             }
         }

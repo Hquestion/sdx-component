@@ -26,7 +26,7 @@
                         <div class="progerss-info">
                             <span class="speed">{{ (scope.row.extra.speedPerSecInBytes || 0) | byteFormatter }}/s</span>
                             <span class="time-remain">
-                                剩余时间 {{ (scope.row.extra.remainingTimeInSec || 0) | seconds2HMS }}
+                                {{ t('view.file.RemainingTime') }} {{ (scope.row.extra.remainingTimeInSec || 0) | seconds2HMS }}
                             </span>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
             </template>
         </el-table-column>
         <el-table-column
-            label="源"
+            :label="t('view.file.Source')"
             min-width="90"
             header-align="left"
             align="left"
@@ -42,7 +42,7 @@
             show-overflow-tooltip
         />
         <el-table-column
-            label="目标"
+            :label="t('view.file.Target')"
             min-width="90"
             prop="args.targetPath"
             header-align="left"
@@ -50,7 +50,7 @@
             :show-overflow-tooltip="true"
         />
         <el-table-column
-            label="状态"
+            :label="t('sdxCommon.Status')"
             min-width="80"
             header-align="left"
             align="left"
@@ -65,7 +65,7 @@
             </template>
         </el-table-column>
         <el-table-column
-            label="操作"
+            :label="t('sdxCommon.Operation')"
             min-width="40"
             header-align="left"
             align="left"
@@ -94,6 +94,7 @@ import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { copyTaskStatusMap } from '../helper/config';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import { asyncJobStatus } from '@sdx/utils/src/const/file';
+import locale from '@sdx/utils/src/mixins/locale';
 
 const PULL_TIME = 2 * 1000; // 查询间隔 2秒
 
@@ -103,7 +104,7 @@ export default {
         SdxuFoldLabel: SdxuFoldLabel.FoldLabel,
         SdxuIconButton
     },
-    mixins: [transformFilter],
+    mixins: [transformFilter, locale],
     inject: ['taskPop'],
     data() {
         return {

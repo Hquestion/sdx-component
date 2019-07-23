@@ -6,16 +6,16 @@
                 @switch="switchModelType"
             >
                 <SdxuTabRadioItem name="ALL">
-                    全部列表
+                    {{ t('view.model.tabs.all') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="PRIVATE">
-                    私有模型列表
+                    {{ t('view.model.tabs.private') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="MY_SHARE">
-                    我的共享列表
+                    {{ t('view.model.tabs.myShare') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="OTHER_SHARE">
-                    他人共享列表
+                    {{ t('view.model.tabs.otherShare') }}
                 </SdxuTabRadioItem>
             </SdxuTabRadioGroup>
             <SdxuButton
@@ -25,7 +25,7 @@
                 @click="createModel"
                 v-auth.model.button="'MODEL:CREATE'"
             >
-                新建模型
+                {{ t('view.model.createModel') }}
             </SdxuButton>
         </div>
         <div>
@@ -39,7 +39,7 @@
                             v-model="searchName"
                             type="search"
                             size="small"
-                            placeholder="请输入模型名称"
+                            :placeholder="t('view.model.searchModelName')"
                         />
                     </sdxw-search-item>
                 </sdxw-search-layout>
@@ -74,6 +74,7 @@ import Button from '@sdx/ui/components/button';
 import Input from '@sdx/ui/components/input';
 import SearchLayout from  '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvModelManage',
     data() {
@@ -97,6 +98,7 @@ export default {
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
         CreateModel
     },
+    mixins: [locale],
     directives: {
         auth
     },

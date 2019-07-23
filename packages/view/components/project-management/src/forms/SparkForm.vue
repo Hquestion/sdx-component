@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? '编辑':'新建'}Spark任务`"
+        :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} Spark ${t('view.task.form.task')}`"
         class="form-spark"
         :label-width="120"
         icon="sdx-Apache_Spark_logo"
@@ -17,35 +17,35 @@
         >
             <el-form-item
                 prop="name"
-                label="任务名称:"
+                :label="`${t('view.task.taskName')}:`"
             >
                 <SdxuInput
                     v-model="params.name"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入任务名称"
+                    :placeholder="t('view.task.form.Please_enter_the_task_name')"
                 />
             </el-form-item>
             <el-form-item
                 prop="description"
-                label="任务描述:"
+                :label="`${t('view.task.TaskDescription')}:`"
             >
                 <SdxuInput
                     type="textarea"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入任务描述"
+                    :placeholder="t('view.task.form.Please_enter_a_task_description')"
                     v-model="params.description"
                 />
             </el-form-item>
             <el-form-item
                 prop="imageId"
-                label="运行环境:"
+                :label="`${t('view.task.RuntimeEnvironment')}:`"
             >
                 <el-select
                     v-model="params.imageId"
                     size="small"
-                    placeholder="请选择运行环境"
+                    :placeholder="t('view.task.form.Please_select_the_operating_environment')"
                 >
                     <el-option
                         v-for="item in imageOptions"
@@ -57,62 +57,62 @@
             </el-form-item>
             <el-form-item
                 prop="resourceConfig"
-                label="资源配置:"
+                :label="`${t('view.task.form.ResourceAllocation')}:`"
             >
                 <i class="icon">*</i>
                 <SdxwResourceConfig
                     v-model="cpuDriver"
                     type="cpu"
-                    cpulabel="驱动器CPU/内存"
+                    :cpulabel="t('widget.resourceConfig.Driver_CPU_Memory')"
                 />
                 <SdxwResourceConfig
                     v-model="cpuExecute"
                     type="cpu"
-                    cpulabel="执行器CPU/内存"
+                    :cpulabel="t('widget.resourceConfig.Actuator_CPU_Memory')"
                 />
             </el-form-item>
             <el-form-item
-                prop="instances.SPARK_EXECUTOR_INSTANCES"
-                label="执行器实例数:"
+                prop="resourceConfig.SPARK_EXECUTOR_INSTANCES"
+                :label="`${t('view.task.ExectorInstanceCount')}:`"
             >
                 <el-input-number
-                    v-model="params.instances.SPARK_EXECUTOR_INSTANCES"
+                    v-model="params.resourceConfig.SPARK_EXECUTOR_INSTANCES"
                     :min="1"
                     :max="InputNumberMax"
                 />
             </el-form-item>
             <el-form-item
                 prop="sourcePaths"
-                label="源代码:"
+                :label="`${t('view.task.SourceCode')}:`"
             >
                 <SdxwFileSelect
                     v-model="params.sourcePaths"
-                    accept="'.jar'， '.py'， '.zip'， '.egg'"
+                    accept=".jar,.py,.zip,.egg"
                     :string-model="true"
                     check-type="file"
                 />
             </el-form-item>
             <el-form-item
                 prop="mainClass"
-                label="主类名称:"
+                :label="`${t('view.task.MainClassName')}:`"
                 v-if="params.sourcePaths[0] && params.sourcePaths[0].includes('.jar')"
             >
                 <SdxuInput
                     v-model="params.mainClass"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入主类名称"
+                    :label="`${t('view.task.StartupParameter')}:`"
                 />
             </el-form-item>
             <el-form-item
                 prop="args"
-                label="启动参数:"
+                :label="`${t('view.task.StartupParameter')}:`"
             >
                 <SdxuInput
                     v-model="params.args"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入创建的参数，~/ 代表家目录， ./ 代表代码所在的目录"
+                    :placeholder="`${t('view.task.form.Start_up_parameter_holder')}`"
                 />
             </el-form-item>
         </el-form>
@@ -128,9 +128,12 @@ import FileSelect from '@sdx/widget/components/file-select';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import { createTask,updateTask} from '@sdx/utils/src/api/project';
-import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SparkForm',
+    mixins: [locale],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -150,9 +153,9 @@ export default {
     data() {
         const resourceValidate = (rule, value, callback) => {
             if(value.SPARK_DRIVER_CPUS === 0) {
-                callback(new Error('需要配置驱动器CPU/内存'));
+                callback(new Error(this.t('view.task.form.Driver_CPU_memory_needs_to_be_configured')));
             }else  if (value.SPARK_EXECUTOR_CPUS === 0) {
-                callback(new Error('需要配置执行器CPU/内存'));
+                callback(new Error(this.t('view.task.form.Executor_CPU_memory_needs_to_be_configured')));
             } else {
                 callback();
             }
@@ -172,9 +175,6 @@ export default {
                     'SPARK_DRIVER_MEMORY': 0,
                     'SPARK_EXECUTOR_MEMORY': 0,
                 },
-                instances: {
-                    'SPARK_EXECUTOR_INSTANCES': 1,
-                },
                 sourcePaths: [],
                 args: '',
                 mainClass: ''
@@ -184,15 +184,21 @@ export default {
             cpuExecute: {},
             rules:  {
                 name: [
-                    { required: true, message: '请输入任务名称', trigger: 'blur',
+                    { required: true, message: this.t('view.task.form.Please_enter_the_task_name'), trigger: 'blur',
                         transform(value) {
                             return value && ('' + value).trim();
                         }
                     },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
+                ],
                 imageId: [
-                    { required: true, message: '请选择运行环境', trigger: 'change' }
+                    { required: true, message: this.t('view.task.form.Please_select_the_operating_environment'), trigger: 'change' }
                 ],
                 resourceConfig: [
                     {
@@ -201,13 +207,13 @@ export default {
                     }
                 ],
                 sourcePaths: [
-                    { required: true, message: '请选择源代码', trigger: 'blur' }
+                    { required: true, message: this.t('view.task.form.Please_select_the_source_code'), trigger: 'blur' }
                 ],
-                'instances.SPARK_EXECUTOR_INSTANCES': [
-                    { required: true, message: '请输入实例个数',trigger: 'change' }
+                'resourceConfig.SPARK_EXECUTOR_INSTANCES': [
+                    { required: true, message: this.t('view.task.form.Please_enter_the_number_of_instances'),trigger: 'change' }
                 ],
                 mainClass: [
-                    { required: true, message: '请输入主类名称', trigger: 'blur',
+                    { required: true, message: this.t('view.task.form.Please_enter_the_name_of_the_main_class'), trigger: 'blur',
                         transform(value) {
                             return value && ('' + value).trim();
                         }
@@ -227,7 +233,8 @@ export default {
             const params = {
                 imageType: 'SPARK',
                 start: 1,
-                count: -1
+                count: -1,
+                ownerId: getUser().userId || ''
             };
             getImageList(params)
                 .then(data => {
@@ -249,7 +256,7 @@ export default {
 
     watch: {
         task(nval) {
-            this.params = { ...this.params, ...nval, ...{imageId:nval.image.uuid}};
+            this.params = { ...this.params, ...nval};
             this.cpuDriver = {
                 cpu: this.params.resourceConfig.SPARK_DRIVER_CPUS/1000,
                 memory: this.params.resourceConfig.SPARK_DRIVER_MEMORY / (1024*1024*1024),
@@ -264,7 +271,7 @@ export default {
         cpuDriver(val) {
             this.params.resourceConfig = { 
                 'SPARK_DRIVER_CPUS': val.cpu *1000,
-                'SPARK_EXECUTOR_INSTANCES': this.params.instances.SPARK_EXECUTOR_INSTANCES,
+                'SPARK_EXECUTOR_INSTANCES': this.params.resourceConfig.SPARK_EXECUTOR_INSTANCES,
                 'SPARK_EXECUTOR_CPUS': this.params.resourceConfig.SPARK_EXECUTOR_CPUS,
                 'SPARK_DRIVER_MEMORY': val.memory * 1024* 1024*1024,
                 'SPARK_EXECUTOR_MEMORY': this.params.resourceConfig.SPARK_EXECUTOR_MEMORY,
@@ -273,7 +280,7 @@ export default {
         cpuExecute(val) {
             this.params.resourceConfig = { 
                 'SPARK_DRIVER_CPUS': this.params.resourceConfig.SPARK_DRIVER_CPUS,
-                'SPARK_EXECUTOR_INSTANCES': this.params.instances.SPARK_EXECUTOR_INSTANCES,
+                'SPARK_EXECUTOR_INSTANCES': this.params.resourceConfig.SPARK_EXECUTOR_INSTANCES,
                 'SPARK_EXECUTOR_CPUS': val.cpu *1000,
                 'SPARK_DRIVER_MEMORY': this.params.resourceConfig.SPARK_DRIVER_MEMORY,
                 'SPARK_EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,

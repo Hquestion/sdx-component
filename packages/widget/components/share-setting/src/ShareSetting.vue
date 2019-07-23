@@ -1,6 +1,6 @@
 <template>
     <sdxu-dialog
-        title="共享设置"
+        :title="t('widget.shareSetting.title')"
         :visible.sync="dialogVisible"
         @close="dialogClose"
         :confirm-handler="confirmEdit"
@@ -12,24 +12,24 @@
             ref="shareSettingForm"
         >
             <el-form-item
-                label="共享至全局："
+                :label="t('widget.shareSetting.shareGlobal')"
                 v-auth.button="authMap[sourceKind]"
             >
                 <el-radio
                     v-model="shareForm.shareType"
                     label="PUBLIC"
                 >
-                    是
+                    {{ t('sdxCommon.Yes') }}
                 </el-radio>
                 <el-radio
                     v-model="shareForm.shareType"
                     label="PRIVATE"
                 >
-                    否
+                    {{ t('sdxCommon.No') }}
                 </el-radio>
             </el-form-item>
             <el-form-item
-                label="用户/用户组："
+                :label="t('widget.shareSetting.userGroup')"
                 v-show="shareForm.shareType !== 'PUBLIC'"
             >
                 <sdxw-select-group-user
@@ -47,6 +47,7 @@ import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import ElRadio from 'element-ui/lib/radio';
+import locale from '@sdx/utils/src/mixins/locale';
 import auth from '@sdx/widget/components/auth';
 export default {
     name: 'SdxwShareSetting',
@@ -70,6 +71,7 @@ export default {
     directives: {
         auth
     },
+    mixins: [locale],
     watch: {
         visible (nVal) {
             this.dialogVisible = nVal;

@@ -33,7 +33,7 @@
         </sdxu-content-panel>
         <sdxu-content-panel
             class="sdxv-project-detail__task-list"
-            title="任务列表"
+            :title="t('view.project.taskList')"
             v-loading="loading"
         >
             <div
@@ -44,17 +44,17 @@
                     v-model="searchName"
                     type="search"
                     size="small"
-                    placeholder="请输入任务名"
+                    :placeholder="t('view.project.enterTaskName')"
                 />
                 <sdxu-button
                     size="small"
                     @click="searchTask"
                     style="margin: 0 10px;"
                 >
-                    搜索
+                    {{ t('sdxCommon.Search') }}
                 </sdxu-button>
                 <SdxuSortButton
-                    title="按创建时间排序"
+                    :title="t('view.project.sortByCreateTime')"
                     @sortChange="sortChange"
                     :order.sync="order"
                 />
@@ -65,7 +65,6 @@
                 >
                     <task-card-list>
                         <task-card
-                            @operate="handleOperate"
                             v-for="(item, index) in taskList"
                             :key="index"
                             :meta="item"
@@ -75,7 +74,7 @@
                                     v-for="(el, i) in getOperationList(item)"
                                     :key="i"
                                     :icon="el.icon"
-                                    :title="el.label"
+                                    :title="t(el.label)"
                                     @click="handleOperation(el.value, item)"
                                 />
                             </template>
@@ -105,19 +104,18 @@ import Button from '@sdx/ui/components/button';
 import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
 import SortButton from '@sdx/ui/components/sort-button';
-// import MessageBox from '@sdx/ui/components/message-box';
 import Empty from '@sdx/ui/components/empty';
 import TaskCard from './TaskCard';
 import TaskCardList from './TaskCardList';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import TaskIcon from './TaskIcon';
-// import Message from 'element-ui/lib/message';
 import { getTaskList } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
 import taskMixin from '@sdx/utils/src/mixins/task';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvProjectDetail',
-    mixins: [taskMixin],
+    mixins: [taskMixin, locale],
     data() {
         return {
             searchName: '',
@@ -131,7 +129,7 @@ export default {
             refreshTimer: null,
             taskOptions: [
                 {
-                    name: '模型开发',
+                    name: this.t('view.project.modelDev'),
                     tasks: [
                         {
                             name: 'Jupyter',
@@ -141,7 +139,7 @@ export default {
                     ]
                 },
                 {
-                    name: '模型训练',
+                    name: this.t('view.project.modelTraining'),
                     tasks: [
                         {
                             name: 'Python',
@@ -154,25 +152,25 @@ export default {
                             type: 'SPARK'
                         },
                         {
-                            name: 'TensorFlow单机版',
+                            name: this.t('view.task.type.TENSORFLOW'),
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW'
 
                         },
                         {
-                            name: 'TensorFlow分布式',
+                            name: this.t('view.task.type.TENSORFLOW_DIST'),
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_DIST'
                         },
                         {
-                            name: 'TensorFlow自动并行',
+                            name: this.t('view.task.type.TENSORFLOW_AUTO_DIST'),
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_AUTO_DIST'
                         }
                     ]
                 },
                 {
-                    name: '模型评估',
+                    name: this.t('view.project.modelAssess'),
                     tasks: [
 
                         {
@@ -183,7 +181,7 @@ export default {
                     ]
                 },
                 {
-                    name: '自定义容器',
+                    name: this.t('view.task.type.CONTAINERDEV'),
                     tasks: [
                         {
                             name: 'ContainerDev',
@@ -196,7 +194,7 @@ export default {
         };
     },
     created() {
-        this.initList(true);
+        this.initList();
         this.fetchDataMinxin = this.initList;
     },
     directives: {
@@ -219,7 +217,7 @@ export default {
     },
     methods: {
         searchTask() {
-            this.initList(true);
+            this.initList();
         },
         createTask(task) {
             this.$router.push(
@@ -232,8 +230,8 @@ export default {
                 }
             );
         },
-        initList(showLoading) {
-            this.loading = showLoading ? true : false;
+        initList(hideLoading) {
+            this.loading = hideLoading ? false : true;
             const params = {
                 name: this.searchName,
                 ...paginate(this.current, this.pageSize),
@@ -247,7 +245,7 @@ export default {
                 this.loading = false;
                 if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
                     if (!this.refreshTimer) {
-                        this.refreshTimer = setInterval(this.initList, 3000, false);
+                        this.refreshTimer = setInterval(this.initList, 3000, true);
                     }
                 } else {
                     clearInterval(this.refreshTimer);
@@ -256,10 +254,10 @@ export default {
         },
         currentChange(val) {
             this.current = val;
-            this.initList(true);
+            this.initList();
         },
         sortChange() {
-            this.initList(true);
+            this.initList();
         }
         // handleOperate(operation) {
         //     // console.log('operation', operation);
@@ -274,7 +272,7 @@ export default {
         //                     message: '运行成功',
         //                     type: 'success'
         //                 });
-        //                 this.initList(true);
+        //                 this.initList();
         //             });
         //         }).catch(() => {});
         //         break;
@@ -288,7 +286,7 @@ export default {
         //                     message: '停止成功',
         //                     type: 'success'
         //                 });
-        //                 this.initList(true);
+        //                 this.initList();
         //             });
         //         }).catch(() => {});
         //         break;
@@ -321,7 +319,7 @@ export default {
         //                     message: '删除成功',
         //                     type: 'success'
         //                 });
-        //                 this.initList(true);
+        //                 this.initList();
         //             });
         //         }).catch(() => {});
         //         break;

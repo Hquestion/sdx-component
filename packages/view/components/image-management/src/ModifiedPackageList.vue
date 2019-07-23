@@ -1,33 +1,40 @@
 <template>
     <div class="sdxv-modified-list">
         <div class="sdxv-modified-list__table">
-            <sdxu-table :data="dataList">
+            <sdxu-table
+                :data="dataList"
+                :empty-text="t('sdxCommon.NoData')"
+            >
                 <el-table-column
                     prop="name"
-                    label="包名称"
+                    :label="t('view.image.PackageName')"
                 />
                 <el-table-column
                     prop="sourceType"
-                    label="源类型"
-                />
+                    :label="t('view.image.SourceType')"
+                >
+                    <template #default="{ row }">
+                        {{ SOURCE_TYPE[row.sourceType] }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="version"
-                    label="版本"
+                    :label="t('view.image.Version')"
                 />
-                <el-table-column label="变更类型">
+                <el-table-column :label="t('view.image.ChangeType')">
                     <template #default="{ row }">
                         <span>{{ row.modify.desc }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                     v-if="operatable"
-                    label="操作"
+                    :label="t('sdxCommon.Operation')"
                 >
                     <template #default="{ row }">
                         <sdxu-icon-button
                             icon="sdx-icon sdx-quxiao"
                             @click="handleRevert(row)"
-                            title="撤销"
+                            :title="t('sdxCommon.Revert')"
                         />
                     </template>
                 </el-table-column>
@@ -49,10 +56,12 @@ import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import { TableColumn } from 'element-ui';
-import { VERSION_TYPE, SOURCE_URL_TYPE } from '@sdx/utils/src/const/image';
+import { VERSION_TYPE, SOURCE_URL_TYPE, SOURCE_TYPE } from '@sdx/utils/src/const/image';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvModifiedPackageList',
+    mixins: [locale],
     components: {
         SdxuIconButton,
         SdxuTable,
@@ -78,6 +87,7 @@ export default {
         }
     },
     data() {
+        this.SOURCE_TYPE = SOURCE_TYPE;
         return {
             page: 1,
             pageSize: 5,
@@ -96,12 +106,12 @@ export default {
                         : item.version;
                 ret.sourceUrl =
                     item.sourceUrlType === SOURCE_URL_TYPE.DEFAULT
-                        ? '默认'
+                        ? this.t('view.image.Default')
                         : item.sourceUrl;
                 ret.modify = {
                     type: 'installPackages',
                     index,
-                    desc: '新增'
+                    desc: this.t('view.image.NewlyAdded')
                 };
                 return ret;
             });
@@ -110,7 +120,7 @@ export default {
                 ret.modify = {
                     type: 'uninstallPackages',
                     index,
-                    desc: '删除'
+                    desc: this.t('sdxCommon.Delete')
                 };
                 return ret;
             });
@@ -123,7 +133,7 @@ export default {
                 ret.modify = {
                     type: 'upgradePackages',
                     index,
-                    desc: '升级'
+                    desc: this.t('sdxCommon.Upgrade')
                 };
                 return ret;
             });

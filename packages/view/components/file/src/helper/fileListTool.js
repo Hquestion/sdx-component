@@ -1,4 +1,5 @@
 import auth from '@sdx/widget/components/auth';
+import { t } from '@sdx/utils/src/locale';
 
 export const rootKinds = {
     'MY_SHARE': 'MY_SHARE',
@@ -36,47 +37,48 @@ const authIconButtonMap = {
 export const iconButtonTypes = {
     SHARE: {
         icon: 'sdx-icon sdx-fenxiang',
-        title: '分享',
+        title: t('view.file.Share'),
         name: BTN_NAMES.SHARE
     },
     CANCEL_SHARE: {
         icon: 'sdx-icon sdx-quxiaofenxiang',
-        title: '取消分享',
+        title: t('view.file.CancelShare'),
         name: BTN_NAMES.CANCEL_SHARE
     },
     DOWNLOAD: {
         icon: 'sdx-icon sdx-icon--download',
-        title: '下载',
-        name: BTN_NAMES.DOWNLOAD
+        title: t('view.file.Download'),
+        name: BTN_NAMES.DOWNLOAD,
+        loading: false
     },
     COPY: {
         icon: 'sdx-icon sdx-kaobei',
-        title: '拷贝',
+        title: t('view.file.Copy'),
         name: BTN_NAMES.COPY
     },
     MOVE: {
         icon: 'sdx-icon sdx-kaobei',
-        title: '移动/拷贝',
+        title: t('view.file.MoveOrCopy'),
         name: BTN_NAMES.MOVE
     },
     RENAME: {
         icon: 'sdx-icon sdx-rename',
-        title: '重命名',
+        title: t('view.file.Rename'),
         name: BTN_NAMES.RENAME
     },
     DELETE: {
         icon: 'sdx-icon sdx-icon-delete',
-        title: '删除',
+        title: t('sdxCommon.Delete'),
         name: BTN_NAMES.DELETE
     },
     PATH: {
         icon: 'sdx-icon sdx-icon-tickets',
-        title: '查看路径',
+        title: t('view.file.CheckPath'),
         name: BTN_NAMES.PATH
     },
     UNZIP: {
         icon: 'sdx-icon sdx-yasuowenjian',
-        title: '解压',
+        title: t('view.file.Unzip'),
         name: BTN_NAMES.UNZIP
     }
 };
@@ -88,9 +90,9 @@ export const ROOT_FILE_BTN_MAP = {
 };
 
 export const fixedRowsNameMap = {
-    [MY_SHARE_PATH]: '我的共享',
-    [ACCEPTED_SHARE_PATH]: '收到的共享',
-    [PROJECT_SHARE_PATH]: '协作项目文件'
+    [MY_SHARE_PATH]: t('view.file.MyShare'),
+    [ACCEPTED_SHARE_PATH]: t('view.file.AcceptedShare'),
+    [PROJECT_SHARE_PATH]: t('view.file.CooperationProject')
 };
 
 export const fixedRowsKeyMap = {

@@ -27,15 +27,17 @@
 <script>
 import AutoComplete from '@sdx/ui/components/autocomplete';
 import { getUserRoleGroupByName } from '@sdx/utils/src/api/user';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxwUserPicker',
+    mixins: [locale],
     data() {
         return {
             typeNameMap: {
-                user: '用户',
-                role: '角色',
-                group: '用户组'
+                user: this.t('widget.userPicker.User'),
+                role: this.t('widget.userPicker.Role'),
+                group: this.t('widget.userPicker.Group')
             }
         };
     },
@@ -83,6 +85,8 @@ export default {
         guessUser(name, cb) {
             getUserRoleGroupByName(name, this.type).then(res => {
                 cb(res);
+            }, () => {
+                cb([]);
             });
         },
         handleSelect(item) {

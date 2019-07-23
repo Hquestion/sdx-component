@@ -14,7 +14,7 @@
                 {{ percent }}%
             </p>
             <p class="sdxv-resource-chart__desc">
-                已使用
+                {{ t('view.monitor.resourceStatistic.Used') }}
             </p>
         </SdxuRadialProgress>
     </div>
@@ -22,8 +22,10 @@
 
 <script>
 import SdxuRadialProgress from '@sdx/ui/components/radial-progress';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvChartProcess',
+    mixins: [locale],
     components: {
         SdxuRadialProgress
     },

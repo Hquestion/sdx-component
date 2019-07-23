@@ -81,7 +81,7 @@ Vue.use(SdxWidget);
 可以通过变量修改默认的scss样式。
 
 ```scss
-$sdxw-resource-label-width: 130px !default;
+$sdxw-resource-label-width: 110px !default;
 $sdxw-resource-label-fontsize: 13px !default;
 $sdw-resource-icon-color: #457FF6 !default;
 $sdw-resource-icon-size: 4px !default;

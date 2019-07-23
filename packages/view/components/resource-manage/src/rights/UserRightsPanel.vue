@@ -1,7 +1,7 @@
 <template>
     <SdxuContentPanel
         class="user-rights-panel"
-        title="用户特权"
+        :title="t('view.resourceManage.UserRights')"
     >
         <SdxuButton
             icon="sdx-icon-plus"
@@ -11,24 +11,24 @@
             @click="addRights"
             v-auth.resource.button="'CONFIG:WRITE'"
         >
-            新建特权
+            {{ t('view.resourceManage.NewUserRights') }}
         </SdxuButton>
         <div class="user-rights-list" v-loading="loading">
             <template v-if="userRightsList.length > 0">
                 <SdxuTable :data="userRightsList">
                     <el-table-column
-                        label="用户名"
+                        :label="t('view.file.UserName')"
                         prop="user.fullName"
                     />
                     <el-table-column
-                        label="授权时间"
+                        :label="t('view.resourceManage.AuthAt')"
                         prop="createTime"
                     >
                         <template #default="{row}">
                             {{ row.createdAt | dateFormatter }}
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作">
+                    <el-table-column :label="t('sdxCommon.Operation')">
                         <template slot-scope="scope">
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-eye-open"
@@ -58,7 +58,7 @@
             </template>
             <template v-else>
                 <SdxuEmpty>
-                    <span>如有需要，您可以选择添加用户特权哦</span>
+                    <span>{{ t('view.resourceManage.AddUserRightsTip') }}</span>
                     <div class="add-btn-block">
                         <SdxuButton
                             type="default"
@@ -67,7 +67,7 @@
                             @click="addRights"
                             v-auth.resource.button="'CONFIG:WRITE'"
                         >
-                            新建特权
+                            {{ t('view.resourceManage.NewRights') }}
                         </SdxuButton>
                     </div>
                 </SdxuEmpty>
@@ -95,10 +95,11 @@ import { getResourceConfigs, deleteResourceConfig } from '@sdx/utils/src/api/res
 import EditUserRule from './EditUserRule';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'UserRightsPanel',
-    mixins: [transformFilter],
+    mixins: [transformFilter, locale],
     directives: {auth},
     data() {
         return {
@@ -139,8 +140,8 @@ export default {
         },
         del({row}) {
             MessageBox.confirm.error({
-                title: '确定要删除次用户特权吗？',
-                content: '删除后不可恢复'
+                title: this.t('view.resourceManage.ConfirmDeleteUserRights'),
+                content: this.t('view.file.CantRecoveryAfterDel')
             }).then(() => {
                 deleteResourceConfig(row.uuid).then(() => {
                     this.init();

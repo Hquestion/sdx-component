@@ -12,8 +12,11 @@
                     ]"
                     v-show="visible"
                 >
-                    <div class="sdxu-message-box__icon-close" @click="close">
-                        <i class="sdx-icon sdx-icon-check"></i>
+                    <div
+                        class="sdxu-message-box__icon-close"
+                        @click="close"
+                    >
+                        <i class="sdx-icon sdx-icon-check" />
                     </div>
                     <div class="sdxu-message-box__header">
                         <i
@@ -31,13 +34,13 @@
                             @click="handleCancel"
                             v-if="type==='confirm'"
                         >
-                            取消
+                            {{ t('sdxCommon.Cancel') }}
                         </SdxuButton>
                         <SdxuButton
                             type="primary"
                             @click="handleConfirm"
                         >
-                            确定
+                            {{ t('sdxCommon.Confirm') }}
                         </SdxuButton>
                     </div>
                 </div>
@@ -48,6 +51,7 @@
 
 <script>
 import Button from '@sdx/ui/components/button';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxuMessageBox',
     data() {
@@ -63,6 +67,7 @@ export default {
     components: {
         [Button.name]: Button
     },
+    mixins: [locale],
     props: {
         title: {
             type: String,

@@ -57,6 +57,10 @@ export function createTask(params) {
 export function getTaskDetail(uuid) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-detail`, {uuid});
 }
+// 任务编辑的时候不需要聚合
+export function getTaskDetailBackEnd(uuid) {
+    return httpService.get(`${taskApi}/${uuid}`);
+}
 export function updateTask(uuid,params) {
     return httpService.patch(`${taskApi}/${uuid}`, params);
 }
@@ -84,5 +88,6 @@ export default {
     getTaskDetail,
     updateTask,
     getDataSet,
-    getTaskDataSource
+    getTaskDataSource,
+    getTaskDetailBackEnd
 };

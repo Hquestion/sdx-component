@@ -8,7 +8,7 @@
             <el-select
                 :searchable="true"
                 size="small"
-                :placeholder="`请选择${cpulabel}`"
+                :placeholder="`${t('widget.resourceConfig.Please_select')}${cpulabel}`"
                 v-model="__value"
                 value-key="uuid"
                 :popper-append-to-body="false"
@@ -23,10 +23,10 @@
                     <div class="sdxw-resource-config__selectoption">
                         <i class="icon" />
                         <div>
-                            <span>CPU</span> <span>{{ `${item.value.cpu}核` }}</span>
+                            <span>CPU</span> <span>{{ `${item.value.cpu} ${t('widget.resourceConfig.Core')}` }}</span>
                         </div>
                         <div>
-                            <span>内存</span><span>{{ `${item.value.memory}GB` }}</span>
+                            <span>{{ t('widget.resourceConfig.Memory') }}</span><span>{{ `${item.value.memory} GB` }}</span>
                         </div>
                     </div>
                 </el-option>
@@ -38,7 +38,7 @@
             </div>
             <el-select
                 size="small"
-                placeholder="请选择GPU"
+                :placeholder="`${t('widget.resourceConfig.Please_select')}${t('widget.resourceConfig.GPU')}`"
                 v-model="__value"
                 value-key="uuid"
                 :popper-append-to-body="false"
@@ -53,10 +53,10 @@
                     <div class="sdxw-resource-config__selectoption">
                         <i class="sdxw-resource-config__icon" />
                         <div>
-                            <span>型号</span> <span>{{ item.value.label }}</span>
+                            <span>{{ t('widget.resourceConfig.Model') }}</span> <span>{{ item.value.label }}</span>
                         </div>
                         <div>
-                            <span>数量</span><span>{{ `${item.value.count}块` }}</span>
+                            <span>{{ t('widget.resourceConfig.Number') }}</span><span>{{ `${item.value.count} ${t('widget.resourceConfig.Piece')}` }}</span>
                         </div>
                     </div>
                 </el-option>
@@ -65,7 +65,7 @@
         <div v-if="type === 'onlycpu'">
             <el-select
                 size="small"
-                placeholder="请选择资源配置"
+                :placeholder="t('widget.resourceConfig.Please_select_resource_allocation')"
                 v-model="__value"
                 value-key="uuid"
                 :popper-append-to-body="false"
@@ -80,10 +80,10 @@
                     <div class="sdxw-resource-config__selectoption">
                         <i class="sdxw-resource-config__icon" />
                         <div>
-                            <span>CPU</span> <span>{{ `${item.value.cpu}核` }}</span>
+                            <span>CPU</span> <span>{{ `${item.value.cpu} ${t('widget.resourceConfig.Core')}` }}</span>
                         </div>
                         <div>
-                            <span>内存</span><span>{{ `${item.value.memory}GB` }}</span>
+                            <span>{{ t('widget.resourceConfig.Memory') }}</span><span>{{ `${item.value.memory} GB` }}</span>
                         </div>
                     </div>
                 </el-option>
@@ -96,9 +96,11 @@
 
 import Select from 'element-ui/lib/select';
 import { getResourceTmplList } from '@sdx/utils/src/api/resource';
-
+import locale from '@sdx/utils/src/mixins/locale';
+import { t } from '@sdx/utils/src/locale';
 export default {
     name: 'ResourceConfig',
+    mixins: [locale],
     props: {
         type: {
             type: String,
@@ -110,7 +112,7 @@ export default {
         },
         cpulabel: {
             type: String,
-            default: 'CPU/内存'
+            default: () => t('widget.resourceConfig.CPU_Memory') // 'CPU/内存'
         },
         gpulabel: {
             type: String,
@@ -149,7 +151,7 @@ export default {
             const CPU = list.map(item => {
                 const { cpu, memory ,uuid} = item;
                 return {
-                    label: `${ Math.ceil(cpu/1000)}C   ${Math.ceil(memory / (1024*1024*1024))}GB`,
+                    label: `${ Math.ceil(cpu/1000)} C   ${Math.ceil(memory / (1024*1024*1024))} GB`,
                     value: {
                         cpu: Math.ceil(cpu/1000),
                         memory:  Math.ceil(memory / (1024*1024*1024)),
@@ -164,7 +166,7 @@ export default {
             const GPU = list.map(item => {
                 const { label, count ,uuid} = item;
                 return {
-                    label: `${label}   ${Math.ceil(count)}块`,
+                    label: `${label}   ${Math.ceil(count)} ${this.t('widget.resourceConfig.Piece')}`,
                     value: {
                         label,
                         count: Math.ceil(count),
@@ -174,19 +176,23 @@ export default {
                 };
             });
             return GPU;
+        },
+        getResourceList (start, count, type, params) {
+            getResourceTmplList(start, count, type, params)
+                .then(data => {
+                    for (let i= 0; i<data.items.length; i++) {
+                        if(type === 'CPU') {
+                            this.resourceCPU.push(data.items[i]);
+                        } else if (type === 'GPU') {
+                            this.resourceGPU.push(data.items[i]);
+                        }
+                    }
+                });
         }
     },
     created() {
-        getResourceTmplList()
-            .then(data=> {
-                for (let i= 0; i<data.items.length; i++) {
-                    if(data.items[i].templateType === 'CPU') {
-                        this.resourceCPU.push(data.items[i]);
-                    } else if (data.items[i].templateType === 'GPU') {
-                        this.resourceGPU.push(data.items[i]);
-                    }
-                }
-            });
+        this.getResourceList(1, -1, 'CPU', {order: 'asc', orderBy:'cpu'});
+        this.getResourceList(1, -1, 'GPU', {order: 'asc', orderBy: 'gpu'});
 
     }
 };

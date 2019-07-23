@@ -1,20 +1,19 @@
 <template>
-    <SdxvJupyterDetail :task="task" />
+    <SdxvTaskDetail :task="task" />
 </template>
 
 <script>
-import SdxvJupyterDetail from '@sdx/view/components/project-management/src/task-detail/JupyterDetail';
-import SdxvTensorflowDetail from '@sdx/view/components/project-management/src/task-detail/TensorflowDetail';
+import SdxvTaskDetail from '@sdx/view/components/task-management/src/task-detail/TaskDetail';
 
 export default {
     components: {
-        SdxvJupyterDetail,
-        SdxvTensorflowDetail
+        SdxvTaskDetail
     },
     data() {
         return {
             task: {
                 name: 'jupyter',
+                type: 'JUPYTER',
                 state: 'RUNNING',
                 owner: {
                     name: 'creator'
@@ -42,7 +41,7 @@ export default {
                     SPARK_DRIVER_MEMORY: 128849018880,
                     SPARK_DRIVER_CPUS: 4000,
                 },
-                runningAt: '2019-04-04 12:00:00',
+                startedAt: '2019-04-04 12:00:00',
                 stoppedAt: '2019-04-05 12:00:00',
                 externalUrl: 'www.baidu.com',
                 sourcePaths: ['system/code'],
@@ -65,10 +64,7 @@ export default {
                     name: 'Skytsdbsdms'
                 }],
                 pods: [{
-                    'name':'jupyter-12325345',
-                    'state':'',
-                    'reason': '',
-                    'startTime': ''
+                    'name':'ddf22857-4a1c-11e9-ad36-d094667446bd'
                 }, {
                     'name': 'jupyter-36435234523'
                 }]

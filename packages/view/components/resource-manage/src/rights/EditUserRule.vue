@@ -17,7 +17,7 @@
                     :rules="rule"
                 >
                     <el-form-item
-                        label="用户"
+                        :label="t('view.resourceManage.User')"
                         prop="user"
                     >
                         <SdxwUserPicker
@@ -31,7 +31,7 @@
                         />
                     </el-form-item>
                     <el-form-item
-                        label="用户规则设置"
+                        :label="t('view.resourceManage.UserRuleSetting')"
                         prop="rule"
                     >
                         <div>
@@ -56,9 +56,11 @@ import SdxwUserPicker from '@sdx/widget/components/user-picker';
 import RuleForm from '../rule/RuleForm';
 import { Form, FormItem } from 'element-ui';
 import { createUserResourceConfig, saveResourceConfig } from '@sdx/utils/src/api/resource';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'EditUserRule',
+    mixins: [locale],
     components: {
         RuleForm,
         SdxuDialog,
@@ -78,12 +80,12 @@ export default {
             },
             rule: {
                 user: [
-                    { required: true, message: '请选择用户', trigger: 'blur' },
+                    { required: true, message: this.t('view.resourceManage.PleaseSelectUser'), trigger: 'blur' },
                     { validator: this.userValidator, trigger: 'change' },
                     { validator: this.userValidator, trigger: 'blur' }
                 ],
                 rule: [
-                    { required: true, message: '配置不合法', trigger: 'blur' },
+                    { required: true, message: this.t('view.resourceManage.IllegalSetting'), trigger: 'blur' },
                     {validator: this.configValidator}
                 ]
             }
@@ -113,7 +115,7 @@ export default {
             }
         },
         title() {
-            return this.meta ? (this.readonly ? '查看用户特权' : '编辑用户特权') : '新增用户特权';
+            return this.meta ? (this.readonly ? this.t('view.resourceManage.CheckUserRights') : this.t('view.resourceManage.EditUserRights')) : this.t('view.resourceManage.NewUserRights') ;
         }
     },
     methods: {
@@ -143,7 +145,7 @@ export default {
             for (let i = 0; i < intKeys.length; i++) {
                 let value = config[intKeys[i]];
                 if (!value || +value <= 0 || +value !== +value) {
-                    cb('配置不合法');
+                    cb(this.t('view.resourceManage.IllegalSetting'));
                     return;
                 }
             }
@@ -153,7 +155,7 @@ export default {
             if (this.params.user && this.params.user.uuid) {
                 cb();
             } else {
-                cb('请选择用户');
+                cb(this.t('view.resourceManage.PleaseSelectUser'));
             }
         }
     },

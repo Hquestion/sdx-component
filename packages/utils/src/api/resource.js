@@ -1,5 +1,5 @@
 import httpService from '../http-service';
-import { RESOURCE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
+import { RESOURCE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, SYSTEM_MANAGE_GETWAY_BASE } from './config';
 import shareCenter from '../helper/shareCenter';
 import readAuths from './config';
 import { authWrapper } from './helper';
@@ -13,11 +13,12 @@ import { authWrapper } from './helper';
     });
 } */
 
-export const getResourceTmplList = authWrapper(function (start = 1, count = -1, templateType) {
+export const getResourceTmplList = authWrapper(function (start = 1, count = -1, templateType, params) {
     return httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_templates`, {
         start,
         count,
-        templateType
+        templateType,
+        ...params
     });
 }, readAuths.RESOURCE_TEMPLATE_READ);
 
@@ -40,7 +41,7 @@ export const getResourceStates = authWrapper(function (global = false) {
 }, readAuths.SYSTEM_GLOBAL_RESOURCE_READ);
 
 export function getGpuModels() {
-    return getResourceStates().then(res => res.gpus);
+    return httpService.get(`${SYSTEM_MANAGE_GETWAY_BASE}resources`).then(res => res.total.gpuModels);
 }
 
 /* export function getResourceConfigDetail(uuid) {

@@ -11,7 +11,8 @@
     @include element('selectoption') {
         color: $sdx-text-minor-color;
         div {
-            width: $sdxw-resource-label-width;
+            min-width: $sdxw-resource-label-width;
+            max-width: calc(100% - 110px);
             display: inline-block;
             vertical-align: middle;
             span:first-child {

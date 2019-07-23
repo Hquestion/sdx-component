@@ -69,6 +69,8 @@
 import Dialog from 'element-ui/lib/dialog';
 import Button from '@sdx/ui/components/button';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
+import locale from '@sdx/utils/src/mixins/locale';
+import {t} from '@sdx/utils/src/locale';
 export default {
     name: 'SdxuDialog',
     data() {
@@ -81,6 +83,7 @@ export default {
             this.dialogVisible = nVal;
         }
     },
+    mixins:[locale],
     components: {
         [Dialog.name]: Dialog,
         [Button.name]: Button
@@ -152,11 +155,11 @@ export default {
         },
         confirmLabel: {
             type: String,
-            default: '确定'
+            default: () => t('ui.button.ok')
         },
         cancelLabel: {
             type: String,
-            default: '取消'
+            default: () => t('ui.button.cancel')
         },
         confirmHandler: {
             type: Function,

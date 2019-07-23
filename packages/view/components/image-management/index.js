@@ -2,7 +2,7 @@ import ImageManagementList from './src/ImageManagementList.vue';
 import ImageFileBuild from './src/image-file-build/Index.vue';
 import ImageBasicBuild from './src/image-build-basic/index.vue';
 import ImageManagement from './src/Index.vue';
-
+import { t } from '@sdx/utils/src/locale';
 const routeCfg = [
     {
         path: '/sdxv-image-manage',
@@ -10,20 +10,24 @@ const routeCfg = [
         component: ImageManagement,
         redirect: '/sdxv-image-manage/imageList/imageTab',
         meta: {
-            breadcrumb: '镜像管理'
+            breadcrumb: t('view.image.ImageManagement')
         },
         children: [
             {
                 path: 'imageList/:tab',
                 name:'imageList',
                 component: ImageManagementList,
+                meta: {
+                    breadcrumb: t('view.image.ImageManagement'),
+                    isRoot: true
+                },
             },
             {
                 path: 'filebuild',
                 name:'filebuild',
                 component:  ImageFileBuild,
                 meta: {
-                    breadcrumb: '基于文件构建',
+                    breadcrumb: t('view.image.BuildBasedOnFile'),
                 }
             },
             {
@@ -31,7 +35,7 @@ const routeCfg = [
                 name:'basicbuild',
                 component:  ImageBasicBuild,
                 meta: {
-                    breadcrumb: '基于此构建',
+                    breadcrumb: t('view.image.BuildBaseThis'),
                 },
                 props: true
             }]

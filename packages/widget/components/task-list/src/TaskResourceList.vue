@@ -5,15 +5,15 @@
             @search="handleSearch"
             @reset="handleReset"
         >
-            <SdxwSearchItem label="名称搜索:">
+            <SdxwSearchItem :label="t('view.task.searchName') + ':'">
                 <SdxuInput
                     v-model="searchName"
                     type="search"
                     size="small"
-                    placeholder="请输入任务名称、项目名称或创建人"
+                    :placeholder="t('view.task.searchPlaceholder')"
                 />
             </SdxwSearchItem>
-            <SdxwSearchItem label="任务类型:">
+            <SdxwSearchItem :label="t('view.task.taskType') + ':'">
                 <el-select
                     v-model="taskType"
                     size="medium"
@@ -21,12 +21,12 @@
                     <el-option
                         v-for="item in taskTypeList"
                         :key="item.value"
-                        :label="item.label"
+                        :label="t(item.label)"
                         :value="item.value"
                     />
                 </el-select>
             </SdxwSearchItem>
-            <SdxwSearchItem label="任务状态:">
+            <SdxwSearchItem :label="t('view.task.taskState') + ':'">
                 <el-select
                     v-model="taskState"
                     size="medium"
@@ -34,7 +34,7 @@
                     <el-option
                         v-for="item in taskStateList"
                         :key="item.value"
-                        :label="item.label"
+                        :label="t(item.label)"
                         :value="item.value"
                     />
                 </el-select>
@@ -46,24 +46,25 @@
             @sort-change="handleSortChange"
             :default-sort="defaultSort"
             v-loading="loading"
+            :empty-text="t('sdxCommon.NoData')"
         >
             <el-table-column
                 prop="name"
-                label="任务名称"
+                :label="t('view.task.taskName')"
                 fixed
                 min-width="150px"
             />
             <el-table-column
                 prop="type"
-                label="任务类型"
+                :label="t('view.task.taskType')"
                 min-width="150px"
             >
                 <template #default="{ row }">
-                    {{ TASK_TYPE_LABEL[row.type] }}
+                    {{ t(TASK_TYPE_LABEL[row.type]) }}
                 </template>
             </el-table-column>
             <el-table-column
-                label="任务状态"
+                :label="t('view.task.taskState')"
                 min-width="100px"
             >
                 <template #default="{ row }">
@@ -72,65 +73,65 @@
                         :type="STATE_MAP_FOLD_LABEL_TYPE[row.state]"
                         :status="stateIcon(row.state)"
                     >
-                        {{ STATE_TYPE_LABEL[row.state] }}
+                        {{ t(STATE_TYPE_LABEL[row.state]) }}
                     </SdxwFoldLabel>
                 </template>
             </el-table-column>
             <el-table-column
-                label="所属项目"
-                min-width="150px"
+                :label="t('view.task.taskProject')"
+                min-width="160px"
             >
                 <template #default="{ row }">
-                    <span v-if="monitor">{{ row.project.name }}</span>
+                    <span v-if="monitor">{{ row.project && row.project.name }}</span>
                     <span
                         v-else
                         @click="handleGotoProject(row.project)"
                         class="sdxw-task-resource-list__table--project-link"
-                    >{{ row.project.name }}</span>
+                    >{{ row.project && row.project.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column
                 prop="CPU"
-                label="已使用CPU（核）"
+                :label="t('view.task.cpuUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="160px"
             >
                 <template #default="{ row }">
-                    {{ row.quota.cpu / 1000 }}
+                    {{ row.quota && row.quota.cpu / 1000 }}
                 </template>
             </el-table-column>
             <el-table-column
                 prop="MEMORY"
-                label="已使用内存（GB）"
+                :label="t('view.task.memoryUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="170px"
             >
                 <template #default="{ row }">
-                    {{ row.quota.memory / (1024 * 1024 * 1024) }}
+                    {{ row.quota && row.quota.memory / (1024 * 1024 * 1024) }}
                 </template>
             </el-table-column>
             <el-table-column
                 prop="GPU"
-                label="已使用GPU（块）"
+                :label="t('view.task.gpuUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="170px"
             >
                 <template #default="{ row }">
-                    <span v-if="row.quota.gpu > 0">{{ `${row.quota.gpuModel}: ${row.quota.gpu}` }}</span>
+                    <span v-if="row.quota && row.quota.gpu > 0">{{ `${row.quota && row.quota.gpuModel}: ${row.quota && row.quota.gpu}` }}</span>
                     <span v-else>0</span>
                 </template>
             </el-table-column>
             <el-table-column
                 prop="owner.fullName"
-                label="创建人"
+                :label="t('sdxCommon.Creator')"
                 min-width="100px"
             />
             <el-table-column
                 prop="createdAt"
-                label="创建时间"
+                :label="t('sdxCommon.CreatedTime')"
                 :sortable="ranking ? false : 'custom'"
                 :sort-orders="sortOrders"
                 min-width="200px"
@@ -142,9 +143,9 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="操作"
+                :label="t('sdxCommon.Operation')"
                 fixed="right"
-                min-width="130px"
+                min-width="140px"
             >
                 <template #default="{ row }">
                     <SdxuIconButtonGroup>
@@ -152,7 +153,7 @@
                             v-for="(item, i) in getOperationList(row, monitor)"
                             :key="i"
                             :icon="item.icon"
-                            :title="item.label"
+                            :title="t(item.label)"
                             @click="handleOperation(item.value, row)"
                         />
                     </SdxuIconButtonGroup>
@@ -188,6 +189,7 @@ import ElOption from 'element-ui/lib/option';
 
 import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, TASK_TYPE_LABEL, TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
 import taskMixin from '@sdx/utils/src/mixins/task';
+import locale from '@sdx/utils/src/mixins/locale';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import { getTaskList } from '@sdx/utils/src/api/project';
 
@@ -195,7 +197,7 @@ const POLLING_PERIOD = 3 * 1000;
 
 export default {
     name: 'SdxwTaskResourceList',
-    mixins: [taskMixin],
+    mixins: [taskMixin, locale],
     components: {
         SdxuTable,
         SdxuIconButton,
@@ -236,7 +238,7 @@ export default {
             };
         });
         this.taskTypeList.unshift({
-            label: '全部',
+            label: 'sdxCommon.ALL',
             value: ''
         });
         this.taskStateList = Object.values(STATE_TYPE).map(item => {
@@ -246,7 +248,7 @@ export default {
             };
         });
         this.taskStateList.unshift({
-            label: '全部',
+            label: 'sdxCommon.ALL',
             value: ''
         });
         return {
@@ -291,7 +293,7 @@ export default {
     },
     methods: {
         fetchData(showLoading = true) {
-            if (showLoading) { 
+            if (showLoading) {
                 this.loading = true;
             }
             getTaskList(this.queryParams).then(data => {
@@ -346,7 +348,7 @@ export default {
     },
     beforeDestroy() {
         this.pollingId && clearInterval(this.pollingId);
-        this.pollingId = null;    
+        this.pollingId = null;
     },
     watch: {
         queryParams() {
@@ -362,7 +364,7 @@ export default {
                 this.pollingId && clearInterval(this.pollingId);
                 this.pollingId = null;
             }
-        } 
+        }
     }
 };
 </script>

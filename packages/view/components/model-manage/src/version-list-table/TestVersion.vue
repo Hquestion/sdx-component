@@ -3,7 +3,7 @@
         :visible.sync="dialogVisible"
         @close="dialogClose"
         class="sdxv-test-version"
-        title="测试模型版本"
+        :title="t('view.model.testVersion')"
         no-footer
     >
         <el-form
@@ -13,7 +13,7 @@
             ref="testForm"
         >
             <el-form-item
-                label="API地址："
+                :label="t('view.model.apiUrl')"
             >
                 <div>
                     {{ version.restApi }}
@@ -29,7 +29,7 @@
                     @click="getToken"
                     :loading="loading"
                 >
-                    获取Key
+                    {{ t('view.model.versionDetail.getKey') }}
                 </SdxuButton>
                 <div
                     v-else
@@ -39,7 +39,7 @@
                 </div>
             </el-form-item>
             <el-form-item
-                label="输入："
+                :label="t('view.model.input')"
             >
                 <SdxuButton
                     size="small"
@@ -47,7 +47,7 @@
                     plain
                     class="sdxv-test-version__get-token-button"
                 >
-                    <span>获取入参格式</span>
+                    <span>{{ t('view.model.getParamFormat') }}</span>
                     <i
                         class="sdx-icon sdx-icon-caret-top"
                         v-if="!inputFormat"
@@ -67,7 +67,7 @@
                 <sdxu-input
                     v-model="testForm.inputs"
                     type="textarea"
-                    placeholder="请输入"
+                    :placeholder="t('view.model.enterParam')"
                     :rows="6"
                     class="sdxv-test-version__input"
                 />
@@ -76,11 +76,11 @@
                     @click="test"
                     :disabled="!token"
                 >
-                    测试
+                    {{ t('view.model.test') }}
                 </SdxuButton>
             </el-form-item>
             <el-form-item
-                label="返回结果："
+                :label="t('view.model.result')"
             >
                 <sdxu-input
                     v-model="outputs"
@@ -101,6 +101,7 @@ import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import { getVersionToken, getVersionInputFormat } from '@sdx/utils/src/api/model';
 import httpService from '@sdx/utils/src/http-service';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'TestVersion',
     data() {
@@ -115,6 +116,7 @@ export default {
             outputs: ''
         };
     },
+    mixins: [locale],
     props: {
         visible: {
             type: Boolean,
@@ -142,7 +144,7 @@ export default {
     methods: {
         getInputFormat() {
             getVersionInputFormat(this.$route.params.modelId, this.version.uuid).then(res => {
-                this.inputFormat = res.input;
+                this.inputFormat = res.inputs;
             });
         },
         getToken() {

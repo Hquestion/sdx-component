@@ -1,7 +1,5 @@
 <template>
-    <sdxu-content-panel
-        title="用户"
-    >
+    <sdxu-content-panel :title="t('view.userManage.User')">
         <div
             class="sdxv-user-manage"
             v-auth.user.button="'USER:READ'"
@@ -17,7 +15,7 @@
                         size="small"
                         v-auth.user.button="'USER:WRITE'"
                     >
-                        新建用户
+                        {{ t('view.userManage.NewUser') }}
                     </SdxuButton>
                     <SdxwSearchLayout
                         @search="search"
@@ -32,7 +30,7 @@
                                 :searchable="true"
                                 size="small"
                                 type="search"
-                                placeholder="请输入用户名"
+                                :placeholder="t('view.userManage.PleaseInputUsername')"
                             />
                         </SdxwSearchItem>
                     </SdxwSearchLayout>
@@ -49,15 +47,15 @@
             >
                 <el-table-column
                     prop="username"
-                    label="用户名"
+                    :label="t('view.userManage.Username')"
                 />
                 <el-table-column
                     prop="fullName"
-                    label="显示名"
+                    :label="t('view.userManage.FullName')"
                 />
                 <el-table-column
                     prop="roles"
-                    label="角色"
+                    :label="t('view.userManage.Role')"
                 >
                     <template slot-scope="scope">
                         <SdxuTextTooltip
@@ -67,7 +65,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="创建时间"
+                    :label="t('view.userManage.CreatedAt')"
                     prop="createdAt"
                     sortable
                 >
@@ -76,21 +74,21 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="操作"
+                    :label="t('sdxCommon.Operation')"
                 >
                     <template slot-scope="scope">
                         <sdxu-icon-button
-                            @click="handleJoinGroup(scope.row)"
+                            @click.native.stop="handleJoinGroup(scope.row)"
                             class="sdx-icon sdx-icon-zu2"
                             v-auth.user.button="'USER:WRITE'"
                         />
                         <sdxu-icon-button
-                            @click="handleEditUser(scope.row)"
+                            @click.native.stop="handleEditUser(scope.row)"
                             class="sdx-icon sdx-icon-edit"
                             v-auth.user.button="'USER:WRITE'"
                         />
                         <sdxu-icon-button
-                            @click="handleDeleteUser(scope.row)"
+                            @click.native.stop="handleDeleteUser(scope.row)"
                             class="sdx-icon sdx-icon-delete"
                             v-auth.user.button="'USER:WRITE'"
                         />
@@ -156,9 +154,10 @@ import SearchLayout from '@sdx/widget/components/search-layout';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';
 import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name:'SdxvUserManage',
-    mixins: [transformFilter],
+    mixins: [transformFilter, locale],
     data () {
         return {
             id:'',
@@ -222,12 +221,12 @@ export default {
         //删除
         handleDeleteUser(user) {
             MessageBox.confirm({
-                title: `确定要删除 ${user.fullName} 吗`,
-                content: '用户确定删除后不可恢复哦',
+                title: `${this.t('view.userManage.ConfirmToDelete')}${user.fullName}${this.t('view.userManage.ConfirmHelper')}`,
+                content: this.t('view.file.CantRecoveryAfterDel'),
             }).then(() => {
                 deleteUser(user.uuid).then(() => {
                     this.$message({
-                        message: '删除成功',
+                        message: this.t('view.userManage.DeleteSuccess'),
                         type: 'success'
                     });
                     if (this.tableData.length === 1) {

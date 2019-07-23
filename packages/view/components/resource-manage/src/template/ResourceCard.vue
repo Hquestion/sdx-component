@@ -16,27 +16,31 @@
                 <div class="cate-type">
                     {{ cate }}
                 </div>
-                <div class="cate-count">
+                <div class="cate-count" :title="`${count[index]}${unit[index]}`">
                     <span>{{ count[index] }}</span>{{ unit[index] }}
                 </div>
             </div>
         </div>
-        <IconButton
-            class="delete"
-            icon="iconfont sdx-icon-delete"
-            @click.stop="handleDelete"
-        />
+        <div v-auth.resource.button="'TEMPLATE:WRITE'">
+            <IconButton
+                class="delete"
+                icon="iconfont sdx-icon-delete"
+                @click.stop="handleDelete"
+            />
+        </div>
     </div>
 </template>
 
 <script>
 import MessageBox from '@sdx/ui/components/message-box';
 import IconButton from '@sdx/ui/components/icon-button';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'ResourceCard',
     data() {
         return {};
     },
+    mixins: [locale],
     components: {
         IconButton
     },
@@ -59,18 +63,18 @@ export default {
         },
         cates() {
             if (this.isCPU) {
-                return ['CPU', '内存'];
+                return ['CPU', this.t('view.resourceManage.Memory')];
             } else if (this.isGPU) {
-                return ['GPU', '型号'];
+                return ['GPU', this.t('view.resourceManage.Model')];
             } else{
                 return [];
             }
         },
         unit() {
             if (this.isCPU) {
-                return ['核', 'G'];
+                return [this.t('view.resourceManage.Core'), 'G'];
             } else if (this.isGPU) {
-                return ['块', ''];
+                return [this.t('view.resourceManage.Piece'), ''];
             } else {
                 return [];
             }
@@ -79,8 +83,8 @@ export default {
     methods: {
         handleDelete() {
             MessageBox.confirm.error({
-                title: '确定要删除此资源模板吗？',
-                content: '删除后不可恢复哦'
+                title: this.t('view.resourceManage.ConfirmDeleteTemplate'),
+                content: this.t('view.file.CantRecoveryAfterDel')
             }).then(() => {
                 this.$emit('delete');
             });
@@ -127,6 +131,7 @@ export default {
         .detail {
             margin-left: 10px;
             font-size: 13px;
+            width: calc(100% - 46px);
             .cate-group {
                 line-height: 1.5;
                 display: flex;
@@ -134,11 +139,15 @@ export default {
                 align-items: center;
                 .cate-type {
                     color: $sdx-text-regular-color;
+                    white-space: nowrap;
                 }
                 .cate-count {
                     margin-left: 14px;
                     color: $sdx-text-primary-color;
                     font-size: 14px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
         }

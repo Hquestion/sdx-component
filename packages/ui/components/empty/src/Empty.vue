@@ -15,8 +15,10 @@
 </template>
 
 <script>
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxuEmpty',
+    mixins: [locale],
     props: {
         emptyType: {
             type: String,
@@ -39,15 +41,15 @@ export default {
             let [icon, content, res] = ['', '', ''];
             if (emptytype === 'noData') {
                 icon = '#sdx-wushuju';
-                content = '暂无数据哦'; 
+                content = this.t('ui.empty.noData');
             } else if(emptytype === 'noSearchResult'){
                 icon = '#sdx-wusousuojieguo';
-                content = '无搜索结果哦';
+                content = this.t('ui.empty.noSearchResult');
             } else if (emptytype === 'noNetwork') {
                 icon = '#sdx-wuwangluo';
             } else if(emptytype === 'noFound') {
                 icon = '#sdx-icon-test';
-                content = '哎呀！您所在的页面出现错误';
+                content = this.t('ui.empty.ErrorInYourPage');
             } else {
                 icon = `#${emptytype}`;
                 content = emptycontent;

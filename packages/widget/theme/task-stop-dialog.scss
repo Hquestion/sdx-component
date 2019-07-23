@@ -18,11 +18,12 @@
         margin-top: $sdx-margin;
         margin-left: 39px;
         font-size: 14px;
-        .el-checkbox {
-            .el-checkbox__label {
-                color: $sdx-text-regular-color;
-                font-weight: normal;
-            }
+        display: flex;
+        align-items: start;
+        .el-checkbox__label {
+            color: $sdx-text-regular-color;
+            font-weight: normal;
+            white-space: normal;
         }
     }
 }

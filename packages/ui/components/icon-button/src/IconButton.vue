@@ -8,7 +8,8 @@
         ]"
         v-show="visible"
         :title="title"
-        @click.stop="handlerClick"
+        @click="handlerClick"
+        v-loading="loading"
     >
         <i :class="[icon]" />
     </div>
@@ -44,6 +45,10 @@ export default {
         title: {
             type: String,
             default: ''
+        },
+        loading: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {

@@ -1,4 +1,5 @@
 import ResourceManage from './src/Home';
+import { t } from '@sdx/utils/src/locale';
 
 const routeCfg = [
     {
@@ -6,8 +7,9 @@ const routeCfg = [
         name: 'SdxvResourceManage',
         component: ResourceManage,
         meta: {
-            breadcrumb: '资源管理',
-            system: 'manage'
+            breadcrumb: t('view.resourceManage.ResourceManage'),
+            system: 'manage',
+            isRoot: true,
         }
     }
 ];

@@ -1,6 +1,6 @@
 {
     "name": "@sdx/widget",
-    "version": "1.1.0",
+    "version": "1.1.7",
     "description": "控件级业务组件库",
     "keywords": [
         "widget"
@@ -33,7 +33,7 @@
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "dependencies": {
-        "@sdx/utils": "^1.1.0",
+        "@sdx/utils": "^1.1.7",
         "vue-codemirror-lite": "^1.0.4"
     },
     "peerDependencies": {

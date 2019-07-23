@@ -1,6 +1,6 @@
 import { isString } from './tool';
 import dayjs from 'dayjs';
-
+import { t } from '../locale';
 // 标准时间转换时间距离现在多久
 export function  getDateDiff(dateTimeStamp) {
     let minute = 1000 * 60;
@@ -12,7 +12,7 @@ export function  getDateDiff(dateTimeStamp) {
     let diffValue = now - new Date(dateTimeStamp);
     let result = '';
     // 处理后端给的数据有些许问题
-    if (diffValue < 0) { result = '刚刚'; }
+    if (diffValue < 0) { result = t('utils.transform.just'); }
     let yearC = diffValue / year;
     let monthC = diffValue / month;
     let weekC = diffValue / (7 * day);
@@ -20,18 +20,18 @@ export function  getDateDiff(dateTimeStamp) {
     let hourC = diffValue / hour;
     let minC = diffValue / minute;
     if (yearC >= 1) {
-        result = `${parseInt(yearC)}年前`;
+        result = `${parseInt(yearC)} ${parseInt(yearC) === 1 ? t('utils.transform.year_ago') : t('utils.transform.years_ago')}`;
     } else if (monthC >= 1) {
-        result = `${parseInt(monthC)}月前`;
+        result = `${parseInt(monthC)} ${parseInt(monthC) === 1 ? t('utils.transform.month_ago') : t('utils.transform.months_ago')}`;
     } else if (weekC >= 1) {
-        result = `${parseInt(weekC)}周前`;
+        result = `${parseInt(weekC)} ${parseInt(weekC) === 1 ? t('utils.transform.week_ago') : t('utils.transform.weeks_ago')}`;
     } else if (dayC >= 1) {
-        result = `${parseInt(dayC)}天前`;
+        result = `${parseInt(dayC)} ${parseInt(dayC) === 1 ? t('utils.transform.day_ago') : t('utils.transform.days_ago')}`;
     } else if (hourC >= 1) {
-        result = `${parseInt(hourC)}小时前`;
+        result = `${parseInt(hourC)} ${parseInt(hourC) === 1 ? t('utils.transform.hour_ago') : t('utils.transform.hours_ago')}`;
     } else if (minC >= 1) {
-        result = `${parseInt(minC)}分钟前`;
-    } else { result = '刚刚'; }
+        result = `${parseInt(minC)} ${parseInt(minC) === 1 ? t('utils.transform.minute_ago') : t('utils.transform.minutes_ago')}`;
+    } else { result = t('utils.transform.just'); }
     return result;
 }
 
@@ -65,6 +65,10 @@ export function formatDate(date,fmt){
 
 export function byteToGB(byte) {
     return Math.floor(byte / Math.pow(1024, 3));
+}
+
+export function byteToMB(byte) {
+    return Math.floor(byte / Math.pow(1024, 2));
 }
 
 export function gbToByte(gb) {

@@ -1,7 +1,7 @@
 <template>
     <sdxu-dialog
         :visible.sync="dialogVisible"
-        title="新建GPU模板"
+        :title="t('view.resourceManage.newGpuTemplateTitle')"
         size="small"
         :confirm-handler="handleConfirm"
         @cancel="handleCancel"
@@ -10,11 +10,11 @@
         <el-form
             :model="formData"
             ref="form"
-            label-width="90px"
+            label-width="100px"
             :rules="rules"
         >
             <el-form-item
-                label="GPU型号 :"
+                :label="t('view.resourceManage.GpuLabel')"
                 prop="label"
                 required
             >
@@ -22,13 +22,13 @@
                     <el-option
                         v-for="(item, i) in GPUList"
                         :key="i"
-                        :label="item.label"
-                        :value="item.label"
+                        :label="item"
+                        :value="item"
                     />
                 </el-select>
             </el-form-item>
             <el-form-item
-                label="GPU(块) :"
+                :label="t('view.resourceManage.PieceLabel')"
                 prop="count"
                 required
             >
@@ -44,6 +44,7 @@
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
 import {createResourceTmpl, getGpuModels} from '@sdx/utils/src/api/resource';
+import locale from '@sdx/utils/src/mixins/locale';
 
 import { InputNumber, Form, FormItem, Select } from 'element-ui';
 
@@ -55,6 +56,7 @@ export default {
             default: false
         }
     },
+    mixins: [locale],
     components: {
         SdxuDialog,
         [InputNumber.name]: InputNumber,
@@ -108,7 +110,7 @@ export default {
         },
         validateLabel(rule, value, callback) {
             if (value === '') {
-                callback(new Error('请选择型号'));
+                callback(new Error(this.t('view.resourceManage.PleaseSelectGpuKind')));
             } else {
                 callback();
             }

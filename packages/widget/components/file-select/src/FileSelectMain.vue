@@ -1,13 +1,13 @@
 <template>
     <div class="sdxw-file-select-main">
         <SdxuInput
-            placeholder="请输入文件名"
+            :placeholder="t('view.file.PleaseInputFileName')"
             type="search"
             v-model="key"
         />
         <div class="sdxw-file-select-main__tip">
             <i class="sdx-icon sdx-icon-info" />
-            <span>没有找到？请使用搜索功能</span>
+            <span>{{ t('widget.fileSelect.UseSearchTip') }}</span>
         </div>
         <div class="sdxw-file-select-main__main">
             <SdxuScroll>
@@ -34,14 +34,14 @@
                 type="default"
                 size="small"
             >
-                取消
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="onConfirm"
             >
-                确定
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </div>
@@ -54,8 +54,10 @@ import SdxuScroll from '@sdx/ui/components/scroll';
 import FileSelectTree from './FileSelectTree';
 import FileSelectSearch from './FileSelectSearch';
 import debounce from '@sdx/utils/src/helper/debounce';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxwFileSelectMain',
+    mixins: [locale],
     components: {
         SdxuButton,
         SdxuInput,

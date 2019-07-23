@@ -13,7 +13,7 @@
             :rules="isPublishing ? {} : versionInfoFormRule"
         >
             <el-form-item
-                label="版本名称："
+                :label="t('view.model.createVersionForm.name')"
                 prop="name"
             >
                 <div v-if="isPublishing">
@@ -22,11 +22,11 @@
                 <sdxu-input
                     v-else
                     v-model="versionInfoForm.name"
-                    placeholder="请输入版本名称"
+                    :placeholder="t('view.model.enterName')"
                 />
             </el-form-item>
             <el-form-item
-                label="版本类型："
+                :label="t('view.model.createVersionForm.framework')"
                 prop="framework"
             >
                 <div v-if="isPublishing">
@@ -35,7 +35,7 @@
                 <el-select
                     v-else
                     v-model="versionInfoForm.framework"
-                    placeholder="请选择版本类型"
+                    :placeholder="t('view.model.enterFramework')"
                     @change="frameworkChange"
                     :disabled="!!editingVersion"
                 >
@@ -48,7 +48,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                label="版本描述："
+                :label="t('view.model.createVersionForm.description')"
                 prop="description"
             >
                 <div v-if="isPublishing">
@@ -58,12 +58,12 @@
                     v-else
                     v-model="versionInfoForm.description"
                     type="textarea"
-                    placeholder="请输入版本描述，最多可输入256个字符"
+                    :placeholder="t('view.model.enterDescription')"
                     :rows="3"
                 />
             </el-form-item>
             <el-form-item
-                label="发布环境："
+                :label="t('view.model.createVersionForm.runtimeImage')"
                 prop="runtimeImage"
             >
                 <div v-if="isPublishing">
@@ -72,8 +72,8 @@
                 <el-select
                     v-else
                     v-model="versionInfoForm.runtimeImage"
-                    placeholder="请选择发布环境"
-                    :disabled="!versionInfoForm.framework || !!editingVersion"
+                    :placeholder="t('view.model.enterImage')"
+                    :disabled="!versionInfoForm.framework"
                 >
                     <el-option
                         v-for="(item,index) in runtimeImageOptions"
@@ -84,7 +84,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                label="资源环境："
+                :label="t('view.model.createVersionForm.runtimeResource')"
                 prop="runtimeResource"
             >
                 <ResourceConfig
@@ -101,17 +101,17 @@
                 <ResourceConfig
                     v-model="versionInfoForm.runtimeResource.gpuObj"
                     type="gpu"
-                    v-if="!editingVersion"
+                    v-if="!editingVersion && isGpuEnt"
                 />
                 <ResourceConfig
                     v-model="gpuObj"
                     type="gpu"
-                    v-else
+                    v-if="editingVersion && isGpuEnt"
                     :read-only="isPublishing"
                 />
             </el-form-item>
             <el-form-item
-                label="模型路径："
+                :label="t('view.model.createVersionForm.modelPath')"
                 prop="modelPath"
             >
                 <div v-if="isPublishing">
@@ -121,8 +121,6 @@
                     v-else
                     v-model="versionInfoForm.modelPath"
                     source="ceph"
-                    check-type="folder"
-                    :disabled="!!editingVersion"
                     string-model
                 />
             </el-form-item>
@@ -135,14 +133,14 @@
                 size="small"
                 @click="cancel"
             >
-                取消
+                {{ t('sdxCommon.Cancel') }}
             </SdxuButton>
             <SdxuButton
                 type="primary"
                 size="small"
                 @click="confirm"
             >
-                确认
+                {{ t('sdxCommon.Confirm') }}
             </SdxuButton>
         </div>
     </sdxu-dialog>
@@ -160,12 +158,14 @@ import FileSelect from '@sdx/widget/components/file-select';
 import ResourceConfig from '../../../project-management/src/forms/ResourceConfig';
 import { getFrameworks, createVersion, updateVersion, startVersion } from '@sdx/utils/src/api/model';
 import { getImageList } from '@sdx/utils/src/api/image';
+import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'CreateVersion',
     data() {
         return {
             dialogVisible: this.visible,
-            title: '新增模型版本',
+            title: this.t('view.model.createVersion'),
             frameworks: [],
             versionInfoForm: {
                 name: '',
@@ -183,27 +183,27 @@ export default {
             runtimeImageOptions: [],
             versionInfoFormRule: {
                 name: [
-                    { required: true, message: '请输入版本名称', trigger: 'blur' },
-                ],
-                framework: [
-                    { required: true, message: '请选择版本类型', trigger: 'change' },
-                ],
-                runtimeImage: [
-                    { required: true, message: '请选择发布环境', trigger: 'change' },
-                ],
-                runtimeResource: [
-                    { required: true, message: '请选择资源环境', trigger: 'change' },
-                    { validator: this.validateResource, trigger: 'change' }
-                ],
-                modelPath: [
-                    { required: true, message: '请选择模型路径', trigger: 'blur' },
+                    { required: true, message: this.t('view.model.enterName'), trigger: 'blur' },
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 description: [
                     {
-                        max: 256,
-                        message: '最多输入256个字符',
-                        trigger: 'change'
+                        validator: descValidator,
+                        trigger: 'blur'
                     }
+                ],
+                framework: [
+                    { required: true, message: this.t('view.model.enterFramework'), trigger: 'change' },
+                ],
+                runtimeImage: [
+                    { required: true, message: this.t('view.model.enterImage'), trigger: 'change' },
+                ],
+                runtimeResource: [
+                    { required: true, message: this.t('view.model.enterResource'), trigger: 'change' },
+                    { validator: this.validateResource, trigger: 'change' }
+                ],
+                modelPath: [
+                    { required: true, message: this.t('view.model.enterModelPath'), trigger: 'blur' },
                 ]
             },
             needRefresh: false
@@ -223,9 +223,17 @@ export default {
             default: false
         }
     },
+    mixins: [locale],
     watch: {
         visible (nVal) {
             this.dialogVisible = nVal;
+        }
+    },
+    computed: {
+        isGpuEnt() {
+            if (!this.runtimeImageOptions.length) return false;
+            let item = this.runtimeImageOptions.find(item => item.value === this.versionInfoForm.runtimeImage);
+            return item && item.label.includes('gpu');
         }
     },
     components: {
@@ -243,7 +251,7 @@ export default {
             this.frameworks = res;
         });
         if (this.editingVersion) {
-            this.title = this.isPublishing ? '发布版本' : '编辑版本';
+            this.title = this.isPublishing ? this.t('view.model.publishVersion') : this.t('view.model.editVersion');
             this.frameworkChange(this.editingVersion.framework);
             Object.assign(this.versionInfoForm, this.editingVersion);
             const cpu = this.versionInfoForm.runtimeResource.cpu / 1000;
@@ -268,8 +276,8 @@ export default {
                 callback();
                 return;
             }
-            if (value && (!Object.keys(value.cpuObj).length || !Object.keys(value.gpuObj).length)) {
-                callback(new Error('请选择资源环境'));
+            if (value && (!Object.keys(value.cpuObj).length || (this.isGpuEnt && !Object.keys(value.gpuObj).length))) {
+                callback(new Error(this.t('view.model.enterResource')));
             } else {
                 callback();
             }
@@ -301,12 +309,12 @@ export default {
         confirm() {
             this.$refs.versionInfoForm.validate(valid => {
                 if (!valid) {
-                    Message.error('请输入必填信息');
+                    Message.error(this.t('sdxCommon.requiredInfo'));
                 } else {
                     if (this.isPublishing) {
                         startVersion(this.$route.params.modelId, this.editingVersion.uuid).then(() => {
                             Message({
-                                message: '操作成功',
+                                message: this.t('sdxCommon.OperationSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;
@@ -321,7 +329,7 @@ export default {
                         this.versionInfoForm.runtimeResource.gpuModel = this.gpuObj.label;
                         updateVersion(this.$route.params.modelId, this.editingVersion.uuid, this.versionInfoForm).then(() => {
                             Message({
-                                message: '更新成功',
+                                message: this.t('sdxCommon.UpdateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;
@@ -330,11 +338,13 @@ export default {
                     } else {
                         this.versionInfoForm.runtimeResource.cpu = this.versionInfoForm.runtimeResource.cpuObj.cpu * 1000;
                         this.versionInfoForm.runtimeResource.memory = this.versionInfoForm.runtimeResource.cpuObj.memory * 1024 * 1024 * 1024;
-                        this.versionInfoForm.runtimeResource.gpu = this.versionInfoForm.runtimeResource.gpuObj.count;
-                        this.versionInfoForm.runtimeResource.gpuModel = this.versionInfoForm.runtimeResource.gpuObj.label;
+                        if (this.isGpuEnt) {
+                            this.versionInfoForm.runtimeResource.gpu = this.versionInfoForm.runtimeResource.gpuObj.count;
+                            this.versionInfoForm.runtimeResource.gpuModel = this.versionInfoForm.runtimeResource.gpuObj.label;
+                        }
                         createVersion(this.$route.params.modelId, this.versionInfoForm).then(() => {
                             Message({
-                                message: '创建成功',
+                                message: this.t('sdxCommon.CreateSuccess'),
                                 type: 'success'
                             });
                             this.needRefresh = true;

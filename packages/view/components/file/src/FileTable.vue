@@ -8,7 +8,7 @@
                 v-model="checked"
                 :indeterminate="isIndeterminate"
             >
-                已选中{{ fileManager.checked.length }}个文件/文件夹
+                {{ t('view.file.AlreadyChecked') }}{{ fileManager.checked.length }}{{ t('view.file.FileOrFolder') }}
             </el-checkbox>
         </div>
         <SdxuTable
@@ -34,7 +34,7 @@
                 v-show="!fileManager.isProjectRoot()"
             />
             <el-table-column
-                label="文件名"
+                :label="t('view.file.FileName')"
                 :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="name"
                 :sort-orders="['ascending', 'descending']"
@@ -51,7 +51,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="所在目录"
+                :label="t('view.file.InPath')"
                 :sortable="false"
                 prop="path"
                 width="240"
@@ -67,7 +67,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="文件路径"
+                :label="t('view.file.FilePath')"
                 :sortable="false"
                 prop="path"
                 width="360"
@@ -83,7 +83,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="大小"
+                :label="t('sdxCommon.Size')"
                 :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="size"
                 width="180"
@@ -91,11 +91,12 @@
                 v-if="!fileManager.isProjectRoot() && fileManager.rootKind !== rootKinds.MY_SHARE || fileManager.isSearch"
             >
                 <template #default="{row}">
-                    {{ row.size | byteFormatter }}
+                    <span v-if="row.size && row.size > 0">{{ row.size | byteFormatter }}</span>
+                    <span v-else>-</span>
                 </template>
             </el-table-column>
             <el-table-column
-                label="用户名"
+                :label="t('view.file.UserName')"
                 :sortable="false"
                 prop="size"
                 width="180"
@@ -106,7 +107,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                :label="fileManager.rootKind === rootKinds.ACCEPTED_SHARE ? '共享时间': '更新时间'"
+                :label="fileManager.rootKind === rootKinds.ACCEPTED_SHARE ? t('view.file.SharedAt'): t('view.file.UpdatedAt')"
                 :sortable="fileManager.isSearch ? true: 'custom'"
                 prop="updatedAt"
                 width="240"
@@ -118,7 +119,7 @@
                 </template>
             </el-table-column>
             <el-table-column
-                label="操作"
+                :label="t('sdxCommon.Operation')"
                 width="180"
                 v-if="!fileManager.isProjectRoot()"
             >
@@ -129,6 +130,7 @@
                             :icon="item.icon"
                             :title="item.title"
                             :key="index"
+                            :loading="mapLoadingStatus(item, row)"
                             @click="handleFileAction(row, item)"
                         />
                     </SdxuIconButtonGroup>
@@ -164,6 +166,7 @@ import SdxwShareSetting from '@sdx/widget/components/share-setting';
 
 import { lock, unlock } from '@sdx/utils/src/lockScroll';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+import locale from '@sdx/utils/src/mixins/locale';
 
 import dayjs from 'dayjs';
 
@@ -186,7 +189,7 @@ export default {
             fileTable: this
         };
     },
-    mixins: [Loadmore, checkMixin, OperationHandlerMixin, transformFilter],
+    mixins: [Loadmore, checkMixin, OperationHandlerMixin, transformFilter, locale],
     components: {
         FileName,
         SdxwShareSetting,
@@ -201,7 +204,7 @@ export default {
             topCount: 0,
             containerCount: 0,
             editingRow: null,
-            tempRowName: '新建文件夹',
+            tempRowName: this.t('view.file.NewFolder'),
             rootKinds
         };
     },
@@ -220,13 +223,13 @@ export default {
         mkdir(row) {
             if (this.editingRow) {
                 MessageBox.alert.warning({
-                    title: '请先完成新建或重命名'
+                    title: this.t('view.file.PleaseFinishRenameOrMkdir')
                 });
                 return;
             }
             const emptyRow = {
                 ownerId: '',
-                name: '新建文件夹',
+                name: this.t('view.file.NewFolder'),
                 path: '',
                 filesystem: 'cephfs',
                 isFile: false,

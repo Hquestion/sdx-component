@@ -1,11 +1,13 @@
+import {t} from '../locale';
+
 /**
  * 镜像相关常量定义
  */
 
 // 源类型
 export const SOURCE_TYPE = {
-    PIP: 'PIP',
-    CONDA: 'CONDA'
+    PIP: 'pip',
+    CONDA: 'conda'
 };
 
 // 镜像类型
@@ -36,6 +38,15 @@ export const BUILD_TYPE = {
     TAR: 'TAR',                     //基于tar构建
     DOCKERFILE: 'DOCKERFILE',       //基于DockerFile构建
     TASK: 'TASK'                    //任务转存
+};
+
+// 构建类型 - 文字
+export const BUILD_TYPE_LABEL = {
+    BASIC: t('view.image.BuildTypes.Basic'),
+    ONLINE: t('view.image.BuildTypes.Online'),
+    TAR: t('view.image.BuildTypes.Tar'),
+    DOCKERFILE: t('view.image.BuildTypes.Dockerfile'),
+    TASK: t('view.image.BuildTypes.Task')
 };
 
 // 源地址类型

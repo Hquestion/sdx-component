@@ -377,6 +377,17 @@ export function resumeExecuteRecord(execute_id) {
 }
 
 /**
+ * 获取执行列表运行状态
+ *
+ * @param {Array} executions [execute_id, execute_id...]
+ */
+export function getExecuteListState(executions) {
+    return httpService.post(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/execute/state', {
+        executions
+    });
+}
+
+/**
  * 保存执行记录model_json
  * @param {Object} params {execute_id: '', model_json: ''}
  */

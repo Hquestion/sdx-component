@@ -4,13 +4,15 @@
 
 <script>
 import echarts from 'echarts';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvChartGPU',
+    mixins: [locale],
     props: {
         allocations: {
-            type: Array,
-            default: () => []
+            type: Object,
+            default: () => ({})
         },
         used: {
             type: Object,
@@ -24,26 +26,29 @@ export default {
         };
     },
     computed: {
+        gpuModelKeys() {
+            return Object.keys(this.allocations);
+        },
         allocationList() {
-            return this.allocations.map(item => {
+            return this.gpuModelKeys.map(item => {
                 return {
-                    name: item.label,
-                    value: item.count
+                    name: item,
+                    value: this.allocations[item]
                 };
             });
         },
         usedList() {
             const list = [];
-            this.allocations.map((item, i) => {
-                let value = this.used[item.label] || 0;
+            this.gpuModelKeys.map((item, i) => {
+                let value = this.used[item] || 0;
                 list.push({
-                    name: '已使用',
+                    name: this.t('view.monitor.resourceStatistic.Used'),
                     value: value,
                     itemStyle: { color: this.color[i] }
                 });
                 list.push({
-                    name: '未使用',
-                    value: item.count - value,
+                    name: this.t('view.monitor.resourceStatistic.Unused'),
+                    value: this.allocations[item] - value,
                     itemStyle: { color: this.color[i], opacity: 0.5 }
                 });
             });
@@ -56,7 +61,7 @@ export default {
             this.chartInstance = echarts.init(this.$el);
             this.chartInstance.setOption({
                 tooltip: {
-                    formatter: '{a} {b} <br/>{c}核 {d}%'
+                    formatter: `{a} {b} <br/>{c}${this.t('view.monitor.resourceStatistic.Core')} {d}%`
                 },
                 series: [{
                     name: 'GPU',
@@ -69,7 +74,7 @@ export default {
                     color: this.color,
                     data: this.allocationList
                 }, {
-                    name: '使用情况',
+                    name: this.t('view.monitor.resourceStatistic.Usage'),
                     type: 'pie',
                     hoverAnimation: false,
                     radius: ['88%', '100%'],
@@ -85,8 +90,11 @@ export default {
         this.initChart();
     },
     watch: {
-        allocations() {
-            this.initChart();
+        allocations: {
+            deep: true, 
+            handler() {
+                this.initChart();
+            }
         },
         used() {
             this.initChart();

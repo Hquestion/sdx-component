@@ -2,16 +2,17 @@
     <SdxuDialog
         class="sdxv-folder-select"
         :visible.sync="_visible"
-        title="复制/移动"
+        :title="t('view.file.MoveOrCopy')"
         @close="$emit('cancel')"
     >
-        <span slot="title">复制/移动</span>
+        <span slot="title">{{ t('view.file.MoveOrCopy') }}</span>
         <div style="height: 50vh">
             <SdxuScroll>
                 <SdxwFileSelectTree
                     ref="fileSelectTree"
                     :checkable="false"
                     check-type="folder"
+                    :project-enable="true"
                     :tree-options="{expandOnClickNode: false}"
                     @tree-shake="handleTreeShake"
                     @current-change="handleCurrentChange"
@@ -28,16 +29,17 @@
                 @click="newFolder"
                 :disabled="!newable"
             >
-                新建文件夹
+                {{ $t('view.file.NewFolder') }}
             </SdxuButton>
             <SdxuButton
                 @click="$emit('move', currentNode().node.data)"
                 v-if="supportMove"
+                :disabled="!isFolderLegal"
             >
-                移动
+                {{ $t('view.file.Move') }}
             </SdxuButton>
-            <SdxuButton @click="$emit('copy', currentNode().node.data)">
-                复制
+            <SdxuButton @click="$emit('copy', currentNode().node.data)" :disabled="!isFolderLegal">
+                {{ $t('view.file.Copy') }}
             </SdxuButton>
         </template>
     </SdxuDialog>
@@ -48,14 +50,17 @@ import SdxwFileSelect from '@sdx/widget/components/file-select';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuButton from '@sdx/ui/components/button';
 import { mkdir } from '@sdx/utils/src/api/file';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvFolderSelect',
     data() {
         return {
-            newable: false
+            newable: false,
+            isFolderLegal: false
         };
     },
+    mixins: [locale],
     components: {
         SdxuButton,
         SdxuDialog,
@@ -86,22 +91,37 @@ export default {
             let node = this.$refs.fileSelectTree.$refs.fileTree.currentNode;
             this.$refs.fileSelectTree.$refs.fileTree.append({
                 path: '',
-                name: '新建文件夹',
+                name: this.t('view.file.NewFolder'),
                 isFile: false,
                 parentPath: this.currentNode().node.data.path
             }, node.node);
         },
         currentNode() {
-            return this.$refs.fileSelectTree && this.$refs.fileSelectTree.$refs.fileTree && this.$refs.fileSelectTree.$refs.fileTree.currentNode;
+            let node = this.$refs.fileSelectTree && this.$refs.fileSelectTree.$refs.fileTree && this.$refs.fileSelectTree.$refs.fileTree.currentNode;
+            if (node) {
+                let rootNode = this.$refs.fileSelectTree.getRootNode(node.node);
+                if (rootNode.data.isProjectFiles) {
+                    if (node.node.level === 2) {
+                        node.node.data.path = '/';
+                    }
+                }
+            }
+            return node;
         },
         isCurrentNodeExpand() {
             return this.currentNode() && this.currentNode().expanded;
         },
         handleTreeShake() {
-            this.newable = !this.isCurrentNodeExpand();
+            this.newable = this.isCurrentNodeExpand();
         },
         handleCurrentChange() {
-            this.newable = this.isCurrentNodeExpand();
+            // 触发change事件的时候，currentNode还没有刷新，这时取currentNode会取到之前的，所以这里在$nextTick之后再来取
+            this.$nextTick(() => {
+                this.newable = this.isCurrentNodeExpand();
+                const node = this.currentNode();
+                if(!node) return false;
+                this.isFolderLegal = !node.node.data.selectDisable;
+            });
         },
         handleCancel() {
             this.$refs.fileSelectTree.$refs.fileTree.remove({path: ''});

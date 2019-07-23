@@ -7,24 +7,24 @@
             ref="shareSettingForm"
         >
             <el-form-item
-                label="共享至全局："
+                :label="t('widget.shareForm.ShareToGlobal')"
                 v-auth.button="authMap[sourceKind]"
             >
                 <el-radio-group v-model="shareForm.shareType">
                     <el-radio
                         label="PUBLIC"
                     >
-                        是
+                        {{ t('widget.shareForm.Yes') }}
                     </el-radio>
                     <el-radio
                         label="PRIVATE"
                     >
-                        否
+                        {{ t('widget.shareForm.No') }}
                     </el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item
-                label="用户/用户组："
+                :label="t('widget.shareForm.UserOrGroup')"
                 v-show="shareForm.shareType !== 'PUBLIC'"
             >
                 <sdxw-select-group-user
@@ -42,8 +42,10 @@ import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import ElRadio from 'element-ui/lib/radio';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxwShareForm',
+    mixins: [locale],
     data() {
         return {
             authMap: {

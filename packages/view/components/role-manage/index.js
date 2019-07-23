@@ -1,5 +1,5 @@
 import RoleManage from './src/Index';
-
+import { t } from '@sdx/utils/src/locale';
 // 路由配置
 
 const routeCfg = [
@@ -8,8 +8,9 @@ const routeCfg = [
         name: 'SdxvRoleManage',
         component: RoleManage,
         meta: {
-            breadcrumb: '角色',
-            system: 'manage'
+            breadcrumb: t('widget.userInfo.role'),
+            system: 'manage',
+            isRoot: true
         }
     }
 ];

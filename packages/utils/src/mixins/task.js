@@ -4,6 +4,7 @@ import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
 import { getUser } from '../helper/shareCenter';
+import { t } from '../locale';
 
 export default {
     data() {
@@ -63,10 +64,11 @@ export default {
                 this.fetchDataMinxin && this.fetchDataMinxin();
             } catch (e) {
                 // cancel
-                // todo:
+                window.console.error(e);
             }
         },
         async handleKill(row) {
+            let that = this;
             let isSaveImage = false;
             try {
                 // 任务类型为jupyter或container_dev且状态为运行中则弹出框
@@ -78,7 +80,7 @@ export default {
                     });
                 } else {
                     await SdxuMessageBox.warning({
-                        title: '确定要终止选中的任务吗？',
+                        title: t.call(that, 'view.task.stopTask'),
                         content: ''
                     });
                 }
@@ -87,21 +89,27 @@ export default {
                 this.fetchDataMinxin && this.fetchDataMinxin();
             } catch(e) {
                 // cancel
-                // todo:
             }
         },
         handleDetail(row) {
-            // todo:
-            this.$router.push(`/sdxv-project-manage/taskInfo/${row.type}/${row.uuid}`);
+            if (this.$$handleDetail) {
+                this.$$handleDetail(row);
+            } else {
+                this.$router.push(`/sdxv-task-management/sdxv-task-detail/${row.uuid}`);
+            }
         },
         handleEdit(row) {
-            // todo:
-            this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.project.uuid}`);
+            if (this.$$handleEdit) {
+                this.$$handleEdit(row);
+            } else {
+                this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.project.uuid}`);
+            }
         },
         async handleDelete(row) {
+            let that = this;
             try {
                 await SdxuMessageBox.warning({
-                    title: '此操作将会永久删除该任务，是否继续？',
+                    title: t.call(that, 'view.task.deleteTask'),
                     content: ''
                 });
 
@@ -110,7 +118,7 @@ export default {
                 });
             } catch (e) {
                 // cancel
-                // todo:
+                window.console.error(e);
             }
         }
     }

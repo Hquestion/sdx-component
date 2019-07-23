@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-skyflow">
         <div class="sdxv-skyflow__header">
-            工作流列表
+            {{ t('view.skyflow.skyflowList') }}
         </div>
         <div class="sdxv-skyflow__tool">
             <div class="sdxv-skyflow__tool--left">
@@ -12,7 +12,7 @@
                     style="margin-right: 10px;"
                     v-auth.skyflow.button="'FLOW:CREATE'"
                 >
-                    新建工作流
+                    {{ t('view.skyflow.createWorkflow') }}
                     <template slot="dropdown">
                         <SdxuButton
                             type="text"
@@ -20,7 +20,7 @@
                             block
                             @click="showCreateWorkflow('empty')"
                         >
-                            空白创建
+                            {{ t('view.project.emptyCreate') }}
                         </SdxuButton>
                         <SdxuButton
                             type="text"
@@ -28,7 +28,7 @@
                             block
                             @click="showCreateWorkflow('template')"
                         >
-                            模板创建
+                            {{ t('view.project.templateCreate') }}
                         </SdxuButton>
                         <SdxuButton
                             type="text"
@@ -36,12 +36,12 @@
                             block
                             @click="showCreateWorkflow('workflow')"
                         >
-                            复制创建
+                            {{ t('view.project.copyCreate') }}
                         </SdxuButton>
                     </template>
                 </sdxu-button>
                 <SdxuSortButton
-                    title="按创建时间排序"
+                    :title="t('view.project.sortByCreateTime')"
                     @sortChange="sortChange"
                     :order.sync="order"
                 />
@@ -57,7 +57,7 @@
                             v-model="searchName"
                             type="search"
                             size="small"
-                            placeholder="请输入工作流名称"
+                            :placeholder="t('view.skyflow.enterSkyflowName')"
                         />
                     </SdxwSearchItem>
                 </SdxwSearchLayout>
@@ -65,7 +65,7 @@
         </div>
         <sdxu-content-panel
             style="margin-bottom: 30px;"
-            title="模板"
+            :title="t('view.skyflow.template')"
             v-loading="templatesLoading"
             v-auth.skyflow.button="'TEMPLATE_FLOW:READ'"
         >
@@ -101,7 +101,7 @@
             <SdxuEmpty v-else />
         </sdxu-content-panel>
         <sdxu-content-panel
-            title="私有与共享"
+            :title="t('view.skyflow.privateAndShare')"
             v-auth.skyflow.button="'FLOW:READ'"
         >
             <div v-if="workflowList.length || !workflowsLoaded">
@@ -159,6 +159,7 @@ import Scroll from '@sdx/ui/components/scroll';
 import WorkflowCard from './workflow-card/WorkflowCard';
 import WorkflowCardList from './workflow-card/WorkflowCardList';
 import auth from '@sdx/widget/components/auth';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxvSkyflowList',
     data() {
@@ -201,6 +202,7 @@ export default {
     created() {
         this.initList(true);
     },
+    mixins: [locale],
     directives: {
         auth
     },
@@ -249,9 +251,9 @@ export default {
                     this.templateOptions = res.items;
                     if (this.templateOptions && this.templateOptions.length) {
                         if (this.$route.query.templateType === 'traffic' && this.templateOptions.find(item => item.name === '轨道交通模板')) {
-                            this.templateType = '轨道交通模板';
+                            this.templateType = this.t('view.skyflow.trafficTemplate');
                         } else if (this.$route.query.templateType === 'wind' && this.templateOptions.find(item => item.name === '风电模板')) {
-                            this.templateType = '风电模板';
+                            this.templateType = this.t('view.skyflow.windPower');
                         } else {
                             this.templateType = this.templateOptions[0].name;
                         }
@@ -290,12 +292,12 @@ export default {
                 switch(operation.type) {
                 case 'delete':
                     MessageBox({
-                        title: '确定要删除该工作流吗？',
-                        content: '删除后将不可恢复'
+                        title: this.t('view.skyflow.removeWorkflowConfirm'),
+                        content: this.t('sdxCommon.ConfirmRemove')
                     }).then(() => {
                         removeWorkflow(operation.id).then(() => {
                             Message({
-                                message: '删除成功',
+                                message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'
                             });
                             this.initList(true);

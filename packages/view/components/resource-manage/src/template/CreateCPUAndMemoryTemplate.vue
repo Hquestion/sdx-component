@@ -1,7 +1,7 @@
 <template>
     <sdxu-dialog
         :visible.sync="dialogVisible"
-        title="新建CPU / 内存模板"
+        :title="t('view.resourceManage.newCpuTemplateTitle')"
         size="small"
         @confirm="handleConfirm"
         @cancel="handleCancel"
@@ -10,10 +10,10 @@
         <el-form
             :model="formData"
             ref="form"
-            label-width="90px"
+            label-width="100px"
         >
             <el-form-item
-                label="CPU(核) :"
+                :label="t('view.resourceManage.CpuLabel')"
                 prop="cpu"
                 required
             >
@@ -23,7 +23,7 @@
                 />
             </el-form-item>
             <el-form-item
-                label="内存(GB) :"
+                :label="t('view.resourceManage.MemoryLabel')"
                 prop="memory"
                 required
             >
@@ -40,6 +40,7 @@
 import SdxuDialog from '@sdx/ui/components/dialog';
 import { createResourceTmpl } from '@sdx/utils/src/api/resource';
 import { gbToByte, toMilli } from '@sdx/utils/src/helper/transform';
+import locale from '@sdx/utils/src/mixins/locale';
 
 import InputNumber from 'element-ui/lib/input-number';
 import FormItem from 'element-ui/lib/form-item';
@@ -53,6 +54,7 @@ export default {
             default: false
         }
     },
+    mixins: [locale],
     components: {
         SdxuDialog,
         [InputNumber.name]: InputNumber,

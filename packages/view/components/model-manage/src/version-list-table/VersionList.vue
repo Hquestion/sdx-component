@@ -253,7 +253,7 @@ export default {
                     item.showShutdown = this.isModelOwner && (item.state === 'RUNNING' || item.state === 'LAUNCHING');
                     item.showEdit = this.isModelOwner && (item.state === 'CREATED' || item.state === 'FAILED' || item.state === 'KILLED');
                     item.showRemove = this.isModelOwner && (item.state === 'CREATED' || item.state === 'FAILED' || item.state === 'KILLED');
-                    item.showTest = this.isModelOwner && item.state === 'RUNNING' && item.framework === 'TENSORFLOW';
+                    item.showTest = this.isModelOwner && item.state === 'RUNNING';
                     item.label = {};
                     switch(item.state) {
                     case 'CREATED':

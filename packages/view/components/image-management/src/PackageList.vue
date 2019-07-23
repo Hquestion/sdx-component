@@ -45,7 +45,11 @@
                 <el-table-column
                     prop="sourceType"
                     :label="t('view.image.SourceType')"
-                />
+                >
+                    <template #default="{ row }">
+                        {{ SOURCE_TYPE[row.sourceType] }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="version"
                     :label="t('view.image.Version')"
@@ -127,9 +131,9 @@ export default {
         }
     },
     data() {
-        const sourceTypeList = Object.values(SOURCE_TYPE).map(item => {
+        const sourceTypeList = Object.keys(SOURCE_TYPE).map(item => {
             return {
-                label: item,
+                label: SOURCE_TYPE[item],
                 value: item
             };
         });
@@ -137,6 +141,7 @@ export default {
             label: this.t('sdxCommon.ALL'),
             value: ''
         });
+        this.SOURCE_TYPE = SOURCE_TYPE;
         this.VERSION_TYPE = VERSION_TYPE;
         this.SOURCE_URL_TYPE = SOURCE_URL_TYPE;
         return {

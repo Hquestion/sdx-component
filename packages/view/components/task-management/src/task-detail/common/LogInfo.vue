@@ -4,7 +4,6 @@
         class="sdxv-log-info"
     >
         <template
-            v-if="method === 'tail'"
             #right
         >
             <div class="sdxv-log-info__switch">

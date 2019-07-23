@@ -155,7 +155,7 @@ import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
 import ElSelect from 'element-ui/lib/select';
 import FileSelect from '@sdx/widget/components/file-select';
-import ResourceConfig from '../../../project-management/src/forms/ResourceConfig';
+import ResourceConfig from '@sdx/widget/components/resource-config';
 import { getFrameworks, createVersion, updateVersion, startVersion } from '@sdx/utils/src/api/model';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';

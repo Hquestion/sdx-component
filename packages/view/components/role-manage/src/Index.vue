@@ -8,6 +8,21 @@
                     class="sdxv-role-manage__header"
                 >
                     <div class="sdxv-role-manage__handle">
+                        <SdxwSearchLayout
+                            @search="searchName"
+                            :block="false"
+                            align="right"
+                        >
+                            <SdxwSearchItem>
+                                <SdxuInput
+                                    v-model="searchRoles.name"
+                                    type="search"
+                                    size="small"
+                                    :searchable="false"
+                                    :placeholder="t('view.authorizeManage.please_enter_the_role_name')"
+                                />
+                            </SdxwSearchItem>
+                        </SdxwSearchLayout>
                         <SdxuButton
                             type="primary"
                             size="small"
@@ -20,22 +35,6 @@
                             />
                             {{ t('view.authorizeManage.new_roles') }}
                         </sdxubutton>
-                        <SdxwSearchLayout
-                            @search="searchName"
-                            :block="false"
-                            align="right"
-                            style="flex: 1"
-                        >
-                            <SdxwSearchItem>
-                                <SdxuInput
-                                    v-model="searchRoles.name"
-                                    type="search"
-                                    size="small"
-                                    :searchable="false"
-                                    :placeholder="t('view.authorizeManage.please_enter_the_role_name')"
-                                />
-                            </SdxwSearchItem>
-                        </SdxwSearchLayout>
                     </div>
                 </div>
                 <div

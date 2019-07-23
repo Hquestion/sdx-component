@@ -73,7 +73,7 @@
                     v-else
                     v-model="versionInfoForm.runtimeImage"
                     :placeholder="t('view.model.enterImage')"
-                    :disabled="!versionInfoForm.framework || !!editingVersion"
+                    :disabled="!versionInfoForm.framework"
                 >
                     <el-option
                         v-for="(item,index) in runtimeImageOptions"
@@ -121,7 +121,6 @@
                     v-else
                     v-model="versionInfoForm.modelPath"
                     source="ceph"
-                    :disabled="!!editingVersion"
                     string-model
                 />
             </el-form-item>

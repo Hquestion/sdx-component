@@ -176,6 +176,7 @@ export default {
             Block: '块',
             Count: '个',
             TaskDetail: '任务详情',
+            TaskListTips: '单个GPU任务运行时长超过6小时，单个非GPU任务运行时长超过7天将将会被系统自动终止，如有特殊资源需求，请联系管理员。',
 
             type: {
                 SPARK: 'SPARK',

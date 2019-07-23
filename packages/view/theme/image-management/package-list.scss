@@ -47,12 +47,27 @@
 
 @include block('package-upgrade-dialog', $bem-namespace-view) {
     @include element('form') {
+        margin-left: 40px;
+
         @include modifier('item') {
             display: flex;
             align-items: center;
             .sdxu-input {
                 width: 300px;
             }
+        }
+    }
+}
+
+@include block('build-log', $bem-namespace-view) {
+    @include element('switch') {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: $sdx-margin;
+
+        & > span {
+            margin-right: 10px;
         }
     }
 }

@@ -40,6 +40,13 @@
                 </el-select>
             </SdxwSearchItem>
         </SdxwSearchLayout>
+        <div
+            v-if="!monitor"
+            class="sdxw-task-resource-list__tips"
+        >
+            <i class="sdx-icon sdx-icon-info" />
+            <span>{{ t('view.task.TaskListTips') }}</span>
+        </div>
         <SdxuTable
             class="sdxw-task-resource-list__table"
             :data="taskResourceList"

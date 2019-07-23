@@ -29,6 +29,21 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         align-items: center;
         justify-content: space-between;
         margin-bottom: 10px;
+        @include modifier('indicator') {
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            right: -6px;
+            top: -6px;
+            border: 1px solid rgba(255,94,94,1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:rgba(255,94,94,1);
+            color: white;
+            font-size: 12px;
+        }
     }
     @include element('nav-menu') {
         margin-bottom: 10px;

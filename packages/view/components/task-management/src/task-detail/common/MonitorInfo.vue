@@ -132,7 +132,7 @@ const CHART_DEFAULT_OPTION = {
     series: [] // 需要自己设置
 };
 
-const POLLING_PERIOD = 3 * 1000;
+const POLLING_PERIOD = 15 * 1000;
 
 export default {
     name: 'SdxvMonitorInfo',
@@ -169,11 +169,6 @@ export default {
             statList: [],
             pollingId: null
         };
-    },
-    computed: {
-        needPolling() {
-            return this.polling && !!this.statList.length;
-        }
     },
     methods: {
         /** 获图表数据 */
@@ -356,11 +351,14 @@ export default {
         currentPod() {
             this.fetchData();
         },
-        polling(nval) {
-            if (nval) {
-                this.startPolling();
-            } else {
-                this.stopPolling();
+        polling: {
+            immediate: true,
+            handler: function(nval) {
+                if (nval) {
+                    this.startPolling();
+                } else {
+                    this.stopPolling();
+                }
             }
         }
     }

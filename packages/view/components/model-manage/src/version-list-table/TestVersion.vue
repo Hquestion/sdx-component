@@ -160,13 +160,22 @@ export default {
             this.$emit('close');
         },
         test() {
-            httpService.post(this.version.restApi, this.testForm, {
+            httpService.post(this.version.restApi, {inputs: this.processJson(this.testForm.inputs)}, {
                 headers: {
                     token: this.token
                 }
             }).then(res => {
-                this.outputs = res.outputs;
+                this.outputs = JSON.stringify(res);
             });
+        },
+        processJson(str) {
+            let ret = '';
+            try {
+                ret = JSON.parse(str);
+            } catch (e) {
+                ret = str;
+            }
+            return ret;
         }
     }
 };

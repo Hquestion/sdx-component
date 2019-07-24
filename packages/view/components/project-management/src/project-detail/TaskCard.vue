@@ -26,6 +26,38 @@
                 <i class="sdx-icon sdx-icon-time" />
                 <span>{{ meta.createdAt | dateFormatter }}</span>
             </div>
+            <div
+                class="sdxv-task-card__link"
+            >
+                <span
+                    v-if="showContainerDevLink"
+                    class="sdxv-task-card__link--container"
+                    @click="handleExternalLink(meta)"
+                >
+                    ContainerDev
+                </span>
+                <span
+                    v-if="showTensorflowLink"
+                    class="sdxv-task-card__link--tensorflow"
+                    @click="handleExternalLink(meta)"
+                >
+                    Tensorboard
+                </span>
+                <span
+                    v-if="showJupyterLink"
+                    class="sdxv-task-card__link--jupyter"
+                    @click="handleExternalLink(meta, 'lab?')"
+                >
+                    Jupyter lab
+                </span>
+                <span
+                    v-if="showJupyterLink"
+                    class="sdxv-task-card__link--jupyter"
+                    @click="handleExternalLink(meta, 'tree?')"
+                >
+                    Jupyter notebook
+                </span>
+            </div>
         </main>
         <footer class="sdxv-task-card__footer">
             <div
@@ -92,6 +124,15 @@ export default {
     },
     mixins: [Filters, TaskOperations, locale],
     computed: {
+        showContainerDevLink() {
+            return this.meta.type === 'CONTAINERDEV' && this.meta.state === 'RUNNING' && this.meta.externalUrl;
+        },
+        showTensorflowLink() {
+            return this.meta.type === 'TENSORBOARD' && this.meta.state === 'RUNNING' && this.meta.externalUrl;
+        },
+        showJupyterLink() {
+            return this.meta.type === 'JUPYTER' && this.meta.state === 'RUNNING' && this.meta.externalUrl;
+        },
         operations() {
             const operationList = this.getOperationList(this.meta);
             let operations = [];
@@ -169,7 +210,9 @@ export default {
         }
     },
     methods: {
-
+        handleExternalLink(meta, param) {
+            window.open(`${meta.externalUrl}/` + (param ? `${param}` : ''));
+        }
     }
 };
 </script>

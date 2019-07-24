@@ -1,7 +1,7 @@
 <template>
     <el-pagination
         background
-        layout="prev, pager, next"
+        layout="total, prev, pager, next"
         :total="total"
         :current-page.sync="current"
         :page-size="pageSize"

@@ -18,5 +18,6 @@ module.exports = {
     'code-editor': './components/code-editor/index.js',
     'resource-config': './components/resource-config/index.js',
     'auth': './components/auth/index.js',
-    'share-form': './components/share-form/index.js'
+    'share-form': './components/share-form/index.js',
+    'task-running-limit': './components/task-running-limit/index.js'
 };

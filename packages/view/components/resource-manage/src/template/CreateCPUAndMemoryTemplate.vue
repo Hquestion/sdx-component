@@ -20,6 +20,7 @@
                 <el-input-number
                     v-model="formData.cpu"
                     :min="1"
+                    :max="maxCpu"
                 />
             </el-form-item>
             <el-form-item
@@ -30,6 +31,7 @@
                 <el-input-number
                     v-model="formData.memory"
                     :min="1"
+                    :max="maxMemory"
                 />
             </el-form-item>
         </el-form>
@@ -38,7 +40,7 @@
 
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
-import { createResourceTmpl } from '@sdx/utils/src/api/resource';
+import {createResourceTmpl, getTotalResource} from '@sdx/utils/src/api/resource';
 import { gbToByte, toMilli } from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
 
@@ -66,7 +68,9 @@ export default {
             formData: {
                 cpu: 1,
                 memory: 1
-            }
+            },
+            maxCpu: 1,
+            maxMemory: 1
         };
     },
     computed: {
@@ -101,7 +105,16 @@ export default {
         handleCancel() {
             this.$refs.form.resetFields();
             this.dialogVisible = false;
+        },
+        initTotalLimit() {
+            getTotalResource().then(res => {
+                this.maxCpu = res.cpu;
+                this.maxMemory = toMilli(res.memory);
+            });
         }
+    },
+    created() {
+        this.initTotalLimit();
     }
 };
 </script>

@@ -8,7 +8,7 @@
                 <sdxu-button
                     placement="right"
                     size="small"
-                    icon="sdx-icon-plus"
+                    trigger="click"
                     v-auth.project.button="'PROJECT:CREATE'"
                 >
                     {{ t('view.project.createProject') }}

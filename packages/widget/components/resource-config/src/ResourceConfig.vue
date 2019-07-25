@@ -31,6 +31,10 @@
                     </div>
                 </el-option>
             </el-select>
+            <span
+                class="sdxw-resource-config__error"
+                v-if="showError && cpuError"
+            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span>
         </div>
         <div v-if="type === 'gpu'">
             <div class="sdxw-resource-config__title">
@@ -61,6 +65,10 @@
                     </div>
                 </el-option>
             </el-select>
+            <span
+                class="sdxw-resource-config__error"
+                v-if="showError && gpuError"
+            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span>
         </div>
         <div v-if="type === 'onlycpu'">
             <el-select
@@ -88,6 +96,10 @@
                     </div>
                 </el-option>
             </el-select>
+            <span
+                class="sdxw-resource-config__error"
+                v-if="showError && cpuError"
+            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span>
         </div>
     </div>
 </template>
@@ -128,13 +140,15 @@ export default {
         },
         showError: {
             type: Boolean,
-            default: false
+            default: true
         }
     },
     data() {
         return {
             resourceCPU: [],
-            resourceGPU: []
+            resourceGPU: [],
+            cpuError: false,
+            gpuError: false
         };
     },
     components: {
@@ -184,43 +198,61 @@ export default {
         getResourceList (start, count, type, params) {
             getResourceTmplList(start, count, type, params)
                 .then(data => {
-                    for (let i= 0; i<data.items.length; i++) {
-                        if(type === 'CPU') {
-                            this.resourceCPU.push(data.items[i]);
-                        } else if (type === 'GPU') {
-                            this.resourceGPU.push(data.items[i]);
+                    if (this.type === 'gpu') {
+                        let uuidGPUArr=[];
+                        this.resourceGPU = data.items;
+                        this.dealGPU(this.resourceGPU).map(item => {
+                            uuidGPUArr.push(item.uuid);
+                        });
+                        
+                        if(!uuidGPUArr.includes(this.value.uuid) && this.value.uuid && uuidGPUArr.length) {
+                            this.$emit('input', {
+                                label: '',
+                                count: 0,
+                                uuid: '-0'
+                            });
+                            this.gpuError = true;
+                        } else {
+                            this.gpuError = false;
+                        }
+                    
+                    } else {
+                        let uuidCPUArr=[];
+                        this.resourceCPU = data.items;
+                        this.dealCPU(this.resourceCPU).map(item => {
+                            uuidCPUArr.push(item.uuid);
+                        });
+                        
+                        if(!uuidCPUArr.includes(this.value.uuid) && this.value.uuid && uuidCPUArr.length) {
+                            this.$emit('input', {
+                                cpu: 0,
+                                memory: 0,
+                                uuid: '0-0'
+                            });
+                            
+                            this.cpuError = true;
+                        } else {  
+                            this.cpuError = false;
                         }
                     }
-
-                    let [uuidCPUArr, uuidGPUArr]=[[], []];
-                    this.dealCPU(this.resourceCPU).map(item => {
-                        uuidCPUArr.push(item.uuid);
-                    });
-                    this.dealGPU(this.resourceGPU).map(item => {
-                        uuidGPUArr.push(item.uuid);
-                    });
-                    if(!uuidGPUArr.includes(this.value.uuid) && this.value.uuid) {
-                        this.$emit('input', {
-                            label: '0',
-                            count: 0,
-                            uuid: '0-0'
-                        });
-                    }
-                    if(!uuidCPUArr.includes(this.value.uuid) && this.value.uuid) {
-                        this.$emit('input', {
-                            cpu: 0,
-                            memory: 0,
-                            uuid: '0-0'
-                        });
-                    }
-                    
                 });
         }
     },
     created() {
-        this.getResourceList(1, -1, 'CPU', {order: 'asc', orderBy:'cpu'});
-        this.getResourceList(1, -1, 'GPU', {order: 'asc', orderBy: 'gpu'});
-
+        if(this.type === 'gpu') {
+            this.getResourceList(1, -1, 'GPU', {order: 'asc', orderBy: 'gpu'});
+        } else {
+            this.getResourceList(1, -1, 'CPU', {order: 'asc', orderBy:'cpu'});
+        }
+    },
+    watch: {
+        __value(nval) {
+            if(this.type === 'gpu' && nval.count) {
+                this.gpuError = false;
+            } else if ((this.type === 'cpu' || this.type === 'onlycpu') && nval.cpu) {
+                this.cpuError = false;
+            }
+        }
     }
 };
 </script>

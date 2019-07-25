@@ -150,7 +150,8 @@ export default {
             this.fileManager.$refs.fileTask.checkTab('UPLOAD');
         },
         removeUpload(file) {
-            this.$refs.fileUploader.handleRemove(file);
+            // this.$refs.fileUploader.handleRemove(file);
+            // 目前先保留上传记录，不处理
         }
     },
     mounted() {

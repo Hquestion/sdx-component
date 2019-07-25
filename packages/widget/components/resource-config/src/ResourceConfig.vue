@@ -125,6 +125,10 @@ export default {
         required: {
             type: Boolean,
             default: false
+        },
+        showError: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -195,20 +199,21 @@ export default {
                     this.dealGPU(this.resourceGPU).map(item => {
                         uuidGPUArr.push(item.uuid);
                     });
+                    if(!uuidGPUArr.includes(this.value.uuid) && this.value.uuid) {
+                        this.$emit('input', {
+                            label: '0',
+                            count: 0,
+                            uuid: '0-0'
+                        });
+                    }
                     if(!uuidCPUArr.includes(this.value.uuid) && this.value.uuid) {
-                        this.__value = {
+                        this.$emit('input', {
                             cpu: 0,
                             memory: 0,
-                            uuid: ''
-                        };
+                            uuid: '0-0'
+                        });
                     }
-                    if(!uuidGPUArr.includes(this.value.uuid) && this.value.uuid) {
-                        this.__value = {
-                            label: '',
-                            count: 0,
-                            uuid: ''
-                        };
-                    }
+                
                 });
         }
     },

@@ -63,6 +63,7 @@
                 <div
                     class="sdxv-project-detail__content"
                 >
+                    <sdxw-task-running-limit style="margin: 10px 0 20px 0;" />
                     <task-card-list>
                         <task-card
                             v-for="(item, index) in taskList"
@@ -113,6 +114,7 @@ import { getTaskList } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
 import taskMixin from '@sdx/utils/src/mixins/task';
 import locale from '@sdx/utils/src/mixins/locale';
+import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
 export default {
     name: 'SdxvProjectDetail',
     mixins: [taskMixin, locale],
@@ -210,6 +212,7 @@ export default {
         [IconButton.name]: IconButton,
         [SortButton.name]: SortButton,
         [Pagination.name]: Pagination,
+        [TaskRunningLimit.name]: TaskRunningLimit,
         [Empty.name]: Empty,
         TaskIcon,
         TaskCard,

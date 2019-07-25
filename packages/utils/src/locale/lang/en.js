@@ -100,6 +100,11 @@ export default {
             Piece: 'Piece',
             Please_select_resource_allocation: 'Please select resource allocation',
             GPU: ' GPU'
+        },
+        taskRunningLimit: {
+            info1: 'Single GPU task\'s running time exceeds ',
+            info2: ' hour(s), or single non-GPU task\'s running time exceeds ',
+            info3: ' day(s) will be terminated by system automatically. If you have special resource needs, please contact administrator.'
         }
     },
     view: {

@@ -70,8 +70,8 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
 
     @include element('main') {
-        padding: 24px 0 30px;
-        height: 40px;
+        padding: 24px 0 34px;
+        height: 58px;
         box-sizing: content-box;
     }
 
@@ -92,6 +92,26 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             line-height: $sdxv-task-card-operate-icon-size;
             font-size: $sdxv-task-card-font-size;
         }
+    }
+
+    @include element('link') {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        & span:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        @include modifier('container') {
+            color: #359CEC;
+        }
+        @include modifier('tensorflow') {
+            color: #FF882B;
+        }
+        @include modifier('jupyter') {
+            color: #FF882B;
+        }
+
     }
 
     @include element('footer') {

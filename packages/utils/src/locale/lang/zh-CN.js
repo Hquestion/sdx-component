@@ -100,6 +100,11 @@ export default {
             Piece: '块',
             Please_select_resource_allocation: '请选择资源配置',
             GPU: 'GPU'
+        },
+        taskRunningLimit: {
+            info1: '单个GPU任务运行时长超过',
+            info2: '小时，单个非GPU任务运行时长超过',
+            info3: '天将会被系统自动终止，如有特殊资源需求，请联系管理员。'
         }
     },
     view: {

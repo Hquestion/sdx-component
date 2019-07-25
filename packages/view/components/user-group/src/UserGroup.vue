@@ -5,19 +5,10 @@
             v-auth.user.button="'GROUP:READ'"
         >
             <div class="sdxv-user-group__bar">
-                <sdxu-button
-                    icon="sdx-icon sdx-icon-plus"
-                    size="small"
-                    @click="createGroup"
-                    v-auth.user.button="'GROUP:WRITE'"
-                >
-                    {{ t('view.userManage.NewGroup') }}
-                </sdxu-button>
                 <SdxwSearchLayout
                     @search="handleSearch"
                     :block="false"
                     align="right"
-                    style="flex: 1"
                 >
                     <SdxwSearchItem>
                         <sdxu-input
@@ -30,6 +21,14 @@
                         />
                     </SdxwSearchItem>
                 </SdxwSearchLayout>
+                <sdxu-button
+                    icon="sdx-icon sdx-icon-plus"
+                    size="small"
+                    @click="createGroup"
+                    v-auth.user.button="'GROUP:WRITE'"
+                >
+                    {{ t('view.userManage.NewGroup') }}
+                </sdxu-button>
             </div>
             <sdxu-table
                 :data="groups"

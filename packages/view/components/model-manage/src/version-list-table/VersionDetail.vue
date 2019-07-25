@@ -161,11 +161,11 @@ export default {
         },
         init() {
             getVersionInfo(this.$route.params.modelId, this.$route.params.versionId).then(res => {
-                this.versionInfo = res;
+                this.versionInfo = Object.assign({}, this.versionInfo, res);
                 this.versionInfo.label = {};
                 if (this.versionInfo.serviceId) {
                     getTaskDetail(this.versionInfo.serviceId).then(res => {
-                        this.versionInfo.pods = res.pods;
+                        this.$set(this.versionInfo, 'pods', res.pods);
                     });
                 }
                 if (this.versionInfo.state === 'LAUNCHING' || this.versionInfo.state === 'RUNNING' || this.versionInfo.state === 'KILLING') {

@@ -187,6 +187,28 @@ export default {
                             this.resourceGPU.push(data.items[i]);
                         }
                     }
+
+                    let [uuidCPUArr, uuidGPUArr]=[[], []];
+                    this.dealCPU(this.resourceCPU).map(item => {
+                        uuidCPUArr.push(item.uuid);
+                    });
+                    this.dealGPU(this.resourceGPU).map(item => {
+                        uuidGPUArr.push(item.uuid);
+                    });
+                    if(!uuidCPUArr.includes(this.value.uuid) && this.value.uuid) {
+                        this.__value = {
+                            cpu: 0,
+                            memory: 0,
+                            uuid: ''
+                        };
+                    }
+                    if(!uuidGPUArr.includes(this.value.uuid) && this.value.uuid) {
+                        this.__value = {
+                            label: '',
+                            count: 0,
+                            uuid: ''
+                        };
+                    }
                 });
         }
     },

@@ -8,20 +8,10 @@
                 class="sdxv-user-manage__title"
             >
                 <div class="sdxv-user-manage__title--operate">
-                    <SdxuButton
-                        @click="handleAddUser"
-                        type="primary"
-                        icon="sdx-icon sdx-icon-plus"
-                        size="small"
-                        v-auth.user.button="'USER:WRITE'"
-                    >
-                        {{ t('view.userManage.NewUser') }}
-                    </SdxuButton>
                     <SdxwSearchLayout
                         @search="search"
                         :block="false"
                         align="right"
-                        style="flex: 1"
                     >
                         <SdxwSearchItem>
                             <SdxuInput
@@ -34,6 +24,15 @@
                             />
                         </SdxwSearchItem>
                     </SdxwSearchLayout>
+                    <SdxuButton
+                        @click="handleAddUser"
+                        type="primary"
+                        icon="sdx-icon sdx-icon-plus"
+                        size="small"
+                        v-auth.user.button="'USER:WRITE'"
+                    >
+                        {{ t('view.userManage.NewUser') }}
+                    </SdxuButton>
                 </div>
             </div>
             <sdxu-table

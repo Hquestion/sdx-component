@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { Pagination } from 'element-ui';
+import Pagination from 'element-ui/lib/pagination';
 export default {
     name: 'SdxuPagination',
     data() {

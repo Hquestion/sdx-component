@@ -89,6 +89,7 @@ export default {
                 this.fetchDataMinxin && this.fetchDataMinxin();
             } catch(e) {
                 // cancel
+                window.console.error(e);
             }
         },
         handleDetail(row) {

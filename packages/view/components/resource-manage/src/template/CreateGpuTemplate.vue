@@ -35,6 +35,7 @@
                 <el-input-number
                     v-model="formData.count"
                     :min="1"
+                    :max="maxGpu"
                 />
             </el-form-item>
         </el-form>
@@ -43,7 +44,7 @@
 
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
-import {createResourceTmpl, getGpuModels} from '@sdx/utils/src/api/resource';
+import {createResourceTmpl, getGpuModels, getTotalResource} from '@sdx/utils/src/api/resource';
 import locale from '@sdx/utils/src/mixins/locale';
 
 import { InputNumber, Form, FormItem, Select } from 'element-ui';
@@ -75,7 +76,8 @@ export default {
                 label: [{
                     validator: this.validateLabel, trigger: 'change'
                 }]
-            }
+            },
+            maxGpu: 1
         };
     },
     computed: {
@@ -114,10 +116,16 @@ export default {
             } else {
                 callback();
             }
+        },
+        initTotalLimit() {
+            getTotalResource().then(res => {
+                this.maxGpu = res.gpu;
+            });
         }
     },
     created() {
         this.fetchGpuList();
+        this.initTotalLimit();
     }
 };
 </script>

@@ -21,12 +21,19 @@
                 <slot name="right" />
             </div>
         </div>
-        <div class="sdxu-content-panel__main">
+        <div
+            class="sdxu-content-panel__main"
+        >
             <slot>
                 <div class="sdxu-content-panel__empty">
                     {{ t('ui.panel.noContent') }}
                 </div>
             </slot>
+        </div>
+        <div
+            class="sdxu-content-panel__footer"
+        >
+            <slot name="footer" />
         </div>
     </div>
 </template>

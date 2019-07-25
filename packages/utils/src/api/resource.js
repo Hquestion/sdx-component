@@ -40,8 +40,19 @@ export const getResourceStates = authWrapper(function (global = false) {
     });
 }, readAuths.SYSTEM_GLOBAL_RESOURCE_READ);
 
+export function getTotalResource() {
+    if (getTotalResource.cache) {
+        return Promise.resolve(getTotalResource.cache);
+    } else {
+        return httpService.get(`${SYSTEM_MANAGE_GETWAY_BASE}resources`).then(res => {
+            getTotalResource.cache = res.total;
+            return res.total;
+        });
+    }
+}
+
 export function getGpuModels() {
-    return httpService.get(`${SYSTEM_MANAGE_GETWAY_BASE}resources`).then(res => res.total.gpuModels);
+    return getTotalResource().then(res => res.gpuModels);
 }
 
 /* export function getResourceConfigDetail(uuid) {

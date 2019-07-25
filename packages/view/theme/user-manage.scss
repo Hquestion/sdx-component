@@ -1,7 +1,5 @@
 @import "~element-ui/packages/theme-chalk/src/radio.scss";
 @include block('user-manage',$bem-namespace-view) {
-    display: flex;
-    flex-flow: column nowrap;
     height: 100%;
     box-sizing: border-box;
     @include element('title') {
@@ -32,5 +30,5 @@
             text-align: right;
         }
     }
-    
+
 }

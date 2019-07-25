@@ -1,5 +1,5 @@
 <template>
-    <sdxu-content-panel :title="t('view.userManage.User')">
+    <sdxu-content-panel :title="t('view.userManage.User')" :fullscreen="true">
         <div
             class="sdxv-user-manage"
             v-auth.user.button="'USER:READ'"
@@ -96,17 +96,6 @@
             </sdxu-table>
 
             <!-- 分页 -->
-            <div
-                class="sdxv-user-manage__pagination"
-            >
-                <sdxu-pagination
-                    v-if="total!=0"
-                    :current-page.sync="current"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="currentChange"
-                />
-            </div>
             <!-- 用户详情 -->
             <UserDetail
                 @cancelUserDetailDialog="cancelUserDetailDialog"
@@ -129,6 +118,18 @@
                 @cancelJoinGroupDialog="cancelJoinGroupDialog"
                 v-if="JoinGroupVisible"
                 @refresh="refreshUsers"
+            />
+        </div>
+        <div
+            class="sdxv-user-manage__pagination"
+            slot="footer"
+        >
+            <sdxu-pagination
+                v-if="total!=0"
+                :current-page.sync="current"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="currentChange"
             />
         </div>
     </sdxu-content-panel>

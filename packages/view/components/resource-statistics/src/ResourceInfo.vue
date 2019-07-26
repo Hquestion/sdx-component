@@ -47,7 +47,7 @@ export default {
         },
         unit() {
             return this.type === 'cpu' 
-                ? `(${this.t('view.monitor.resourceStatistic.Memory')})` 
+                ? `(${this.t('view.monitor.resourceStatistic.Core')})` 
                 : this.type === 'gpu' 
                     ? `(${this.t('view.monitor.resourceStatistic.Block')})` : '(GB)';
         },

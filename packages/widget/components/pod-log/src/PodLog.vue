@@ -5,6 +5,7 @@
         :loading="loading"
         :content="logContent"
         @scroll="handleScroll"
+        ref="log"
     />
 </template>
 
@@ -137,8 +138,8 @@ export default {
             }
         },
         gotoBottom() {
-            this.$refs.scroll.$refs.scroll.scrollTo({
-                y: '100%'
+            this.$refs.log.$refs.scroll.$refs.scroll.scrollTo({
+                y: '99.99%'
             });
         },
         startAutoPull() {

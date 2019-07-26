@@ -9,17 +9,17 @@
   <highlight-code slot="codeText" lang="vue">
     <template>
         <div class="sdxw-task-list">
-            <SdxwTaskList></SdxwTaskList>
+            <SdxwTaskResourceList></SdxwTaskResourceList>
         </div>
     </template>
 
     <script>
-    import SdxwTaskList from '@sdx/widget/components/task-list';
+    import SdxwTaskResourceList from '@sdx/widget/components/task-list';
 
     export default {
         name: 'TaskListDemo',
         components: {
-            SdxwTaskList
+            SdxwTaskResourceList
         }
     }
     </script>
@@ -37,9 +37,9 @@
 
 ```js
 import Vue from 'vue';
-import { SdxwTaskList } from '@sdx/widget';
+import { SdxwTaskResourceList } from '@sdx/widget';
 
-Vue.use(SdxwTaskList);
+Vue.use(SdxwTaskResourceList);
 
 // 也可以全量引入使用
 import SdxWidget from '@sdx/widget';

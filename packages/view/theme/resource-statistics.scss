@@ -34,6 +34,7 @@
 
     @include element('search') {
         display: flex;
+        margin-bottom: $sdx-margin;
 
         @include modifier('button') {
             margin-left: $sdx-margin;

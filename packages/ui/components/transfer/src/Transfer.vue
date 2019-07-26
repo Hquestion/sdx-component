@@ -102,8 +102,8 @@ export default {
             default: ''
         },
         loading: {
-            type: String,
-            default: ''
+            type: Boolean,
+            default: false
         }
     },
     data() {

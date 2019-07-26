@@ -93,7 +93,7 @@ export default {
         border-top: 1px dashed #e6eaf2;
         padding-bottom: 5px;
         li {
-            padding: 0 40px;
+            padding: 0 36px;
             &:nth-child(2n) {
                 background-color: rgba(#e6eaf2, 0.5);
             }

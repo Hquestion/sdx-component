@@ -3,7 +3,7 @@
         :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} TensorBoard ${t('view.task.form.task')}`"
         class="form-tensorboard"
         :label-width="100"
-        icon="sdx-icon-tensorflow"
+        icon="sdx-icon-tensorboard"
         @commit="commit"
     >
         <el-form

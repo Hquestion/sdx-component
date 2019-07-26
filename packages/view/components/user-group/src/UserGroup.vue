@@ -1,5 +1,8 @@
 <template>
-    <sdxu-panel :title="t('view.userManage.UserGroup')">
+    <sdxu-panel
+        :title="t('view.userManage.UserGroup')"
+        :fullscreen="true"
+    >
         <div
             class="sdxv-user-group"
             v-auth.user.button="'GROUP:READ'"
@@ -95,15 +98,18 @@
                     </template>
                 </el-table-column>
             </sdxu-table>
-            <div class="sdxv-user-group__pagination">
-                <sdxu-pagination
-                    v-if="total"
-                    :current-page.sync="page"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="handleChangePage"
-                />
-            </div>
+        </div>
+        <div
+            class="sdxv-user-group__pagination"
+            slot="footer"
+        >
+            <sdxu-pagination
+                v-if="total"
+                :current-page.sync="page"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="handleChangePage"
+            />
         </div>
         <CreateUserGroup
             :visible.sync="createVisible"

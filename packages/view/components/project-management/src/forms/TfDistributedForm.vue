@@ -3,7 +3,7 @@
         :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} ${t('view.task.type.TENSORFLOW_DIST')} ${t('view.task.form.task')}`"
         class="form-tfdistributed"
         :label-width="160"
-        icon="sdx-icon-tensorboard"
+        icon="sdx-icon-tensorflow"
         @commit="commit"
     >
         <el-form

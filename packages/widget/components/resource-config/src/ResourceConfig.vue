@@ -10,7 +10,6 @@
                 :placeholder="`${t('widget.resourceConfig.Please_select')}${cpulabel}`"
                 v-model="__value"
                 value-key="uuid"
-                :popper-append-to-body="false"
                 :disabled="readOnly"
                 filterable
             >
@@ -45,7 +44,6 @@
                 :placeholder="`${t('widget.resourceConfig.Please_select')}${t('widget.resourceConfig.GPU')}`"
                 v-model="__value"
                 value-key="uuid"
-                :popper-append-to-body="false"
                 :disabled="readOnly"
                 filterable
             >
@@ -77,7 +75,6 @@
                 :placeholder="t('widget.resourceConfig.Please_select_resource_allocation')"
                 v-model="__value"
                 value-key="uuid"
-                :popper-append-to-body="false"
                 :disabled="readOnly"
                 filterable
             >

@@ -64,16 +64,19 @@
                     v-if="!isGpuEnt"
                     v-model="cpuObj"
                     type="onlycpu"
+                    :data-ready="dataReady"
                 />
 
                 <div v-if="isGpuEnt">
                     <SdxwResourceConfig
                         v-model="cpuObj"
                         type="cpu"
+                        :data-ready="dataReady"
                     />
                     <SdxwResourceConfig
                         v-model="gpuObj"
                         type="gpu"
+                        :data-ready="dataReady"
                     />
                 </div>
             </el-form-item>
@@ -135,16 +138,17 @@ export default {
     },
     data() {
         const resourceValidate = (rule, value, callback) => {
+            window.console.log(value, 'gg');
             if(this.isGpuEnt) {
-                if(value.EXECUTOR_CPUS === 0) {
+                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
-                } else if (value.EXECUTOR_GPUS === 0) {
+                } else if (value.EXECUTOR_GPUS === 0 || value.EXECUTOR_GPUS === null || isNaN(value.EXECUTOR_GPUS)) {
                     callback(new Error(this.t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
-                if(value.EXECUTOR_CPUS === 0) {
+                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
@@ -198,7 +202,8 @@ export default {
                 sourcePaths: [
                     { required: true, message: this.t('view.task.form.Please_select_the_source_code'), trigger: 'blur' }
                 ]
-            }
+            },
+            dataReady: false
         };
     },
     computed: {
@@ -257,6 +262,9 @@ export default {
                 count: this.params.resourceConfig.EXECUTOR_GPUS,
                 uuid: `${this.params.resourceConfig.GPU_MODEL}-${this.params.resourceConfig.EXECUTOR_GPUS}`
             };
+            this.$nextTick(()=> {
+                this.dataReady = true;
+            });
         },
         cpuObj(val) {
             this.params.resourceConfig = {

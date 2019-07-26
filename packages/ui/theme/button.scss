@@ -195,11 +195,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             //border: 1px solid $sdx-border-color;
             box-sizing: border-box;
             box-shadow: 1px 1px 8px 1px rgba(87,127,255,0.17);
+            padding: 5px;
             & /deep/ .sdxu-button {
                 display: block;
                 border: none;
                 border-radius: 0;
-                border-top: 1px solid $sdx-border-color;
                 text-align: left;
                 padding: 0;
                 margin-left: 0 !important;
@@ -208,8 +208,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                     border-top: none;
                 }
                 &:hover {
-                    color: #fff;
-                    background: $sdx-primary-color;
+                    color: #457FF6;
+                    background: #F7FAFF;
+                    border-radius: $sdx-border-radius;
                 }
             }
         }

@@ -31,7 +31,7 @@ export default {
         background: #F2F6FC;
         color: #000015;
         font-size: 14px;
-        padding: 0 6px;
+        padding: 0 10px;
         border-radius: $sdx-border-radius;
         &.input-readonly--small {
             min-width: $sdx-form-element-height-small;

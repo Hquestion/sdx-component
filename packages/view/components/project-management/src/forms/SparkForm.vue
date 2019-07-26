@@ -64,11 +64,13 @@
                     v-model="cpuDriver"
                     type="cpu"
                     :cpulabel="t('widget.resourceConfig.Driver_CPU_Memory')"
+                    :data-ready="dataReady"
                 />
                 <SdxwResourceConfig
                     v-model="cpuExecute"
                     type="cpu"
                     :cpulabel="t('widget.resourceConfig.Actuator_CPU_Memory')"
+                    :data-ready="dataReady"
                 />
             </el-form-item>
             <el-form-item
@@ -152,9 +154,9 @@ export default {
     },
     data() {
         const resourceValidate = (rule, value, callback) => {
-            if(value.SPARK_DRIVER_CPUS === 0) {
+            if(value.SPARK_DRIVER_CPUS === 0 || value.SPARK_DRIVER_CPUS === null || isNaN(value.SPARK_DRIVER_CPUS)) {
                 callback(new Error(this.t('view.task.form.Driver_CPU_memory_needs_to_be_configured')));
-            }else  if (value.SPARK_EXECUTOR_CPUS === 0) {
+            }else  if (value.SPARK_EXECUTOR_CPUS === 0 || value.SPARK_EXECUTOR_CPUS === null || isNaN(value.SPARK_EXECUTOR_CPUS)) {
                 callback(new Error(this.t('view.task.form.Executor_CPU_memory_needs_to_be_configured')));
             } else {
                 callback();
@@ -219,7 +221,8 @@ export default {
                         }
                     },
                 ]
-            }
+            },
+            dataReady: false
         };
     },
     computed: {
@@ -267,6 +270,9 @@ export default {
                 memory: this.params.resourceConfig.SPARK_EXECUTOR_MEMORY / (1024*1024*1024),
                 uuid: `${this.params.resourceConfig.SPARK_EXECUTOR_CPUS/1000}-${this.params.resourceConfig.SPARK_EXECUTOR_MEMORY / (1024*1024*1024)}`
             };
+            this.$nextTick(()=> {
+                this.dataReady = true;
+            });
         },
         cpuDriver(val) {
             this.params.resourceConfig = { 

@@ -242,7 +242,8 @@ export default {
                 Please_select_the_training_output_directory: '请选择训练输出目录',
                 Please_enter_the_parameter_server_calculate_the_number_of_node_instances: '请输入参数服务器/计算节点实例个数',
                 Please_enter_the_number_of_calculated_node_instances: '请输入计算节点实例个数',
-                Please_enter_the_number_of_parameter_server_instances: '请输入参数服务器实例个数'
+                Please_enter_the_number_of_parameter_server_instances: '请输入参数服务器实例个数',
+                Need_to_configure_master_CPU_memory: '需要配置主节点CPU/内存'
             }
         },
         monitor: {

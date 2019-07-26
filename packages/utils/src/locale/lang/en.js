@@ -242,7 +242,8 @@ export default {
                 Please_select_the_training_output_directory: 'Please select the training output directory',
                 Please_enter_the_parameter_server_calculate_the_number_of_node_instances: 'Please enter the parameter server / calculate the number of node instances',
                 Please_enter_the_number_of_calculated_node_instances: 'Please enter the number of calculated node instances',
-                Please_enter_the_number_of_parameter_server_instances: 'Please enter the number of parameter server instances'
+                Please_enter_the_number_of_parameter_server_instances: 'Please enter the number of parameter server instances',
+                Need_to_configure_master_CPU_memory: 'Master CPU/memory needs to be configured'
             }
 
         },

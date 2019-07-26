@@ -405,7 +405,7 @@ export default {
                         title: this.t('view.skyflow.removeRuntimeConfirm'),
                         content: this.t('sdxCommon.ConfirmRemove')
                     }).then(() => {
-                        removeTimerRunningSubTask(row.jobId).then(() => {
+                        removeTimerRunningSubTask(row.jobId, { skyflowCrontab : this.expandingRow.uuid}).then(() => {
                             Message({
                                 message: this.t('sdxCommon.RemoveSuccess'),
                                 type: 'success'

@@ -69,8 +69,8 @@ export function removeGeneralRunningTask(uuid) {
     return httpService.remove(`${skyflowExecuteApi}/${uuid}`);
 }
 
-export function removeTimerRunningSubTask(uuid) {
-    return httpService.remove(`${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_crontab_jobs/${uuid}`);
+export function removeTimerRunningSubTask(uuid, params) {
+    return httpService.remove(`${SKYFLOW_MANAGE_GATEWAY_BASE}skyflow_crontab_jobs/${uuid}`, params);
 }
 
 export function removeTimerRunningTask(uuid) {

@@ -61,6 +61,7 @@
                     size="regular"
                     :plain="true"
                     @click="removeAllTag"
+                    :disabled="tags.length === 0"
                 >
                     {{ t('ui.transfer.deleteAll') }}
                 </SdxuButton>

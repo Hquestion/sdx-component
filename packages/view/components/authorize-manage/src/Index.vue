@@ -90,13 +90,15 @@
                         slot-scope="scope"
                         class="icon"
                     >
-                        <i
-                            class="sdx-icon sdx-icon-edit icon"
+                        <SdxuIconButton
+                            class="sdx-icon sdx-icon-edit"
                             @click="edit(scope.row)"
+                            :title="t('sdxCommon.Edit')"
                         />
-                        <i
-                            class="sdx-icon sdx-icon-delete icon"
+                        <SdxuIconButton
+                            class="sdx-icon sdx-icon-delete"
                             @click="remove(scope.row.uuid, objectType === 'user' ? scope.row.fullName : scope.row.name)"
+                            :title="t('sdxCommon.Delete')"
                         />
                     </template>
                 </el-table-column>

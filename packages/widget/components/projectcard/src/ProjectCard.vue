@@ -50,21 +50,21 @@
                 v-else
                 class="sdxw-project-card__footer--operation"
             >
-                <i
+                <sdxu-icon-button
                     v-if="viewAble"
-                    class="sdx-icon sdx-icon-detail"
+                    icon="sdx-icon sdx-icon-detail"
                     :title="t('widget.projectCard.title.ViewDetail')"
                     @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
                 />
-                <i
+                <sdxu-icon-button
                     v-if="editAble"
-                    class="sdx-icon sdx-icon-edit"
+                    icon="sdx-icon sdx-icon-edit"
                     :title="t('widget.projectCard.title.Edit')"
                     @click="$emit('operate', {id: meta.uuid, type: 'edit'})"
                 />
-                <i
+                <sdxu-icon-button
                     v-if="deleteAble"
-                    class="sdx-icon sdx-icon-delete"
+                    icon="sdx-icon sdx-icon-delete"
                     :title="t('widget.projectCard.title.Delete')"
                     @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
                 />
@@ -85,6 +85,7 @@
 <script>
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
+import IconButton from '@sdx/ui/components/icon-button';
 export default {
     name: 'SdxwProjectCard',
     props: {
@@ -111,6 +112,9 @@ export default {
                 return ['rud', 'template', 'project'].includes(value);
             }
         }
+    },
+    components: {
+        [IconButton.name]: IconButton
     },
     mixins: [locale],
     data() {

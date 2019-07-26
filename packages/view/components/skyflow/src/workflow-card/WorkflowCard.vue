@@ -49,26 +49,26 @@
                 v-else
                 class="sdxv-workflow-card__footer--operation"
             >
-                <i
-                    class="sdx-icon sdx-huabu"
+                <sdxu-icon-button
+                    icon="sdx-icon sdx-huabu"
                     :title="t('view.skyflow.canvas')"
                     @click="$emit('operate', {id: meta.uuid, type: 'canvas'})"
                 />
-                <i
-                    class="sdx-icon sdx-icon-tickets"
+                <sdxu-icon-button
+                    icon="sdx-icon sdx-icon-tickets"
                     :title="t('view.skyflow.runningInfo')"
                     @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
                 />
-                <i
+                <sdxu-icon-button
                     v-if="editAble"
-                    class="sdx-icon sdx-icon-edit"
+                    icon="sdx-icon sdx-icon-edit"
                     :title="t('sdxCommon.Edit')"
                     @click="$emit('operate', {item: meta, type: 'edit'})"
                     v-auth.skyflow.button="auth"
                 />
-                <i
+                <sdxu-icon-button
                     v-if="deleteAble"
-                    class="sdx-icon sdx-icon-delete"
+                    icon="sdx-icon sdx-icon-delete"
                     :title="t('sdxCommon.Delete')"
                     @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
                     v-auth.skyflow.button="auth"
@@ -92,6 +92,7 @@ import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
+import IconButton from '@sdx/ui/components/icon-button';
 export default {
     name: 'SdxvWorkflowCard',
     props: {
@@ -125,7 +126,8 @@ export default {
         };
     },
     components: {
-        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
+        [IconButton.name]: IconButton
     },
     computed: {
         auth() {

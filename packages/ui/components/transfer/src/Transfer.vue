@@ -75,6 +75,7 @@ import Button from '@sdx/ui/components/button';
 import Input from '@sdx/ui/components/input';
 import SdxuScroll from '@sdx/ui/components/scroll';
 import locale from '@sdx/utils/src/mixins/locale';
+import {t} from '@sdx/utils/src/locale';
 export default {
     name: 'SdxuTransfer',
     mixins: [locale],
@@ -85,7 +86,7 @@ export default {
         },
         placeholder: {
             type: String,
-            default: ''
+            default: () => t('ui.transfer.PleaseEnter')
         },
         tags: {
             type: Array,

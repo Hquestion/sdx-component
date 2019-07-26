@@ -11,7 +11,8 @@ export default {
         },
         transfer: {
             moveAll: 'Move all',
-            deleteAll: 'Delete all'
+            deleteAll: 'Delete all',
+            PleaseEnter: 'Please enter'
         },
         panel: {
             noContent: 'No Content'
@@ -99,7 +100,8 @@ export default {
             Number: 'Number',
             Piece: 'Piece',
             Please_select_resource_allocation: 'Please select resource allocation',
-            GPU: ' GPU'
+            GPU: ' GPU',
+            Resource_template_has_been_deleted: 'The resource template has been deleted. Please re-select it'
         },
         taskRunningLimit: {
             info1: 'Single GPU task\'s running time exceeds ',

@@ -1,4 +1,7 @@
 @include block('resource-config', $bem-namespace-widget) {
+    & > div {
+        position: relative;
+    }
     @include element('title') {
         color: $sdx-text-minor-color;
         height: $sdxw-resource-label-height;
@@ -7,6 +10,15 @@
             vertical-align: middle;
             color: $sdxw-resource-require-color;
         }
+    }
+    
+    @include element('error') {
+        line-height: 1;
+        position: absolute;
+        left: 0;
+        color: $sdxw-resource-require-color;
+        font-size: $sdx-help-font-size;
+        bottom: -14px;
     }
     @include element('selectoption') {
         color: $sdx-text-minor-color;

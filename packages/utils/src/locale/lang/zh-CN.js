@@ -11,7 +11,8 @@ export default {
         },
         transfer: {
             moveAll: '移动全部',
-            deleteAll: '删除全部'
+            deleteAll: '删除全部',
+            PleaseEnter: '请输入'
         },
         panel: {
             noContent: '暂无内容'
@@ -99,7 +100,8 @@ export default {
             Number: '数量',
             Piece: '块',
             Please_select_resource_allocation: '请选择资源配置',
-            GPU: 'GPU'
+            GPU: 'GPU',
+            Resource_template_has_been_deleted: '资源模板已被删除，请重新选择'
         },
         taskRunningLimit: {
             info1: '单个GPU任务运行时长超过',

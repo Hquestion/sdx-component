@@ -40,13 +40,10 @@
                 </el-select>
             </SdxwSearchItem>
         </SdxwSearchLayout>
-        <div
+        <SdxwTaskRunningLimit
             v-if="!monitor"
             class="sdxw-task-resource-list__tips"
-        >
-            <i class="sdx-icon sdx-icon-info" />
-            <span>{{ t('view.task.TaskListTips') }}</span>
-        </div>
+        />
         <SdxuTable
             class="sdxw-task-resource-list__table"
             :data="taskResourceList"
@@ -189,6 +186,7 @@ import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuInput from '@sdx/ui/components/input';
+import SdxwTaskRunningLimit from '@sdx/widget/components/task-running-limit';
 
 import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
@@ -214,6 +212,7 @@ export default {
         [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
         SdxuInput,
+        SdxwTaskRunningLimit,
         ElTableColumn,
         ElSelect,
         ElOption

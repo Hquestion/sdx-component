@@ -1,165 +1,169 @@
 <template>
-    <div class="sdxv-role-manage">
-        <SdxuContentPanel
-            :title="t('widget.userInfo.role')"
+    <SdxuContentPanel
+        :title="t('widget.userInfo.role')"
+        :fullscreen="true"
+    >
+        <div
+            v-auth.user.button="'ROLE:READ'"
+            class="sdxv-role-manage"
         >
-            <div v-auth.user.button="'ROLE:READ'">
-                <div
-                    class="sdxv-role-manage__header"
-                >
-                    <div class="sdxv-role-manage__handle">
-                        <SdxwSearchLayout
-                            @search="searchName"
-                            :block="false"
-                            align="right"
-                        >
-                            <SdxwSearchItem>
-                                <SdxuInput
-                                    v-model="searchRoles.name"
-                                    type="search"
-                                    size="small"
-                                    :searchable="false"
-                                    :placeholder="t('view.authorizeManage.please_enter_the_role_name')"
-                                />
-                            </SdxwSearchItem>
-                        </SdxwSearchLayout>
-                        <SdxuButton
-                            type="primary"
-                            size="small"
-                            placement="right"
-                            @click="addRole"
-                            v-auth.user.button="'ROLE:WRITE'"
-                        >
-                            <i
-                                class="sdx-icon sdx-icon-plus"
-                            />
-                            {{ t('view.authorizeManage.new_roles') }}
-                        </sdxubutton>
-                    </div>
-                </div>
-                <div
-                    class="sdxv-role-manage__table"
-                    v-loading="roleLoading"
-                >
-                    <SdxuTable
-                        :data="tableData"
-                        :default-sort="{prop: 'createdAt', order: 'descending'}"
-                        @sort-change="handleSortChange"
-                    >
-                        <el-table-column
-                            prop="name"
-                            :label="t('view.authorizeManage.role_name')"
-                        />
-                        <el-table-column
-                            prop="description"
-                            :label="t('view.authorizeManage.role_description')"
-                        >
-                            <template slot-scope="scope">
-                                <SdxuTextTooltip
-                                    :content="scope.row.description"
-                                    content-key="description"
-                                />
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            prop="createdAt"
-                            :label="t('view.image.Columns.createdAt')"
-                            sortable
-                        >
-                            <template slot-scope="scope">
-                                {{ dateFormatter(scope.row.createdAt) }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column
-                            style="width: 15%"
-                            :label="t('sdxCommon.Operation')"
-                            v-auth.user.button="'ROLE:WRITE'"
-                        >
-                            <template
-                                slot-scope="scope"
-                                class="icon"
-                            >
-                                <i
-                                    class="sdx-icon sdx-icon-edit icon"
-                                    @click="editRole(scope.row.uuid)"
-                                    v-auth.user.button="'ROLE:WRITE'"
-                                />
-                                <i
-                                    class="sdx-icon sdx-icon-delete icon"
-                                    @click="removeRole(scope.row.uuid, scope.row.name)"
-                                    v-auth.user.button="'ROLE:WRITE'"
-                                />
-                            </template>
-                        </el-table-column>
-                    </SdxuTable>
-                    <div class="sdxv-role-manage__pagination">
-                        <sdxu-pagination
-                            v-if="total"
-                            :current-page.sync="current"
-                            :page-size="pageSize"
-                            :total="total"
-                            @current-change="currentChange"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <sdxu-dialog
-                :visible.sync="dialogVisible"
-                @open="resetForm()"
+            <div
+                class="sdxv-role-manage__header"
             >
-                <div slot="title">
-                    {{ id ? t('view.authorizeManage.editorial_role') : t('view.authorizeManage.new_roles') }}
-                </div>
-                <div>
-                    <el-form
-                        label-width="100px"
-                        :model="roleObj"
-                        ref="currentRole"
-                        :rules="rules"
-                        @submit.native.prevent
+                <div class="sdxv-role-manage__handle">
+                    <SdxwSearchLayout
+                        @search="searchName"
+                        :block="false"
+                        align="right"
                     >
-                        <el-form-item
-                            :label="`${t('view.authorizeManage.role_name')}:`"
-                            prop="name"
-                        >
+                        <SdxwSearchItem>
                             <SdxuInput
-                                v-model="roleObj.name"
+                                v-model="searchRoles.name"
+                                type="search"
                                 size="small"
+                                :searchable="false"
                                 :placeholder="t('view.authorizeManage.please_enter_the_role_name')"
                             />
-                        </el-form-item>
-                        <el-form-item
-                            :label="`${t('view.authorizeManage.role_description')}:`"
-                            prop="description"
-                        >
-                            <SdxuInput
-                                type="textarea"
-                                :placeholder="t('view.authorizeManage.please_enter_a_role_description')"
-                                v-model="roleObj.description"
-                            />
-                        </el-form-item>
-                    </el-form>
-                </div>
-                <div slot="footer">
-                    <SdxuButton
-                        type="default"
-                        size="small"
-                        @click="dialogCancel"
-                    >
-                        {{ t('sdxCommon.Cancel') }}
-                    </sdxubutton>
+                        </SdxwSearchItem>
+                    </SdxwSearchLayout>
                     <SdxuButton
                         type="primary"
                         size="small"
-                        @click="dialogConfirm"
+                        placement="right"
+                        @click="addRole"
+                        v-auth.user.button="'ROLE:WRITE'"
                     >
-                        {{ t('sdxCommon.Confirm') }}
+                        <i
+                            class="sdx-icon sdx-icon-plus"
+                        />
+                        {{ t('view.authorizeManage.new_roles') }}
                     </sdxubutton>
                 </div>
-            </sdxu-dialog>
-        </SdxuContentPanel>
-    </div>
+            </div>
+            <div
+                class="sdxv-role-manage__table"
+                v-loading="roleLoading"
+            >
+                <SdxuTable
+                    :data="tableData"
+                    :default-sort="{prop: 'createdAt', order: 'descending'}"
+                    @sort-change="handleSortChange"
+                >
+                    <el-table-column
+                        prop="name"
+                        :label="t('view.authorizeManage.role_name')"
+                    />
+                    <el-table-column
+                        prop="description"
+                        :label="t('view.authorizeManage.role_description')"
+                    >
+                        <template slot-scope="scope">
+                            <SdxuTextTooltip
+                                :content="scope.row.description"
+                                content-key="description"
+                            />
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="createdAt"
+                        :label="t('view.image.Columns.createdAt')"
+                        sortable
+                    >
+                        <template slot-scope="scope">
+                            {{ dateFormatter(scope.row.createdAt) }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        style="width: 15%"
+                        :label="t('sdxCommon.Operation')"
+                        v-auth.user.button="'ROLE:WRITE'"
+                    >
+                        <template
+                            slot-scope="scope"
+                            class="icon"
+                        >
+                            <i
+                                class="sdx-icon sdx-icon-edit icon"
+                                @click="editRole(scope.row.uuid)"
+                                v-auth.user.button="'ROLE:WRITE'"
+                            />
+                            <i
+                                class="sdx-icon sdx-icon-delete icon"
+                                @click="removeRole(scope.row.uuid, scope.row.name)"
+                                v-auth.user.button="'ROLE:WRITE'"
+                            />
+                        </template>
+                    </el-table-column>
+                </SdxuTable>
+            </div>
+        </div>
+        <div
+            class="sdxv-role-manage__pagination"
+            slot="footer"
+        >
+            <sdxu-pagination
+                v-if="total"
+                :current-page.sync="current"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="currentChange"
+            />
+        </div>
+        <sdxu-dialog
+            :visible.sync="dialogVisible"
+            @open="resetForm()"
+        >
+            <div slot="title">
+                {{ id ? t('view.authorizeManage.editorial_role') : t('view.authorizeManage.new_roles') }}
+            </div>
+            <div>
+                <el-form
+                    label-width="100px"
+                    :model="roleObj"
+                    ref="currentRole"
+                    :rules="rules"
+                    @submit.native.prevent
+                >
+                    <el-form-item
+                        :label="`${t('view.authorizeManage.role_name')}:`"
+                        prop="name"
+                    >
+                        <SdxuInput
+                            v-model="roleObj.name"
+                            size="small"
+                            :placeholder="t('view.authorizeManage.please_enter_the_role_name')"
+                        />
+                    </el-form-item>
+                    <el-form-item
+                        :label="`${t('view.authorizeManage.role_description')}:`"
+                        prop="description"
+                    >
+                        <SdxuInput
+                            type="textarea"
+                            :placeholder="t('view.authorizeManage.please_enter_a_role_description')"
+                            v-model="roleObj.description"
+                        />
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div slot="footer">
+                <SdxuButton
+                    type="default"
+                    size="small"
+                    @click="dialogCancel"
+                >
+                    {{ t('sdxCommon.Cancel') }}
+                </sdxubutton>
+                <SdxuButton
+                    type="primary"
+                    size="small"
+                    @click="dialogConfirm"
+                >
+                    {{ t('sdxCommon.Confirm') }}
+                </sdxubutton>
+            </div>
+        </sdxu-dialog>
+    </SdxuContentPanel>
 </template>
 
 <script>

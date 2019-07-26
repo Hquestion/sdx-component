@@ -8,6 +8,7 @@
                 type="primary"
                 size="small"
                 dropdown-width="150px"
+                trigger="click"
                 placement="right"
                 v-auth.resource.button="'TEMPLATE:WRITE'"
             >

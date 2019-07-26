@@ -31,18 +31,21 @@
                     <el-table-column :label="t('sdxCommon.Operation')">
                         <template slot-scope="scope">
                             <SdxuIconButton
-                                icon="sdx-icon sdx-icon-eye-open"
+                                icon="sdx-icon sdx-icon-yanjing"
                                 @click="view(scope)"
+                                :title="t('sdxCommon.Detail')"
                             />
                             <SdxuIconButton
                                 v-auth.resource.button="'CONFIG:WRITE'"
                                 icon="sdx-icon sdx-icon-edit"
                                 @click="edit(scope)"
+                                :title="t('sdxCommon.Edit')"
                             />
                             <SdxuIconButton
                                 v-auth.resource.button="'CONFIG:WRITE'"
                                 icon="sdx-icon sdx-icon-delete"
                                 @click="del(scope)"
+                                :title="t('sdxCommon.Delete')"
                             />
                         </template>
                     </el-table-column>

@@ -78,18 +78,21 @@
                     <template slot-scope="scope">
                         <sdxu-icon-button
                             @click.native.stop="handleJoinGroup(scope.row)"
-                            class="sdx-icon sdx-icon-zu2"
+                            icon="sdx-icon sdx-icon-zu2"
                             v-auth.user.button="'USER:WRITE'"
+                            :title="t('widget.userInfo.groups')"
                         />
                         <sdxu-icon-button
                             @click.native.stop="handleEditUser(scope.row)"
-                            class="sdx-icon sdx-icon-edit"
+                            icon="sdx-icon sdx-icon-edit"
                             v-auth.user.button="'USER:WRITE'"
+                            :title="t('sdxCommon.Edit')"
                         />
                         <sdxu-icon-button
                             @click.native.stop="handleDeleteUser(scope.row)"
-                            class="sdx-icon sdx-icon-delete"
+                            icon="sdx-icon sdx-icon-delete"
                             v-auth.user.button="'USER:WRITE'"
+                            :title="t('sdxCommon.Delete')"
                         />
                     </template>
                 </el-table-column>

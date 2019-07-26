@@ -32,7 +32,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         position: relative;
     }
     .el-dialog__body {
-        padding: 20px 20px;
+        padding: 0 20px 20px;
     }
 
     @include element('icon') {

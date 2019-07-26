@@ -1,12 +1,12 @@
 <template>
     <SdxuContentPanel :title="t('view.monitor.resourceStatistic.AllTaskList')">
-        <SdxvTaskResourceList :monitor="true" />
+        <SdxwTaskResourceList :monitor="true" />
     </SdxuContentPanel>
 </template>
 
 <script>
 import SdxuContentPanel from '@sdx/ui/components/content-panel';
-import SdxvTaskResourceList from '@sdx/widget/components/task-list';
+import SdxwTaskResourceList from '@sdx/widget/components/task-list';
 import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
@@ -14,7 +14,7 @@ export default {
     mixins: [locale],
     components: {
         SdxuContentPanel,
-        SdxvTaskResourceList
+        SdxwTaskResourceList
     }
 };
 </script>

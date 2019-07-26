@@ -7,6 +7,12 @@
         @close="handleCloseDialog"
         class="sdxv-build-log"
     >
+        <div class="sdxv-build-log__switch">
+            <span>{{ t('view.task.AutoPull') }}: </span>
+            <el-switch
+                v-model="autoPull"
+            />
+        </div>
         <SdxuLogDetail
             :content="logInfo"
             :loading="loading"
@@ -18,16 +24,20 @@
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuLogDetail from '@sdx/ui/components/log-detail';
+import ElSwitch from 'element-ui/lib/switch';
 
 import { getImageBuildLog } from '@sdx/utils/src/api/image';
 import locale from '@sdx/utils/src/mixins/locale';
+
+const POLLING_INTERVAL = 3 * 1000;
 
 export default {
     name: 'SdxvBuildLogDialog',
     mixins: [locale],
     components: {
         SdxuDialog,
-        SdxuLogDetail
+        SdxuLogDetail,
+        ElSwitch
     },
     props: {
         visible: {
@@ -42,7 +52,9 @@ export default {
     data() {
         return {
             logInfo: '',
-            loading: false
+            autoPull: false,
+            loading: false,
+            pollingId: ''
         };
     },
     computed: {
@@ -78,12 +90,36 @@ export default {
             this.fetchLogInfo();
         },
         handleCloseDialog() {
+            this.stopPolling();
             this.logInfo = '';
         },
         handleScroll({ scrollInfo }) {
             let { scrollTop, warpHeight, offsetHeight } = scrollInfo;
             if (scrollTop + warpHeight >= offsetHeight) {
                 this.fetchLogInfo();
+            }
+        },
+        startPolling() {
+            clearInterval(this.pollingId);
+            this.pollingId = setInterval(this.fetchLogInfo, POLLING_INTERVAL);
+        },
+        stopPolling() {
+            clearInterval(this.pollingId);
+            this.pollingId = '';
+        }
+    },
+    beforeDestroy() {
+        this.stopPolling();
+    },
+    watch: {
+        autoPull: {
+            immediate: true,
+            handler: function(nval) {
+                if (nval) {
+                    this.startPolling();
+                } else {
+                    this.stopPolling();
+                }
             }
         }
     }

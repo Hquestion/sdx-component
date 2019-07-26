@@ -64,17 +64,20 @@
                     v-model="cpuService"
                     type="cpu"
                     :cpulabel="t('widget.resourceConfig.Parametric_Server_CPU_Memory')"
+                    :data-ready="dataReady"
                 />
                 <SdxwResourceConfig
                     v-model="cpuCompute"
                     type="cpu"
                     :cpulabel="t('widget.resourceConfig.Computing_Node_CPU_Memory')"
+                    :data-ready="dataReady"
                 />
                 <SdxwResourceConfig
                     v-if="isGpuEnt"
                     v-model="gpuObj"
                     :gpulabel="t('widget.resourceConfig.Computing_Node_GPU')"
                     type="gpu"
+                    :data-ready="dataReady"
                 /> 
             </el-form-item>
             <el-form-item
@@ -158,19 +161,19 @@ export default {
     data() {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
-                if(value.TF_PS_CPUS === 0) {
+                if(value.TF_PS_CPUS === 0 || value.TF_PS_CPUS === null || isNaN(value.TF_PS_CPUS)) {
                     callback(new Error(this.t('view.task.form.Parameter_server_CPU_Memory_need_to_be_configured')));
-                } else if (value.TF_WORKER_CPUS === 0) {
+                } else if (value.TF_WORKER_CPUS === 0 || value.TF_WORKER_CPUS === null || isNaN(value.TF_WORKER_CPUS)) {
                     callback(new Error(this.t('view.task.form.Computing_node_CPU_Memory_need_to_be_configured')));
-                } else if (value.TF_WORKER_GPUS === 0){
+                } else if (value.TF_WORKER_GPUS === 0 || value.TF_WORKER_GPUS === null || isNaN(value.TF_WORKER_GPUS)){
                     callback(new Error(this.t('view.task.form.Computing_node_GPU_needs_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
-                if(value.TF_PS_CPUS === 0) {
+                if(value.TF_PS_CPUS === 0 || value.TF_PS_CPUS === null || isNaN(value.TF_PS_CPUS)) {
                     callback(new Error(this.t('view.task.form.Parameter_server_CPU_Memory_need_to_be_configured')));
-                } else if (value.TF_WORKER_CPUS === 0) {
+                } else if (value.TF_WORKER_CPUS === 0 || value.TF_WORKER_CPUS === null || isNaN(value.TF_WORKER_CPUS)) {
                     callback(new Error(this.t('view.task.form.Computing_node_CPU_Memory_need_to_be_configured')));
                 } else {
                     callback();
@@ -235,7 +238,8 @@ export default {
                 'resourceConfig.TF_PS_INSTANCES': [
                     { required: true, message: this.t('view.task.form.Please_enter_the_number_of_parameter_server_instances'),trigger: 'change' }
                 ],
-            }
+            },
+            dataReady: false
         };
     },
     computed: {
@@ -299,6 +303,9 @@ export default {
                 count: this.params.resourceConfig.TF_WORKER_GPUS,
                 uuid: `${this.params.resourceConfig.GPU_MODEL}-${this.params.resourceConfig.TF_WORKER_GPUS}`
             };
+            this.$nextTick(()=> {
+                this.dataReady = true;
+            });
         },
         cpuService(val) {
             this.params.resourceConfig = { 

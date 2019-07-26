@@ -63,6 +63,7 @@
                 <SdxwResourceConfig
                     v-model="cpuObj"
                     type="onlycpu"
+                    :data-ready="dataReady"
                 />
             </el-form-item>
             <el-form-item
@@ -112,15 +113,15 @@ export default {
     data() {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
-                if(value.EXECUTOR_CPUS === 0) {
+                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
-                } else if (value.EXECUTOR_GPUS === 0) {
+                } else if (value.EXECUTOR_GPUS === 0 || value.EXECUTOR_GPUS === null || isNaN(value.EXECUTOR_GPUS)) {
                     callback(new Error(this.t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
-                if(value.EXECUTOR_CPUS === 0) {
+                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
@@ -172,7 +173,8 @@ export default {
                 logPaths: [
                     { required: true, message: this.t('view.task.form.Please_select_the_log_directory'), trigger: 'blur' }
                 ]
-            }
+            },
+            dataReady: false
         };
     },
     computed: {
@@ -214,6 +216,9 @@ export default {
                 memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),
                 uuid: `${this.params.resourceConfig.EXECUTOR_CPUS/1000}-${this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024)}`
             };
+            this.$nextTick(()=> {
+                this.dataReady = true;
+            });
         },
         cpuObj(val) {
             this.params.resourceConfig = { 

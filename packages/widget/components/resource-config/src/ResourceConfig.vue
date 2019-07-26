@@ -30,10 +30,10 @@
                     </div>
                 </el-option>
             </el-select>
-            <span
+            <!-- <span
                 class="sdxw-resource-config__error"
                 v-if="showError && cpuError"
-            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span>
+            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span> -->
         </div>
         <div v-if="type === 'gpu'">
             <div class="sdxw-resource-config__title">
@@ -64,10 +64,10 @@
                     </div>
                 </el-option>
             </el-select>
-            <span
+            <!-- <span
                 class="sdxw-resource-config__error"
                 v-if="showError && gpuError"
-            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span>
+            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span> -->
         </div>
         <div v-if="type === 'onlycpu'">
             <el-select
@@ -95,10 +95,10 @@
                     </div>
                 </el-option>
             </el-select>
-            <span
+            <!-- <span
                 class="sdxw-resource-config__error"
                 v-if="showError && cpuError"
-            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span>
+            >{{ t('widget.resourceConfig.Resource_template_has_been_deleted') }}</span> -->
         </div>
     </div>
 </template>
@@ -109,6 +109,7 @@ import Select from 'element-ui/lib/select';
 import { getResourceTmplList } from '@sdx/utils/src/api/resource';
 import locale from '@sdx/utils/src/mixins/locale';
 import { t } from '@sdx/utils/src/locale';
+// import { isEmptyObject } from '@sdx/utils/src/helper/tool';
 export default {
     name: 'ResourceConfig',
     mixins: [locale],
@@ -140,6 +141,10 @@ export default {
         showError: {
             type: Boolean,
             default: true
+        },
+        dataReady: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -147,7 +152,8 @@ export default {
             resourceCPU: [],
             resourceGPU: [],
             cpuError: false,
-            gpuError: false
+            gpuError: false,
+            isReady: false
         };
     },
     components: {
@@ -156,6 +162,11 @@ export default {
     computed: {
         __value: {
             get() {
+                // if (this.isReady) {
+                //     return this.value;
+                // } else {
+                //     return  {};
+                // }
                 return this.value;
             },
             set(nval) {
@@ -205,13 +216,10 @@ export default {
                         });
                         
                         if(!uuidGPUArr.includes(this.value.uuid) && this.value.uuid && uuidGPUArr.length) {
-                            this.$emit('input', {
-                                label: '',
-                                count: 0,
-                                uuid: '-0'
-                            });
-                            this.gpuError = true;
+                            this.$emit('input', {});
+                            // this.gpuError = true;
                         } else {
+                            this.isReady = true;
                             this.gpuError = false;
                         }
                     
@@ -223,18 +231,13 @@ export default {
                         });
                         
                         if(!uuidCPUArr.includes(this.value.uuid) && this.value.uuid && uuidCPUArr.length) {
-                            this.$emit('input', {
-                                cpu: 0,
-                                memory: 0,
-                                uuid: '0-0'
-                            });
-                            
+                            this.$emit('input', {});
                             this.cpuError = true;
                         } else {  
+                            // this.isReady = true;
                             this.cpuError = false;
                         }
                     }
-                
                 });
         }
     },
@@ -252,7 +255,47 @@ export default {
             } else if ((this.type === 'cpu' || this.type === 'onlycpu') && nval.cpu) {
                 this.cpuError = false;
             }
-        }
+        },
+        dataReady: {
+            immediate: true,
+            handler(nval) {
+                if (nval) {
+                    if(this.gpuError || this.cpuError) {
+                        this.$message({
+                            type: 'error',
+                            message: this.t('widget.resourceConfig.Resource_template_has_been_deleted')
+                        });
+                    } 
+                }
+            
+            }
+        },
+        gpuError: {
+            immediate: true,
+            handler(nval) {
+                if(nval) {
+                    if(this.dataReady) {
+                        this.$message({
+                            type: 'error',
+                            message: this.t('widget.resourceConfig.Resource_template_has_been_deleted')
+                        });
+                    }
+                }
+            }
+        },
+        cpuError: {
+            immediate: true,
+            handler(nval) {
+                if(nval) {
+                    if(this.dataReady) {
+                        this.$message({
+                            type: 'error',
+                            message: this.t('widget.resourceConfig.Resource_template_has_been_deleted')
+                        });
+                    }
+                }
+            }
+        },
     }
 };
 </script>

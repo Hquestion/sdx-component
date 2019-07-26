@@ -7,16 +7,18 @@
             disable ? 'is-disable': ''
         ]"
         v-show="visible"
-        :title="title"
         @click="handlerClick"
         v-loading="loading"
     >
-        <i :class="[icon]" />
+        <TextTooltip :title="title">
+            <i :class="[icon]" />
+        </TextTooltip>
     </div>
 </template>
 
 <script>
 import emitter from '@sdx/utils/src/mixins/emitter';
+import TextTooltip from '@sdx/ui/components/text-tooltip';
 export default {
     name: 'SdxuIconButton',
     mixins: [emitter],
@@ -24,6 +26,9 @@ export default {
         return {
             visible: true
         };
+    },
+    components: {
+        TextTooltip
     },
     props: {
         icon: {

@@ -1,35 +1,43 @@
 <template>
-    <el-popover
-        class="sdxu-text-tooltip"
-        placement="bottom"
-        effect="light"
-        trigger="hover"
-        popper-class="sdxu-text-tooltip__popper"
-    >
-        <div>
-            <template v-if="tipType === 'text'">
-                {{ tooltip }}
-            </template>
-            <template v-else>
-                <span
-                    class="sdxu-text-tooltip__item"
-                    v-for="(item, index) in content"
-                    :key="index"
-                >
-                    {{ typeof item === 'string' ? item : item[contentKey] }}{{ (index !== content.length - 1) ? ',' : '' }}
-                </span>
-            </template>
-        </div>
-        <span
-            slot="reference"
-            class="sdxu-text-tooltip__main"
-            :style="overflowStyle"
+    <span>
+        <el-popover
+            class="sdxu-text-tooltip"
+            placement="bottom"
+            effect="light"
+            trigger="hover"
+            popper-class="sdxu-text-tooltip__popper"
+            v-if="tooltip || (content && content.length > 0)"
         >
+            <div>
+                <template v-if="tipType === 'text'">
+                    {{ tooltip }}
+                </template>
+                <template v-else>
+                    <span
+                        class="sdxu-text-tooltip__item"
+                        v-for="(item, index) in content"
+                        :key="index"
+                    >
+                        {{ typeof item === 'string' ? item : item[contentKey] }}{{ (index !== content.length - 1) ? ',' : '' }}
+                    </span>
+                </template>
+            </div>
+            <span
+                slot="reference"
+                class="sdxu-text-tooltip__main"
+                :style="overflowStyle"
+            >
+                <slot>
+                    {{ text }}
+                </slot>
+            </span>
+        </el-popover>
+        <template v-else>
             <slot>
                 {{ text }}
             </slot>
-        </span>
-    </el-popover>
+        </template>
+    </span>
 </template>
 
 <script>

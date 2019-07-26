@@ -10,7 +10,8 @@
         >
             <sdxu-icon-button
                 v-auth.resource.button="'CONFIG:WRITE'"
-                class="iconfont sdx-icon-edit"
+                icon="sdx-icon sdx-icon-edit"
+                :title="t('sdxCommon.Edit')"
                 :active="!isReadonly"
                 @click="handleEdit"
             />

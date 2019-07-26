@@ -1,178 +1,184 @@
 <template>
-    <div class="sdxv-authorize-manage">
-        <SdxuContentPanel v-if="defaultName('READ')">
-            <div class="sdxv-authorize-manage__header">
-                <div class="sdxv-authorize-manage__handle">
-                    <SdxuTabRadioGroup
-                        v-model="objectType"
-                        @switch="switchTab"
-                    >
-                        <SdxuTabRadioItem
-                            name="user"
-                            v-auth.user.button="'USER:READ'"
-                        >
-                            {{ t('view.authorizeManage.user_authorization_list') }}
-                        </SdxuTabRadioItem>
-                        <SdxuTabRadioItem
-                            name="group"
-                            v-auth.user.button="'GROUP:READ'"
-                        >
-                            {{ t('view.authorizeManage.user_group_authorization_list') }}
-                        </SdxuTabRadioItem>
-                        <SdxuTabRadioItem
-                            name="role"
-                            v-auth.user.button="'ROLE:READ'"
-                        >
-                            {{ t('view.authorizeManage.role_authorization_list') }}
-                        </SdxuTabRadioItem>
-                    </SdxuTabRadioGroup>
-                    <SdxuButton
-                        type="primary"
-                        placement="right"
-                        @click="addAuthorize"
-                        size="small"
-                        class="addAuth"
-                        v-if="authtoWrite(objectType)"
-                    >
-                        <i
-                            class="sdx-icon sdx-icon-plus"
-                        />
-                        {{ t('view.authorizeManage.new_authorization') }}
-                    </sdxubutton>
-                </div>
-                <SdxwSearchLayout
-                    @search="searchName"
-                    align="left"
-                    style="flex: 1"
+    <SdxuContentPanel
+        v-if="defaultName('READ')"
+        :fullscreen="true"
+    >
+        <div class="sdxv-authorize-manage">
+            <div class="sdxv-authorize-manage__handle">
+                <SdxuTabRadioGroup
+                    v-model="objectType"
+                    @switch="switchTab"
                 >
-                    <SdxwSearchItem>
-                        <SdxuInput
-                            v-model="searchPermissions.name"
-                            :searchable="false"
-                            size="small"
-                            type="search"
-                            :placeholder="tabName(true)"
+                    <SdxuTabRadioItem
+                        name="user"
+                        v-auth.user.button="'USER:READ'"
+                    >
+                        {{ t('view.authorizeManage.user_authorization_list') }}
+                    </SdxuTabRadioItem>
+                    <SdxuTabRadioItem
+                        name="group"
+                        v-auth.user.button="'GROUP:READ'"
+                    >
+                        {{ t('view.authorizeManage.user_group_authorization_list') }}
+                    </SdxuTabRadioItem>
+                    <SdxuTabRadioItem
+                        name="role"
+                        v-auth.user.button="'ROLE:READ'"
+                    >
+                        {{ t('view.authorizeManage.role_authorization_list') }}
+                    </SdxuTabRadioItem>
+                </SdxuTabRadioGroup>
+                <SdxuButton
+                    type="primary"
+                    placement="right"
+                    @click="addAuthorize"
+                    size="small"
+                    class="addAuth"
+                    v-if="authtoWrite(objectType)"
+                >
+                    <i
+                        class="sdx-icon sdx-icon-plus"
+                    />
+                    {{ t('view.authorizeManage.new_authorization') }}
+                </sdxubutton>
+            </div>
+            <SdxwSearchLayout
+                @search="searchName"
+                align="left"
+                style="flex: 1"
+            >
+                <SdxwSearchItem>
+                    <SdxuInput
+                        v-model="searchPermissions.name"
+                        :searchable="false"
+                        size="small"
+                        type="search"
+                        :placeholder="tabName(true)"
+                    />
+                </SdxwSearchItem>
+            </SdxwSearchLayout>
+        </div>
+        <div
+            class="sdxv-authorize-manage__table"
+            v-loading="permissionLoading"
+        >
+            <SdxuTable
+                :data="tableData"
+            >
+                <el-table-column
+                    :prop="objectType === 'user' ? 'fullName' : 'name'"
+                    :label="tabName()"
+                    width="300px"
+                />
+                <el-table-column
+                    :label="t('view.authority.Authority')"
+                >
+                    <template slot-scope="scope">
+                        <SdxuTextTooltip
+                            :content="scope.row.permissions"
+                            content-key="name"
+                            tip-type="inline-block"
                         />
-                    </SdxwSearchItem>
-                </SdxwSearchLayout>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    width="400px"
+                    :label="t('sdxCommon.Operation')"
+                    v-if="authtoWrite(objectType)"
+                >
+                    <template
+                        slot-scope="scope"
+                        class="icon"
+                    >
+                        <SdxuIconButton
+                            class="sdx-icon sdx-icon-edit"
+                            @click="edit(scope.row)"
+                            :title="t('sdxCommon.Edit')"
+                        />
+                        <SdxuIconButton
+                            class="sdx-icon sdx-icon-delete"
+                            @click="remove(scope.row.uuid, objectType === 'user' ? scope.row.fullName : scope.row.name)"
+                            :title="t('sdxCommon.Delete')"
+                        />
+                    </template>
+                </el-table-column>
+            </SdxuTable>
+        </div>
+        <div
+            class="sdxv-role-manage__pagination"
+            slot="footer"
+        >
+            <sdxu-pagination
+                :current-page.sync="current"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="currentChange"
+            />
+        </div>
+        <sdxu-dialog
+            :visible.sync="dialogVisible"
+            class="sdxv-authorize-model"
+            @closed="closedDialog"
+            :title="is_update ? t('view.authorizeManage.editorial_authorization') : t('view.authorizeManage.new_authorization')"
+            @open="openDialog"
+        >
+            <div>
+                <el-form
+                    label-position="right"
+                    label-width="80px"
+                    @submit.native.prevent
+                    ref="permissionForm"
+                    :rules="is_update ? null : rules"
+                    :model="dialogParams"
+                    :validate-on-rule-change="false"
+                >
+                    <el-form-item
+                        prop="objValue"
+                        :label="t('view.authorizeManage.authorized_object')"
+                    >
+                        <SdxuUserAvatar
+                            v-if="is_update"
+                            :name="objName"
+                        />
+                        <SdxwUserPicker
+                            v-model="dialogParams.objValue"
+                            :type="objectType"
+                            v-else
+                        />
+                    </el-form-item>
+                    <el-form-item
+                        :label="t('view.authorizeManage.permission_settings')"
+                        prop="tags"
+                    >
+                        <SdxuTransfer
+                            :data="permissionData"
+                            :tags.sync="dialogParams.tags"
+                            :default-keys.sync="defaultKeys"
+                            :tree-node-key="treeNodeKey"
+                        />
+                    </el-form-item>
+                </el-form>
             </div>
             <div
-                class="sdxv-authorize-manage__table"
-                v-loading="permissionLoading"
+                slot="footer"
             >
-                <SdxuTable
-                    :data="tableData"
+                <SdxuButton
+                    type="default"
+                    size="small"
+                    @click="dialogCancel"
                 >
-                    <el-table-column
-                        :prop="objectType === 'user' ? 'fullName' : 'name'"
-                        :label="tabName()"
-                        width="300px"
-                    />
-                    <el-table-column
-                        :label="t('view.authority.Authority')"
-                    >
-                        <template slot-scope="scope">
-                            <SdxuTextTooltip
-                                :content="scope.row.permissions"
-                                content-key="name"
-                                tip-type="inline-block"
-                            />
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        width="400px"
-                        :label="t('sdxCommon.Operation')"
-                        v-if="authtoWrite(objectType)"
-                    >
-                        <template
-                            slot-scope="scope"
-                            class="icon"
-                        >
-                            <i
-                                class="sdx-icon sdx-icon-edit icon"
-                                @click="edit(scope.row)"
-                            />
-                            <i
-                                class="sdx-icon sdx-icon-delete icon"
-                                @click="remove(scope.row.uuid, objectType === 'user' ? scope.row.fullName : scope.row.name)"
-                            />
-                        </template>
-                    </el-table-column>
-                </SdxuTable>
-                <div class="sdxv-role-manage__pagination">
-                    <sdxu-pagination
-                        :current-page.sync="current"
-                        :page-size="pageSize"
-                        :total="total"
-                        @current-change="currentChange"
-                    />
-                </div>
+                    {{ t('sdxCommon.Cancel') }}
+                </SdxuButton>
+                <SdxuButton
+                    type="primary"
+                    size="small"
+                    @click="dialogConfirm"
+                >
+                    {{ t('sdxCommon.Confirm') }}
+                </SdxuButton>
             </div>
-            <sdxu-dialog
-                :visible.sync="dialogVisible"
-                class="sdxv-authorize-model"
-                @closed="closedDialog"
-                :title="is_update ? t('view.authorizeManage.editorial_authorization') : t('view.authorizeManage.new_authorization')"
-                @open="openDialog"
-            >
-                <div>
-                    <el-form
-                        label-position="right"
-                        label-width="80px"
-                        @submit.native.prevent
-                        ref="permissionForm"
-                        :rules="is_update ? null : rules"
-                        :model="dialogParams"
-                        :validate-on-rule-change="false"
-                    >
-                        <el-form-item
-                            prop="objValue"
-                            :label="t('view.authorizeManage.authorized_object')"
-                        >
-                            <SdxuUserAvatar
-                                v-if="is_update"
-                                :name="objName"
-                            />
-                            <SdxwUserPicker
-                                v-model="dialogParams.objValue"
-                                :type="objectType"
-                                v-else
-                            />
-                        </el-form-item>
-                        <el-form-item
-                            :label="t('view.authorizeManage.permission_settings')"
-                            prop="tags"
-                        >
-                            <SdxuTransfer
-                                :data="permissionData"
-                                :tags.sync="dialogParams.tags"
-                                :default-keys.sync="defaultKeys"
-                                :tree-node-key="treeNodeKey"
-                            />
-                        </el-form-item>
-                    </el-form>
-                </div>
-                <div
-                    slot="footer"
-                >
-                    <SdxuButton
-                        type="default"
-                        size="small"
-                        @click="dialogCancel"
-                    >
-                        {{ t('sdxCommon.Cancel') }}
-                    </SdxuButton>
-                    <SdxuButton
-                        type="primary"
-                        size="small"
-                        @click="dialogConfirm"
-                    >
-                        {{ t('sdxCommon.Confirm') }}
-                    </SdxuButton>
-                </div>
-            </sdxu-dialog>
-        </SdxuContentPanel>
-    </div>
+        </sdxu-dialog>
+    </SdxuContentPanel>
 </template>
 
 <script>

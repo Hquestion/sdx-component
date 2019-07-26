@@ -52,6 +52,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
     @include element('pagination') {
         align-self: flex-end;
+        margin-top: $sdx-margin;
     }
 }
 

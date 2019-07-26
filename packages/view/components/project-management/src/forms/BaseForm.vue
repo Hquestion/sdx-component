@@ -1,39 +1,39 @@
 
 <template>
-    <div class="sdxv-project-task-form">
-        <SdxuContentPanel
-            :title="title"
+    <SdxuContentPanel
+        class="sdxv-project-task-form"
+        :title="title"
+        :fullscreen="true"
+    >
+        <!-- 图标插入 -->
+        <div :style="`padding-left: ${labelWidth}px; padding-bottom: 20px` ">
+            <i :class="['sdx-icon' ,icon]" />
+        </div>
+        <slot
+            name="form"
         >
-            <!-- 图标插入 -->
-            <div :style="`padding-left: ${labelWidth}px; padding-bottom: 20px` ">
-                <i :class="['sdx-icon' ,icon]" />
-            </div>
-            <slot
-                name="form"
+            <!-- 插入form -->
+        </slot>
+        <div
+            class="task-from__btn-box"
+            :style="`padding-left: ${labelWidth}px`"
+        >
+            <SdxuButton
+                size="small"
+                type="default"
+                @click="handleCancel"
             >
-                <!-- 插入form -->
-            </slot>
-            <div
-                class="task-from__btn-box"
-                :style="`padding-left: ${labelWidth}px`"
+                {{ t('sdxCommon.Cancel') }}
+            </SdxuButton>
+            <SdxuButton
+                type="primary"
+                size="small"
+                @click="handleCommit"
             >
-                <SdxuButton
-                    size="small"
-                    type="default"
-                    @click="handleCancel"
-                >
-                    {{ t('sdxCommon.Cancel') }}
-                </SdxuButton>
-                <SdxuButton
-                    type="primary"
-                    size="small"
-                    @click="handleCommit"
-                >
-                    {{ commitTitle }}
-                </SdxuButton>
-            </div>
-        </SdxuContentPanel>
-    </div>
+                {{ commitTitle }}
+            </SdxuButton>
+        </div>
+    </SdxuContentPanel>
 </template>
 
 <script>

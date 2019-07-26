@@ -97,6 +97,7 @@
                     type="cpu"
                     v-else
                     :read-only="isPublishing"
+                    :data-ready="dataReady"
                 />
                 <ResourceConfig
                     v-model="versionInfoForm.runtimeResource.gpuObj"
@@ -108,6 +109,7 @@
                     type="gpu"
                     v-if="editingVersion && isGpuEnt"
                     :read-only="isPublishing"
+                    :data-ready="dataReady"
                 />
             </el-form-item>
             <el-form-item
@@ -206,7 +208,8 @@ export default {
                     { required: true, message: this.t('view.model.enterModelPath'), trigger: 'blur' },
                 ]
             },
-            needRefresh: false
+            needRefresh: false,
+            dataReady: false
         };
     },
     props: {
@@ -268,6 +271,7 @@ export default {
                 label,
                 uuid: `${label}-${count}`
             };
+            this.dataReady = true;
         }
     },
     methods: {

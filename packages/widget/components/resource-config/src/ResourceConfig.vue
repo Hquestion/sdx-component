@@ -6,13 +6,13 @@
                 <span v-if="required">*</span>  {{ cpulabel }}
             </div>
             <el-select
-                :searchable="true"
                 size="small"
                 :placeholder="`${t('widget.resourceConfig.Please_select')}${cpulabel}`"
                 v-model="__value"
                 value-key="uuid"
                 :popper-append-to-body="false"
                 :disabled="readOnly"
+                filterable
             >
                 <el-option
                     v-for="(item) in dealCPU(resourceCPU)"
@@ -47,6 +47,7 @@
                 value-key="uuid"
                 :popper-append-to-body="false"
                 :disabled="readOnly"
+                filterable
             >
                 <el-option
                     v-for="(item) in dealGPU(resourceGPU)"
@@ -78,6 +79,7 @@
                 value-key="uuid"
                 :popper-append-to-body="false"
                 :disabled="readOnly"
+                filterable
             >
                 <el-option
                     v-for="(item) in dealCPU(resourceCPU)"

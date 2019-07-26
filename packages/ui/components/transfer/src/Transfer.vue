@@ -20,6 +20,7 @@
                         check-on-click-node
                         :default-checked-keys="defaultKeys"
                         @check="checkChange"
+                        v-loading="loading"
                     />
                 </SdxuScroll>
             </div>
@@ -97,6 +98,10 @@ export default {
             default:() => []
         },
         treeNodeKey: {
+            type: String,
+            default: ''
+        },
+        loading: {
             type: String,
             default: ''
         }

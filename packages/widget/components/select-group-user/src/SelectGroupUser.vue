@@ -5,6 +5,7 @@
         :default-keys.sync="tmpDefaultKeys"
         :tree-node-key="treeNodeKey"
         class="sdxw-select-group-user"
+        :loading="loading"
     />
 </template>
 
@@ -18,7 +19,8 @@ export default {
             treeNodeKey: 'uuid',
             treeData: [],
             tmpTags: [],
-            tmpDefaultKeys: []
+            tmpDefaultKeys: [],
+            loading: false
         };
     },
     watch: {
@@ -53,6 +55,7 @@ export default {
         const params = {
             count: -1
         };
+        this.loading = true;
         if (!this.mode) {
             // 选择用户和组
             const res = await getGroups(params);
@@ -84,6 +87,7 @@ export default {
                         });
                     }
                 });
+                this.loading = false;
             });
             this.groups.forEach(group => {
                 if (this.tmpDefaultKeys.indexOf(group) === -1) {
@@ -105,6 +109,7 @@ export default {
                         label: group.name
                     });
                 });
+                this.loading = false;
             });
             this.groups.forEach(group => {
                 if (this.tmpDefaultKeys.indexOf(group) === -1) {
@@ -120,6 +125,7 @@ export default {
                         label: user.fullName
                     });
                 });
+                this.loading = false;
             });
             this.users.forEach(user => {
                 if (this.tmpDefaultKeys.indexOf(user) === -1) {

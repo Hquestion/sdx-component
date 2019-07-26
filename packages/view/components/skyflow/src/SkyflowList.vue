@@ -8,7 +8,7 @@
                 <sdxu-button
                     placement="right"
                     size="small"
-                    icon="sdx-icon-plus"
+                    trigger="click"
                     style="margin-right: 10px;"
                     v-auth.skyflow.button="'FLOW:CREATE'"
                 >

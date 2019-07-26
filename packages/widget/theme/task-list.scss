@@ -14,4 +14,9 @@
             cursor: pointer;
         }
     }
+    @include element('tips') {
+        background: #F2F6FC;
+        padding: 17px $sdx-padding;
+        margin: $sdx-margin 0 10px;
+    }
 }

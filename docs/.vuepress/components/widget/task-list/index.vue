@@ -1,16 +1,16 @@
 <template>
     <div class="sdxw-task-list">
-        <SdxwTaskList></SdxwTaskList>
+        <SdxwTaskResourceList></SdxwTaskResourceList>
     </div>
 </template>
 
 <script>
-import SdxwTaskList from '@sdx/widget/components/task-list';
+import SdxwTaskResourceList from '@sdx/widget/components/task-list';
 
 export default {
     name: 'TaskListDemo',
     components: {
-        SdxwTaskList
+        SdxwTaskResourceList
     }
 }
 </script>

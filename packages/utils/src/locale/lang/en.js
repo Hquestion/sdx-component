@@ -183,6 +183,7 @@ export default {
             Block: 'Block',
             Count: '',
             TaskDetail: 'Task Detail',
+            TaskListTips: 'A single GPU task runs longer than 6 hours, and a single non-GPU task runs longer than 7 days will be automatically terminated by the system. If there are special resource requirements, please contact the administrator.',
 
             type: {
                 SPARK: 'SPARK',

@@ -172,12 +172,12 @@
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ParametricServerMemory')"
-                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.TF_PS_MEMORY0 || 0) + 'GB'"
+                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.TF_PS_MEMORY || 0) + 'GB'"
                         :strip="true"
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ParametricServerInstanceCount')"
-                        :value="task && task.resourceConfig && task.resourceConfig.TF_EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
+                        :value="task && task.resourceConfig && (task.resourceConfig.TF_PS_INSTANCES || task.resourceConfig.TF_EXECUTOR_INSTANCES) || 0 + t('view.task.Count')"
                         :strip="true"
                     />
                 </div>
@@ -199,7 +199,7 @@
                     />
                     <SdxvBaseInfoItem
                         :label="t('view.task.ComputationalNodeInstanceCount')"
-                        :value="task && task.resourceConfig && task.resourceConfig.TF_EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
+                        :value="task && task.resourceConfig && (task.resourceConfig.TF_WORKER_INSTANCES || task.resourceConfig.TF_EXECUTOR_INSTANCES) || 0 + t('view.task.Count')"
                         :strip="true"
                     />
                 </div>

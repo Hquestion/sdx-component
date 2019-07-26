@@ -61,7 +61,7 @@ export default {
             this.chartInstance = echarts.init(this.$el);
             this.chartInstance.setOption({
                 tooltip: {
-                    formatter: `{a} {b} <br/>{c}${this.t('view.monitor.resourceStatistic.Core')} {d}%`
+                    formatter: `{a} {b} <br/>{c}${this.t('view.monitor.resourceStatistic.Block')} {d}%`
                 },
                 series: [{
                     name: 'GPU',

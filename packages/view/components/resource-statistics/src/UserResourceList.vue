@@ -5,36 +5,35 @@
     >
         <template
             #right
-            v-if="ranking || searchable"
+            v-if="ranking"
         >
             <div
-                v-if="ranking"
                 class="sdxv-user-resource-list__more"
                 @click="handGotoUserResourceList"
             >
                 <span>{{ t('sdxCommon.ALL') }}</span>
                 <i class="sdx-icon sdx-icon-arrow-right" />
             </div>
-            <div
-                v-else-if="searchable"
-                class="sdxv-user-resource-list__search"
-            >
-                <SdxuInput
-                    v-model="searchName"
-                    type="search"
-                    :placeholder="t('view.monitor.resourceStatistic.userSearchInputPlaceholder')"
-                    size="small"
-                />
-                <SdxuButton
-                    type="primary"
-                    size="small"
-                    @click="handleSearch"
-                    class="sdxv-user-resource-list__search--button"
-                >
-                    {{ t('sdxCommon.Search') }}
-                </SdxuButton>
-            </div>
         </template>
+        <div
+            v-if="!ranking && searchable"
+            class="sdxv-user-resource-list__search"
+        >
+            <SdxuInput
+                v-model="searchName"
+                type="search"
+                :placeholder="t('view.monitor.resourceStatistic.userSearchInputPlaceholder')"
+                size="small"
+            />
+            <SdxuButton
+                type="primary"
+                size="small"
+                @click="handleSearch"
+                class="sdxv-user-resource-list__search--button"
+            >
+                {{ t('sdxCommon.Search') }}
+            </SdxuButton>
+        </div>
         <SdxuTable
             :data="userResourceList"
             @sort-change="handleSortChange"

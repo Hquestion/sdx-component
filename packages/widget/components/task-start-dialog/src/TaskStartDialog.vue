@@ -18,7 +18,7 @@
                     v-if="autoImage"
                     :label="true"
                 >
-                    {{ t('view.task.TemporalImage') }}: {{ autoImage.image_update_time }}
+                    {{ t('view.task.TemporalImage') }}: {{ autoImage.updatedAt && dateFormatter(autoImage.updatedAt) || '' }}
                 </el-radio>
                 <el-radio
                     v-if="image"
@@ -55,6 +55,7 @@ import ElRadioGroup from 'element-ui/lib/radio-group';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuButton from '@sdx/ui/components/button';
 import locale from '@sdx/utils/src/mixins/locale';
+import { dateFormatter } from '@sdx/utils/src/helper/transform';
 
 export default {
     name: 'SdxwTaskStartDialog',
@@ -100,6 +101,9 @@ export default {
         },
         handleCancel() {
             this.$emit('cancel');
+        },
+        dateFormatter(date) {
+            return dateFormatter(date);
         }
     }
 };

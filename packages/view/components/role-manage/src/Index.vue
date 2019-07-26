@@ -82,15 +82,17 @@
                             slot-scope="scope"
                             class="icon"
                         >
-                            <i
-                                class="sdx-icon sdx-icon-edit icon"
+                            <SdxuIconButton
+                                class="sdx-icon sdx-icon-edit"
                                 @click="editRole(scope.row.uuid)"
+                                :title="t('sdxCommon.Edit')"
                                 v-auth.user.button="'ROLE:WRITE'"
                             />
-                            <i
-                                class="sdx-icon sdx-icon-delete icon"
-                                @click="removeRole(scope.row.uuid, scope.row.name)"
+                            <SdxuIconButton
+                                class="sdx-icon sdx-icon-delete"
                                 v-auth.user.button="'ROLE:WRITE'"
+                                @click="removeRole(scope.row.uuid, scope.row.name)"
+                                :title="t('sdxCommon.Delete')"
                             />
                         </template>
                     </el-table-column>

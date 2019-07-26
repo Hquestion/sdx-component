@@ -1,6 +1,7 @@
 <template>
     <SdxuContentPanel
         :title="t('view.authority.Authority')"
+        :fullscreen="true"
     >
         <template>
             <div
@@ -80,15 +81,18 @@
                     </template>
                 </el-table-column>
             </sdxu-table>
-            <div class="sdxv-privilege-system__pagination">
-                <sdxu-pagination
-                    v-if="total"
-                    :current-page.sync="page"
-                    :page-size="pageSize"
-                    :total="total"
-                    @current-change="handleChangePage"
-                />
-            </div>
+        </div>
+        <div
+            class="sdxv-privilege-system__pagination"
+            slot="footer"
+        >
+            <sdxu-pagination
+                v-if="total"
+                :current-page.sync="page"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="handleChangePage"
+            />
         </div>
     </SdxuContentPanel>
 </template>

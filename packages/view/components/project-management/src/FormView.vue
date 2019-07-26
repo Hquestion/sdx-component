@@ -1,13 +1,11 @@
 <template>
-    <div class="form">
-        <component
-            v-if="taskId && task || projectId"
-            :is="formComp"
-            :project-id="projectId"
-            :kind-single-instance="kindSingleInstance"
-            :task="task"
-        />
-    </div>
+    <component
+        v-if="taskId && task || projectId"
+        :is="formComp"
+        :project-id="projectId"
+        :kind-single-instance="kindSingleInstance"
+        :task="task"
+    />
 </template>
 
 <script>
@@ -78,7 +76,5 @@ export default {
 </script>
 
 <style lang="scss">
-.form {
-    height: 100%;
-}
+
 </style>

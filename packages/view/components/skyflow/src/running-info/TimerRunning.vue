@@ -45,10 +45,15 @@
                         </el-table-column>
                         <el-table-column
                             key="executeTime"
-                            prop="executeTime"
                             :label="t('view.skyflow.columns.executeTime')"
                             sortable="custom"
-                        />
+                        >
+                            <template slot-scope="prop">
+                                <div>
+                                    {{ prop.row.executeTime | seconds2HMS }}
+                                </div>
+                            </template>
+                        </el-table-column>
                         <el-table-column
                             key="state"
                             :label="t('view.skyflow.columns.state')"
@@ -69,15 +74,15 @@
                         >
                             <template slot-scope="props">
                                 <sdxu-icon-button
+                                    @click="handleSubOperation(props.row, 'canvas')"
+                                    icon="sdx-icon sdx-huabu"
+                                    :title="t('view.skyflow.canvas')"
+                                />
+                                <sdxu-icon-button
                                     @click="handleSubOperation(props.row, 'remove')"
                                     icon="sdx-icon sdx-icon-delete"
                                     :title="t('sdxCommon.Delete')"
                                     v-if="isOwnWorkflow"
-                                />
-                                <sdxu-icon-button
-                                    @click="handleSubOperation(props.row, 'canvas')"
-                                    icon="sdx-icon sdx-huabu"
-                                    :title="t('view.skyflow.canvas')"
                                 />
                             </template>
                         </el-table-column>
@@ -355,8 +360,8 @@ export default {
                 this.runningInfoList = res.items;
                 this.runningInfoList.forEach(item => {
                     item.showRun = this.isOwnWorkflow && item.state === 'stopped';
-                    item.showEdit = this.isOwnWorkflow && (item.state === 'cronRunning' || item.state === 'stopped');
-                    item.showRemove = this.isOwnWorkflow;
+                    item.showEdit = this.isOwnWorkflow && item.state === 'stopped';
+                    item.showRemove = this.isOwnWorkflow && item.state !== 'cronRunning';
                     item.showShutdown = this.isOwnWorkflow && (item.state === 'cronRunning' || item.state === 'succeeded');
                     item.label = {};
                     switch(item.state) {

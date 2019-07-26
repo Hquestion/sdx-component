@@ -97,18 +97,21 @@
                     @search="filterProjects"
                 />
             </div>
-            <sdxw-project-card-list
-                v-loading="loading"
-                class="sdxv-create-project__template-list"
-            >
-                <sdxw-project-card
-                    @operate="handleOperate"
-                    v-for="(item, index) in projectList"
-                    :key="index"
-                    :meta="item"
-                    :operate-type="createType"
-                />
-            </sdxw-project-card-list>
+            <div v-loading="loading">
+                <sdxw-project-card-list
+                    class="sdxv-create-project__template-list"
+                    v-if="!!totalProjects.length"
+                >
+                    <sdxw-project-card
+                        @operate="handleOperate"
+                        v-for="(item, index) in projectList"
+                        :key="index"
+                        :meta="item"
+                        :operate-type="createType"
+                    />
+                </sdxw-project-card-list>
+                <sdxu-empty v-else />
+            </div>
         </el-scrollbar>
         <div
             slot="footer"
@@ -144,6 +147,7 @@ import { updateProject, getProjectList, createProject } from '@sdx/utils/src/api
 import auth from '@sdx/widget/components/auth';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
+import Empty from '@sdx/ui/components/empty';
 export default {
     name: 'SdxvCreateProject',
     data() {
@@ -194,7 +198,8 @@ export default {
         [Scrollbar.name]: Scrollbar,
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
-        [SelectGroupUser.name]: SelectGroupUser
+        [SelectGroupUser.name]: SelectGroupUser,
+        [Empty.name]: Empty
     },
     directives: {
         auth
@@ -261,6 +266,7 @@ export default {
             }
         },
         getProjectList(type, name) {
+            this.loading = true;
             const params = {
                 name: name || '',
                 start: 1,
@@ -270,7 +276,9 @@ export default {
             getProjectList(params).then(res => {
                 this.projectList = res.data.items;
                 this.loading = false;
-                this.totalProjects = this.createType === 'project' ? [...this.projectList] : '';
+                this.totalProjects = [...this.projectList];
+            }).finally(() => {
+                this.loading = false;
             });
         },
         confirm() {

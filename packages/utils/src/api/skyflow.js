@@ -106,8 +106,8 @@ export function stopExecuteWorkflow(execute_id) {
 /**
  * 获取数据集列表
  */
-export function getDatasetList() {
-    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/dataset');
+export function getDatasetList(processType) {
+    return httpService.get(SKYFLOW_MANAGE_GATEWAY_BASE_OLD + 'task/skyflow/dataset', { processType });
 }
 
 /**

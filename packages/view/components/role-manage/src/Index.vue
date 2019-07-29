@@ -83,13 +83,13 @@
                             class="icon"
                         >
                             <SdxuIconButton
-                                class="sdx-icon sdx-icon-edit"
+                                icon="sdx-icon sdx-icon-edit"
                                 @click="editRole(scope.row.uuid)"
                                 :title="t('sdxCommon.Edit')"
                                 v-auth.user.button="'ROLE:WRITE'"
                             />
                             <SdxuIconButton
-                                class="sdx-icon sdx-icon-delete"
+                                icon="sdx-icon sdx-icon-delete"
                                 v-auth.user.button="'ROLE:WRITE'"
                                 @click="removeRole(scope.row.uuid, scope.row.name)"
                                 :title="t('sdxCommon.Delete')"

@@ -2,6 +2,7 @@
     & > div {
         position: relative;
     }
+    
     @include element('title') {
         color: $sdx-text-minor-color;
         height: $sdxw-resource-label-height;
@@ -50,4 +51,7 @@
     .sdxw-file-select {
         max-width: $sdw-resource-file-select-width;
     }
+}
+.el-form-item.is-error > .el-form-item__content > .sdxw-resource-config span.sdxw-resource-config__error {
+    display: none;
 }

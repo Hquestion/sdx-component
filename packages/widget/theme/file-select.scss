@@ -140,11 +140,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         display: block;
         text-align: left;
         span {
-            color: $sdx-text-regular-color;
+            color: inherit;
         }
         &:hover {
             span {
-                color: #fff;
+                color: inherit;
             }
         }
     }

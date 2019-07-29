@@ -19,6 +19,10 @@ export function isObject(value) {
     return value != null && (type === 'object' || type === 'function');
 }
 
+export function isEmptyObject(value) {
+    return isObject(value) && Object.keys(value).length === 0;
+}
+
 export function isFunction(value) {
     return typeof value === 'function';
 }

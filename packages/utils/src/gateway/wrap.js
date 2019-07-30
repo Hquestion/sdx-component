@@ -3,6 +3,24 @@
 import '@babel/polyfill';
 import { v4 as uuid } from 'uuid';
 
+// tyk网关协议/服务名
+export const TYK_SERVER_PROTOCOL = 'http://';
+export const TYK_SERVER_NAME = 'tyk-api-gateway';
+// 之前用的tyk-gateway，重新部署后确认修改为tyk-api-gateway
+// 为了简化修改，这里对url做一次处理，替换掉原来的http://tyk-gateway
+const OLD_TYK_NAME = 'tyk-gateway';
+
+export const prefixRestApi = url => {
+    if (url.indexOf(`${TYK_SERVER_PROTOCOL}${TYK_SERVER_NAME}`) >= 0) {
+        return url;
+    }
+    let oldName = `http://${OLD_TYK_NAME}/`;
+    if (url.indexOf(oldName) >= 0) {
+        url = url.replace(oldName, '');
+    }
+    return `${TYK_SERVER_PROTOCOL}${TYK_SERVER_NAME}/${url}`;
+};
+
 /* Common HTTP constants
  */
 export const AUTHORIZATION_HEADER = 'Authorization';
@@ -209,7 +227,7 @@ class Context {
         const req = {
             method,
             headers: {},
-            relative_url: url
+            relative_url: prefixRestApi(url)
         };
 
         PASSED_HEADERS.forEach(key => {
@@ -419,7 +437,7 @@ class Context {
             const uuids = new Set();
             const path = pattern.path;
             const paths = pattern.paths;
-            const url = pattern.url;
+            const url = prefixRestApi(pattern.url);
             const result = pattern.result;
             resultIdKeys[url] = pattern.resultIdKey || 'uuid';
             if (result !== undefined) {

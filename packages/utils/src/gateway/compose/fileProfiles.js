@@ -1,8 +1,8 @@
-import wrap from '../wrap';
+import wrap, { prefixRestApi } from '../wrap';
 
 export const handler = wrap(function(ctx, request) {
     const files = ctx.sendRequest(ctx.createGetRequest(
-        'http://tyk-gateway/file-manager/api/v1/files',
+        prefixRestApi('file-manager/api/v1/files'),
         request.Params));
 
     const extensions = request.Params.fileExtensions;
@@ -14,14 +14,14 @@ export const handler = wrap(function(ctx, request) {
         };
         delete newParams.fileExtensions;
         const folders = ctx.sendRequest(ctx.createGetRequest(
-            'http://tyk-gateway/file-manager/api/v1/files',
+            prefixRestApi('file-manager/api/v1/files'),
             newParams));
         files.children = folders.children.concat(files.children);
     }
 
     ctx.resolveUuids(files, {
         path: 'children.*.ownerId',
-        url: 'http://tyk-gateway/user-manager/api/v1/users',
+        url: prefixRestApi('user-manager/api/v1/users'),
         result: 'users',
         errorReplaceKey: 'uuid'
     });

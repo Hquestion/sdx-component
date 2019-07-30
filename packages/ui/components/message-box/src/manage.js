@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import MessageBoxConstruct from './MessageBox';
-import {t} from '@sdx/utils/src/locale';
 import {lock, unlock} from '@sdx/utils/src/lockScroll';
 
 let instance = null;
@@ -9,7 +8,7 @@ let vm;
 function MessageBox(opt) {
     let _resolve, _reject;
     let {
-        title = t('ui.messageBox.pormpt'),
+        title = '',
         content = '',
         type = 'confirm',
         status = 'error',

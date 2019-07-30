@@ -108,6 +108,9 @@
             "path": "./node_modules/cz-conventional-changelog"
         }
     },
+    "publishConfig": {
+        "registry": "http://192.168.20.38:4873/"
+    },
     "version": "0.0.1",
     "peerDependencies": {
         "vue": "^2.6.10"

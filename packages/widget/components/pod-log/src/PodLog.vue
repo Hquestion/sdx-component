@@ -113,7 +113,7 @@ export default {
                 this.preLoading = false;
             } else if (!this._isDestroyed) {
                 ElMessage.warning({
-                    message: this.t('view.task.ReachedTheHeadOfLog')
+                    message: this.logContent ? this.t('view.task.ReachedTheHeadOfLog') : this.t('view.task.NoNewLogsYet')
                 });
             }
         },
@@ -162,14 +162,17 @@ export default {
             if (this.startedAt) {
                 params.startedAt = this.startedAt;
             }
+            this.preLoading = true;
             // tail 查看时的初始化方法，先查询最新日志
             // 获取日志长度
             try {
                 const data = await getPodLog(this.podName, params);
                 this.start = this.end = data.total + 1;
+                this.preLoading = false;
                 this.getBackwardLog();
             } catch(e) {
                 window.console.error(e);
+                this.preLoading = false;
             }
         },
         getTaskInfo() {

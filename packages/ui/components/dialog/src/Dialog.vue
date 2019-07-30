@@ -42,6 +42,7 @@
         </div>
         <div><slot /></div>
         <div
+            class="sdxu-dialog__footer"
             slot="footer"
             v-if="!noFooter"
         >

@@ -164,9 +164,7 @@ export default {
 <style lang="scss" scoped>
 .sdxv-operation-bar {
     display: flex;
+    flex-direction: row-reverse;
     justify-content: space-between;
-    .sdxv-operation-bar__search {
-        flex: 1;
-    }
 }
 </style>

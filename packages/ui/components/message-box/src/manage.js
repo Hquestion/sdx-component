@@ -52,8 +52,10 @@ function MessageBox(opt) {
 }
 
 MessageBox.close = () => {
+    if (!vm) return;
     vm.visible = false;
     setTimeout(() => {
+        if(!vm) return;
         vm.$off('cancel');
         vm.$off('confirm');
         vm.$off('close');

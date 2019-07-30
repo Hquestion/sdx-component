@@ -259,7 +259,7 @@ export default {
         });
         return {
             taskResourceList: [],
-            total: 100,
+            total: 1,
             page: 1,
             pageSize: 10,
             taskType: '',
@@ -286,7 +286,11 @@ export default {
         },
         queryParams() {
             let params = this.ownerId ? { ownerId: this.ownerId } : {};
-            return Object.assign({}, params, this.params, {
+            params.isMonitor = this.monitor;
+            if (this.ranking) {
+                params.states = `${STATE_TYPE.RUNNING},${STATE_TYPE.LAUNCHING},${STATE_TYPE.KILLING}`;
+            }
+            return Object.assign({}, this.params, params, {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });
@@ -342,7 +346,11 @@ export default {
             this.page = 1;
         },
         handleGotoProject(project) {
-            this.$router.push(`/sdxv-project-manage/project-detail/${project.uuid}`);
+            if (project && project.uuid) {
+                this.$router.push(`/sdxv-project-manage/project-detail/${project.uuid}`);
+            } else {
+                return false;
+            }
         },
         formatDate(date) {
             return dateFormatter(date, 'YYYY-MM-DD HH:mm:ss');

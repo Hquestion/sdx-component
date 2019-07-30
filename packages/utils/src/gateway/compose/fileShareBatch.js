@@ -1,4 +1,4 @@
-import wrap from '../wrap';
+import wrap, {prefixRestApi} from '../wrap';
 import errorCode from '../errorCode';
 
 export let handler = wrap(function(ctx, request) {
@@ -7,14 +7,11 @@ export let handler = wrap(function(ctx, request) {
         const newBody = {...body, path};
         delete newBody.paths;
         return ctx.createPostRequest(
-            'http://tyk-gateway/file-manager/api/v1/file_shares?index='+index,
+            prefixRestApi('file-manager/api/v1/file_shares?index='+index),
             newBody
         );
     });
-    ctx.info('share request params: ' + JSON.stringify(requests));
     const results = ctx.sendRequests(...requests);
-
-    ctx.info('batch result before: ' + JSON.stringify(results));
 
     let errorRequest = [];
     results.forEach(result => {

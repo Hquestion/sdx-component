@@ -1,6 +1,6 @@
 <template>
     <div class="sdxu-empty">
-        <div>
+        <div v-if="emptyType">
             <svg
                 :class="`sdxu-empty--${size}`"
                 aria-hidden="true"

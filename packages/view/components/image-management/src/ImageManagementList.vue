@@ -207,8 +207,7 @@ export default {
                 'TENSORFLOW_DEPLOYMENT',
                 'SPARK_DEPLOYMENT',
                 'PMML_DEPLOYMENT',
-                'CONTAINER_DEV',
-                'OTHER'
+                'CONTAINER_DEV'
             ],
             buildTypes: [
                 {

@@ -1,6 +1,7 @@
 <template>
     <SdxuContentPanel
         :title="title || t('view.monitor.resourceStatistic.AllUserResourceStatistics')"
+        :fullscreen="true"
         class="sdxv-user-resource-list"
     >
         <template

@@ -1,23 +1,22 @@
 <template>
-    <div
+    <SdxuContentPanel
+        :fullscreen="true"
         class="sdxv-components-state"
         v-auth.system.button="'POD_STATE:READ'"
     >
-        <SdxuContentPanel>
-            <SdxuTabRadioGroup
-                v-model="type"
-                class="sdxv-components-state__tab"
-            >
-                <SdxuTabRadioItem name="base">
-                    {{ t('view.monitor.componentState.BasicComponents') }}
-                </SdxuTabRadioItem>
-                <SdxuTabRadioItem name="system">
-                    {{ t('view.monitor.componentState.MicroserviceComponents') }}
-                </SdxuTabRadioItem>
-            </SdxuTabRadioGroup>
-            <SdxvComponentStateList :type="type" />
-        </SdxuContentPanel>
-    </div>
+        <SdxuTabRadioGroup
+            v-model="type"
+            class="sdxv-components-state__tab"
+        >
+            <SdxuTabRadioItem name="base">
+                {{ t('view.monitor.componentState.BasicComponents') }}
+            </SdxuTabRadioItem>
+            <SdxuTabRadioItem name="system">
+                {{ t('view.monitor.componentState.MicroserviceComponents') }}
+            </SdxuTabRadioItem>
+        </SdxuTabRadioGroup>
+        <SdxvComponentStateList :type="type" />
+    </SdxuContentPanel>
 </template>
 
 <script>

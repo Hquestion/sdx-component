@@ -1,5 +1,8 @@
 <template>
-    <SdxuContentPanel :title="t('view.task.TaskManagement')">
+    <SdxuContentPanel
+        :title="t('view.task.TaskManagement')"
+        :fullscreen="true"
+    >
         <SdxwTaskResourceList :owner-id="currentUser && currentUser.userId || ''" />
     </SdxuContentPanel>
 </template>

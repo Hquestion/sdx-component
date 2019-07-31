@@ -1,5 +1,8 @@
 <template>
-    <SdxuContentPanel :title="t('view.monitor.resourceStatistic.AllTaskList')">
+    <SdxuContentPanel
+        :title="t('view.monitor.resourceStatistic.AllTaskList')" 
+        :fullscreen="true"
+    >
         <SdxwTaskResourceList :monitor="true" />
     </SdxuContentPanel>
 </template>

@@ -72,7 +72,8 @@ externals = [
     nodeExternals({
         whitelist: [
             /^codemirror/,
-            'vue-codemirror-lite'
+            'vue-codemirror-lite',
+            'portal-vue'
         ]
     })
 ];

@@ -95,6 +95,7 @@
         "element-ui": "^2.3.7",
         "highlight.js": "^9.12.0",
         "less-loader": "^4.1.0",
+        "portal-vue": "^2.1.5",
         "sh": "0.0.3",
         "vue": "^2.6.10",
         "vue-clipboard2": "^0.3.0",

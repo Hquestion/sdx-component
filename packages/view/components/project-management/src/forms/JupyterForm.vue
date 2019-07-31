@@ -261,6 +261,10 @@ export default {
                 });
         },
         commit() {
+            if (!this.isGpuEnt) {
+                this.params.resourceConfig.EXECUTOR_GPUS = 0; 
+                this.params.resourceConfig.GPU_MODEL = '';
+            }
             this.$refs.jupyter.validate().then(() => {
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
                     .then (() => {

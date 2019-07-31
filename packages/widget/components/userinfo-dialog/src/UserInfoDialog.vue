@@ -6,6 +6,7 @@
             class="sdxw-userinfo"
             :class="[`sdxw-userinfo__${theme}`]"
             :visible.sync="dialogVisible"
+            size="small"
             @close="dialogClose"
             :no-footer="dashboardBtn || theme !== 'dashboard'"
             :title="t('widget.userInfo.title')"

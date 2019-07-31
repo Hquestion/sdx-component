@@ -54,7 +54,7 @@ describe('UserPicker', () => {
             setTimeout(() => {
                 expect(vm.data).toEqual({name: 'zhangsan', uuid: '3'});
                 done();
-            }, 1000)
-        }, 500)
+            }, 1000);
+        }, 500);
     });
 });

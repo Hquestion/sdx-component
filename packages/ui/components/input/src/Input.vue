@@ -22,7 +22,7 @@
                     v-if="passwordVisibleness && !isDisabled"
                     class="sdx-icon sdxu-input__icon is-clickable"
                     :class="{'sdx-icon-eye-close': showPwd,
-                             'sdx-icon-eye-open': showPwd}"
+                             'sdx-icon-eye-open': !showPwd}"
                     @click="showPwd = !showPwd"
                 />
                 <i
@@ -64,13 +64,13 @@
 </template>
 
 <script>
-import { Input } from 'element-ui';
+import ElInput from 'element-ui/lib/input';
 
 export default {
     name: 'SdxuInput',
     inheritAttrs: false,
     components: {
-        [Input.name]: Input
+        ElInput
     },
     props: {
         searchable: {

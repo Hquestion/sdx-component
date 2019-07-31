@@ -74,6 +74,9 @@
             font-size: 14px;
         }
     }
+    @include element('content') {
+        min-height: calc(100vh - 560px);
+    }
     @include element('footer') {
         display: flex;
         align-items: center;

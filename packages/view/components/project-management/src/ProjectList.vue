@@ -87,48 +87,54 @@
         </sdxu-content-panel>
         <sdxu-content-panel
             :title="t('view.project.privateAndShare')"
+            class="sdxv-project-management__bottom-panel"
         >
-            <SdxuTabRadioGroup
-                v-model="projectType"
-                style="margin-bottom: 10px;"
-                @switch="switchProjectType"
-            >
-                <SdxuTabRadioItem
-                    name="private"
+            <div class="sdxv-project-management__bottom-panel--content">
+                <SdxuTabRadioGroup
+                    v-model="projectType"
+                    style="margin-bottom: 10px;"
+                    @switch="switchProjectType"
                 >
-                    {{ t('view.project.selfCreateProject') }}
-                </SdxuTabRadioItem>
-                <SdxuTabRadioItem
-                    name="public"
-                >
-                    {{ t('view.project.otherProject') }}
-                </SdxuTabRadioItem>
-            </SdxuTabRadioGroup>
-            <div v-if="projectList.length || !projectsLoaded">
-                <div>
-                    <sdxw-project-card-list v-loading="projectsLoading">
-                        <sdxw-project-card
-                            @operate="handleOperate"
-                            v-for="(item, index) in projectList"
-                            :key="index"
-                            :meta="item"
-                            :edit-able="item.showEdit"
-                            :delete-able="item.showRemove"
-                        />
-                    </sdxw-project-card-list>
+                    <SdxuTabRadioItem
+                        name="private"
+                    >
+                        {{ t('view.project.selfCreateProject') }}
+                    </SdxuTabRadioItem>
+                    <SdxuTabRadioItem
+                        name="public"
+                    >
+                        {{ t('view.project.otherProject') }}
+                    </SdxuTabRadioItem>
+                </SdxuTabRadioGroup>
+                <div v-if="projectList.length || !projectsLoaded">
+                    <div>
+                        <sdxw-project-card-list v-loading="projectsLoading">
+                            <sdxw-project-card
+                                @operate="handleOperate"
+                                v-for="(item, index) in projectList"
+                                :key="index"
+                                :meta="item"
+                                :edit-able="item.showEdit"
+                                :delete-able="item.showRemove"
+                            />
+                        </sdxw-project-card-list>
+                    </div>
                 </div>
-                <div class="sdxv-project-management__footer">
-                    <div />
-                    <sdxu-pagination
-                        v-if="total"
-                        :current-page.sync="current"
-                        :page-size="pageSize"
-                        :total="total"
-                        @current-change="currentChange"
-                    />
-                </div>
+                <SdxuEmpty v-else />
             </div>
-            <SdxuEmpty v-else />
+            <div
+                class="sdxv-project-management__footer"
+                slot="footer"
+            >
+                <div />
+                <sdxu-pagination
+                    v-if="total"
+                    :current-page.sync="current"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="currentChange"
+                />
+            </div>
         </sdxu-content-panel>
         <sdxv-create-project
             :visible.sync="createProjectVisible"

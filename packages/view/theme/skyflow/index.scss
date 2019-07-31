@@ -52,6 +52,11 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
         flex-wrap: nowrap;
         padding: 8px 4px;
     }
+    @include element('bottom-panel') {
+        @include modifier('content') {
+            min-height: calc(38vh);
+        }
+    }
     @include element("panel-footer") {
         display: flex;
         margin-top: 10px;

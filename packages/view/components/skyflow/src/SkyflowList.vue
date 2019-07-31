@@ -103,32 +103,38 @@
         <sdxu-content-panel
             :title="t('view.skyflow.privateAndShare')"
             v-auth.skyflow.button="'FLOW:READ'"
+            class="sdxv-skyflow__bottom-panel"
         >
-            <div v-if="workflowList.length || !workflowsLoaded">
-                <div>
-                    <sdxv-workflow-card-list v-loading="workflowsLoading">
-                        <sdxv-workflow-card
-                            @operate="handleOperate"
-                            v-for="(item, index) in workflowList"
-                            :key="index"
-                            :meta="item"
-                            :edit-able="item.editable"
-                            :delete-able="item.removable"
-                        />
-                    </sdxv-workflow-card-list>
+            <div class="sdxv-skyflow__bottom-panel--content">
+                <div v-if="workflowList.length || !workflowsLoaded">
+                    <div>
+                        <sdxv-workflow-card-list v-loading="workflowsLoading">
+                            <sdxv-workflow-card
+                                @operate="handleOperate"
+                                v-for="(item, index) in workflowList"
+                                :key="index"
+                                :meta="item"
+                                :edit-able="item.editable"
+                                :delete-able="item.removable"
+                            />
+                        </sdxv-workflow-card-list>
+                    </div>
                 </div>
-                <div class="sdxv-skyflow__panel-footer">
-                    <div />
-                    <sdxu-pagination
-                        v-if="total"
-                        :current-page.sync="current"
-                        :page-size="pageSize"
-                        :total="total"
-                        @current-change="currentChange"
-                    />
-                </div>
+                <SdxuEmpty v-else />
             </div>
-            <SdxuEmpty v-else />
+            <div
+                class="sdxv-skyflow__panel-footer"
+                slot="footer"
+            >
+                <div />
+                <sdxu-pagination
+                    v-if="total"
+                    :current-page.sync="current"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="currentChange"
+                />
+            </div>
         </sdxu-content-panel>
         <sdxv-create-workflow
             :visible.sync="createWorkflowVisible"

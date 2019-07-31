@@ -2,6 +2,7 @@
     <sdxu-content-panel
         :title="t('view.skyflow.runningInfo')"
         class="sdxv-running-info"
+        fullscreen
     >
         <div v-if="skyflowInfo.processType === 'PATCH'">
             <SdxuTabRadioGroup

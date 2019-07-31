@@ -59,41 +59,44 @@
                     :order.sync="order"
                 />
             </div>
-            <div v-if="taskList.length">
-                <div
-                    class="sdxv-project-detail__content"
-                >
-                    <sdxw-task-running-limit style="margin: 10px 0 20px 0;" />
-                    <task-card-list>
-                        <task-card
-                            v-for="(item, index) in taskList"
-                            :key="index"
-                            :meta="item"
-                        >
-                            <template #footer>
-                                <SdxuIconButton
-                                    v-for="(el, i) in getOperationList(item)"
-                                    :key="i"
-                                    :icon="el.icon"
-                                    :title="t(el.label)"
-                                    @click="handleOperation(el.value, item)"
-                                />
-                            </template>
-                        </task-card>
-                    </task-card-list>
+            <div class="sdxv-project-detail__content">
+                <div v-if="taskList.length">
+                    <div>
+                        <sdxw-task-running-limit style="margin: 10px 0 20px 0;" />
+                        <task-card-list>
+                            <task-card
+                                v-for="(item, index) in taskList"
+                                :key="index"
+                                :meta="item"
+                            >
+                                <template #footer>
+                                    <SdxuIconButton
+                                        v-for="(el, i) in getOperationList(item)"
+                                        :key="i"
+                                        :icon="el.icon"
+                                        :title="t(el.label)"
+                                        @click="handleOperation(el.value, item)"
+                                    />
+                                </template>
+                            </task-card>
+                        </task-card-list>
+                    </div>
                 </div>
-                <div class="sdxv-project-detail__footer">
-                    <div />
-                    <sdxu-pagination
-                        v-if="total"
-                        :current-page.sync="current"
-                        :page-size="pageSize"
-                        :total="total"
-                        @current-change="currentChange"
-                    />
-                </div>
+                <SdxuEmpty v-else />
             </div>
-            <SdxuEmpty v-else />
+            <div
+                class="sdxv-project-detail__footer"
+                slot="footer"
+            >
+                <div />
+                <sdxu-pagination
+                    v-if="total"
+                    :current-page.sync="current"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="currentChange"
+                />
+            </div>
         </sdxu-content-panel>
     </div>
 </template>

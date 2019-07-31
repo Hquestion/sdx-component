@@ -5,6 +5,22 @@
         </div>
         <div class="sdxv-skyflow__tool">
             <div class="sdxv-skyflow__tool--left">
+                <SdxwSearchLayout
+                    @search="searchWorkflow"
+                    :block="false"
+                    align="right"
+                >
+                    <SdxwSearchItem>
+                        <sdxu-input
+                            v-model="searchName"
+                            type="search"
+                            size="small"
+                            :placeholder="t('view.skyflow.enterSkyflowName')"
+                        />
+                    </SdxwSearchItem>
+                </SdxwSearchLayout>
+            </div>
+            <div class="sdxv-skyflow__tool--right">
                 <sdxu-button
                     placement="right"
                     size="small"
@@ -45,22 +61,6 @@
                     @sortChange="sortChange"
                     :order.sync="order"
                 />
-            </div>
-            <div class="sdxv-skyflow__tool--right">
-                <SdxwSearchLayout
-                    @search="searchWorkflow"
-                    :block="false"
-                    align="right"
-                >
-                    <SdxwSearchItem>
-                        <sdxu-input
-                            v-model="searchName"
-                            type="search"
-                            size="small"
-                            :placeholder="t('view.skyflow.enterSkyflowName')"
-                        />
-                    </SdxwSearchItem>
-                </SdxwSearchLayout>
             </div>
         </div>
         <sdxu-content-panel

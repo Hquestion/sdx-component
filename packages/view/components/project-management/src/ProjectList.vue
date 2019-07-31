@@ -5,6 +5,23 @@
         </div>
         <div class="sdxv-project-management__tool">
             <div class="sdxv-project-management__tool--left">
+                <SdxwSearchLayout
+                    @search="searchProject"
+                    :block="false"
+                    align="right"
+                    style="flex: 1"
+                >
+                    <SdxwSearchItem>
+                        <sdxu-input
+                            v-model="searchName"
+                            type="search"
+                            size="small"
+                            :placeholder="t('view.project.enterProjectName')"
+                        />
+                    </SdxwSearchItem>
+                </SdxwSearchLayout>
+            </div>
+            <div class="sdxv-project-management__tool--right">
                 <sdxu-button
                     placement="right"
                     size="small"
@@ -45,23 +62,6 @@
                     @sortChange="sortChange"
                     :order.sync="order"
                 />
-            </div>
-            <div class="sdxv-project-management__tool--right">
-                <SdxwSearchLayout
-                    @search="searchProject"
-                    :block="false"
-                    align="right"
-                    style="flex: 1"
-                >
-                    <SdxwSearchItem>
-                        <sdxu-input
-                            v-model="searchName"
-                            type="search"
-                            size="small"
-                            :placeholder="t('view.project.enterProjectName')"
-                        />
-                    </SdxwSearchItem>
-                </SdxwSearchLayout>
             </div>
         </div>
         <sdxu-content-panel

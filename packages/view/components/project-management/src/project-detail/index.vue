@@ -49,7 +49,7 @@
                 <sdxu-button
                     size="small"
                     @click="searchTask"
-                    style="margin: 0 10px;"
+                    style="margin: 0 25px 0 10px;"
                 >
                     {{ t('sdxCommon.Search') }}
                 </sdxu-button>

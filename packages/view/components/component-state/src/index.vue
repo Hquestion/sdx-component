@@ -16,6 +16,9 @@
             </SdxuTabRadioItem>
         </SdxuTabRadioGroup>
         <SdxvComponentStateList :type="type" />
+        <template #footer>
+            <PortalTarget name="component-panination" />
+        </template>
     </SdxuContentPanel>
 </template>
 
@@ -26,6 +29,7 @@ import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import SdxvComponentStateList from './ComponentStateList';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
+import * as Portal from 'portal-vue';
 
 export default {
     name: 'SdxvComponentsState',
@@ -34,7 +38,8 @@ export default {
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         SdxvComponentStateList,
-        SdxuContentPanel
+        SdxuContentPanel,
+        PortalTarget: Portal.PortalTarget
     },
     directives: {
         auth

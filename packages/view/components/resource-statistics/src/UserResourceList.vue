@@ -99,15 +99,17 @@
                 </template>
             </el-table-column>
         </SdxuTable>
-        <div class="sdxv-user-resource-list__pagination">
-            <SdxuPagination
-                v-if="!ranking"
-                :current-page.sync="page"
-                :page-size="pageSize"
-                :total="total"
-                @current-change="handlePageChange"
-            />
-        </div>
+        <template #footer>
+            <div class="sdxv-user-resource-list__pagination">
+                <SdxuPagination
+                    v-if="!ranking"
+                    :current-page.sync="page"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="handlePageChange"
+                />
+            </div>
+        </template>
     </SdxuContentPanel>
 </template>
 

@@ -26,7 +26,6 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 @import "./running-info.scss";
 
 @include block("skyflow", $bem-namespace-view) {
-    padding: 30px 20px 40px;
     @include element("header") {
         height: 16px;
         font-size: 16px;

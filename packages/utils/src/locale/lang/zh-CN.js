@@ -307,12 +307,14 @@ export default {
                 setTemplate: '设为模板：'
             },
             selfCreateProject: '自建项目',
-            otherProject: '其他项目',
+            otherProject: '协作项目',
             taskList: '任务列表',
             enterTaskName: '请输入任务名',
             modelDev: '模型开发',
             modelTraining: '模型训练',
-            modelAssess: '模型评估'
+            modelAssess: '模型评估',
+            template: '模板',
+            privateAndShare: '自建与协作'
         },
         skyflow: {
             skyflowList: '工作流列表',

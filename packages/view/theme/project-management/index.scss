@@ -28,22 +28,26 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 @include block('project-management', $bem-namespace-view) {
     height: 100%;
+
     @include element('header') {
+        height: 16px;
+        font-size: 16px;
+        font-weight: 600;
+        color: rgba(48, 49, 51, 1);
+        line-height: 16px;
+        padding-left: 10px;
+        border-left: 3px solid #4781F8;
+    }
+    @include element('tool') {
+        margin: 20px 0;
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        margin: 10px 0;
-        @include modifier('left') {
-            color: $sdx-text-regular-color;
-            font-size: 14px;
-            font-weight: 400;
-            .sdxu-button--primary {
-                display: inline-block;
-                margin-right: 20px;
-            }
-            .el-select {
-                width: 146px;
-            }
+        align-items: center;
+        .sdxw-search-layout__btn {
+            margin-bottom: 2px;
+        }
+        .sdxw-search-item {
+            margin-bottom: 0;
         }
     }
     @include element('footer') {

@@ -43,7 +43,7 @@ function i18nHandler() {
                 defaultLang = (this.$i18n || i18n).locale;
                 (this.$i18n || i18n).mergeLocaleMessage(defaultLang, getLangMessage(defaultLang));
             }
-            if (Object.getPrototypeOf(this).$t) {
+            if (Object.getPrototypeOf(this).$t && this.$i18n) {
                 return vuei18n.apply(this, arguments);
             } else {
                 return i18n.t(arguments[0], arguments[1]);

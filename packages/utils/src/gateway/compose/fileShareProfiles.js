@@ -1,8 +1,8 @@
-import wrap from '../wrap';
+import wrap, {prefixRestApi} from '../wrap';
 
 export const handler = wrap(function(ctx, request) {
     const shares = ctx.sendRequest(ctx.createGetRequest(
-        'http://tyk-gateway/file-manager/api/v1/file_shares',
+        prefixRestApi('file-manager/api/v1/file_shares'),
         request.Params));
 
     let isMyShare = request.Params.ownerId && !!request.Params.ownerId[0];

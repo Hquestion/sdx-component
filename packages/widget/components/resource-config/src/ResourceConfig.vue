@@ -260,7 +260,7 @@ export default {
             immediate: true,
             handler(nval) {
                 if (nval) {
-                    if(this.gpuError || this.cpuError) {
+                    if((this.gpuError || this.cpuError) && this.showError) {
                         this.$message({
                             type: 'error',
                             message: this.t('widget.resourceConfig.Resource_template_has_been_deleted')
@@ -274,7 +274,7 @@ export default {
             immediate: true,
             handler(nval) {
                 if(nval) {
-                    if(this.dataReady) {
+                    if(this.dataReady && this.showError) {
                         this.$message({
                             type: 'error',
                             message: this.t('widget.resourceConfig.Resource_template_has_been_deleted')
@@ -287,7 +287,7 @@ export default {
             immediate: true,
             handler(nval) {
                 if(nval) {
-                    if(this.dataReady) {
+                    if(this.dataReady && this.showError) {
                         this.$message({
                             type: 'error',
                             message: this.t('widget.resourceConfig.Resource_template_has_been_deleted')

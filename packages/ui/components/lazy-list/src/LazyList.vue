@@ -134,22 +134,20 @@ export default {
         async generateRenderData() {
             this.renderData = Object.freeze(this.list.slice(this.topCount, this.topCount + this.renderCount));
         },
-        handleScroll() {
-            throttle(() => {
-                if (this.loadedCount < this.total) {
-                    if (this.topCount + this.renderCount > this.loadedCount - 3) {
-                        if (this.loading) return;
-                        this.initList(this.pageIndex + 1).then(() => {
-                            this.calcCount();
-                        });
-                    } else {
+        handleScroll: throttle(() => {
+            if (this.loadedCount < this.total) {
+                if (this.topCount + this.renderCount > this.loadedCount - 3) {
+                    if (this.loading) return;
+                    this.initList(this.pageIndex + 1).then(() => {
                         this.calcCount();
-                    }
+                    });
                 } else {
                     this.calcCount();
                 }
-            }, 500)();
-        }
+            } else {
+                this.calcCount();
+            }
+        }, 500)
     },
     watch: {
         topCount() {

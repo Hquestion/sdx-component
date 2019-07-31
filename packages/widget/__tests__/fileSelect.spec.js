@@ -1,6 +1,15 @@
 import Vue from 'vue';
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
-import FileSelect from '../components/file-select';
+
+const mockScript = () => {
+    const script = document.createElement('script');
+    script.setAttribute('data-injectcss', '1');
+    window.__iconfont__svg__cssinject__ = true;
+    document.body.appendChild(script);
+};
+mockScript();
+
+const FileSelect = require('../components/file-select').default;
 import ElementUI from 'element-ui';
 
 const localVue = createLocalVue();

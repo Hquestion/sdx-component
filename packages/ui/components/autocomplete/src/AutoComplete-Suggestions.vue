@@ -24,8 +24,8 @@
     </transition>
 </template>
 <script>
-import Popper from 'element-ui/src/utils/vue-popper';
-import Emitter from 'element-ui/src/mixins/emitter';
+import Popper from 'element-ui/lib/utils/vue-popper';
+import Emitter from 'element-ui/lib/mixins/emitter';
 import ElScrollbar from 'element-ui/lib/scrollbar';
 
 export default {

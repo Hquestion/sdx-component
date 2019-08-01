@@ -8,7 +8,7 @@
 <ui-log-detail-index></ui-log-detail-index>
   <highlight-code slot="codeText" lang="vue">
     <template>
-        <SdxuLogDetail :content="content" height="600px" :preLoading="true" :sufLoading="true" />
+        <SdxuLogDetail :content="content" height="600px" :preLoading="true" :sufLoading="true" :loading="true" />
     </template>
 
     <script>

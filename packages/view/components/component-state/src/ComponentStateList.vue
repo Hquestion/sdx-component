@@ -62,16 +62,18 @@
                 </template>
             </el-table-column>
         </SdxuTable>
-        <div
-            class="sdxv-component-state-list__pagination"
-        >
-            <SdxuPagination
-                :current-page.sync="page"
-                :page-size="pageSize"
-                :total="filterTotalList.length"
-                @current-change="handlePageChange"
-            />
-        </div>
+        <Portal to="component-panination">
+            <div
+                class="sdxv-component-state-list__pagination"
+            >
+                <SdxuPagination
+                    :current-page.sync="page"
+                    :page-size="pageSize"
+                    :total="filterTotalList.length"
+                    @current-change="handlePageChange"
+                />
+            </div>
+        </Portal>
         <SdxvComponentStateLogDialog
             :visible.sync="logDialogVisible"
             :pod="currentPod"
@@ -91,6 +93,7 @@ import auth from '@sdx/widget/components/auth';
 import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
+import * as Portal from 'portal-vue';
 
 import { POD_STATE_TYPE } from '@sdx/utils/src/const/task';
 import { getPodsStatus } from '@sdx/utils/src/api/system';
@@ -112,6 +115,7 @@ export default {
         ElTableColumn,
         ElSelect,
         ElOption,
+        Portal: Portal.Portal,
         SdxvComponentStateLogDialog
     },
     props: {

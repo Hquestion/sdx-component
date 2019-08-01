@@ -164,17 +164,19 @@
                 </template>
             </el-table-column>
         </SdxuTable>
-        <div
-            v-if="!ranking"
-            class="sdxw-task-resource-list__pagination"
-        >
-            <SdxuPagination
-                :current-page.sync="page"
-                :page-size="pageSize"
-                :total="total"
-                @current-change="handlePageChange"
-            />
-        </div>
+        <Portal to="task-panination">
+            <div
+                v-if="!ranking"
+                class="sdxw-task-resource-list__pagination"
+            >
+                <SdxuPagination
+                    :current-page.sync="page"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="handlePageChange"
+                />
+            </div>
+        </Portal>
     </div>
 </template>
 
@@ -191,6 +193,7 @@ import SdxwTaskRunningLimit from '@sdx/widget/components/task-running-limit';
 import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
+import * as Portal from 'portal-vue';
 
 import { STATE_TYPE, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE, TASK_TYPE_LABEL, TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
 import taskMixin from '@sdx/utils/src/mixins/task';
@@ -213,6 +216,7 @@ export default {
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
         SdxuInput,
         SdxwTaskRunningLimit,
+        Portal: Portal.Portal,
         ElTableColumn,
         ElSelect,
         ElOption

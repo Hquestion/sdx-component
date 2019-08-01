@@ -15,9 +15,17 @@ export function getProjectList(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
 }
 
-/* export function getTaskList(params) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
-} */
+export const getProjectTemplates = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
+}, readAuths.PROJECT_TEMPLATE_PROJECT_READ);
+
+export const getSelfCreatedProjects = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
+}, readAuths.PROJECT_PROJECT_READ);
+
+export const getSharingProjects = authWrapper(function (params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
+}, readAuths.PROJECT_COOPERATE_PROJECT_READ);
 
 export const getTaskList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);

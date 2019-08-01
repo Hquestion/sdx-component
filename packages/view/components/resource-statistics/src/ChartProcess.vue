@@ -41,7 +41,11 @@ export default {
     },
     computed: {
         percent() {
-            return this.total ? Math.floor((this.used / this.total) * 100) : 0;
+            let per = this.total ? Math.floor((this.used / this.total) * 100) : 0;
+            return this.total && this.used 
+                ? per 
+                    ? per : 1
+                : 0;
         }
     }
 };

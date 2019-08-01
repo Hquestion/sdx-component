@@ -43,6 +43,12 @@ export default {
             type: 'boolean',
             optionValue: 'true / false',
             defaultValue: 'false'
+          }, {
+            params: 'loading',
+            describe: '首次请求日志全页面遮罩',
+            type: 'boolean',
+            optionValue: 'true / false',
+            defaultValue: 'false'
           }
       ],
       eventData: [

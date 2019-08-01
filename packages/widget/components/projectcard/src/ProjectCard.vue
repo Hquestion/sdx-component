@@ -10,10 +10,6 @@
                 :class="[projectType.state, projectType.icon]"
             />
             <span class="sdxw-project-card__header--name">{{ meta.name }}</span>
-            <span
-                v-if="meta.isTemplate"
-                class="sdxw-project-card__header--type"
-            >{{ t('widget.projectCard.Template') }}</span>
         </header>
         <main class="sdxw-project-card__main">
             <div class="sdxw-project-card__info">
@@ -60,7 +56,7 @@
                     v-if="editAble"
                     icon="sdx-icon sdx-icon-edit"
                     :title="t('widget.projectCard.title.Edit')"
-                    @click="$emit('operate', {id: meta.uuid, type: 'edit'})"
+                    @click="$emit('operate', {item: meta, type: 'edit'})"
                 />
                 <sdxu-icon-button
                     v-if="deleteAble"

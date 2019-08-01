@@ -1,6 +1,7 @@
 <template>
     <SdxuContentPanel
         :title="title || t('view.monitor.resourceStatistic.AllUserResourceStatistics')"
+        :fullscreen="true"
         class="sdxv-user-resource-list"
     >
         <template
@@ -98,15 +99,19 @@
                 </template>
             </el-table-column>
         </SdxuTable>
-        <div class="sdxv-user-resource-list__pagination">
-            <SdxuPagination
-                v-if="!ranking"
-                :current-page.sync="page"
-                :page-size="pageSize"
-                :total="total"
-                @current-change="handlePageChange"
-            />
-        </div>
+        <template
+            #footer
+            v-if="!ranking"
+        >
+            <div class="sdxv-user-resource-list__pagination">
+                <SdxuPagination
+                    :current-page.sync="page"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="handlePageChange"
+                />
+            </div>
+        </template>
     </SdxuContentPanel>
 </template>
 

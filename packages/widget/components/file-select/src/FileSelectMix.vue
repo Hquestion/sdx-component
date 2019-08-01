@@ -447,7 +447,7 @@ export default {
             } else {
                 cephModel = fileList.map(item => ({
                     path: item.cephName,
-                    isFile: !item.isDir || true
+                    isFile: !item.isDir
                 }));
             }
             this.cephPaths = cephModel;

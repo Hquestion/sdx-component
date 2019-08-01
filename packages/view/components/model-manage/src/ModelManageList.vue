@@ -1,5 +1,8 @@
 <template>
-    <sdxu-content-panel class="sdxv-model-management">
+    <sdxu-content-panel
+        class="sdxv-model-management"
+        fullscreen
+    >
         <div class="sdxv-model-management__header">
             <SdxuTabRadioGroup
                 v-model="modelType"

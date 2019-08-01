@@ -3,6 +3,7 @@
         class="sdxv-version-list"
         :title="t('view.model.versionList')"
         v-loading="loading"
+        fullscreen
     >
         <div slot="right">
             <SdxuButton
@@ -121,7 +122,10 @@
                 </template>
             </el-table-column>
         </sdxu-table>
-        <div class="sdxv-version-list__footer">
+        <div
+            class="sdxv-version-list__footer"
+            slot="footer"
+        >
             <div />
             <sdxu-pagination
                 v-if="total"

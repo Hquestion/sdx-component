@@ -131,7 +131,7 @@ export default {
             }
             this.renderCount = renderCount;
         },
-        async generateRenderData() {
+        generateRenderData() {
             this.renderData = Object.freeze(this.list.slice(this.topCount, this.topCount + this.renderCount));
         },
         handleScroll: throttle(() => {

@@ -3,106 +3,110 @@
         class="sdxv-general-running"
         v-loading="loading"
     >
-        <sdxu-table
-            :data="runningInfoList"
-            @sort-change="sortChange"
+        <div
+            class="sdxv-general-running__table"
         >
-            <el-table-column
-                :label="t('view.skyflow.columns.name')"
-                key="name"
-                prop="name"
-            />
-            <el-table-column
-                key="executeKind"
-                :label="t('view.skyflow.columns.executeKind')"
+            <sdxu-table
+                :data="runningInfoList"
+                @sort-change="sortChange"
             >
-                <template slot-scope="scope">
-                    <div>
-                        {{ executionKinds[scope.row.executeKind] || '' }}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                key="state"
-                :label="t('view.skyflow.columns.state')"
-            >
-                <template slot-scope="scope">
-                    <SdxwFoldLabel
-                        plain
-                        :type="scope.row.label.type"
-                        :status="scope.row.label.status"
-                    >
-                        {{ scope.row.label.text }}
-                    </SdxwFoldLabel>
-                </template>
-            </el-table-column>
-            <el-table-column
-                key="executeStart"
-                :label="t('view.skyflow.columns.executeStart')"
-                sortable="custom"
-                prop="executeStart"
-            >
-                <template slot-scope="scope">
-                    <div>
-                        {{ scope.row.executeStart | dateFormatter }}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                key="executeEnd"
-                :label="t('view.skyflow.columns.executeEnd')"
-                prop="executeEnd"
-                sortable="custom"
-            >
-                <template slot-scope="scope">
-                    <div>
-                        {{ scope.row.executeEnd | dateFormatter }}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                key="executeTime"
-                prop="executeTime"
-                :label="t('view.skyflow.columns.executeTime')"
-                sortable="custom"
-            >
-                <template slot-scope="scope">
-                    <div>
-                        {{ scope.row.executeTime | seconds2HMS }}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                :label="t('sdxCommon.Operation')"
-                key="operation"
-            >
-                <template slot-scope="scope">
-                    <sdxu-icon-button
-                        @click="handleOperation(scope.row, 'canvas')"
-                        icon="sdx-icon sdx-huabu"
-                        :title="t('view.skyflow.canvas')"
-                    />
-                    <sdxu-icon-button
-                        @click="handleOperation(scope.row, 'copy')"
-                        icon="sdx-icon sdx-kaobei"
-                        v-if="scope.row.showCopy"
-                        :title="t('view.skyflow.copyWorkflow')"
-                    />
-                    <sdxu-icon-button
-                        @click="handleOperation(scope.row, 'shutdown')"
-                        icon="sdx-icon sdx-tingzhi"
-                        :title="t('sdxCommon.Stop')"
-                        v-if="scope.row.showShutdown"
-                    />
-                    <sdxu-icon-button
-                        @click="handleOperation(scope.row, 'remove')"
-                        icon="sdx-icon sdx-icon-delete"
-                        :title="t('sdxCommon.Delete')"
-                        v-if="scope.row.showRemove"
-                    />
-                </template>
-            </el-table-column>
-        </sdxu-table>
+                <el-table-column
+                    :label="t('view.skyflow.columns.name')"
+                    key="name"
+                    prop="name"
+                />
+                <el-table-column
+                    key="executeKind"
+                    :label="t('view.skyflow.columns.executeKind')"
+                >
+                    <template slot-scope="scope">
+                        <div>
+                            {{ executionKinds[scope.row.executeKind] || '' }}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    key="state"
+                    :label="t('view.skyflow.columns.state')"
+                >
+                    <template slot-scope="scope">
+                        <SdxwFoldLabel
+                            plain
+                            :type="scope.row.label.type"
+                            :status="scope.row.label.status"
+                        >
+                            {{ scope.row.label.text }}
+                        </SdxwFoldLabel>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    key="executeStart"
+                    :label="t('view.skyflow.columns.executeStart')"
+                    sortable="custom"
+                    prop="executeStart"
+                >
+                    <template slot-scope="scope">
+                        <div>
+                            {{ scope.row.executeStart | dateFormatter }}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    key="executeEnd"
+                    :label="t('view.skyflow.columns.executeEnd')"
+                    prop="executeEnd"
+                    sortable="custom"
+                >
+                    <template slot-scope="scope">
+                        <div>
+                            {{ scope.row.executeEnd | dateFormatter }}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    key="executeTime"
+                    prop="executeTime"
+                    :label="t('view.skyflow.columns.executeTime')"
+                    sortable="custom"
+                >
+                    <template slot-scope="scope">
+                        <div>
+                            {{ scope.row.executeTime | seconds2HMS }}
+                        </div>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    :label="t('sdxCommon.Operation')"
+                    key="operation"
+                >
+                    <template slot-scope="scope">
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'canvas')"
+                            icon="sdx-icon sdx-huabu"
+                            :title="t('view.skyflow.canvas')"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'copy')"
+                            icon="sdx-icon sdx-kaobei"
+                            v-if="scope.row.showCopy"
+                            :title="t('view.skyflow.copyWorkflow')"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'shutdown')"
+                            icon="sdx-icon sdx-tingzhi"
+                            :title="t('sdxCommon.Stop')"
+                            v-if="scope.row.showShutdown"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'remove')"
+                            icon="sdx-icon sdx-icon-delete"
+                            :title="t('sdxCommon.Delete')"
+                            v-if="scope.row.showRemove"
+                        />
+                    </template>
+                </el-table-column>
+            </sdxu-table>
+        </div>
         <div class="sdxv-general-running__footer">
             <div />
             <sdxu-pagination

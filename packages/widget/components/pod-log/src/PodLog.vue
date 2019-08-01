@@ -179,7 +179,7 @@ export default {
             return new Promise(resolve => {
                 getTaskList({ podName: this.podName }).then(data => {
                     const task = data && Array.isArray(data.items) && data.items[0] || null;
-                    this.startedAt = task && new Date(task.startedAt).getTime() || '';
+                    this.startedAt = task && (new Date(task.startedAt).getTime() / 1000).toFixed() || '';
                     resolve();
                 }).catch(() => {
                     resolve();

@@ -3,135 +3,138 @@
         class="sdxv-model-list"
         v-loading="loading"
     >
-        <div>
-            <SdxuButton
-                type="primary"
-                size="small"
-                @click="share"
-                v-show="modelType === 'PRIVATE'"
-                v-auth.model.button="'MODEL:SHARE'"
-            >
-                {{ t('sdxCommon.ShareAll') }}
-            </SdxuButton>
-            <SdxuButton
-                type="primary"
-                invert
-                size="small"
-                @click="remove"
-                v-show="modelType === 'PRIVATE'"
-            >
-                {{ t('sdxCommon.Delete') }}
-            </SdxuButton>
-            <SdxuButton
-                type="primary"
-                size="small"
-                @click="cancelShare"
-                v-show="modelType === 'MY_SHARE'"
-                v-auth.model.button="'MODEL:SHARE'"
-            >
-                {{ t('sdxCommon.CancelShare') }}
-            </SdxuButton>
-        </div>
-        <sdxu-table
-            :data="modelList"
-            class="sdxv-model-list__table"
-            @selection-change="selectionChange"
-            @sort-change="sortChange"
-            :default-sort="{prop: 'createdAt', order: 'descending'}"
-        >
-            <el-table-column
-                type="selection"
-                width="55"
-                v-if="modelType === 'MY_SHARE' || modelType === 'PRIVATE'"
-            />
-            <el-table-column
-                prop="name"
-                :label="t('view.model.modelColumns.name')"
-                key="name"
-            />
-            <el-table-column
-                key="description"
-                :label="t('view.model.modelColumns.description')"
-            >
-                <template slot-scope="scope">
-                    <div
-                        :title="scope.row.description"
-                        style="white-space: nowrap;
+        <div class="sdxv-model-list__content">
+            <div>
+                <SdxuButton
+                    type="primary"
+                    size="small"
+                    @click="share"
+                    v-show="modelType === 'PRIVATE'"
+                    v-auth.model.button="'MODEL:SHARE'"
+                >
+                    {{ t('sdxCommon.ShareAll') }}
+                </SdxuButton>
+                <SdxuButton
+                    type="primary"
+                    invert
+                    size="small"
+                    @click="remove"
+                    v-show="modelType === 'PRIVATE'"
+                >
+                    {{ t('sdxCommon.Delete') }}
+                </SdxuButton>
+                <SdxuButton
+                    type="primary"
+                    size="small"
+                    @click="cancelShare"
+                    v-show="modelType === 'MY_SHARE'"
+                    v-auth.model.button="'MODEL:SHARE'"
+                >
+                    {{ t('sdxCommon.CancelShare') }}
+                </SdxuButton>
+            </div>
+            <div class="sdxv-model-list__table">
+                <sdxu-table
+                    :data="modelList"
+                    @selection-change="selectionChange"
+                    @sort-change="sortChange"
+                    :default-sort="{prop: 'createdAt', order: 'descending'}"
+                >
+                    <el-table-column
+                        type="selection"
+                        width="55"
+                        v-if="modelType === 'MY_SHARE' || modelType === 'PRIVATE'"
+                    />
+                    <el-table-column
+                        prop="name"
+                        :label="t('view.model.modelColumns.name')"
+                        key="name"
+                    />
+                    <el-table-column
+                        key="description"
+                        :label="t('view.model.modelColumns.description')"
+                    >
+                        <template slot-scope="scope">
+                            <div
+                                :title="scope.row.description"
+                                style="white-space: nowrap;
                                overflow: hidden;
                                text-overflow: ellipsis;"
+                            >
+                                {{ scope.row.description }}
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        key="labels"
+                        :label="t('view.model.modelColumns.label')"
                     >
-                        {{ scope.row.description }}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column
-                key="labels"
-                :label="t('view.model.modelColumns.label')"
-            >
-                <template slot-scope="scope">
-                    <SdxwFoldLabelGroup :list="scope.row.labels" />
-                </template>
-            </el-table-column>
-            <el-table-column
-                key="owner"
-                :label="t('view.model.modelColumns.creator')"
-                v-if="modelType === 'ALL' || modelType === 'OTHER_SHARE'"
-            >
-                <template slot-scope="scope">
-                    {{ (scope.row.creator && scope.row.creator.fullName) || '' }}
-                </template>
-            </el-table-column>
-            <el-table-column
-                key="createdAt"
-                prop="createdAt"
-                :label="t('view.model.modelColumns.createdTime')"
-                sortable="custom"
-            >
-                <template slot-scope="scope">
-                    {{ scope.row.createdAt | dateFormatter }}
-                </template>
-            </el-table-column>
-            <el-table-column
-                :label="t('sdxCommon.Operation')"
-                key="operation"
-            >
-                <template slot-scope="scope">
-                    <sdxu-icon-button-group>
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'share')"
-                            icon="sdx-icon sdx-fenxiang"
-                            :title="t('widget.shareSetting.title')"
-                            v-if="scope.row.showShare"
-                            v-auth.model.button="'MODEL:SHARE'"
-                        />
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'detail')"
-                            icon="sdx-icon sdx-icon-tickets"
-                            :title="t('sdxCommon.Detail')"
-                            v-if="scope.row.showDetail"
-                        />
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'remove')"
-                            icon="sdx-icon sdx-icon-delete"
-                            :title="t('sdxCommon.Delete')"
-                            v-if="scope.row.showRemove"
-                        />
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'edit')"
-                            icon="sdx-icon sdx-icon-edit"
-                            :title="t('sdxCommon.Edit')"
-                            v-if="scope.row.showEdit"
-                        />
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'cancelShare')"
-                            icon="sdx-icon sdx-quxiaofenxiang"
-                            :title="t('sdxCommon.CancelShare')"
-                            v-if="scope.row.showCancelShare"
-                        />
-                    </sdxu-icon-button-group>
-                </template>
-            </el-table-column>
-        </sdxu-table>
+                        <template slot-scope="scope">
+                            <SdxwFoldLabelGroup :list="scope.row.labels" />
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        key="owner"
+                        :label="t('view.model.modelColumns.creator')"
+                        v-if="modelType === 'ALL' || modelType === 'OTHER_SHARE'"
+                    >
+                        <template slot-scope="scope">
+                            {{ (scope.row.creator && scope.row.creator.fullName) || '' }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        key="createdAt"
+                        prop="createdAt"
+                        :label="t('view.model.modelColumns.createdTime')"
+                        sortable="custom"
+                    >
+                        <template slot-scope="scope">
+                            {{ scope.row.createdAt | dateFormatter }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        :label="t('sdxCommon.Operation')"
+                        key="operation"
+                    >
+                        <template slot-scope="scope">
+                            <sdxu-icon-button-group>
+                                <sdxu-icon-button
+                                    @click="handleOperation(scope.row, 'share')"
+                                    icon="sdx-icon sdx-fenxiang"
+                                    :title="t('widget.shareSetting.title')"
+                                    v-if="scope.row.showShare"
+                                    v-auth.model.button="'MODEL:SHARE'"
+                                />
+                                <sdxu-icon-button
+                                    @click="handleOperation(scope.row, 'detail')"
+                                    icon="sdx-icon sdx-icon-tickets"
+                                    :title="t('sdxCommon.Detail')"
+                                    v-if="scope.row.showDetail"
+                                />
+                                <sdxu-icon-button
+                                    @click="handleOperation(scope.row, 'remove')"
+                                    icon="sdx-icon sdx-icon-delete"
+                                    :title="t('sdxCommon.Delete')"
+                                    v-if="scope.row.showRemove"
+                                />
+                                <sdxu-icon-button
+                                    @click="handleOperation(scope.row, 'edit')"
+                                    icon="sdx-icon sdx-icon-edit"
+                                    :title="t('sdxCommon.Edit')"
+                                    v-if="scope.row.showEdit"
+                                />
+                                <sdxu-icon-button
+                                    @click="handleOperation(scope.row, 'cancelShare')"
+                                    icon="sdx-icon sdx-quxiaofenxiang"
+                                    :title="t('sdxCommon.CancelShare')"
+                                    v-if="scope.row.showCancelShare"
+                                />
+                            </sdxu-icon-button-group>
+                        </template>
+                    </el-table-column>
+                </sdxu-table>
+            </div>
+        </div>
         <div class="sdxv-model-list__footer">
             <div />
             <sdxu-pagination

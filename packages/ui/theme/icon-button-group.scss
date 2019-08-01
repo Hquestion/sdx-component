@@ -11,11 +11,22 @@
             color: #fff;
             font-size: $sdx-content-font-size;
             position: relative;
-            .popper__arrow {
-                left: -7px !important;
-                border-right-color: transparent;
-                &:after {
-                    border-right-color: rgba(0,0,0,0.6) !important;
+            &[x-placement^="right"] {
+                .popper__arrow {
+                    left: -7px !important;
+                    border-right-color: transparent;
+                    &:after {
+                        border-right-color: rgba(0,0,0,0.6) !important;
+                    }
+                }
+            }
+            &[x-placement^="left"] {
+                .popper__arrow {
+                    right: -7px !important;
+                    border-left-color: transparent;
+                    &:after {
+                        border-left-color: rgba(0,0,0,0.6) !important;
+                    }
                 }
             }
         }

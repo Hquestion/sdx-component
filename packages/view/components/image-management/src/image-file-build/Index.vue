@@ -1,112 +1,112 @@
 <template>
-    <div class="sdxv-image-file">
-        <SdxuContentPanel
-            :title="t('view.image.BuildBasedOnFile')"
+    <SdxuContentPanel
+        class="sdxv-image-file"
+        :fullscreen="true"
+        :title="t('view.image.BuildBasedOnFile')"
+    >
+        <el-radio-group
+            v-model="radio"
+            @change="radioChange"
         >
-            <el-radio-group
-                v-model="radio"
-                @change="radioChange"
+            <el-radio
+                label="tar"
+                v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'"
             >
-                <el-radio
-                    label="tar"
-                    v-auth.image.button="'IMAGE_BUILDER:BUILD_TAR'"
-                >
-                    {{ t('view.image.BuildTypes.Tar') }}
-                </el-radio>
-                <el-radio
-                    label="DockerFile"
-                    v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'"
-                >
-                    {{ t('view.image.BuildTypes.Dockerfile') }}
-                </el-radio>
-            </el-radio-group>
-            <el-form
-                ref="form"
-                :model="params"
-                label-width="140px"
-                label-position="right"
-                :rules="rules"
+                {{ t('view.image.BuildTypes.Tar') }}
+            </el-radio>
+            <el-radio
+                label="DockerFile"
+                v-auth.image.button="'IMAGE_BUILDER:BUILD_IMAGE_FILE'"
             >
-                <el-form-item
-                    :label="t('view.image.SearchImageName')"
-                    prop="name"
+                {{ t('view.image.BuildTypes.Dockerfile') }}
+            </el-radio>
+        </el-radio-group>
+        <el-form
+            ref="form"
+            :model="params"
+            label-width="140px"
+            label-position="right"
+            :rules="rules"
+        >
+            <el-form-item
+                :label="t('view.image.SearchImageName')"
+                prop="name"
+            >
+                <SdxuInput
+                    :placeholder="t('view.image.ImageNameInputPlaceholder')"
+                    v-model="params.name"
+                />
+            </el-form-item>
+            <el-form-item
+                :label="t('view.image.MirrorVersion')"
+                prop="version"
+            >
+                <SdxuInput
+                    :placeholder="t('view.image.ImageVersionInputPlaceholder')"
+                    v-model="params.version"
+                />
+            </el-form-item>
+            <el-form-item
+                :label="t('view.image.SearchImageKind')"
+                prop="imageType"
+            >
+                <el-select
+                    v-model="params.imageType"
+                    style="width: 100%"
                 >
-                    <SdxuInput
-                        :placeholder="t('view.image.ImageNameInputPlaceholder')"
-                        v-model="params.name"
+                    <el-option
+                        v-for="item in DOCKER_IMAGE_KIND_LIST"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
                     />
-                </el-form-item>
-                <el-form-item
-                    :label="t('view.image.MirrorVersion')"
-                    prop="version"
+                </el-select>
+            </el-form-item>
+            <el-form-item
+                :label="radio === 'DockerFile' ? t('view.image.FileAddress') :t('view.image.FileAddressColon') "
+                prop="filePath"
+                :class="radio === 'DockerFile' ? 'iconinfo' : ''"
+            >
+                <el-popover
+                    placement="right"
+                    width="540"
+                    trigger="hover"
+                    v-if="radio === 'DockerFile'"
                 >
-                    <SdxuInput
-                        :placeholder="t('view.image.ImageVersionInputPlaceholder')"
-                        v-model="params.version"
-                    />
-                </el-form-item>
-                <el-form-item
-                    :label="t('view.image.SearchImageKind')"
-                    prop="imageType"
-                >
-                    <el-select
-                        v-model="params.imageType"
-                        style="width: 100%"
+                    <Iconinfo />
+                    <i
+                        class="sdx-icon sdx-icon-info"
+                        slot="reference"
                     >
-                        <el-option
-                            v-for="item in DOCKER_IMAGE_KIND_LIST"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                        />
-                    </el-select>
-                </el-form-item>
-                <el-form-item
-                    :label="radio === 'DockerFile' ? t('view.image.FileAddress') :t('view.image.FileAddressColon') "
-                    prop="filePath"
-                    :class="radio === 'DockerFile' ? 'iconinfo' : ''"
-                >
-                    <el-popover
-                        placement="right"
-                        width="540"
-                        trigger="hover"
-                        v-if="radio === 'DockerFile'"
-                    >
-                        <Iconinfo />
-                        <i
-                            class="sdx-icon sdx-icon-info"
-                            slot="reference"
-                        >
-                            <span>：</span>
-                        </i>
-                    </el-popover>
-                    <SdxwFileSelect
-                        v-model="params.filePath"
-                        :accept="radio === 'DockerFile' ? '': '.tar'"
-                        check-type="file"
-                        :string-model="true"
-                        :source="radio === 'DockerFile' ? 'ceph': 'all'"
-                    />
-                </el-form-item>
-            </el-form>
-            <div class="foot">
-                <SdxuButton
-                    type="default"
-                    @click="cancel"
-                    size="small"
-                >
-                    {{ t('sdxCommon.Cancel') }}
-                </sdxubutton>
-                <SdxuButton
-                    type="primary"
-                    @click="savaBuild"
-                    size="small"
-                >
-                    {{ t('view.image.SaveAndBuild') }}
-                </sdxubutton>
-            </div>
-        </SdxuContentPanel>
-    </div>
+                        <span>：</span>
+                    </i>
+                </el-popover>
+                <SdxwFileSelect
+                    v-model="params.filePath"
+                    :accept="radio === 'DockerFile' ? '': '.tar'"
+                    check-type="file"
+                    :string-model="true"
+                    :source="radio === 'DockerFile' ? 'ceph': 'all'"
+                />
+            </el-form-item>
+        </el-form>
+        <div class="foot">
+            <SdxuButton
+                type="default"
+                @click="cancel"
+                size="small"
+            >
+                {{ t('sdxCommon.Cancel') }}
+            </sdxubutton>
+            <SdxuButton
+                type="primary"
+                @click="savaBuild"
+                size="small"
+            >
+                {{ t('view.image.SaveAndBuild') }}
+            </sdxubutton>
+        </div>
+    </SdxuContentPanel>
 </template>
 
 <script>

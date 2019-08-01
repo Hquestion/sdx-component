@@ -82,7 +82,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    width="400px"
+                    width="220px"
                     :label="t('sdxCommon.Operation')"
                     v-if="authtoWrite(objectType)"
                 >

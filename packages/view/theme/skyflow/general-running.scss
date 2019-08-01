@@ -1,4 +1,7 @@
 @include block("general-running", $bem-namespace-view) {
+    @include element('table') {
+        min-height: calc(100vh - 450px);
+    }
     @include element('footer') {
         display: flex;
         justify-content: space-between;

@@ -1,14 +1,32 @@
 <template>
-    <sdxu-content-panel
-        class="sdxv-project-management"
-        :title="t('view.project.projectList')"
-    >
+    <div class="sdxv-project-management">
         <div class="sdxv-project-management__header">
-            <div class="sdxv-project-management__header--left">
+            {{ t('view.project.projectList') }}
+        </div>
+        <div class="sdxv-project-management__tool">
+            <div class="sdxv-project-management__tool--left">
+                <SdxwSearchLayout
+                    @search="searchProject"
+                    :block="false"
+                    align="right"
+                    style="flex: 1"
+                >
+                    <SdxwSearchItem>
+                        <sdxu-input
+                            v-model="searchName"
+                            type="search"
+                            size="small"
+                            :placeholder="t('view.project.enterProjectName')"
+                        />
+                    </SdxwSearchItem>
+                </SdxwSearchLayout>
+            </div>
+            <div class="sdxv-project-management__tool--right">
                 <sdxu-button
                     placement="right"
                     size="small"
                     trigger="click"
+                    style="margin-right: 10px;"
                     v-auth.project.button="'PROJECT:CREATE'"
                 >
                     {{ t('view.project.createProject') }}
@@ -45,36 +63,79 @@
                     :order.sync="order"
                 />
             </div>
-            <SdxwSearchLayout
-                @search="searchProject"
-                :block="false"
-                align="right"
-                style="flex: 1"
-            >
-                <SdxwSearchItem>
-                    <sdxu-input
-                        v-model="searchName"
-                        type="search"
-                        size="small"
-                        :placeholder="t('view.project.enterProjectName')"
-                    />
-                </SdxwSearchItem>
-            </SdxwSearchLayout>
         </div>
-        <div
-            class="sdxv-project-management__content"
+        <sdxu-content-panel
+            style="margin-bottom: 30px;"
+            :title="t('view.project.template')"
+            v-loading="templatesLoading"
         >
-            <sdxw-project-card-list v-loading="loading">
-                <sdxw-project-card
-                    @operate="handleOperate"
-                    v-for="(item, index) in projectList"
-                    :key="index"
-                    :meta="item"
-                    :edit-able="item.showEdit"
-                    :delete-able="item.showRemove"
+            <div v-if="templateList.length || !templatesLoaded">
+                <SdxuScroll style="height: 230px;">
+                    <sdxw-project-card-list>
+                        <sdxw-project-card
+                            @operate="handleOperate"
+                            v-for="(item, index) in templateList"
+                            :key="index"
+                            :meta="item"
+                            :edit-able="item.showEdit"
+                            :delete-able="item.showRemove"
+                        />
+                    </sdxw-project-card-list>
+                </SdxuScroll>
+            </div>
+            <SdxuEmpty v-else />
+        </sdxu-content-panel>
+        <sdxu-content-panel
+            :title="t('view.project.privateAndShare')"
+            class="sdxv-project-management__bottom-panel"
+        >
+            <div class="sdxv-project-management__bottom-panel--content">
+                <SdxuTabRadioGroup
+                    v-model="projectType"
+                    style="margin-bottom: 10px;"
+                    @switch="switchProjectType"
+                >
+                    <SdxuTabRadioItem
+                        name="private"
+                    >
+                        {{ t('view.project.selfCreateProject') }}
+                    </SdxuTabRadioItem>
+                    <SdxuTabRadioItem
+                        name="public"
+                    >
+                        {{ t('view.project.otherProject') }}
+                    </SdxuTabRadioItem>
+                </SdxuTabRadioGroup>
+                <div v-if="projectList.length || !projectsLoaded">
+                    <div>
+                        <sdxw-project-card-list v-loading="projectsLoading">
+                            <sdxw-project-card
+                                @operate="handleOperate"
+                                v-for="(item, index) in projectList"
+                                :key="index"
+                                :meta="item"
+                                :edit-able="item.showEdit"
+                                :delete-able="item.showRemove"
+                            />
+                        </sdxw-project-card-list>
+                    </div>
+                </div>
+                <SdxuEmpty v-else />
+            </div>
+            <div
+                class="sdxv-project-management__footer"
+                slot="footer"
+            >
+                <div />
+                <sdxu-pagination
+                    v-if="total"
+                    :current-page.sync="current"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="currentChange"
                 />
-            </sdxw-project-card-list>
-        </div>
+            </div>
+        </sdxu-content-panel>
         <sdxv-create-project
             :visible.sync="createProjectVisible"
             v-if="createProjectVisible"
@@ -82,7 +143,7 @@
             :data="editingProject"
             :create-type="createType"
         />
-    </sdxu-content-panel>
+    </div>
 </template>
 
 <script>
@@ -95,12 +156,14 @@ import Project from '@sdx/widget/components/projectcard';
 import MessageBox from '@sdx/ui/components/message-box';
 import Select from 'element-ui/lib/select';
 import Message from 'element-ui/lib/message';
-import { getProjectList, removeProject } from '@sdx/utils/src/api/project';
+import { removeProject, getProjectTemplates, getSelfCreatedProjects, getSharingProjects } from '@sdx/utils/src/api/project';
 import SortButton from '@sdx/ui/components/sort-button';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
+import TabRadio from '@sdx/ui/components/tab-radio';
+import { paginate } from '@sdx/utils/src/helper/tool';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -109,10 +172,16 @@ export default {
             order: 'desc',
             current: 1,
             total: 0,
+            pageSize: 10,
             createProjectVisible: false,
             createType: '',
+            templateList: [],
             projectList: [],
-            loading: false,
+            projectType: 'private',
+            templatesLoading: false,
+            templatesLoaded: false,
+            projectsLoaded: false,
+            projectsLoading: false,
             editingProject: null
         };
     },
@@ -131,22 +200,20 @@ export default {
         [ContentPanel.name]: ContentPanel,
         [SortButton.name]:SortButton,
         [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
-        [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem
+        [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
+        [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
+        [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
     },
     created() {
         this.initList();
     },
     methods: {
-        // 模版排序 前面
-        sortTemplate(frontObj, endObj) {
-            let [a, b] =[frontObj.isTemplate, endObj.isTemplate];
-            if (a < b) {
-                return 1;
-            } else if (a > b) {
-                return -1;
-            } else {
-                return 0;
-            }
+        switchProjectType() {
+            this.initProjectsList();
+        },
+        async initList() {
+            this.initProjectsList();
+            this.initTemplatesList();
         },
         sortChange() {
             this.initList();
@@ -154,16 +221,43 @@ export default {
         searchProject() {
             this.initList();
         },
-        initList() {
-            this.loading = true;
+        initTemplatesList() {
+            this.templatesLoading = true;
+            this.templatesLoaded = false;
             const params = {
                 name: this.searchName,
-                start: this.current,
+                start: 1,
                 count: -1,
                 order: this.order,
-                orderBy: 'createdAt'
+                orderBy: 'createdAt',
+                type: 'template'
             };
-            getProjectList(params).then(res => {
+            getProjectTemplates(params).then(res => {
+                this.templateList = res.data.items;
+                this.templateList.forEach(item => {
+                    const isOwn = getUser().userId === item.owner.uuid;
+                    let hasWriteAuth = true;
+                    if (item.isTempalte) hasWriteAuth = auth.checkAuth('PROJECT-MANAGER:TEMPLATE_PROJECT:WRITE', 'BUTTON');
+                    item.showEdit = isOwn && hasWriteAuth;
+                    item.showRemove = isOwn && hasWriteAuth;
+                });
+            }).finally(() => {
+                this.templatesLoading = false;
+                this.templatesLoaded = true;
+            });
+        },
+        initProjectsList() {
+            this.projectsLoading = true;
+            this.projectsLoaded = false;
+            const params = {
+                name: this.searchName,
+                ...paginate(this.current, this.pageSize),
+                order: this.order,
+                orderBy: 'createdAt',
+                type: this.projectType
+            };
+            const fn = this.projectType === 'private' ? getSelfCreatedProjects : getSharingProjects;
+            fn(params).then(res => {
                 this.projectList = res.data.items;
                 this.projectList.forEach(item => {
                     const isOwn = getUser().userId === item.owner.uuid;
@@ -172,22 +266,10 @@ export default {
                     item.showEdit = isOwn && hasWriteAuth;
                     item.showRemove = isOwn && hasWriteAuth;
                 });
-
-                // 暂时排序
-                let [templateList, otherList ] = [[], []];
-                for (let i =0; i< this.projectList.length; i++) {
-                    if(this.projectList[i].isTemplate) {
-                        templateList.push(this.projectList[i]);
-                    } else {
-                        otherList.push(this.projectList[i]);
-                    }
-                }
-                this.projectList = [...templateList, ...otherList];
-                // this.projectList.sort(this.sortTemplate);
-                // 暂时排序
-
                 this.total = res.data.total;
-                this.loading = false;
+            }).finally(() => {
+                this.projectsLoading = false;
+                this.projectsLoaded = true;
             });
         },
         handleOperate(operation) {
@@ -208,7 +290,7 @@ export default {
                     }).catch(() => {});
                     break;
                 case 'edit':
-                    this.editingProject = this.projectList.find(item => item.uuid === operation.id);
+                    this.editingProject = { ...operation.item };
                     this.showCreateProject('empty');
                     break;
                 case 'detail':

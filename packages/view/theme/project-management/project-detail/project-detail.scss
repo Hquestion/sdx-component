@@ -38,7 +38,7 @@
         align-items: center;
         justify-content: center;
         min-width: 110px;
-        width: calc(6vw);
+        width: calc(7vw);
         height: 130px;
         margin-top: 20px;
         @include modifier('name') {
@@ -73,6 +73,9 @@
         .sdx-icon {
             font-size: 14px;
         }
+    }
+    @include element('content') {
+        min-height: calc(100vh - 560px);
     }
     @include element('footer') {
         display: flex;

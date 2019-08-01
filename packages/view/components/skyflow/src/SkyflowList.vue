@@ -104,6 +104,7 @@
             :title="t('view.skyflow.privateAndShare')"
             v-auth.skyflow.button="'FLOW:READ'"
             class="sdxv-skyflow__bottom-panel"
+            :fullscreen="true"
         >
             <div class="sdxv-skyflow__bottom-panel--content">
                 <div v-if="workflowList.length || !workflowsLoaded">

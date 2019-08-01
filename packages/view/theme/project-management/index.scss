@@ -24,6 +24,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import './project-detail/project-detail.scss';
 
 @include block('project-management', $bem-namespace-view) {
+    height: 100%;
     @include element('header') {
         height: 16px;
         font-size: 16px;
@@ -46,9 +47,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
     }
     @include element('bottom-panel') {
-        @include modifier('content') {
-            min-height: calc(38vh);
-        }
+        min-height: calc(100% - 488px);
     }
     @include element('footer') {
         display: flex;

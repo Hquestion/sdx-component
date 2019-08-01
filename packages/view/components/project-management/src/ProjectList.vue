@@ -88,6 +88,7 @@
         <sdxu-content-panel
             :title="t('view.project.privateAndShare')"
             class="sdxv-project-management__bottom-panel"
+            :fullscreen="true"
         >
             <div class="sdxv-project-management__bottom-panel--content">
                 <SdxuTabRadioGroup

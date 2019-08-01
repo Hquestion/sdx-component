@@ -9,6 +9,7 @@
         @open="syncCode"
     >
         <codemirror
+            ref="codemirror"
             v-model="mirrorCode"
             :options="editorOptions"
         />
@@ -56,7 +57,7 @@ export default {
         },
         title: {
             type: String,
-            default: t('widget.codeEditor.CodeEditor')
+            default: () => t('widget.codeEditor.CodeEditor')
         },
         saveHandler: {
             type: Function,

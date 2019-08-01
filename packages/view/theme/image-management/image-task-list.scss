@@ -1,4 +1,7 @@
 @include block('image-task', $bem-namespace-view) {
+    .content {
+        min-height: calc(100vh - 395px);
+    }
     .pagination {
         display: flex;
         justify-content: flex-end;

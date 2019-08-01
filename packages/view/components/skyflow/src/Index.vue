@@ -1,7 +1,5 @@
 <template>
-    <div style="height: 100%">
-        <router-view />
-    </div>
+    <router-view />
 </template>
 
 <script>

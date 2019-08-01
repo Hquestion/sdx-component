@@ -104,10 +104,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    @import "~@sdx/utils/src/theme-common/var";
     .sdxv-file-breadcrumb-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 10px;
+        .loaded-tip {
+            color: $sdx-text-regular-color;
+        }
     }
 </style>

@@ -8,7 +8,7 @@
             popper-class="sdxu-text-tooltip__popper"
             v-if="tooltip || (content && content.length > 0)"
         >
-            <div>
+            <div class="sdxu-text-tooltip__container">
                 <template v-if="tipType === 'text'">
                     {{ tooltip }}
                 </template>

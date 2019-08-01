@@ -27,6 +27,8 @@
             height="100%"
             v-loadmore="loadMore"
             v-loading="fileManager.loading"
+            row-id="path"
+            :highlight-key="editingRow && editingRow.path"
         >
             <el-table-column
                 type="selection"
@@ -409,6 +411,12 @@ export default {
     .sdxv-file-table__checkbar {
         padding-left: 10px;
         line-height: 58px;
+    }
+    & /deep/ .sdxu-table {
+        border-bottom: none;
+        table {
+            border-bottom: 1px solid #EBEEF5;
+        }
     }
 }
 </style>

@@ -107,7 +107,7 @@ export default {
         },
         fetchGpuList() {
             getGpuModels().then(res => {
-                this.GPUList = res;
+                this.GPUList = [...new Set(res)];
             });
         },
         validateLabel(rule, value, callback) {

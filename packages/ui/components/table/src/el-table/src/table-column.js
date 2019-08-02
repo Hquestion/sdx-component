@@ -1,6 +1,6 @@
 import ElCheckbox from 'element-ui/lib/checkbox';
 import ElTag from 'element-ui/lib/tag';
-import objectAssign from 'element-ui/src/utils/merge';
+import objectAssign from 'element-ui/lib/utils/merge';
 
 export function getPropByPath(obj, path, strict) {
     let tempObj = obj;

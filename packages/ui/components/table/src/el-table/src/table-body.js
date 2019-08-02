@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { getCell, getColumnByCell, getRowIdentity } from './util';
-import { getStyle, hasClass, addClass, removeClass } from 'element-ui/src/utils/dom';
+import { getStyle, hasClass, addClass, removeClass } from 'element-ui/lib/utils/dom';
 import ElCheckbox from 'element-ui/lib/checkbox';
 import ElTooltip from 'element-ui/lib/tooltip';
 import debounce from 'throttle-debounce/debounce';

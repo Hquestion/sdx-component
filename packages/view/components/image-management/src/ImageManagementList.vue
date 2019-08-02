@@ -1,5 +1,8 @@
 <template>
-    <sdxu-content-panel class="sdxv-image-management">
+    <sdxu-content-panel
+        class="sdxv-image-management"
+        fullscreen
+    >
         <div class="sdxv-image-management__header">
             <div style="position: relative">
                 <SdxuTabRadioGroup

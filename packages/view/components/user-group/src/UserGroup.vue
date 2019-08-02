@@ -43,7 +43,24 @@
                 <el-table-column
                     :label="t('view.userManage.UserGroupName')"
                     prop="name"
-                />
+                >
+                    <template #default="{ row }">
+                        <div class="sdxv-user-group__table--name">{{row.name}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column type="expand">
+                    <template #default="{ row }">
+                        <div class="sdxv-user-group__table--expand">
+                            <span class="sdxv-user-group__table--expand-label">{{ t('view.userManage.GroupMembers') }}:</span>
+                            <sdxw-fold-label-group
+                                v-if="row.users && row.users.length > 0"
+                                :list="row.users.map(item => item.fullName)"
+                                type="default"
+                            />
+                            <span style="line-height: 24px" v-else>{{ t('view.userManage.NoMembers') }}</span>
+                        </div>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     :label="t('view.userManage.Role')"
                 >
@@ -84,19 +101,7 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column type="expand">
-                    <template #default="{ row }">
-                        <div class="sdxv-user-group__table--expand">
-                            <span class="sdxv-user-group__table--expand-label">{{ t('view.userManage.GroupMembers') }}:</span>
-                            <sdxw-fold-label-group
-                                v-if="row.users && row.users.length > 0"
-                                :list="row.users.map(item => item.fullName)"
-                                type="default"
-                            />
-                            <span v-else>{{ t('view.userManage.NoMembers') }}</span>
-                        </div>
-                    </template>
-                </el-table-column>
+
             </sdxu-table>
         </div>
         <div

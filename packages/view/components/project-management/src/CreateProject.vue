@@ -143,7 +143,7 @@ import Project from '@sdx/widget/components/projectcard';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Radio, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
-import { updateProject, getProjectList, createProject } from '@sdx/utils/src/api/project';
+import { updateProject, createProject, getProjectTemplates, getSelfCreatedProjects, getSharingProjects } from '@sdx/utils/src/api/project';
 import auth from '@sdx/widget/components/auth';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -273,7 +273,8 @@ export default {
                 count: 1000,
                 type
             };
-            getProjectList(params).then(res => {
+            const fn = type === 'template' ? getProjectTemplates : (type === 'private' ? getSelfCreatedProjects : getSharingProjects);
+            fn(params).then(res => {
                 this.projectList = res.data.items;
                 this.loading = false;
                 this.totalProjects = [...this.projectList];

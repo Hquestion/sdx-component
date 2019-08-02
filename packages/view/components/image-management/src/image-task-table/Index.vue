@@ -3,83 +3,86 @@
         class="sdxv-image-task"
         v-loading="loading"
     >
-        <SdxuTable
-            :data="tableData"
-            @sort-change="handleSortChange"
-            :default-sort="{prop: 'createdAt', order: 'descending'}"
-        >
-            <el-table-column
-                prop="name"
-                :label="t('view.image.Columns.imageName')"
-            />
-            <el-table-column
-                prop="version"
-                :label="t('view.image.Columns.version')"
-            />
-            <el-table-column
-                prop="imageType"
-                :label="t('view.image.Columns.imageType')"
-            />
-            <el-table-column
-                prop="buildTypeText"
-                :label="t('view.image.Columns.buildType')"
-            />
-            <el-table-column
-                :label="t('view.image.Columns.state')"
-                prop="state"
+        <div class="content">
+            <SdxuTable
+                :data="tableData"
+                @sort-change="handleSortChange"
+                :default-sort="{prop: 'createdAt', order: 'descending'}"
             >
-                <template
-                    slot-scope="scope"
+                <el-table-column
+                    prop="name"
+                    :label="t('view.image.Columns.imageName')"
+                />
+                <el-table-column
+                    prop="version"
+                    :label="t('view.image.Columns.version')"
+                />
+                <el-table-column
+                    prop="imageType"
+                    :label="t('view.image.Columns.imageType')"
+                />
+                <el-table-column
+                    prop="buildTypeText"
+                    :label="t('view.image.Columns.buildType')"
+                />
+                <el-table-column
+                    :label="t('view.image.Columns.state')"
+                    prop="state"
                 >
-                    <SdxwFoldLabel
-                        :plain="true"
-                        :type="imageTaskLabel[scope.row.state.label]"
-                        :status="scope.row.state.needPull ? 'loading' : ''"
+                    <template
+                        slot-scope="scope"
                     >
-                        {{ t(`view.image.States.${(scope.row.state.label).slice(0, 1) + (scope.row.state.label).slice(1).toLocaleLowerCase()}`) }}
-                    </SdxwFoldLabel>
-                </template>
-            </el-table-column>
-            <el-table-column
-                prop="createdAt"
-                :label="t('view.image.Columns.createdAt')"
-                sortable="custom"
-            >
-                <template
-                    slot-scope="scope"
+                        <SdxwFoldLabel
+                            :plain="true"
+                            :type="imageTaskLabel[scope.row.state.label]"
+                            :status="scope.row.state.needPull ? 'loading' : ''"
+                        >
+                            {{ t(`view.image.States.${(scope.row.state.label).slice(0, 1) + (scope.row.state.label).slice(1).toLocaleLowerCase()}`) }}
+                        </SdxwFoldLabel>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="createdAt"
+                    :label="t('view.image.Columns.createdAt')"
+                    sortable="custom"
                 >
-                    {{ dateFormatter(scope.row.createdAt) }}
-                </template>
-            </el-table-column>
-            <el-table-column
-                style="width: 15%"
-                :label="t('sdxCommon.Operation')"
-            >
-                <template
-                    slot-scope="scope"
-                    class="icon"
+                    <template
+                        slot-scope="scope"
+                    >
+                        {{ dateFormatter(scope.row.createdAt) }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    style="width: 15%"
+                    :label="t('sdxCommon.Operation')"
                 >
-                    <SdxuIconButton
-                        icon="sdx-icon sdx-baobijiao"
-                        :title="t('view.image.Columns.compare')"
-                        v-if="scope.row.showDiff"
-                        @click="handleShowCompareDialog(scope.row)"
-                    />
-                    <SdxuIconButton
-                        icon="sdx-icon sdx-chakanrizhi"
-                        :title="t('view.image.Columns.viewLog')"
-                        v-if="scope.row.showLog"
-                        @click="handelShowBuilderLog(scope.row.uuid)"
-                    />
-                    <SdxuIconButton
-                        icon="sdx-icon sdx-icon-delete"
-                        :title="t('sdxCommon.Delete')"
-                        v-if="scope.row.showRemove"
-                        @click="deleteImageTask(scope.row.uuid)"
-                    />
-                </template>
-            </el-table-column>
-        </SdxuTable>
+                    <template
+                        slot-scope="scope"
+                        class="icon"
+                    >
+                        <SdxuIconButton
+                            icon="sdx-icon sdx-baobijiao"
+                            :title="t('view.image.Columns.compare')"
+                            v-if="scope.row.showDiff"
+                            @click="handleShowCompareDialog(scope.row)"
+                        />
+                        <SdxuIconButton
+                            icon="sdx-icon sdx-chakanrizhi"
+                            :title="t('view.image.Columns.viewLog')"
+                            v-if="scope.row.showLog"
+                            @click="handelShowBuilderLog(scope.row.uuid)"
+                        />
+                        <SdxuIconButton
+                            icon="sdx-icon sdx-icon-delete"
+                            :title="t('sdxCommon.Delete')"
+                            v-if="scope.row.showRemove"
+                            @click="deleteImageTask(scope.row.uuid)"
+                        />
+                    </template>
+                </el-table-column>
+            </SdxuTable>
+        </div>
+       
         <div class="pagination">
             <sdxu-pagination
                 v-if="total"

@@ -5,6 +5,7 @@
         type="info"
         show-icon
         :closable="false"
+        style="height: 50px"
     />
 </template>
 

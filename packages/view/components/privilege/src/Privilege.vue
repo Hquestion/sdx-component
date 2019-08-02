@@ -56,6 +56,7 @@
                         <sdxw-fold-label-group
                             :list="row.tags"
                             mode="list"
+                            type="default"
                         />
                     </template>
                 </el-table-column>

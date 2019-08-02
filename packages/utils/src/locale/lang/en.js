@@ -308,12 +308,14 @@ export default {
                 setTemplate: 'Set As Template:'
             },
             selfCreateProject: 'My Projects',
-            otherProject: 'Others Sharing Projects',
+            otherProject: 'Cooperating Projects',
             taskList: 'Tasks List',
             enterTaskName: 'Please enter task name',
             modelDev: 'Model Development',
             modelTraining: 'Model Training',
-            modelAssess: 'Model Assessment'
+            modelAssess: 'Model Assessment',
+            template: 'Templates',
+            privateAndShare: 'Self Created And Cooperate'
         },
         skyflow: {
             skyflowList: 'Workflows List',

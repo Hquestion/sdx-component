@@ -1,11 +1,12 @@
 @import '~@sdx/ui/theme/icon-button';
 
 @include block('image-list', $bem-namespace-view) {
-    @include element('table') {
-        margin: 20px 0;
+    @include element('content') {
+        min-height: calc(100vh - 460px);
     }
     @include element('footer') {
         display: flex;
         justify-content: space-between;
+        margin-top: 20px;
     }
 }

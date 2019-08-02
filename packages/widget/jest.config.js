@@ -16,7 +16,8 @@ module.exports = {
         '^@sdx/widget/(.*)': '<rootDir>/../widget/$1',
         '^@sdx/view/(.*)': '<rootDir>/../view/$1',
         '^@sdx/utils/(.*)': '<rootDir>/../utils/$1',
-        '^@/(.*)$': '<rootDir>/src/$1'
+        '^@/(.*)$': '<rootDir>/src/$1',
+        '\\.(css|less)$': 'identity-obj-proxy'
     },
     transformIgnorePatterns: ['<rootDir>/node_modules/(?!@sdx)', '<rootDir>/../utils/src/theme-common/iconfont/iconfont.js']
 };

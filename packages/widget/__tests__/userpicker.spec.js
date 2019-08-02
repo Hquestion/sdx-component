@@ -1,7 +1,7 @@
-jest.mock('../../../utils/src/api/user');
+// jest.mock('../../../utils/src/api/user');
 
 import {shallowMount, mount, createLocalVue, createWrapper} from '@vue/test-utils';
-import UserPicker from '../../components/user-picker';
+import UserPicker from '../components/user-picker';
 import ElementUI from 'element-ui';
 import Vue from 'vue/dist/vue.min';
 const localVue = createLocalVue();

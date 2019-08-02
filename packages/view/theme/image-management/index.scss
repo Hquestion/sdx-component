@@ -24,6 +24,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import './image-file-build.scss';
 @import './image-task-list.scss';
 @include block('image-management', $bem-namespace-view) {
+    padding-top: 20px;
+    .sdxu-content-panel__main {
+        padding-top: 10px;
+    }
     @include element('header') {
         display: flex;
         align-items: center;

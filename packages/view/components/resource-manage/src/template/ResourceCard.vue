@@ -153,8 +153,8 @@ export default {
         }
         .delete {
             position: absolute;
-            right: 5px;
-            top: 5px;
+            right: 8px;
+            top: 8px;
             display: none;
         }
         &:hover {

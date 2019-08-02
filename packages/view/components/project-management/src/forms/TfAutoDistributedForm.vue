@@ -301,6 +301,10 @@ export default {
                 });
         },
         commit() {
+            if (!this.isGpuEnt) {
+                this.params.resourceConfig.TF_WORKER_GPUS = 0; 
+                this.params.resourceConfig.GPU_MODEL = '';
+            }
             this.$refs.tfautodistributed.validate().then(() => {
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
                     .then (() => {

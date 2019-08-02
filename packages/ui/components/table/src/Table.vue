@@ -33,11 +33,15 @@ export default {
         highlightKey: {
             type: String,
             default: ''
+        },
+        rowId: {
+            type: String,
+            default: 'uuid'
         }
     },
     methods: {
         tableRowClassName({row}) {
-            if(row.key === this.highlightKey) {
+            if(row[this.rowId] === this.highlightKey) {
                 return 'highlight-row';
             }
             return '';

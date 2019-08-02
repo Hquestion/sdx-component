@@ -93,8 +93,9 @@ export default {
         .global-rule-panel__body {
             padding-left: 40px;
             .global-rule-panel__footer {
-                text-align: center;
-                margin-top: 20px;
+                text-align: left;
+                margin-top: 40px;
+                margin-left: 185px;
             }
         }
     }

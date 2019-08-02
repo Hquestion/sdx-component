@@ -26,7 +26,7 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
 @import "./running-info.scss";
 
 @include block("skyflow", $bem-namespace-view) {
-    padding: 30px 20px 40px;
+    height: 100%;
     @include element("header") {
         height: 16px;
         font-size: 16px;
@@ -52,6 +52,9 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
         height: 230px;
         flex-wrap: nowrap;
         padding: 8px 4px;
+    }
+    @include element('bottom-panel') {
+        min-height: calc(100% - 488px);
     }
     @include element("panel-footer") {
         display: flex;

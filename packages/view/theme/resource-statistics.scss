@@ -119,11 +119,13 @@
 
 @include block('resource-chart', $bem-namespace-view) {
     @include element('percent') {
+        font-family: Impact;
         font-size: 26px;
         font-weight: bold;
         color: $sdx-text-primary-color;
     }
     @include element('desc') {
+        margin-top: 8px;
         font-size: 12px;
         color: $sdx-text-minor-color;
     }

@@ -1,14 +1,14 @@
 <template>
     <div class="sdxv-resource-chart">
         <SdxuRadialProgress
-            :diameter="130"
+            :diameter="138"
             :completed-steps="used"
             :total-steps="total"
             start-color="#4781F8"
             stop-color="#8AEBFF"
             inner-stroke-color="#ECF3FD"
-            :stroke-width="12"
-            :slide-width="8"
+            :stroke-width="14"
+            :slide-width="10"
         >
             <p class="sdxv-resource-chart__percent">
                 {{ percent }}%

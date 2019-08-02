@@ -67,7 +67,7 @@ export default {
                     name: 'GPU',
                     type: 'pie',
                     hoverAnimation: false,
-                    radius: ['33%', '63%'],
+                    radius: ['42.7%', '70%'],
                     label: {
                         show: false
                     },
@@ -77,7 +77,7 @@ export default {
                     name: this.t('view.monitor.resourceStatistic.Usage'),
                     type: 'pie',
                     hoverAnimation: false,
-                    radius: ['88%', '100%'],
+                    radius: ['89.1%', '100%'],
                     label: {
                         show: false
                     },

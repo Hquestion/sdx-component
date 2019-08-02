@@ -104,6 +104,10 @@ export default {
         loading: {
             type: Boolean,
             default: false
+        },
+        needShowTags: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -131,9 +135,12 @@ export default {
             for (let i = 0; i< this.checkedTags.length; i++) {
                 checkKeys.push(this.checkedTags[i][this.treeNodeKey]);
             }
+
             if(this.is_moveall) {
                 hightIcon =  false;
             }else if(tagsKey.sort().toString() === checkKeys.sort().toString()) {
+                hightIcon =  false;
+            } else if(this.defaultKeys.length === this.tags.length) {
                 hightIcon =  false;
             } else {
                 hightIcon = true;
@@ -234,6 +241,12 @@ export default {
                 });
             },
             immediate: true
+        },
+        needShowTags() {
+            this.$nextTick(() => {
+                this.$refs.tree && this.$refs.tree.setCheckedKeys(this.defaultKeys);
+                this.movetag();
+            });
         }
     },
 };

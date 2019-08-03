@@ -30,7 +30,8 @@ externals = [
         'axios': 'axios',
         'echarts': 'echarts',
         'dexie': 'dexie',
-        'dayjs': 'dayjs'
+        'dayjs': 'dayjs',
+        'portal-vue': 'portal-vue'
     }, externals),
     /^element-ui/,
     /^~element-ui/,
@@ -72,8 +73,7 @@ externals = [
     nodeExternals({
         whitelist: [
             /^codemirror/,
-            'vue-codemirror-lite',
-            'portal-vue'
+            'vue-codemirror-lite'
         ]
     })
 ];

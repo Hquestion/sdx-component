@@ -130,9 +130,9 @@ export default {
     },
     data() {
         this.POD_STATE_TYPE = POD_STATE_TYPE;
-        this.podStateList = Object.values(POD_STATE_TYPE).map(item => {
+        this.podStateList = Object.keys(POD_STATE_TYPE).map(item => {
             return {
-                label: item,
+                label: POD_STATE_TYPE[item],
                 value: item
             };
         });
@@ -197,6 +197,7 @@ export default {
             this.page = 1;
             this.query.podName = this.searchName.trim();
             this.query.status = this.podState;
+            console.error(this.query);
         },
         handlePageChange(page) {
             this.page = page;

@@ -26,7 +26,6 @@ describe('SdxwProjectCard', () => {
         });
 
         expect(wrapper.find('.sdxw-project-card__header--name').text()).toBe('name1');
-        expect(wrapper.find('.sdxw-project-card__header--type').exists()).toBe(true);
         expect(wrapper.findAll('.sdxw-project-card__info > span').at(0).text()).toBe('full name');
         expect(wrapper.findAll('.sdxw-project-card__info > span').at(1).text()).toBe(dateFormatter('2019/08/01'));
         expect(wrapper.find('.sdxw-project-card__mask--text').text()).toBe('test description');

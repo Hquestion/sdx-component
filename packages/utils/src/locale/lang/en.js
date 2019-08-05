@@ -21,11 +21,11 @@ export default {
     widget: {
         userInfo:{
             title:'User Detail',
-            username:'Username',
-            fullname:'Full Name',
+            username:'Username:',
+            fullname:'Full Name:',
             password:'Password',
-            groups:'Groups',
-            role:'Role',
+            groups:'Groups:',
+            role:'Role:',
             noGroup: 'Not in groups',
             noRole: 'No role'
         },

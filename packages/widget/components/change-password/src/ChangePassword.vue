@@ -4,6 +4,7 @@
         @close="dialogClose"
         class="sdxw-change-password"
         title-icon="sdx-icon-password"
+        size="small"
     >
         <div
             slot="title"
@@ -11,8 +12,8 @@
             <span>{{ t('widget.changePassword.title') }}</span>
         </div>
         <el-form
-            label-width="110px"
-            label-position="left"
+            label-width="108px"
+            label-position="right"
             :model="changePwdForm"
             ref="changePwdForm"
             :rules="changePwdFormRule"

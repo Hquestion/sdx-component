@@ -155,6 +155,7 @@
                             :tags.sync="dialogParams.tags"
                             :default-keys.sync="defaultKeys"
                             :tree-node-key="treeNodeKey"
+                            :need-show-tags="showTags"
                         />
                     </el-form-item>
                 </el-form>
@@ -193,7 +194,7 @@ import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import Select from 'element-ui/lib/select';
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
-import {getUserProfilesList, getGroupProfilesList, getRoleProfilesList} from '@sdx/utils/src/api/manage';
+import {getUserProfilesList, getGroupProfilesList, getRoleProfilesList, getRolePermissions} from '@sdx/utils/src/api/manage';
 import {updataUser, updateGroups} from '@sdx/utils/src/api/user';
 import {getPermissionList} from '@sdx/utils/src/api/permissions';
 import {updateRoles} from '@sdx/utils/src/api/rolemange';
@@ -275,7 +276,8 @@ export default {
                 ],
 
             },
-            permissionLoading:false
+            permissionLoading:false,
+            showTags: false
         };
     },
     created() {
@@ -488,6 +490,32 @@ export default {
 
             });
 
+        }
+    },
+    watch: {
+        'dialogParams.objValue'(nval) {
+            this.defaultKeys = [];
+            this.showTags = false;
+            this.dialogParams.tags = [];
+            if(nval && nval.uuid) {
+                // 拼接role ，查对应的接口
+                let role = `${this.objectType}s`;
+                getRolePermissions(role, nval.uuid)
+                    .then(data => {
+                        if(data.permissions.length) {
+                            this.defaultKeys = data.permissions;
+                            this.showTags = true;
+                        } else {
+                            this.defaultKeys = [];
+                            this.showTags = false;
+                            this.dialogParams.tags = [];
+                        }
+                    }, () => {
+                        this.defaultKeys = [];
+                        this.showTags = false;
+                        this.dialogParams.tags = [];
+                    });
+            }
         }
     }
 };

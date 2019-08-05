@@ -21,11 +21,11 @@ export default {
     widget: {
         userInfo:{
             title:'用户信息',
-            username:'用户名',
-            fullname:'显示名',
+            username:'用户名：',
+            fullname:'显示名：',
             password:'密码',
-            groups:'加入组',
-            role:'角色',
+            groups:'加入组：',
+            role:'角色：',
             noGroup: '暂未加入用户组',
             noRole: '暂无角色'
         },

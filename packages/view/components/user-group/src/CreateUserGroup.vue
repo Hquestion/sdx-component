@@ -171,6 +171,7 @@ export default {
             handler(val) {
                 if (val) {
                     this.params = Object.assign(this.params, val);
+                    this.params.roles = this.params.roles.map(item => typeof item === 'string' ? item : item.uuid);
                     this.saveGroupObj = JSON.parse(JSON.stringify({
                         name: this.params.name,
                         roles: this.params.roles

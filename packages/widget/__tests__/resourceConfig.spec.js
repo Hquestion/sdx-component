@@ -97,25 +97,4 @@ describe('ResourceConfig', () => {
         });
         expect(wrapper.vm.showError).toBe(true);
     });
-
-    // it('etches async when a resourceConfig is render', done => {
-    //     // const mockFn = jest.fn();
-    //     const wrapper = mount(ResourceConfig, {
-    //         localVue,
-    //         propsData: {
-    //             type: 'gpu',
-    //             value: {
-    //                 label: 'XX',
-    //                 count: 1,
-    //                 uuid: 'XX-1'
-    //             }
-    //         }
-    //     });
-    //     setTimeout(() => {
-    //         console.log(wrapper.html());
-    //         done();
-    //     }, 1000)
-    //     // wrapper.setMethods({getResourceList: mockFn});
-    //     // expect(mockFn).toBeCalled();
-    // });
 });

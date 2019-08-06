@@ -119,11 +119,11 @@ export default {
                 return;
             }
             this.elWidthValue = this.$el.offsetWidth;
-            window.console.log('容器宽度:', this.elWidthValue);
+            // window.console.log('容器宽度:', this.elWidthValue);
             this.searchItemWidth = this.$slots.default[0].elm.offsetWidth;
-            window.console.log('元素宽度:', this.searchItemWidth);
+            // window.console.log('元素宽度:', this.searchItemWidth);
             this.minVisible = Math.floor((this.elWidthValue - 300) / this.searchItemWidth);
-            window.console.log('最小显示个数:', this.minVisible);
+            // window.console.log('最小显示个数:', this.minVisible);
             if (this.singlerow) {
                 this.active.items = this.minVisible;
             } else {

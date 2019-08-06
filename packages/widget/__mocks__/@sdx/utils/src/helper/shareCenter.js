@@ -6,5 +6,8 @@ export default {
                 ''
             ]
         };
+    },
+    getAuthSwitcher() {
+        return false;
     }
 };

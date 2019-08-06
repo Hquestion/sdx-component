@@ -41,10 +41,19 @@ export let handler = wrap(function(ctx, request) {
         },
     );
 
+    ctx.resolveUuids(authToken,
+        {
+            path: 'user.groups.*.roles.*',
+            url: 'http://tyk-gateway/user-manager/api/v1/roles',
+            result: 'roles'
+        },
+    );
+
     ctx.resolveUuids(authToken, {
         paths: [
             'user.permissions.*',
             'user.groups.*.permissions.*',
+            'user.groups.*.roles.*.permissions.*',
             'user.roles.*.permissions.*',
         ],
         url: 'http://tyk-gateway/user-manager/api/v1/permissions',

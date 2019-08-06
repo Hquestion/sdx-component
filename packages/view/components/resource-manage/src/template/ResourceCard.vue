@@ -35,12 +35,14 @@
 import MessageBox from '@sdx/ui/components/message-box';
 import IconButton from '@sdx/ui/components/icon-button';
 import locale from '@sdx/utils/src/mixins/locale';
+import auth from '@sdx/widget/components/auth';
 export default {
     name: 'ResourceCard',
     data() {
         return {};
     },
     mixins: [locale],
+    directives: { auth },
     components: {
         IconButton
     },
@@ -66,7 +68,7 @@ export default {
                 return ['CPU', this.t('view.resourceManage.Memory')];
             } else if (this.isGPU) {
                 return ['GPU', this.t('view.resourceManage.Model')];
-            } else{
+            } else {
                 return [];
             }
         },

@@ -1,5 +1,3 @@
-
-
 <template>
     <div>
         <sdxu-dialog
@@ -71,6 +69,8 @@ import SdxuDialog from '@sdx/ui/components/dialog';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuInput from '@sdx/ui/components/input';
+import ElForm from 'element-ui/lib/form';
+import ElFormItem from 'element-ui/lib/form-item';
 export default {
     name:'SdxwUserInfoDialog',
     data () {
@@ -87,7 +87,7 @@ export default {
             type: Boolean,
             default: false
         },
-        userInfoData:{
+        userInfoData: {
             type: Object,
             default: () => {
                 return {
@@ -98,11 +98,11 @@ export default {
                 };
             }
         },
-        theme:{
+        theme: {
             type:String,
-            default:''
+            default: 'user'
         },
-        id:{
+        id: {
             type:String,
             default:''
         }
@@ -180,7 +180,9 @@ export default {
     components:{
         SdxuInput,
         SdxuDialog,
-        [SdxwFoldLabel.FoldLabelGroup.name]: SdxwFoldLabel.FoldLabelGroup
+        [SdxwFoldLabel.FoldLabelGroup.name]: SdxwFoldLabel.FoldLabelGroup,
+        ElForm,
+        ElFormItem
     }
 };
 </script>

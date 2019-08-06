@@ -90,8 +90,8 @@ export default {
     mounted() {
         this.$nextTick(() => {
             if (this.mode === 'list') return;
-            const width = this.$el.offsetWidth;
-            const pWidth = getParentNode(this.$el).offsetWidth;
+            // const width = this.$el.offsetWidth;
+            // const pWidth = getParentNode(this.$el).offsetWidth;
             // this.$el.style.width = `${Math.min(width, pWidth) + 5}px`;
             this.$el.style.width = '100%';
         });

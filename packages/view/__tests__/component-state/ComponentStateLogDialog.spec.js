@@ -24,4 +24,4 @@ describe('SdxvComponentStateLogDialog', () => {
 
         expect(wrapper.vm.pod.podName).toEqual('test-pod-name-asdfsf123');
     })
-})
+});

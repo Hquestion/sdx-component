@@ -154,10 +154,7 @@ export default {
             // 目前先保留上传记录，不处理
         }
     },
-    mounted() {
-        // eslint-disable-next-line
-        console.log(this.fileManager);
-    }
+    mounted() {}
 };
 </script>
 

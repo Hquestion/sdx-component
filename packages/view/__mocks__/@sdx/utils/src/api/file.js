@@ -23,6 +23,20 @@ export function searchFiles(options) {
 export function getFilesList(options) {
     return Promise.resolve({
         children: files,
-        total: 100
+        childrenCount: 100
+    });
+}
+
+export function getCopyTaskList() {
+    return Promise.resolve({
+        jobs: [],
+        total: 0
+    });
+}
+
+export function getUnzipTaskList() {
+    return Promise.resolve({
+        jobs: [],
+        total: 0
     });
 }

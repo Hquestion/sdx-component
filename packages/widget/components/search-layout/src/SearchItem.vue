@@ -29,10 +29,6 @@ export default {
         label: {
             type: String,
             default: ''
-        },
-        index: {
-            type: Number,
-            default: 0
         }
     }
 };

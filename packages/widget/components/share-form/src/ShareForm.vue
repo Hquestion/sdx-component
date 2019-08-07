@@ -41,6 +41,7 @@ import SdxwSelectGroupUser from '@sdx/widget/components/select-group-user';
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import ElRadio from 'element-ui/lib/radio';
+import ElRadioGroup from 'element-ui/lib/radio-group';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
 export default {
@@ -66,7 +67,8 @@ export default {
         SdxwSelectGroupUser,
         ElForm,
         ElFormItem,
-        ElRadio
+        ElRadio,
+        ElRadioGroup
     },
     directives: {
         auth

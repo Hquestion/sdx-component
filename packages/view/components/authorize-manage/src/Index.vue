@@ -312,11 +312,11 @@ export default {
         // 根据权限展示
         defaultName(type) {
             let name = '';
-            if(this.$auth(`USER-MANAGER:USER:${type}:""`, 'button')) {
+            if(auth.checkAuth(`USER-MANAGER:USER:${type}:""`, 'button')) {
                 name = 'user';
-            } else if(!this.$auth(`USER-MANAGER:USER:${type}:""`, 'button') && this.$auth(`USER-MANAGER:GROUP:${type}:""`, 'button')) {
+            } else if(!auth.checkAuth(`USER-MANAGER:USER:${type}:""`, 'button') && auth.checkAuth(`USER-MANAGER:GROUP:${type}:""`, 'button')) {
                 name = 'group';
-            } else if(!this.$auth(`USER-MANAGER:USER:${type}:""`, 'button') && !this.$auth(`USER-MANAGER:GROUP:${type}:""`, 'button') && this.$auth(`USER-MANAGER:ROLE:${type}:""`, 'button') ){
+            } else if(!auth.checkAuth(`USER-MANAGER:USER:${type}:""`, 'button') && !auth.checkAuth(`USER-MANAGER:GROUP:${type}:""`, 'button') && auth.checkAuth(`USER-MANAGER:ROLE:${type}:""`, 'button') ){
                 name = 'role';
             } else {
                 name = '';
@@ -326,7 +326,7 @@ export default {
         // 根据权限展示操作
         authtoWrite(type) {
             let TYPE = type.toUpperCase();
-            return this.$auth(`USER-MANAGER:${TYPE}:WRITE:""`, 'button');
+            return auth.checkAuth(`USER-MANAGER:${TYPE}:WRITE:""`, 'button');
         },
         // 何种类型是否重置页码
         changeObjectType(type,reset) {

@@ -98,7 +98,6 @@ describe('UserInfoDialog', () => {
             }
         });
         setTimeout(() => {
-            console.log(wrapper.html());
             expect(wrapper.find('.sdxw-userinfo__full-name input').exists()).toEqual(false);
             done();
         }, 1000);

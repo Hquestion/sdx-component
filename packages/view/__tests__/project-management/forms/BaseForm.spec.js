@@ -63,10 +63,10 @@ describe('BaseForm', () => {
     it('form slot is rendered withing BaseForm', () => {
         const wrapper = mount(BaseForm, {
             slots: {
-                form: '<div>What an awesome form</div>'
+                form: '<div class="sdxv-project-task-form-slot">What an awesome form</div>'
             }
         });
-        const form = wrapper.find('slot');
-        // expect(form.text()).toBe('What an awesome header')
+        const formText = wrapper.find('.sdxv-project-task-form-slot').text();
+        expect(formText).toEqual('What an awesome form');
     });
 })

@@ -16,5 +16,5 @@ module.exports = {
         '^@sdx/utils/(.*)': '<rootDir>/packages/utils/$1',
         '^@/(.*)$': '<rootDir>/src/$1'
     },
-    transformIgnorePatterns: ['<rootDir>/node_modules/(?!@sdx)', '<rootDir>/packages/utils/src/theme-common/iconfont/iconfont.js']
+    transformIgnorePatterns: ['<rootDir>/node_modules/(?!(@sdx|vue-codemirror-lite))', '<rootDir>/packages/utils/src/theme-common/iconfont/iconfont.js']
 };

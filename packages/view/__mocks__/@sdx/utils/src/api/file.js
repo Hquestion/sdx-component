@@ -23,7 +23,7 @@ export function searchFiles(options) {
 export function getFilesList(options) {
     return Promise.resolve({
         children: files,
-        total: 100
+        childrenCount: 100
     });
 }
 

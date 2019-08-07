@@ -75,10 +75,13 @@
 import Dialog from '@sdx/ui/components/dialog';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
-import { Form, FormItem, Message } from 'element-ui';
-import { userApi } from '@sdx/utils/src/api';
+import Form from 'element-ui/lib/form';
+import FormItem from 'element-ui/lib/form-item';
+import Message from 'element-ui/lib/message';
+import { changePassword } from '@sdx/utils/src/api/user';
 import locale from '@sdx/utils/src/mixins/locale';
-import {passwordValidator} from '@sdx/utils/src/helper/validate';
+import { passwordValidator } from '@sdx/utils/src/helper/validate';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'SdxwChangePassword',
     data() {
@@ -167,7 +170,7 @@ export default {
                     if (this.handler) {
                         this.handler(params);
                     } else {
-                        userApi.changePassword(this.userInfoData.userId, params).then(() => {
+                        changePassword(this.userInfoData.userId || getUser().userId, params).then(() => {
                             Message({
                                 message: this.t('widget.changePassword.changeSuccess'),
                                 type: 'success'

@@ -14,13 +14,13 @@
 </template>
 
 <script>
-import clickoutside from 'element-ui/src/utils/clickoutside';
+import clickoutside from 'element-ui/lib/utils/clickoutside';
 import Loading from 'element-ui/lib/loading';
 import Vue from 'vue';
 import {getFilesList, getProjectShare} from '@sdx/utils/src/api/file';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 import { getPathIcon } from './utils';
-import ElTree from 'element-ui/packages/tree';
+import ElTree from 'element-ui/lib/tree';
 import locale from '@sdx/utils/src/mixins/locale';
 
 Vue.use(Loading);

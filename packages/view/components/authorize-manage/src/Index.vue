@@ -207,6 +207,7 @@ import SdxwUserPicker from '@sdx/widget/components/user-picker';
 import SearchLayout from '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
+import SdxuIconButton from '@sdx/ui/components/icon-button';
 export default {
     name: 'SdxvAuthorizeManage',
     mixins: [locale],
@@ -228,7 +229,8 @@ export default {
         SdxuUserAvatar,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
-        SdxuTextTooltip
+        SdxuTextTooltip,
+        SdxuIconButton
     },
     directives: {
         auth

@@ -159,6 +159,8 @@ class Context {
     }
 
     _log(level, message) {
+        return;
+        // eslint-disable-next-line
         if (level >= this.config.logLevel) {
             const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
             const date = new Date().toISOString();

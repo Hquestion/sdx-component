@@ -64,7 +64,7 @@ export function updateImage(uuid, params) {
 
 // 批量更新共享设置
 export function updateGroupImages(params) {
-    return httpService.patch(`${COMPOSE_GATEWAY_BASE}image-share-batch`, params);
+    return httpService.post(`${COMPOSE_GATEWAY_BASE}image-share-batch`, params);
 }
 
 export function removeImage(uuid) {

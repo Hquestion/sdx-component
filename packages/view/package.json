@@ -30,7 +30,8 @@
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "dependencies": {
-        "@sdx/utils": "^1.1.20"
+        "@sdx/utils": "^1.1.20",
+        "fake-indexeddb": "^2.1.1"
     },
     "peerDependencies": {
         "@sdx/ui": "^1.0.2",

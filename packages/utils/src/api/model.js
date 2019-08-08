@@ -34,7 +34,7 @@ export function removeGroupModels(params) {
 }
 
 export function updateGroupModels(params) {
-    return httpService.patch(`${COMPOSE_GATEWAY_BASE}model-share-batch`, params);
+    return httpService.post(`${COMPOSE_GATEWAY_BASE}model-share-batch`, params);
 }
 
 export function updateModel(uuid, params) {

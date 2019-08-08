@@ -59,7 +59,7 @@ module.exports = [
     },
     {
         apiId: '/fe-compose/api/v1/image-share-batch',
-        method: 'PATCH',
+        method: 'POST',
         functionName: 'imageShareBatch.handler',
         filePath: './compose/imageShareBatch.js'
     },
@@ -95,7 +95,7 @@ module.exports = [
     },
     {
         apiId: '/fe-compose/api/v1/model-share-batch',
-        method: 'PATCH',
+        method: 'POST',
         functionName: 'modelShareBatch.handler',
         filePath: './compose/modelShareBatch.js'
     },

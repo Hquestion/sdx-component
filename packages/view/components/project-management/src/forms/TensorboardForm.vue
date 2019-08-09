@@ -73,6 +73,7 @@
                 <SdxwFileSelect
                     v-model="params.logPaths"
                     check-type="folder"
+                    :use-folder-path="true"
                     :string-model="true"
                 />
             </el-form-item>

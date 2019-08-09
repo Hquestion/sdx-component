@@ -10,6 +10,7 @@
                 :keep-dropdown-open="true"
                 ref="dropdownMain"
                 :dropdown-width="dropdownWidth"
+                :placement="dropdownPlacement"
                 :disabled="disableCheck"
                 @dropdown-hide="emitBlurOnFormItem"
             >
@@ -56,11 +57,12 @@
                             :on-change="handlerDirectoryChange"
                             :on-error="onDirectoryError"
                             :on-exceed="onExceed"
-                            :limit="realLimit"
+                            :limit="localFolderRealLimit"
                             :data="uploadParams"
                             :show-file-list="false"
                             :on-progress="onProgress"
                             :on-success="onSuccess"
+                            :on-folder-change="handleFolderChange"
                             :before-upload="beforeUploadDir"
                             @click.native="$refs.fileSelectPop && $refs.fileSelectPop.close()"
                         >
@@ -236,7 +238,15 @@ export default {
             type: String,
             default: '100%'
         },
+        dropdownPlacement: {
+            type: String,
+            default: 'left'
+        },
         disabled: {
+            type: Boolean,
+            default: false
+        },
+        useFolderPath: {
             type: Boolean,
             default: false
         }
@@ -245,6 +255,13 @@ export default {
         realLimit() {
             return +this.limit === -1 ? Infinity : +this.limit;
         },
+        localFolderRealLimit() {
+            if (this.checkType === 'folder' && this.useFolderPath) {
+                return Infinity;
+            } else {
+                return this.realLimit;
+            }
+        },
         localVisible() {
             return ['all', 'local'].includes(this.source) && ['all', 'file'].includes(this.checkType);
         },
@@ -252,7 +269,7 @@ export default {
             return ['all', 'ceph'].includes(this.source);
         },
         localFolderVisible() {
-            return this.localVisible && this.realLimit > 1 && ['all', 'file'].includes(this.checkType);
+            return (this.localVisible && this.realLimit > 1) || (this.useFolderPath && this.checkType === 'folder');
         },
         selectedFiles() {
             if (typeof this.value === 'string') {
@@ -432,6 +449,13 @@ export default {
             let fileUploadFiles = this.$refs.fileSelect && this.$refs.fileSelect.uploadFiles || [];
             let dirUploadFiles = this.$refs.directorySelect && this.$refs.directorySelect.uploadFiles || [];
             return [...fileUploadFiles, ...dirUploadFiles];
+        },
+        handleFolderChange(val) {
+            if (this.useFolderPath && this.checkType === 'folder') {
+                this.$refs.directorySelect && this.$refs.directorySelect.clearFiles();
+                this.$refs.directorySelect && (this.$refs.directorySelect.uploadFiles = [val]);
+                this.makeFileList();
+            }
         }
     },
     mounted() {

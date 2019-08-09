@@ -108,6 +108,10 @@ export default {
         directory: {
             type: Boolean,
             default: false
+        },
+        onFolderChange: {
+            type: Function,
+            default: () => {}
         }
     },
 
@@ -180,6 +184,7 @@ export default {
                 file.status = 'success';
                 file.response = res;
                 file.cephName = res.files[0].path;
+                console.log(file);
 
                 this.onSuccess(res, file, this.uploadFiles);
                 this.onChange(file, this.uploadFiles);
@@ -305,7 +310,8 @@ export default {
                 'on-preview': this.onPreview,
                 'on-remove': this.handleRemove,
                 'http-request': this.httpRequest,
-                directory: this.directory
+                directory: this.directory,
+                'on-folder-change': this.onFolderChange
             },
             ref: 'upload-inner',
             on: {

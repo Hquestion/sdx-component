@@ -1,5 +1,8 @@
 <template>
-    <sdxu-content-panel :title="t('view.userManage.User')" :fullscreen="true">
+    <sdxu-content-panel
+        :title="t('view.userManage.User')"
+        :fullscreen="true"
+    >
         <div
             class="sdxv-user-manage"
             v-auth.user.button="'USER:READ'"
@@ -158,6 +161,8 @@ import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import auth from '@sdx/widget/components/auth';
 import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import locale from '@sdx/utils/src/mixins/locale';
+import SdxuPagination from '@sdx/ui/components/pagination';
+import SdxuButton from '@sdx/ui/components/button';
 export default {
     name:'SdxvUserManage',
     mixins: [transformFilter, locale],
@@ -307,6 +312,8 @@ export default {
         SdxuTextTooltip,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
+        SdxuPagination,
+        SdxuButton
     }
 };
 </script>

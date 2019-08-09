@@ -186,6 +186,7 @@ import { nameWithChineseValidator,descValidator} from '@sdx/utils/src/helper/val
 import { removeSameAttr } from '@sdx/utils/src/helper/tool';
 import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import locale from '@sdx/utils/src/mixins/locale';
+import SdxuIconButton from '@sdx/ui/components/icon-button';
 export default {
     name: 'SdxvRoleManage',
     mixins: [locale],
@@ -200,7 +201,8 @@ export default {
         [ContentPanel.name]: ContentPanel,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
-        SdxuTextTooltip
+        SdxuTextTooltip,
+        SdxuIconButton
     },
     data() {
         return {

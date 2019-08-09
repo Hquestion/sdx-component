@@ -45,7 +45,6 @@ describe('FileName', () => {
 
     it('渲染普通文件', async done => {
         await flushPromise();
-        console.log(wrapper.html());
         expect(wrapper.find('.sdxv-file__item-icon use[xlink:href="#sdx-morenwenjian"]').exists()).toBe(true);
         expect(wrapper.find('.sdxv-file__item-name').html().indexOf('<span>file1.py</span>') > 0).toBe(true);
         done();

@@ -38,8 +38,6 @@ describe('BreadcrumbBar', () => {
     });
 
     it('正确解析路由并显示', () => {
-        console.log(wrapper.html());
-        console.log(wrapper.vm.list);
         expect(wrapper.vm.list.length).toBe(4);
         expect(wrapper.vm.list[1]).toEqual({name: 'folder1', path: '/folder1'});
         expect(wrapper.vm.list[3]).toEqual({name: 'folder3', path: '/folder1/folder2/folder3'});

@@ -50,7 +50,6 @@ describe('FileTask', function () {
             visible: true
         });
         setTimeout(async () => {
-            console.log(wrapper.html());
             expect(wrapper.classes('is-expand')).toBe(true);
             expect(wrapper.isVisible()).toBe(true);
             done();

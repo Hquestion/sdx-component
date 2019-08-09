@@ -22,6 +22,7 @@ describe('FileTable', () => {
     beforeEach(() => {
         wrapper = mount(FileTable, {
             localVue,
+            sync: false,
             provide: {
                 fileManager: {
                     isSearch: false,
@@ -94,7 +95,6 @@ describe('FileTable', () => {
 
     it('文件列表渲染正确', done => {
         setTimeout(() => {
-            console.log(wrapper.html());
             expect(wrapper.find('.sdxu-table').exists()).toBeTruthy();
             expect(wrapper.find('.sdxv-file-table__checkbar').exists()).toBe(true);
             expect(wrapper.find('.sdxv-file-table__checkbar').isVisible()).toBe(true);
@@ -137,38 +137,43 @@ describe('FileTable', () => {
             const buttonWrappers = rowWrapper.findAll('.sdxu-icon-button-group .sdxu-icon-button');
 
             buttonWrappers.at(0).trigger('click');
-            const shareDialog = wrapper.find('sdxwsharesetting-stub');
-            expect(shareDialog.isVisible()).toBe(true);
-
-            const downloadMock = jest.fn();
-
-            wrapper.vm.OPERATION_MAP['DOWNLOAD'] = downloadMock;
-            wrapper.vm.$forceUpdate();
             await flushPromise();
-            buttonWrappers.at(1).trigger('click');
-            expect(downloadMock).toBeCalled();
+            setTimeout(async () => {
+                const shareDialog = wrapper.find('sdxwsharesetting-stub');
+                expect(shareDialog.isVisible()).toBe(true);
 
-            const ellipseButtons = wrapper.findAll('.sdxu-icon-button-group .sdxu-icon-button-group__ellipse-item');
+                const downloadMock = jest.fn();
 
-            ellipseButtons.at(0).trigger('click');
-            expect(wrapper.find('sdxvfolderselect-stub').isVisible()).toBe(true);
+                wrapper.vm.OPERATION_MAP['DOWNLOAD'] = downloadMock;
+                wrapper.vm.$forceUpdate();
+                await flushPromise();
+                buttonWrappers.at(1).trigger('click');
+                expect(downloadMock).toBeCalled();
 
-            ellipseButtons.at(1).trigger('click');
-            await flushPromise();
-            expect(wrapper.vm.editingRow.name).toBe('file1');
+                const ellipseButtons = wrapper.findAll('.sdxu-icon-button-group .sdxu-icon-button-group__ellipse-item');
 
-            ellipseButtons.at(2).trigger('click');
-            const bodyWrapper = createWrapper(document.body);
-            expect(bodyWrapper.find('.sdxu-message-box').exists()).toBe(true);
-            document.body.innerHTML = '';
+                ellipseButtons.at(0).trigger('click');
+                await setImmediate(() => {});
+                expect(wrapper.find('sdxvfolderselect-stub').isVisible()).toBe(true);
 
-            const pathMock = jest.fn();
-            wrapper.vm.OPERATION_MAP['PATH'] = pathMock;
-            wrapper.vm.$forceUpdate();
-            await flushPromise();
-            ellipseButtons.at(3).trigger('click');
-            expect(pathMock).toBeCalled();
-            done();
+                ellipseButtons.at(1).trigger('click');
+                await flushPromise();
+                expect(wrapper.vm.editingRow.name).toBe('file1');
+
+                ellipseButtons.at(2).trigger('click');
+                const bodyWrapper = createWrapper(document.body);
+                expect(bodyWrapper.find('.sdxu-message-box').exists()).toBe(true);
+                document.body.innerHTML = '';
+
+                const pathMock = jest.fn();
+                wrapper.vm.OPERATION_MAP['PATH'] = pathMock;
+                wrapper.vm.$forceUpdate();
+                await flushPromise();
+                ellipseButtons.at(3).trigger('click');
+                expect(pathMock).toBeCalled();
+                done();
+            }, 100)
+
         }, 500);
     });
 });

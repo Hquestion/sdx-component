@@ -336,7 +336,7 @@ export default {
                 enterDescription: '请输入工作流描述',
                 setAsTemplate: '设为模板：',
                 templateType: '模板种类：',
-                enterTemplateType: '请选择模板种类',
+                enterTemplateType: '请选择或输入模板种类',
                 shareSetting: '共享设置：',
                 privateWorkflow: '私有工作流',
                 shareWorkflow: '共享工作流',

@@ -126,6 +126,7 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import { getTaskList } from '@sdx/utils/src/api/project';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
+import { STATE_TYPE } from '@sdx/utils/src/const/task';
 
 export default {
     name: 'SdxvUserResourceList',
@@ -163,7 +164,8 @@ export default {
                 username: '',
                 order: 'desc',
                 orderBy: 'CPU',
-                groupBy: 'USER'
+                groupBy: 'USER',
+                states: `${STATE_TYPE.RUNNING},${STATE_TYPE.LAUNCHING},${STATE_TYPE.KILLING}`
             },
             loading: false,
             searchName: '',

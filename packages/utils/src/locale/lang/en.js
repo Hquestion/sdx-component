@@ -725,6 +725,7 @@ export default {
             EditUser: 'Edit User',
             UpdateSuccess: 'Update success',
             UserGroup: 'User Group',
+            JoinGroup: 'Join Group',
             JoinGroupSetting: 'Join Group Setting',
             UserGroupName: 'Group Name',
             EditGroup: 'Edit @:(view.userManage.UserGroup)',

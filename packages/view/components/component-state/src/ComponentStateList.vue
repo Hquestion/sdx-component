@@ -197,7 +197,6 @@ export default {
             this.page = 1;
             this.query.podName = this.searchName.trim();
             this.query.status = this.podState;
-            console.error(this.query);
         },
         handlePageChange(page) {
             this.page = page;

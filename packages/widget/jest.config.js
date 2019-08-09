@@ -19,5 +19,5 @@ module.exports = {
         '^@/(.*)$': '<rootDir>/src/$1',
         '\\.(css|less)$': 'identity-obj-proxy'
     },
-    transformIgnorePatterns: ['<rootDir>/node_modules/(?!@sdx)', '<rootDir>/../utils/src/theme-common/iconfont/iconfont.js']
+    transformIgnorePatterns: ['<rootDir>/node_modules/(?!@sdx|vue-codemirror-lite)', '<rootDir>/../utils/src/theme-common/iconfont/iconfont.js']
 };

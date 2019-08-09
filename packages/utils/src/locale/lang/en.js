@@ -337,7 +337,7 @@ export default {
                 enterDescription: 'Please enter workflow description',
                 setAsTemplate: 'Set As Template:',
                 templateType: 'Template Type:',
-                enterTemplateType: 'Please select template type',
+                enterTemplateType: 'Please select or enter template type',
                 shareSetting: 'Sharing Setting:',
                 privateWorkflow: 'Private Workflows',
                 shareWorkflow: 'Sharing Workflows',

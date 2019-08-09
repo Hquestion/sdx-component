@@ -29,7 +29,7 @@
         "build:component": "webpack --config ./build/webpack.component.js",
         "build:lib": "webpack --config ./build/webpack.common.js",
         "build": "npm run build:lib && npm run build:component",
-        "test:unit": "jest --passWithNoTests --no-cache",
+        "test:unit": "jest --passWithNoTests",
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "peerDependencies": {

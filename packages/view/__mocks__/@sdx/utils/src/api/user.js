@@ -102,3 +102,8 @@ export function getUserList() {
         ]
     });
 }
+export function getUserSimpleInfo() {
+    return Promise.resolve({
+        creatorName: '11111111'
+    });
+}

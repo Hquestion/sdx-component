@@ -302,10 +302,20 @@ export default {
             });
         },
         dialogClose() {
-            this.versionInfoForm = {};
             this.$refs.versionInfoForm.clearValidate();
             this.$emit('update:visible', false);
             this.$emit('close', this.needRefresh);
+            this.versionInfoForm = {
+                name: '',
+                description: '',
+                framework: '',
+                runtimeImage: '',
+                modelPath: '',
+                runtimeResource: {
+                    cpuObj: {},
+                    gpuObj: {},
+                }
+            };
         },
         cancel() {
             this.dialogVisible = false;

@@ -83,7 +83,7 @@
                             @click.native.stop="handleJoinGroup(scope.row)"
                             icon="sdx-icon sdx-icon-zu2"
                             v-auth.user.button="'USER:WRITE'"
-                            :title="t('widget.userInfo.groups')"
+                            :title="t('view.userManage.JoinGroup')"
                         />
                         <sdxu-icon-button
                             @click.native.stop="handleEditUser(scope.row)"

@@ -78,15 +78,9 @@ export default {
 
         };
     },
-    props: {
-        uploadFileList: {
-            type: Array,
-            default: () => []
-        }
-    },
     computed: {
         list() {
-            return this.fileManager.uploadingFiles;
+            return this.fileManager.uploadingFiles || [];
         }
     },
     methods: {

@@ -99,6 +99,12 @@ export function getImage() {
     );
 }
 
+export function getImageList() {
+    return Promise.resolve({
+        data: []
+    });
+}
+
 export function buildImageBasic() {
     return Promise.resolve({
 

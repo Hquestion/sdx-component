@@ -31,3 +31,25 @@ export function getTaskList(params) {
         });
     }
 }
+
+export function getTaskDetail() {
+    return Promise.resolve({
+        'username': 'sysadmin',
+        'fullName': '\u7cfb\u7edf\u7ba1\u7406\u54582',
+        'isActive': true,
+        'lastLogin': {
+            'loginedAt': '2019-08-08T07:20:27.747000Z',
+            'clientIP': '198.168.125.241',
+            'clientAgent': 'Go-http-client/1.1',
+            'clientType': 'Unknown'
+        },
+        'recentLogin': '2019-08-09T07:37:04.985000Z',
+        'uuid': '292a2b73-3093-4782-8719-a11e01e08398',
+        'createdAt': '2019-07-29T15:55:54.806000Z',
+        'updatedAt': '2019-08-05T09:25:50.618000Z',
+        'description': '',
+        'permissions': [],
+        'roles': ['64e5b6c6-8e47-4e4a-b0de-f3c0eb47dc4c', '75c71638-36bb-4d19-91d6-edc9811b8278'],
+        'groups': []
+    });
+}

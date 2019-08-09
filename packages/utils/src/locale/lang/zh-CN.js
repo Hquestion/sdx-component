@@ -724,6 +724,7 @@ export default {
             EditUser: '编辑用户',
             UpdateSuccess: '修改成功',
             UserGroup: '用户组',
+            JoinGroup: '加入组',
             JoinGroupSetting: '加入组设置',
             UserGroupName: '用户组名',
             EditGroup: '编辑@:(view.userManage.UserGroup)',

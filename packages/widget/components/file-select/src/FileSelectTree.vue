@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import clickoutside from 'element-ui/src/utils/clickoutside';
+import clickoutside from 'element-ui/lib/utils/clickoutside';
 import Loading from 'element-ui/lib/loading';
 import Vue from 'vue';
 import {getFilesList, getProjectShare} from '@sdx/utils/src/api/file';

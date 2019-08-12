@@ -31,3 +31,88 @@ export function getTaskList(params) {
         });
     }
 }
+
+export function getTaskDetail() {
+    return Promise.resolve({
+        '_cls':'apis.v1.task.models.spark.SparkTask',
+        'args':'',
+        'createdAt':'2019-08-02T01:53:01.213000Z',
+        'description':'dddd',
+        'error':'',
+        'executionId':'1db08865-8fc0-4c6a-96cc-3a44fba97fc8',
+        'image':{'buildType':'BASIC',
+            'createdAt':'2019-08-01T02:14:26+00:00',
+            'groups':null,
+            'imageType':'SPARK',
+            'name':'spark2.4.0_py2.7_cpu',
+            'operations':[],
+            'ownerId':null,
+            'packages':null,
+            'projectName':'skyintelligent',
+            'shareType':'PUBLIC',
+            'updatedAt':'2019-08-02T06:23:03.937000+00:00',
+            'users':null,
+            'uuid':'4bae7888-37a7-425f-823c-f8fb450169d1',
+            'version':'latest'},
+        'mainClass':'org.apache.spark.examples.SparkPi ',
+        'name':'spark',
+        'nodeId':'spark-d1b7fda3-8ce4-4fae-848d-fe74b2e5d261',
+        'owner':{'createdAt':'2019-07-30T06:42:16.263000Z',
+            'description':'',
+            'expiresAt':'2020-07-29T06:42:45.494000Z',
+            'fullName':'张霞',
+            'groups':[],
+            'isActive':true,
+            'lastLogin':{'clientAgent':'Go-http-client/1.1',
+                'clientIP':'198.168.125.241',
+                'clientType':'Unknown',
+                'loginedAt':'2019-08-08T09:52:58.374000Z'},
+            'permissions':['9fdff30d-da5f-443b-a8f4-6339c12eb7b4'],
+            'recentLogin':'2019-08-09T02:07:27.964000Z',
+            'roles':['64e5b6c6-8e47-4e4a-b0de-f3c0eb47dc4c',
+                '75c71638-36bb-4d19-91d6-edc9811b8278'],
+            'updatedAt':'2019-08-02T08:52:47.781000Z',
+            'username':'xia.zhang',
+            'uuid':'67ee5756-e983-4a45-bd3a-b4e2f9667363'},
+        'pods':[
+            {
+                'name':'spark-d1b7fda3-8ce4-4fae-848d-fe74b2e5d261-driver',
+                'reason':'',
+                'startTime':'',
+                'state':''
+            }
+        ],
+        'project':{
+            'createdAt':'2019-08-01T06:35:24.335000Z',
+            'description':'dd',
+            'groups':[],
+            'isTemplate':false,
+            'name':'new',
+            'ownerId':'67ee5756-e983-4a45-bd3a-b4e2f9667363',
+            'type':'private',
+            'updatedAt':'2019-08-01T06:35:24.335000Z',
+            'users':[],
+            'uuid':'10a9ffd7-6648-4849-9cb2-9c9aedf408c3'},
+        'quota':{
+            'cpu':24000,
+            'gpu':0,
+            'gpuModel':'',
+            'memory':51539607552
+        },
+        'resourceConfig':{
+            'SPARK_DRIVER_CPUS':12000,
+            'SPARK_DRIVER_MEMORY':25769803776,
+            'SPARK_EXECUTOR_CPUS':12000,
+            'SPARK_EXECUTOR_INSTANCES':1,
+            'SPARK_EXECUTOR_MEMORY':25769803776
+        },
+        'sourcePaths':['/test.py'],
+        'sparkParams':'',
+        'startedAt':'2019-08-02T07:57:50.370000Z',
+        'state':'FINISHED',
+        'stoppedAt':'2019-08-02T07:58:51.493000Z',
+        'type':'SPARK',
+        'updatedAt':'2019-08-02T08:08:20.874000Z',
+        'uuid':'26f51dd5-c54b-4607-be49-3804f9b84e3b'
+    });
+}

@@ -5,7 +5,6 @@
         @confirm="handleConfirm"
         @cancel="handleCancel"
     >
-        <!-- // todo:  -->
         <el-form
             v-if="task"
             :model="formData"
@@ -120,15 +119,15 @@ export default {
                 baseImage: this.task && (this.task.imageId || this.task.image && this.task.image.uuid) || '',
                 name: this.formData.name,
                 version: this.formData.version
-            }).then(data => {
-                console.error(data);
-                // this.dialogVisible = false;
+            }).then(() => {
+                this.dialogVisible = false;
+            }).catch(e => {
+                window.console.error(e);
             });
         },
         handleCancel() {
             this.dialogVisible = false;
         }
-        // todo: 镜像名称重名校验
     }
 };
 </script>

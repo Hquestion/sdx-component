@@ -32,3 +32,47 @@ export function getClusterResourceMonitor() {
         }
     });
 }
+
+export function getPodResourceStatus() {
+    return Promise.resolve({
+        'stats':[
+            {
+                'cpu':0.000014183311111122995,
+                'memory':47841280,
+                'gpu':0,
+                'gpuMemory':0,
+                'timestamp':1565328261
+            },
+            {
+                'cpu':0.000014224977777763412,
+                'memory':47841280,
+                'gpu':0,
+                'gpuMemory':0,
+                'timestamp':1565328294
+            },
+            {
+                'cpu':0.00001301893333334192,
+                'memory':47841280,
+                'gpu':0,
+                'gpuMemory':0,
+                'timestamp':1565328369
+            },
+            {
+                'cpu':0.00001245506666667969,
+                'memory':47841280,
+                'gpu':0,
+                'gpuMemory':0,
+                'timestamp':1565328498
+            },
+            {
+                'cpu':0,
+                'memory':47841280,
+                'gpu':0,
+                'gpuMemory':0,
+                'timestamp':1565328774
+            }
+        ]
+    }
+    
+    );
+}

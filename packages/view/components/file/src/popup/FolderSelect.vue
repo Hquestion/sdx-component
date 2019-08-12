@@ -29,17 +29,17 @@
                 @click="newFolder"
                 :disabled="!newable"
             >
-                {{ $t('view.file.NewFolder') }}
+                {{ t('view.file.NewFolder') }}
             </SdxuButton>
             <SdxuButton
                 @click="$emit('move', currentNode().node.data)"
                 v-if="supportMove"
                 :disabled="!isFolderLegal"
             >
-                {{ $t('view.file.Move') }}
+                {{ t('view.file.Move') }}
             </SdxuButton>
             <SdxuButton @click="$emit('copy', currentNode().node.data)" :disabled="!isFolderLegal">
-                {{ $t('view.file.Copy') }}
+                {{ t('view.file.Copy') }}
             </SdxuButton>
         </template>
     </SdxuDialog>
@@ -49,6 +49,7 @@
 import SdxwFileSelect from '@sdx/widget/components/file-select';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuButton from '@sdx/ui/components/button';
+import SdxuScroll from '@sdx/ui/components/scroll';
 import { mkdir } from '@sdx/utils/src/api/file';
 import locale from '@sdx/utils/src/mixins/locale';
 
@@ -64,7 +65,8 @@ export default {
     components: {
         SdxuButton,
         SdxuDialog,
-        SdxwFileSelectTree: SdxwFileSelect.FileSelectTree
+        SdxwFileSelectTree: SdxwFileSelect.FileSelectTree,
+        SdxuScroll
     },
     props: {
         visible: {

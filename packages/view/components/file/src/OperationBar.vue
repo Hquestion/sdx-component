@@ -2,6 +2,7 @@
     <div class="sdxv-operation-bar">
         <div class="sdxv-operation-bar__operations">
             <SdxuButton
+                class="sdxv-operation-bar__operation-mkdir"
                 icon="sdx-icon sdx-icon-plus"
                 @click="createFolder"
                 v-if="canMkdir()"
@@ -9,11 +10,13 @@
                 {{ t('view.file.NewFolder') }}
             </SdxuButton>
             <SdxwFileSelect
+                class="sdxv-operation-bar__operation-upload"
                 ref="fileUploader"
                 source="local"
                 :inline="true"
                 :limit="-1"
                 dropdown-width="138px"
+                dropdown-placement="right"
                 :local-file-label="t('view.file.UploadFile')"
                 :local-folder-label="t('view.file.UploadFolder')"
                 :upload-params="makeUploadParams()"
@@ -24,16 +27,30 @@
             >
                 {{ t('view.file.Upload') }}
             </SdxwFileSelect>
-            <SdxuButton v-if="canDownload()" @click="handleDownload" :loading="fileManager.$refs.fileTable.btnStatus.batchDownloading.length > 0">
+            <SdxuButton
+                class="sdxv-operation-bar__operation-download"
+                v-if="canDownload()"
+                @click="handleDownload"
+                :loading="fileManager.$refs.fileTable.btnStatus.batchDownloading.length > 0"
+            >
                 {{ t('view.file.Download') }}
             </SdxuButton>
-            <SdxuButton v-if="canShare()" @click="handleShare">
+            <SdxuButton
+                class="sdxv-operation-bar__operation-share"
+                v-if="canShare()"
+                @click="handleShare"
+            >
                 {{ t('view.file.Share') }}
             </SdxuButton>
-            <SdxuButton v-if="canCancelShare()" @click="handleCancelShare">
+            <SdxuButton
+                class="sdxv-operation-bar__operation-cshare"
+                v-if="canCancelShare()"
+                @click="handleCancelShare"
+            >
                 {{ t('view.file.CancelShare') }}
             </SdxuButton>
             <SdxuButton
+                class="sdxv-operation-bar__operation-copy"
                 type="default"
                 v-if="canCopy()"
                 @click="handleCopy"
@@ -41,6 +58,7 @@
                 {{ t('view.file.Copy') }}
             </SdxuButton>
             <SdxuButton
+                class="sdxv-operation-bar__operation-move"
                 type="default"
                 v-if="canMove()"
                 @click="handleMove"
@@ -48,6 +66,7 @@
                 {{ t('view.file.MoveOrCopy') }}
             </SdxuButton>
             <SdxuButton
+                class="sdxv-operation-bar__operation-del"
                 type="default"
                 v-if="canDelete()"
                 @click="handleDelete"

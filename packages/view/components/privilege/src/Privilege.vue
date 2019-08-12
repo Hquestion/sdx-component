@@ -108,7 +108,7 @@ import auth from '@sdx/widget/components/auth';
 import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import { getPermissionList } from '@sdx/utils/src/api/permissions';
 import locale from '@sdx/utils/src/mixins/locale';
-
+import SdxuButton from '@sdx/ui/components/button';
 export default {
     name: 'SdxvPrivilege',
     mixins: [locale],
@@ -119,7 +119,8 @@ export default {
         SdxuContentPanel,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
-        SdxuTextTooltip
+        SdxuTextTooltip,
+        SdxuButton
     },
     data() {
         return {

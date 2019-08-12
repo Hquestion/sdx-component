@@ -63,7 +63,11 @@ function matchErrorCode(httpCode, code, reqConfig) {
             // 没url则继续转默认处理
             if (reqConfig.method) {
                 const toMatchMap = defaultErrorMap[reqConfig.method.toUpperCase()];
-                return matchCodeWithMap(httpCode, code, toMatchMap);
+                if (toMatchMap) {
+                    return matchCodeWithMap(httpCode, code, toMatchMap);
+                } else {
+                    return matchErrorCode(httpCode, code);
+                }
             } else {
                 return matchErrorCode(httpCode, code);
             }
@@ -123,7 +127,7 @@ handler.register = (errorCodeMap, customCodeHandler, i18nInstance) => {
     errorMessageMap = errorCodeMap;
     specialCodeHandler = customCodeHandler;
     defaultErrorMap = errorMessageMap.default || [];
-    reqErrorMap = reqErrorMap.req || [];
+    reqErrorMap = errorMessageMap.req || [];
     i18nInstance && (i18n = i18nInstance);
 };
 

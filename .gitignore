@@ -9,3 +9,7 @@ packages/view/lib/
 packages/utils/lib/
 packages/utils/gateway/
 packages/widget/lib/
+packages/ui/coverage/
+packages/view/coverage/
+packages/utils/coverage/
+packages/widget/coverage/

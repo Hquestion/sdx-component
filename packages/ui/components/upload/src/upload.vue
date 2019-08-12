@@ -53,6 +53,10 @@ export default {
         directory: {
             type: Boolean,
             default: false
+        },
+        onFolderChange: {
+            type: Function,
+            default: () => {}
         }
     },
 
@@ -88,9 +92,27 @@ export default {
 
             if (postFiles.length === 0) { return; }
 
+            const promiseList = [];
             postFiles.forEach(rawFile => {
                 this.onStart(rawFile);
-                if (this.autoUpload) this.upload(rawFile);
+                if (this.autoUpload) {
+                    promiseList.push(this.upload(rawFile));
+                }
+            });
+            Promise.all(promiseList).then(() => {
+                if (this.directory) {
+                    const uploadRelativePath = this.getFolderPath(postFiles[0]);
+                    let folderPath = `${this.data.path || ''}${uploadRelativePath}`;
+                    const cephObj = {
+                        path: folderPath,
+                        name: folderPath.split('/')[folderPath.split('/').length - 1],
+                        ownerId: this.data.ownerId,
+                        isFile: false,
+                        cephName: folderPath
+                    };
+                    this.onFolderChange(cephObj);
+                    this.$emit('folder-change', cephObj);
+                }
             });
         },
         upload(rawFile) {
@@ -99,10 +121,9 @@ export default {
             if (!this.beforeUpload) {
                 return this.post(rawFile);
             }
-
             const before = this.beforeUpload(rawFile);
             if (before && before.then) {
-                before.then(processedFile => {
+                return before.then(processedFile => {
                     const fileType = Object.prototype.toString.call(processedFile);
 
                     if (fileType === '[object File]' || fileType === '[object Blob]') {
@@ -116,17 +137,17 @@ export default {
                                 processedFile[p] = rawFile[p];
                             }
                         }
-                        this.post(processedFile);
+                        return this.post(processedFile);
                     } else {
-                        this.post(rawFile);
+                        return this.post(rawFile);
                     }
                 }, () => {
-                    this.onRemove(null, rawFile);
+                    return this.onRemove(null, rawFile);
                 });
             } else if (before !== false) {
-                this.post(rawFile);
+                return this.post(rawFile);
             } else {
-                this.onRemove(null, rawFile);
+                return this.onRemove(null, rawFile);
             }
         },
         abort(file) {
@@ -145,17 +166,10 @@ export default {
             }
         },
         post(rawFile) {
-            const { uid, webkitRelativePath } = rawFile;
-            let uploadRelativePath = '', action = this.action;
-            if (webkitRelativePath) {
-                const relativePathList = webkitRelativePath.split('/');
-                if (relativePathList.length > 1) {
-                    uploadRelativePath = relativePathList.slice(0, -1).join('/');
-                    if (this.data.path[this.data.path.length - 1] !== '/') {
-                        uploadRelativePath = `/${uploadRelativePath}`;
-                    }
-                }
-            }
+            let _resolve = () => {}, _reject = () => {};
+            const { uid } = rawFile;
+            let uploadRelativePath = this.getFolderPath(rawFile),
+                action = this.action;
             const options = {
                 headers: this.headers,
                 withCredentials: this.withCredentials,
@@ -169,16 +183,23 @@ export default {
                 onSuccess: res => {
                     this.onSuccess(res, rawFile);
                     delete this.reqs[uid];
+                    _resolve(rawFile);
                 },
                 onError: err => {
                     this.onError(err, rawFile);
                     delete this.reqs[uid];
+                    _reject(rawFile);
                 }
             };
             const req = this.httpRequest(options);
             this.reqs[uid] = req;
             if (req && req.then) {
-                req.then(options.onSuccess, options.onError);
+                return req.then(options.onSuccess, options.onError);
+            } else {
+                return new Promise((resolve, reject) => {
+                    _resolve = resolve;
+                    _reject = reject;
+                });
             }
         },
         handleClick() {
@@ -192,6 +213,20 @@ export default {
             if (e.keyCode === 13 || e.keyCode === 32) {
                 this.handleClick();
             }
+        },
+        getFolderPath(rawFile) {
+            const { webkitRelativePath } = rawFile;
+            let uploadRelativePath = '';
+            if (webkitRelativePath) {
+                const relativePathList = webkitRelativePath.split('/');
+                if (relativePathList.length > 1) {
+                    uploadRelativePath = relativePathList.slice(0, -1).join('/');
+                    if (this.data.path[this.data.path.length - 1] !== '/') {
+                        uploadRelativePath = `/${uploadRelativePath}`;
+                    }
+                }
+            }
+            return uploadRelativePath;
         }
     },
 

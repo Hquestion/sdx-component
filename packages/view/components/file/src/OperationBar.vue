@@ -16,6 +16,7 @@
                 :inline="true"
                 :limit="-1"
                 dropdown-width="138px"
+                dropdown-placement="right"
                 :local-file-label="t('view.file.UploadFile')"
                 :local-folder-label="t('view.file.UploadFolder')"
                 :upload-params="makeUploadParams()"

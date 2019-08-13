@@ -116,3 +116,40 @@ export function getTaskDetail() {
         'uuid':'26f51dd5-c54b-4607-be49-3804f9b84e3b'
     });
 }
+
+export function getDataSet() {
+    return Promise.resolve({
+        data: {
+            options: []
+        },
+        error_code: 0,
+        success: true
+    });
+}
+
+export function getProjectDetail() {
+    return Promise.resolve({
+        data: {
+            createdAt: '2019-08-02T01:42:30.144000Z',
+            description: 'dddd',
+            groups: [],
+            isTemplate: true,
+            name: '模板项目',
+            ownerId: '67ee5756-e983-4a45-bd3a-b4e2f9667363',
+            type: 'private',
+            updatedAt: '2019-08-02T01:42:30.144000Z',
+            users: [],
+            uuid: '267da0dc-4c47-4343-8a83-ccebce092c78',
+        }
+    });
+}
+
+export function getTaskDataSource() {
+    return Promise.resolve({
+        data: {
+            options: []
+        },
+        error_code: 0,
+        success: true
+    });
+}

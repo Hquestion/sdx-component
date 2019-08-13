@@ -13,11 +13,12 @@ const mockScript = () => {
 
 
 mockScript();
-const AddUser = require('../../components/user-manage/src/components/AddUser').default;
+const TfDistributedForm = require('../../../components/project-management/src/forms/TfDistributedForm').default;
 let wrapper = null;
-describe('AddUser', () => {
+describe('TfDistributedForm', () => {
     beforeEach(() => {
-        wrapper = mount(AddUser, {
+        wrapper = mount(TfDistributedForm, {
+            sync: false,
             localVue,
             stubs: {
                 transition: false,
@@ -25,6 +26,13 @@ describe('AddUser', () => {
                 'el-form-item': true,
                 'el-select': true,
                 'el-option': true
+            },
+            mocks: {
+                $route: {
+                    params: {
+                        projectId: '123dasd31'
+                    }
+                }
             }
         });
     });
@@ -34,17 +42,25 @@ describe('AddUser', () => {
         document.body.innerHTML = '';
     });
 
-    it('渲染正常', () => {
-        expect(wrapper.find('.sdxv-user-manage__userform').exists()).toBeTruthy();
-        expect(wrapper.find('.sdxu-dialog').exists()).toBeTruthy();
+    it('渲染正常，测试有无uuid时，展示编辑，新建', async done => {
+        expect(wrapper.find('.sdxu-content-panel').exists()).toBeTruthy();
+        expect(wrapper.find('.sdxu-content-panel__title').text().includes('新建')).toBe(true);
+        wrapper.setProps({
+            task: {
+                uuid: '12'
+            }
+        })
+        await flushPromise();
+        expect(wrapper.find('.sdxu-content-panel__title').text().includes('编辑')).toBe(true);
+        done();
     });
 
-    it('点击确定按钮，confirm方法被调用', async done => {
+    it('点击确定按钮，commit方法被调用', async done => {
         const mockFn = jest.fn();
         wrapper.setMethods({
-            confirm: mockFn
+            commit: mockFn
         });
-        wrapper.find('.sdxu-button:last-child').trigger('click');
+        wrapper.find('.task-from__btn-box .sdxu-button--primary').trigger('click');
         await flushPromise();
         expect(mockFn).toBeCalled();
         expect(mockFn).toHaveBeenCalledTimes(1);

@@ -1,8 +1,9 @@
 import { shallowMount, mount, createLocalVue, createWrapper} from '@vue/test-utils';
 import 'babel-polyfill';
 import ElementUI from 'element-ui';
-const localVue = createLocalVue();
 import flushPromise from 'flush-promises';
+const localVue = createLocalVue();
+import SdxuButton from '@sdx/ui/components/button';
 localVue.use(ElementUI);
 const mockScript = () => {
     const script = document.createElement('script');
@@ -13,19 +14,20 @@ const mockScript = () => {
 
 
 mockScript();
-const AddUser = require('../../components/user-manage/src/components/AddUser').default;
+const ImageFileBuild = require('../../../components/image-management/src/image-file-build/Index').default;
 let wrapper = null;
-describe('AddUser', () => {
+
+describe('ImageFileBuild', () => {
     beforeEach(() => {
-        wrapper = mount(AddUser, {
+        wrapper = mount(ImageFileBuild, {
             localVue,
             stubs: {
-                transition: false,
                 'el-form': true,
                 'el-form-item': true,
                 'el-select': true,
                 'el-option': true
-            }
+            },
+            sync: false,
         });
     });
 
@@ -35,20 +37,33 @@ describe('AddUser', () => {
     });
 
     it('渲染正常', () => {
-        expect(wrapper.find('.sdxv-user-manage__userform').exists()).toBeTruthy();
-        expect(wrapper.find('.sdxu-dialog').exists()).toBeTruthy();
+        expect(wrapper.find('.sdxv-image-file').exists()).toBeTruthy();
+        expect(wrapper.find('.foot').exists()).toBeTruthy();
     });
 
-    it('点击确定按钮，confirm方法被调用', async done => {
+    it('点击取消时', async done => {
         const mockFn = jest.fn();
         wrapper.setMethods({
-            confirm: mockFn
+            cancel: mockFn
         });
-        wrapper.find('.sdxu-button:last-child').trigger('click');
+        await flushPromise();
+        wrapper.find('.foot .sdxu-button:first-child').trigger('click');
         await flushPromise();
         expect(mockFn).toBeCalled();
         expect(mockFn).toHaveBeenCalledTimes(1);
         done();
     });
 
+    it('点击保存构建', async done => {
+        const mockFn = jest.fn();
+        wrapper.setMethods({
+            savaBuild: mockFn
+        });
+        await flushPromise();
+        wrapper.find('.foot .sdxu-button:last-child').trigger('click');
+        await flushPromise();
+        expect(mockFn).toBeCalled();
+        expect(mockFn).toHaveBeenCalledTimes(1);
+        done();
+    });
 })

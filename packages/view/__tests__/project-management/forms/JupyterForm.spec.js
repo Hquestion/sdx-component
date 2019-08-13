@@ -3,6 +3,7 @@ import 'babel-polyfill';
 import ElementUI from 'element-ui';
 const localVue = createLocalVue();
 import flushPromise from 'flush-promises';
+import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 localVue.use(ElementUI);
 const mockScript = () => {
     const script = document.createElement('script');
@@ -13,11 +14,11 @@ const mockScript = () => {
 
 
 mockScript();
-const AddUser = require('../../components/user-manage/src/components/AddUser').default;
+const JupyterForm = require('../../../components/project-management/src/forms/JupyterForm').default;
 let wrapper = null;
-describe('AddUser', () => {
+describe('JupyterForm', () => {
     beforeEach(() => {
-        wrapper = mount(AddUser, {
+        wrapper = mount(JupyterForm, {
             localVue,
             stubs: {
                 transition: false,
@@ -25,6 +26,13 @@ describe('AddUser', () => {
                 'el-form-item': true,
                 'el-select': true,
                 'el-option': true
+            },
+            mocks: {
+                $route: {
+                    params: {
+                        projectId: '123dasd31'
+                    }
+                }
             }
         });
     });
@@ -34,17 +42,24 @@ describe('AddUser', () => {
         document.body.innerHTML = '';
     });
 
-    it('渲染正常', () => {
-        expect(wrapper.find('.sdxv-user-manage__userform').exists()).toBeTruthy();
-        expect(wrapper.find('.sdxu-dialog').exists()).toBeTruthy();
+    it('渲染正常，测试有无uuid时，展示编辑，新建', () => {
+        expect(wrapper.find('.sdxu-content-panel').exists()).toBeTruthy();
+        expect(wrapper.find('.sdxu-content-panel__title').text().includes('新建')).toBe(true);
+        wrapper.setProps({
+            task: {
+                uuid: '12'
+            }
+        })
+        
+        expect(wrapper.find('.sdxu-content-panel__title').text().includes('编辑')).toBe(true);
     });
 
-    it('点击确定按钮，confirm方法被调用', async done => {
+    it('点击确定按钮，commit方法被调用', async done => {
         const mockFn = jest.fn();
         wrapper.setMethods({
-            confirm: mockFn
+            commit: mockFn
         });
-        wrapper.find('.sdxu-button:last-child').trigger('click');
+        wrapper.find('.sdxu-button--primary').trigger('click');
         await flushPromise();
         expect(mockFn).toBeCalled();
         expect(mockFn).toHaveBeenCalledTimes(1);

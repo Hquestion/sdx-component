@@ -110,3 +110,32 @@ export function buildImageBasic() {
 
     });
 }
+
+export function getImageTaskList() {
+    return Promise.resolve({
+        total: 66,
+        data: [
+            {
+                baseImage: null,
+                buildType: 'ONLINE',
+                createdAt: '2019-08-02T01:51:18.598000Z',
+                errorMsg: 'image build runtime error',
+                imageType: 'JUPYTER',
+                installPackages: [],
+                name: 'tar123',
+                operations: ['remove', 'log'],
+                owner: {createdAt: '2019-07-30T08:19:24.031000Z', description: '', expiresAt: '2020-07-29T08:19:24.031000Z'},
+                projectName: 'af0ef5df-e867-4f34-9a98-940013a462ef',
+                state: {content: '已失败', label: 'FAILED', needPull: false},
+                uninstallPackages: [],
+                updatedAt: '2019-08-02T01:51:19.760000Z',
+                upgradePackages: [],
+                uuid: '72d1393a-86e1-467c-a935-e28c1ee01b41',
+                version: 'v1',
+                showDiff: true,
+                showLog: true,
+                showRemove: true
+            }
+        ]
+    });
+}

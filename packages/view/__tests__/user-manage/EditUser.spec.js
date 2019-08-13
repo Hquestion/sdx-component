@@ -13,11 +13,11 @@ const mockScript = () => {
 
 
 mockScript();
-const AddUser = require('../../components/user-manage/src/components/AddUser').default;
+const EditUser = require('../../components/user-manage/src/components/EditUser').default;
 let wrapper = null;
-describe('AddUser', () => {
+describe('EditUser', () => {
     beforeEach(() => {
-        wrapper = mount(AddUser, {
+        wrapper = mount(EditUser, {
             localVue,
             stubs: {
                 transition: false,

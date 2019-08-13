@@ -207,6 +207,7 @@ export default {
     },
     beforeDestroy () {
         clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
     },
     components: {
         [ContentPanel.name]: ContentPanel,
@@ -255,6 +256,7 @@ export default {
                     }
                 } else {
                     clearInterval(this.refreshTimer);
+                    this.refreshTimer = null;
                 }
             });
         },

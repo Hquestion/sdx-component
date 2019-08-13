@@ -126,7 +126,7 @@ export default {
     mixins: [locale],
     data() {
         return {
-            radio: this.$auth('IMAGE-MANAGER:IMAGE_BUILDER:BUILD_TAR:""', 'button') ? 'tar' : 'DockerFile',
+            radio: auth.checkAuth('IMAGE-MANAGER:IMAGE_BUILDER:BUILD_TAR:""', 'button') ? 'tar' : 'DockerFile',
             params: {
                 name: '',
                 version: '',

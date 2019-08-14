@@ -1,4 +1,5 @@
-import {deepCopy, isNaN, isString, isUndefined, isObject,isEmptyObject, isFunction, isArray, isStringArray, isObjectArray, removeSameAttr, removeBlankAttr, paginate } from '@sdx/utils/src/helper/tool';
+import {deepCopy, isNaN, isString, isUndefined, isObject,isEmptyObject, isFunction, isArray, 
+isStringArray, isObjectArray, removeSameAttr, removeBlankAttr, paginate } from '../../src/helper/tool';
 describe('tool', () => {
     it('test deepCopy', () => {
         const data = [{age: 12, name: 'edison'}]

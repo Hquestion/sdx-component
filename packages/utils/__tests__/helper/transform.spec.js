@@ -1,7 +1,7 @@
 import {getDateDiff, byteToGB, byteToMB,
     gbToByte, parseMilli, toMilli, byteFormatter, dateFormatter, secToHour, hourToSec, secToDay, dayToSec, cpuTplFriendly} 
-from '@sdx/utils/src/helper/transform';
-import { t } from '@sdx/utils/src/locale';
+from '../../src/helper/transform';
+import { t } from '../../src/locale';
 
 describe('tool', () => {
     it('test getDateDiff', () => {

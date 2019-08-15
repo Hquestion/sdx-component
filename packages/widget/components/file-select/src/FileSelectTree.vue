@@ -137,13 +137,13 @@ export default {
                     },
                     disabled: data => {
                         if (this.checkType === 'file') {
-                            return !data.isFile || !!data.selectDisable;
+                            return !data.isFile || !!data.selectDisable || !!data.isProject;
                         }
                         if (this.checkType === 'folder') {
-                            return !!data.isFile || !!data.selectDisable;
+                            return !!data.isFile || !!data.selectDisable || !!data.isProject;
                         }
                         if (this.checkType === 'all') {
-                            return !!data.selectDisable || false;
+                            return !!data.selectDisable || !!data.isProject || false;
                         }
                     }
                 },

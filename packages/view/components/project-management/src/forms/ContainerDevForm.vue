@@ -115,16 +115,17 @@
 import BaseForm from './BaseForm';
 import {Form, FormItem, Select} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-import {  createTask, updateTask, getDataSet, getProjectDetail} from '@sdx/utils/src/api/project';
+import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
+import projectDetailMixin from './projectDetailMixin';
 export default {
     name: 'ContainerDevForm',
-    mixins: [locale],
+    mixins: [locale, projectDetailMixin],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -228,10 +229,7 @@ export default {
         this.imageList();
         this.getDataSetList();
         // 判断是否协作
-        getProjectDetail(this.$route.params.projectId)
-            .then(res => {
-                this.cooperation = res.data.groups.length > 0 ? true : false;
-            });
+        this.projectCooperation();
     },
     methods: {
         // 数据集列表

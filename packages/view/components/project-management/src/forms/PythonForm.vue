@@ -89,8 +89,6 @@
                     accept=".py,.zip"
                     :string-model="true"
                     :prefix-owner="true"
-                    :project-enable="true"
-                    :share-enable="true"
                     check-type="file"
                     :project-enable="cooperation"
                     :private-enable="!cooperation"

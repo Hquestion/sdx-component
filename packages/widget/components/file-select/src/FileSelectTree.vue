@@ -17,15 +17,31 @@
 import clickoutside from 'element-ui/lib/utils/clickoutside';
 import Loading from 'element-ui/lib/loading';
 import Vue from 'vue';
-import {getFilesList, getProjectShare} from '@sdx/utils/src/api/file';
+import {getFilesList, getProjectShare, getMyAcceptedShare} from '@sdx/utils/src/api/file';
 import '@sdx/utils/src/theme-common/iconfont/iconfont.js';
 import { getPathIcon } from './utils';
 import ElTree from 'element-ui/lib/tree';
 import locale from '@sdx/utils/src/mixins/locale';
+import { isArray, isObject } from '@sdx/utils/src/helper/tool';
 
 Vue.use(Loading);
 
-const NODE_KEY = 'path';
+const NODE_KEY = '$feKey';
+
+function setFileKey(list) {
+    if (isArray(list)) {
+        list.forEach(item => {
+            item.$feKey = `${item.path}@${item.ownerId}`;
+        });
+    } else if (isObject(list)) {
+        list.$feKey = `${list.path}@${list.ownerId}`;
+    }
+    return list;
+}
+
+function getFileKey(file) {
+    return file[NODE_KEY] || `${file.path}@${file.ownerId}`;
+}
 
 export default {
     name: 'SdxwFileSelectTree',
@@ -84,12 +100,20 @@ export default {
         projectEnable: {
             type: Boolean,
             default: false
+        },
+        privateEnable: {
+            type: Boolean,
+            default: true
+        },
+        shareEnable: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
         // 已选节点(兼容单选和多选模式)
         selectedNodes() {
-            return this.value.map(item => typeof item === 'object' ? item[NODE_KEY] : item);
+            return this.value.map(item => typeof item === 'object' ? getFileKey(item) : item);
         },
         // 合并外部Tree参数,通过 v-bind='__treeOption' 一次性将这些设置都配置到 el-tree上
         __treeOption() {
@@ -113,13 +137,13 @@ export default {
                     },
                     disabled: data => {
                         if (this.checkType === 'file') {
-                            return !data.isFile || !!data.selectDisable;
+                            return !data.isFile || !!data.selectDisable || !!data.isProject;
                         }
                         if (this.checkType === 'folder') {
-                            return !!data.isFile || !!data.selectDisable;
+                            return !!data.isFile || !!data.selectDisable || !!data.isProject;
                         }
                         if (this.checkType === 'all') {
-                            return !!data.selectDisable || false;
+                            return !!data.selectDisable || !!data.isProject || false;
                         }
                     }
                 },
@@ -137,7 +161,7 @@ export default {
             deep: true,
             handler(val) {
                 if (this.$refs.fileTree) {
-                    this.$refs.fileTree.setCheckedKeys(val.map(item => typeof item === 'object' ? item[NODE_KEY] : item));
+                    this.$refs.fileTree.setCheckedKeys(val.map(item => typeof item === 'object' ? getFileKey(item) : item));
                 }
             }
         },
@@ -162,14 +186,25 @@ export default {
             // rootPath为根目录时，需要在第一层展示根目录
             if (path === '/' && node.level === 0) {
                 this.isTreeLoading = false;
-                const rootDirs = [
-                    {
+                const rootDirs = [];
+                if(this.privateEnable) {
+                    rootDirs.push({
                         name: '/',
                         path: '/',
                         isFile: false,
                         ownerId: this.userId
-                    }
-                ];
+                    });
+                }
+                if (this.shareEnable) {
+                    rootDirs.push({
+                        name: this.t('view.file.AcceptedShare'),
+                        path: '/fixed-accept-root',
+                        isFile: false,
+                        ownerId: this.userId,
+                        isShareFiles: true,
+                        selectDisable: true
+                    });
+                }
                 if (this.projectEnable) {
                     rootDirs.push({
                         name: this.t('view.file.CooperationProject'),
@@ -180,7 +215,7 @@ export default {
                         selectDisable: true
                     });
                 }
-                return resolve(rootDirs);
+                return resolve(setFileKey(rootDirs));
             }
             if (node.level > 0) {
                 path = node.data.path;
@@ -190,7 +225,28 @@ export default {
                 promise = this.loadFnWrap(this.rootPath, node.data.path, this.userId)();
             } else {
                 let rootNode = this.getRootNode(node);
-                if (rootNode.data.isProjectFiles) {
+                if (rootNode.data.isShareFiles) {
+                    if (node.level === 1) {
+                        promise = getMyAcceptedShare({
+                            start: 1,
+                            count: -1,
+                            path: ''
+                        }).then(res => {
+                            return res.children;
+                        });
+                    } else {
+                        const params = {
+                            path: node.level === 2 ? '/' : path,
+                            ownerId: node.data.ownerId,
+                            fileExtension: this.accept,
+                            onlyDirectory: this.checkType === 'folder',
+                            onlyFile: this.checkType === 'file'
+                        };
+                        promise = getFilesList(params).then(res => {
+                            return res.children;
+                        });
+                    }
+                } else if (rootNode.data.isProjectFiles) {
                     // 第一级获取项目列表，后面与获取文件一致
                     if (node.level === 1) {
                         promise = getProjectShare({
@@ -227,7 +283,7 @@ export default {
             }
             return promise.then(res => {
                 this.isTreeLoading = false;
-                resolve(res);
+                resolve(setFileKey(res));
             });
         },
         // 处理"单文件选择"问题
@@ -236,7 +292,7 @@ export default {
                 data.checkTimestamp = +new Date();
                 if (this.limit >= 1) {
                     const checkedNodes = this.tree.getCheckedNodes();
-                    const index = checkedNodes.findIndex(item => item[NODE_KEY] === data[NODE_KEY]);
+                    const index = checkedNodes.findIndex(item => getFileKey(item) === getFileKey(data));
                     checkedNodes.sort((a, b) => a.checkTimestamp - b.checkTimestamp);
                     if (this.checkType === 'folder') {
                         if (!data.isFile) {

@@ -275,6 +275,7 @@ export function getProjectShare(params) {
             path: `/${item.name}`,
             filesystem: 'cephfs',
             isFile: false,
+            isProject: true,
             mimeType: 'text/directory',
             fileExtension: '',
             fileShareId: '',

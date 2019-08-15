@@ -183,7 +183,7 @@ import ImageTaskTable from './image-task-table/Index';
 import SearchLayout from  '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
-import {t} from '@sdx/utils/src/locale';
+import { t } from '@sdx/utils/src/locale';
 import { getImageTaskList } from '@sdx/utils/src/api/image';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
@@ -323,13 +323,7 @@ export default {
         },
         reset() {
             this.resetFilters();
-            this.$nextTick(() => {
-                if(this.projectType === 'image') {
-                    this.updateTable();
-                } else {
-                    this.updateTaskTable();
-                }
-            });
+            this.search();
         },
         switchProjectType() {
             this.$router.push({

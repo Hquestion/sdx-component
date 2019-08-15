@@ -153,3 +153,37 @@ export function getTaskDataSource() {
         success: true
     });
 }
+
+export function createProject() {
+    return Promise.resolve();
+}
+
+export function getSelfCreatedProjects() {
+    return Promise.resolve({
+        data: {
+            items: [],
+            total: 2
+        },
+        total: 2
+    });
+}
+
+export function getSharingProjects() {
+    return Promise.resolve({
+        data: {
+            items: [],
+            total: 2
+        },
+        total: 2
+    });
+}
+
+export function getProjectTemplates() {
+    return Promise.resolve({
+        data: {
+            items: [],
+            total: 2
+        },
+        total: 2
+    });
+}

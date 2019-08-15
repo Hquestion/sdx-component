@@ -118,14 +118,15 @@ import Select from 'element-ui/lib/select';
 import SdxuInput from '@sdx/ui/components/input';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
-import { getProjectDetail, createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
+import { createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
+import projectDetailMixin from './projectDetailMixin';
 export default {
     name: 'JupyterForm',
-    mixins: [locale],
+    mixins: [locale, projectDetailMixin],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -226,10 +227,7 @@ export default {
     },
     created() {
         this.imageList();
-        getProjectDetail(this.$route.params.projectId)
-            .then(res => {
-                this.cooperation = res.data.groups.length > 0 ? true : false;
-            });
+        this.projectCooperation();
         this.getDataSetList();
     },
     methods: {

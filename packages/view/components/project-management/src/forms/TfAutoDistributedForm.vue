@@ -115,6 +115,9 @@
                     :accept="'.py'"
                     :string-model="true"
                     check-type="file"
+                    :project-enable="cooperation"
+                    :private-enable="!cooperation"
+                    :share-enable="!cooperation"
                 />
             </el-form-item>
             <el-form-item
@@ -136,6 +139,9 @@
                     check-type="folder"
                     v-model="params.outputPaths"
                     :string-model="true"
+                    :project-enable="cooperation"
+                    :private-enable="!cooperation"
+                    :share-enable="false"
                 />
             </el-form-item>
         </el-form>
@@ -154,9 +160,10 @@ import { createTask ,updateTask} from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
+import projectDetailMixin from './projectDetailMixin';
 export default {
     name: 'TfAutoDistributedForm',
-    mixins: [locale],
+    mixins: [locale, projectDetailMixin],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -264,7 +271,8 @@ export default {
                 //     { required: true, message: '请输入参数服务器实例个数',trigger: 'change' }
                 // ],
             },
-            dataReady: false
+            dataReady: false,
+            cooperation:true
         };
     },
     computed: {
@@ -284,6 +292,7 @@ export default {
     },
     created() {
         this.imageList();
+        this.projectCooperation();
     },
     methods: {
         imageList() {

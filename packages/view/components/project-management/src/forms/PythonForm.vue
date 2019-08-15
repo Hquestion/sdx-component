@@ -88,6 +88,9 @@
                     v-model="params.sourcePaths"
                     accept=".py,.zip"
                     :string-model="true"
+                    :prefix-owner="true"
+                    :project-enable="true"
+                    :share-enable="true"
                     check-type="file"
                 />
             </el-form-item>

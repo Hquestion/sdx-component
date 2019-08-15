@@ -238,6 +238,10 @@ export default {
             );
         },
         initList(hideLoading) {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                return;
+            }
             this.loading = hideLoading ? false : true;
             const params = {
                 name: this.searchName,

@@ -22,6 +22,9 @@
                     :checkable="checkable"
                     :check-type="checkType"
                     :querystring="key"
+                    :project-enable="projectEnable"
+                    :private-enable="privateEnable"
+                    :share-enable="shareEnable"
                     ref="fileComp"
                 />
             </SdxuScroll>
@@ -97,6 +100,18 @@ export default {
         checkType: {
             type: String,
             default: 'all' // 'file', 'folder'
+        },
+        projectEnable: {
+            type: Boolean,
+            default: false
+        },
+        privateEnable: {
+            type: Boolean,
+            default: true
+        },
+        shareEnable: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -130,6 +145,17 @@ export default {
                     this.$refs.fileComp.refresh && this.$refs.fileComp.refresh(true);
                 }
             }, 500))();
+        },
+        value: {
+            immediate: true,
+            handler() {
+                this.checked = this.value;
+            }
+        }
+    },
+    mounted() {
+        if (this.value) {
+            this.checked = this.value;
         }
     }
 };

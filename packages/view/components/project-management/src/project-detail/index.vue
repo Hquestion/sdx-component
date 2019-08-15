@@ -240,7 +240,7 @@ export default {
         initList(hideLoading) {
             if (this._isDestroyed) {
                 clearInterval(this.refreshTimer);
-                return;
+                this.refreshTimer = null;
             }
             this.loading = hideLoading ? false : true;
             const params = {

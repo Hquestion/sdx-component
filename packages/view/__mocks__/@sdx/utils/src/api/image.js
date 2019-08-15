@@ -101,7 +101,8 @@ export function getImage() {
 
 export function getImageList() {
     return Promise.resolve({
-        data: []
+        data: [],
+        total: 3
     });
 }
 

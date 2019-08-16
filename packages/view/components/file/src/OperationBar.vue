@@ -24,6 +24,8 @@
                 :on-success="removeUpload"
                 style="margin-left: 20px;margin-right: 20px;"
                 v-if="canUpload()"
+                :on-exceed-max-size="onExceedMaxSize"
+                :on-exceed-max-size-dir="onExceedMaxSizeDir"
             >
                 {{ t('view.file.Upload') }}
             </SdxwFileSelect>
@@ -102,7 +104,7 @@ import batchOperationAuthMixin from './helper/batchOperationAuthMixin';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import { rootKinds } from './helper/fileListTool';
 import locale from '@sdx/utils/src/mixins/locale';
-
+import MessageBox from '@sdx/ui/components/message-box';
 export default {
     name: 'OperationBar',
     components: {
@@ -171,16 +173,59 @@ export default {
         removeUpload(file) {
             // this.$refs.fileUploader.handleRemove(file);
             // 目前先保留上传记录，不处理
+        },
+        onExceedMaxSize() {
+            let that = this;
+            let url = this.getSystemUrl();
+            MessageBox.confirm.warning({
+                title: this.t('view.file.upload_or_download_operation_files_are_large'),
+                content(h){
+                    return (
+                        <div class="fileClient">
+                            <a href={url}>{that.t('view.file.Download_Now')}</a> 
+                            <span>{that.t('view.file.And_install_SkyDiscovery_File_Management_Client')}</span>
+                        </div>
+                    );
+                },
+                type: 'custom',
+            });
+        },
+        onExceedMaxSizeDir() {
+            this.onExceedMaxSize();
+        },
+        //判断系统类型获取url
+        getSystemUrl(){
+            let url = '';
+            let STATIC_PATH = process.env.VUE_APP_STATIC_PATH;
+            const isWindows = /windows|win32/i.test(navigator.userAgent);
+            const isMac = /macintosh|mac os x/i.test(navigator.userAgent); 
+            const isLinux = (String(navigator.platform).indexOf('Linux') > -1);
+            if (isWindows) {
+                url = `${STATIC_PATH}static/filemanager-client/windows/sky-filemanager-client.exe`;
+            } else if (isMac){
+                url = `${STATIC_PATH}static/filemanager-client/mac/sky-filemanager-client.zip`;
+            } else if(isLinux){
+                url = `${STATIC_PATH}static/filemanager-client/linux/sky-filemanager-client.zip`;
+            }
+            return url;
         }
     },
     mounted() {}
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .sdxv-operation-bar {
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
 }
+.fileClient {
+    a {
+        padding-right: 4px;
+        color:#5C89FF;
+    }
+}
 </style>
+
+

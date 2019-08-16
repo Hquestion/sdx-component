@@ -646,7 +646,10 @@ export default {
             PleaseFinishRenameOrMkdir: 'Please finish rename or new folder first',
             UploadFile: '@:(view.file.Upload) @:(view.file.File)',
             UploadFolder: '@:(view.file.Upload) @:(view.file.Folder)',
-            PleaseInputFileName: 'Please input file name'
+            PleaseInputFileName: 'Please input file name',
+            Download_Now: 'Download now',
+            And_install_SkyDiscovery_File_Management_Client: 'And install SkyDiscovery File Management Client',
+            upload_or_download_operation_files_are_large: 'Currently, upload or download operation files are large, please use file management client operation'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',
@@ -752,7 +755,9 @@ export default {
             please_enter_a_role_description: 'Please enter a role description',
             determine_the_deletion_role: 'Determine the deletion role',
             this_action_deletes_the_authorization_items: 'This action deletes the authorization items associated with this role at the same time',
-            authorization: 'Authorization'
+            authorization: 'Authorization',
+            Are_you_sure_delete_it: 'Are you sure you want to delete the authorization?',
+            Can_not_be_restored_after_deletion: 'Can not be restored after deletion'
         }
     },
     sdxCommon: {

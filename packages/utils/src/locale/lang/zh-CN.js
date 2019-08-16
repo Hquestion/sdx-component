@@ -645,7 +645,10 @@ export default {
             PleaseFinishRenameOrMkdir: '请先完成新建或重命名',
             UploadFile: '@:(view.file.Upload)@:(view.file.File)',
             UploadFolder: '@:(view.file.Upload)@:(view.file.Folder)',
-            PleaseInputFileName: '请输入文件名称'
+            PleaseInputFileName: '请输入文件名称',
+            Download_Now: '立即下载',
+            And_install_SkyDiscovery_File_Management_Client: '并安装SkyDiscovery文件管理客户端',
+            upload_or_download_operation_files_are_large: '当前上传或下载操作文件较大，请使用文件管理客户端操作'
         },
         resourceManage: {
             ResourceManage: '资源管理',
@@ -751,7 +754,9 @@ export default {
             please_enter_a_role_description: '请输入角色说明',
             determine_the_deletion_role: '确定删除角色',
             this_action_deletes_the_authorization_items: '此操作会同时删除与此角色关联的授权项',
-            authorization: '授权'
+            authorization: '授权',
+            Are_you_sure_delete_it: '确定删除授权吗？',
+            Can_not_be_restored_after_deletion: '删除后不可恢复哦'
         }
     },
     sdxCommon: {

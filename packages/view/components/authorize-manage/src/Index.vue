@@ -483,8 +483,8 @@ export default {
         },
         remove(id, name) {
             MessageBox.confirm({
-                title: `确定删除授权${name}吗？`,
-                content: '删除后不可恢复哦',
+                title: this.t('view.authorizeManage.Are_you_sure_delete_it'),
+                content: this.t('view.authorizeManage.Can_not_be_restored_after_deletion'),
                 type: 'alert'
             }).then(() => {
                 this.updatePermissions(this.objectType, id, []);

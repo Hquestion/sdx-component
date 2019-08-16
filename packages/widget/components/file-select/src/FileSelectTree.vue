@@ -3,6 +3,7 @@
         <el-tree
             v-loading="isTreeLoading"
             v-bind="__treeOption"
+            :key="treeKey"
             ref="fileTree"
             @check-change="handleCheckChange"
             @node-expand="treeShake"
@@ -57,7 +58,8 @@ export default {
             isTreeLoading: false, // 文件树是否正在加载
             allow: null, // 通过type获取的文件类型过滤数组
             computedAllow: [], // 计算后的文件类型过滤数组,用于提示
-            treeData: []
+            treeData: [],
+            treeKey: +new Date()
         };
     },
     props: {
@@ -174,6 +176,18 @@ export default {
             this.$refs.fileTree.root.loadData();
         },
         accept() {
+            this.$refs.fileTree.root.loaded = false;
+            this.$refs.fileTree.root.loadData();
+        },
+        projectEnable() {
+            this.$refs.fileTree.root.loaded = false;
+            this.$refs.fileTree.root.loadData();
+        },
+        shareEnable() {
+            this.$refs.fileTree.root.loaded = false;
+            this.$refs.fileTree.root.loadData();
+        },
+        privateEnable() {
             this.$refs.fileTree.root.loaded = false;
             this.$refs.fileTree.root.loadData();
         }

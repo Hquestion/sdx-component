@@ -20,6 +20,9 @@ function MessageBox(opt) {
     }
     instance.title = title;
     instance.content = content;
+    if (typeof content === 'function') {
+        instance.$slots.content = content(instance.$createElement);
+    }
     instance.type = type;
     instance.status = status;
     vm = instance.$mount();

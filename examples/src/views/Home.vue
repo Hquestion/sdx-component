@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="home is-en">
         <img
             alt="Vue logo"
             src="../assets/logo.png"
@@ -34,6 +34,7 @@
                 <div slot="content">woshineirong</div>
             </el-tooltip>
         </div>
+        <SdxuButton @click="msgbox">弹出messagebox</SdxuButton>
     </div>
 </template>
 
@@ -48,6 +49,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import HelloWorld from '../components/HelloWorld';
 import ElTooltip from 'element-ui/packages/tooltip';
+import MessageBox from '@sdx/ui/components/message-box';
 
 export default {
     name: 'Home',
@@ -103,6 +105,15 @@ export default {
         authFn() {
             console.log(arguments);
             return this.authFn;
+        },
+        msgbox() {
+            MessageBox({
+                title: 'test',
+                type: 'custom',
+                content(h) {
+                    return (<a href="http://www.baidu.com">你好！</a>);
+                }
+            });
         }
     },
     mounted() {

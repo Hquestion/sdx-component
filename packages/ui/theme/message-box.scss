@@ -49,6 +49,11 @@
             }
         }
     }
+    @include state('custom') {
+        @include element('main') {
+            margin-bottom: 52px;
+        }
+    }
     @include element('icon-close') {
         position: absolute;
         right: $sdx-padding;
@@ -59,6 +64,8 @@
     @include element('header') {
         line-height: 1;
         font-size: 0;
+        display: flex;
+        justify-content: flex-start;
         i {
             font-size: $sdxu-status-icon-size;
             margin-right: $sdx-status-icon-margin-right;
@@ -67,6 +74,8 @@
         span {
             font-size: 20px;
             color: $sdx-text-primary-color;
+            display: inline-block;
+            line-height: 1.25;
         }
     }
     @include element('main') {

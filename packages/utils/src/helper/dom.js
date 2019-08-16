@@ -37,7 +37,7 @@ export function getParentNode(node) {
 }
 
 export function addClass(el, name) {
-    if (!el.classList.contains(name)) {
+    if (el.classList && !el.classList.contains(name)) {
         el.classList.add(name);
     }
 }

@@ -19,5 +19,6 @@ module.exports = {
     'resource-config': './components/resource-config/index.js',
     'auth': './components/auth/index.js',
     'share-form': './components/share-form/index.js',
-    'task-running-limit': './components/task-running-limit/index.js'
+    'task-running-limit': './components/task-running-limit/index.js',
+    'lang-handle': './components/lang-handle/index.js',
 };

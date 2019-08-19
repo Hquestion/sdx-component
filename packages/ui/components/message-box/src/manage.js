@@ -69,7 +69,7 @@ MessageBox.close = () => {
     }, 300);
 };
 
-['alert', 'confirm'].forEach(type => {
+['alert', 'confirm', 'custom'].forEach(type => {
     MessageBox[type] = opt => MessageBox({ ...opt, type });
     ['error', 'info', 'success', 'warning'].forEach(status => {
         MessageBox[type][status] = opt => MessageBox({...opt, type, status});

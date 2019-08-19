@@ -117,6 +117,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.$el.classList);
         setTimeout(() => {
             this.visible = false;
         }, 10000);

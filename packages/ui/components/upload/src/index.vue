@@ -184,6 +184,7 @@ export default {
                 file.status = 'success';
                 file.response = res;
                 file.cephName = res.files[0].path;
+                file.ownerId = this.data.ownerId;
                 console.log(file);
 
                 this.onSuccess(res, file, this.uploadFiles);

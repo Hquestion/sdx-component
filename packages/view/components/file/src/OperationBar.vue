@@ -177,17 +177,16 @@ export default {
         onExceedMaxSize() {
             let that = this;
             let url = this.getSystemUrl();
-            MessageBox.confirm.warning({
+            MessageBox.custom.warning({
                 title: this.t('view.file.upload_or_download_operation_files_are_large'),
                 content(h){
                     return (
                         <div class="fileClient">
-                            <a href={url}>{that.t('view.file.Download_Now')}</a> 
+                            <a href={url} target="blank">{that.t('view.file.Download_Now')}</a>
                             <span>{that.t('view.file.And_install_SkyDiscovery_File_Management_Client')}</span>
                         </div>
                     );
-                },
-                type: 'custom',
+                }
             });
         },
         onExceedMaxSizeDir() {
@@ -201,11 +200,11 @@ export default {
             const isMac = /macintosh|mac os x/i.test(navigator.userAgent); 
             const isLinux = (String(navigator.platform).indexOf('Linux') > -1);
             if (isWindows) {
-                url = `${STATIC_PATH}static/filemanager-client/windows/sky-filemanager-client.exe`;
+                url = `${STATIC_PATH}static/filemanage-client/windows/sky-filemanager-client.exe`;
             } else if (isMac){
-                url = `${STATIC_PATH}static/filemanager-client/mac/sky-filemanager-client.zip`;
+                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.zip`;
             } else if(isLinux){
-                url = `${STATIC_PATH}static/filemanager-client/linux/sky-filemanager-client.zip`;
+                url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.zip`;
             }
             return url;
         }

@@ -648,7 +648,7 @@ export default {
             PleaseInputFileName: '请输入文件名称',
             Download_Now: '立即下载',
             And_install_SkyDiscovery_File_Management_Client: '并安装SkyDiscovery文件管理客户端',
-            upload_or_download_operation_files_are_large: '当前上传或下载操作文件较大，请使用文件管理客户端操作'
+            upload_or_download_operation_files_are_large: '当前上传的文件较大，请使用文件管理客户端操作'
         },
         resourceManage: {
             ResourceManage: '资源管理',

@@ -225,17 +225,6 @@ export default {
                 }
             }
             return isGpuEnt;
-        },
-        uploadParams() {
-            if (this.cooperation) {
-                return {
-                    ownerId: this.$route.params.projectId
-                };
-            } else {
-                return {
-                    ownerId: getUser().userId || ''
-                };
-            }
         }
     },
     created() {

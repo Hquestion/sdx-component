@@ -649,7 +649,7 @@ export default {
             PleaseInputFileName: 'Please input file name',
             Download_Now: 'Download now',
             And_install_SkyDiscovery_File_Management_Client: 'And install SkyDiscovery File Management Client',
-            upload_or_download_operation_files_are_large: 'Currently, upload or download operation files are large, please use file management client operation'
+            upload_or_download_operation_files_are_large: 'Currently uploaded files are large, please use file management client operation'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',

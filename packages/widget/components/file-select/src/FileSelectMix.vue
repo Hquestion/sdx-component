@@ -33,7 +33,7 @@
                             :on-progress="onProgress"
                             :on-success="onSuccess"
                             :on-exceed="onExceed"
-                            :data="uploadParams"
+                            :data="rebuildUploadParams"
                             :limit="realLimit"
                             :show-file-list="false"
                             :before-upload="beforeUpload"
@@ -58,7 +58,7 @@
                             :on-error="onDirectoryError"
                             :on-exceed="onExceed"
                             :limit="localFolderRealLimit"
-                            :data="uploadParams"
+                            :data="rebuildUploadParams"
                             :show-file-list="false"
                             :on-progress="onProgress"
                             :on-success="onSuccess"
@@ -121,6 +121,12 @@ import errorHandler from '@sdx/utils/src/error-handler';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import { t } from '@sdx/utils/src/locale';
+
+const uploadDefaults = {
+    path: '/',
+    filesystem: 'cephfs',
+    overwrite: 1
+};
 export default {
     name: 'SdxwFileSelect',
     mixins: [emitter, locale],
@@ -214,12 +220,9 @@ export default {
         },
         uploadParams: {
             type: Object,
-            default: () => ({
-                ownerId: shareCenter.getUser() && shareCenter.getUser().uuid || '',
-                path: '/',
-                filesystem: 'cephfs',
-                overwrite: 1
-            })
+            default: () => (Object.assign({}, uploadDefaults, {
+                ownerId: shareCenter.getUser() && shareCenter.getUser().uuid || ''
+            }))
         },
         localFileLabel: {
             type: String,
@@ -323,6 +326,9 @@ export default {
         },
         disableCheck() {
             return this.disabled || this.selectedFiles.length >= this.realLimit;
+        },
+        rebuildUploadParams() {
+            return Object.assign({}, uploadDefaults, this.uploadParams);
         }
     },
     methods: {

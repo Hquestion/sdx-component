@@ -40,6 +40,7 @@
         "@sdx/ui": "^1.0.2",
         "@sdx/utils": "^1.0.2",
         "element-ui": "^2.7.2",
+        "portal-vue": "^2.1.5",
         "vue": "^2.6.10"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"

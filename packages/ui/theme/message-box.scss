@@ -76,6 +76,7 @@
             color: $sdx-text-primary-color;
             display: inline-block;
             line-height: 1.25;
+            word-break: break-all;
         }
     }
     @include element('main') {

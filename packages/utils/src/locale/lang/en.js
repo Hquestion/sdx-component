@@ -27,7 +27,8 @@ export default {
             groups:'Groups:',
             role:'Role:',
             noGroup: 'Not in groups',
-            noRole: 'No role'
+            noRole: 'No role',
+            noColonRole: 'Role'
         },
         changePassword: {
             title: 'Change Password',
@@ -734,7 +735,10 @@ export default {
             EditGroup: 'Edit @:(view.userManage.UserGroup)',
             NewGroup: 'New @:(view.userManage.UserGroup)',
             GroupMembers: 'Group Members',
-            NoMembers: 'No Members'
+            NoMembers: 'No Members',
+            Modified_user_group_successfully: 'Modified user group successfully',
+            User_group_created_successfully: 'User group created successfully',
+            UserGroup_colon: 'User Group:'
         },
         authorizeManage: {
             user_authorization_list: 'User Authorization List',

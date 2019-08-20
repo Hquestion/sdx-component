@@ -27,7 +27,8 @@ export default {
             groups:'加入组：',
             role:'角色：',
             noGroup: '暂未加入用户组',
-            noRole: '暂无角色'
+            noRole: '暂无角色',
+            noColonRole: '角色'
         },
         changePassword: {
             title: '修改密码',
@@ -733,7 +734,10 @@ export default {
             EditGroup: '编辑@:(view.userManage.UserGroup)',
             NewGroup: '创建@:(view.userManage.UserGroup)',
             GroupMembers: '组员',
-            NoMembers: '暂无用户'
+            NoMembers: '暂无用户',
+            Modified_user_group_successfully: '修改用户组成功',
+            User_group_created_successfully: '创建用户组成功',
+            UserGroup_colon: '用户组：',
         },
         authorizeManage: {
             user_authorization_list: '用户授权列表',

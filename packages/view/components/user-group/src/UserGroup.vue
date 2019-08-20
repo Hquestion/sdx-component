@@ -45,7 +45,9 @@
                     prop="name"
                 >
                     <template #default="{ row }">
-                        <div class="sdxv-user-group__table--name">{{row.name}}</div>
+                        <div class="sdxv-user-group__table--name">
+                            {{ row.name }}
+                        </div>
                     </template>
                 </el-table-column>
                 <el-table-column type="expand">
@@ -57,7 +59,10 @@
                                 :list="row.users.map(item => item.fullName)"
                                 type="default"
                             />
-                            <span style="line-height: 24px" v-else>{{ t('view.userManage.NoMembers') }}</span>
+                            <span
+                                style="line-height: 24px"
+                                v-else
+                            >{{ t('view.userManage.NoMembers') }}</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -101,7 +106,6 @@
                         </div>
                     </template>
                 </el-table-column>
-
             </sdxu-table>
         </div>
         <div
@@ -120,6 +124,7 @@
             :visible.sync="createVisible"
             :meta="groupMeta"
             @refresh="handleRefresh"
+            @close="handleClose"
         />
     </sdxu-panel>
 </template>
@@ -240,6 +245,9 @@ export default {
         },
         handleRefresh() {
             this.fetchData();
+        },
+        handleClose() {
+            this.groupMeta = undefined;
         }
     },
     created() {

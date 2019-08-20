@@ -6,11 +6,10 @@
         :confirm-handler="confirmEdit"
     >
         <sdxw-share-form
-            :default-users="shareForm.selectedUsers"
-            :default-groups="shareForm.selectedGroups"
-            :default-share-type="shareForm.shareType"
+            :default-users.sync="shareForm.selectedUsers"
+            :default-groups.sync="shareForm.selectedGroups"
+            :default-share-type.sync="shareForm.shareType"
             :source-kind="sourceKind"
-            sync
         />
     </sdxu-dialog>
 </template>

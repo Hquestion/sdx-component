@@ -17,6 +17,9 @@
                 :tree-options="treeOptions"
                 :checkable="checkable"
                 :check-type="checkType"
+                :project-enable="projectEnable"
+                :private-enable="privateEnable"
+                :share-enable="shareEnable"
                 v-model="checked"
                 @cancel="handleCancel"
                 @confirm="handleConfirm"
@@ -100,6 +103,18 @@ export default {
         checkType: {
             type: String,
             default: 'all' // 'file', 'folder'
+        },
+        projectEnable: {
+            type: Boolean,
+            default: false
+        },
+        privateEnable: {
+            type: Boolean,
+            default: true
+        },
+        shareEnable: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {

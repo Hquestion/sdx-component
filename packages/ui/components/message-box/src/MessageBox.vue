@@ -8,7 +8,8 @@
                 <div
                     class="sdxu-message-box"
                     :class="[
-                        `sdxu-message-box--${status}`
+                        `sdxu-message-box--${status}`,
+                        `is-${type}`
                     ]"
                     v-show="visible"
                 >
@@ -26,9 +27,11 @@
                         <span>{{ title }}</span>
                     </div>
                     <div class="sdxu-message-box__main">
-                        {{ content }}
+                        <slot name="content">
+                            {{ content }}
+                        </slot>
                     </div>
-                    <div class="sdxu-message-box__footer">
+                    <div class="sdxu-message-box__footer" v-if="type !== 'custom'">
                         <SdxuButton
                             type="default"
                             @click="handleCancel"
@@ -79,7 +82,7 @@ export default {
         },
         type: {
             type: String,
-            default: 'confirm' // alert, confirm
+            default: 'confirm' // alert, confirm, custom
         },
         status: {
             type: String,

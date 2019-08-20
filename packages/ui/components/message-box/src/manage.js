@@ -20,6 +20,9 @@ function MessageBox(opt) {
     }
     instance.title = title;
     instance.content = content;
+    if (typeof content === 'function') {
+        instance.$slots.content = content(instance.$createElement);
+    }
     instance.type = type;
     instance.status = status;
     vm = instance.$mount();
@@ -66,7 +69,7 @@ MessageBox.close = () => {
     }, 300);
 };
 
-['alert', 'confirm'].forEach(type => {
+['alert', 'confirm', 'custom'].forEach(type => {
     MessageBox[type] = opt => MessageBox({ ...opt, type });
     ['error', 'info', 'success', 'warning'].forEach(status => {
         MessageBox[type][status] = opt => MessageBox({...opt, type, status});

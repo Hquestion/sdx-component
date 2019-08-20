@@ -87,6 +87,9 @@
                     check-type="file"
                     :string-model="true"
                     :source="radio === 'DockerFile' ? 'ceph': 'all'"
+                    :project-enable="true"
+                    :private-enable="true"
+                    :share-enable="true"
                 />
             </el-form-item>
         </el-form>

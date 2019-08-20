@@ -88,7 +88,12 @@
                     v-model="params.sourcePaths"
                     accept=".py,.zip"
                     :string-model="true"
+                    :prefix-owner="true"
                     check-type="file"
+                    :project-enable="cooperation"
+                    :private-enable="!cooperation"
+                    :share-enable="!cooperation"
+                    :upload-params="uploadParams"
                 />
             </el-form-item>
             <el-form-item
@@ -118,9 +123,10 @@ import { createTask,updateTask} from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
+import projectDetailMixin from './projectDetailMixin';
 export default {
     name: 'PythonForm',
-    mixins: [locale],
+    mixins: [locale, projectDetailMixin],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -202,7 +208,8 @@ export default {
                     { required: true, message: this.t('view.task.form.Please_select_the_source_code'), trigger: 'blur' }
                 ]
             },
-            dataReady: false
+            dataReady: false,
+            cooperation:true
         };
     },
     computed: {
@@ -218,10 +225,22 @@ export default {
                 }
             }
             return isGpuEnt;
+        },
+        uploadParams() {
+            if (this.cooperation) {
+                return {
+                    ownerId: this.$route.params.projectId
+                };
+            } else {
+                return {
+                    ownerId: getUser().userId || ''
+                };
+            }
         }
     },
     created() {
         this.imageList();
+        this.projectCooperation();
     },
     methods: {
         imageList() {

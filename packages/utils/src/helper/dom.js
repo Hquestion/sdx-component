@@ -35,3 +35,13 @@ export function calcNodeWidth(node) {
 export function getParentNode(node) {
     return node.parentNode;
 }
+
+export function addClass(el, name) {
+    if (el.classList && !el.classList.contains(name)) {
+        el.classList.add(name);
+    }
+}
+
+export function removeClass(el, name) {
+    el.classList.remove(name);
+}

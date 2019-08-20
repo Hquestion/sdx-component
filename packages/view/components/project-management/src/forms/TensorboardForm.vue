@@ -75,6 +75,9 @@
                     check-type="folder"
                     :use-folder-path="true"
                     :string-model="true"
+                    :project-enable="cooperation"
+                    :private-enable="!cooperation"
+                    :share-enable="!cooperation"
                 />
             </el-form-item>
         </el-form>
@@ -93,9 +96,10 @@ import { createTask, updateTask } from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
+import projectDetailMixin from './projectDetailMixin';
 export default {
     name: 'TensorboardForm',
-    mixins: [locale],
+    mixins: [locale, projectDetailMixin],
     components: {
         BaseForm,
         [Form.name]: Form,
@@ -175,7 +179,8 @@ export default {
                     { required: true, message: this.t('view.task.form.Please_select_the_log_directory'), trigger: 'blur' }
                 ]
             },
-            dataReady: false
+            dataReady: false,
+            cooperation:true
         };
     },
     computed: {
@@ -183,6 +188,7 @@ export default {
     },
     created() {
         this.imageList();
+        this.projectCooperation();
     },
     methods: {
         imageList() {

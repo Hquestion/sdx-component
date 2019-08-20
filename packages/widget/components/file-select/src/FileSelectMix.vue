@@ -33,7 +33,7 @@
                             :on-progress="onProgress"
                             :on-success="onSuccess"
                             :on-exceed="onExceed"
-                            :data="uploadParams"
+                            :data="rebuildUploadParams"
                             :limit="realLimit"
                             :show-file-list="false"
                             :before-upload="beforeUpload"
@@ -58,7 +58,7 @@
                             :on-error="onDirectoryError"
                             :on-exceed="onExceed"
                             :limit="localFolderRealLimit"
-                            :data="uploadParams"
+                            :data="rebuildUploadParams"
                             :show-file-list="false"
                             :on-progress="onProgress"
                             :on-success="onSuccess"
@@ -84,6 +84,9 @@
                             :tree-options="treeOptions"
                             :checkable="checkable"
                             :check-type="checkType"
+                            :project-enable="projectEnable"
+                            :private-enable="privateEnable"
+                            :share-enable="shareEnable"
                             @cancel="handleCancel"
                             @confirm="handleConfirm"
                         >
@@ -118,6 +121,12 @@ import errorHandler from '@sdx/utils/src/error-handler';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import { t } from '@sdx/utils/src/locale';
+
+const uploadDefaults = {
+    path: '/',
+    filesystem: 'cephfs',
+    overwrite: 1
+};
 export default {
     name: 'SdxwFileSelect',
     mixins: [emitter, locale],
@@ -211,12 +220,9 @@ export default {
         },
         uploadParams: {
             type: Object,
-            default: () => ({
-                ownerId: shareCenter.getUser() && shareCenter.getUser().uuid || '',
-                path: '/',
-                filesystem: 'cephfs',
-                overwrite: 1
-            })
+            default: () => (Object.assign({}, uploadDefaults, {
+                ownerId: shareCenter.getUser() && shareCenter.getUser().uuid || ''
+            }))
         },
         localFileLabel: {
             type: String,
@@ -249,6 +255,22 @@ export default {
         useFolderPath: {
             type: Boolean,
             default: false
+        },
+        prefixOwner: {
+            type: Boolean,
+            default: true
+        },
+        projectEnable: {
+            type: Boolean,
+            default: false
+        },
+        privateEnable: {
+            type: Boolean,
+            default: true
+        },
+        shareEnable: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -274,25 +296,27 @@ export default {
         selectedFiles() {
             if (typeof this.value === 'string') {
                 return (this.value && this.value.split(',') || []).map(item => ({
-                    name: item,
-                    cephName: item,
+                    name: this.parsePathStr(item).path,
+                    cephName: this.parsePathStr(item).path,
                     status: 'success',
                     percentage: 100,
                     uid: Math.ceil(Math.random() * 1000000000),
                     from: 'unknown',
-                    isFile: true
+                    isFile: true,
+                    ownerId: this.parsePathStr(item).ownerId
                 }));
             } else {
                 return this.value.map(item => {
                     if (typeof item === 'string') {
                         return {
-                            name: item,
-                            cephName: item,
+                            name: this.parsePathStr(item).path,
+                            cephName: this.parsePathStr(item).path,
                             status: 'success',
                             percentage: 100,
                             uid: Math.ceil(Math.random() * 1000000000),
                             from: 'unknown',
-                            isFile: true
+                            isFile: true,
+                            ownerId: this.parsePathStr(item).ownerId
                         };
                     } else {
                         return item;
@@ -302,6 +326,9 @@ export default {
         },
         disableCheck() {
             return this.disabled || this.selectedFiles.length >= this.realLimit;
+        },
+        rebuildUploadParams() {
+            return Object.assign({}, uploadDefaults, this.uploadParams);
         }
     },
     methods: {
@@ -413,7 +440,7 @@ export default {
                     cephPaths = [{
                         fullpath: cephPaths,
                         path: cephPaths,
-                        is_dir: false
+                        isFile: false
                     }];
                 } else {
                     cephPaths = [];
@@ -428,13 +455,14 @@ export default {
                 percentage: 100,
                 uid: Math.ceil(Math.random() * 1000000000),
                 from: 'ceph',
-                isDir: !item.isFile
+                isDir: !item.isFile,
+                ownerId: item.ownerId || this.userId || shareCenter.getUser() && shareCenter.getUser().uuid
             }));
             let temp = [...fileUploadFiles, ...dirUploadFiles, ...cephPathsMap];
             this.$emit('input',
                 typeof this.value === 'string'
-                    ? temp.map(item => item.cephName || item.name).join(',')
-                    : (this.stringModel ? temp.map(item => item.cephName || item.name) : temp));
+                    ? temp.map(item => this.getPathFlag(item)).join(',')
+                    : (this.stringModel ? temp.map(item => this.getPathFlag(item)) : temp));
         },
         emitBlurOnFormItem() {
             this.dispatch('ElFormItem', 'el.form.blur');
@@ -456,6 +484,34 @@ export default {
                 this.$refs.directorySelect && (this.$refs.directorySelect.uploadFiles = [val]);
                 this.makeFileList();
             }
+        },
+        parsePathStr(path) {
+            let ownerId = this.userId || shareCenter.getUser() && shareCenter.getUser().uuid,
+                realPath;
+            if (path.startsWith('/')) {
+                realPath = path;
+            } else {
+                let arr = path.split(':');
+                ownerId = arr[0];
+                realPath = arr[1];
+            }
+            return {
+                ownerId,
+                path: realPath
+            };
+        },
+        getPathFlag(file) {
+            let ownerId = this.userId || shareCenter.getUser() && shareCenter.getUser().uuid;
+            let path = file;
+            if (typeof file !== 'string') {
+                ownerId = file.ownerId || ownerId;
+                path = file.cephName || file.name;
+            }
+            if (this.prefixOwner) {
+                return `${ownerId}:${path}`;
+            } else {
+                return path;
+            }
         }
     },
     mounted() {
@@ -464,15 +520,29 @@ export default {
             let cephModel;
             if (typeof fileList === 'string') {
                 fileList = fileList && fileList.split(',') || [];
-                cephModel = fileList.map(item => ({
-                    path: item,
-                    isFile: true
-                }));
+                cephModel = fileList.map(item => {
+                    return {
+                        path: this.parsePathStr(item).path,
+                        isFile: true,
+                        ownerId: this.parsePathStr(item).ownerId
+                    };
+                });
             } else {
-                cephModel = fileList.map(item => ({
-                    path: item.cephName,
-                    isFile: !item.isDir
-                }));
+                cephModel = fileList.map(item => {
+                    if (typeof item === 'string') {
+                        return {
+                            path: this.parsePathStr(item).path,
+                            isFile: true,
+                            ownerId: this.parsePathStr(item).ownerId
+                        };
+                    } else {
+                        return {
+                            path: item.cephName,
+                            isFile: !item.isDir,
+                            ownerId: item.ownerId || this.userId || shareCenter.getUser() && shareCenter.getUser().uuid
+                        };
+                    }
+                });
             }
             this.cephPaths = cephModel;
             // console.log(getUser());

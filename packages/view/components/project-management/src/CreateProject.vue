@@ -13,7 +13,7 @@
             <span>{{ title }}</span>
         </div>
         <el-form
-            label-width="110px"
+            :label-width="lang$ === 'en' ? '155px' : '110px'"
             label-position="right"
             :model="projectForm"
             ref="projectForm"

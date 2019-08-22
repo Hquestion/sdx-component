@@ -93,11 +93,38 @@ export default {
         }
         & /deep/  {
             .el-select {
-                width: 100%;
-                max-width: 560px;
+                width: 560px;
             }
             .sdxu-input {
-                max-width: 560px;
+                width: 560px;
+            }
+            .sdxw-file-select {
+                width: 560px;
+            }
+            .el-form-item__content {
+                position: relative;
+                .icon {
+                    color: #F56C6C;
+                    position: absolute;
+                    top: 2px;
+                    left: -83px;
+                }
+            }
+            .is-lang-en {
+                .el-select {
+                    width: 730px;
+                }
+                .sdxu-input {
+                    width: 730px;
+                }
+                .sdxw-file-select {
+                    width: 730px;
+                }
+                .el-form-item__content {
+                    .icon {
+                        left: -158px;
+                    }
+                }
             }
         }
         .sdx-icon {

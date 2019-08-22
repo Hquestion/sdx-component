@@ -13,7 +13,8 @@ export const TASK_TYPE = {
     DATA_SERVICE: 'DATA_SERVICE',
     TENSORFLOW_SERVING: 'TENSORFLOW_SERVING',
     SPARK_SERVING: 'SPARK_SERVING',
-    PMML_SERVING: 'PMML_SERVING'
+    PMML_SERVING: 'PMML_SERVING',
+    SKYFLOW_EXEC: 'SKYFLOW_EXEC'
 };
 
 export const TASK_TYPE_LABEL = { // 对应的值是国际化的词条值
@@ -28,7 +29,8 @@ export const TASK_TYPE_LABEL = { // 对应的值是国际化的词条值
     DATA_SERVICE: 'view.task.type.DATA_SERVICE',
     TENSORFLOW_SERVING: 'view.task.type.TENSORFLOW_SERVING',
     SPARK_SERVING: 'view.task.type.SPARK_SERVING',
-    PMML_SERVING: 'view.task.type.PMML_SERVING'
+    PMML_SERVING: 'view.task.type.PMML_SERVING',
+    SKYFLOW_EXEC: 'view.task.type.SKYFLOW_EXEC'
 };
 
 export const STATE_TYPE = {
@@ -54,14 +56,14 @@ export const STATE_TYPE_LABEL = { // 对应的值是国际化的词条值
 };
 
 export const STATE_TYPE_OPERATION = {
-    CREATED: ['start', 'detail', 'edit', 'remove'],
-    LAUNCHING: ['kill', 'detail'],
-    LAUNCH_ABNORMAL: ['start', 'detail', 'edit', 'remove'],
-    RUNNING: ['kill', 'detail'],
-    FINISHED: ['start', 'detail', 'edit', 'remove'],
-    KILLED: ['start', 'detail', 'edit', 'remove'],
-    FAILED: ['start', 'detail', 'edit', 'remove'],
-    KILLING: ['detail']
+    CREATED: ['start', 'detail', 'entry', 'edit', 'remove'],
+    LAUNCHING: ['kill', 'detail', 'entry'],
+    LAUNCH_ABNORMAL: ['start', 'detail', 'entry', 'edit', 'remove'],
+    RUNNING: ['kill', 'detail', 'entry'],
+    FINISHED: ['start', 'detail', 'entry', 'edit', 'remove'],
+    KILLED: ['start', 'detail', 'entry', 'edit', 'remove'],
+    FAILED: ['start', 'detail', 'entry', 'edit', 'remove'],
+    KILLING: ['detail', 'entry']
 };
 
 export const STATE_MAP_FOLD_LABEL_TYPE = {
@@ -108,6 +110,11 @@ export const OPERATION_INFO = {
         label: 'view.task.operation.remove',
         value: 'remove',
         icon: 'sdx-icon sdx-icon-delete'
+    },
+    entry: {
+        label: 'view.task.operation.entry',
+        value: 'entry',
+        icon: 'sdx-icon sdx-huabu'
     }
 };
 
@@ -117,3 +124,5 @@ export const MONITOR_ALLOW_OPERATION = ['start', 'detail', 'kill'];
 export const NON_OWNER_TASK_OPERATION = ['detail'];
 
 export const TASK_POLLING_STATE_TYPE = [STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.LAUNCHING, STATE_TYPE.KILLING, STATE_TYPE.RUNNING];
+
+export const SPECIAL_TASK_TYPE = [TASK_TYPE.PMML_SERVING, TASK_TYPE.SPARK_SERVING, TASK_TYPE.TENSORFLOW_SERVING, TASK_TYPE.SKYFLOW_EXEC, TASK_TYPE.DATA_SERVICE];

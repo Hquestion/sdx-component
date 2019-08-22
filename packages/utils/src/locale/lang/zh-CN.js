@@ -197,7 +197,8 @@ export default {
                 DATA_SERVICE: '数据服务',
                 TENSORFLOW_SERVING: 'TENSORFLOW模型服务',
                 SPARK_SERVING: 'SPARK模型服务',
-                PMML_SERVING: 'PMML模型服务'
+                PMML_SERVING: 'PMML模型服务',
+                SKYFLOW_EXEC: 'SKYFLOW执行记录'
             },
             state: {
                 CREATED: '创建成功',
@@ -214,7 +215,8 @@ export default {
                 kill: '停止',
                 detail: '查看',
                 edit: '编辑',
-                remove: '删除'
+                remove: '删除',
+                entry: '进入画布'
             },
             form: {
                 create: '新建',

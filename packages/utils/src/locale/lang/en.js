@@ -197,7 +197,8 @@ export default {
                 DATA_SERVICE: 'DATA_SERVICE',
                 TENSORFLOW_SERVING: 'TENSORFLOW_SERVING',
                 SPARK_SERVING: 'SPARK_SERVING',
-                PMML_SERVING: 'PMML_SERVING'
+                PMML_SERVING: 'PMML_SERVING',
+                SKYFLOW_EXEC: 'SKYFLOW_EXEC'
             },
             state: {
                 CREATED: 'CREATED',
@@ -214,7 +215,8 @@ export default {
                 kill: 'kill',
                 detail: 'detail',
                 edit: 'edit',
-                remove: 'remove'
+                remove: 'remove',
+                entry: 'entry'
             },
             form: {
                 create: 'Create',

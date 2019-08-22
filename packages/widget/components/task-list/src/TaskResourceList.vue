@@ -4,6 +4,7 @@
             v-if="!ranking"
             @search="handleSearch"
             @reset="handleReset"
+            :label-width="lang$ ==='en' ? '120px' : '80px'"
         >
             <SdxwSearchItem :label="t('view.task.searchName') + ':'">
                 <SdxuInput

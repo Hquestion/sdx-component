@@ -2,13 +2,13 @@
     <BaseForm
         :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} Spark ${t('view.task.form.task')}`"
         class="form-spark"
-        :label-width="120"
+        :label-width="lang$ === 'en' ? 190 : 120"
         icon="sdx-Apache_Spark_logo"
         @commit="commit"
     >
         <el-form
             label-position="right"
-            label-width="120px"
+            :label-width="lang$ === 'en' ? '190px' : '120px'"
             slot="form"
             @submit.native.prevent
             ref="spark"
@@ -306,19 +306,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-    .form-spark {
-        .title {
-            color: #909399;
-        }
-        .icon {
-            color: #F56C6C;
-            position: absolute;
-            top: 2px;
-            left: -83px;
-        }
-        .sdxw-file-select {
-            max-width: 560px;
-        }
-    }
-</style>

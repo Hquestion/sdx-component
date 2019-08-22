@@ -2,13 +2,13 @@
     <BaseForm
         :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} ${t('view.task.type.TENSORFLOW_DIST')} ${t('view.task.form.task')}`"
         class="form-tfdistributed"
-        :label-width="160"
+        :label-width="lang$ === 'en' ? 276 : 160"
         icon="sdx-icon-tensorflow"
         @commit="commit"
     >
         <el-form
             label-position="right"
-            label-width="160px"
+            :label-width="lang$ === 'en' ? '276px' : '160px'"
             slot="form"
             @submit.native.prevent
             ref="tfdistributed"
@@ -361,19 +361,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-    .form-tfdistributed {
-        .el-form-item__content {
-            position: relative;
-        }
-        .icon {
-            color: #F56C6C;
-            position: absolute;
-            top: 2px;
-            left: -83px;
-        }
-        .sdxw-file-select {
-            max-width: 560px;
-        }
-    }
-</style>

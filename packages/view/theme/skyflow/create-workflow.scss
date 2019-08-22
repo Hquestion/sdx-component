@@ -4,6 +4,9 @@
         align-items: center;
         justify-content: space-between;
         margin: 0 10px 10px 0;
+        .sdxu-input.sdxu-input--small.is-lang-en {
+            width: 248px;
+        }
     }
     @include element('template-list') {
         margin: 0;

@@ -45,11 +45,12 @@
                     type="search"
                     size="small"
                     :placeholder="t('view.project.enterTaskName')"
+                    style="width: 300px;"
                 />
                 <sdxu-button
                     size="small"
                     @click="searchTask"
-                    style="margin: 0 25px 0 10px;"
+                    style="margin: 0 30px 0 20px;"
                 >
                     {{ t('sdxCommon.Search') }}
                 </sdxu-button>

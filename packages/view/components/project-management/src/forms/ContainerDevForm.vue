@@ -2,13 +2,13 @@
     <BaseForm
         :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
         class="form-containerdev"
-        :label-width="100"
+        :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-icon-docker"
         @commit="commit"
     >
         <el-form
             label-position="right"
-            label-width="100px"
+            :label-width="lang$ === 'en' ? '190px' : '100px'"
             slot="form"
             @submit.native.prevent
             ref="containerdev"
@@ -308,20 +308,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss" scoped>
-    .form-containerdev {
-        .el-form-item__content {
-            position: relative;
-        }
-        .icon {
-            color: #F56C6C;
-            position: absolute;
-            top: 2px;
-            left: -83px;
-        }
-        .sdxw-file-select {
-            max-width: 560px;
-        }
-    }
-</style>

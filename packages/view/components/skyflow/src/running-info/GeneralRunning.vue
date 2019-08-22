@@ -158,7 +158,8 @@ export default {
             isOwnWorkflow: false,
             createWorkflowVisible: false,
             editingWorkflow: null,
-            skyflowInfo: null
+            skyflowInfo: null,
+            refreshTimer: null
         };
     },
     components: {
@@ -174,6 +175,10 @@ export default {
             type: Object,
             default: () => {}
         }
+    },
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
     },
     created() {
         getSkyflowInfo(this.$route.params.id).then(res => {
@@ -194,6 +199,10 @@ export default {
             }
         },
         initList(reset) {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             this.loading = true;
             if (reset) this.current = 1;
             const params = {
@@ -245,6 +254,14 @@ export default {
                         break;
                     }
                 });
+                if (this.runningInfoList.length && this.runningInfoList.find(item => item.state === 'running' || item.state === 'launching' || item.state === 'stopping')) {
+                    if (!this.refreshTimer) {
+                        this.refreshTimer = setInterval(this.initList, 3000);
+                    }
+                } else {
+                    clearInterval(this.refreshTimer);
+                    this.refreshTimer = null;
+                }
                 this.total = res.total;
             }).finally(() => {
                 this.loading = false;

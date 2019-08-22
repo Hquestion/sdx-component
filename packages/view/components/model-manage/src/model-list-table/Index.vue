@@ -231,6 +231,7 @@ export default {
     methods: {
         dialogClose(needRefresh) {
             if (needRefresh) this.initModelList();
+            this.editingModel = null;
         },
         share() {
             if (!this.selectedModels.length) {

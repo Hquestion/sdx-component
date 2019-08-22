@@ -217,6 +217,7 @@ export default {
     mixins: [TimerFilter, locale],
     beforeDestroy () {
         clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
     },
     methods: {
         dialogClose(needRefresh) {
@@ -242,6 +243,10 @@ export default {
             }
         },
         initVersionList(hideLoading) {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             this.loading = hideLoading ? false : true;
             const params = {
                 name: this.name,
@@ -301,6 +306,7 @@ export default {
                     }
                 } else {
                     clearInterval(this.refreshTimer);
+                    this.refreshTimer = null;
                 }
             }).finally(() => {
                 this.loading = false;

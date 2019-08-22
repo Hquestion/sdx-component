@@ -294,6 +294,10 @@ export default {
     },
     methods: {
         getRunningTask() {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             const params = {
                 ownerId: getUser().userId,
                 state: 'BUILDING',
@@ -309,6 +313,7 @@ export default {
                         }
                     } else {
                         clearInterval(this.refreshTimer);
+                        this.refreshTimer = null;
                     }
                 });
         },

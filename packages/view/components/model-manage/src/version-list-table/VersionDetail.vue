@@ -150,6 +150,7 @@ export default {
     },
     beforeDestroy() {
         clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
     },
     methods: {
         getToken() {
@@ -160,6 +161,10 @@ export default {
             });
         },
         init() {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             getVersionInfo(this.$route.params.modelId, this.$route.params.versionId).then(res => {
                 this.versionInfo = Object.assign({}, this.versionInfo, res);
                 this.versionInfo.label = {};
@@ -174,6 +179,7 @@ export default {
                     }
                 } else {
                     clearInterval(this.refreshTimer);
+                    this.refreshTimer = null;
                 }
                 if (!this.creatorName) {
                     getUserSimpleInfo(this.versionInfo.creatorId).then(res => {

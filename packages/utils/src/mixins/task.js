@@ -1,4 +1,4 @@
-import { OPERATION_INFO, STATE_TYPE_OPERATION, MONITOR_ALLOW_OPERATION, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION } from '../const/task';
+import { OPERATION_INFO, STATE_TYPE_OPERATION, MONITOR_ALLOW_OPERATION, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION, SPECIAL_TASK_TYPE } from '../const/task';
 import { startTask, stopTask, removeTask } from '../api/project';
 import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
@@ -19,6 +19,9 @@ export default {
             const ownerId = row.owner && row.owner.uuid || '';
             let isOwnerTask = currentUser && currentUser.userId === ownerId;
             let list = STATE_TYPE_OPERATION[row.state];
+            let isSkyflowExec = row.type === TASK_TYPE.SKYFLOW_EXEC;
+            let isSecialTask = SPECIAL_TASK_TYPE.includes(row.type) && list.indexOf('edit') !== -1;
+
             if (isMonitor) {
                 list = list.filter(item => {
                     return MONITOR_ALLOW_OPERATION.includes(item);
@@ -28,6 +31,11 @@ export default {
                     return NON_OWNER_TASK_OPERATION.includes(item);
                 });
             }
+
+            list = list.filter(item => {
+                return (isSkyflowExec ? item !== 'detail' : item !== 'entry') 
+                && (isSecialTask ? item !== 'edit' : true);
+            });
 
             return list.map(item => {
                 return OPERATION_INFO[item];
@@ -49,6 +57,9 @@ export default {
                 break;
             case 'remove':
                 this.handleDelete(row);
+                break;
+            case 'entry':
+                this.handleEntry(row);
                 break;
             }
         },
@@ -105,6 +116,9 @@ export default {
             } else {
                 this.$router.push(`/sdxv-project-manage/modifyTask/${row.type}/${row.uuid}/${row.project.uuid}`);
             }
+        },
+        handleEntry(row) {
+            window.open(`/#/editor/${row.project.uuid}/${row.uuid}`);
         },
         async handleDelete(row) {
             let that = this;

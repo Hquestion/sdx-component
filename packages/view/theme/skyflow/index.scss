@@ -47,6 +47,9 @@ $--font-path: "~element-ui/lib/theme-chalk/fonts";
         .sdxw-search-item {
             margin-bottom: 0;
         }
+        .sdxu-button__dropdown.sdxu-button__dropdown--place-right {
+            width: calc(100% + 82px) !important;
+        }
     }
     @include element("template-cards") {
         height: 230px;

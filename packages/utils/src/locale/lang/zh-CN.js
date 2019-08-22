@@ -27,7 +27,8 @@ export default {
             groups:'加入组：',
             role:'角色：',
             noGroup: '暂未加入用户组',
-            noRole: '暂无角色'
+            noRole: '暂无角色',
+            noColonRole: '角色'
         },
         changePassword: {
             title: '修改密码',
@@ -650,7 +651,7 @@ export default {
             PleaseInputFileName: '请输入文件名称',
             Download_Now: '立即下载',
             And_install_SkyDiscovery_File_Management_Client: '并安装SkyDiscovery文件管理客户端',
-            upload_or_download_operation_files_are_large: '当前上传或下载操作文件较大，请使用文件管理客户端操作'
+            upload_or_download_operation_files_are_large: '当前上传的文件较大，请使用文件管理客户端操作'
         },
         resourceManage: {
             ResourceManage: '资源管理',
@@ -735,7 +736,10 @@ export default {
             EditGroup: '编辑@:(view.userManage.UserGroup)',
             NewGroup: '创建@:(view.userManage.UserGroup)',
             GroupMembers: '组员',
-            NoMembers: '暂无用户'
+            NoMembers: '暂无用户',
+            Modified_user_group_successfully: '修改用户组成功',
+            User_group_created_successfully: '创建用户组成功',
+            UserGroup_colon: '用户组：',
         },
         authorizeManage: {
             user_authorization_list: '用户授权列表',

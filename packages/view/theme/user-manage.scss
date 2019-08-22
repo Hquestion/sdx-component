@@ -29,6 +29,9 @@
         @include modifier('operate') {
             text-align: right;
         }
+        @include modifier('username') {
+            word-break: break-all;
+        }
     }
 
 }

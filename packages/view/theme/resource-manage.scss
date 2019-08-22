@@ -1,2 +1,8 @@
 @import "~@sdx/utils/src/theme-common/element-customize/form.scss";
 @import "~@sdx/utils/src/theme-common/element-customize/input-number.scss";
+
+@include block('source-manage-home', $bem-namespace-view) {
+    .sdxu-button__dropdown.sdxu-button__dropdown--place-right.is-lang-en {
+        width: 226px !important;
+    }
+}

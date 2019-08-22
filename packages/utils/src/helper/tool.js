@@ -1,3 +1,5 @@
+import isEqual from './isEqual';
+
 export function deepCopy(data) {
     return JSON.parse(JSON.stringify(data));
 }
@@ -60,7 +62,7 @@ export function removeSameAttr(oObj,nObj) {
     let [keys, res] = [Object.keys(nObj), nObj];
     for(let i =0; i< keys.length; i++) {
         let name = keys[i];
-        if(oObj[name] === nObj[name]) {
+        if(isEqual(oObj[name], nObj[name])) {
             delete res[name];
         }
     }

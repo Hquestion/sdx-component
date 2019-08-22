@@ -82,7 +82,7 @@
                 </el-table-column>
             </SdxuTable>
         </div>
-       
+
         <div class="pagination">
             <sdxu-pagination
                 v-if="total"
@@ -162,6 +162,7 @@ export default {
     },
     beforeDestroy () {
         clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
     },
     components: {
         SdxuTable,
@@ -193,6 +194,7 @@ export default {
                         }
                     } else {
                         clearInterval(this.refreshTimer);
+                        this.refreshTimer = null;
                     }
                 }).finally(() => {
                     this.loading = false;
@@ -214,6 +216,10 @@ export default {
             this.initImageTaskList();
         },
         initImageTaskList(reset, hideLoading) {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             if (reset) this.current = 1;
             this.loading = hideLoading ? false : true;
             const params = {

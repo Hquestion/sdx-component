@@ -84,7 +84,12 @@ export default {
         userPicker: {
             User: 'User',
             Group: 'Group',
-            Role: 'Role'
+            Role: 'Role',
+            userName: ' user name',
+            groupName: ' group name',
+            roleName: ' role name',
+            allRoleName: ' user name/group name/role name',
+            plsEnter: 'Please enter'
         },
         resourceConfig: {
             Please_select: 'Please select',

@@ -20,6 +20,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include modifier('button') {
             margin-left: $sdx-margin;
         }
+        .sdxu-input {
+            width: 300px;
+        }
     }
 
     @include element('table') {

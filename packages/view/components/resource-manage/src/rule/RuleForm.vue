@@ -7,7 +7,7 @@
         <el-form
             :model="params"
             :label-position="labelPosition"
-            label-width="185px"
+            :label-width="lang$ === 'en' ? '270px' : '185px'"
         >
             <el-form-item
                 :label="t('view.resourceManage.maxConcurrentTasks')"

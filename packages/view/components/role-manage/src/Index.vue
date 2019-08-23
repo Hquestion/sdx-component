@@ -120,7 +120,7 @@
             </div>
             <div>
                 <el-form
-                    label-width="100px"
+                    :label-width="lang$ === 'en' ? '140px' : '90px'"
                     :model="roleObj"
                     ref="currentRole"
                     :rules="rules"

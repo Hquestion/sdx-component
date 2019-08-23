@@ -76,6 +76,9 @@ export default {
             getImageBuildLog(this.imageBuilderId, params).then(data => {
                 this.logInfo = this.filterIp(data.content);
                 this.loading = false;
+                if (this.autoPull) {
+                    this.startPolling();
+                }
             }).catch(() => {
                 this.loading = false;
             });
@@ -100,11 +103,13 @@ export default {
             }
         },
         startPolling() {
-            clearInterval(this.pollingId);
-            this.pollingId = setInterval(this.fetchLogInfo, POLLING_INTERVAL);
+            if (!this._isDestroyed) {
+                clearTimeout(this.pollingId);
+                this.pollingId = setTimeout(this.fetchLogInfo, POLLING_INTERVAL);
+            }
         },
         stopPolling() {
-            clearInterval(this.pollingId);
+            clearTimeout(this.pollingId);
             this.pollingId = '';
         }
     },

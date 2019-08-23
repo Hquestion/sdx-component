@@ -17,7 +17,7 @@
                 class="sdxw-userinfo__content"
             >
                 <el-form-item :label="t('widget.userInfo.username')">
-                    <span>{{ users.username }}</span>
+                    <span style="word-break: break-all;">{{ users.username }}</span>
                 </el-form-item>
                 <el-form-item :label="t('widget.userInfo.fullname')">
                     <span

@@ -11,7 +11,8 @@ export let handler = wrap(function(ctx, request) {
         if (result.code < 200 || result.code >= 300) {
             errorRequest.push({
                 code: result.code,
-                url: result.relative_url
+                url: result.relative_url,
+                result
             });
         }
     });

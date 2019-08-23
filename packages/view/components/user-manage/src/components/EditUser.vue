@@ -20,7 +20,7 @@
                         :label="t('view.userManage.Username') + '：'"
                         prop="username"
                     >
-                        <span>{{ user.username }}</span>
+                        <span class="sdxv-user-manage__userform--username">{{ user.username }}</span>
                     </el-form-item>
                     <el-form-item
                         :label="t('view.userManage.FullName') + '：'"
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { commonNameValidator } from '@sdx/utils/src/helper/validate';
+import { commonNameValidator, nickNameValidator} from '@sdx/utils/src/helper/validate';
 import SdxuInput from '@sdx/ui/components/input';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuButton from '@sdx/ui/components/button';
@@ -129,7 +129,8 @@ export default {
                     { validator: commonNameValidator, trigger: 'blur' },
                 ],
                 fullName: [
-                    { required: true, message: this.t('view.userManage.PleaseInputFullName'), trigger: 'blur' }
+                    { required: true, message: this.t('view.userManage.PleaseInputFullName'), trigger: 'blur' },
+                    { validator: nickNameValidator, trigger: 'blur' }
                 ],
                 roles: [
                     { required: true, message: this.t('view.userManage.PleaseInputRole'), trigger: 'change' }

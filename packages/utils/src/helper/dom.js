@@ -45,3 +45,7 @@ export function addClass(el, name) {
 export function removeClass(el, name) {
     el.classList.remove(name);
 }
+
+export function getClientWidth() {
+    return document.body.clientWidth;
+}

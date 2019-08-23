@@ -4,6 +4,7 @@
         :visible.sync="groupVisible"
         @open="onOpen"
         :confirm-handler="handleConfirm"
+        @closed="onClose"
     >
         <div slot="title">
             {{ title }}
@@ -132,6 +133,10 @@ export default {
                 this.$refs.form.clearValidate();
             });
         },
+        onClose() {
+            this.clearState();
+            this.$emit('close');
+        },
         clearState() {
             this.params = {
                 uuid: '',
@@ -147,17 +152,16 @@ export default {
                     roles: this.params.roles.map(item => typeof item === 'string' ? item : item.uuid)
                 };
                 // 传变化的值给后端
-                let params = removeSameAttr(this.saveGroupObj, groupData);
                 if (this.params.uuid) {
+                    let params = removeSameAttr(this.saveGroupObj, groupData);
                     promise = updateGroups(this.params.uuid, params);
                 } else {
                     groupData.permissions = [];
                     promise = createGroup(groupData);
                 }
                 return promise.then(() => {
-                    this.clearState();
                     this.$message({
-                        message: this.params.uuid ? '修改用户组成功' : '创建用户组成功',
+                        message: this.params.uuid ? this.t('view.userManage.Modified_user_group_successfully') : this.t('view.userManage.User_group_created_successfully'),
                         type: 'success'
                     });
                     this.$emit('refresh');

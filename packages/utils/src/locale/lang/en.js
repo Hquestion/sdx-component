@@ -27,7 +27,8 @@ export default {
             groups:'Groups:',
             role:'Role:',
             noGroup: 'Not in groups',
-            noRole: 'No role'
+            noRole: 'No role',
+            noColonRole: 'Role'
         },
         changePassword: {
             title: 'Change Password',
@@ -197,7 +198,8 @@ export default {
                 DATA_SERVICE: 'DATA_SERVICE',
                 TENSORFLOW_SERVING: 'TENSORFLOW_SERVING',
                 SPARK_SERVING: 'SPARK_SERVING',
-                PMML_SERVING: 'PMML_SERVING'
+                PMML_SERVING: 'PMML_SERVING',
+                SKYFLOW_EXEC: 'SKYFLOW_EXEC'
             },
             state: {
                 CREATED: 'CREATED',
@@ -214,7 +216,8 @@ export default {
                 kill: 'kill',
                 detail: 'detail',
                 edit: 'edit',
-                remove: 'remove'
+                remove: 'remove',
+                entry: 'entry'
             },
             form: {
                 create: 'Create',
@@ -649,7 +652,7 @@ export default {
             PleaseInputFileName: 'Please input file name',
             Download_Now: 'Download now',
             And_install_SkyDiscovery_File_Management_Client: 'And install SkyDiscovery File Management Client',
-            upload_or_download_operation_files_are_large: 'Currently, upload or download operation files are large, please use file management client operation'
+            upload_or_download_operation_files_are_large: 'Currently uploaded files are large, please use file management client operation'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',
@@ -734,7 +737,10 @@ export default {
             EditGroup: 'Edit @:(view.userManage.UserGroup)',
             NewGroup: 'New @:(view.userManage.UserGroup)',
             GroupMembers: 'Group Members',
-            NoMembers: 'No Members'
+            NoMembers: 'No Members',
+            Modified_user_group_successfully: 'Modified user group successfully',
+            User_group_created_successfully: 'User group created successfully',
+            UserGroup_colon: 'User Group:'
         },
         authorizeManage: {
             user_authorization_list: 'User Authorization List',

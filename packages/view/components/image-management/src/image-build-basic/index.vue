@@ -215,7 +215,8 @@ export default {
         handleSaveAndBuild() {
             this.$refs.form.validate().then(valid => {
                 if (valid) {
-                    buildImageBasic(this.imageInfo).then(() => {
+                    let params = Object.assign({}, this.imageInfo, { name: this.name_prefix + this.imageInfo.name });
+                    buildImageBasic(params).then(() => {
                         this.$router.go(-1);
                     });
                 } else {

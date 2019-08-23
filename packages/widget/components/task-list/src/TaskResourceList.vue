@@ -298,11 +298,6 @@ export default {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });
-        },
-        needPolling() {
-            return this.taskResourceList.some(item => {
-                return TASK_POLLING_STATE_TYPE.includes(item.state);
-            });
         }
     },
     methods: {
@@ -314,6 +309,11 @@ export default {
                 this.taskResourceList = data.items;
                 this.total = data.total;
                 this.loading = false;
+                if (this.taskResourceList.some(item => {
+                    return TASK_POLLING_STATE_TYPE.includes(item.state);
+                })) {
+                    this.startPolling();
+                }
             }).catch(() => {
                 this.taskResourceList = [];
                 this.total = 0;
@@ -358,6 +358,18 @@ export default {
         },
         formatDate(date) {
             return dateFormatter(date, 'YYYY-MM-DD HH:mm:ss');
+        },
+        startPolling() {
+            if (!this._isDestroyed) {
+                this.pollingId && clearTimeout(this.pollingId);
+                this.pollingId = setTimeout(() => {
+                    this.fetchData(false);
+                }, POLLING_PERIOD);
+            }
+        },
+        stopPolling() {
+            this.pollingId && clearTimeout(this.pollingId);
+            this.pollingId = null;
         }
     },
     created() {
@@ -365,23 +377,11 @@ export default {
         this.fetchDataMinxin = this.fetchData;
     },
     beforeDestroy() {
-        this.pollingId && clearInterval(this.pollingId);
-        this.pollingId = null;
+        this.stopPolling();
     },
     watch: {
         queryParams() {
             this.fetchData();
-        },
-        needPolling(nval) {
-            if (nval) {
-                this.pollingId && clearInterval(this.pollingId);
-                this.pollingId = setInterval(() => {
-                    this.fetchData(false);
-                }, POLLING_PERIOD);
-            } else {
-                this.pollingId && clearInterval(this.pollingId);
-                this.pollingId = null;
-            }
         }
     }
 };

@@ -5,6 +5,7 @@ import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
 import { getUser } from '../helper/shareCenter';
 import { t } from '../locale';
+import { getImage } from '../api/image';
 
 export default {
     data() {
@@ -68,7 +69,14 @@ export default {
             try {
                 // 任务类型为jupyter或container_dev且状态不为新建则弹出框
                 if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINERDEV].includes(row.type) && row.state !== STATE_TYPE.CREATED) {
-                    isSelectAutoImage = await SdxwTaskStartDialog({ visible: true, image: row.image, autoImage: row.autoImage });
+                    let image = null;
+                    let autoImage = null;
+                    if (row.autoImageId) {
+                        [image, autoImage] = await Promise.all([getImage(row.imageId), getImage(row.autoImageId)]);
+                    } else {
+                        image = await getImage(row.imageId);
+                    }
+                    isSelectAutoImage = await SdxwTaskStartDialog({ visible: true, image, autoImage });
                 }
 
                 await startTask(row.uuid, { isAuto: isSelectAutoImage });
@@ -84,11 +92,7 @@ export default {
             try {
                 // 任务类型为jupyter或container_dev且状态为运行中则弹出框
                 if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINERDEV].includes(row.type) && row.state === STATE_TYPE.RUNNING) {
-                    isSaveImage = await SdxwTaskStopDialog({
-                        visible: true,
-                        image: row.image,
-                        autoImage: row.autoImage
-                    });
+                    isSaveImage = await SdxwTaskStopDialog({visible: true});
                 } else {
                     await SdxuMessageBox.warning({
                         title: t.call(that, 'view.task.stopTask'),

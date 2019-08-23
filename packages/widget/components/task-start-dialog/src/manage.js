@@ -32,7 +32,7 @@ function TaskStartDialog(opt) {
     });
     vm.$on('confirm', () => {
         TaskStartDialog.close();
-        _resolve('confirm', vm.selectImage);
+        _resolve(vm.selectImage);
     });
     vm.$on('update:visible', (value) => {
         vm.visible = value;

@@ -1,6 +1,6 @@
 <template>
     <SdxuContentPanel
-        :title="t('widget.userInfo.role')"
+        :title="t('widget.userInfo.noColonRole')"
         :fullscreen="true"
     >
         <div

@@ -45,6 +45,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         .sdxw-search-item {
             margin-bottom: 0;
         }
+        .sdxu-button__dropdown.sdxu-button__dropdown--place-right.is-lang-en {
+            width: calc(100% + 92px) !important;
+        }
     }
     @include element('bottom-panel') {
         min-height: calc(100% - 488px);

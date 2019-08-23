@@ -118,6 +118,7 @@
                     :project-enable="cooperation"
                     :private-enable="!cooperation"
                     :share-enable="!cooperation"
+                    :upload-params="uploadParams"
                 />
             </el-form-item>
             <el-form-item
@@ -142,6 +143,7 @@
                     :project-enable="cooperation"
                     :private-enable="!cooperation"
                     :share-enable="false"
+                    :upload-params="uploadParams"
                 />
             </el-form-item>
         </el-form>

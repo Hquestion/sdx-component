@@ -8,13 +8,22 @@
                 {{ t('view.userManage.JoinGroupSetting') }}
             </div>
             <div class="join-group">
-                <p>{{ t('view.userManage.UserGroup') }}：</p>
-                <SdxuTransfer
-                    :data="data"
-                    :tags.sync="tags"
-                    :default-keys="defaultKeys"
-                    tree-node-key="uuid"
-                />
+                <el-form
+                    label-position="right"
+                    label-width="70px"
+                    @submit.native.prevent
+                >
+                    <el-form-item
+                        :label="t('view.userManage.UserGroup_colon')"
+                    >
+                        <SdxuTransfer
+                            :data="data"
+                            :tags.sync="tags"
+                            :default-keys.sync="defaultKeys"
+                            tree-node-key="uuid"
+                        />
+                    </el-form-item>
+                </el-form>
             </div>
             <div slot="footer">
                 <sdxu-button
@@ -40,6 +49,8 @@ import { getGroups, updataUser } from '@sdx/utils/src/api/user';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import SdxuButton from '@sdx/ui/components/button';
 import locale from '@sdx/utils/src/mixins/locale';
+import Form from 'element-ui/lib/form';
+import FormItem from 'element-ui/lib/form-item';
 export default {
     name:'JoinGroup',
     mixins: [locale],
@@ -47,7 +58,8 @@ export default {
         return {
             groupVisible:true,
             data:[],
-            tags: []
+            tags: [],
+            defaultKeys: []
         };
     },
     props: {
@@ -55,11 +67,6 @@ export default {
             required: true,
             type: Object,
             default: () => ({})
-        }
-    },
-    computed: {
-        defaultKeys() {
-            return this.user.groups.map(item => item.uuid);
         }
     },
     methods:{
@@ -84,35 +91,30 @@ export default {
             this.$emit('refresh');
             this.close();
         }
-
     },
     components: {
         SdxuTransfer,
         SdxuDialog,
-        SdxuButton
-    },
-    watch :{
-        groupVisible(nVal) {
-
-        }
+        SdxuButton,
+        [Form.name]: Form,
+        [FormItem.name]: FormItem,
     },
     mounted() {
         this._getGroups();
-    }
+    },
+    created() {
+        this.defaultKeys = this.user.groups.map(item => item.uuid);
+    },
+    
 };
 </script>
 
 <style lang='scss' scoped>
 .join-group{
     width: 100%;
-    display: flex;
     /deep/ .sdxu-transfer__moveicon{
         width: 40px;
         text-align: center;
     }
-    p{
-        min-width: 70px;
-    }
-
 }
 </style>

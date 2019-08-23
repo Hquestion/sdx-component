@@ -59,31 +59,66 @@ export default {
         initChart() {
             this.chartInstance && this.chartInstance.clear();
             this.chartInstance = echarts.init(this.$el);
-            this.chartInstance.setOption({
-                tooltip: {
-                    formatter: `{a} {b} <br/>{c}${this.t('view.monitor.resourceStatistic.Block')} {d}%`
-                },
-                series: [{
-                    name: 'GPU',
-                    type: 'pie',
-                    hoverAnimation: false,
-                    radius: ['42.7%', '70%'],
-                    label: {
-                        show: false
+            if (this.allocationList.length > 0) {
+                this.chartInstance.setOption({
+                    tooltip: {
+                        formatter: `{a} {b} <br/>{c}${this.t('view.monitor.resourceStatistic.Block')} {d}%`
                     },
-                    color: this.color,
-                    data: this.allocationList
-                }, {
-                    name: this.t('view.monitor.resourceStatistic.Usage'),
-                    type: 'pie',
-                    hoverAnimation: false,
-                    radius: ['89.1%', '100%'],
-                    label: {
-                        show: false
+                    series: [{
+                        name: 'GPU',
+                        type: 'pie',
+                        hoverAnimation: false,
+                        radius: ['42.7%', '70%'],
+                        label: {
+                            show: false
+                        },
+                        color: this.color,
+                        data: this.allocationList
+                    }, {
+                        name: this.t('view.monitor.resourceStatistic.Usage'),
+                        type: 'pie',
+                        hoverAnimation: false,
+                        radius: ['89.1%', '100%'],
+                        label: {
+                            show: false
+                        },
+                        data: this.usedList
+                    }]
+                });
+            } else {
+                this.chartInstance.setOption({
+                    tooltip: {
+                        formatter: `{a} {b} <br/>{c}${this.t('view.monitor.resourceStatistic.Block')} {d}%`
                     },
-                    data: this.usedList
-                }]
-            });
+                    series: [{
+                        name: 'GPU',
+                        type: 'pie',
+                        hoverAnimation: false,
+                        radius: ['42.7%', '70%'],
+                        label: {
+                            show: false
+                        },
+                        color: ['#E5ECF6'],
+                        data: [{
+                            name: '',
+                            value: 0
+                        }]
+                    }, {
+                        name: this.t('view.monitor.resourceStatistic.Usage'),
+                        type: 'pie',
+                        hoverAnimation: false,
+                        radius: ['89.1%', '100%'],
+                        label: {
+                            show: false
+                        },
+                        data: [{
+                            name: '',
+                            value: 0,
+                            itemStyle: { color: '#E5ECF6', opacity: 0.5 }
+                        }]
+                    }]
+                });
+            }
         }
     },
     mounted() {
@@ -96,8 +131,11 @@ export default {
                 this.initChart();
             }
         },
-        used() {
-            this.initChart();
+        used: {
+            deep: true,
+            handler() {
+                this.initChart();
+            }
         }
     }
 };

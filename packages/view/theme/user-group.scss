@@ -8,9 +8,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         margin-bottom: $sdx-margin;
         display: flex;
         justify-content: space-between;
-        @include modifier('input') {
-            width: 224px;
-        }
     }
 
     @include element('table') {
@@ -38,6 +35,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     @include element('pagination') {
         align-self: flex-end;
         margin-top: $sdx-margin;
+    }
+
+    .is-lang-en {
+        .sdxv-user-group__table--expand-label {
+            width: 110px;
+        }
     }
 }
 

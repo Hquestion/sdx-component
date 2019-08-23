@@ -77,12 +77,12 @@ export default {
         },
         placeholder() {
             const textMap = {
-                user: '用户名',
-                group: '用户组名',
-                role: '角色名',
-                all: '用户/用户组/角色名称'
+                user: this.t('widget.userPicker.userName'),
+                group: this.t('widget.userPicker.groupName'),
+                role: this.t('widget.userPicker.roleName'),
+                all: this.t('widget.userPicker.allRoleName'),
             };
-            return `请输入${textMap[this.type]}`;
+            return `${this.t('widget.userPicker.plsEnter')}${textMap[this.type]}`;
         }
     },
     methods: {

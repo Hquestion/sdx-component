@@ -125,7 +125,7 @@
             <div>
                 <el-form
                     label-position="right"
-                    label-width="80px"
+                    :label-width="lang$ === 'en' ? '150px' : '80px'"
                     @submit.native.prevent
                     ref="permissionForm"
                     :rules="is_update ? null : rules"

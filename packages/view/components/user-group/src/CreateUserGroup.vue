@@ -13,7 +13,7 @@
             ref="form"
             :model="params"
             :rules="rules"
-            label-width="80px"
+            :label-width="lang$ === 'en' ? '110px' : '80px'"
             label-position="right"
         >
             <el-form-item

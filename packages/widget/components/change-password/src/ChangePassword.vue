@@ -12,7 +12,7 @@
             <span>{{ t('widget.changePassword.title') }}</span>
         </div>
         <el-form
-            label-width="108px"
+            :label-width="lang$ === 'en' ? '128px' : '108px'"
             label-position="right"
             :model="changePwdForm"
             ref="changePwdForm"

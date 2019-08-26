@@ -70,7 +70,7 @@
             </el-table-column>
             <el-table-column
                 :label="t('view.task.taskState')"
-                min-width="100px"
+                :min-width="lang$ === 'en' ? '120px' : '100px'"
             >
                 <template #default="{ row }">
                     <SdxwFoldLabel

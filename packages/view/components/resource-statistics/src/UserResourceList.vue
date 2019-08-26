@@ -25,6 +25,7 @@
                 type="search"
                 :placeholder="t('view.monitor.resourceStatistic.userSearchInputPlaceholder')"
                 size="small"
+                style="width: 300px"
             />
             <SdxuButton
                 type="primary"

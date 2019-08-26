@@ -21,7 +21,10 @@
                             @click.capture="createTask(task)"
                         >
                             <task-icon :icon-class="task.class" />
-                            <span class="sdxv-project-detail__task--name">{{ task.name }}</span>
+                            <span
+                                class="sdxv-project-detail__task--name"
+                                :style="clientWidth > 2060 ? 'width: 160px' : 'width: 92px'"
+                            >{{ task.name }}</span>
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-circle-plus"
                                 class="sdxv-project-detail__task--button"
@@ -119,6 +122,8 @@ import auth from '@sdx/widget/components/auth';
 import taskMixin from '@sdx/utils/src/mixins/task';
 import locale from '@sdx/utils/src/mixins/locale';
 import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
+import { getClientWidth } from '@sdx/utils/lib/helper/dom';
+import debounce from '@sdx/utils/src/helper/debounce';
 export default {
     name: 'SdxvProjectDetail',
     mixins: [taskMixin, locale],
@@ -158,18 +163,18 @@ export default {
                             type: 'SPARK'
                         },
                         {
-                            name: this.t('view.task.type.TENSORFLOW'),
+                            name: 'TensorFlow',
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW'
 
                         },
                         {
-                            name: this.t('view.task.type.TENSORFLOW_DIST'),
+                            name: this.t('view.task.officiaType.TENSORFLOW_DIST'),
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_DIST'
                         },
                         {
-                            name: this.t('view.task.type.TENSORFLOW_AUTO_DIST'),
+                            name: this.t('view.task.officiaType.TENSORFLOW_AUTO_DIST'),
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_AUTO_DIST'
                         }
@@ -196,7 +201,8 @@ export default {
                         }
                     ]
                 },
-            ]
+            ],
+            clientWidth: 1500
         };
     },
     created() {
@@ -206,7 +212,15 @@ export default {
     directives: {
         auth
     },
+    mounted() {
+        this.clientWidth = getClientWidth();
+        this.__resizeHanlder = debounce(() => {
+            this.clientWidth = getClientWidth();
+        }, 300);
+        window.addEventListener('resize', this.__resizeHanlder);
+    },
     beforeDestroy () {
+        window.removeEventListener('resize', this.__resizeHanlder);
         clearInterval(this.refreshTimer);
         this.refreshTimer = null;
     },
@@ -271,7 +285,8 @@ export default {
         },
         sortChange() {
             this.initList();
-        }
+        },
+        getClientWidth
         // handleOperate(operation) {
         //     // console.log('operation', operation);
         //     switch(operation.type) {

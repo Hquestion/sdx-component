@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} Tensorflow ${t('view.task.form.task')}`"
+        :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} TensorFlow ${t('view.task.form.task')}`"
         class="form-tfsingle"
         :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-icon-tensorflow"

@@ -206,6 +206,10 @@ export default {
                 PMML_SERVING: 'PMML_SERVING',
                 SKYFLOW_EXEC: 'SKYFLOW_EXEC'
             },
+            officiaType: {
+                TENSORFLOW_DIST: 'TensorFlow_DIST',
+                TENSORFLOW_AUTO_DIST: 'TensorFlow_AUTO_DIST',
+            },
             state: {
                 CREATED: 'CREATED',
                 LAUNCHING: 'LAUNCHING',

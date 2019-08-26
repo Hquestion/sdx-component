@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} ${t('view.task.type.TENSORFLOW_AUTO_DIST')} ${t('view.task.form.task')}`"
+        :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} ${t('view.task.officiaType.TENSORFLOW_AUTO_DIST')} ${t('view.task.form.task')}`"
         class="form-tfautodistributed"
         :label-width="lang$ === 'en' ? 256 : 240"
         icon="sdx-icon-tensorflow"

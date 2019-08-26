@@ -206,6 +206,10 @@ export default {
                 PMML_SERVING: 'PMML模型服务',
                 SKYFLOW_EXEC: 'SKYFLOW执行记录'
             },
+            officiaType: {
+                TENSORFLOW_DIST: 'TensorFlow分布式',
+                TENSORFLOW_AUTO_DIST: 'TENSORFLOW自动并行',
+            },
             state: {
                 CREATED: '创建成功',
                 LAUNCHING: '启动中',

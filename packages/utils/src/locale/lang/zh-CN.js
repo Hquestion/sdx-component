@@ -208,7 +208,7 @@ export default {
             },
             officiaType: {
                 TENSORFLOW_DIST: 'TensorFlow分布式',
-                TENSORFLOW_AUTO_DIST: 'TENSORFLOW自动并行',
+                TENSORFLOW_AUTO_DIST: 'TensorFlow自动并行',
             },
             state: {
                 CREATED: '创建成功',

@@ -1,16 +1,21 @@
 <template>
-    <SdxuAutoComplete
+    <el-select
         popper-class="sdxw-user-picker"
         v-model="data"
-        :fetch-suggestions="guessUser"
+        filterable
+        remote
         :placeholder="placeholder"
-        @select="handleSelect"
-        :trigger-on-focus="false"
-        :popper-append-to-body="false"
-        :popper-options="{forceAbsolute: true}"
+        :remote-method="guessUser"
+        :loading="loading"
+        @change="handleSelect"
         @blur="onBlur"
+        @focus="handleFocus"
     >
-        <template slot-scope="{ item }">
+        <el-option
+            v-for="item in options"
+            :key="item.uuid"
+            :label="item.name"
+            :value="item">
             <div class="sdxw-user-picker__user-tpl">
                 <div
                     class="sdxw-user-picker__name"
@@ -20,12 +25,11 @@
                     {{ typeNameMap[item.gtype] }}
                 </div>
             </div>
-        </template>
-    </SdxuAutoComplete>
+        </el-option>
+    </el-select>
 </template>
 
 <script>
-import AutoComplete from '@sdx/ui/components/autocomplete';
 import { getUserRoleGroupByName } from '@sdx/utils/src/api/user';
 import locale from '@sdx/utils/src/mixins/locale';
 
@@ -38,12 +42,12 @@ export default {
                 user: this.t('widget.userPicker.User'),
                 role: this.t('widget.userPicker.Role'),
                 group: this.t('widget.userPicker.Group')
-            }
+            },
+            options: [],
+            loading: false
         };
     },
-    components: {
-        [AutoComplete.name]: AutoComplete
-    },
+    components: {},
     props: {
         type: {
             type: String,
@@ -82,11 +86,14 @@ export default {
         }
     },
     methods: {
-        guessUser(name, cb) {
+        guessUser(name) {
+            this.loading = true;
             getUserRoleGroupByName(name, this.type).then(res => {
-                cb(res);
+                this.options = res;
+                this.loading = false;
             }, () => {
-                cb([]);
+                this.options = [];
+                this.loading = false;
             });
         },
         handleSelect(item) {
@@ -96,6 +103,9 @@ export default {
             if (!this.value || !this.value.uuid) {
                 this.$emit('input', undefined);
             }
+        },
+        handleFocus() {
+            this.options = [];
         }
     }
 };

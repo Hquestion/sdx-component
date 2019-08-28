@@ -94,11 +94,13 @@
                             icon="sdx-icon sdx-icon-edit"
                             @click="edit(scope.row)"
                             :title="t('sdxCommon.Edit')"
+                            :disable="scope.row.initial"
                         />
                         <SdxuIconButton
                             icon="sdx-icon sdx-icon-delete"
                             @click="remove(scope.row.uuid, objectType === 'user' ? scope.row.fullName : scope.row.name)"
                             :title="t('sdxCommon.Delete')"
+                            :disable="scope.row.initial"
                         />
                     </template>
                 </el-table-column>

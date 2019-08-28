@@ -96,12 +96,14 @@
                                 @click="handleEdit(row)"
                                 :title="t('sdxCommon.Edit')"
                                 v-auth.user.button="'GROUP:WRITE'"
+                                :disable="row.initial"
                             />
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-delete"
                                 v-auth.user.button="'GROUP:WRITE'"
                                 @click="handleDelete(row)"
                                 :title="t('sdxCommon.Delete')"
+                                :disable="row.initial"
                             />
                         </div>
                     </template>

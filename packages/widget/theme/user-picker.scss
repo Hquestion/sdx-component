@@ -1,7 +1,6 @@
 $sdx-userpicker-item-padding: 0 15px 0 20px !default;
 
 @include block('user-picker', $bem-namespace-widget) {
-    width: 100%;
     & /deep/ .el-autocomplete-suggestion li {
         padding: $sdx-userpicker-item-padding;
     }

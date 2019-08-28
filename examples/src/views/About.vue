@@ -37,12 +37,16 @@
                 @click="onClick(1)"
             />
         </SdxuIconButtonGroup>
+        <div style="position: relative;width: calc(100vw - 2px);height: 50vh;">
+            <SdxvSkyIDE></SdxvSkyIDE>
+        </div>
     </div>
 </template>
 <script>
 import SdxuButton from '@sdx/ui/components/button';
 import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group/src/IconButtonGroup';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
+import SdxvSkyIDE from '@sdx/view/components/sky-ide/src/Main';
 export default {
     name: 'About',
     data() {
@@ -53,7 +57,8 @@ export default {
     components: {
         SdxuIconButtonGroup,
         SdxuButton,
-        SdxuIconButton
+        SdxuIconButton,
+        SdxvSkyIDE
     },
     methods: {
         onClick(a) {

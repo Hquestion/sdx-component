@@ -20,7 +20,7 @@
     }
     @include state('header') {
         .sdxu-content-panel__main {
-            margin-top: $sdx-margin;
+            padding-top: $sdx-margin;
         }
     }
     @include element('header') {

@@ -10,7 +10,7 @@
             </div>
             <el-form
                 :model="user"
-                label-width="100px"
+                :label-width="lang$==='en' ? '110px' : '80px'"
                 :status-icon="true"
                 :rules="rules"
                 ref="userForm"

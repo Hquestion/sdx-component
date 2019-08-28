@@ -6,7 +6,7 @@
         :title="title"
     >
         <el-form
-            label-width="110px"
+            :label-width="lang$==='en' ? '150px' : '110px'"
             label-position="right"
             :model="modelInfoForm"
             ref="modelInfoForm"

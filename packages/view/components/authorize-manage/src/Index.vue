@@ -94,11 +94,13 @@
                             icon="sdx-icon sdx-icon-edit"
                             @click="edit(scope.row)"
                             :title="t('sdxCommon.Edit')"
+                            :disable="scope.row.initial"
                         />
                         <SdxuIconButton
                             icon="sdx-icon sdx-icon-delete"
                             @click="remove(scope.row.uuid, objectType === 'user' ? scope.row.fullName : scope.row.name)"
                             :title="t('sdxCommon.Delete')"
+                            :disable="scope.row.initial"
                         />
                     </template>
                 </el-table-column>
@@ -125,7 +127,7 @@
             <div>
                 <el-form
                     label-position="right"
-                    label-width="80px"
+                    :label-width="lang$ === 'en' ? '150px' : '80px'"
                     @submit.native.prevent
                     ref="permissionForm"
                     :rules="is_update ? null : rules"

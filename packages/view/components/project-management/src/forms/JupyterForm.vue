@@ -2,13 +2,13 @@
     <BaseForm
         :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} Jupyter ${t('view.task.form.task')}`"
         class="form-jupyter"
-        :label-width="100"
+        :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-Jupter"
         @commit="commit"
     >
         <el-form
             label-position="right"
-            label-width="100px"
+            :label-width="lang$ === 'en' ? '190px' : '100px'"
             slot="form"
             @submit.native.prevent
             ref="jupyter"
@@ -312,23 +312,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss" scoped>
-    .form-jupyter {
-        .title {
-            color: #909399;
-        }
-        .el-form-item__content {
-            position: relative;
-        }
-        .icon {
-            color: #F56C6C;
-            position: absolute;
-            top: 2px;
-            left: -83px;
-        }
-        .sdxw-file-select {
-            max-width: 560px;
-        }
-    }
-</style>

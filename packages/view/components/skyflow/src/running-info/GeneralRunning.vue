@@ -44,6 +44,7 @@
                     :label="t('view.skyflow.columns.executeStart')"
                     sortable="custom"
                     prop="executeStart"
+                    min-width="100px"
                 >
                     <template slot-scope="scope">
                         <div>
@@ -56,6 +57,7 @@
                     :label="t('view.skyflow.columns.executeEnd')"
                     prop="executeEnd"
                     sortable="custom"
+                    min-width="100px"
                 >
                     <template slot-scope="scope">
                         <div>

@@ -2,7 +2,7 @@
     <div class="sdxw-share-form">
         <el-form
             :label-width="labelWidth"
-            label-position="left"
+            label-position="right"
             :model="shareForm"
             ref="shareSettingForm"
         >

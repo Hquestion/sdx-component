@@ -216,3 +216,11 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+.sdxv-task-card.is-lang-en {
+    .sdxv-task-card__header--name {
+        width: 100px;
+    }
+}
+</style>

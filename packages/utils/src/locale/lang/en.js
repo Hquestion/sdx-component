@@ -84,7 +84,12 @@ export default {
         userPicker: {
             User: 'User',
             Group: 'Group',
-            Role: 'Role'
+            Role: 'Role',
+            userName: ' user name',
+            groupName: ' group name',
+            roleName: ' role name',
+            allRoleName: ' user name/group name/role name',
+            plsEnter: 'Please enter'
         },
         resourceConfig: {
             Please_select: 'Please select',
@@ -200,6 +205,10 @@ export default {
                 SPARK_SERVING: 'SPARK_SERVING',
                 PMML_SERVING: 'PMML_SERVING',
                 SKYFLOW_EXEC: 'SKYFLOW_EXEC'
+            },
+            officiaType: {
+                TENSORFLOW_DIST: 'TensorFlow_DIST',
+                TENSORFLOW_AUTO_DIST: 'TensorFlow_AUTO_DIST',
             },
             state: {
                 CREATED: 'CREATED',

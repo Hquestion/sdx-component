@@ -10,7 +10,7 @@
             <div class="join-group">
                 <el-form
                     label-position="right"
-                    label-width="70px"
+                    :label-width="lang$ === 'en' ? '100px' : '70px'"
                     @submit.native.prevent
                 >
                     <el-form-item

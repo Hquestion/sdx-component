@@ -84,7 +84,12 @@ export default {
         userPicker: {
             User: '用户',
             Group: '用户组',
-            Role: '角色'
+            Role: '角色',
+            userName: '用户名',
+            groupName: '用户组名',
+            roleName: '角色名',
+            allRoleName: '用户/用户组/角色名称',
+            plsEnter: '请输入'
         },
         resourceConfig: {
             Please_select: '请选择',
@@ -200,6 +205,10 @@ export default {
                 SPARK_SERVING: 'SPARK模型服务',
                 PMML_SERVING: 'PMML模型服务',
                 SKYFLOW_EXEC: 'SKYFLOW执行记录'
+            },
+            officiaType: {
+                TENSORFLOW_DIST: 'TensorFlow分布式',
+                TENSORFLOW_AUTO_DIST: 'TensorFlow自动并行',
             },
             state: {
                 CREATED: '创建成功',

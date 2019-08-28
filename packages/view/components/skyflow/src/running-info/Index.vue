@@ -26,61 +26,71 @@
                 @search="search"
                 @reset="resetSearch"
                 style="width: 100%"
+                v-if="listType === 'timer'"
+                key="timer"
             >
-                <span v-if="listType === 'timer'">
-                    <sdxw-search-item :label="t('view.skyflow.taskName')">
-                        <sdxu-input
-                            v-model="searchConditions.name"
-                            type="search"
-                            size="small"
-                            :placeholder="t('view.skyflow.enterTaskName')"
+                <sdxw-search-item :label="t('view.skyflow.taskName')">
+                    <sdxu-input
+                        v-model="searchConditions.name"
+                        type="search"
+                        size="small"
+                        :placeholder="t('view.skyflow.enterTaskName')"
+                    />
+                </sdxw-search-item>
+            </sdxw-search-layout>
+            <sdxw-search-layout
+                @search="search"
+                @reset="resetSearch"
+                style="width: 100%"
+                key="execute"
+                v-else
+                class="executeLayout"
+            >
+                <sdxw-search-item :label="t('view.skyflow.executeKind')">
+                    <el-select
+                        v-model="searchConditions.executeKind"
+                        :placeholder="t('view.skyflow.enterExecuteKind')"
+                        size="small"
+                    >
+                        <el-option
+                            :label="t('sdxCommon.All')"
+                            value=""
                         />
-                    </sdxw-search-item>
-                </span>
-                <span v-else>
-                    <sdxw-search-item :label="t('view.skyflow.executeKind')">
-                        <el-select
-                            v-model="searchConditions.executeKind"
-                            :placeholder="t('view.skyflow.enterExecuteKind')"
-                        >
-                            <el-option
-                                :label="t('sdxCommon.All')"
-                                value=""
-                            />
-                            <el-option
-                                :label="t('view.skyflow.manual')"
-                                value="MANUAL"
-                            />
-                            <el-option
-                                :label="t('view.skyflow.resume')"
-                                value="RESUME"
-                            />
-                        </el-select>
-                    </sdxw-search-item>
-                    <sdxw-search-item :label="t('view.skyflow.state')">
-                        <el-select
-                            v-model="searchConditions.state"
-                            :placeholder="t('view.skyflow.enterState')"
-                        >
-                            <el-option
-                                v-for="(item, index) in stateList"
-                                :key="index"
-                                :label="item.label"
-                                :value="item.value"
-                            />
-                        </el-select>
-                    </sdxw-search-item>
-                    <sdxw-search-item :label="t('view.skyflow.timeRange')">
-                        <el-date-picker
-                            v-model="searchConditions.timeRange"
-                            type="datetimerange"
-                            :range-separator="t('sdxCommon.To')"
-                            :start-placeholder="t('view.skyflow.startDate')"
-                            :end-placeholder="t('view.skyflow.endDate')"
-                            align="right"
+                        <el-option
+                            :label="t('view.skyflow.manual')"
+                            value="MANUAL"
                         />
-                    </sdxw-search-item>
-                </span>
+                        <el-option
+                            :label="t('view.skyflow.resume')"
+                            value="RESUME"
+                        />
+                    </el-select>
+                </sdxw-search-item>
+                <sdxw-search-item :label="t('view.skyflow.state')">
+                    <el-select
+                        v-model="searchConditions.state"
+                        :placeholder="t('view.skyflow.enterState')"
+                        size="small"
+                    >
+                        <el-option
+                            v-for="(item, index) in stateList"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value"
+                        />
+                    </el-select>
+                </sdxw-search-item>
+                <sdxw-search-item :label="t('view.skyflow.timeRange')">
+                    <el-date-picker
+                        v-model="searchConditions.timeRange"
+                        type="datetimerange"
+                        :range-separator="t('sdxCommon.To')"
+                        :start-placeholder="t('view.skyflow.startDate')"
+                        :end-placeholder="t('view.skyflow.endDate')"
+                        align="right"
+                        size="medium"
+                    />
+                </sdxw-search-item>
             </sdxw-search-layout>
         </div>
         <div>

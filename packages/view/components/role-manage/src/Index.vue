@@ -87,12 +87,14 @@
                                 @click="editRole(scope.row.uuid)"
                                 :title="t('sdxCommon.Edit')"
                                 v-auth.user.button="'ROLE:WRITE'"
+                                :disable="scope.row.initial"
                             />
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-delete"
                                 v-auth.user.button="'ROLE:WRITE'"
                                 @click="removeRole(scope.row.uuid, scope.row.name)"
                                 :title="t('sdxCommon.Delete')"
+                                :disable="scope.row.initial"
                             />
                         </template>
                     </el-table-column>
@@ -120,7 +122,7 @@
             </div>
             <div>
                 <el-form
-                    label-width="100px"
+                    :label-width="lang$ === 'en' ? '140px' : '90px'"
                     :model="roleObj"
                     ref="currentRole"
                     :rules="rules"

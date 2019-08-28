@@ -6,7 +6,10 @@
         <OperationBar ref="operationBar" />
         <BreadcrumbBar />
         <FileTable ref="fileTable" />
-        <SdxvFileTask :visible.sync="taskVisible" ref="fileTask"/>
+        <SdxvFileTask
+            :visible.sync="taskVisible"
+            ref="fileTask"
+        />
     </SdxuContentPanel>
 </template>
 
@@ -388,5 +391,9 @@ export default {
 <style lang="scss" scoped>
 .sdxv-file-main {
     height: 100%;
+    padding-top: 20px;
+    /deep/ .sdxu-content-panel__main {
+        padding-top: 10px;
+    }
 }
 </style>

@@ -43,10 +43,11 @@
         margin-top: 20px;
         @include modifier('name') {
             font-size: 14px;
-            width: 84px;
+            width: 92px;
             margin: 10px 0;
             color:rgba(38,43,62,1);
             text-align: center;
+            word-break: break-all;
         }
         @include modifier('button') {
             color: #4781F8!important;

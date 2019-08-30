@@ -2,13 +2,13 @@
     <BaseForm
         :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} TensorBoard ${t('view.task.form.task')}`"
         class="form-tensorboard"
-        :label-width="100"
+        :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-icon-tensorboard"
         @commit="commit"
     >
         <el-form
             label-position="right"
-            label-width="100px"
+            :label-width="lang$ === 'en' ? '190px' : '100px'"
             slot="form"
             @submit.native.prevent
             ref="tensorboard"
@@ -244,19 +244,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-    .form-tensorboard {
-        .el-form-item__content {
-            position: relative;
-        }
-        .icon {
-            color: #F56C6C;
-            position: absolute;
-            top: 2px;
-            left: -83px;
-        }
-        .sdxw-file-select {
-            max-width: 560px;
-        }
-    }
-</style>

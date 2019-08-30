@@ -117,7 +117,7 @@ export default {
         handleConfirm() {
             buildImageBasic({
                 baseImage: this.task && (this.task.imageId || this.task.image && this.task.image.uuid) || '',
-                name: this.formData.name,
+                name: this.name_prefix + this.formData.name,
                 version: this.formData.version
             }).then(() => {
                 this.dialogVisible = false;

@@ -171,9 +171,6 @@ export default {
             return {
                 namespace: this.type === 'base' ? 'kube-system,skydiscovery' : 'skydiscovery-system'
             };
-        },
-        needPolling() {
-            return this.componentList.some(item => ['running', 'pending'].includes(item.status));
         }
     },
     methods: {
@@ -184,6 +181,10 @@ export default {
             getPodsStatus(this.params).then(data => {
                 this.componentList = data.status_list;
                 this.loading = false;
+                // 轮询
+                if (this.componentList.some(item => ['running', 'pending'].includes(item.status))) {
+                    this.startPolling();
+                }
             }).catch(() => {
                 this.componentList = [];
                 this.loading = false;
@@ -200,14 +201,25 @@ export default {
         },
         handlePageChange(page) {
             this.page = page;
+        },
+        startPolling() {
+            if (!this._isDestroyed) {
+                this.pollingId && clearTimeout(this.pollingId);
+                this.pollingId = setTimeout(() => {
+                    this.fetchData(false);
+                }, POLLING_PERIOD);
+            }
+        },
+        stopPolling() {
+            this.pollingId && clearTimeout(this.pollingId);
+            this.pollingId = null;
         }
     },
     created() {
         this.fetchData();
     },
     beforeDestroy() {
-        clearInterval(this.pollingId);
-        this.pollingId = null;
+        this.stopPolling();
     },
     watch: {
         type() {
@@ -221,17 +233,6 @@ export default {
             };
             this.componentList = [];
             this.fetchData();
-        },
-        needPolling(nval) {
-            if (nval) {
-                clearInterval(this.pollingId);
-                this.pollingId = setInterval(() => {
-                    this.fetchData(false);
-                }, POLLING_PERIOD);
-            } else {
-                clearInterval(this.pollingId);
-                this.pollingId = null;
-            }
         }
     }
 };

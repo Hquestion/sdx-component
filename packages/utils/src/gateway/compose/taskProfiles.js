@@ -38,14 +38,8 @@ export let handler = wrap(function(ctx, request) {
         },
         {
             path: 'items.*.projectId',
-            url: 'http://tyk-gateway/fe-compose/api/v1/project-detail-batch',
-            result: 'items',
-            errorReplaceKey: 'uuid'
-        },
-        {
-            paths: ['items.*.imageId', 'items.*.autoImageId'],
-            url: 'http://tyk-gateway/image-manager/api/v1/images',
-            result: 'data',
+            url: 'http://tyk-gateway/project-manager/api/v1/projects',
+            result: 'data.items',
             errorReplaceKey: 'uuid'
         }
     );
@@ -54,8 +48,6 @@ export let handler = wrap(function(ctx, request) {
 
     ctx.rename(projects, 'items.*.ownerId', 'owner');
     ctx.rename(projects, 'items.*.projectId', 'project');
-    ctx.rename(projects, 'items.*.imageId', 'image');
-    ctx.rename(projects, 'items.*.autoImageId', 'autoImage');
 
     return ctx.createResponse(200, projects);
 });

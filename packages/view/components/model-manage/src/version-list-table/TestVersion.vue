@@ -7,7 +7,7 @@
         no-footer
     >
         <el-form
-            label-width="110px"
+            :label-width="lang$ ==='en' ? '70px' : '90px'"
             label-position="right"
             :model="testForm"
             ref="testForm"
@@ -15,7 +15,7 @@
             <el-form-item
                 :label="t('view.model.apiUrl')"
             >
-                <div>
+                <div class="breakAll">
                     {{ version.restApi }}
                 </div>
             </el-form-item>
@@ -33,7 +33,7 @@
                 </SdxuButton>
                 <div
                     v-else
-                    style="overflow-wrap: break-word;"
+                    class="breakAll"
                 >
                     {{ token }}
                 </div>

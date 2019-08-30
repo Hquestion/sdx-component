@@ -6,7 +6,7 @@
         :title="title"
     >
         <el-form
-            label-width="110px"
+            :label-width="lang$ === 'en' ? '150px' : '110px'"
             label-position="right"
             :model="versionInfoForm"
             ref="versionInfoForm"
@@ -116,7 +116,10 @@
                 :label="t('view.model.createVersionForm.modelPath')"
                 prop="modelPath"
             >
-                <div v-if="isPublishing">
+                <div
+                    v-if="isPublishing"
+                    style="word-break: break-all;"
+                >
                     {{ versionInfoForm.modelPath }}
                 </div>
                 <SdxwFileSelect

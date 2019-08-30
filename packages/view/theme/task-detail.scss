@@ -20,7 +20,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     display: flex;
     flex-flow: row wrap;
     margin: 0 $sdx-margin;
-
     @include element('item') {
         width: 50%;
         min-height: 20px;
@@ -42,6 +41,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
 
         @include modifier('value') {
+            word-break: break-all;
             flex: auto;
             display: flex;
             align-items: flex-start;
@@ -65,6 +65,17 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
     @include state('background') {
         background-color: #F2F6FC;
+    }
+
+    .sdxv-info-container__item.is-lang-en {
+        .sdxv-info-container__item--label {
+            flex: none;
+            width: 160px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+            word-break: break-all;
+        }
     }
 }
 

@@ -13,7 +13,7 @@
             @open="open"
         >
             <el-form
-                label-width="80px"
+                :label-width="lang$ === 'en' ? '90px' : '80px'"
                 class="sdxw-userinfo__content"
             >
                 <el-form-item :label="t('widget.userInfo.username')">

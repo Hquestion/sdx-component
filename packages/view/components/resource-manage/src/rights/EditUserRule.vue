@@ -12,7 +12,7 @@
                 <el-form
                     ref="ruleForm"
                     :model="params"
-                    label-width="108px"
+                    :label-width="lang$ === 'en' ? '140px' : '108px'"
                     label-position="right"
                     :rules="rule"
                 >

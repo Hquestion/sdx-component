@@ -6,4 +6,13 @@
     .el-date-editor .el-range-separator {
         width: 10%;
     }
+    .executeLayout {
+        .el-form {
+            .sdxw-search-item:nth-child(3) {
+                .el-form-item__content {
+                    width: 402px;
+                }
+            }
+        }
+    }
 }

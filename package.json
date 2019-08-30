@@ -14,7 +14,9 @@
         ]
     },
     "jest": {
-        "setupFiles": ["jest-canvas-mock"]
+        "setupFiles": [
+            "jest-canvas-mock"
+        ]
     },
     "scripts": {
         "lint": "eslint examples/*.js packages/**/*.js --fix",
@@ -101,6 +103,7 @@
         "echarts": "^4.2.1",
         "element-ui": "^2.3.7",
         "highlight.js": "^9.12.0",
+        "interactjs": "^1.4.0-rc.13",
         "less-loader": "^4.1.0",
         "portal-vue": "^2.1.5",
         "sh": "0.0.3",

@@ -17,6 +17,7 @@ import ElMessage from 'element-ui/lib/message';
 import { getPodLog } from '@sdx/utils/src/api/system';
 import { getTaskList } from '@sdx/utils/src/api/project';
 import locale from '@sdx/utils/src/mixins/locale';
+import { dateFormatter } from '@sdx/utils/src/helper/transform';
 
 const AUTO_PULL_INTERVAL = 3000;
 
@@ -88,8 +89,14 @@ export default {
             }
             try {
                 const data = await getPodLog(this.podName, params);
-                let content = data && Array.isArray(data.contents) && data.contents.join('') || '';
-                let length  = data && Array.isArray(data.contents) ? data.contents.length : 0;
+                let content = '';
+                let length = 0;
+                if (data && Array.isArray(data.contents)) {
+                    data.contents.forEach(item => {
+                        content += `[${dateFormatter(item.timestamp)}]  ${item.message.trim()}\r\n`;
+                    });
+                    length = data.contents.length;
+                }
                 if (size < 0) {
                     this.start = this.start - length;
                     this.logContent = content + this.logContent;

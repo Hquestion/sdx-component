@@ -10,7 +10,7 @@
         <el-form
             :model="formData"
             ref="form"
-            label-width="100px"
+            label-width="110px"
             :rules="rules"
         >
             <el-form-item

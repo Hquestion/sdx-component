@@ -84,18 +84,21 @@
                             icon="sdx-icon sdx-icon-zu2"
                             v-auth.user.button="'USER:WRITE'"
                             :title="t('view.userManage.JoinGroup')"
+                            :disable="scope.row.initial"
                         />
                         <sdxu-icon-button
                             @click.native.stop="handleEditUser(scope.row)"
                             icon="sdx-icon sdx-icon-edit"
                             v-auth.user.button="'USER:WRITE'"
                             :title="t('sdxCommon.Edit')"
+                            :disable="scope.row.initial"
                         />
                         <sdxu-icon-button
                             @click.native.stop="handleDeleteUser(scope.row)"
                             icon="sdx-icon sdx-icon-delete"
                             v-auth.user.button="'USER:WRITE'"
                             :title="t('sdxCommon.Delete')"
+                            :disable="scope.row.initial"
                         />
                     </template>
                 </el-table-column>

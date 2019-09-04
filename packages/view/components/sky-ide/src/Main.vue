@@ -18,13 +18,9 @@
                         文件管理
                     </ResizablePanel>
                     <ResizablePanel child-direction="vertical">
-                        <ResizablePanel :init-height="300">
-                            文档管理
-                        </ResizablePanel>
                         <ResizablePanel>
-                            调试
+                            <SkyNotebook  :file="currentFile"/>
                         </ResizablePanel>
-
                         <ResizablePanel
                             :fixed="true"
                             :init-height="40"
@@ -46,9 +42,11 @@ import ResizablePanel from './widgets/ResizablePanel';
 import { CommandRegistry } from '@phosphor/commands';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
+import SkyNotebook from './widgets/notebook/SkyNotebook';
 export default {
     name: 'Main',
     components: {
+        SkyNotebook,
         Sidebar,
         ResizablePanel
     },
@@ -59,7 +57,7 @@ export default {
     },
     data() {
         return {
-            commands: null,
+            commands: new CommandRegistry(),
             sidebar: {
                 currentTab: '',
                 activeWindows: []
@@ -71,7 +69,11 @@ export default {
                 }
 
             },
-
+            currentFile: {
+                path: '/test.ipynb',
+                // path: '/first.py',
+                ownerId: '292a2b73-3093-4782-8719-a11e01e08398'
+            }
         };
     },
     computed: {
@@ -83,7 +85,6 @@ export default {
         window.addEventListener('keydown', event => {
             this.commands.processKeydownEvent(event);
         }, true);
-        this.commands = new CommandRegistry();
         this.commands.addCommand('run:test', {
             execute: () => console.log(111)
         });
@@ -93,6 +94,8 @@ export default {
             keys: ['Enter'],
             command: 'run:test'
         });
+        window.nbCommands = this.commands
+        console.log(this.commands.listCommands());
     }
 };
 </script>

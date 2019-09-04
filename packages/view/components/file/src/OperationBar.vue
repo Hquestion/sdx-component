@@ -105,6 +105,7 @@ import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import { rootKinds } from './helper/fileListTool';
 import locale from '@sdx/utils/src/mixins/locale';
 import MessageBox from '@sdx/ui/components/message-box';
+import { systemType } from '@sdx/utils/src/helper/tool';
 export default {
     name: 'OperationBar',
     components: {
@@ -175,19 +176,23 @@ export default {
             // 目前先保留上传记录，不处理
         },
         onExceedMaxSize() {
-            let that = this;
-            let url = this.getSystemUrl();
+            let [that,url]  = [this,this.getSystemUrl()];   
             MessageBox.custom.warning({
                 title: this.t('view.file.upload_or_download_operation_files_are_large'),
                 content(h){
                     return (
                         <div class="fileClient">
-                            <a href={url} target="blank">{that.t('view.file.Download_Now')}</a>
-                            <span>{that.t('view.file.And_install_SkyDiscovery_File_Management_Client')}</span>
+                            <a target="_blank" href={url}>{that.t('view.file.Download_Now')}</a>
+                            <div class={that.lang$ === 'en' ? 'english' : 'chinese'}>
+                                <span>{that.t('view.file.And_install_SkyDiscovery_File_Management_Client')}</span>
+                                <a href='sdx-file-management://'>{that.t('view.file.Open_it_immediately')}</a>
+                            </div>
                         </div>
                     );
                 }
             });
+            
+            
         },
         onExceedMaxSizeDir() {
             this.onExceedMaxSize();
@@ -196,20 +201,16 @@ export default {
         getSystemUrl(){
             let url = '';
             let STATIC_PATH = process.env.VUE_APP_STATIC_PATH;
-            const isWindows = /windows|win32/i.test(navigator.userAgent);
-            const isMac = /macintosh|mac os x/i.test(navigator.userAgent); 
-            const isLinux = (String(navigator.platform).indexOf('Linux') > -1);
-            if (isWindows) {
+            if (systemType() === 'Windows') {
                 url = `${STATIC_PATH}static/filemanage-client/windows/sky-filemanager-client.exe`;
-            } else if (isMac){
+            } else if (systemType() === 'Mac'){
                 url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.zip`;
-            } else if(isLinux){
+            } else if(systemType() === 'Linux'){
                 url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.zip`;
             }
             return url;
         }
-    },
-    mounted() {}
+    }
 };
 </script>
 
@@ -220,9 +221,28 @@ export default {
     justify-content: space-between;
 }
 .fileClient {
-    a {
-        padding-right: 4px;
-        color:#5C89FF;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    &>a{
+        margin-left: 140px;
+        text-align: center;
+        display: block;
+        width: 150px;
+        background: #4781F8;
+        color: #fff;
+        height: 30px;
+        line-height: 30px;
+    }
+    .chinese {
+        text-align: center;
+        padding-top: 12px;
+        padding-right: 70px;
+    }
+    .english {
+        padding-top: 12px;
+        text-align: left;
+        padding-right: 0;
     }
 }
 </style>

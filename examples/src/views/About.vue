@@ -39,6 +39,7 @@
         </SdxuIconButtonGroup>
         <div style="position: relative;width: calc(100vw - 2px);height: 50vh;">
             <SdxvSkyIDE></SdxvSkyIDE>
+            <SkyNotebook file=""></SkyNotebook>
         </div>
     </div>
 </template>
@@ -47,6 +48,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group/src/IconButtonGroup';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxvSkyIDE from '@sdx/view/components/sky-ide/src/Main';
+import SkyNotebook from '@sdx/view/components/sky-ide/src/widgets/notebook/SkyNotebook';
 export default {
     name: 'About',
     data() {
@@ -55,6 +57,7 @@ export default {
         };
     },
     components: {
+        SkyNotebook,
         SdxuIconButtonGroup,
         SdxuButton,
         SdxuIconButton,

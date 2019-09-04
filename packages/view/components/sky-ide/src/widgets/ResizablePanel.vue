@@ -7,6 +7,7 @@
 <script>
 import emitter from '@sdx/utils/src/mixins/emitter';
 import interact from 'interactjs';
+import debounce from '@sdx/utils/src/helper/debounce';
 export default {
     name: 'ResizablePanel',
     componentName: 'ResizablePanel',
@@ -154,6 +155,12 @@ export default {
                             if (child.fixed || nextChild.fixed || !hasExpandChildAfter()) {
                                 return;
                             }
+                            const heightResizeDebounce = debounce((e, dist) => {
+                                nextChild.height = nextChild.height - dist;
+                                nextChild.top = nextChild.top + dist;
+
+                                child.height = e.rect.height;
+                            }, 200);
                             interact(child.$el)
                                 .resizable({
                                     edges: {
@@ -167,12 +174,19 @@ export default {
                                     let dist = e.rect.height - child.height;
                                     let height = nextChild.height - dist;
                                     if (height > nextChild.getPanelRealMinHeight() && e.rect.height > this.getPanelRealMinHeight()) {
-                                        nextChild.height = nextChild.height - dist;
-                                        nextChild.top = nextChild.top + dist;
+                                        nextChild.$el.style.height = `${nextChild.height - dist}px`;
+                                        nextChild.$el.style.top = `${nextChild.top + dist}px`;
+                                        child.$el.style.height = `${e.rect.height}px`;
 
-                                        child.height = e.rect.height;
-                                        // resize 之后重新计算分配比例
-                                        this.calcChildrenRatio('height');
+                                        clearTimeout(this.resizeHeightTimer);
+                                        this.resizeHeightTimer = setTimeout(() => {
+                                            nextChild.height = nextChild.height - dist;
+                                            nextChild.top = nextChild.top + dist;
+
+                                            child.height = e.rect.height;
+                                            // resize 之后重新计算分配比例
+                                            this.calcChildrenRatio('height');
+                                        }, 200);
                                     }
                                 });
                         }
@@ -199,7 +213,6 @@ export default {
                             children.forEach(item => {
                                 wToAssign -= item.fixed ? item.width : 0;
                             });
-                            console.log(this.childrenRatio);
                             if (child.fixed) {
                                 child.width = this.childrenRatio[index].ratio;
                             } else {
@@ -234,13 +247,20 @@ export default {
                                     let dist = e.rect.width - child.width;
                                     let width = nextChild.width - dist;
                                     if (width > nextChild.minWidth && e.rect.width > this.minWidth) {
-                                        nextChild.width = nextChild.width - dist;
-                                        nextChild.left = nextChild.left + dist;
+                                        nextChild.$el.style.width = `${nextChild.width - dist}px`;
+                                        nextChild.$el.style.left = `${nextChild.left + dist}px`;
+                                        child.$el.style.width = `${e.rect.width}px`;
 
-                                        child.width = e.rect.width;
+                                        clearTimeout(this.resizeWidthTimer);
+                                        this.resizeWidthTimer = setTimeout(() => {
+                                            nextChild.width = nextChild.width - dist;
+                                            nextChild.left = nextChild.left + dist;
 
-                                        // resize 之后重新计算分配比例
-                                        this.calcChildrenRatio('width');
+                                            child.width = e.rect.width;
+
+                                            // resize 之后重新计算分配比例
+                                            this.calcChildrenRatio('width');
+                                        }, 200);
                                     }
                                 })
                             ;
@@ -357,5 +377,6 @@ export default {
     .resizable-panel {
         position: absolute;
         touch-action: none;
+        overflow: hidden;
     }
 </style>

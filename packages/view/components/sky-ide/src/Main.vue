@@ -15,11 +15,12 @@
             <ResizablePanel>
                 <ResizablePanel child-direction="horizontal">
                     <ResizablePanel :init-width="200">
-                        文件管理
+                        <SkyCommands />
+                        <!-- <SkyTerminal /> -->
                     </ResizablePanel>
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
-                            <SkyNotebook  :file="currentFile"/>
+                            <SkyNotebook :file="currentFile" />
                         </ResizablePanel>
                         <ResizablePanel
                             :fixed="true"
@@ -29,7 +30,10 @@
                         </ResizablePanel>
                     </ResizablePanel>
                 </ResizablePanel>
-                <ResizablePanel :init-height="100" :collapse="!terminalVisible">
+                <ResizablePanel
+                    :init-height="100"
+                    :collapse="!terminalVisible"
+                >
                     终端
                 </ResizablePanel>
             </ResizablePanel>
@@ -43,12 +47,16 @@ import { CommandRegistry } from '@phosphor/commands';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
 import SkyNotebook from './widgets/notebook/SkyNotebook';
+import SkyCommands from './widgets/notebook/SkyCommands';
+import SkyTerminal from './widgets/terminal/Terminal';
 export default {
     name: 'Main',
     components: {
         SkyNotebook,
         Sidebar,
-        ResizablePanel
+        ResizablePanel,
+        SkyCommands,
+        SkyTerminal
     },
     provide() {
         return {
@@ -94,7 +102,7 @@ export default {
             keys: ['Enter'],
             command: 'run:test'
         });
-        window.nbCommands = this.commands
+        window.nbCommands = this.commands;
         console.log(this.commands.listCommands());
     }
 };

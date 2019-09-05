@@ -253,7 +253,7 @@ export default {
 
 <style lang="scss" scoped>
 .sdxv-file-table {
-    height: calc(100% - 60px);
+    height: calc(100% - 100px);
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {
         display: none;

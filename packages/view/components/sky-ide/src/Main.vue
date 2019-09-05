@@ -14,12 +14,12 @@
             </ResizablePanel>
             <ResizablePanel>
                 <ResizablePanel child-direction="horizontal">
-                    <ResizablePanel :init-width="200">
-                        文件管理
+                    <ResizablePanel :init-width="400">
+                        <file-manager />
                     </ResizablePanel>
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
-                            <SkyNotebook  :file="currentFile"/>
+                            <SkyNotebook :file="currentFile" />
                         </ResizablePanel>
                         <ResizablePanel
                             :fixed="true"
@@ -29,7 +29,10 @@
                         </ResizablePanel>
                     </ResizablePanel>
                 </ResizablePanel>
-                <ResizablePanel :init-height="100" :collapse="!terminalVisible">
+                <ResizablePanel
+                    :init-height="100"
+                    :collapse="!terminalVisible"
+                >
                     终端
                 </ResizablePanel>
             </ResizablePanel>
@@ -42,6 +45,7 @@ import ResizablePanel from './widgets/ResizablePanel';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
 import SkyNotebook from './widgets/notebook/SkyNotebook';
+import FileManager from './widgets/file-manager/Main';
 import { initCommands } from './config/commands';
 
 export default {
@@ -49,7 +53,8 @@ export default {
     components: {
         SkyNotebook,
         Sidebar,
-        ResizablePanel
+        ResizablePanel,
+        FileManager
     },
     provide() {
         return {

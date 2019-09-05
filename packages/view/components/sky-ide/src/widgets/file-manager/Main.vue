@@ -217,8 +217,9 @@ export default {
 
 <style lang="scss">
 .file-main {
-    height: 1000px;
-    width: 400px;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
     user-select: none;
     .el-table tr td,
     .el-table tr th.is-leaf {

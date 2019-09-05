@@ -289,7 +289,8 @@ export default {
                     setting: {
                         shareType: 'PRIVATE',
                         users: [],
-                        groups: []
+                        groups: [],
+                        isPublic: false
                     }
                 };
                 updateGroupModels(params).then(() => {
@@ -394,7 +395,11 @@ export default {
                 case 'share':
                     this.dialogVisible = true;
                     this.editingModel = row;
-                    Object.assign(this.shareForm, row);
+                    Object.assign(this.shareForm, {
+                        shareType: row.shareType,
+                        users: row.users,
+                        groups: row.groups
+                    });
                     break;
                 case 'edit':
                     this.createDialogVisible = true;

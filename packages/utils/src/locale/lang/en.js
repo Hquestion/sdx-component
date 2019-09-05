@@ -655,6 +655,7 @@ export default {
             UserName: 'Username',
             SharedAt: 'Shared At',
             UpdatedAt: 'Updated At',
+            LastModify: 'Last Modified',
             PleaseFinishRenameOrMkdir: 'Please finish rename or new folder first',
             UploadFile: '@:(view.file.Upload) @:(view.file.File)',
             UploadFolder: '@:(view.file.Upload) @:(view.file.Folder)',

@@ -14,10 +14,13 @@
             </ResizablePanel>
             <ResizablePanel>
                 <ResizablePanel child-direction="horizontal">
-                    <ResizablePanel :init-width="200">
+                    <ResizablePanel :init-width="400">
                         <SkyCommands />
-                        <!-- <SkyTerminal /> -->
                     </ResizablePanel>
+                    <!-- <SkyTerminal /> -->
+                    <!-- <ResizablePanel :init-width="400">
+                        <file-manager />
+                    </ResizablePanel> -->
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
                             <SkyNotebook :file="currentFile" />
@@ -43,12 +46,14 @@
 
 <script>
 import ResizablePanel from './widgets/ResizablePanel';
-import { CommandRegistry } from '@phosphor/commands';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
 import SkyNotebook from './widgets/notebook/SkyNotebook';
 import SkyCommands from './widgets/notebook/SkyCommands';
 import SkyTerminal from './widgets/terminal/Terminal';
+import FileManager from './widgets/file-manager/Main';
+import { initCommands } from './config/commands';
+
 export default {
     name: 'Main',
     components: {
@@ -56,7 +61,8 @@ export default {
         Sidebar,
         ResizablePanel,
         SkyCommands,
-        SkyTerminal
+        SkyTerminal,
+        FileManager
     },
     provide() {
         return {
@@ -65,7 +71,7 @@ export default {
     },
     data() {
         return {
-            commands: new CommandRegistry(),
+            commands: initCommands(),
             sidebar: {
                 currentTab: '',
                 activeWindows: []

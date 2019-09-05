@@ -42,7 +42,8 @@
         "@jupyterlab/services": "^4.1.0",
         "@jupyterlab/terminal": "^1.1.0",
         "@jupyterlab/theme-light-extension": "^1.1.0",
-        "@jupyterlab/coreutils": "~3.1.0"
+        "@jupyterlab/coreutils": "~3.1.0",
+        "interactjs": "^1.6.1"
     },
     "peerDependencies": {
         "@sdx/ui": "^1.0.2",

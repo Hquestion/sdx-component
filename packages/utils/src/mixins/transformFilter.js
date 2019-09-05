@@ -1,4 +1,4 @@
-import { byteFormatter, dateFormatter } from '../helper/transform';
+import { byteFormatter, dateFormatter, getDateDiff } from '../helper/transform';
 
 const fillZero = (num) => {
     return num < 10 ? '0' + num : num;
@@ -8,6 +8,7 @@ export default {
     filters: {
         byteFormatter,
         dateFormatter,
+        getDateDiff,
         seconds2HMS(seconds) {
             if (seconds > 0 && seconds < 1) {
                 seconds = 1;

@@ -39,10 +39,11 @@
 
 <script>
 import ResizablePanel from './widgets/ResizablePanel';
-import { CommandRegistry } from '@phosphor/commands';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
 import SkyNotebook from './widgets/notebook/SkyNotebook';
+import { initCommands } from './config/commands';
+
 export default {
     name: 'Main',
     components: {
@@ -57,7 +58,7 @@ export default {
     },
     data() {
         return {
-            commands: new CommandRegistry(),
+            commands: initCommands(),
             sidebar: {
                 currentTab: '',
                 activeWindows: []
@@ -85,17 +86,6 @@ export default {
         window.addEventListener('keydown', event => {
             this.commands.processKeydownEvent(event);
         }, true);
-        this.commands.addCommand('run:test', {
-            execute: () => console.log(111)
-        });
-
-        this.commands.addKeyBinding({
-            selector: '.sdxv-skyide-sidebar',
-            keys: ['Enter'],
-            command: 'run:test'
-        });
-        window.nbCommands = this.commands
-        console.log(this.commands.listCommands());
     }
 };
 </script>

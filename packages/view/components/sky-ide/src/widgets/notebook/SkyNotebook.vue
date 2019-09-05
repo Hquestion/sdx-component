@@ -27,6 +27,9 @@ import SkyMarkdownCellModel from '../../model/MarkdownCell';
 import SkyRawCellModel from '../../model/RawCell';
 import { CodeCell } from '@jupyterlab/cells';
 import { CommandRegistry } from '@phosphor/commands';
+import setupCommands from './setupCommands';
+import { initCommands } from '../../config/commands';
+
 export default {
     name: 'SkyNotebook',
     components: {
@@ -69,7 +72,7 @@ export default {
     inject: {
         app: {
             default: {
-                commands: new CommandRegistry()
+                commands: initCommands()
             }
         }
     },
@@ -147,19 +150,18 @@ export default {
         },
         onAttachCell(data, widget) {
             this.cellMap[data.order] = widget;
-            console.log(widget);
         },
         onRemoveCell(data, widget) {
             delete this.cellMap[data.order];
         },
-        insertCell(type) {
+        insertCell(type, model) {
             let cell;
             if (type === 'code') {
-                cell = new SkyCodeCellModel({});
+                cell = model || new SkyCodeCellModel({});
             } else if (type === 'markdown') {
-                cell = new SkyMarkdownCellModel({});
+                cell = model || new SkyMarkdownCellModel({});
             } else {
-                cell = new SkyRawCellModel({});
+                cell = model || new SkyRawCellModel({});
             }
             cell.order = this.nextOrder();
             this.notebook.cells.push(cell);
@@ -207,24 +209,6 @@ export default {
                     this.activeCellWidget.model.rendered = false;
                 }
             });
-        },
-        registerCommands(nb) {
-            this.app.commands.addCommand('run:cell', {
-                label: 'Run Cell',
-                execute: () => {
-                    if (nb.activeCell && nb.activeCell.cell_type === 'code') {
-                        CodeCell.execute(nb.activeCellWidget, {kernel: {}});
-                    } else if (nb.activeCell && nb.activeCell.cell_type === 'markdown') {
-                        nb.activeCellWidget.rendered = true;
-                    }
-                }
-            });
-
-            this.app.commands.addKeyBinding({
-                selector: '.jp-InputArea-editor',
-                keys: ['Shift Enter'],
-                command: 'run:cell'
-            });
         }
     },
     watch: {
@@ -241,8 +225,7 @@ export default {
         }
     },
     mounted() {
-        // this.init();
-        this.registerCommands(this);
+        setupCommands(this.app.commands, this);
     }
 };
 </script>

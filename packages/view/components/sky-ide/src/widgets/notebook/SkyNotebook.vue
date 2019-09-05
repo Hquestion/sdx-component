@@ -154,6 +154,9 @@ export default {
         onRemoveCell(data, widget) {
             delete this.cellMap[data.order];
         },
+        /**
+        * 插入cell
+        */
         insertCell(type, model) {
             let cell;
             if (type === 'code') {

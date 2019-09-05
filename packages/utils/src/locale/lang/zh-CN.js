@@ -654,6 +654,7 @@ export default {
             UserName: '用户名',
             SharedAt: '共享时间',
             UpdatedAt: '更新时间',
+            LastModify: '上次更新',
             PleaseFinishRenameOrMkdir: '请先完成新建或重命名',
             UploadFile: '@:(view.file.Upload)@:(view.file.File)',
             UploadFolder: '@:(view.file.Upload)@:(view.file.Folder)',

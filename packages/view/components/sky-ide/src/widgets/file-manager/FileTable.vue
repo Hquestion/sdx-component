@@ -23,6 +23,7 @@
                 prop="name"
                 :sort-orders="['ascending', 'descending']"
                 v-if="true"
+                min-width="200"
             >
                 <template #default="{row}">
                     <FileName

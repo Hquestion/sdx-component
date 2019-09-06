@@ -1,5 +1,6 @@
 export const SIDEBAR_FILE = 'SIDEBAR_FILE';
 export const SIDEBAR_DATA = 'SIDEBAR_DATA';
+export const SIDEBAR_COMMANDS = 'SIDEBAR_COMMANDS';
 export const SIDEBAR_TERMINAL = 'SIDEBAR_TERMINAL';
 
 export const SIDEBAR_TABS = [
@@ -10,6 +11,11 @@ export const SIDEBAR_TABS = [
     },
     {
         name: SIDEBAR_DATA,
+        icon: 'sdx-icon-tensorflow',
+        label: ''
+    },
+    {
+        name: SIDEBAR_COMMANDS,
         icon: 'sdx-icon-tensorflow',
         label: ''
     }

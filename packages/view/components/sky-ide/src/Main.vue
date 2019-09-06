@@ -15,8 +15,12 @@
             <ResizablePanel>
                 <ResizablePanel child-direction="horizontal">
                     <ResizablePanel :init-width="400">
-                        <file-manager />
+                        <SkyCommands />
                     </ResizablePanel>
+                    <!-- <SkyTerminal /> -->
+                    <!-- <ResizablePanel :init-width="400">
+                        <file-manager />
+                    </ResizablePanel> -->
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
                             <SkyEditorAdaptor :file="currentFile"></SkyEditorAdaptor>
@@ -45,6 +49,8 @@ import ResizablePanel from './widgets/ResizablePanel';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
 import SkyNotebook from './widgets/notebook/SkyNotebook';
+import SkyCommands from './widgets/notebook/SkyCommands';
+import SkyTerminal from './widgets/terminal/Terminal';
 import FileManager from './widgets/file-manager/Main';
 import { initCommands } from './config/commands';
 import SkyEditorAdaptor from './widgets/adaptor/SkyEditorAdaptor';
@@ -56,6 +62,8 @@ export default {
         SkyNotebook,
         Sidebar,
         ResizablePanel,
+        SkyCommands,
+        SkyTerminal,
         FileManager
     },
     provide() {
@@ -95,6 +103,17 @@ export default {
         window.addEventListener('keydown', event => {
             this.commands.processKeydownEvent(event);
         }, true);
+        this.commands.addCommand('run:test', {
+            execute: () => console.log(111)
+        });
+
+        this.commands.addKeyBinding({
+            selector: '.sdxv-skyide-sidebar',
+            keys: ['Enter'],
+            command: 'run:test'
+        });
+        window.nbCommands = this.commands;
+        console.log(this.commands.listCommands());
     }
 };
 </script>

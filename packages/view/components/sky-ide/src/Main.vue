@@ -19,7 +19,7 @@
                     </ResizablePanel>
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
-                            <SkyNotebook :file="currentFile" />
+                            <SkyEditorAdaptor :file="currentFile"></SkyEditorAdaptor>
                         </ResizablePanel>
                         <ResizablePanel
                             :fixed="true"
@@ -47,10 +47,12 @@ import { SIDEBAR_TERMINAL } from './config';
 import SkyNotebook from './widgets/notebook/SkyNotebook';
 import FileManager from './widgets/file-manager/Main';
 import { initCommands } from './config/commands';
+import SkyEditorAdaptor from './widgets/adaptor/SkyEditorAdaptor';
 
 export default {
     name: 'Main',
     components: {
+        SkyEditorAdaptor,
         SkyNotebook,
         Sidebar,
         ResizablePanel,
@@ -76,8 +78,10 @@ export default {
 
             },
             currentFile: {
-                path: '/test.ipynb',
-                // path: '/first.py',
+                // path: '/test.ipynb',
+                // name: 'test.ipynb',
+                path: '/commands.js',
+                name: 'commands.js',
                 ownerId: '292a2b73-3093-4782-8719-a11e01e08398'
             }
         };

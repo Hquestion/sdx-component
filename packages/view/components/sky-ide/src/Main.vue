@@ -20,7 +20,7 @@
                     </ResizablePanel>
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
-                            <SkyEditorAdaptor :file="currentFile"></SkyEditorAdaptor>
+                            <SkyEditorAdaptor :file="currentFile" />
                         </ResizablePanel>
                         <ResizablePanel
                             :fixed="true"
@@ -34,7 +34,7 @@
                     :init-height="100"
                     :collapse="!terminalVisible"
                 >
-                    <SkyTerminal />
+                    <SkyTerminal v-if="terminalVisible" />
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>

@@ -35,14 +35,12 @@
         "@jupyterlab/completer": "^1.0.5",
         "@jupyterlab/mathjax2": "^1.1.0",
         "@jupyterlab/rendermime": "^1.0.5",
+        "@jupyterlab/services": "^4.1.0",
+        "@jupyterlab/terminal": "^1.1.0",
         "@phosphor/commands": "^1.7.0",
         "@phosphor/widgets": "^1.9.0",
         "@sdx/utils": "^1.1.22",
         "fake-indexeddb": "^2.1.1",
-        "@jupyterlab/services": "^4.1.0",
-        "@jupyterlab/terminal": "^1.1.0",
-        "@jupyterlab/theme-light-extension": "^1.1.0",
-        "@jupyterlab/coreutils": "~3.1.0",
         "interactjs": "^1.6.1"
     },
     "peerDependencies": {

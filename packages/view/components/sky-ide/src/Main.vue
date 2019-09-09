@@ -15,9 +15,8 @@
             <ResizablePanel>
                 <ResizablePanel child-direction="horizontal">
                     <ResizablePanel :init-width="400">
-                        <SkyCommands />
+                        <SkyTerminal />
                     </ResizablePanel>
-                    <!-- <SkyTerminal /> -->
                     <!-- <ResizablePanel :init-width="400">
                         <file-manager />
                     </ResizablePanel> -->

@@ -1,6 +1,6 @@
 <script>
 export default {
-    name: 'SdxuEllipseBreadcrumb',
+    name: 'SkyideEllipseBreadcrumb',
     data() {
         return {};
     },
@@ -20,9 +20,9 @@ export default {
         const { breadcrumb } = this;
         const handleClick = item => this.$emit('nav', item);
         const breadcrumbItem = (item, ignoreLastArrow) => (
-            <div class="sdxu-ellipse-breadcrumb__item" vOn:click={() => !ignoreLastArrow && handleClick(item)}>
-                <div class={{ 'sdxu-ellipse-breadcrumb__name': true, 'is-last': !!ignoreLastArrow }}> { item.name } </div>
-                {!ignoreLastArrow && (<div class="sdxu-ellipse-breadcrumb__split">/</div>) }
+            <div class="skyide-ellipse-breadcrumb__item" vOn:click={() => !ignoreLastArrow && handleClick(item)}>
+                <div class={{ 'skyide-ellipse-breadcrumb__name': true, 'is-last': !!ignoreLastArrow }}> { item.name } </div>
+                {!ignoreLastArrow && (<div class="skyide-ellipse-breadcrumb__split">/</div>) }
             </div>
         );
         const make = () => {
@@ -30,16 +30,16 @@ export default {
                 const leftList = breadcrumb.slice(0, Math.floor(this.maxVisible / 2));
                 const rightList = breadcrumb.slice(-2);
                 return (
-                    <div class="sdxu-ellipse-breadcrumb">
+                    <div class="skyide-ellipse-breadcrumb">
                         {leftList.map(item => breadcrumbItem(item))}
                         ...
-                        <div class="sdxu-ellipse-breadcrumb__split">/</div>
+                        <div class="skyide-ellipse-breadcrumb__split">/</div>
                         {rightList.map((item, index) => breadcrumbItem(item, index === rightList.length - 1))}
                     </div>
                 );
             } else {
                 return (
-                    <div class="sdxu-ellipse-breadcrumb">
+                    <div class="skyide-ellipse-breadcrumb">
                         {
                             breadcrumb.map((item, index) => breadcrumbItem(item, index === breadcrumb.length - 1))
                         }
@@ -54,11 +54,11 @@ export default {
 
 <style lang="scss" scoped>
     @import "~@sdx/utils/src/theme-common/var";
-    .sdxu-ellipse-breadcrumb {
+    .skyide-ellipse-breadcrumb {
         font-size: 14px;
-        .sdxu-ellipse-breadcrumb__item {
+        .skyide-ellipse-breadcrumb__item {
             display: inline-block;
-            .sdxu-ellipse-breadcrumb__name {
+            .skyide-ellipse-breadcrumb__name {
                 display: inline-block;
                 cursor: pointer;
                 color: $sdx-text-regular-color;
@@ -75,12 +75,12 @@ export default {
                     }
                 }
             }
-            .sdxu-ellipse-breadcrumb__split {
+            .skyide-ellipse-breadcrumb__split {
                 display: inline-block;
                 margin: 0 5px;
             }
         }
-        .sdxu-ellipse-breadcrumb__split {
+        .skyide-ellipse-breadcrumb__split {
             display: inline-block;
             margin: 0 5px;
         }

@@ -1,5 +1,5 @@
 <template>
-    <div class="sdxv-file-table">
+    <div class="skyide-file-table">
         <SdxuTable
             ref="fileTable"
             :dynamic="true"
@@ -253,13 +253,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sdxv-file-table {
+.skyide-file-table {
     height: calc(100% - 100px);
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {
         display: none;
     }
-    .sdxv-file-table__checkbar {
+    .skyide-file-table__checkbar {
         padding-left: 10px;
         line-height: 58px;
     }

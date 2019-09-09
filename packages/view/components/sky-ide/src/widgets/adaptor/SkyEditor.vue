@@ -16,19 +16,13 @@ require('codemirror/mode/r/r.js');
 require('codemirror/mode/clike/clike.js');
 require('codemirror/mode/javascript/javascript.js');
 
-import { codemirror } from 'vue-codemirror-lite';
-// import CodeMirror from 'codemirror';
+import { codemirror } from 'vue-codemirror';
+import 'codemirror/lib/codemirror.css';
 import { readFile, saveFile } from '@sdx/utils/src/api/file';
 import { findFileMode, findModeByName } from '../../config/supportMimeTypes';
 
-
-import 'codemirror/theme/base16-dark.css';
-
-// require('codemirror/lib/codemirror.css');
-// require('codemirror/addon/hint/show-hint.js');
-// require('codemirror/addon/hint/show-hint.css');
-// require('codemirror/addon/mode/loadmode');
-
+require('codemirror/addon/hint/show-hint.js');
+require('codemirror/addon/hint/show-hint.css');
 
 let _resolve;
 
@@ -47,8 +41,7 @@ export default {
                 lineWrapping: false,
                 spellcheck: true,
                 autocorrect: true,
-                autofocus: true,
-                theme: 'base16-dark'
+                autofocus: true
             },
             ready: new Promise(resolve => _resolve = resolve)
         };
@@ -71,15 +64,12 @@ export default {
         async readFile(file) {
             await this.ready;
             this.code = await readFile(file.path, file.ownerId);
-            console.log(this.$refs.codemirror.editor);
-            // this.$refs.codemirror.editor.setOption('value', this.code);
             this.$forceUpdate();
         },
         async setMode(file) {
             await this.ready;
             if (file) {
                 let mode = findFileMode(file);
-                console.log(this);
                 this.$set(this.editorOptions, 'mode', mode.mime);
                 // this.$refs.codemirror.editor.setOption('mode', mode.mime);
                 // FIXME 当前不能支持动态加载mode的js文件，需对应的解决方案
@@ -130,6 +120,10 @@ export default {
     },
     mounted() {
         _resolve();
+        // var myCodeMirror = CodeMirror(this.$el, {
+        //     value: 'function myScript(){return 100;}\n',
+        //     mode:  'javascript'
+        // });
     },
     beforeDestroy() {
         _resolve = null;
@@ -141,7 +135,7 @@ export default {
     .sky-editor {
         position: relative;
         height: 100%;
-        & /deep/ .vue-codemirror-wrap {
+        & /deep/ .vue-codemirror {
             position: absolute;
             left: 0;
             top: 0;

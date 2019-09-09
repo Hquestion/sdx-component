@@ -18,7 +18,7 @@
 
 <script>
 import SdxuDialog from '@sdx/ui/components/dialog';
-import { codemirror } from 'vue-codemirror-lite';
+import { codemirror } from 'vue-codemirror';
 import { isFunction } from '@sdx/utils/src/helper/tool';
 import { t } from '@sdx/utils/src/locale';
 import locale from '@sdx/utils/src/mixins/locale';

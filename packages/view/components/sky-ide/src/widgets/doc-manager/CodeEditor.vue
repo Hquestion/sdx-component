@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { codemirror } from 'vue-codemirror-lite';
+import { codemirror } from 'vue-codemirror';
 
 require('codemirror/addon/hint/show-hint.js');
 require('codemirror/addon/hint/show-hint.css');

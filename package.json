@@ -109,7 +109,6 @@
         "sh": "0.0.3",
         "vue": "^2.6.10",
         "vue-clipboard2": "^0.3.0",
-        "vue-codemirror-lite": "^1.0.4",
         "vue-highlight.js": "^2.2.0",
         "vuepress": "0.14.10",
         "vuescroll": "^4.12.2"

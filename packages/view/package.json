@@ -43,7 +43,8 @@
         "@phosphor/widgets": "^1.9.0",
         "@sdx/utils": "^1.1.22",
         "fake-indexeddb": "^2.1.1",
-        "interactjs": "^1.6.1"
+        "interactjs": "^1.6.1",
+        "vue-codemirror": "^4.0.6"
     },
     "peerDependencies": {
         "@sdx/ui": "^1.0.2",
@@ -54,7 +55,8 @@
         "echarts": "^4.2.1",
         "element-ui": "^2.7.2",
         "vue": "^2.6.10",
-        "vue-clipboard2": "^0.3.0"
+        "vue-clipboard2": "^0.3.0",
+        "vue-codemirror": "^4.0.6"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

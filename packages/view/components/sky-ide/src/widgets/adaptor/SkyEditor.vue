@@ -120,10 +120,6 @@ export default {
     },
     mounted() {
         _resolve();
-        // var myCodeMirror = CodeMirror(this.$el, {
-        //     value: 'function myScript(){return 100;}\n',
-        //     mode:  'javascript'
-        // });
     },
     beforeDestroy() {
         _resolve = null;

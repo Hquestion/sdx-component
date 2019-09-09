@@ -1,5 +1,5 @@
 <template>
-    <div class="sdxv-file-breadcrumb-bar">
+    <div class="skyide-file-breadcrumb-bar">
         <div class="file-breadcrumb">
             <EllipseBreadcrumb
                 :breadcrumb="list"
@@ -50,7 +50,7 @@ export default {
 
 <style lang="scss" scoped>
     @import "~@sdx/utils/src/theme-common/var";
-    .sdxv-file-breadcrumb-bar {
+    .skyide-file-breadcrumb-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;

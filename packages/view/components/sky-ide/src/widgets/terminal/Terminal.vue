@@ -1,5 +1,15 @@
 <template>
     <div class="SkyTerminal">
+        <SdxuButton
+            type="primary"
+            placement="right"
+            @click="addTerminal"
+            size="small"
+        >
+            <i
+                class="sdx-icon sdx-icon-plus"
+            />
+        </sdxubutton>
         <el-tabs
             v-model="editableTabsValue"
             type="card"
@@ -18,16 +28,6 @@
                 />
             </el-tab-pane>
         </el-tabs>
-        <SdxuButton
-            type="primary"
-            placement="right"
-            @click="addTerminal"
-            size="small"
-        >
-            <i
-                class="sdx-icon sdx-icon-plus"
-            />
-        </sdxubutton>
     </div>
 </template>
 
@@ -64,6 +64,7 @@ export default {
             const s =  await TerminalSession.startNew();
             const term = new Terminal(s, { theme: 'dark' });
             // Attach the widget to the dom.
+            window.console.log(this.$refs.terminal, 'init');
             Widget.attach(term, this.$refs.terminal[0]);
         },
         async addTerminal () {

@@ -2,7 +2,7 @@
     <!-- <SdxuContentPanel
         class="sdxv-file-main"
     > -->
-    <div class="file-main">
+    <div class="skyide-file-main">
         <OperationBar ref="operationBar" />
         <BreadcrumbBar ref="breadcrumbBar" />
         <FileTable ref="fileTable" />
@@ -216,7 +216,7 @@ export default {
 </style>
 
 <style lang="scss">
-.file-main {
+.skyide-file-main {
     width: 100%;
     height: 100%;
     padding: 10px;

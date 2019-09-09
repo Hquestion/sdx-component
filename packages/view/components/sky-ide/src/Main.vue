@@ -15,14 +15,12 @@
             <ResizablePanel>
                 <ResizablePanel child-direction="horizontal">
                     <ResizablePanel :init-width="400">
-                        <SkyTerminal />
+                        <SkyCommands v-show="false" />
+                        <file-manager v-show="true" />
                     </ResizablePanel>
-                    <!-- <ResizablePanel :init-width="400">
-                        <file-manager />
-                    </ResizablePanel> -->
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
-                            <SkyNotebook :file="currentFile" />
+                            <SkyEditorAdaptor :file="currentFile" />
                         </ResizablePanel>
                         <ResizablePanel
                             :fixed="true"
@@ -36,7 +34,7 @@
                     :init-height="100"
                     :collapse="!terminalVisible"
                 >
-                    终端
+                    <SkyTerminal v-if="terminalVisible" />
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>
@@ -52,10 +50,12 @@ import SkyCommands from './widgets/notebook/SkyCommands';
 import SkyTerminal from './widgets/terminal/Terminal';
 import FileManager from './widgets/file-manager/Main';
 import { initCommands } from './config/commands';
+import SkyEditorAdaptor from './widgets/adaptor/SkyEditorAdaptor';
 
 export default {
     name: 'Main',
     components: {
+        SkyEditorAdaptor,
         SkyNotebook,
         Sidebar,
         ResizablePanel,
@@ -83,8 +83,10 @@ export default {
 
             },
             currentFile: {
-                path: '/test.ipynb',
-                // path: '/first.py',
+                // path: '/test.ipynb',
+                // name: 'test.ipynb',
+                path: '/TmpFileManage.java',
+                name: 'TmpFileManage.java',
                 ownerId: '292a2b73-3093-4782-8719-a11e01e08398'
             }
         };

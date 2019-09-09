@@ -15,12 +15,9 @@
             <ResizablePanel>
                 <ResizablePanel child-direction="horizontal">
                     <ResizablePanel :init-width="400">
-                        <SkyCommands />
+                        <SkyCommands v-show="false" />
+                        <file-manager v-show="true" />
                     </ResizablePanel>
-                    <!-- <SkyTerminal /> -->
-                    <!-- <ResizablePanel :init-width="400">
-                        <file-manager />
-                    </ResizablePanel> -->
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
                             <SkyEditorAdaptor :file="currentFile"></SkyEditorAdaptor>
@@ -37,7 +34,7 @@
                     :init-height="100"
                     :collapse="!terminalVisible"
                 >
-                    终端
+                    <SkyTerminal />
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>
@@ -88,8 +85,8 @@ export default {
             currentFile: {
                 // path: '/test.ipynb',
                 // name: 'test.ipynb',
-                path: '/commands.js',
-                name: 'commands.js',
+                path: '/TmpFileManage.java',
+                name: 'TmpFileManage.java',
                 ownerId: '292a2b73-3093-4782-8719-a11e01e08398'
             }
         };

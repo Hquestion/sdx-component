@@ -7,9 +7,9 @@
 import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 // @ts-ignore
 // __webpack_public_path__ = URLExt.join(PageConfig.getBaseUrl(), 'example/');
-import '@jupyterlab/application/style/index.css';
+// import '@jupyterlab/application/style/index.css';
 import '@jupyterlab/terminal/style/index.css';
-import '@jupyterlab/theme-light-extension/style/index.css';
+// import '@jupyterlab/theme-light-extension/style/index.css';
 // import '../index.css';
 
 import { DockPanel, Widget } from '@phosphor/widgets';

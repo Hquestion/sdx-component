@@ -10,14 +10,25 @@
 </template>
 
 <script>
+require('codemirror/mode/python/python.js');
+require('codemirror/mode/markdown/markdown.js');
+require('codemirror/mode/r/r.js');
+require('codemirror/mode/clike/clike.js');
+require('codemirror/mode/javascript/javascript.js');
+
 import { codemirror } from 'vue-codemirror-lite';
-import CodeMirror from 'codemirror';
+// import CodeMirror from 'codemirror';
 import { readFile, saveFile } from '@sdx/utils/src/api/file';
 import { findFileMode, findModeByName } from '../../config/supportMimeTypes';
 
-require('codemirror/addon/hint/show-hint.js');
-require('codemirror/addon/hint/show-hint.css');
-require('codemirror/addon/mode/loadmode');
+
+import 'codemirror/theme/base16-dark.css';
+
+// require('codemirror/lib/codemirror.css');
+// require('codemirror/addon/hint/show-hint.js');
+// require('codemirror/addon/hint/show-hint.css');
+// require('codemirror/addon/mode/loadmode');
+
 
 let _resolve;
 
@@ -33,11 +44,11 @@ export default {
                 indentUnit: 4,
                 tabSize: 4,
                 lineNumbers: true,
-                lineWrapping: true,
+                lineWrapping: false,
                 spellcheck: true,
                 autocorrect: true,
                 autofocus: true,
-                mode: 'text'
+                theme: 'base16-dark'
             },
             ready: new Promise(resolve => _resolve = resolve)
         };
@@ -58,13 +69,19 @@ export default {
     },
     methods: {
         async readFile(file) {
+            await this.ready;
             this.code = await readFile(file.path, file.ownerId);
+            console.log(this.$refs.codemirror.editor);
+            // this.$refs.codemirror.editor.setOption('value', this.code);
+            this.$forceUpdate();
         },
         async setMode(file) {
             await this.ready;
             if (file) {
                 let mode = findFileMode(file);
-                this.editorOptions.mode = mode.mime;
+                console.log(this);
+                this.$set(this.editorOptions, 'mode', mode.mime);
+                // this.$refs.codemirror.editor.setOption('mode', mode.mime);
                 // FIXME 当前不能支持动态加载mode的js文件，需对应的解决方案
                 // CodeMirror.autoLoadMode(this.$refs.codemirror.editor, mode);
                 require(`codemirror/mode/${mode.mode}/${mode.mode}.js`);
@@ -120,6 +137,17 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+    .sky-editor {
+        position: relative;
+        height: 100%;
+        & /deep/ .vue-codemirror-wrap {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            overflow: auto;
+        }
+    }
 </style>

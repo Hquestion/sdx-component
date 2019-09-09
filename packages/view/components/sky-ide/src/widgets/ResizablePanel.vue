@@ -7,7 +7,7 @@
 <script>
 import emitter from '@sdx/utils/src/mixins/emitter';
 import interact from 'interactjs';
-import debounce from '@sdx/utils/src/helper/debounce';
+import throttle from '@sdx/utils/src/helper/throttle';
 export default {
     name: 'ResizablePanel',
     componentName: 'ResizablePanel',
@@ -155,7 +155,7 @@ export default {
                             if (child.fixed || nextChild.fixed || !hasExpandChildAfter()) {
                                 return;
                             }
-                            const heightResizeDebounce = debounce((e, dist) => {
+                            const heightResizeDebounce = throttle((e, dist) => {
                                 nextChild.height = nextChild.height - dist;
                                 nextChild.top = nextChild.top + dist;
 

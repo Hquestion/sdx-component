@@ -1,8 +1,8 @@
 <template>
-    <div class="sdxv-operation-bar">
-        <div class="sdxv-operation-bar__operations">
+    <div class="skyide-operation-bar">
+        <div class="skyide-operation-bar__operations">
             <SdxuButton
-                class="sdxv-operation-bar__operation-mkdir"
+                class="skyide-operation-bar__operation-mkdir"
                 icon="sdx-icon sdx-icon-plus"
                 @click="createFolder"
                 v-if="canMkdir()"
@@ -10,7 +10,7 @@
                 {{ t('view.file.NewFolder') }}
             </SdxuButton>
             <SdxwFileSelect
-                class="sdxv-operation-bar__operation-upload"
+                class="skyide-operation-bar__operation-upload"
                 ref="fileUploader"
                 source="local"
                 :inline="true"
@@ -54,6 +54,8 @@ export default {
             this.fileManager.$refs.fileTable.mkdir();
         },
         makeUploadParams() {
+            console.log('shareCenter', shareCenter);
+            console.log('222222222222222222222222');
             return {
                 ownerId: this.$route.query.ownerId || shareCenter.getUser().uuid,
                 path: this.fileManager.rootKind === rootKinds.PROJECT_SHARE ? '/' + this.fileManager.currentPath.split('/').slice(3) : this.fileManager.currentPath,
@@ -109,7 +111,7 @@ export default {
 </script>
 
 <style lang="scss">
-.sdxv-operation-bar {
+.skyide-operation-bar {
     display: flex;
     flex-direction: row;
     justify-content: space-between;

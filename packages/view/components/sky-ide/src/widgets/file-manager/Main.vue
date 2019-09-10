@@ -78,6 +78,11 @@ export default {
             fileManager: this
         };
     },
+    inject: {
+        app: {
+            default: () => {}
+        }
+    },
     methods: {
         isProjectRoot() {
             return false;
@@ -176,6 +181,9 @@ export default {
         },
         getUploadFiles() {
             return this.$refs.operationBar.$refs.fileUploader.getUploadFiles();
+        },
+        refresh() {
+            this.enterDirectory(this.currentPath);
         }
     },
     created() {
@@ -221,6 +229,7 @@ export default {
     height: 100%;
     padding: 10px;
     user-select: none;
+    box-sizing: border-box;
     .el-table tr td,
     .el-table tr th.is-leaf {
         border-top: none;

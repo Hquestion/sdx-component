@@ -4,7 +4,7 @@
             ref="codemirror"
             v-model="code"
             :options="editorOptions"
-            @change="handleCodeChange"
+            @input="handleCodeChange"
         />
     </div>
 </template>
@@ -43,7 +43,8 @@ export default {
                 autocorrect: true,
                 autofocus: true
             },
-            ready: new Promise(resolve => _resolve = resolve)
+            ready: new Promise(resolve => _resolve = resolve),
+            initiated: false
         };
     },
     props: {
@@ -63,8 +64,12 @@ export default {
     methods: {
         async readFile(file) {
             await this.ready;
+            if (this.initiated) return;
             this.code = await readFile(file.path, file.ownerId);
             this.$forceUpdate();
+            this.$nextTick(() => {
+                this.initiated = true;
+            });
         },
         async setMode(file) {
             await this.ready;
@@ -74,7 +79,9 @@ export default {
                 // this.$refs.codemirror.editor.setOption('mode', mode.mime);
                 // FIXME 当前不能支持动态加载mode的js文件，需对应的解决方案
                 // CodeMirror.autoLoadMode(this.$refs.codemirror.editor, mode);
-                require(`codemirror/mode/${mode.mode}/${mode.mode}.js`);
+                if (file.fileExtension !== '.txt') {
+                    require(`codemirror/mode/${mode.mode}/${mode.mode}.js`);
+                }
             } else {
                 let mode = findModeByName(this.type);
                 this.editorOptions.mode = mode.mime;
@@ -91,7 +98,8 @@ export default {
             }
         },
         handleCodeChange() {
-            this.$emit('modify', this);
+            if (!this.initiated || this.file.isEditing) return;
+            this.$parent.$emit('modify', this.file);
         }
     },
     watch: {
@@ -131,13 +139,13 @@ export default {
     .sky-editor {
         position: relative;
         height: 100%;
-        & /deep/ .vue-codemirror {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            overflow: auto;
-        }
+        overflow: auto;
+
     }
+</style>
+
+<style lang="scss">
+.CodeMirror {
+    height: 100%;
+}
 </style>

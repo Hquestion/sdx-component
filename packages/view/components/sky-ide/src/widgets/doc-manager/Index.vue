@@ -1,24 +1,6 @@
 <template>
     <div class="doc-manager">
         <div style="margin-bottom: 20px;">
-            <el-upload
-                class="upload-demo"
-                ref="upload"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-change="handlePreview"
-                style="display: inline-block; margin-right: 10px;"
-                :file-list="fileList"
-                :show-file-list="false"
-                :auto-upload="false"
-            >
-                <el-button
-                    slot="trigger"
-                    size="small"
-                    type="primary"
-                >
-                    打开文件
-                </el-button>
-            </el-upload>
             <el-button
                 size="small"
                 @click="saveCurrent"
@@ -33,19 +15,19 @@
             </el-button>
         </div>
         <el-tabs
-            v-model="activeDoc"
+            v-model="activeTab"
             type="card"
             closable
             @tab-remove="closeDoc"
             ref="tabs"
         >
             <el-tab-pane
-                v-for="(item) in openDocs"
+                v-for="(item) in app.doc.openFiles"
                 :key="item.path"
                 :name="item.path"
             >
                 <span slot="label">
-                    {{ item.title }}
+                    {{ item.name }}
                     <span
                         class="editing-state"
                         v-show="item.isEditing"
@@ -54,25 +36,16 @@
                     </span>
                 </span>
                 <div>
-                    <code-editor
-                        :doc-item="item"
-                        @handleEditing="handleEditing"
-                        :code.sync="item.content"
-                        :mode="item.mode"
-                        v-if="item.mode && item.mode !== 'txt' && item.mode !== 'sky-notebook'"
-                    />
-                    <unsupported-file v-if="!item.mode" />
-                    <txt-render
-                        v-if="item.mode === 'txt'"
-                        :doc-item="item"
-                        @handleEditing="handleEditing"
-                        :code.sync="item.content"
+                    <sky-editor-adaptor
+                        :file="item"
+                        @modify="handleModify"
+                        ref="editor"
                     />
                 </div>
             </el-tab-pane>
         </el-tabs>
         <el-dialog
-            :title="`是否要保存对 ${activeDocItem.title} 的更改?`"
+            :title="`是否要保存对 ${app.doc.currentFile.name} 的更改?`"
             :visible.sync="dialogVisible"
             width="20%"
             :show-close="false"
@@ -104,109 +77,70 @@
 </template>
 
 <script>
-import CodeEditor from './CodeEditor';
-import UnsupportedFile from './UnsupportedFile';
-import TxtRender from './TxtRender';
+import SkyEditorAdaptor from '../adaptor/SkyEditorAdaptor';
 export default {
     data() {
         return {
-            activeDoc: '',
-            openDocs: [],
-            activeDocItem: null,
-            dialogVisible: false,
-            fileList: []
+            activeTab: '',
+            dialogVisible: false
         };
     },
     components: {
-        CodeEditor,
-        UnsupportedFile,
-        TxtRender
+        SkyEditorAdaptor
+    },
+    inject: {
+        app: {
+            default: () => {}
+        }
     },
     methods: {
-        handlePreview(file) {
-            this.addDocFromFile(file);
-        },
-        switchRender(file) {
-            if (!file) return;
-            const fileName = file.name;
-            if (fileName.includes('.js')) {
-                file.mode = 'text/javascript';
-            } else if (fileName.includes('.java')) {
-                file.mode = 'text/x-java';
-            } else if (fileName.includes('.md')) {
-                file.mode = 'text/x-markdown';
-            } else if (fileName.includes('.txt')) {
-                file.mode = 'txt';
-            } else if (fileName.includes('.py') || fileName.includes('.ipynb')) {
-                file.mode = 'sky-notebook';
-            }
-        },
-        addDocFromFile(file) {
-            let reader = new FileReader();
-            reader.onload = e => {
-                file.content = e.target.result;
-                file.title = file.name;
-                file.path = file.name;
-                this.addDocFromPath(file.path, file);
-            };
-            reader.readAsText(file.raw);
-        },
         saveCurrent() {
-            this.saveDoc(this.openDocs.find(item => item.path === this.activeDoc));
+            this.saveDoc(this.app.doc.openFiles.find(item => item.path === this.activeTab));
         },
         saveAll() {
-            this.openDocs.forEach(item => {
+            this.app.doc.openFiles.forEach(item => {
                 if (item.isEditing) {
                     this.saveDoc(item);
                 }
             });
         },
         saveDoc(item) {
-            item.isEditing = false;
-            this.$refs.tabs.$refs.nav.$forceUpdate();
+            const editor = this.$refs.editor.find(editor => editor.file.path === item.path);
+            editor.save && editor.save().then(() => {
+                this.$set(item, 'isEditing', false);
+                this.$refs.tabs.$refs.nav.$forceUpdate();
+                this.$emit('refresh-tree');
+            });
         },
         cancelSave() {
-            this.activeDocItem.isEditing = false;
-            this.closeDoc(this.activeDoc);
+            this.app.doc.currentFile.isEditing = false;
+            this.closeDoc(this.activeTab);
             this.dialogVisible = false;
         },
         saveAndClose() {
-            this.saveDoc(this.activeDocItem);
-            this.closeDoc(this.activeDoc);
+            this.saveDoc(this.app.doc.currentFile);
+            this.closeDoc(this.activeTab);
             this.dialogVisible = false;
         },
-        handleEditing(item) {
-            item.isEditing = true;
+        handleModify(item) {
+            this.$set(item, 'isEditing', true);
             this.$refs.tabs.$refs.nav.$forceUpdate();
         },
-        async addDocFromPath(path, file) {
-            if (!path) return;
-            // make sure the doc has not been open already
-            this.activeDoc = path;
-            if (!this.openDocs.find(item => item.path === path)) {
-                this.switchRender(file);
-                let doc = file ? file : await this.fetchDoc(path);
-                this.openDocs.push({
-                    ...doc,
-                    isEditing: false
-                });
-                this.activeDoc = doc.path;
+        openFile(file) {
+            if (!file) return;
+            this.activeTab = file.path;
+            if (!this.app.doc.openFiles.find(item => item.path === file.path)) {
+                this.app.doc.openFiles.push(file);
+                this.app.doc.currentFile = file;
+                this.activeTab = file.path;
             }
         },
-        fetchDoc(path) {
-            const random = Math.random().toString(3).substring(0, 6);
-            return Promise.resolve({
-                path: path + random,
-                title: 'docTitle' + random,
-                content: ''
-            });
-        },
         closeDoc(target) {
-            let tabs = this.openDocs;
-            let activeName = this.activeDoc;
-            this.activeDocItem = this.openDocs.find(item => item.path === target);
-            if (this.activeDocItem.isEditing) {
-                this.activeDoc = target;
+            let tabs = this.app.doc.openFiles;
+            let activeName = this.activeTab;
+            this.app.doc.currentFile = this.app.doc.openFiles.find(item => item.path === target);
+            if (this.app.doc.currentFile.isEditing) {
+                this.activeTab = target;
                 this.dialogVisible = true;
             } else {
                 if (activeName === target) {
@@ -219,8 +153,8 @@ export default {
                         }
                     });
                 }
-                this.activeDoc = activeName;
-                this.openDocs = tabs.filter(tab => tab.path !== target);
+                this.activeTab = activeName;
+                this.app.doc.openFiles = tabs.filter(tab => tab.path !== target);
             }
         }
     }
@@ -231,7 +165,7 @@ export default {
 .doc-manager {
     height: 100%;
     width: 100%;
-    border: 1px solid red;
+    position: relative;
 }
 </style>
 
@@ -239,6 +173,10 @@ export default {
 .doc-manager {
     .el-tabs__item .el-icon-close {
         margin-left: 15px;
+    }
+    .el-tabs__content {
+        position: initial;
+        overflow: initial;
     }
 }
 </style>

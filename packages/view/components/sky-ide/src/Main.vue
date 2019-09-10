@@ -38,6 +38,18 @@
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>
+        <script
+            id="jupyter-config-data"
+            type="application/json"
+        >
+            {
+            "baseUrl": "http://localhost:8080",
+            "token": "",
+            "notebookPath": "Untitled.ipynb",
+            "mathjaxUrl": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
+            "mathjaxConfig": "TeX-AMS_CHTML-full,Safe"
+            }
+        </script>
     </div>
 </template>
 
@@ -45,7 +57,6 @@
 import ResizablePanel from './widgets/ResizablePanel';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
-import SkyNotebook from './widgets/notebook/SkyNotebook';
 import SkyCommands from './widgets/notebook/SkyCommands';
 import SkyTerminal from './widgets/terminal/Terminal';
 import FileManager from './widgets/file-manager/Main';
@@ -56,7 +67,6 @@ export default {
     name: 'Main',
     components: {
         SkyEditorAdaptor,
-        SkyNotebook,
         Sidebar,
         ResizablePanel,
         SkyCommands,
@@ -83,10 +93,10 @@ export default {
 
             },
             currentFile: {
-                // path: '/test.ipynb',
-                // name: 'test.ipynb',
-                path: '/TmpFileManage.java',
-                name: 'TmpFileManage.java',
+                path: '/Untitled.ipynb',
+                name: 'Untitled.ipynb',
+                // path: '/TmpFileManage.java',
+                // name: 'TmpFileManage.java',
                 ownerId: '292a2b73-3093-4782-8719-a11e01e08398'
             }
         };

@@ -107,10 +107,10 @@ export default {
         saveDoc(item) {
             const editor = this.$refs.editor.find(editor => editor.file.path === item.path);
             editor.save && editor.save().then(() => {
-                this.$set(item, 'isEditing', false);
                 this.$refs.tabs.$refs.nav.$forceUpdate();
                 this.$emit('refresh-tree');
             });
+            this.$set(item, 'isEditing', false);
         },
         cancelSave() {
             this.app.doc.currentFile.isEditing = false;

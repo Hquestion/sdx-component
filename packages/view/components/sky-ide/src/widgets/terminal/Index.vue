@@ -65,11 +65,6 @@ export default {
             }
         },
     },
-    mounted() {
-        if(this.app.terminalVisible) {
-            this.initTerminal();
-        }
-    },
     methods: {
         initTerminal() {
             let newTabName = ++this.tabIndex + '';

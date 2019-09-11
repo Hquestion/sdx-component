@@ -31,10 +31,10 @@
                     </ResizablePanel>
                 </ResizablePanel>
                 <ResizablePanel
-                    :init-height="100"
+                    :init-height="400"
                     :collapse="!terminalVisible"
                 >
-                    <SkyTerminal v-if="terminalVisible" />
+                    <SkyTerminal />
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>
@@ -47,7 +47,7 @@ import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
 import SkyNotebook from './widgets/notebook/SkyNotebook';
 import SkyCommands from './widgets/notebook/SkyCommands';
-import SkyTerminal from './widgets/terminal/Terminal';
+import SkyTerminal from './widgets/terminal/Index';
 import FileManager from './widgets/file-manager/Main';
 import { initCommands } from './config/commands';
 import SkyEditorAdaptor from './widgets/adaptor/SkyEditorAdaptor';

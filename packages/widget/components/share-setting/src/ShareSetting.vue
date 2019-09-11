@@ -77,8 +77,7 @@ export default {
         },
         confirmEdit() {
             if (this.handler) {
-                this.handler(this.shareForm.selectedUsers, this.shareForm.selectedGroups, this.shareForm.shareType);
-                return Promise.resolve();
+                return this.handler(this.shareForm.selectedUsers, this.shareForm.selectedGroups, this.shareForm.shareType);
             } else {
                 this.$emit('confirm-edit', this.shareForm.selectedUsers, this.shareForm.selectedGroups, this.shareForm.shareType);
                 return Promise.resolve();

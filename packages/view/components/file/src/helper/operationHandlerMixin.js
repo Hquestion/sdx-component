@@ -232,6 +232,10 @@ export default {
             }
         },
         doShare(users, groups, shareType) {
+            if (users.length === 0 && groups.length === 0 && shareType !== 'PUBLIC') {
+                Message.warning(t('view.file.PleaseSelectUserOrGroup'));
+                return Promise.reject();
+            }
             if (this.toShareRow) {
                 if (this.toShareRow.fileShareId) {
                     return sharePatch({

@@ -1,4 +1,5 @@
 import CodeMirror from 'codemirror';
+require('codemirror/mode/meta.js');
 
 export const EditorSupportMimeTypes = [
     ...CodeMirror.modeInfo
@@ -10,12 +11,8 @@ export const notebookSupportMimeTypes = [
 ];
 
 export function extname(file) {
-    let ext = file.fileExtension;
-    if (!ext) {
-        let names = file.name.split('.');
-        ext = names[names.length - 1];
-    }
-    return ext;
+    let names = file.name.split('.');
+    return names[names.length - 1];
 }
 
 export function findFileMode(file) {

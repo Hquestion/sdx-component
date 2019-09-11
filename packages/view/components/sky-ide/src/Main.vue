@@ -16,11 +16,18 @@
                 <ResizablePanel child-direction="horizontal">
                     <ResizablePanel :init-width="400">
                         <SkyCommands v-show="false" />
-                        <file-manager v-show="true" />
+                        <file-manager
+                            v-show="true"
+                            @open-file="openFile"
+                            ref="fileManager"
+                        />
                     </ResizablePanel>
                     <ResizablePanel child-direction="vertical">
                         <ResizablePanel>
-                            <SkyEditorAdaptor :file="currentFile" />
+                            <doc-manager
+                                ref="docManager"
+                                @refresh-tree="refreshTree"
+                            />
                         </ResizablePanel>
                         <ResizablePanel
                             :fixed="true"
@@ -38,6 +45,18 @@
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>
+        <script
+            id="jupyter-config-data"
+            type="application/json"
+        >
+            {
+            "baseUrl": "http://localhost:8080",
+            "token": "",
+            "notebookPath": "Untitled.ipynb",
+            "mathjaxUrl": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
+            "mathjaxConfig": "TeX-AMS_CHTML-full,Safe"
+            }
+        </script>
     </div>
 </template>
 
@@ -45,29 +64,30 @@
 import ResizablePanel from './widgets/ResizablePanel';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
-import SkyNotebook from './widgets/notebook/SkyNotebook';
 import SkyCommands from './widgets/notebook/SkyCommands';
 import SkyTerminal from './widgets/terminal/Index';
 import FileManager from './widgets/file-manager/Main';
+import DocManager from './widgets/doc-manager/Index';
 import { initCommands } from './config/commands';
-import SkyEditorAdaptor from './widgets/adaptor/SkyEditorAdaptor';
+import docManagerMixin from '../src/mixins/docManagerMixin';
+import fileManagerMixin from '../src/mixins/fileManagerMixin';
 
 export default {
     name: 'Main',
     components: {
-        SkyEditorAdaptor,
-        SkyNotebook,
         Sidebar,
         ResizablePanel,
         SkyCommands,
         SkyTerminal,
-        FileManager
+        FileManager,
+        DocManager
     },
     provide() {
         return {
             app: this
         };
     },
+    mixins: [docManagerMixin, fileManagerMixin],
     data() {
         return {
             commands: initCommands(),
@@ -80,14 +100,13 @@ export default {
                     currentTab: '',
                     activeWindows: []
                 }
-
             },
-            currentFile: {
-                // path: '/test.ipynb',
-                // name: 'test.ipynb',
-                path: '/TmpFileManage.java',
-                name: 'TmpFileManage.java',
-                ownerId: '292a2b73-3093-4782-8719-a11e01e08398'
+            doc: {
+                currentFile: null,
+                openFiles: []
+            },
+            file: {
+                currentPath: ''
             }
         };
     },

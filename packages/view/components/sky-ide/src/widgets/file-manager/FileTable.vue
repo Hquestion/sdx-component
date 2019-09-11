@@ -271,7 +271,8 @@ export default {
 
 <style lang="scss" scoped>
 .skyide-file-table {
-    height: calc(100% - 100px);
+    height: calc(100% - 150px);
+    margin-bottom: 20px;
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {
         display: none;

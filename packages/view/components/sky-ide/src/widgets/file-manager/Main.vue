@@ -6,6 +6,7 @@
         <OperationBar ref="operationBar" />
         <BreadcrumbBar ref="breadcrumbBar" />
         <FileTable ref="fileTable" />
+        <BottomBar />
     </div>
     <!-- </SdxuContentPanel> -->
 </template>
@@ -16,6 +17,7 @@ import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 import BreadcrumbBar from './BreadcrumbBar';
+import BottomBar from './BottomBar';
 
 import { getFilesList } from '@sdx/utils/src/api/file';
 // import { getFilesList, getMyShare, getMyAcceptedShare, getProjectShare } from '@sdx/utils/src/api/file';
@@ -71,7 +73,8 @@ export default {
     components: {
         BreadcrumbBar,
         FileTable,
-        OperationBar
+        OperationBar,
+        BottomBar
     },
     provide() {
         return {

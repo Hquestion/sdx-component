@@ -26,7 +26,6 @@ import SkyCodeCellModel from '../../model/CodeCell';
 import SkyMarkdownCellModel from '../../model/MarkdownCell';
 import SkyRawCellModel from '../../model/RawCell';
 import { CodeCell } from '@jupyterlab/cells';
-import { CommandRegistry } from '@phosphor/commands';
 import setupCommands from './setupCommands';
 import { initCommands } from '../../config/commands';
 

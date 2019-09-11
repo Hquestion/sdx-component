@@ -45,6 +45,18 @@
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>
+        <script
+            id="jupyter-config-data"
+            type="application/json"
+        >
+            {
+            "baseUrl": "http://localhost:8080",
+            "token": "",
+            "notebookPath": "Untitled.ipynb",
+            "mathjaxUrl": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
+            "mathjaxConfig": "TeX-AMS_CHTML-full,Safe"
+            }
+        </script>
     </div>
 </template>
 

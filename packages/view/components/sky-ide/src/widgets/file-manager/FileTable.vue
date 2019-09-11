@@ -10,12 +10,14 @@
             @sort-change="handleSortChange"
             :dynamic-top-height="topHeight"
             :dynamic-bottom-height="bottomHeight"
+            :row-class-name="getTableRowClassName"
             height="100%"
             v-loadmore="loadMore"
             v-loading="fileManager.loading"
             row-id="path"
             :highlight-key="editingRow && editingRow.path"
             @row-dblclick="handlePathNameClick"
+            @row-click="handleRowClick"
         >
             <el-table-column
                 :label="t('view.file.FileName')"
@@ -88,7 +90,8 @@ export default {
             containerCount: 0,
             editingRow: null,
             tempRowName: this.t('view.file.NewFolder'),
-            rootKinds
+            rootKinds,
+            selectedRows: []
         };
     },
     computed: {
@@ -151,7 +154,15 @@ export default {
                 }
             } else {
                 this.$parent.$emit('open-file', row);
+                this.selectedRows.splice(0, 1, row.path);
+                this.$refs.fileTable.$children[0].doLayout();
             }
+        },
+        handleRowClick(row) {
+            this.selectedRows.splice(0, 1, row.path);
+            this.$nextTick(() => {
+                this.$refs.fileTable.$children[0].doLayout();
+            });
         },
         saveEdit() {
             // todo: 保存修改,然后清空editingRow,刷新列表
@@ -241,6 +252,12 @@ export default {
         },
         scrollToTop() {
             this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+        },
+        getTableRowClassName({row}) {
+            if(this.selectedRows.includes(row.path)) {
+                return 'highlight-row';
+            }
+            return '';
         }
     },
     mounted() {

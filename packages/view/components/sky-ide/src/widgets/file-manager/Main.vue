@@ -188,7 +188,7 @@ export default {
     },
     created() {
         // load data from storage
-        this.currentPath = '';
+        this.currentPath = this.app.file.currentPath;
     },
     mounted() {
         const db = new Dexie('SkyIDE-File');
@@ -204,6 +204,7 @@ export default {
             if (val !== oldVal) {
                 this.enterDirectory(val);
                 this.$refs.breadcrumbBar.buildBreadcrumb(val);
+                this.app.file.currentPath = val;
             }
         },
         rootPath(val, oldVal) {

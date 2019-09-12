@@ -63,12 +63,14 @@ export default {
     },
     methods: {
         async readFile(file) {
-            await this.ready;
             if (this.initiated) return;
-            this.code = await readFile(file.path, file.ownerId);
+            let code = await readFile(file.path, file.ownerId);
+            await this.ready;
+            this.code = code + '';
             this.$forceUpdate();
             this.$nextTick(() => {
                 this.initiated = true;
+                this.$refs.codemirror.refresh();
             });
         },
         async setMode(file) {
@@ -100,6 +102,9 @@ export default {
         handleCodeChange() {
             if (!this.initiated) return;
             this.$emit('modify', this.file);
+        },
+        refresh() {
+            this.$refs.codemirror.refresh();
         }
     },
     watch: {

@@ -29,6 +29,7 @@
                         :file="item"
                         @modify="handleModify"
                         ref="editor"
+                        :activate="item.path === app.doc.currentFile.path"
                     />
                 </div>
             </el-tab-pane>

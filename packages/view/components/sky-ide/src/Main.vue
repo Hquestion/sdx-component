@@ -12,16 +12,32 @@
             >
                 <Sidebar />
             </ResizablePanel>
-            <ResizablePanel>
-                <ResizablePanel child-direction="horizontal">
-                    <ResizablePanel :init-width="400">
+            <ResizablePanel ref="editorMain">
+                <ResizablePanel
+                    child-direction="horizontal"
+                    :init-width="layout.editorWin.weight ? -1 : layout.editorWin.initWidth"
+                    :weight="layout.editorWin.weight"
+                    :min-width="layout.editorWin.minWidth"
+                    ref="editorWin"
+                >
+                    <ResizablePanel
+                        :init-width="layout.file.weight ? -1 : layout.file.initWidth"
+                        :weight="layout.file.weight"
+                        :min-width="layout.file.minWidth"
+                        :collapse="!leftPanelVisible"
+                    >
                         <file-manager
-                            v-show="true"
+                            v-show="fileManagerVisible"
                             @open-file="openFile"
                             ref="fileManager"
                         />
                     </ResizablePanel>
-                    <ResizablePanel child-direction="vertical">
+                    <ResizablePanel
+                        child-direction="vertical"
+                        :init-width="layout.doc.weight ? -1 : layout.doc.initWidth"
+                        :weight="layout.doc.weight"
+                        :min-width="layout.doc.minWidth"
+                    >
                         <ResizablePanel>
                             <doc-manager
                                 ref="docManager"
@@ -37,7 +53,9 @@
                     </ResizablePanel>
                 </ResizablePanel>
                 <ResizablePanel
-                    :init-height="400"
+                    :init-height="layout.terminal.weight ? -1 : layout.terminal.initHeight"
+                    :weight="layout.terminal.weight"
+                    :min-height="layout.terminal.minHeight"
                     :collapse="!terminalVisible"
                 >
                     <SkyTerminal ref="terminal" />
@@ -63,7 +81,6 @@
 import ResizablePanel from './widgets/ResizablePanel';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
-import SkyCommands from './widgets/notebook/SkyCommands';
 import SkyTerminal from './widgets/terminal/Index';
 import FileManager from './widgets/file-manager/Main';
 import DocManager from './widgets/doc-manager/Index';
@@ -73,12 +90,14 @@ import fileManagerMixin from '../src/mixins/fileManagerMixin';
 
 import setupDocCommands from './widgets/doc-manager/setupCommands';
 
+import { SIDEBAR_FILE } from './config';
+import { extend } from './utils/utils';
+
 export default {
     name: 'Main',
     components: {
         Sidebar,
         ResizablePanel,
-        SkyCommands,
         SkyTerminal,
         FileManager,
         DocManager
@@ -93,13 +112,29 @@ export default {
         return {
             commands: initCommands(),
             sidebar: {
-                currentTab: '',
+                currentTab: SIDEBAR_FILE,
                 activeWindows: []
             },
             layout: {
-                sidebar: {
-                    currentTab: '',
-                    activeWindows: []
+                editorWin: {
+                    initWidth: -1,
+                    weight: 1,
+                    minWidth: 20
+                },
+                file: {
+                    initWidth: 400,
+                    weight: undefined,
+                    minWidth: 50
+                },
+                doc: {
+                    initWidth: -1,
+                    weight: 1,
+                    minWidth: 50
+                },
+                terminal: {
+                    initHeight: 400,
+                    minHeight: 50,
+                    weight: undefined
                 }
             },
             doc: {
@@ -123,26 +158,100 @@ export default {
         },
         terminalVisible() {
             return this.sidebar.activeWindows.includes(SIDEBAR_TERMINAL);
+        },
+        leftPanelVisible() {
+            return this.sidebar.currentTab !== '';
+        },
+        fileManagerVisible() {
+            return this.sidebar.currentTab === SIDEBAR_FILE;
+        }
+    },
+    methods: {
+        recoveryLocal() {
+            const restorer = localStorage.getItem('SkyIDERestorer');
+            if (restorer) {
+                const restorerJSON = JSON.parse(restorer);
+                // this.layout = extend(this.layout, restorerJSON.layout);
+                Object.keys(this.layout).forEach((key) => {
+                    this.layout[key].weight = restorerJSON.layout[key].weight;
+                });
+                this.sidebar = extend(this.sidebar, restorerJSON.sidebar);
+                this.doc = extend(this.doc, restorerJSON.doc);
+                this.file = extend(this.file, restorerJSON.file);
+                this.$nextTick(() => {
+                    this.docManager.openFile(this.doc.currentFile);
+                });
+            } else {
+                // 没有的话使用默认配置
+            }
+        },
+        calcEditorMainWeight() {
+            const editorMainChildrenRatio = this.$refs.editorMain.childrenRatio;
+            const editorWinChildrenRatio = this.$refs.editorWin.childrenRatio;
+            let layout = {
+                editorWin: {
+                    weight: editorMainChildrenRatio[0].ratio
+                },
+                terminal: {
+                    weight: editorMainChildrenRatio[1].ratio
+                },
+                file: {
+                    weight: editorWinChildrenRatio[0].ratio
+                },
+                doc: {
+                    weight: editorWinChildrenRatio[1].ratio
+                }
+            };
+            return layout;
+        },
+        syncLayout() {
+            let layout = this.calcEditorMainWeight();
+            Object.keys(this.layout).forEach((key) => {
+                this.layout[key].weight = layout[key].weight;
+            });
+            let restorer = localStorage.getItem('SkyIDERestorer');
+            if (restorer) {
+                restorer = JSON.parse(restorer);
+            } else {
+                restorer = {};
+            }
+            restorer = extend(restorer, {layout});
+            localStorage.setItem('SkyIDERestorer', JSON.stringify(restorer));
+        },
+        prepareRestoreData() {
+            let stored = localStorage.getItem('SkyIDERestorer');
+            if (stored) {
+                stored = JSON.parse(stored);
+            } else {
+                stored = {};
+            }
+            const restorer = {
+                ...stored,
+                sidebar: this.sidebar,
+                doc: this.doc,
+                file: this.file
+            };
+            localStorage.setItem('SkyIDERestorer', JSON.stringify(restorer));
         }
     },
     mounted() {
+        // 恢复布局
+        this.recoveryLocal();
+        // 监听键盘事件
         window.addEventListener('keydown', event => {
             this.commands.processKeydownEvent(event);
         }, true);
-        this.commands.addCommand('run:test', {
-            execute: () => console.log(111)
-        });
-
-        this.commands.addKeyBinding({
-            selector: '.sdxv-skyide-sidebar',
-            keys: ['Enter'],
-            command: 'run:test'
-        });
-        window.nbCommands = this.commands;
-        console.log(this.commands.listCommands());
 
         // 初始化命令
         setupDocCommands(this.commands, this.docManager);
+        setInterval(() => {
+            this.prepareRestoreData();
+        }, 1000);
+    },
+    beforeDestroy() {
+        // 销毁前,保存配置
+        this.syncLayout();
+        this.prepareRestoreData();
     }
 };
 </script>

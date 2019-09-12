@@ -29,6 +29,10 @@ export default {
         file: {
             type: Object,
             default: () => {}
+        },
+        activate: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {
@@ -50,6 +54,15 @@ export default {
                 return 'SkyEditor';
             } else {
                 return 'UnsupportedFile';
+            }
+        }
+    },
+    watch: {
+        activate(val) {
+            if (val) {
+                this.$nextTick(() => {
+                    this.$refs.renderer.refresh && this.$refs.renderer.refresh();
+                });
             }
         }
     }

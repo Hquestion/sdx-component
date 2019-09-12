@@ -13,11 +13,6 @@ export const SIDEBAR_TABS = [
         name: SIDEBAR_DATA,
         icon: 'sdx-icon-tensorflow',
         label: ''
-    },
-    {
-        name: SIDEBAR_COMMANDS,
-        icon: 'sdx-icon-tensorflow',
-        label: ''
     }
 ];
 

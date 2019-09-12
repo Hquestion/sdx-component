@@ -60,6 +60,11 @@ export default {
             order: 0
         };
     },
+    inject: {
+        app: {
+            default: null
+        }
+    },
     computed: {
         rect() {
             return {
@@ -115,7 +120,6 @@ export default {
                             children.forEach(item => {
                                 hToAssign -= item.fixed ? item.height : 0;
                             });
-                            console.log(this.childrenRatio);
                             if (child.fixed) {
                                 child.height = this.childrenRatio[index].ratio;
                             } else {
@@ -125,7 +129,7 @@ export default {
                         child.top = assigned;
                         child.left = 0;
                         child.assigned = true;
-                        assigned += child.height;
+                        assigned += child.collapse ? 0 : child.height;
                         interact(child.$el)
                             .resizable({
                                 edges: {
@@ -188,7 +192,13 @@ export default {
                                             this.calcChildrenRatio('height');
                                         }, 200);
                                     }
-                                });
+                                })
+                                .on('resizeend', e => {
+                                    if (this.app) {
+                                        this.app.syncLayout();
+                                    }
+                                })
+                            ;
                         }
                     });
                     // 计算children的分配比例，在调整时按照比例重新分配
@@ -223,7 +233,7 @@ export default {
                         child.left = assigned;
                         child.top = 0;
                         child.assigned = true;
-                        assigned += child.width;
+                        assigned += child.collapse ? 0 : child.width;
                         if (index < children.length -1) {
                             let nextChild = children[index+1];
                             if (!nextChild.collapse) {
@@ -261,6 +271,11 @@ export default {
                                             // resize 之后重新计算分配比例
                                             this.calcChildrenRatio('width');
                                         }, 200);
+                                    }
+                                })
+                                .on('resizeend', e => {
+                                    if (this.app) {
+                                        this.app.syncLayout();
                                     }
                                 })
                             ;
@@ -340,6 +355,11 @@ export default {
     },
     watch: {
         collapse() {
+            if (this.$parent && this.$parent.$options.componentName === 'ResizablePanel') {
+                this.$parent.updateChildren(true);
+            }
+        },
+        weight() {
             if (this.$parent && this.$parent.$options.componentName === 'ResizablePanel') {
                 this.$parent.updateChildren(true);
             }

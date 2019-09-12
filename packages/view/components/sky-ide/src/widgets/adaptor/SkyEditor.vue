@@ -98,7 +98,7 @@ export default {
             }
         },
         handleCodeChange() {
-            if (!this.initiated || this.file.isEditing) return;
+            if (!this.initiated) return;
             this.$emit('modify', this.file);
         }
     },

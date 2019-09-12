@@ -1,5 +1,8 @@
 <template>
-    <div class="sky-doc-manager" tabindex="1">
+    <div
+        class="sky-doc-manager"
+        tabindex="1"
+    >
         <el-tabs
             v-model="activeTab"
             type="card"
@@ -16,7 +19,7 @@
                     {{ item.name }}
                     <span
                         class="editing-state"
-                        v-show="item.isEditing"
+                        v-show="fileEditingStatus[composeFileKey(item)]"
                     >
                         *
                     </span>
@@ -64,11 +67,14 @@
 
 <script>
 import SkyEditorAdaptor from '../adaptor/SkyEditorAdaptor';
+import { composeFileKey } from '../../utils/utils';
 export default {
     data() {
         return {
             activeTab: '',
-            dialogVisible: false
+            dialogVisible: false,
+            fileEditingStatus: {},
+            fileEditorInstances: {}
         };
     },
     components: {
@@ -85,12 +91,13 @@ export default {
         }
     },
     methods: {
+        composeFileKey,
         saveCurrent() {
             this.saveDoc(this.app.doc.openFiles.find(item => item.path === this.activeTab));
         },
         saveAll() {
             this.app.doc.openFiles.forEach(item => {
-                if (item.isEditing) {
+                if (this.fileEditingStatus[composeFileKey(item)]) {
                     this.saveDoc(item);
                 }
             });
@@ -101,10 +108,10 @@ export default {
                 this.$refs.tabs.$refs.nav.$forceUpdate();
                 this.$emit('refresh-tree');
             });
-            this.$set(item, 'isEditing', false);
+            this.$set(this.fileEditingStatus, this.composeFileKey(item), false);
         },
         cancelSave() {
-            this.app.doc.currentFile.isEditing = false;
+            this.$set(this.fileEditingStatus, this.composeFileKey(this.app.doc.currentFile), false);
             this.closeDoc(this.activeTab);
             this.dialogVisible = false;
         },
@@ -114,7 +121,8 @@ export default {
             this.dialogVisible = false;
         },
         handleModify(item) {
-            this.$set(item, 'isEditing', true);
+            if (this.fileEditingStatus[this.composeFileKey(item)]) return;
+            this.$set(this.fileEditingStatus, this.composeFileKey(item), true);
             this.$refs.tabs.$refs.nav.$forceUpdate();
         },
         openFile(file) {
@@ -124,13 +132,17 @@ export default {
                 this.app.doc.openFiles.push(file);
                 this.app.doc.currentFile = file;
                 this.activeTab = file.path;
+                this.$nextTick(() => {
+                    const editor = this.$refs.editor.find(editor => editor.file.path === file.path);
+                    this.fileEditorInstances[this.composeFileKey(file)] = editor && editor.$refs.renderer;
+                });
             }
         },
         closeDoc(target) {
             let tabs = this.app.doc.openFiles;
             let activeName = this.activeTab;
             this.app.doc.currentFile = this.app.doc.openFiles.find(item => item.path === target);
-            if (this.app.doc.currentFile.isEditing) {
+            if (this.fileEditingStatus[this.composeFileKey(this.app.doc.currentFile)]) {
                 this.activeTab = target;
                 this.dialogVisible = true;
             } else {
@@ -145,7 +157,10 @@ export default {
                     });
                 }
                 this.activeTab = activeName;
+                const file = this.app.doc.openFiles.find(item => item.path === target);
+                delete this.fileEditorInstances[this.composeFileKey(file)];
                 this.app.doc.openFiles = tabs.filter(tab => tab.path !== target);
+
             }
         }
     }

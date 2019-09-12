@@ -4,6 +4,7 @@
             :is="editor"
             :file="file"
             ref="renderer"
+            @modify="handlerModify"
         />
     </div>
 </template>
@@ -33,6 +34,9 @@ export default {
                 this.$refs.renderer.save();
                 resolve();
             });
+        },
+        handlerModify(file) {
+            this.$emit('modify', file);
         }
     },
     computed: {

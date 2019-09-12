@@ -13,7 +13,6 @@
             :row-class-name="getTableRowClassName"
             height="100%"
             v-loadmore="loadMore"
-            v-loading="fileManager.loading"
             row-id="path"
             :highlight-key="editingRow && editingRow.path"
             @row-dblclick="handlePathNameClick"

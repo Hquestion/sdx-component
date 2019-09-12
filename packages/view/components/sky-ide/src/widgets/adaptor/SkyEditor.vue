@@ -99,7 +99,7 @@ export default {
         },
         handleCodeChange() {
             if (!this.initiated || this.file.isEditing) return;
-            this.$parent.$emit('modify', this.file);
+            this.$emit('modify', this.file);
         }
     },
     watch: {

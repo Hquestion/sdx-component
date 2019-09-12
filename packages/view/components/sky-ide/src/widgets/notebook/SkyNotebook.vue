@@ -316,7 +316,8 @@ export default {
         notebook: {
             deep: true,
             handler(val) {
-                this.$emit('modify', this);
+                if (this.file.isEditing) return;
+                this.$emit('modify', this.file);
             }
         }
     },

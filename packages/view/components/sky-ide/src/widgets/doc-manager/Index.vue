@@ -1,19 +1,5 @@
 <template>
-    <div class="doc-manager">
-        <div style="margin-bottom: 20px;">
-            <el-button
-                size="small"
-                @click="saveCurrent"
-            >
-                保存当前
-            </el-button>
-            <el-button
-                size="small"
-                @click="saveAll"
-            >
-                保存全部
-            </el-button>
-        </div>
+    <div class="sky-doc-manager" tabindex="1">
         <el-tabs
             v-model="activeTab"
             type="card"
@@ -93,6 +79,11 @@ export default {
             default: () => {}
         }
     },
+    provide: {
+        doc() {
+            return this;
+        }
+    },
     methods: {
         saveCurrent() {
             this.saveDoc(this.app.doc.openFiles.find(item => item.path === this.activeTab));
@@ -162,21 +153,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.doc-manager {
+.sky-doc-manager {
     height: 100%;
     width: 100%;
     position: relative;
-}
-</style>
-
-<style lang="scss">
-.doc-manager {
-    .el-tabs__item .el-icon-close {
-        margin-left: 15px;
-    }
-    .el-tabs__content {
-        position: initial;
-        overflow: initial;
+    & /deep/ {
+        .el-tabs__item .el-icon-close {
+            margin-left: 15px;
+        }
+        .el-tabs__content {
+            position: initial;
+            overflow: initial;
+        }
     }
 }
 </style>

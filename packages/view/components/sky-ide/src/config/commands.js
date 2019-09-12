@@ -5,7 +5,9 @@ let commands;
 export const CommandIDs = {
     RUN_CELL: 'run:cell',
     COMPLETE: 'completer:invoke',
-    COMPLETER_SELECT: 'completer:select'
+    COMPLETER_SELECT: 'completer:select',
+
+    SAVE_DOC: 'save:doc'
 };
 
 const notebookCommands = [
@@ -40,6 +42,12 @@ export const CommandConfigs = {
         iconClass: '',
         key: ['Enter'],
         selector: '.jp-mod-completer-active'
+    },
+    [CommandIDs.SAVE_DOC]: {
+        label: 'Save',
+        iconClass: '',
+        key: ['Ctrl S'],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
     }
 };
 

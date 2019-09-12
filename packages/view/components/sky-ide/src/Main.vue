@@ -15,7 +15,6 @@
             <ResizablePanel>
                 <ResizablePanel child-direction="horizontal">
                     <ResizablePanel :init-width="400">
-                        <SkyCommands v-show="false" />
                         <file-manager
                             v-show="true"
                             @open-file="openFile"
@@ -41,7 +40,7 @@
                     :init-height="400"
                     :collapse="!terminalVisible"
                 >
-                    <SkyTerminal ref="terminal"/>
+                    <SkyTerminal ref="terminal" />
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>
@@ -120,7 +119,7 @@ export default {
             return this.$refs.fileManager;
         },
         terminal() {
-
+            return this.$refs.terminal;
         },
         terminalVisible() {
             return this.sidebar.activeWindows.includes(SIDEBAR_TERMINAL);

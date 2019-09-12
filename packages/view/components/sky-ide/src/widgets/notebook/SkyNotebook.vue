@@ -101,6 +101,12 @@ export default {
                 return this.cellMap[this.activeCellOrder];
             }
             return undefined;
+        },
+        isPyFile() {
+            return this.file.fileExtension === '.py' || this.file.path.endsWith('.py');
+        },
+        isNbFile() {
+            return this.file.fileExtension === '.ipynb' || this.file.path.endsWith('.ipynb');
         }
     },
     methods: {
@@ -111,7 +117,7 @@ export default {
             return await readFile(file.path, file.ownerId);
         },
         makeCells(content, file) {
-            if (file.fileExtension === '.py' || file.path.endsWith('.py')) {
+            if (this.isPyFile) {
                 let cell = new SkyCodeCellModel({
                     source: content
                 });
@@ -136,7 +142,7 @@ export default {
                         'version': '3.6.5'
                     }
                 };
-            } else if (file.fileExtension === '.ipynb' || file.path.endsWith('.ipynb')) {
+            } else if (this.isNbFile) {
                 let contentJSON = typeof content === 'string' ? JSON.parse(content) : content;
                 contentJSON.cells.forEach(cell => {
                     cell.order = this.nextOrder();
@@ -290,10 +296,28 @@ export default {
             });
         },
         async save() {
-            return await saveFile(JSON.stringify(this.notebook), this.file.path, this.file.ownerId).then(res => {
-                alert('保存成功');
-                return res;
-            });
+            if (this.isPyFile) {
+                let code = '';
+                this.notebook.cells.forEach(cell => {
+                    if (Array.isArray(cell.source)) {
+                        code += cell.source.join('\n');
+                    } else {
+                        code += cell.source;
+                    }
+                    code += '\n';
+                });
+                return await saveFile(code, this.file.path, this.file.ownerId).then(res => {
+                    alert('保存成功');
+                    return res;
+                });
+            } else if (this.isNbFile) {
+                return await saveFile(JSON.stringify(this.notebook), this.file.path, this.file.ownerId).then(res => {
+                    alert('保存成功');
+                    return res;
+                });
+            } else {
+                return Promise.reject('File not support');
+            }
         }
     },
     watch: {
@@ -315,8 +339,11 @@ export default {
         },
         notebook: {
             deep: true,
-            handler(val) {
-                if (this.file.isEditing) return;
+            handler() {
+                if (!this.initiated) {
+                    this.initiated = true;
+                    return;
+                }
                 this.$emit('modify', this.file);
             }
         }

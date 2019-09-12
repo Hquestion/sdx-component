@@ -1,5 +1,8 @@
 <template>
-    <div class="sky-editor-adaptor">
+    <div
+        class="sky-editor-adaptor"
+        tabindex="1"
+    >
         <component
             :is="editor"
             :file="file"

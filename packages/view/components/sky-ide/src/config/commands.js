@@ -3,11 +3,15 @@ import { CommandRegistry } from '@phosphor/commands';
 let commands;
 
 export const CommandIDs = {
-    RUN_CELL: 'run:cell'
+    RUN_CELL: 'run:cell',
+    COMPLETE: 'completer:invoke',
+    COMPLETER_SELECT: 'completer:select'
 };
 
 const notebookCommands = [
-    CommandIDs.RUN_CELL
+    CommandIDs.RUN_CELL,
+    CommandIDs.COMPLETE,
+    CommandIDs.COMPLETER_SELECT
 ];
 
 const CommandCategories = {
@@ -24,6 +28,18 @@ export const CommandConfigs = {
         iconClass: '',
         key: ['Shift Enter'],
         selector: '.jp-InputArea-editor'
+    },
+    [CommandIDs.COMPLETE]: {
+        label: 'Completer',
+        iconClass: '',
+        key: ['Tab'],
+        selector: '.jp-InputArea-editor.jp-mod-completer-enabled'
+    },
+    [CommandIDs.COMPLETER_SELECT]: {
+        label: 'Completer Select',
+        iconClass: '',
+        key: ['Enter'],
+        selector: '.jp-mod-completer-active'
     }
 };
 

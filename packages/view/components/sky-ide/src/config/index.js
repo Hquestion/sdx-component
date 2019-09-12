@@ -28,3 +28,14 @@ export const SIDEBAR_WINDOWS = [
         label: 'Terminal'
     }
 ];
+
+/**
+ * EDIT: 编辑模式 READONLY: 只读模式 CELL_DEBUG: cell调试模式 DEBUG: 单行调试模式
+ * @type {{EDIT: string, DEBUG: string, CELL_DEBUG: string, READONLY: string}}
+ */
+export const NotebookMode = {
+    DEBUG: 'DEBUG',
+    CELL_DEBUG: 'CELL_DEBUG',
+    EDIT: 'EDIT',
+    READONLY: 'READONLY'
+};

@@ -19,15 +19,25 @@
 </template>
 
 <script>
-import { readFile } from '@sdx/utils/src/api/file';
+import { CodeCell } from '@jupyterlab/cells';
+import { Session } from '@jupyterlab/services';
+import { Completer, CompleterModel, KernelConnector, CompletionHandler } from '@jupyterlab/completer';
+import { Widget } from '@phosphor/widgets';
+
+import { readFile, saveFile } from '@sdx/utils/src/api/file';
 import SkyNotebookBar from './SkyNotebookBar';
 import SkyCell from './SkyCell';
 import SkyCodeCellModel from '../../model/CodeCell';
 import SkyMarkdownCellModel from '../../model/MarkdownCell';
 import SkyRawCellModel from '../../model/RawCell';
-import { CodeCell } from '@jupyterlab/cells';
+
 import setupCommands from './setupCommands';
 import { initCommands } from '../../config/commands';
+
+import { NotebookMode } from '../../config';
+
+import '@jupyterlab/completer/style/base.css';
+
 
 export default {
     name: 'SkyNotebook',
@@ -45,7 +55,11 @@ export default {
             activeCellOrder: -1,
             order: 0,
             cellMap: {},
-            cuttingCell: undefined
+            cuttingCell: undefined,
+            session: null,
+            mode: NotebookMode.EDIT,
+            completer: null,
+            completerHandler: null
         };
     },
     props: {
@@ -177,14 +191,77 @@ export default {
                 widget.activate();
             }
         },
-        runCell() {
-            if (this.activeCell && this.notebook.cells[this.activeCellOrder].cell_type === 'code') {
-                CodeCell.execute(this.cellMap[this.activeCell.order], {kernel: {}});
-            } else if (this.activeCell && this.notebook.cells[this.activeCellOrder].cell_type === 'markdown') {
-                this.activeCell.rendered = true;
+        async runCell(cell, widget, session) {
+            cell = cell || this.activeCell;
+            widget = widget || this.activeCellWidget;
+            if (cell && cell.cell_type === 'code') {
+                if (!session) {
+                    session = await Session.startNew({
+                        path: this.file.path,
+                        kernelName: 'python3'
+                    });
+                }
+                await CodeCell.execute(widget, session);
+                return undefined;
+            } else if (cell && cell.cell_type === 'markdown') {
+                widget.rendered = true;
+                return undefined;
             } else {
                 // do nothing
+                return undefined;
             }
+        },
+        /**
+         * 运行Notebook
+         * 遍历cells数组，按顺序执行每个cell
+         */
+        async runNotebook() {
+            let session = await Session.startNew({
+                path: this.file.path,
+                kernelName: 'python3'
+            });
+            let execCount = 0;
+            while(execCount < this.notebook.cells.length) {
+                const cell = this.notebook.cells[execCount];
+                await this.runCell(cell, this.cellMap[cell.order], session);
+                execCount++;
+            }
+            await session.shutdown();
+        },
+        /**
+         * 按cell调试
+         * 切换到调试模式，创建session并缓存，并设置cell的completer
+         */
+        async debugByCell() {
+            this.mode = NotebookMode.CELL_DEBUG;
+            this.session = await Session.startNew({
+                path: this.file.path,
+                kernelName: 'python3'
+            });
+            // 设置completer
+            this.setupCompleter();
+        },
+        async setupCompleter() {
+            if (!this.session) {
+                console.warn('没有活动的session，创建completer失败！');
+                if (this.completer) {
+                    Widget.detach(this.completer);
+                    this.completerHandler.dispose();
+                }
+                return;
+            }
+            const activeWidget = this.activeCellWidget || this.cellMap[this.notebook.cells[0].order];
+            const editor = activeWidget.editor;
+            const model = new CompleterModel();
+            const completer = new Completer({ editor, model });
+            const connector = new KernelConnector({ session: this.session });
+            const handler = new CompletionHandler({ completer, connector });
+            handler.editor = editor;
+            completer.hide();
+            Widget.attach(completer, this.$el);
+            this.completer = completer;
+            this.completerHandler = handler;
+            // watch activeCell 变化，改变completer的editor
         },
         /**
          * 切换cell类型
@@ -211,6 +288,12 @@ export default {
                     this.activeCellWidget.model.rendered = false;
                 }
             });
+        },
+        async save() {
+            return await saveFile(JSON.stringify(this.notebook), this.file.path, this.file.ownerId).then(res => {
+                alert('保存成功');
+                return res;
+            });
         }
     },
     watch: {
@@ -223,6 +306,18 @@ export default {
                     const content = await this.readFile(val);
                     this.makeCells(content, val);
                 }
+            }
+        },
+        activeCell(val) {
+            if (this.completerHandler) {
+                this.completerHandler.editor = this.cellMap[val.order].editor;
+            }
+        },
+        notebook: {
+            deep: true,
+            handler(val) {
+                if (this.file.isEditing) return;
+                this.$emit('modify', this.file);
             }
         }
     },

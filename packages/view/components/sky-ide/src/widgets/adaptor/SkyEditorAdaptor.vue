@@ -4,6 +4,7 @@
             :is="editor"
             :file="file"
             ref="renderer"
+            @modify="handlerModify"
         />
     </div>
 </template>
@@ -33,6 +34,9 @@ export default {
                 this.$refs.renderer.save();
                 resolve();
             });
+        },
+        handlerModify(file) {
+            this.$emit('modify', file);
         }
     },
     computed: {
@@ -52,7 +56,7 @@ export default {
 <style lang="scss" scoped>
     .sky-editor-adaptor {
         position: absolute;
-        top: 100px;
+        top: 41px;
         left: 0;
         bottom: 0;
         right: 0;

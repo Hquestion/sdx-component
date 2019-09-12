@@ -41,7 +41,7 @@
                     :init-height="400"
                     :collapse="!terminalVisible"
                 >
-                    <SkyTerminal />
+                    <SkyTerminal ref="terminal"/>
                 </ResizablePanel>
             </ResizablePanel>
         </ResizablePanel>
@@ -71,6 +71,8 @@ import DocManager from './widgets/doc-manager/Index';
 import { initCommands } from './config/commands';
 import docManagerMixin from '../src/mixins/docManagerMixin';
 import fileManagerMixin from '../src/mixins/fileManagerMixin';
+
+import setupDocCommands from './widgets/doc-manager/setupCommands';
 
 export default {
     name: 'Main',
@@ -111,6 +113,15 @@ export default {
         };
     },
     computed: {
+        docManager() {
+            return this.$refs.docManager;
+        },
+        fileManager() {
+            return this.$refs.fileManager;
+        },
+        terminal() {
+
+        },
         terminalVisible() {
             return this.sidebar.activeWindows.includes(SIDEBAR_TERMINAL);
         }
@@ -130,6 +141,9 @@ export default {
         });
         window.nbCommands = this.commands;
         console.log(this.commands.listCommands());
+
+        // 初始化命令
+        setupDocCommands(this.commands, this.docManager);
     }
 };
 </script>

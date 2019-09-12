@@ -24,6 +24,12 @@
         <SdxuButton @click="clearOutput">
             清除输出
         </SdxuButton>
+        <SdxuButton @click="runNotebook">
+            运行全部
+        </SdxuButton>
+        <SdxuButton @click="debugByCell">
+            调试
+        </SdxuButton>
         <sdxu-button
             placement="right"
             trigger="click"
@@ -65,9 +71,7 @@ export default {
     },
     methods: {
         saveNotebook() {
-            saveFile(JSON.stringify(this.snb.notebook), this.snb.file.path, this.snb.file.ownerId).then(res => {
-                alert('保存成功');
-            });
+            this.snb.save();
         },
         insertCodeCell() {
             this.snb.insertCell('code');
@@ -91,6 +95,12 @@ export default {
                 this.snb.activateCell.outputs = [];
                 this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear();
             }
+        },
+        runNotebook() {
+            this.snb.runNotebook();
+        },
+        debugByCell() {
+            this.snb.debugByCell();
         }
     },
 };

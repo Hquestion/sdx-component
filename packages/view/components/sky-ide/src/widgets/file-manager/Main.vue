@@ -107,8 +107,8 @@ export default {
             // 重置页码
             this.pageIndex = 1;
             // 重置缓存的fileList
-            this.renderFiles = [];
-            this.fileList = [];
+            // this.renderFiles = [];
+            // this.fileList = [];
             this.total = 0;
             this.loadedTotal = 0;
             this.searchKey = '';
@@ -240,16 +240,16 @@ export default {
         height: 30px;
         padding: 2px 0;
     }
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-        background-color: #fff;
-    }
-    ::-webkit-scrollbar-thumb {
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-        background-color: rgba(0, 0, 0, .1);
-        border-radius: 4px;
-    }
+    /*::-webkit-scrollbar {*/
+    /*    width: 8px;*/
+    /*    height: 8px;*/
+    /*    background-color: #fff;*/
+    /*}*/
+    /*::-webkit-scrollbar-thumb {*/
+    /*    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);*/
+    /*    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);*/
+    /*    background-color: rgba(0, 0, 0, .1);*/
+    /*    border-radius: 4px;*/
+    /*}*/
 }
 </style>

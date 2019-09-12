@@ -98,8 +98,8 @@ export default {
             }
         },
         handleCodeChange() {
-            if (!this.initiated || this.file.isEditing) return;
-            this.$parent.$emit('modify', this.file);
+            if (!this.initiated) return;
+            this.$emit('modify', this.file);
         }
     },
     watch: {

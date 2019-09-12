@@ -94,6 +94,7 @@ export default {
             this.$emit('cancel-rename');
         },
         handlePathNameClick(row) {
+            if (row.isFile) return;
             this.$emit('name-click', row);
         }
     }

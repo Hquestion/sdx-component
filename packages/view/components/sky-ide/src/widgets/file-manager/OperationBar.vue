@@ -54,8 +54,6 @@ export default {
             this.fileManager.$refs.fileTable.mkdir();
         },
         makeUploadParams() {
-            console.log('shareCenter', shareCenter);
-            console.log('222222222222222222222222');
             return {
                 ownerId: this.$route.query.ownerId || shareCenter.getUser().uuid,
                 path: this.fileManager.rootKind === rootKinds.PROJECT_SHARE ? '/' + this.fileManager.currentPath.split('/').slice(3) : this.fileManager.currentPath,

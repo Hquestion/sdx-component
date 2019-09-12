@@ -6,6 +6,7 @@
         <OperationBar ref="operationBar" />
         <BreadcrumbBar ref="breadcrumbBar" />
         <FileTable ref="fileTable" />
+        <BottomBar />
     </div>
     <!-- </SdxuContentPanel> -->
 </template>
@@ -16,6 +17,7 @@ import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 import BreadcrumbBar from './BreadcrumbBar';
+import BottomBar from './BottomBar';
 
 import { getFilesList } from '@sdx/utils/src/api/file';
 // import { getFilesList, getMyShare, getMyAcceptedShare, getProjectShare } from '@sdx/utils/src/api/file';
@@ -71,12 +73,18 @@ export default {
     components: {
         BreadcrumbBar,
         FileTable,
-        OperationBar
+        OperationBar,
+        BottomBar
     },
     provide() {
         return {
             fileManager: this
         };
+    },
+    inject: {
+        app: {
+            default: () => {}
+        }
     },
     methods: {
         isProjectRoot() {
@@ -176,11 +184,14 @@ export default {
         },
         getUploadFiles() {
             return this.$refs.operationBar.$refs.fileUploader.getUploadFiles();
+        },
+        refresh() {
+            this.enterDirectory(this.currentPath);
         }
     },
     created() {
         // load data from storage
-        this.currentPath = '';
+        this.currentPath = this.app.file.currentPath;
     },
     mounted() {
         const db = new Dexie('SkyIDE-File');
@@ -196,6 +207,7 @@ export default {
             if (val !== oldVal) {
                 this.enterDirectory(val);
                 this.$refs.breadcrumbBar.buildBreadcrumb(val);
+                this.app.file.currentPath = val;
             }
         },
         rootPath(val, oldVal) {
@@ -221,6 +233,7 @@ export default {
     height: 100%;
     padding: 10px;
     user-select: none;
+    box-sizing: border-box;
     .el-table tr td,
     .el-table tr th.is-leaf {
         border-top: none;

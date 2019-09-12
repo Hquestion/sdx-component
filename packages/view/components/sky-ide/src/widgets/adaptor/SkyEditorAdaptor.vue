@@ -3,6 +3,7 @@
         <component
             :is="editor"
             :file="file"
+            ref="renderer"
         />
     </div>
 </template>
@@ -10,13 +11,15 @@
 <script>
 import SkyNotebook from '../notebook/SkyNotebook';
 import SkyEditor from './SkyEditor';
+import UnsupportedFile from './UnsupportedFile';
 import { isSNbSupport, isCMSupport } from '../../config/supportMimeTypes';
 
 export default {
     name: 'SkyEditorAdaptor',
     components: {
         SkyNotebook,
-        SkyEditor
+        SkyEditor,
+        UnsupportedFile
     },
     props: {
         file: {
@@ -24,12 +27,22 @@ export default {
             default: () => {}
         }
     },
+    methods: {
+        save() {
+            return new Promise(resolve => {
+                this.$refs.renderer.save();
+                resolve();
+            });
+        }
+    },
     computed: {
         editor() {
             if (isSNbSupport(this.file)) {
                 return 'SkyNotebook';
-            } else {
+            } else if (isCMSupport(this.file)) {
                 return 'SkyEditor';
+            } else {
+                return 'UnsupportedFile';
             }
         }
     }
@@ -38,7 +51,11 @@ export default {
 
 <style lang="scss" scoped>
     .sky-editor-adaptor {
-        height: 100%;
+        position: absolute;
+        top: 100px;
+        left: 0;
+        bottom: 0;
+        right: 0;
         overflow: auto;
     }
 </style>

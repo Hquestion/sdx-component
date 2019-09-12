@@ -2,7 +2,7 @@
     <el-table
         class="sdxu-table"
         :data="data"
-        :row-class-name="tableRowClassName"
+        :row-style="tableRowStyle"
         v-bind="$attrs"
         v-on="$listeners"
         style="width: 100%"
@@ -40,9 +40,11 @@ export default {
         }
     },
     methods: {
-        tableRowClassName({row}) {
+        tableRowStyle({row}) {
             if(row[this.rowId] === this.highlightKey) {
-                return 'highlight-row';
+                return {
+                    background: '#F7FAFF'
+                };
             }
             return '';
         }

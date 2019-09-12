@@ -133,3 +133,23 @@ export function systemType() {
     }
     return system;
 }
+
+// 支持字符串不连续匹配
+export function matchingString(oriStr,matStr) {
+    let [oriArr, matArr, index,res, resArr] = [oriStr.toLowerCase().trim().split(''), matStr.toLowerCase().trim().split(''), -1, false, []];
+    matArr.forEach(item => {
+        index = oriArr.findIndex(val => val === item);
+        oriArr = oriArr.slice(index + 1);
+        resArr.push(index);
+        let flag = resArr.findIndex(flagItem => flagItem === -1); 
+        if(flag > -1) {
+            res = false;
+        } else {
+            res = true;
+        }
+    });
+    if(!matArr.length) {
+        res = true;
+    }
+    return res;
+}

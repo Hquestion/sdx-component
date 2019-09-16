@@ -153,3 +153,16 @@ export function matchingString(oriStr,matStr) {
     }
     return res;
 }
+
+// 2个字符串， 查找一个在另一个中的位置，可以分开字符匹配，返回匹配下标数组
+export function matchingStringIndex(oriStr,matStr) {
+    let [oriArr, matArr, indexArr, index] = [oriStr.toLowerCase().trim().split(''), matStr.toLowerCase().trim().split(''), [], -1];
+    matArr.forEach(item => {
+        index = oriArr.findIndex(val => val === item);
+        indexArr.push(index);
+        for(let i = 0; i <= index; i++) {
+            oriArr.splice(i , 1, null);
+        }
+    });
+    return indexArr;
+}

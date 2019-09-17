@@ -98,10 +98,11 @@ export default {
             if (isWindows) {
                 url = `${STATIC_PATH}static/filemanage-client/windows/sky-filemanager-client.exe`;
             } else if (isMac) {
-                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.zip`;
-            } else if (isLinux) {
-                url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.zip`;
-            }
+                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.dmg`;
+            } 
+            // else if (isLinux) {
+            //     url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.zip`;
+            // }
             return url;
         }
     }

@@ -22,6 +22,7 @@
                         <span
                             v-for="(itemLabel, indexLabel) in val.label.length"
                             :key="indexLabel"
+                            :class="{'highLight': matchingStringIndex(val.label,command).includes(indexLabel)}"
                         >{{ val.label[indexLabel] }}</span>
                     </div>
                     <div>{{ val.key }}</div>
@@ -34,7 +35,7 @@
 <script>
 import SdxuInput from '@sdx/ui/components/input';
 import {getCommandsTree} from '../../config/commands';
-import { matchingString } from '@sdx/utils/src/helper/tool';
+import { matchingString, matchingStringIndex } from '@sdx/utils/src/helper/tool';
 export default {
     name: 'SkyCommands',
     components: {
@@ -102,6 +103,9 @@ export default {
             });
             return [...res];
         }
+    },
+    methods: {
+        matchingStringIndex
     }
 };
 </script>
@@ -120,6 +124,9 @@ export default {
         .commands {
             display: flex;
             justify-content: space-between;
+            .highLight {
+                font-weight: 700;
+            }
         }
     }
 }

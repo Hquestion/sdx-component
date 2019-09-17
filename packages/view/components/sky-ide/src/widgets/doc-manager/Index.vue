@@ -163,6 +163,11 @@ export default {
                 this.app.doc.openFiles = tabs.filter(tab => tab.path !== target);
 
             }
+        },
+        getActiveNotebook() {
+            let activeFile = this.app.doc.openFiles.find(item => item.path === this.activeTab);
+            const editor = this.$refs.editor.find(editor => editor.file.path === activeFile.path);
+            return editor.$refs.renderer;
         }
     }
 };

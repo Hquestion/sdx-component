@@ -41,6 +41,7 @@ import '@jupyterlab/completer/style/base.css';
 
 export default {
     name: 'SkyNotebook',
+    componentName: 'SkyNotebook',
     components: {
         SkyNotebookBar,
         SkyCell
@@ -349,7 +350,7 @@ export default {
         }
     },
     mounted() {
-        setupCommands(this.app.commands, this);
+
     }
 };
 </script>

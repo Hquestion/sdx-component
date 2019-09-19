@@ -1,7 +1,8 @@
 <template>
     <div class="sky-notebook">
         <SkyNotebookBar />
-        <div class="sky-notebook__main" tabindex="1">
+        <div class="sky-notebook__main"
+tabindex="1">
             <!--展示notebook cells-->
             <SkyCell
                 v-for="(cell, index) in notebook.cells"

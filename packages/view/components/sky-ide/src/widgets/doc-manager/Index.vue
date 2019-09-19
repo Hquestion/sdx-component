@@ -8,12 +8,14 @@
             type="card"
             closable
             @tab-remove="closeDoc"
+            :before-leave="beforeLeave"
             ref="tabs"
         >
             <el-tab-pane
                 v-for="(item) in app.doc.openFiles"
                 :key="item.path"
                 :name="item.path"
+                lazy
             >
                 <span slot="label">
                     {{ item.name }}
@@ -29,9 +31,21 @@
                         :file="item"
                         @modify="handleModify"
                         ref="editor"
-                        :activate="item.path === app.doc.currentFile.path"
                     />
                 </div>
+            </el-tab-pane>
+            <el-tab-pane
+                key="add"
+                name="add"
+                class="add-notebook"
+            >
+                <span
+                    slot="label"
+                >
+                    <i
+                        class="sdx-icon sdx-icon-plus"
+                    />
+                </span>
             </el-tab-pane>
         </el-tabs>
         <el-dialog
@@ -91,8 +105,20 @@ export default {
             return this;
         }
     },
+    watch: {
+        activeTab(nVal) {
+            if (!nVal) return;
+            this.app.doc.currentFile = this.app.doc.openFiles.find(item => item.path === nVal);
+        }
+    },
     methods: {
         composeFileKey,
+        beforeLeave(active) {
+            if (active === 'add'){
+                this.app.makeFile();
+                return false;
+            }
+        },
         saveCurrent() {
             this.saveDoc(this.app.doc.openFiles.find(item => item.path === this.activeTab));
         },
@@ -181,6 +207,16 @@ export default {
             position: initial;
             overflow: initial;
         }
+        #tab-add {
+            &.is-closable:hover {
+                padding: 0 20px;
+            }
+            .el-icon-close {
+                display: none;
+            }
+        }
     }
+
+
 }
 </style>

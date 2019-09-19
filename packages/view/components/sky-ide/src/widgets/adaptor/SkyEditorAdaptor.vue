@@ -29,10 +29,6 @@ export default {
         file: {
             type: Object,
             default: () => {}
-        },
-        activate: {
-            type: Boolean,
-            default: false
         }
     },
     methods: {
@@ -56,15 +52,6 @@ export default {
                 return 'UnsupportedFile';
             }
         }
-    },
-    watch: {
-        activate(val) {
-            if (val) {
-                this.$nextTick(() => {
-                    this.$refs.renderer.refresh && this.$refs.renderer.refresh();
-                });
-            }
-        }
     }
 };
 </script>
@@ -72,7 +59,7 @@ export default {
 <style lang="scss" scoped>
     .sky-editor-adaptor {
         position: absolute;
-        top: 41px;
+        top: 44px;
         left: 0;
         bottom: 0;
         right: 0;

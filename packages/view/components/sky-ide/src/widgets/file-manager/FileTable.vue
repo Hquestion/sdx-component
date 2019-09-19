@@ -71,7 +71,7 @@ let isFirstSort = true;
 
 export default {
     name: 'FileTable',
-    inject: ['fileManager'],
+    inject: ['fileManager', 'app'],
     provide() {
         return {
             fileTable: this
@@ -162,6 +162,9 @@ export default {
             this.$nextTick(() => {
                 this.$refs.fileTable.$children[0].doLayout();
             });
+        },
+        makeFile() {
+            this.mkFile();
         },
         saveEdit() {
             // todo: 保存修改,然后清空editingRow,刷新列表

@@ -349,6 +349,11 @@ export default {
                     this.$emit('exceed-max-size', file);
                     if (this.onExceedMaxSize && typeof this.onExceedMaxSize === 'function') {
                         this.onExceedMaxSize(file);
+                    } else {
+                        this.$notify.error({
+                            title: this.t('widget.fileSelect.ExistLargeFiles'),
+                            message: this.t('widget.fileSelect.LargeFileNotUpload')
+                        });
                     }
                     this.$refs.fileSelect.clearInputValue();
                     this.handleRemove(file);

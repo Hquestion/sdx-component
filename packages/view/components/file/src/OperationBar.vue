@@ -24,8 +24,6 @@
                 :on-success="removeUpload"
                 style="margin-left: 20px;margin-right: 20px;"
                 v-if="canUpload()"
-                :on-exceed-max-size="onExceedMaxSize"
-                :on-exceed-max-size-dir="onExceedMaxSizeDir"
             >
                 {{ t('view.file.Upload') }}
             </SdxwFileSelect>
@@ -195,7 +193,7 @@ export default {
         //判断系统类型获取url
         getSystemUrl(){
             let url = '';
-            let STATIC_PATH = process.env.VUE_APP_STATIC_PATH;
+            let STATIC_PATH = '/';
             const isWindows = /windows|win32/i.test(navigator.userAgent);
             const isMac = /macintosh|mac os x/i.test(navigator.userAgent); 
             const isLinux = (String(navigator.platform).indexOf('Linux') > -1);

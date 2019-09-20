@@ -14,6 +14,7 @@
                 v-for="(item) in app.doc.openFiles"
                 :key="item.path"
                 :name="item.path"
+                :lazy="true"
             >
                 <span slot="label">
                     {{ item.name }}
@@ -37,7 +38,7 @@
         <el-dialog
             :title="`是否要保存对 ${app.doc.currentFile.name} 的更改?`"
             :visible.sync="dialogVisible"
-            width="20%"
+            width="460"
             :show-close="false"
             v-if="dialogVisible"
         >

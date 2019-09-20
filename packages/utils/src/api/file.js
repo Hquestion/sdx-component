@@ -301,7 +301,7 @@ export function makeFile(path, ownerId) {
         ownerId: ownerId || userInfo.userId,
         path,
         isFile: true,
-        autorename: true
+        autoRename: true
     });
 }
 

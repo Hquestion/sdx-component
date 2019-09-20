@@ -187,6 +187,9 @@ export default {
         },
         refresh() {
             this.enterDirectory(this.currentPath);
+        },
+        makeFile() {
+            this.$refs.fileTable.makeFile();
         }
     },
     created() {

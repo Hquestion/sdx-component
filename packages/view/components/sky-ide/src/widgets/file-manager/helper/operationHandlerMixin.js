@@ -6,12 +6,14 @@ import VueClipboard from 'vue-clipboard2';
 VueClipboard.config.autoSetContainer = true;
 Vue.use(VueClipboard);
 
-import { deletePath, rename, mkdir, move, copy, unzip, download, share, shareCancel, sharePatch, shareDetail, pack, shareBatch } from '@sdx/utils/src/api/file';
+import { deletePath, rename, mkdir, makeFile, move, copy, unzip, download, saveFile, share, shareCancel, sharePatch, shareDetail, pack, shareBatch } from '@sdx/utils/src/api/file';
 import { unlock } from '@sdx/utils/src/lockScroll';
 import { isString } from '@sdx/utils/src/helper/tool';
 import { rootKinds } from './fileListTool';
 import { ValidateReg } from '@sdx/utils/src/helper/validate';
 import { t } from '@sdx/utils/src/locale';
+
+import SkyCodeCellModel from '../../../model/CodeCell';
 
 export default {
     data() {
@@ -55,6 +57,39 @@ export default {
             }
             this.editingRow = row;
             this.tempRowName = row.name;
+        },
+        mkFile() {
+            const fileName = 'Untitled.ipynb';
+            let path = this.fileManager.currentPath.lastIndexOf('/') === this.fileManager.currentPath.length
+                ? `${this.fileManager.currentPath}${fileName}`
+                : `${this.fileManager.currentPath}/${fileName}`;
+            makeFile(path, this.$route.query.ownerId || '').then((res) => {
+                let nbContent = {};
+                nbContent.cells = [new SkyCodeCellModel({})];
+                nbContent.metadata = {
+                    'kernelspec': {
+                        'display_name': 'Python 3',
+                        'language': 'python',
+                        'name': 'python3'
+                    },
+                    'language_info': {
+                        'codemirror_mode': {
+                            'name': 'ipython',
+                            'version': 3
+                        },
+                        'file_extension': '.py',
+                        'mimetype': 'text/x-python',
+                        'name': 'python',
+                        'nbconvert_exporter': 'python',
+                        'pygments_lexer': 'ipython3',
+                        'version': '3.6.5'
+                    }
+                };
+                saveFile(JSON.stringify(nbContent), res.path, res.ownerId).then(() => {
+                    this.fileManager.enterDirectory(this.fileManager.currentPath);
+                    this.app.openFile(res);
+                });
+            });
         },
         doRenameOrMakePath() {
             const reg = new ValidateReg({min:1, max:64}, {at: false}).generate();

@@ -164,11 +164,14 @@ export default {
         width: 100%;
         height: 100%;
         /deep/  {
-            .el-tabs, .el-tabs__content, .el-tab-pane, .p-Widget, .jp-Terminal-body{
+            .el-tabs, .el-tab-pane, .p-Widget, .jp-Terminal-body{
                 height: 100%;
             }
             .el-tabs__nav-wrap {
                 background:#2A303E;
+            }
+            .el-tabs__content {
+                height: calc(100% - 42px);
             }
             .el-tabs__header {
                 letter-spacing: 0.08px;

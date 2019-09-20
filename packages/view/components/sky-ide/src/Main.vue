@@ -89,6 +89,7 @@ import docManagerMixin from '../src/mixins/docManagerMixin';
 import fileManagerMixin from '../src/mixins/fileManagerMixin';
 
 import setupDocCommands from './widgets/doc-manager/setupCommands';
+import setupNbCommands from './widgets/notebook/setupCommands';
 
 import { SIDEBAR_FILE } from './config';
 import { extend } from './utils/utils';
@@ -172,14 +173,12 @@ export default {
                 const restorerJSON = JSON.parse(restorer);
                 // this.layout = extend(this.layout, restorerJSON.layout);
                 Object.keys(this.layout).forEach((key) => {
-                    this.layout[key].weight = restorerJSON.layout[key].weight;
+                    this.layout[key].weight = restorerJSON.layout && restorerJSON.layout[key] && restorerJSON.layout[key].weight;
                 });
                 this.sidebar = extend(this.sidebar, restorerJSON.sidebar);
                 this.doc = extend(this.doc, restorerJSON.doc);
                 this.file = extend(this.file, restorerJSON.file);
-                this.$nextTick(() => {
-                    this.docManager.openFile(this.doc.currentFile);
-                });
+                this.docManager.openFile(this.doc.currentFile);
             } else {
                 // 没有的话使用默认配置
             }
@@ -243,7 +242,8 @@ export default {
 
         // 初始化命令
         setupDocCommands(this.commands, this.docManager);
-        setInterval(() => {
+        setupNbCommands(this.commands, this);
+        this.timer = setInterval(() => {
             this.prepareRestoreData();
         }, 1000);
     },
@@ -251,6 +251,7 @@ export default {
         // 销毁前,保存配置
         this.syncLayout();
         this.prepareRestoreData();
+        clearInterval(this.timer);
     }
 };
 </script>

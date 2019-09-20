@@ -295,6 +295,16 @@ export function mkdir(path, ownerId) {
     });
 }
 
+export function makeFile(path, ownerId) {
+    let userInfo = shareCenter.getUser() || {};
+    return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files`, {
+        ownerId: ownerId || userInfo.userId,
+        path,
+        isFile: true,
+        autoRename: true
+    });
+}
+
 export function rename(path, newName, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/rename`, {

@@ -1,7 +1,10 @@
 <template>
     <div class="sky-notebook">
         <SkyNotebookBar />
-        <div class="sky-notebook__main" tabindex="1">
+        <div
+            class="sky-notebook__main"
+            tabindex="1"
+        >
             <!--展示notebook cells-->
             <SkyCell
                 v-for="(cell, index) in notebook.cells"
@@ -41,6 +44,7 @@ import '@jupyterlab/completer/style/base.css';
 
 export default {
     name: 'SkyNotebook',
+    componentName: 'SkyNotebook',
     components: {
         SkyNotebookBar,
         SkyCell
@@ -349,7 +353,7 @@ export default {
         }
     },
     mounted() {
-        setupCommands(this.app.commands, this);
+
     }
 };
 </script>

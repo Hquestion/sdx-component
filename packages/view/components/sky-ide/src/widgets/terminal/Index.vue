@@ -147,8 +147,12 @@ export default {
         width: 100%;
         height: 100%;
         /deep/  {
-            .el-tabs, .el-tabs__content, .el-tab-pane, .p-Widget, .jp-Terminal-body{
+
+            .el-tabs, .el-tab-pane, .p-Widget, .jp-Terminal-body{
                 height: 100%;
+            }
+            .el-tabs__content {
+                height: calc(100% - 42px);
             }
             .el-tabs__header {
                 margin: 0;

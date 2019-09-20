@@ -89,6 +89,7 @@ import docManagerMixin from '../src/mixins/docManagerMixin';
 import fileManagerMixin from '../src/mixins/fileManagerMixin';
 
 import setupDocCommands from './widgets/doc-manager/setupCommands';
+import setupNbCommands from './widgets/notebook/setupCommands';
 
 import { SIDEBAR_FILE } from './config';
 import { extend } from './utils/utils';
@@ -242,6 +243,7 @@ export default {
 
         // 初始化命令
         setupDocCommands(this.commands, this.docManager);
+        setupNbCommands(this.commands, this);
         this.timer = setInterval(() => {
             this.prepareRestoreData();
         }, 1000);

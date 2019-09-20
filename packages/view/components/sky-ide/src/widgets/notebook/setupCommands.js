@@ -4,8 +4,11 @@ import { Session } from '@jupyterlab/services';
 import { NotebookMode } from '../../config';
 import { addCommand } from '../../utils/commandsHelper';
 
-export default function setupCommands(commands, nb) {
-    addCommand(commands, nb, CommandIDs.RUN_CELL, async function(nb) {
+export default function setupCommands(commands, app) {
+
+    addCommand(commands, app, CommandIDs.RUN_CELL, async function(app) {
+        let nb = app.docManager.getActiveNotebook();
+        if (!nb) return;
         if (nb.activeCell && nb.activeCell.cell_type === 'code') {
             let session = await Session.startNew({
                 path: '',
@@ -20,22 +23,18 @@ export default function setupCommands(commands, nb) {
         }
     });
 
-    commands.addCommand(CommandIDs.COMPLETE, {
-        ...CommandConfigs[CommandIDs.COMPLETE],
-        execute() {
-            if (nb.activeCell && nb.activeCell.cell_type === 'code' && nb.mode === NotebookMode.CELL_DEBUG) {
-                if (nb.completer) {
-                    nb.completerHandler.invoke();
-                }
+    addCommand(commands, app, CommandIDs.COMPLETE, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        if (nb.activeCell && nb.activeCell.cell_type === 'code' && nb.mode === NotebookMode.CELL_DEBUG) {
+            if (nb.completer) {
+                nb.completerHandler.invoke();
             }
-        },
+        }
     });
 
-    commands.addCommand(CommandIDs.COMPLETER_SELECT, {
-        ...CommandConfigs[CommandIDs.COMPLETER_SELECT],
-        execute() {
-            nb.completerHandler.completer.selectActive();
-        },
+    addCommand(commands, app, CommandIDs.COMPLETER_SELECT, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        nb.completerHandler.completer.selectActive();
     });
 
     setupKeyBindings(commands, CommandIDs.COMPLETE);

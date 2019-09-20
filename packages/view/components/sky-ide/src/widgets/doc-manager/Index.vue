@@ -51,7 +51,7 @@
         <el-dialog
             :title="`是否要保存对 ${app.doc.currentFile.name} 的更改?`"
             :visible.sync="dialogVisible"
-            width="20%"
+            width="460"
             :show-close="false"
             v-if="dialogVisible"
         >
@@ -189,6 +189,11 @@ export default {
                 this.app.doc.openFiles = tabs.filter(tab => tab.path !== target);
 
             }
+        },
+        getActiveNotebook() {
+            let activeFile = this.app.doc.openFiles.find(item => item.path === this.activeTab);
+            const editor = this.$refs.editor.find(editor => editor.file.path === activeFile.path);
+            return editor.$refs.renderer;
         }
     }
 };

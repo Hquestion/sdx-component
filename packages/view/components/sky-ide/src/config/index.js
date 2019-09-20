@@ -6,12 +6,12 @@ export const SIDEBAR_TERMINAL = 'SIDEBAR_TERMINAL';
 export const SIDEBAR_TABS = [
     {
         name: SIDEBAR_FILE,
-        icon: 'sdx-icon-tensorflow',
+        icon: 'sdx-wenjianguanlimoren',
         label: ''
     },
     {
         name: SIDEBAR_DATA,
-        icon: 'sdx-icon-tensorflow',
+        icon: 'sdx-shujujiguanlimoren',
         label: ''
     }
 ];
@@ -19,8 +19,8 @@ export const SIDEBAR_TABS = [
 export const SIDEBAR_WINDOWS = [
     {
         name: SIDEBAR_TERMINAL,
-        icon: 'sdx-icon-tensorflow',
-        label: 'Terminal'
+        icon: 'sdx-terminalsmoren',
+        label: ''
     }
 ];
 

@@ -1,5 +1,7 @@
 <template>
-    <div class="terminal" />
+    <div
+        class="terminal"
+    />
 </template>
 
 <script>
@@ -11,19 +13,29 @@ export default {
     name: 'Terminal',
     data(){
         return {
+            term: null
         };
     },
     mounted() {
         this.createTerminal();
+        window.addEventListener('resize', this.handleResize);
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.handleResize);
     },
     methods: {
         async createTerminal() {
             this.$emit('terminalReady', false);
             const terminal = await TerminalSession.startNew();
             this.$emit('terminalServe', terminal);
-            const term = new Terminal(terminal, { theme: 'dark' });
-            Widget.attach(term, this.$el);
+            this.term = new Terminal(terminal, { theme: 'dark' });
+            Widget.attach(this.term, this.$el);
             this.$emit('terminalReady', true);
+        },
+        handleResize() { 
+            setTimeout(()=> {
+                this.term.onFitRequest();
+            },400);
         }
     }
 };
@@ -32,6 +44,12 @@ export default {
     .terminal {
         width: 100%;
         height: 100%;
+        /deep/ {
+            .xterm-screen {
+                width: 100% !important;
+                height: 100% !important;
+            }
+        }
     }
 
 </style>

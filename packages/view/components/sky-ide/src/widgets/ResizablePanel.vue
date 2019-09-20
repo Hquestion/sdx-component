@@ -1,6 +1,9 @@
 <template>
-    <div class="resizable-panel" :style="rect">
-        <slot></slot>
+    <div
+        class="resizable-panel"
+        :style="rect"
+    >
+        <slot />
     </div>
 </template>
 
@@ -237,7 +240,8 @@ export default {
                         if (index < children.length -1) {
                             let nextChild = children[index+1];
                             if (!nextChild.collapse) {
-                                child.$el.style.borderRight = '1px solid #dedede';
+                                // child.$el.style.borderRight = '1px solid #dedede';
+                                child.$el.style.borderRight = 'none';
                             } else {
                                 child.$el.style.borderRight = 'none';
                             }

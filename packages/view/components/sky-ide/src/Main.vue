@@ -6,7 +6,7 @@
         >
             <ResizablePanel
                 :fixed="true"
-                :init-width="20"
+                :init-width="48"
                 class="sdxv-skyide-sidebar"
                 tabindex="1"
             >
@@ -92,7 +92,6 @@ import setupDocCommands from './widgets/doc-manager/setupCommands';
 
 import { SIDEBAR_FILE } from './config';
 import { extend } from './utils/utils';
-
 export default {
     name: 'Main',
     components: {
@@ -270,6 +269,9 @@ export default {
         }
         .sdxv-sky-ide__frame {
             border: 1px solid #dedede;
+            .sdxv-skyide-sidebar {
+                background: #445580;
+            }
         }
     }
 </style>

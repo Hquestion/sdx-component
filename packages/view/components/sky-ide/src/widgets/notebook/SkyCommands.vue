@@ -1,14 +1,9 @@
 <template>
-    <div class="sky-commands">
-        <SdxuInput
-            size="small"
-            v-model="command"
-        >
-            <span
-                slot="prefix"
-                class="sdx-icon sdxu-input__icon sdx-icon-search"
-            />
-        </SdxuInput>
+    <search-panel
+        class="sky-commands"
+        @seach-value="seachValue"
+        content-height="100px"
+    >
         <div class="tree">
             <div
                 v-for="(item, index) in commandTree"
@@ -33,17 +28,17 @@
                 </div>
             </div>
         </div>
-    </div>
+    </search-panel>
 </template>
 
 <script>
-import SdxuInput from '@sdx/ui/components/input';
 import {getCommandsTree} from '../../config/commands';
 import { matchingString, matchingStringIndex } from '@sdx/utils/src/helper/tool';
+import SearchPanel from '../search-panel/SearchPanel';
 export default {
     name: 'SkyCommands',
     components: {
-        SdxuInput
+        SearchPanel
     },
     data() {
         return {
@@ -109,15 +104,15 @@ export default {
         }
     },
     methods: {
-        matchingStringIndex
+        matchingStringIndex,
+        seachValue(value) {
+            this.command = value;
+        }
     }
 };
 </script>
 <style lang="scss" scoped>
 .sky-commands {
-    background: #1F2942;
-    color: #DDE5FE;
-    padding: 10px;
     .tree {
         letter-spacing: 0.07px;
         .category,.commands {
@@ -138,20 +133,6 @@ export default {
             .highLight {
                 font-weight: 700;
             }
-        }
-    }
-    /deep/ {
-        .sdxu-input--small .el-input__inner {
-            height: 32px;
-            line-height: 32px;
-            background: #2C3A60;
-        }
-        .el-input__prefix {
-            left: 8px;
-            color: #A0A5B8;
-        }
-        input.el-input__inner {
-            border: none !important;
         }
     }
 }

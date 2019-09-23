@@ -69,7 +69,7 @@ export default {
             LocaleFolder: '本地文件夹',
             PlatformFile: '平台文件',
             ExistLargeFiles: '存在超大文件',
-            LargeFileNotUpload: '超大文件(大于200MB)将不会上传',
+            LargeFileNotUpload: '上传的文件中含有大于200MB的超大文件，超大文件的上传请使用WinSCP（或同类工具）操作。',
             TooManyFiles: '文件过多',
             SelectMax: '最多选择',
             Files: '个文件',
@@ -659,9 +659,10 @@ export default {
             UploadFile: '@:(view.file.Upload)@:(view.file.File)',
             UploadFolder: '@:(view.file.Upload)@:(view.file.Folder)',
             PleaseInputFileName: '请输入文件名称',
-            Download_Now: '立即下载',
-            And_install_SkyDiscovery_File_Management_Client: '并安装SkyDiscovery文件管理客户端',
-            upload_or_download_operation_files_are_large: '当前上传的文件较大，请使用文件管理客户端操作'
+            Download_Now: '客户端下载',
+            And_install_SkyDiscovery_File_Management_Client: '已安装文件管理客户端，',
+            upload_or_download_operation_files_are_large: '当前上传的文件较大，请使用文件管理客户端操作',
+            Open_it_immediately: '立即打开'
         },
         resourceManage: {
             ResourceManage: '资源管理',

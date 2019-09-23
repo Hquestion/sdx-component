@@ -69,7 +69,7 @@ export default {
             LocaleFolder: 'Local Folder',
             PlatformFile: 'Platform File',
             ExistLargeFiles: 'Exist Large Files',
-            LargeFileNotUpload: 'Large files(>200M) will not upload',
+            LargeFileNotUpload: 'Uploaded files contain large files larger than 200 MB. Please use WinSCP (or similar tools) to upload large files.',
             TooManyFiles: 'Too Many Files',
             SelectMax: 'You can select at most',
             Files: 'Files',
@@ -660,9 +660,10 @@ export default {
             UploadFile: '@:(view.file.Upload) @:(view.file.File)',
             UploadFolder: '@:(view.file.Upload) @:(view.file.Folder)',
             PleaseInputFileName: 'Please input file name',
-            Download_Now: 'Download now',
-            And_install_SkyDiscovery_File_Management_Client: 'And install SkyDiscovery File Management Client',
-            upload_or_download_operation_files_are_large: 'Currently uploaded files are large, please use file management client operation'
+            Download_Now: 'Download Client',
+            And_install_SkyDiscovery_File_Management_Client: 'The file management client has been installed,',
+            upload_or_download_operation_files_are_large: 'Currently uploaded files are large, please use file management client operation',
+            Open_it_immediately: 'Open it immediately'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',

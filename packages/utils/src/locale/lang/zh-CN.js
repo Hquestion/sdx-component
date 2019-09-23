@@ -69,7 +69,7 @@ export default {
             LocaleFolder: '本地文件夹',
             PlatformFile: '平台文件',
             ExistLargeFiles: '存在超大文件',
-            LargeFileNotUpload: '超大文件(大于200MB)将不会上传',
+            LargeFileNotUpload: '上传的文件中含有大于200MB的超大文件，超大文件的上传请使用WinSCP（或同类工具）操作。',
             TooManyFiles: '文件过多',
             SelectMax: '最多选择',
             Files: '个文件',

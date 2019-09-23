@@ -4,6 +4,7 @@
         <div
             class="sky-notebook__main"
             tabindex="1"
+            @contextmenu="handleContextMenu"
         >
             <!--展示notebook cells-->
             <SkyCell
@@ -34,12 +35,13 @@ import SkyCodeCellModel from '../../model/CodeCell';
 import SkyMarkdownCellModel from '../../model/MarkdownCell';
 import SkyRawCellModel from '../../model/RawCell';
 
-import setupCommands from './setupCommands';
 import { initCommands } from '../../config/commands';
 
 import { NotebookMode } from '../../config';
 
 import '@jupyterlab/completer/style/base.css';
+
+import open from '@sdx/ui/components/context-menu';
 
 
 export default {
@@ -322,6 +324,25 @@ export default {
             } else {
                 return Promise.reject('File not support');
             }
+        },
+        handleContextMenu(e) {
+            e.preventDefault();
+
+            open(e.clientX,e.clientY, {
+                groups: [
+                    {
+                        menus: [
+                            {
+                                name: '22',
+                                label: 'xxs',
+                                icon: '',
+                            }
+                        ],
+                        uuid: '1'
+
+                    }
+                ]
+            });
         }
     },
     watch: {

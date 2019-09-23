@@ -56,8 +56,9 @@ export let handler = wrap(function(ctx, request) {
             'user.groups.*.roles.*.permissions.*',
             'user.roles.*.permissions.*',
         ],
-        url: 'http://tyk-gateway/user-manager/api/v1/permissions',
-        result: 'permissions'
+        url: 'http://tyk-gateway/user-manager/api/v1/permissions/list',
+        result: 'permissions',
+        method: 'POST'
     });
 
     return ctx.createResponse(200, authToken);

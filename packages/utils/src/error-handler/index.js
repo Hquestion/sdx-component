@@ -53,7 +53,7 @@ function matchErrorCode(httpCode, code, reqConfig) {
             if (matched) {
                 // 如果命中了匹配项，则继续匹配method/httpcode/code来处理
                 const method = reqConfig.method || 'DEFAULT';
-                let methodErrorMap = matched[method.toUpperCase()];
+                let methodErrorMap = matched.messages[method.toUpperCase()];
                 return matchCodeWithMap(httpCode, code, methodErrorMap);
             } else {
                 // 如果未命中，则转成默认处理

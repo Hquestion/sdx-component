@@ -24,8 +24,6 @@
                 :on-success="removeUpload"
                 style="margin-left: 20px;margin-right: 20px;"
                 v-if="canUpload()"
-                :on-exceed-max-size="onExceedMaxSize"
-                :on-exceed-max-size-dir="onExceedMaxSizeDir"
             >
                 {{ t('view.file.Upload') }}
             </SdxwFileSelect>

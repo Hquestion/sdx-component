@@ -1,4 +1,4 @@
-import { CommandIDs, CommandConfigs } from '../../config/commands';
+import { CommandIDs } from '../../config/commands';
 import { CodeCell } from '@jupyterlab/cells';
 import { Session } from '@jupyterlab/services';
 import { NotebookMode } from '../../config';
@@ -36,18 +36,4 @@ export default function setupCommands(commands, app) {
         let nb = app.docManager.getActiveNotebook();
         nb.completerHandler.completer.selectActive();
     });
-
-    setupKeyBindings(commands, CommandIDs.COMPLETE);
-    setupKeyBindings(commands, CommandIDs.COMPLETER_SELECT);
-}
-
-export function setupKeyBindings(commands, commandId) {
-    let commandCfg = CommandConfigs[commandId];
-    if (commandCfg.key && commandCfg.key.length > 0) {
-        commands.addKeyBinding({
-            selector: commandCfg.selector,
-            keys: commandCfg.key,
-            command: commandId
-        });
-    }
 }

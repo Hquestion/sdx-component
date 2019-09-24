@@ -46,7 +46,7 @@ export default {
             return (
                 <div class={{'sdxu-context-menu__item': true, 'is-disable' : disabled}} {...event}>
                     <div class="sdxu-context-menu__item-name">
-                        <i class={['sdx-icon', icon]}></i>
+                        <i class={['sdx-icon', icon]} />
                         <span>{menu.label}</span> 
                     </div>
                     <div class="sdxu-context-menu__item-shortcut">{menu.shortcut}</div>
@@ -55,7 +55,7 @@ export default {
         };
         const separator = <div class="sdxu-context-menu__separator" />;
         return (
-            <div class="sdxu-context-menu" style={{display: visible ? 'block' : 'none'}}>
+            <div class="sdxu-context-menu" style={{display: visible ? 'block' : 'none'}} on={{contextmenu: e => {e.preventDefault();}}}>
                 {
                     groups.map((group, index) => {
                         return (

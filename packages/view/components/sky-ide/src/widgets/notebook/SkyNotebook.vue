@@ -358,9 +358,37 @@ export default {
                 ]
             });
             ins.addGroup(group);
+            ins.addGroup(new ContextMenuGroupModel({
+                name: 'action2',
+                menus: [
+                    new ContextMenuItemModel({
+                        name: '22',
+                        label: 'xxs',
+                        icon: '',
+                    }),
+                    new ContextMenuItemModel({
+                        name: 'run:cell',
+                        label: 'Run Cell',
+                        icon: '',
+                        disabled: () => {
+                            return this.activeCell && this.activeCell.cell_type === 'raw';
+                        },
+                        callback: () => {
+                            this.app.commands.execute(CommandIDs.RUN_CELL);
+                        }
+                    }),
+                    new ContextMenuItemModel({
+                        name: '444',
+                        label: 'dddee',
+                        icon: '',
+                        shortcut: 'Ctrl+C'
+                    })
+                ]
+            }))
 
             contextMenu.open(e.clientX,e.clientY, ins, menu => {
-                // 这里也可以定义点击menu的回调，可以对命令做一些处理
+                // 这里也可以定义点击menu的回调，可以对命令做一些处理,
+
             });
         }
     },

@@ -1,5 +1,6 @@
 <template>
     <div class="sdxv-sky-ide">
+        <SkyIdeTitle class="title" />
         <ResizablePanel
             class="sdxv-sky-ide__frame"
             child-direction="horizontal"
@@ -93,6 +94,7 @@ import setupNbCommands from './widgets/notebook/setupCommands';
 
 import { SIDEBAR_FILE } from './config';
 import { extend } from './utils/utils';
+import SkyIdeTitle from './widgets/title/SkyIdeTitle';
 export default {
     name: 'Main',
     components: {
@@ -100,7 +102,8 @@ export default {
         ResizablePanel,
         SkyTerminal,
         FileManager,
-        DocManager
+        DocManager,
+        SkyIdeTitle
     },
     provide() {
         return {
@@ -269,7 +272,10 @@ export default {
             }
         }
         .sdxv-sky-ide__frame {
-            border: 1px solid #dedede;
+            // border: 1px solid #dedede;
+            // background: rgb(18,23,36);
+            top: 64px !important;
+            margin-top: 8px;
             .sdxv-skyide-sidebar {
                 background: #445580;
             }

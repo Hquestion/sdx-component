@@ -4,7 +4,13 @@ import Popper from 'popper.js';
 
 let menu, popper;
 
-export function open(x, y, menus) {
+const handleClickOutside = (e) => {
+    if (!menu.$el.contains(e.target)) {
+        close();
+    }
+};
+
+function open(x, y, menus, callback) {
     if (menu) {
         menu.$destroy();
         menu.$el.remove();
@@ -17,12 +23,21 @@ export function open(x, y, menus) {
     menu = new Vue(ContextMenu).$mount();
     menu.menuGroups = menus;
     menu.visible = false;
+
+    menu.$on('menu-clicked', menu => {
+        close();
+        if (callback) {
+            callback(menu);
+        }
+    });
     let ref = document.createElement('div');
     ref.style.position = 'absolute';
     ref.style.left = x + 'px';
     ref.style.top = y + 'px';
     document.body.appendChild(ref);
     document.body.appendChild(menu.$el);
+
+    document.addEventListener('click', handleClickOutside);
     menu.$nextTick(() => {
         menu.visible = true;
         popper = new Popper(ref, menu.$el, {
@@ -34,5 +49,26 @@ export function open(x, y, menus) {
 }
 
 function close() {
-
+    if (menu) {
+        document.removeEventListener('click', handleClickOutside);
+        menu.close();
+        menu.$destroy();
+        menu.$el.remove();
+        if (popper) {
+            popper.reference.remove();
+            popper.popper.remove();
+            popper.destroy();
+        }
+    }
 }
+
+
+function update() {
+    popper && popper.scheduleUpdate();
+}
+
+export default {
+    open,
+    close,
+    update
+};

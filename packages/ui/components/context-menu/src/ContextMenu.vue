@@ -1,4 +1,6 @@
 <script>
+import {isFunction} from '@sdx/utils/src/helper/tool';
+
 export default {
     name: 'SdxuContextMenu',
     data() {
@@ -14,9 +16,15 @@ export default {
             default: false
         }
     },
+    methods: {
+        close() {
+            this.visble = false;
+        }
+    },
     render(h) {
         let { groups = [] } = this.menuGroups;
         let visible = this.visible;
+        const self = this;
         const menuItem = (menu) => {
             let icon = menu.active ? '' : menu.icon;
             let disabled = menu.disabled;
@@ -27,7 +35,11 @@ export default {
             const event = {
                 on: {
                     click() {
-                        this.$emit('menu-clicked', menu);
+                        self.close();
+                        self.$emit('menu-clicked', menu);
+                        if (menu.callback && isFunction(menu.callback)) {
+                            menu.callback(menu);
+                        }
                     }
                 }
             };
@@ -47,7 +59,7 @@ export default {
                 {
                     groups.map((group, index) => {
                         return (
-                            <div children="sdxu-context-menu__group">
+                            <div class="sdxu-context-menu__group">
                                 {
                                     index > 0 && (separator)
                                 }
@@ -67,10 +79,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sdxu-context-menu {
-    width: 200px;
-    height: auto;
-    background: #fff;
-    z-index: 9999;
-}
+
 </style>

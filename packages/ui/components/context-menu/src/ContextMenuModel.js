@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
 export class ContextMenuModel {
-    constructor(opt) {
+    constructor(opt = {}) {
         this.groups = opt.groups || [];
     }
 
@@ -18,8 +18,9 @@ export class ContextMenuModel {
 }
 
 export class ContextMenuGroupModel {
-    constructor(opt) {
+    constructor(opt = {}) {
         this.menus = opt.menus || [];
+        this.name = opt.name || '';
         this.uuid = uuid();
     }
 
@@ -41,7 +42,7 @@ export class ContextMenuGroupModel {
 }
 
 export class ContextMenuItemModel {
-    constructor(opt) {
+    constructor(opt = {}) {
         this.label = opt.label;
         this.name = opt.name;
         this.icon = opt.icon;

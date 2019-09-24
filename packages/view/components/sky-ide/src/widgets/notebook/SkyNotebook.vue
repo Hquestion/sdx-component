@@ -35,13 +35,14 @@ import SkyCodeCellModel from '../../model/CodeCell';
 import SkyMarkdownCellModel from '../../model/MarkdownCell';
 import SkyRawCellModel from '../../model/RawCell';
 
-import { initCommands } from '../../config/commands';
+import {CommandIDs, initCommands} from '../../config/commands';
 
 import { NotebookMode } from '../../config';
 
 import '@jupyterlab/completer/style/base.css';
 
-import open from '@sdx/ui/components/context-menu';
+import contextMenu from '@sdx/ui/components/context-menu';
+import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/ui/components/context-menu';
 
 
 export default {
@@ -328,20 +329,38 @@ export default {
         handleContextMenu(e) {
             e.preventDefault();
 
-            open(e.clientX,e.clientY, {
-                groups: [
-                    {
-                        menus: [
-                            {
-                                name: '22',
-                                label: 'xxs',
-                                icon: '',
-                            }
-                        ],
-                        uuid: '1'
-
-                    }
+            const ins = new ContextMenuModel();
+            const group = new ContextMenuGroupModel({
+                name: 'Action',
+                menus: [
+                    new ContextMenuItemModel({
+                        name: '22',
+                        label: 'xxs',
+                        icon: '',
+                    }),
+                    new ContextMenuItemModel({
+                        name: 'run:cell',
+                        label: 'Run Cell',
+                        icon: '',
+                        disabled: () => {
+                            return this.activeCell && this.activeCell.cell_type === 'raw';
+                        },
+                        callback: () => {
+                            this.app.commands.execute(CommandIDs.RUN_CELL);
+                        }
+                    }),
+                    new ContextMenuItemModel({
+                        name: '444',
+                        label: 'dddee',
+                        icon: '',
+                        shortcut: 'Ctrl+C'
+                    })
                 ]
+            });
+            ins.addGroup(group);
+
+            contextMenu.open(e.clientX,e.clientY, ins, menu => {
+                // 这里也可以定义点击menu的回调，可以对命令做一些处理
             });
         }
     },
@@ -383,5 +402,6 @@ export default {
 .sky-notebook {
     height: 100%;
     overflow: auto;
+    background: #242f49;
 }
 </style>

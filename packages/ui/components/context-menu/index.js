@@ -1,3 +1,9 @@
-import { open } from './src/manage';
+import ContextMenu from './src/manage';
 
-export default open;
+ContextMenu.install = Vue => {
+    Vue.prototype.$contextMenu = ContextMenu;
+    Vue.contextMenu = ContextMenu;
+};
+
+export default ContextMenu;
+export { ContextMenuModel, ContextMenuItemModel, ContextMenuGroupModel } from './src/ContextMenuModel';

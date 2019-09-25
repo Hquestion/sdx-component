@@ -607,6 +607,8 @@ export default {
             Download: 'Download',
             Copy: 'Copy',
             Move: 'Move',
+            PASTE: 'Paste',
+            Cut: 'Cut',
             MoveOrCopy: 'Move/Copy',
             Rename: 'Rename',
             CheckPath: 'Check Path',
@@ -664,7 +666,9 @@ export default {
             And_install_SkyDiscovery_File_Management_Client: 'The file management client has been installed,',
             upload_or_download_operation_files_are_large: 'Currently uploaded files are large, please use file management client operation',
             Open_it_immediately: 'Open it immediately',
-            PleaseSelectUserOrGroup: 'Please select user or group'
+            PleaseSelectUserOrGroup: 'Please select user or group',
+            TensorBoard: 'Go to TensorBoard',
+            ModelAnalysis: 'Model Analysis'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',

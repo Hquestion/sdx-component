@@ -119,6 +119,10 @@ export default {
                 return false;
             }
         },
+        handleFileDelete(path) {
+            const item = this.app.doc.openFiles.find(item => item.path === path);
+            item && this.closeDoc(item.path, true);
+        },
         saveCurrent() {
             this.saveDoc(this.app.doc.openFiles.find(item => item.path === this.activeTab));
         },
@@ -165,11 +169,11 @@ export default {
                 });
             }
         },
-        closeDoc(target) {
+        closeDoc(target, forceClose) {
             let tabs = this.app.doc.openFiles;
             let activeName = this.activeTab;
             this.app.doc.currentFile = this.app.doc.openFiles.find(item => item.path === target);
-            if (this.fileEditingStatus[this.composeFileKey(this.app.doc.currentFile)]) {
+            if (this.fileEditingStatus[this.composeFileKey(this.app.doc.currentFile)] && !forceClose) {
                 this.activeTab = target;
                 this.dialogVisible = true;
             } else {
@@ -187,7 +191,6 @@ export default {
                 const file = this.app.doc.openFiles.find(item => item.path === target);
                 delete this.fileEditorInstances[this.composeFileKey(file)];
                 this.app.doc.openFiles = tabs.filter(tab => tab.path !== target);
-
             }
         },
         getActiveNotebook() {

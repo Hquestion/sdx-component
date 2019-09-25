@@ -605,6 +605,8 @@ export default {
             CancelShare: '取消共享',
             Download: '下载',
             Copy: '拷贝',
+            Paste: '粘贴',
+            Cut: '剪切',
             Move: '移动',
             MoveOrCopy: '移动/拷贝',
             Rename: '重命名',
@@ -663,7 +665,9 @@ export default {
             And_install_SkyDiscovery_File_Management_Client: '已安装文件管理客户端，',
             upload_or_download_operation_files_are_large: '当前上传的文件较大，请使用文件管理客户端操作',
             Open_it_immediately: '立即打开',
-            PleaseSelectUserOrGroup: '请选择用户或用户组'
+            PleaseSelectUserOrGroup: '请选择用户或用户组',
+            TensorBoard: '进入TensorBoard',
+            ModelAnalysis: '模型解析'
         },
         resourceManage: {
             ResourceManage: '资源管理',

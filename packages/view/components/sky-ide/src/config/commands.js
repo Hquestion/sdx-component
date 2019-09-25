@@ -6,8 +6,13 @@ export const CommandIDs = {
     RUN_CELL: 'run:cell',
     COMPLETE: 'completer:invoke',
     COMPLETER_SELECT: 'completer:select',
-
-    SAVE_DOC: 'save:doc'
+    SAVE_DOC: 'save:doc',
+    RENAME: 'file:rename',
+    DELETE: 'file:delete',
+    DOWNLOAD: 'file:download',
+    COPY: 'file:copy',
+    PASTE: 'file:paste',
+    CUT: 'file:cut'
 };
 
 const notebookCommands = [
@@ -48,6 +53,42 @@ export const CommandConfigs = {
         iconClass: '',
         key: ['Ctrl S'],
         selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.RENAME]: {
+        label: 'Rename',
+        iconClass: '',
+        key: ['F2'],
+        selector: '.skyide-file-main'
+    },
+    [CommandIDs.DELETE]: {
+        label: 'Delete',
+        iconClass: '',
+        key: ['Delete'],
+        selector: '.skyide-file-main'
+    },
+    [CommandIDs.DOWNLOAD]: {
+        label: 'Download',
+        iconClass: '',
+        key: ['Ctrl D'],
+        selector: '.skyide-file-main'
+    },
+    [CommandIDs.COPY]: {
+        label: 'Copy',
+        iconClass: '',
+        key: ['Ctrl C'],
+        selector: '.skyide-file-main'
+    },
+    [CommandIDs.PASTE]: {
+        label: 'Paste',
+        iconClass: '',
+        key: ['Ctrl V'],
+        selector: '.skyide-file-main'
+    },
+    [CommandIDs.CUT]: {
+        label: 'Cut',
+        iconClass: '',
+        key: ['Ctrl X'],
+        selector: '.skyide-file-main'
     }
 };
 

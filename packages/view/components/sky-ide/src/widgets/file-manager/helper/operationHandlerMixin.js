@@ -139,6 +139,7 @@ export default {
                     deletePath([row.path], row.ownerId).then(() => {
                         // 删除之后刷新页面
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
+                        this.app.handleFileDelete(row.path);
                     });
                 });
             } else {
@@ -169,38 +170,21 @@ export default {
             this.supportMove = false;
             this.moveVisible = true;
         },
-        handleMove(target) {
-            if (this.toMoveOrCopyRow) {
-                // 移动单个路径
-                move(this.toMoveOrCopyRow.path, target.path, target.ownerId, this.toMoveOrCopyRow.ownerId).then(() => {
-                    this.moveVisible = false;
-                    this.fileManager.enterDirectory(this.fileManager.currentPath);
+        handleCopy(source, target) {
+            target.path = target.isFile ? this.app.file.currentPath : target.path;
+            return new Promise(resolve => {
+                copy([source.path], target.path, target.ownerId, source.ownerId).then(() => {
+                    resolve();
                 });
-            } else {
-                if (this.fileManager.checked.length > 0) {
-                    move(this.fileManager.checked.map(item => item.path), target.path, target.ownerId, this.fileManager.checked[0].ownerId).then(() => {
-                        this.moveVisible = false;
-                        this.fileManager.enterDirectory(this.fileManager.currentPath);
-                    });
-                }
-            }
+            });
         },
-        handleCopy(target) {
-            if (this.toMoveOrCopyRow) {
-                copy([this.toMoveOrCopyRow.path], target.path, target.ownerId, this.toMoveOrCopyRow.ownerId).then(res => {
-                    this.moveVisible = false;
-                    this.fileManager.resetCheck();
-                    this.fileManager.$refs.fileTask.checkTab('COPY');
+        handleCut(source, target) {
+            target.path = target.isFile ? this.app.file.currentPath : target.path;
+            return new Promise(resolve => {
+                move(source.path, target.path, target.ownerId, source.ownerId).then(() => {
+                    resolve();
                 });
-            } else {
-                if (this.fileManager.checked.length > 0) {
-                    copy(this.fileManager.checked.map(item => item.path), target.path, target.ownerId, this.fileManager.checked[0].ownerId).then(() => {
-                        this.moveVisible = false;
-                        this.fileManager.resetCheck();
-                        this.fileManager.$refs.fileTask.checkTab('COPY');
-                    });
-                }
-            }
+            });
         },
         handleCancelMove() {
             this.toMoveOrCopyRow = null;

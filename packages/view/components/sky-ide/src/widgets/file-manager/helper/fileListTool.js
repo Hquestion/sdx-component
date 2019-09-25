@@ -102,6 +102,17 @@ export const contextButtons = [
                 }
             },
             {
+                name: BTN_NAMES.CUT,
+                label: t('view.file.Cut'),
+                shortcut: 'Ctrl+X',
+                disabled: () => {
+                    return false;
+                },
+                callback() {
+                    this.app.commands.execute(CommandIDs.CUT);
+                }
+            },
+            {
                 name: BTN_NAMES.PASTE,
                 label: t('view.file.Paste'),
                 shortcut: 'Ctrl+V',
@@ -112,17 +123,6 @@ export const contextButtons = [
                 callback() {
                     this.app.commands.execute(CommandIDs.PASTE);
                 }
-            },
-            {
-                name: BTN_NAMES.CUT,
-                label: t('view.file.Cut'),
-                shortcut: 'Ctrl+X',
-                disabled: () => {
-                    return false;
-                },
-                callback() {
-                    this.app.commands.execute(CommandIDs.CUT);
-                }
             }
         ]
     },
@@ -130,20 +130,9 @@ export const contextButtons = [
         group: 'action2',
         buttons: [
             {
-                name: BTN_NAMES.DOWNLOAD,
-                label: t('view.file.Download'),
-                shortcut: 'Ctrl+D',
-                disabled: () => {
-                    return false;
-                },
-                callback() {
-                    this.app.commands.execute(CommandIDs.DOWNLOAD);
-                }
-            },
-            {
                 name: BTN_NAMES.RENAME,
                 label: t('view.file.Rename'),
-                shortcut: 'F2',
+                // shortcut: 'F2',
                 disabled: () => {
                     return false;
                 },
@@ -154,12 +143,41 @@ export const contextButtons = [
             {
                 name: BTN_NAMES.DELETE,
                 label: t('sdxCommon.Delete'),
-                shortcut: 'Delete',
+                // shortcut: 'Delete',
                 disabled: () => {
                     return false;
                 },
                 callback() {
                     this.app.commands.execute(CommandIDs.DELETE);
+                }
+            },
+            {
+                name: BTN_NAMES.DOWNLOAD,
+                label: t('view.file.Download'),
+                // shortcut: 'Ctrl+D',
+                disabled: () => {
+                    return false;
+                },
+                callback() {
+                    this.app.commands.execute(CommandIDs.DOWNLOAD);
+                }
+            },
+            {
+                name: 'TensorBoard',
+                label: t('view.file.TensorBoard'),
+                disabled: () => {
+                    return true;
+                },
+                callback() {
+                }
+            },
+            {
+                name: 'ModelAnalysis',
+                label: t('view.file.ModelAnalysis'),
+                disabled: () => {
+                    return true;
+                },
+                callback() {
                 }
             }
         ]

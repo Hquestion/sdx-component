@@ -605,6 +605,8 @@ export default {
             CancelShare: '取消共享',
             Download: '下载',
             Copy: '拷贝',
+            Paste: '粘贴',
+            Cut: '剪切',
             Move: '移动',
             MoveOrCopy: '移动/拷贝',
             Rename: '重命名',

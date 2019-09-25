@@ -2,11 +2,14 @@
     <!-- <SdxuContentPanel
         class="sdxv-file-main"
     > -->
-    <div class="skyide-file-main">
+    <div
+        class="skyide-file-main"
+        tabindex="1"
+    >
         <OperationBar ref="operationBar" />
         <BreadcrumbBar ref="breadcrumbBar" />
         <FileTable ref="fileTable" />
-        <BottomBar />
+        <!-- <BottomBar /> -->
     </div>
     <!-- </SdxuContentPanel> -->
 </template>
@@ -17,7 +20,6 @@ import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 import BreadcrumbBar from './BreadcrumbBar';
-import BottomBar from './BottomBar';
 
 import { getFilesList } from '@sdx/utils/src/api/file';
 // import { getFilesList, getMyShare, getMyAcceptedShare, getProjectShare } from '@sdx/utils/src/api/file';
@@ -73,8 +75,7 @@ export default {
     components: {
         BreadcrumbBar,
         FileTable,
-        OperationBar,
-        BottomBar
+        OperationBar
     },
     provide() {
         return {
@@ -84,6 +85,11 @@ export default {
     inject: {
         app: {
             default: () => {}
+        }
+    },
+    computed: {
+        fileTable() {
+            return this.$refs.fileTable;
         }
     },
     methods: {
@@ -181,9 +187,6 @@ export default {
         async getRenderList(offset, limit) {
             // 获取需要渲染到列表中的数据
             return Object.freeze(await this.db.list.offset(offset).limit(limit).toArray());
-        },
-        getUploadFiles() {
-            return this.$refs.operationBar.$refs.fileUploader.getUploadFiles();
         },
         refresh() {
             this.enterDirectory(this.currentPath);

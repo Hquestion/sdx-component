@@ -1,5 +1,7 @@
 <template>
-    <div class="skyide-file-table">
+    <div
+        class="skyide-file-table"
+    >
         <SdxuTable
             ref="fileTable"
             :dynamic="true"
@@ -17,6 +19,7 @@
             :highlight-key="editingRow && editingRow.path"
             @row-dblclick="handlePathNameClick"
             @row-click="handleRowClick"
+            @row-contextmenu="handleContextMenu"
         >
             <el-table-column
                 :label="t('view.file.FileName')"
@@ -32,7 +35,6 @@
                         v-model="tempRowName"
                         @save-rename="saveEdit"
                         @cancel-rename="cancelEdit"
-                        @name-click="handlePathNameClick"
                     />
                 </template>
             </el-table-column>
@@ -61,10 +63,13 @@ import transformFilter from '@sdx/utils/src/mixins/transformFilter';
 import locale from '@sdx/utils/src/mixins/locale';
 
 import dayjs from 'dayjs';
-import { getFileIcon, getFileBtn, rootKinds } from './helper/fileListTool';
+import { getFileIcon, contextButtons, rootKinds } from './helper/fileListTool';
 import Loadmore from './helper/loadmore';
 import OperationHandlerMixin from './helper/operationHandlerMixin';
 import FileName from './FileName';
+
+import contextMenu from '@sdx/ui/components/context-menu';
+import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/ui/components/context-menu';
 
 const ROW_HEIGHT = 30;
 let isFirstSort = true;
@@ -90,7 +95,10 @@ export default {
             editingRow: null,
             tempRowName: this.t('view.file.NewFolder'),
             rootKinds,
-            selectedRows: []
+            selectedRows: [],
+            contextMenuOpen: false,
+            copyingRow: null,
+            cuttingRow: null
         };
     },
     computed: {
@@ -102,6 +110,65 @@ export default {
         }
     },
     methods: {
+        handleContextMenu(row, event) {
+            this.selectedRows.splice(0, 1, row);
+            event.preventDefault();
+            this.contextMenuOpen = true;
+
+            const ins = new ContextMenuModel();
+
+            contextButtons.forEach(buttonGroup => {
+                const menus = [];
+                buttonGroup.buttons && buttonGroup.buttons.forEach(button => {
+                    button.callback && (button.callback = button.callback.bind(this));
+                    button.disabled && (button.disabled = button.disabled.bind(this));
+                    const itemModel = new ContextMenuItemModel(button);
+                    menus.push(itemModel);
+                });
+                const group = new ContextMenuGroupModel({
+                    name: buttonGroup.group,
+                    menus
+                });
+                ins.addGroup(group);
+            });
+
+            contextMenu.open(event.clientX, event.clientY, ins, menu => {
+                // 这里也可以定义点击menu的回调，可以对命令做一些处理
+                this.contextMenuOpen = false;
+            });
+        },
+        copyFile() {
+            this.copyingRow = this.selectedRows[0];
+            this.cuttingRow = null;
+        },
+        pasteFile() {
+            if (this.copyingRow && !this.cuttingRow) {
+                this.handleCopy(this.copyingRow, this.selectedRows[0]).then(() => {
+                    this.fileManager.refresh();
+                });
+            } else if (this.cuttingRow && !this.copyingRow) {
+                this.handleCut(this.cuttingRow, this.selectedRows[0]).then(() => {
+                    this.fileManager.refresh();
+                });
+                this.cuttingRow = null;
+            }
+        },
+        cutFile() {
+            this.cuttingRow = this.selectedRows[0];
+            this.copyingRow = null;
+        },
+        downloadFile() {
+            if (this.selectedRows.length !== 1) return;
+            this.download(this.selectedRows[0]);
+        },
+        renameFile() {
+            if (this.selectedRows.length !== 1) return;
+            this.rename(this.selectedRows[0]);
+        },
+        removeFile() {
+            if (this.selectedRows.length !== 1) return;
+            this.deleteRow(this.selectedRows[0]);
+        },
         init() {
             this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
         },
@@ -153,12 +220,12 @@ export default {
                 }
             } else {
                 this.$parent.$emit('open-file', row);
-                this.selectedRows.splice(0, 1, row.path);
+                this.selectedRows.splice(0, 1, row);
                 this.$refs.fileTable.$children[0].doLayout();
             }
         },
         handleRowClick(row) {
-            this.selectedRows.splice(0, 1, row.path);
+            this.selectedRows.splice(0, 1, row);
             this.$nextTick(() => {
                 this.$refs.fileTable.$children[0].doLayout();
             });
@@ -183,9 +250,6 @@ export default {
             }
             this.editingRow = null;
             this.tempRowName = '';
-        },
-        getFileBtn(file) {
-            return getFileBtn(file, this.fileManager.rootKind, this.fileManager.isShareRoot());
         },
         getFileIcon(file) {
             return getFileIcon(file);
@@ -256,7 +320,7 @@ export default {
             this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
         },
         getTableRowClassName({row}) {
-            if(this.selectedRows.includes(row.path)) {
+            if (this.selectedRows.some(item => item.path === row.path)) {
                 return 'highlight-row';
             }
             return '';
@@ -273,7 +337,7 @@ export default {
 
 <style lang="scss" scoped>
 .skyide-file-table {
-    height: calc(100% - 150px);
+    height: calc(100% - 100px);
     margin-bottom: 20px;
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {

@@ -91,6 +91,7 @@ import fileManagerMixin from '../src/mixins/fileManagerMixin';
 
 import setupDocCommands from './widgets/doc-manager/setupCommands';
 import setupNbCommands from './widgets/notebook/setupCommands';
+import setupFileCommands from './widgets/file-manager/setupCommands';
 
 import { SIDEBAR_FILE } from './config';
 import { extend } from './utils/utils';
@@ -245,6 +246,7 @@ export default {
 
         // 初始化命令
         setupDocCommands(this.commands, this.docManager);
+        setupFileCommands(this.commands, this.fileManager);
         setupNbCommands(this.commands, this);
         this.timer = setInterval(() => {
             this.prepareRestoreData();

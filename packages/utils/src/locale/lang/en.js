@@ -607,6 +607,8 @@ export default {
             Download: 'Download',
             Copy: 'Copy',
             Move: 'Move',
+            PASTE: 'Paste',
+            Cut: 'Cut',
             MoveOrCopy: 'Move/Copy',
             Rename: 'Rename',
             CheckPath: 'Check Path',

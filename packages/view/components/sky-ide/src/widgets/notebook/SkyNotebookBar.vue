@@ -28,16 +28,10 @@
                 +Raw
             </SdxuButton>
             <SdxuButton
-                @click="toggleMode('code')"
-                v-if="false"
-            >
-                切换为Code
-            </SdxuButton>
-            <SdxuButton
-                @click="toggleMode('markdown')"
+                @click="toggleMode()"
                 icon="sdx-icon sdx-zhuanhuandaima"
             >
-                转为MD
+                {{ modeType === 'code' ? '转为MD' : '转为code' }}
             </SdxuButton>
             <SdxuIconButton
                 @click="toggleMode('raw')"
@@ -138,7 +132,8 @@ export default {
             }, {
                 value: 'R',
                 label: 'R'
-            }]
+            }],
+            modeType: 'code'
         };
     },
     components: {
@@ -169,8 +164,9 @@ export default {
         insertRawCell() {
             this.snb.insertCell('raw');
         },
-        toggleMode(type) {
-            this.snb.changeCellType(type);
+        toggleMode() {
+            this.modeType = this.modeType === 'code' ? 'markdown' : 'code';
+            this.snb.changeCellType(this.modeType);
         },
         clearOutput() {
             if (this.snb.activeCell) {
@@ -260,6 +256,9 @@ export default {
                 padding: 0 16px;
                 height: 50px;
                 line-height: 50px;
+            }
+            .el-select-dropdown {
+                border: none;
             }
         }
     }

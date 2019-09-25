@@ -16,7 +16,7 @@
 
 <script>
 // import SdxuContentPanel from '@sdx/ui/components/content-panel';
-import Dexie from 'dexie';
+// import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 import BreadcrumbBar from './BreadcrumbBar';
@@ -37,8 +37,6 @@ export default {
             searchKey: '',
             // 动态渲染到列表中的文件列表
             renderFiles: [],
-            // 当前路径下的文件列表
-            fileList: [],
             // 当前路径下总文件数
             total: 0,
             // 当前路径下已加载的文件总数
@@ -128,32 +126,35 @@ export default {
             // this.rootKind = getDirRootKind(dir);
             // 修改为加载中，准备获取数据
             this.loading = true;
-            this.db.list.clear();
+            // this.db.list.clear();
             // 滚动到页面顶部
             this.$refs.fileTable.init();
 
             let defer = this.loadFileList();
             return defer.then(res => {
                 let fileList = res.children;
+                this.renderFiles = res.children;
                 this.total = res.childrenCount;
+                this.loadedTotal += fileList.length;
                 this.loading = false;
-                return this.db.list.bulkAdd(fileList).then(() => {
-                    this.loadedTotal += fileList.length;
-                }, e => {
-                    window.console.error(e);
-                });
+                // return this.db.list.bulkAdd(fileList).then(() => {
+                //     this.loadedTotal += fileList.length;
+                // }, e => {
+                //     window.console.error(e);
+                // });
             }, () => {
-                let fileList = [];
+                // let fileList = [];
                 this.total = 0;
                 this.loading = false;
-                return this.db.list.bulkAdd(fileList).then(() => {
-                    this.loadedTotal += fileList.length;
-                }, e => {
-                    window.console.error(e);
-                });
+                this.loadedTotal = 0;
+                // return this.db.list.bulkAdd(fileList).then(() => {
+                //     this.loadedTotal += fileList.length;
+                // }, e => {
+                //     window.console.error(e);
+                // });
             }).then(() => {
                 this.$nextTick(() => {
-                    this.$refs.fileTable.calcViewportVisible();
+                    // this.$refs.fileTable.calcViewportVisible();
                 });
             });
         },
@@ -165,12 +166,15 @@ export default {
             // 根据当前路径分页请求
             return this.loadFileList().then(res => {
                 let fileList = res.children;
+                // this.renderFiles = [...this.renderFiles, ...fileList];
+                this.renderFiles.push(...fileList);
                 this.loading = false;
-                return this.db.list.bulkAdd(fileList).then(() => {
-                    this.loadedTotal += fileList.length;
-                }, e => {
-                    window.console.log(e);
-                });
+                this.loadedTotal += fileList.length;
+                // return this.db.list.bulkAdd(fileList).then(() => {
+                //     this.loadedTotal += fileList.length;
+                // }, e => {
+                //     window.console.log(e);
+                // });
             }, () => {
                 this.loading = false;
             });
@@ -184,9 +188,10 @@ export default {
                 order: this.order
             });
         },
-        async getRenderList(offset, limit) {
+        getRenderList(offset, limit) {
             // 获取需要渲染到列表中的数据
-            return Object.freeze(await this.db.list.offset(offset).limit(limit).toArray());
+            // return Object.freeze(await this.db.list.offset(offset).limit(limit).toArray());
+            return Promise.resolve(this.renderFiles);
         },
         refresh() {
             this.enterDirectory(this.currentPath);
@@ -200,11 +205,11 @@ export default {
         this.currentPath = this.app.file.currentPath;
     },
     mounted() {
-        const db = new Dexie('SkyIDE-File');
-        db.version(1).stores({
-            list: '++,path,ownerId,name,filesystem,isFile,mimeType,fileExtension,fileShareId,createdAt,updatedAt,size'
-        });
-        this.db = db;
+        // const db = new Dexie('SkyIDE-File');
+        // db.version(1).stores({
+        //     list: '++,path,ownerId,name,filesystem,isFile,mimeType,fileExtension,fileShareId,createdAt,updatedAt,size'
+        // });
+        // this.db = db;
         this.enterDirectory(this.currentPath);
         this.$refs.breadcrumbBar.buildBreadcrumb('');
     },

@@ -10,8 +10,6 @@
             :data="fileManager.renderFiles"
             :default-sort="{prop: fileManager.orderBy, order: 'descending'}"
             @sort-change="handleSortChange"
-            :dynamic-top-height="topHeight"
-            :dynamic-bottom-height="bottomHeight"
             :row-class-name="getTableRowClassName"
             height="100%"
             v-loadmore="loadMore"
@@ -103,10 +101,10 @@ export default {
     },
     computed: {
         topHeight() {
-            return this.topCount * ROW_HEIGHT;
+            return 0;
         },
         bottomHeight() {
-            return (this.fileManager.loadedTotal - this.topCount - this.containerCount) * ROW_HEIGHT;
+            return 0;
         }
     },
     methods: {
@@ -310,7 +308,7 @@ export default {
                 if (isReachBottom && isScrollDown) {
                     this.loadNextPage();
                 }
-                this.calcViewportVisible();
+                // this.calcViewportVisible();
             }
         },
         loadNextPage() {

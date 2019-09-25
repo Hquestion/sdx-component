@@ -139,6 +139,7 @@ export default {
                     deletePath([row.path], row.ownerId).then(() => {
                         // 删除之后刷新页面
                         this.fileManager.enterDirectory(this.fileManager.currentPath);
+                        this.app.handleFileDelete(row.path);
                     });
                 });
             } else {

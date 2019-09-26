@@ -43,7 +43,7 @@
                 <span
                     slot="label"
                 >
-                    关闭
+                    {{ t('view.skyide.close') }}
                 </span>
             </el-tab-pane>
         </el-tabs>
@@ -54,8 +54,10 @@
 import '@jupyterlab/terminal/style/index.css';
 import {Tabs,TabPane} from 'element-ui/lib';
 import TerminalComp from './Terminal';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SkyTerminal',
+    mixins: [locale],
     data(){
         return {
             editableTabsValue: '1',

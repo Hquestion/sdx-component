@@ -21,7 +21,7 @@ export default {
         const handleClick = item => this.$emit('nav', item);
         const breadcrumbItem = (item, ignoreLastArrow) => (
             <div class="skyide-ellipse-breadcrumb__item" vOn:click={() => !ignoreLastArrow && handleClick(item)}>
-                <div class={{ 'skyide-ellipse-breadcrumb__name': true, 'is-last': !!ignoreLastArrow }}> { item.name } </div>
+                <div class={{ 'skyide-ellipse-breadcrumb__name': true, 'is-last': !!ignoreLastArrow }}> <i class={{ 'sdx-icon sdx-mianbaoxieshouye': item.showIcon }}></i>{ item.name } </div>
                 {!ignoreLastArrow && (<div class="skyide-ellipse-breadcrumb__split">/</div>) }
             </div>
         );
@@ -61,28 +61,30 @@ export default {
             .skyide-ellipse-breadcrumb__name {
                 display: inline-block;
                 cursor: pointer;
-                color: $sdx-text-regular-color;
+                color: #A0A5B8;
                 font-weight: 400;
                 &:hover {
-                    color: $sdx-primary-color;
+                    color: #fff;
                 }
                 &.is-last {
-                    color: $sdx-text-primary-color;
+                    color: #DDE5FE;
                     cursor: default;
                     font-weight: 600;
                     &:hover {
-                        color: $sdx-text-primary-color;
+                        color: #fff;
                     }
                 }
             }
             .skyide-ellipse-breadcrumb__split {
                 display: inline-block;
                 margin: 0 5px;
+                color: #A0A5B8;
             }
         }
         .skyide-ellipse-breadcrumb__split {
             display: inline-block;
             margin: 0 5px;
+            color: #A0A5B8;
         }
     }
 

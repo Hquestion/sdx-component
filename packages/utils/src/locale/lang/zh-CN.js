@@ -667,7 +667,8 @@ export default {
             Open_it_immediately: '立即打开',
             PleaseSelectUserOrGroup: '请选择用户或用户组',
             TensorBoard: '进入TensorBoard',
-            ModelAnalysis: '模型解析'
+            ModelAnalysis: '模型解析',
+            CreateFolder: '新建文件夹'
         },
         resourceManage: {
             ResourceManage: '资源管理',
@@ -779,6 +780,24 @@ export default {
             authorization: '授权',
             Are_you_sure_delete_it: '确定删除授权吗？',
             Can_not_be_restored_after_deletion: '删除后不可恢复哦'
+        },
+        skyide: {
+            close: '关闭',
+            shear: '剪切',
+            paste: '粘贴',
+            shift_up: '上移',
+            shift_down: '下移',
+            Clear_Output: '清除输出',
+            Kernel_is_not_connected: 'Kernel未连接',
+            Kernel_Connected: 'Kernel已连接',
+            save: '保存',
+            copy: '复制',
+            Turn_to_MD: '转为MD',
+            Turn_to_code: '转为code',
+            Run_all: '运行全部',
+            debug: '调试',
+            View_commands: '查看命令',
+            code_snippet: '代码片段'
         }
     },
     sdxCommon: {

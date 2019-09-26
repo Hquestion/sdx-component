@@ -115,7 +115,6 @@ export default {
         &.is-no-zip-file {
             &:hover {
                 span {
-                    color: $sdx-text-regular-color;
                     cursor: default;
                 }
             }

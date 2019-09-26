@@ -7,32 +7,32 @@
         <div class="sky-cell-operations">
             <SdxuIconButton
                 icon="sdx-icon sdx-jianqiedaima"
-                title="剪切"
+                :title="t('view.skyide.shear')"
                 @click.native.stop="cutCell" 
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-kaobeidaima"
-                title="粘贴"
+                :title="t('view.skyide.paste')"
                 @click.native.stop="pasteBelow"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-xiangshangyidong"
-                title="上移"
+                :title="t('view.skyide.shift_up')"
                 @click.native.stop="moveUp"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-xiangxiayidong"
-                title="下移"
+                :title="t('view.skyide.shift_down')"
                 @click.native.stop="moveDown"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-shanchu"
-                title="删除"
+                :title="t('sdxCommon.Delete')"
                 @click.native.stop="deleteCell" 
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-qingchuyunhangxiaoguo"
-                title="清除输出"
+                :title="t('view.skyide.Clear_Output')"
                 @click.native.stop="clearOutput"
             />
         </div>
@@ -56,9 +56,10 @@ import {
 import { Widget } from '@phosphor/widgets';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { MathJaxTypesetter } from '@jupyterlab/mathjax2';
-
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SkyCell',
+    mixins: [locale],
     data() {
         return {
             cellWidget: null

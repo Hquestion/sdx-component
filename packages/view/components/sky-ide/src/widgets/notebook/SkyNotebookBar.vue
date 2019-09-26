@@ -97,11 +97,12 @@
         </div>
         <div>
             <el-switch
-                v-model="kernelValue"
+                v-model="kernelStatus"
                 active-color="rgb(74,128,245)"
                 inactive-color="rgb(189,206,242)"
                 @change="changeSwitch"
-            /><span class="switch-content">{{ kernelValue ? 'Kernel已连接' : 'Kernel未连接' }}</span>
+            />
+            <span class="switch-content">{{ kernelStatus ? 'Kernel已连接' : 'Kernel未连接' }}</span>
             <el-select
                 v-model="codeType"
                 placeholder="请选择"
@@ -125,12 +126,12 @@ import SkyCodeCellModel from '../../model/CodeCell';
 import IconButton from '@sdx/ui/components/icon-button';
 import Button from '@sdx/ui/components/button';
 import { Select} from 'element-ui';
+import {NotebookMode} from '../../config';
 export default {
     name: 'SkyNotebookBar',
     data() {
         return {
             sinppets,
-            kernelValue: false,
             codeType: 'Python3',
             codeOptions: [{
                 value: 'Python3',
@@ -140,6 +141,21 @@ export default {
                 label: 'R'
             }]
         };
+    },
+    computed: {
+        kernelStatus: {
+            get() {
+                return this.snb.mode === NotebookMode.CELL_DEBUG;
+            },
+            set(val) {
+                if (val) {
+                    // 启动
+                    this.snb.debugByCell();
+                } else {
+                    this.snb.cancelDebug();
+                }
+            }
+        }
     },
     components: {
         [IconButton.name]: IconButton,
@@ -185,7 +201,7 @@ export default {
             this.snb.debugByCell();
         },
         changeSwitch() {
-            window.console.log(this.kernelValue);
+            window.console.log(this.kernelStatus);
         }
     },
 };

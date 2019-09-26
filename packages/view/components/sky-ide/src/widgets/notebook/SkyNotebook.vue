@@ -76,8 +76,7 @@ export default {
         },
         mathjaxUrl: {
             type: String,
-            default: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js',
-            required: true
+            default: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js'
         },
         mathjaxConfig: {
             type: String,
@@ -114,6 +113,15 @@ export default {
         },
         isNbFile() {
             return this.file.fileExtension === '.ipynb' || this.file.path.endsWith('.ipynb');
+        },
+        isDebugMode() {
+            return this.mode === NotebookMode.CELL_DEBUG || this.mode === NotebookMode.DEBUG;
+        },
+        isEditMode() {
+            return this.mode === NotebookMode.EDIT;
+        },
+        isReadonlyMode() {
+            return this.mode === NotebookMode.READONLY;
         }
     },
     methods: {
@@ -204,17 +212,17 @@ export default {
                 widget.activate();
             }
         },
-        async runCell(cell, widget, session) {
+        async runCell(cell, widget, session, shutdownAfterRun = false) {
             cell = cell || this.activeCell;
             widget = widget || this.activeCellWidget;
             if (cell && cell.cell_type === 'code') {
                 if (!session) {
-                    session = await Session.startNew({
-                        path: this.file.path,
-                        kernelName: 'python3'
-                    });
+                    session = await this.startSession();
                 }
                 await CodeCell.execute(widget, session);
+                if (shutdownAfterRun) {
+                    this.shutdownSession(true);
+                }
                 return undefined;
             } else if (cell && cell.cell_type === 'markdown') {
                 widget.rendered = true;
@@ -229,17 +237,57 @@ export default {
          * 遍历cells数组，按顺序执行每个cell
          */
         async runNotebook() {
-            let session = await Session.startNew({
-                path: this.file.path,
-                kernelName: 'python3'
-            });
+            let session = this.session;
+            if (!session) {
+                session = await this.startSession();
+            }
             let execCount = 0;
             while(execCount < this.notebook.cells.length) {
                 const cell = this.notebook.cells[execCount];
-                await this.runCell(cell, this.cellMap[cell.order], session);
+                await this.runCell(cell, this.cellMap[cell.order], session, false);
                 execCount++;
             }
-            await session.shutdown();
+            if (!this.isDebugMode) {
+                await this.shutdownSession(true);
+            }
+            return true;
+        },
+        /**
+         * 创建session，如果已存在则返回该session
+         */
+        async startSession() {
+            if (this.session) {
+                return await this.session;
+            }
+            await this.app.taskManager.run();
+            return this.session = await Session.startNew({
+                path: this.file.path,
+                kernelName: 'python3',
+                serverSettings: {
+                    baseUrl: '',
+                    wsUrl: '',
+                    ideUuid: this.app.taskManager.ideUuid
+                }
+            });
+        },
+
+        /**
+         * 连接到session,用于恢复状态。
+         * 例如：在刷新时重新连接到之前session
+         */
+        async connectToSession() {
+            // TODO
+        },
+
+        async shutdownSession(shutdownTask = true) {
+            if (!this.session) return await true;
+            await this.session.shutdown();
+            this.session = null;
+            // 同时停止任务
+            if (shutdownTask) {
+                await this.app.taskManager.stop();
+            }
+            return await true;
         },
         /**
          * 按cell调试
@@ -247,12 +295,17 @@ export default {
          */
         async debugByCell() {
             this.mode = NotebookMode.CELL_DEBUG;
-            this.session = await Session.startNew({
-                path: this.file.path,
-                kernelName: 'python3'
-            });
+            this.session = await this.startSession();
             // 设置completer
             this.setupCompleter();
+        },
+        async cancelDebug() {
+            if (this.isDebugMode) {
+                await this.shutdownSession(true);
+                this.mode = NotebookMode.EDIT;
+                return null;
+            }
+            return null;
         },
         async setupCompleter() {
             if (!this.session) {
@@ -261,6 +314,9 @@ export default {
                     Widget.detach(this.completer);
                     this.completerHandler.dispose();
                 }
+                return;
+            }
+            if (this.activeCell.cell_type !== 'code') {
                 return;
             }
             const activeWidget = this.activeCellWidget || this.cellMap[this.notebook.cells[0].order];

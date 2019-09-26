@@ -6,7 +6,7 @@
 
 <script>
 import { Widget } from '@phosphor/widgets';
-import { TerminalSession } from '@jupyterlab/services';
+import { TerminalSession } from '@skyide/services';
 import { Terminal } from '@jupyterlab/terminal';
 
 export default {

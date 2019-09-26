@@ -141,6 +141,9 @@ export default {
             cellWidget.editor.editor.on('focus', () => {
                 this.selectCell();
             });
+            cellWidget.editor.editor.on('mousedown', () => {
+                this.selectCell();
+            });
             this.$emit('cell-attach', this.cellData, this.cellWidget);
             this.$nextTick(() => {
                 if (this.cellData.cell_type === 'markdown') {
@@ -215,6 +218,7 @@ export default {
         this.init();
     },
     beforeDestroy() {
+        this.cellWidget && this.cellWidget.dispose();
         this.$emit('cell-destroy', this.cellData, this.cellWidget);
         if (this.cellData.cell_type === 'markdown') {
             this.$el.removeEventListener('dblclick', this.toggleMarkdownRendered);

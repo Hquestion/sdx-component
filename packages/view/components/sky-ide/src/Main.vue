@@ -87,6 +87,7 @@ import DocManager from './widgets/doc-manager/Index';
 import { initCommands } from './config/commands';
 import docManagerMixin from '../src/mixins/docManagerMixin';
 import fileManagerMixin from '../src/mixins/fileManagerMixin';
+import ideInit from '../src/mixins/ideInit';
 
 import setupDocCommands from './widgets/doc-manager/setupCommands';
 import setupNbCommands from './widgets/notebook/setupCommands';
@@ -102,12 +103,18 @@ export default {
         FileManager,
         DocManager
     },
+    props: {
+        taskId: {
+            type: String,
+            default: '69f10cad-1493-432f-ae5b-7374e9eadd65'
+        }
+    },
     provide() {
         return {
             app: this
         };
     },
-    mixins: [docManagerMixin, fileManagerMixin],
+    mixins: [docManagerMixin, fileManagerMixin, ideInit],
     data() {
         return {
             commands: initCommands(),
@@ -232,7 +239,9 @@ export default {
             localStorage.setItem('SkyIDERestorer', JSON.stringify(restorer));
         }
     },
-    mounted() {
+    async mounted() {
+        // 初始化IDE，获取项目及task信息
+        await this.prepareEnv();
         // 恢复布局
         this.recoveryLocal();
         // 监听键盘事件

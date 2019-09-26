@@ -33,7 +33,8 @@
         "axios": "^0.18.0",
         "dayjs": "^1.8.14",
         "qs": "latest",
-        "vue": "^2.6.10"
+        "vue": "^2.6.10",
+        "@sdx/widget": "^1.1.27"
     },
     "babel": {
         "presets": [
@@ -41,6 +42,7 @@
         ]
     },
     "dependencies": {
+        "@sdx/widget": "^1.1.27",
         "axios": "^0.18.0",
         "uuid": "^3.3.2"
     },

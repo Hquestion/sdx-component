@@ -668,7 +668,8 @@ export default {
             Open_it_immediately: 'Open it immediately',
             PleaseSelectUserOrGroup: 'Please select user or group',
             TensorBoard: 'Go to TensorBoard',
-            ModelAnalysis: 'Model Analysis'
+            ModelAnalysis: 'Model Analysis',
+            CreateFolder: 'Create Folder'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',

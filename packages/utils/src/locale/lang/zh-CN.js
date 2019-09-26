@@ -667,7 +667,8 @@ export default {
             Open_it_immediately: '立即打开',
             PleaseSelectUserOrGroup: '请选择用户或用户组',
             TensorBoard: '进入TensorBoard',
-            ModelAnalysis: '模型解析'
+            ModelAnalysis: '模型解析',
+            CreateFolder: '新建文件夹'
         },
         resourceManage: {
             ResourceManage: '资源管理',

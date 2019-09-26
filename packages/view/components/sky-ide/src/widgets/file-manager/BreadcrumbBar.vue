@@ -35,8 +35,9 @@ export default {
                 return { name, path };
             });
             pathObjArr.unshift({
-                name: this.t('view.file.AllFiles'),
-                path: ''
+                name: '',
+                path: '',
+                showIcon: true
             });
             this.list = pathObjArr;
             return pathObjArr;
@@ -51,10 +52,13 @@ export default {
 <style lang="scss" scoped>
     @import "~@sdx/utils/src/theme-common/var";
     .skyide-file-breadcrumb-bar {
+        height: 48px;
+        background: #314065;
         display: flex;
+        padding-left: 10px;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        border-bottom: 1px solid #1C253D;
         .loaded-tip {
             color: $sdx-text-regular-color;
         }

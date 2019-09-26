@@ -109,7 +109,7 @@ export default {
     },
     methods: {
         handleContextMenu(row, event) {
-            this.selectedRows.splice(0, 1, row);
+            this.handleRowClick(row);
             event.preventDefault();
             this.contextMenuOpen = true;
 
@@ -160,6 +160,7 @@ export default {
             this.download(this.selectedRows[0]);
         },
         renameFile() {
+            console.log('this.selectedRows', this.selectedRows);
             if (this.selectedRows.length !== 1) return;
             this.rename(this.selectedRows[0]);
         },
@@ -201,6 +202,7 @@ export default {
                         this.fileManager.renderFiles.unshift(emptyRow);
                     }
                     this.editingRow = emptyRow;
+                    this.handleRowClick(this.editingRow);
                     this.tempRowName = emptyRow.name;
                     setTimeout(() => {
                         lock(this.$el.querySelector('.el-table__body-wrapper'));
@@ -224,6 +226,7 @@ export default {
         },
         handleRowClick(row) {
             this.selectedRows.splice(0, 1, row);
+            if (this.editingRow && this.editingRow !== row) this.cancelEdit();
             this.$nextTick(() => {
                 this.$refs.fileTable.$children[0].doLayout();
             });
@@ -319,7 +322,7 @@ export default {
         },
         getTableRowClassName({row}) {
             if (this.selectedRows.some(item => item.path === row.path)) {
-                return 'highlight-row';
+                return 'highlight-file-row';
             }
             return '';
         }
@@ -335,8 +338,7 @@ export default {
 
 <style lang="scss" scoped>
 .skyide-file-table {
-    height: calc(100% - 100px);
-    margin-bottom: 20px;
+    height: calc(100% - 106px);
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {
         display: none;
@@ -349,6 +351,40 @@ export default {
         border-bottom: none;
         table {
             border-bottom: none;
+        }
+
+        &.el-table th > .cell,
+        &.el-table .cell {
+            background-color: #314065;
+        }
+        &.el-table td,
+        &.el-table th > .cell {
+            color: #DDE5FE;
+        }
+        &.el-table tr,
+        &.el-table th {
+            background-color: #314065;
+        }
+        &.el-table .ascending .sort-caret.ascending {
+            border-bottom-color: #fff;
+        }
+        &.el-table .descending .sort-caret.descending {
+            border-top-color: #fff;
+        }
+        .el-table__body tr:hover > td,
+        &.el-table tr:hover .cell{
+            background-color: #34539B;
+        }
+        &.el-table .highlight-file-row,
+        &.el-table .highlight-file-row .cell {
+            background-color: #34539B!important;
+        }
+        .el-table__empty-block {
+            background-color: #314065;
+            border-top: none;
+        }
+        .el-table__body-wrapper.is-scrolling-none {
+            background-color: #314065;
         }
     }
 }

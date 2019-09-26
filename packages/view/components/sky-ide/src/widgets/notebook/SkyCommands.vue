@@ -2,7 +2,7 @@
     <search-panel
         class="sky-commands"
         @seach-value="seachValue"
-        content-height="100px"
+        content-max-height="408px"
     >
         <div class="tree">
             <div
@@ -47,41 +47,7 @@ export default {
     },
     computed: {
         commandTree() {
-            let trees = [
-                { category: 'note',
-                    commands: [
-                        {
-                            label: 'notebook',
-                            key: 1
-                        },
-                        {
-                            label: 'notebook2',
-                            key: 1
-                        },
-                        {
-                            label: 'notebook3',
-                            key: 1
-                        },
-                    ]
-                },
-                { category: 'gg',
-                    commands: [
-                        {
-                            label: 'hh',
-                            key: 4
-                        },
-                        {
-                            label: 'hh4',
-                            key: 5
-                        },
-                        {
-                            label: 'bb',
-                            key: 6
-                        },
-                    ]
-                }
-            ];
-            let [res, tree] = [new Set(), trees, getCommandsTree('Notebook')];
+            let [res, tree] = [new Set(), getCommandsTree('Notebook')];
             tree.forEach(item => {
                 let commands =  new Set();
                 if (matchingString(item.category, this.command)) {

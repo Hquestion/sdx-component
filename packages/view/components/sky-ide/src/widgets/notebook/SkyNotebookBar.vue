@@ -31,7 +31,7 @@
                 @click="toggleMode()"
                 icon="sdx-icon sdx-zhuanhuandaima"
             >
-                {{ modeType === 'code' ? '转为MD' : '转为code' }}
+                {{ ( snb.activeCell && snb.activeCell.cell_type) === 'code' ? '转为MD' : '转为code' }}
             </SdxuButton>
             <SdxuIconButton
                 @click="toggleMode('raw')"
@@ -64,11 +64,20 @@
             <SdxuIconButton
                 @click="debugByCell"
                 icon="sdx-icon sdx-tiaoshi"
-                class="marginleft32"
+                class="marginleft32 marginright8"
             />
-            <SdxuIconButton
-                icon="sdx-icon sdx-bianzu4"
-            />
+            <el-popover
+                trigger="click"
+                placement="bottom-start"
+                popper-class="sky-popover"
+                width="300"
+            >
+                <SkyCommands />
+                <SdxuIconButton
+                    slot="reference"
+                    icon="sdx-icon sdx-bianzu4"
+                />
+            </el-popover>
             <sdxu-button
                 placement="right"
                 trigger="click"
@@ -118,7 +127,8 @@ import sinppets from '../../config/snippets';
 import SkyCodeCellModel from '../../model/CodeCell';
 import IconButton from '@sdx/ui/components/icon-button';
 import Button from '@sdx/ui/components/button';
-import { Select} from 'element-ui';
+import { Select, Popover} from 'element-ui';
+import SkyCommands from './SkyCommands';
 export default {
     name: 'SkyNotebookBar',
     data() {
@@ -132,14 +142,15 @@ export default {
             }, {
                 value: 'R',
                 label: 'R'
-            }],
-            modeType: 'code'
+            }]
         };
     },
     components: {
         [IconButton.name]: IconButton,
         [Button.name]: Button,
-        [Select.name]: Select
+        [Select.name]: Select,
+        [Popover.name]: Popover,
+        SkyCommands
     },
     inject: {
         snb: {
@@ -165,8 +176,9 @@ export default {
             this.snb.insertCell('raw');
         },
         toggleMode() {
-            this.modeType = this.modeType === 'code' ? 'markdown' : 'code';
-            this.snb.changeCellType(this.modeType);
+            let modeType = this.snb && this.snb.activeCell && this.snb.activeCell.cell_type;
+            modeType = modeType === 'code' ? 'markdown' : 'code';
+            this.snb.changeCellType(modeType);
         },
         clearOutput() {
             if (this.snb.activeCell) {
@@ -199,6 +211,9 @@ export default {
     justify-content: space-between;
     .marginleft32 {
         margin-left: 32px !important;
+    }
+    .marginright8 {
+        margin-right: 8px;
     }
     .basic-btn-style {
         width: 24px;
@@ -315,5 +330,15 @@ export default {
             margin-left: -10px;
         }
     }   
+}
+</style>
+
+<style lang="sass">
+.sky-popover {
+    padding: 0 !important;
+    border: 0 !important;
+    .popper__arrow {
+        display: none !important;
+    }
 }
 </style>

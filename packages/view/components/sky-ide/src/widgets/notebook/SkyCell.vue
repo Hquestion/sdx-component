@@ -11,17 +11,17 @@
                 @click.native.stop="cutCell" 
             />
             <SdxuIconButton
-                icon="sdx-icon sdx-kaobei"
+                icon="sdx-icon sdx-kaobeidaima"
                 title="粘贴"
                 @click.native.stop="pasteBelow"
             />
             <SdxuIconButton
-                icon="sdx-icon sdx-RectangleCopy2"
+                icon="sdx-icon sdx-xiangshangyidong"
                 title="上移"
                 @click.native.stop="moveUp"
             />
             <SdxuIconButton
-                icon="sdx-icon sdx-RectangleCopy"
+                icon="sdx-icon sdx-xiangxiayidong"
                 title="下移"
                 @click.native.stop="moveDown"
             />
@@ -259,6 +259,7 @@ export default {
             & /deep/ {
                 .jp-Collapser {
                     background: #03a9f4;
+                    cursor: pointer;
                 }
             }
             .sky-cell-operations {

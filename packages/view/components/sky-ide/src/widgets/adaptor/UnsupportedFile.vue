@@ -21,5 +21,6 @@ export default {
     align-items: center;
     justify-content: center;
     // margin: 20px 0;
+    color: #fff;
 }
 </style>

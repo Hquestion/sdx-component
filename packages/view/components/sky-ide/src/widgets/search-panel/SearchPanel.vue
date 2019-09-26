@@ -10,7 +10,7 @@
                 class="sdx-icon sdxu-input__icon sdx-icon-search"
             />
         </SdxuInput>
-        <div :style="{'height': contentHeight}">
+        <div :style="{'max-height': contentMaxHeight, 'min-height': contentMinHeight}">
             <SdxuScroll>
                 <slot />
             </SdxuScroll>
@@ -28,9 +28,13 @@ export default {
         SdxuScroll
     },
     props: {
-        contentHeight: {
+        contentMaxHeight: {
             type: String,
             default: '356px'
+        },
+        contentMinHeight: {
+            type: String,
+            default: '100px'
         }
     },
     data() {

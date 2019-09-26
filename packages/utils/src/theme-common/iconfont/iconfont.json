@@ -902,13 +902,6 @@
       "unicode_decimal": 58998
     },
     {
-      "icon_id": "10969626",
-      "name": "上下移动",
-      "font_class": "shangxiayidong",
-      "unicode": "e679",
-      "unicode_decimal": 59001
-    },
-    {
       "icon_id": "10969627",
       "name": "上传文件",
       "font_class": "shangchuanwenjian",
@@ -1049,39 +1042,11 @@
       "unicode_decimal": 59021
     },
     {
-      "icon_id": "10969647",
-      "name": "Rectangle Copy 33",
-      "font_class": "RectangleCopy",
-      "unicode": "e68e",
-      "unicode_decimal": 59022
-    },
-    {
-      "icon_id": "10969648",
-      "name": "Rectangle Copy 32",
-      "font_class": "RectangleCopy1",
-      "unicode": "e68f",
-      "unicode_decimal": 59023
-    },
-    {
       "icon_id": "10969649",
       "name": "Rectanglee",
       "font_class": "Rectanglee",
       "unicode": "e690",
       "unicode_decimal": 59024
-    },
-    {
-      "icon_id": "10969650",
-      "name": "Rectangle Copy 35",
-      "font_class": "RectangleCopy2",
-      "unicode": "e691",
-      "unicode_decimal": 59025
-    },
-    {
-      "icon_id": "10969651",
-      "name": "Rectangle Copy 34",
-      "font_class": "RectangleCopy3",
-      "unicode": "e692",
-      "unicode_decimal": 59026
     },
     {
       "icon_id": "10969652",
@@ -1131,6 +1096,76 @@
       "font_class": "Kernelweilianjie",
       "unicode": "e699",
       "unicode_decimal": 59033
+    },
+    {
+      "icon_id": "10979353",
+      "name": "bianyuanduan-b",
+      "font_class": "bianyuanduan-b",
+      "unicode": "e7c8",
+      "unicode_decimal": 59336
+    },
+    {
+      "icon_id": "10979354",
+      "name": "bianyuanduan-a",
+      "font_class": "bianyuanduan-a",
+      "unicode": "e7c9",
+      "unicode_decimal": 59337
+    },
+    {
+      "icon_id": "10979414",
+      "name": "moxingxiafa",
+      "font_class": "moxingxiafa",
+      "unicode": "e7ca",
+      "unicode_decimal": 59338
+    },
+    {
+      "icon_id": "11078303",
+      "name": "向下移动",
+      "font_class": "xiangxiayidong",
+      "unicode": "e68e",
+      "unicode_decimal": 59022
+    },
+    {
+      "icon_id": "11078304",
+      "name": "拷贝代码",
+      "font_class": "kaobeidaima",
+      "unicode": "e68f",
+      "unicode_decimal": 59023
+    },
+    {
+      "icon_id": "11078305",
+      "name": "Rectangle Copy 32",
+      "font_class": "RectangleCopy",
+      "unicode": "e691",
+      "unicode_decimal": 59025
+    },
+    {
+      "icon_id": "11078306",
+      "name": "Rectangle Copy 35",
+      "font_class": "RectangleCopy1",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "11078307",
+      "name": "Rectangle Copy 33",
+      "font_class": "RectangleCopy2",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "11078308",
+      "name": "Rectangle Copy 34",
+      "font_class": "RectangleCopy3",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "11078309",
+      "name": "向上移动",
+      "font_class": "xiangshangyidong",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
     }
   ]
 }

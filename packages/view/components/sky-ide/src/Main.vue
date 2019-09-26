@@ -1,67 +1,70 @@
 <template>
     <div class="sdxv-sky-ide">
-        <ResizablePanel
-            class="sdxv-sky-ide__frame"
-            child-direction="horizontal"
-        >
+        <SkyIdeTitle class="title" />
+        <div class="sdxv-sky-ide__frame">
             <ResizablePanel
-                :fixed="true"
-                :init-width="48"
-                class="sdxv-skyide-sidebar"
-                tabindex="1"
+                child-direction="horizontal"
             >
-                <Sidebar />
-            </ResizablePanel>
-            <ResizablePanel ref="editorMain">
                 <ResizablePanel
-                    child-direction="horizontal"
-                    :init-width="layout.editorWin.weight ? -1 : layout.editorWin.initWidth"
-                    :weight="layout.editorWin.weight"
-                    :min-width="layout.editorWin.minWidth"
-                    ref="editorWin"
+                    :fixed="true"
+                    :init-width="48"
+                    class="sdxv-skyide-sidebar"
+                    tabindex="1"
                 >
+                    <Sidebar />
+                </ResizablePanel>
+                <ResizablePanel ref="editorMain">
                     <ResizablePanel
-                        :init-width="layout.file.weight ? -1 : layout.file.initWidth"
-                        :weight="layout.file.weight"
-                        :min-width="layout.file.minWidth"
-                        :collapse="!leftPanelVisible"
+                        child-direction="horizontal"
+                        :init-width="layout.editorWin.weight ? -1 : layout.editorWin.initWidth"
+                        :weight="layout.editorWin.weight"
+                        :min-width="layout.editorWin.minWidth"
+                        ref="editorWin"
                     >
-                        <file-manager
-                            v-show="fileManagerVisible"
-                            @open-file="openFile"
-                            ref="fileManager"
-                        />
-                    </ResizablePanel>
-                    <ResizablePanel
-                        child-direction="vertical"
-                        :init-width="layout.doc.weight ? -1 : layout.doc.initWidth"
-                        :weight="layout.doc.weight"
-                        :min-width="layout.doc.minWidth"
-                    >
-                        <ResizablePanel>
-                            <doc-manager
-                                ref="docManager"
-                                @refresh-tree="refreshTree"
+                        <ResizablePanel
+                            :init-width="layout.file.weight ? -1 : layout.file.initWidth"
+                            :weight="layout.file.weight"
+                            :min-width="layout.file.minWidth"
+                            :collapse="!leftPanelVisible"
+                        >
+                            <file-manager
+                                v-show="fileManagerVisible"
+                                @open-file="openFile"
+                                ref="fileManager"
                             />
                         </ResizablePanel>
                         <ResizablePanel
-                            :fixed="true"
-                            :init-height="40"
+                            child-direction="vertical"
+                            :init-width="layout.doc.weight ? -1 : layout.doc.initWidth"
+                            :weight="layout.doc.weight"
+                            :min-width="layout.doc.minWidth"
                         >
-                            资源查看
+                            <ResizablePanel>
+                                <doc-manager
+                                    ref="docManager"
+                                    @refresh-tree="refreshTree"
+                                />
+                            </ResizablePanel>
+                            <ResizablePanel
+                                :fixed="true"
+                                :init-height="40"
+                            >
+                                <ResourceUsage />
+                            </ResizablePanel>
                         </ResizablePanel>
                     </ResizablePanel>
-                </ResizablePanel>
-                <ResizablePanel
-                    :init-height="layout.terminal.weight ? -1 : layout.terminal.initHeight"
-                    :weight="layout.terminal.weight"
-                    :min-height="layout.terminal.minHeight"
-                    :collapse="!terminalVisible"
-                >
-                    <SkyTerminal ref="terminal" />
+                    <ResizablePanel
+                        :init-height="layout.terminal.weight ? -1 : layout.terminal.initHeight"
+                        :weight="layout.terminal.weight"
+                        :min-height="layout.terminal.minHeight"
+                        :collapse="!terminalVisible"
+                    >
+                        <SkyTerminal ref="terminal" />
+                    </ResizablePanel>
                 </ResizablePanel>
             </ResizablePanel>
-        </ResizablePanel>
+        </div>
+        
         <script
             id="jupyter-config-data"
             type="application/json"
@@ -91,9 +94,12 @@ import ideInit from '../src/mixins/ideInit';
 
 import setupDocCommands from './widgets/doc-manager/setupCommands';
 import setupNbCommands from './widgets/notebook/setupCommands';
+import setupFileCommands from './widgets/file-manager/setupCommands';
 
 import { SIDEBAR_FILE } from './config';
 import { extend } from './utils/utils';
+import SkyIdeTitle from './widgets/title/SkyIdeTitle';
+import ResourceUsage from './widgets/resource/ResourceUsage';
 export default {
     name: 'Main',
     components: {
@@ -101,7 +107,9 @@ export default {
         ResizablePanel,
         SkyTerminal,
         FileManager,
-        DocManager
+        DocManager,
+        SkyIdeTitle,
+        ResourceUsage
     },
     props: {
         taskId: {
@@ -251,6 +259,7 @@ export default {
 
         // 初始化命令
         setupDocCommands(this.commands, this.docManager);
+        setupFileCommands(this.commands, this.fileManager);
         setupNbCommands(this.commands, this);
         this.timer = setInterval(() => {
             this.prepareRestoreData();
@@ -272,13 +281,19 @@ export default {
         top: 0;
         width: 100%;
         height: 100%;
+        background: rgb(18,23,36);
         & /deep/ {
             :focus {
                 outline: none;
             }
         }
         .sdxv-sky-ide__frame {
-            border: 1px solid #dedede;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: calc(100% - 72px);
+            margin-top: 72px;
             .sdxv-skyide-sidebar {
                 background: #445580;
             }

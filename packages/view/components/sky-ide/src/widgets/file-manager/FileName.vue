@@ -106,12 +106,12 @@ export default {
     .skyide-file__item {
         display: block;
         overflow: hidden;
-        &:hover {
+        /* &:hover {
             span {
                 color: $sdx-primary-color;
                 cursor: pointer;
             }
-        }
+        } */
         &.is-no-zip-file {
             &:hover {
                 span {

@@ -487,5 +487,9 @@ export default {
     height: 100%;
     overflow: auto;
     background: #242f49;
+    .sky-notebook__main {
+        height: calc(100% - 48px);
+        padding: 16px;
+    }
 }
 </style>

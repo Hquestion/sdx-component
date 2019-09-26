@@ -5,12 +5,36 @@
         @click="selectCell"
     >
         <div class="sky-cell-operations">
-            <SdxuIconButton icon="sdx-icon sdx-icon-check" title="剪切" @click.native.stop="cutCell"></SdxuIconButton>
-            <SdxuIconButton icon="sdx-icon sdx-kaobei" title="粘贴" @click.native.stop="pasteBelow"></SdxuIconButton>
-            <SdxuIconButton icon="sdx-icon sdx-icon-back" title="上移" @click.native.stop="moveUp"></SdxuIconButton>
-            <SdxuIconButton icon="sdx-icon sdx-icon-back" title="下移" @click.native.stop="moveDown"></SdxuIconButton>
-            <SdxuIconButton icon="sdx-icon sdx-icon-delete" title="删除" @click.native.stop="deleteCell"></SdxuIconButton>
-            <SdxuIconButton icon="sdx-icon sdx-fabu" title="清除输出" @click.native.stop="clearOutput"></SdxuIconButton>
+            <SdxuIconButton
+                icon="sdx-icon sdx-jianqiedaima"
+                title="剪切"
+                @click.native.stop="cutCell" 
+            />
+            <SdxuIconButton
+                icon="sdx-icon sdx-kaobeidaima"
+                title="粘贴"
+                @click.native.stop="pasteBelow"
+            />
+            <SdxuIconButton
+                icon="sdx-icon sdx-xiangshangyidong"
+                title="上移"
+                @click.native.stop="moveUp"
+            />
+            <SdxuIconButton
+                icon="sdx-icon sdx-xiangxiayidong"
+                title="下移"
+                @click.native.stop="moveDown"
+            />
+            <SdxuIconButton
+                icon="sdx-icon sdx-shanchu"
+                title="删除"
+                @click.native.stop="deleteCell" 
+            />
+            <SdxuIconButton
+                icon="sdx-icon sdx-qingchuyunhangxiaoguo"
+                title="清除输出"
+                @click.native.stop="clearOutput"
+            />
         </div>
     </div>
 </template>
@@ -125,9 +149,10 @@ export default {
                         model:  new RawCellModel({
                             cell: this.cellData
                         })
-                    }).initializeState();
+                    }).initializeState(); 
                     break;
             }
+            cellWidget.editor.setOption('theme', 'seti');
             cellWidget.model.contentChanged.connect(model => {
                 Object.assign(this.cellData, model.toJSON());
             });
@@ -229,10 +254,65 @@ export default {
 
 <style lang="scss">
     .sky-cell {
+        position: relative;
+        padding: 8px 0;
+        .sky-cell-operations {
+            display: none;
+        }
         &.is-active {
             & /deep/ {
                 .jp-Collapser {
                     background: #03a9f4;
+                    cursor: pointer;
+                }
+            }
+            .sky-cell-operations {
+                display: inline-block;
+                width: 200px;
+                position: absolute;
+                z-index: 9;
+                right: 8px;
+                background: #34446B;
+                box-shadow: 0 3px 6px 0 rgba(14,22,46,0.68);
+                border-radius: 4px;
+                height: 40px;
+                line-height: 40px;
+                padding: 0px 11px;
+                top: -20px
+            }
+            .sdxu-icon-button + .sdxu-icon-button {
+                margin-left: 16px;
+            }
+        }
+        /deep/ {
+            .jp-InputArea-editor {
+                border: 0;
+            }
+            .p-Widget.jp-Cell.jp-CodeCell.jp-mod-noOutputs, .p-Widget.jp-Cell.jp-MarkdownCell {
+                background: #1B2439;
+                padding: 0;
+            }
+            .jp-Placeholder {
+                height: 56px;
+                background: #242F49;
+                .jp-MoreHorizIcon:before {
+                    content: '...';
+                    font-size: 31px;
+                    position: relative;
+                    top: 0px;
+                    letter-spacing: 13px;
+                    font-weight: 900;
+                    line-height: 42px;
+                    width: 100px;
+                    display: block;
+                    height: 56px;
+                    padding: 0 20px;
+                    background: #1B2439;
+                    box-sizing: border-box;
+                    color: #A0A5B8;
+                }
+                .jp-Placeholder-content .jp-MoreHorizIcon:hover {
+                    border: none;
                 }
             }
         }

@@ -2,9 +2,12 @@
     <search-panel
         class="sky-commands"
         @seach-value="seachValue"
-        content-height="100px"
+        content-max-height="408px"
     >
-        <div class="tree">
+        <div
+            class="tree"
+            v-if="commandTree.length"
+        >
             <div
                 v-for="(item, index) in commandTree"
                 :key="index"
@@ -28,6 +31,12 @@
                 </div>
             </div>
         </div>
+        <div
+            v-else
+            class="nodata"
+        >
+            暂无数据
+        </div>
     </search-panel>
 </template>
 
@@ -47,41 +56,7 @@ export default {
     },
     computed: {
         commandTree() {
-            let trees = [
-                { category: 'note',
-                    commands: [
-                        {
-                            label: 'notebook',
-                            key: 1
-                        },
-                        {
-                            label: 'notebook2',
-                            key: 1
-                        },
-                        {
-                            label: 'notebook3',
-                            key: 1
-                        },
-                    ]
-                },
-                { category: 'gg',
-                    commands: [
-                        {
-                            label: 'hh',
-                            key: 4
-                        },
-                        {
-                            label: 'hh4',
-                            key: 5
-                        },
-                        {
-                            label: 'bb',
-                            key: 6
-                        },
-                    ]
-                }
-            ];
-            let [res, tree] = [new Set(), trees, getCommandsTree('Notebook')];
+            let [res, tree] = [new Set(), getCommandsTree('Notebook')];
             tree.forEach(item => {
                 let commands =  new Set();
                 if (matchingString(item.category, this.command)) {
@@ -113,6 +88,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sky-commands {
+    color: #DDE5FE;
     .tree {
         letter-spacing: 0.07px;
         .category,.commands {
@@ -132,8 +108,16 @@ export default {
             line-height: 24px;
             .highLight {
                 font-weight: 700;
+                color: #fff;
             }
         }
+    }
+    .nodata {
+        text-align: center;
+        height: 100px;
+        line-height: 100px;
+        font-family: HiraginoSansGB-W6;
+        font-size: 12px;
     }
 }
 </style>

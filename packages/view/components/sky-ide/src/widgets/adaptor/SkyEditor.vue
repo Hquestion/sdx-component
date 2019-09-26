@@ -41,7 +41,8 @@ export default {
                 lineWrapping: false,
                 spellcheck: true,
                 autocorrect: true,
-                autofocus: true
+                autofocus: true,
+                theme:'seti'
             },
             ready: new Promise(resolve => _resolve = resolve),
             initiated: false

@@ -145,7 +145,8 @@ export default {
                         if (!child.collapse && index < children.length - 1) {
                             let nextChild = children[index+1];
                             if (!nextChild.collapse) {
-                                child.$el.style.borderBottom = '1px solid #dedede';
+                                // child.$el.style.borderBottom = '1px solid #dedede';
+                                child.$el.style.borderBottom = 'none';
                             } else {
                                 child.$el.style.borderBottom = 'none';
                             }

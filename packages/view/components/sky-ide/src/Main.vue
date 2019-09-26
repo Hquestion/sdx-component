@@ -49,7 +49,7 @@
                                 :fixed="true"
                                 :init-height="40"
                             >
-                                资源查看
+                                <ResourceUsage />
                             </ResizablePanel>
                         </ResizablePanel>
                     </ResizablePanel>
@@ -98,6 +98,7 @@ import setupFileCommands from './widgets/file-manager/setupCommands';
 import { SIDEBAR_FILE } from './config';
 import { extend } from './utils/utils';
 import SkyIdeTitle from './widgets/title/SkyIdeTitle';
+import ResourceUsage from './widgets/resource/ResourceUsage';
 export default {
     name: 'Main',
     components: {
@@ -106,7 +107,8 @@ export default {
         SkyTerminal,
         FileManager,
         DocManager,
-        SkyIdeTitle
+        SkyIdeTitle,
+        ResourceUsage
     },
     provide() {
         return {

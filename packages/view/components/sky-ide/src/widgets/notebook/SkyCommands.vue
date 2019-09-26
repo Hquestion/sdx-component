@@ -4,7 +4,10 @@
         @seach-value="seachValue"
         content-max-height="408px"
     >
-        <div class="tree">
+        <div
+            class="tree"
+            v-if="commandTree.length"
+        >
             <div
                 v-for="(item, index) in commandTree"
                 :key="index"
@@ -27,6 +30,12 @@
                     <div>{{ val.key }}</div>
                 </div>
             </div>
+        </div>
+        <div
+            v-else
+            class="nodata"
+        >
+            暂无数据
         </div>
     </search-panel>
 </template>
@@ -79,6 +88,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sky-commands {
+    color: #DDE5FE;
     .tree {
         letter-spacing: 0.07px;
         .category,.commands {
@@ -98,8 +108,16 @@ export default {
             line-height: 24px;
             .highLight {
                 font-weight: 700;
+                color: #fff;
             }
         }
+    }
+    .nodata {
+        text-align: center;
+        height: 100px;
+        line-height: 100px;
+        font-family: HiraginoSansGB-W6;
+        font-size: 12px;
     }
 }
 </style>

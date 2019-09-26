@@ -55,6 +55,7 @@ export default {
             height: 32px;
             line-height: 32px;
             background: #2C3A60;
+            color: #DDE5FE;
         }
         .el-input__prefix {
             left: 8px;

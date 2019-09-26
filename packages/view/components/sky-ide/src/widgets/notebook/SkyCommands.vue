@@ -35,7 +35,7 @@
             v-else
             class="nodata"
         >
-            暂无数据
+            {{ t('sdxCommon.NoData') }}
         </div>
     </search-panel>
 </template>
@@ -44,8 +44,10 @@
 import {getCommandsTree} from '../../config/commands';
 import { matchingString, matchingStringIndex } from '@sdx/utils/src/helper/tool';
 import SearchPanel from '../search-panel/SearchPanel';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SkyCommands',
+    mixins: [locale],
     components: {
         SearchPanel
     },

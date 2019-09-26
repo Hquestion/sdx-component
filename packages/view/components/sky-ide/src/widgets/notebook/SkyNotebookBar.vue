@@ -5,39 +5,46 @@
                 @click="saveNotebook"
                 icon="sdx-icon sdx-baocun"
                 :title="t('view.skyide.save')"
+                :native-tooltip="true"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-fuzhidaima"
                 :title="t('view.skyide.copy')"
+                :native-tooltip="true"
             />
             <SdxuButton
                 @click="insertCodeCell"
                 icon="sdx-icon sdx-xinzengbiaoqian"
                 class="marginleft32"
+                :native-tooltip="true"
             >      
                 code
             </SdxuButton>
             <SdxuButton
                 @click="insertMarkdownCell"
                 icon="sdx-icon sdx-xinzengbiaoqian"
+                :native-tooltip="true"
             >
                 markdown
             </SdxuButton>
             <SdxuButton
                 @click="insertRawCell"
                 v-if="false"
+                :native-tooltip="true"
             >
                 +Raw
             </SdxuButton>
             <SdxuButton
                 @click="toggleMode()"
                 icon="sdx-icon sdx-zhuanhuandaima"
+                :native-tooltip="true"
             >
                 {{ ( snb.activeCell && snb.activeCell.cell_type) === 'code' ? t('view.skyide.Turn_to_MD') : t('view.skyide.Turn_to_code') }}
             </SdxuButton>
             <SdxuIconButton
                 @click="toggleMode('raw')"
                 v-if="false"
+                :native-tooltip="true"
             >
                 切换为Raw
             </SdxuIconButton>
@@ -47,32 +54,38 @@
                     icon="sdx-icon sdx-quanbuyunhang"
                     size="small"
                     :title="t('view.skyide.Run_all')"
+                    :native-tooltip="true"
                 />
                 <SdxuIconButton
                     icon="sdx-icon sdx-yunhang"
                     size="small"
                     :title="t('sdxCommon.Run')"
+                    :native-tooltip="true"
                 />
                 <SdxuIconButton
                     icon="sdx-icon sdx-tingzhi1"
                     size="small"
                     :title="t('sdxCommon.Stop')"
+                    :native-tooltip="true"
                 />
             </span>
             <SdxuIconButton
                 icon="sdx-icon sdx-chongzi"
                 :title="t('view.skyide.debug')"
+                :native-tooltip="true"
             />
             <SdxuIconButton
                 @click="clearOutput"
                 icon="sdx-icon sdx-qingchu"
                 :title="t('view.skyide.Clear_Output')"
+                :native-tooltip="true"
             />
             <SdxuIconButton
                 @click="debugByCell"
                 icon="sdx-icon sdx-tiaoshi"
                 class="marginleft32 marginright8"
                 v-if="false"
+                :native-tooltip="true"
             />
             <el-popover
                 trigger="click"
@@ -86,12 +99,14 @@
                     slot="reference"
                     icon="sdx-icon sdx-bianzu4"
                     :title="t('view.skyide.View_commands')"
+                    :native-tooltip="true"
                 />
             </el-popover>
             <sdxu-button
                 placement="right"
                 trigger="click"
                 style="margin-left: 10px;"
+                :native-tooltip="true"
             >
                 {{ t('view.skyide.code_snippet') }}
                 <template slot="dropdown">
@@ -340,6 +355,9 @@ export default {
         .el-switch.is-checked .el-switch__core::after {
             background-color: rgb(133,171,252);
             margin-left: -10px;
+        }
+        .el-select-dropdown.el-popper {
+            margin-top: 0;
         }
     }   
 }

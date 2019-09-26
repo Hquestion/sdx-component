@@ -215,9 +215,43 @@ export default {
             position: initial;
             overflow: initial;
         }
+        .el-tabs--card > .el-tabs__header {
+            border-bottom: none;
+            background: #1C253D;
+        }
+        .el-tabs__nav {
+            display: flex;
+            border: none !important;
+            .el-tabs__item {
+                height: 56px;
+                display: flex;
+                align-items: center;
+                border: none;
+                color: #DDE5FE;
+                &.is-active {
+                    color: #DDE5FE;
+                    background: #273250;
+                }
+                &.is-closable {
+                    padding-left: 13px;
+                    padding-right: 13px;
+                }
+                .el-icon-close {
+                    font-size: 14px;
+                    width: 14px;
+                    margin-left: 30px;
+                    &:hover {
+                        background: none;
+                    }
+                }
+            }
+        }
         #tab-add {
-            &.is-closable:hover {
+            &.is-closable {
                 padding: 0 20px;
+                &:hover {
+                    color: #fff;
+                }
             }
             .el-icon-close {
                 display: none;

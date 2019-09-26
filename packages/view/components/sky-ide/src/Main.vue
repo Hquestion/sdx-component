@@ -137,7 +137,7 @@ export default {
                 doc: {
                     initWidth: -1,
                     weight: 1,
-                    minWidth: 50
+                    minWidth: 1055
                 },
                 terminal: {
                     initHeight: 400,

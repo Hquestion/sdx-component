@@ -7,33 +7,39 @@
         <div class="sky-cell-operations">
             <SdxuIconButton
                 icon="sdx-icon sdx-jianqiedaima"
-                title="剪切"
+                :title="t('view.skyide.shear')"
                 @click.native.stop="cutCell" 
+                :native-tooltip="true"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-kaobeidaima"
-                title="粘贴"
+                :title="t('view.skyide.paste')"
                 @click.native.stop="pasteBelow"
+                :native-tooltip="true"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-xiangshangyidong"
-                title="上移"
+                :title="t('view.skyide.shift_up')"
                 @click.native.stop="moveUp"
+                :native-tooltip="true"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-xiangxiayidong"
-                title="下移"
+                :title="t('view.skyide.shift_down')"
                 @click.native.stop="moveDown"
+                :native-tooltip="true"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-shanchu"
-                title="删除"
+                :title="t('sdxCommon.Delete')"
                 @click.native.stop="deleteCell" 
+                :native-tooltip="true"
             />
             <SdxuIconButton
                 icon="sdx-icon sdx-qingchuyunhangxiaoguo"
-                title="清除输出"
+                :title="t('view.skyide.Clear_Output')"
                 @click.native.stop="clearOutput"
+                :native-tooltip="true"
             />
         </div>
     </div>
@@ -56,9 +62,10 @@ import {
 import { Widget } from '@phosphor/widgets';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { MathJaxTypesetter } from '@jupyterlab/mathjax2';
-
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SkyCell',
+    mixins: [locale],
     data() {
         return {
             cellWidget: null
@@ -274,7 +281,7 @@ export default {
                 height: 40px;
                 line-height: 40px;
                 padding: 0px 11px;
-                top: -20px
+                top: -12px
             }
             .sdxu-icon-button + .sdxu-icon-button {
                 margin-left: 16px;
@@ -310,6 +317,9 @@ export default {
                 .jp-Placeholder-content .jp-MoreHorizIcon:hover {
                     border: none;
                 }
+            }
+            .jp-RenderedMarkdown.jp-MarkdownOutput {
+                color: #fff;
             }
         }
     }

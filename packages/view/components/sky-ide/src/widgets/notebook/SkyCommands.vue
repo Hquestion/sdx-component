@@ -4,7 +4,10 @@
         @seach-value="seachValue"
         content-max-height="408px"
     >
-        <div class="tree">
+        <div
+            class="tree"
+            v-if="commandTree.length"
+        >
             <div
                 v-for="(item, index) in commandTree"
                 :key="index"
@@ -28,6 +31,12 @@
                 </div>
             </div>
         </div>
+        <div
+            v-else
+            class="nodata"
+        >
+            {{ t('sdxCommon.NoData') }}
+        </div>
     </search-panel>
 </template>
 
@@ -35,8 +44,10 @@
 import {getCommandsTree} from '../../config/commands';
 import { matchingString, matchingStringIndex } from '@sdx/utils/src/helper/tool';
 import SearchPanel from '../search-panel/SearchPanel';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SkyCommands',
+    mixins: [locale],
     components: {
         SearchPanel
     },
@@ -79,6 +90,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .sky-commands {
+    color: #DDE5FE;
     .tree {
         letter-spacing: 0.07px;
         .category,.commands {
@@ -98,8 +110,16 @@ export default {
             line-height: 24px;
             .highLight {
                 font-weight: 700;
+                color: #fff;
             }
         }
+    }
+    .nodata {
+        text-align: center;
+        height: 100px;
+        line-height: 100px;
+        font-family: HiraginoSansGB-W6;
+        font-size: 12px;
     }
 }
 </style>

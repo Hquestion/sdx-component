@@ -256,6 +256,7 @@ export default {
     .sky-cell {
         position: relative;
         padding: 8px 0;
+        margin-top: 10px;
         .sky-cell-operations {
             display: none;
         }
@@ -287,6 +288,7 @@ export default {
         /deep/ {
             .jp-InputArea-editor {
                 border: 0;
+                background: none;
             }
             .p-Widget.jp-Cell.jp-CodeCell.jp-mod-noOutputs, .p-Widget.jp-Cell.jp-MarkdownCell {
                 background: #1B2439;

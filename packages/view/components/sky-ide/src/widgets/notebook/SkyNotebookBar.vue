@@ -58,7 +58,7 @@
                 icon="sdx-icon sdx-chongzi"
             />
             <SdxuIconButton
-                @click="clearOutput"
+                @click="clearAllOutput"
                 icon="sdx-icon sdx-qingchu"
             />
             <SdxuIconButton
@@ -201,6 +201,12 @@ export default {
                 this.snb.activateCell.outputs = [];
                 this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear();
             }
+        },
+        clearAllOutput() {
+            this.snb.cells.forEach(cell => {
+                cell.outputs = [];
+                this.snb.cellMap[cell.order].model.outputs.clear();
+            });
         },
         runNotebook() {
             this.snb.runNotebook();
@@ -349,7 +355,7 @@ export default {
 }
 </style>
 
-<style lang="sass">
+<style lang="scss">
 .sky-popover {
     padding: 0 !important;
     border: 0 !important;

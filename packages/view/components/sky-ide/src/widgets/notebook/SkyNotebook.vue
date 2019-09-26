@@ -24,7 +24,7 @@
 
 <script>
 import { CodeCell } from '@jupyterlab/cells';
-import { Session } from '@jupyterlab/services';
+import { Session } from '@skyide/services';
 import { Completer, CompleterModel, KernelConnector, CompletionHandler } from '@jupyterlab/completer';
 import { Widget } from '@phosphor/widgets';
 
@@ -264,8 +264,8 @@ export default {
                 path: this.file.path,
                 kernelName: 'python3',
                 serverSettings: {
-                    baseUrl: '',
-                    wsUrl: '',
+                    baseUrl: this.app.taskManager.task.externalUrl,
+                    wsUrl: this.app.taskManager.task.externalUrl,
                     ideUuid: this.app.taskManager.ideUuid
                 }
             });
@@ -294,8 +294,8 @@ export default {
          * 切换到调试模式，创建session并缓存，并设置cell的completer
          */
         async debugByCell() {
-            this.mode = NotebookMode.CELL_DEBUG;
             this.session = await this.startSession();
+            this.mode = NotebookMode.CELL_DEBUG;
             // 设置completer
             this.setupCompleter();
         },
@@ -383,6 +383,9 @@ export default {
             }
         },
         handleContextMenu(e) {
+            if (e.shiftKey) {
+                return;
+            }
             e.preventDefault();
 
             const ins = new ContextMenuModel();

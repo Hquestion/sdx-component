@@ -110,13 +110,20 @@ export default {
             // 通过关闭tab 关闭 terminal 服务
             let removeIndex = this.tabTerminal.findIndex(item => Object.keys(item)[0] == targetName);
             let terminalServe  = this.tabTerminal[removeIndex][Number(targetName)];
-            terminalServe.shutdown().then(()=> {
+            terminalServe.shutdown({
+                name: terminalServe.name,
+                settings: {
+                    baseUrl: this.app.taskManager.task.externalUrl,
+                    wsUrl: this.app.taskManager.task.externalUrl.replace('http://', 'ws://'),
+                    ideUuid: this.app.taskManager.ideUuid,
+                    WebSocket: WebSocket
+                }
+            }).then(()=> {
                 requestAnimationFrame(() => {
                     this.editableTabs.splice(index, 1);
+                    this.tabTerminal.splice(removeIndex, 1);
                 });
             });
-            
-            this.tabTerminal.splice(removeIndex, 1);
         },
         terminalReady(ready) {
             this.ready = ready;

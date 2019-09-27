@@ -16,6 +16,7 @@ export default {
             term: null
         };
     },
+    inject: ['app'],
     mounted() {
         this.createTerminal();
         window.addEventListener('resize', this.handleResize);
@@ -26,7 +27,15 @@ export default {
     methods: {
         async createTerminal() {
             this.$emit('terminalReady', false);
-            const terminal = await TerminalSession.startNew();
+            await this.app.taskManager.run();
+            const terminal = await TerminalSession.startNew({
+                serverSettings: {
+                    baseUrl: this.app.taskManager.task.externalUrl,
+                    wsUrl: this.app.taskManager.task.externalUrl.replace('http://', 'ws://'),
+                    ideUuid: this.app.taskManager.ideUuid,
+                    WebSocket: WebSocket
+                }
+            });
             this.$emit('terminalServe', terminal);
             this.term = new Terminal(terminal, { theme: 'dark' });
             Widget.attach(this.term, this.$el);

@@ -669,7 +669,13 @@ export default {
             PleaseSelectUserOrGroup: 'Please select user or group',
             TensorBoard: 'Go to TensorBoard',
             ModelAnalysis: 'Model Analysis',
-            CreateFolder: 'Create Folder'
+            CreateFolder: 'Create Folder',
+            SaveFor: 'Are you sure to save change for ',
+            Change: ' ?',
+            IfNotSave: 'If you don\'t save, the changes will be lost.',
+            Save: 'Save',
+            NotSave: 'Don\'t Save',
+            NotSupported: 'File format not supported.'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',

@@ -54,6 +54,7 @@ export default {
     .skyide-file-breadcrumb-bar {
         height: 48px;
         background: #314065;
+        color: #A0A5B8;
         display: flex;
         padding-left: 10px;
         justify-content: space-between;

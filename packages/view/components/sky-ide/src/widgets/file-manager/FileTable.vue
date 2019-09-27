@@ -1,6 +1,7 @@
 <template>
     <div
         class="skyide-file-table"
+        @contextmenu="handleEmptyContextMenu"
     >
         <SdxuTable
             ref="fileTable"
@@ -40,7 +41,7 @@
                 :label="t('view.file.LastModify')"
                 :sortable="'custom'"
                 prop="updatedAt"
-                width="120"
+                width="140"
                 :sort-orders="['ascending', 'descending']"
             >
                 <template #default="{row}">
@@ -94,7 +95,6 @@ export default {
             tempRowName: this.t('view.file.NewFolder'),
             rootKinds,
             selectedRows: [],
-            contextMenuOpen: false,
             copyingRow: null,
             cuttingRow: null
         };
@@ -108,11 +108,18 @@ export default {
         }
     },
     methods: {
+        handleEmptyContextMenu() {
+            this.selectedRows = [];
+            event.preventDefault();
+            this.openContextMenu();
+        },
         handleContextMenu(row, event) {
             this.handleRowClick(row);
             event.preventDefault();
-            this.contextMenuOpen = true;
-
+            event.stopPropagation();
+            this.openContextMenu();
+        },
+        openContextMenu() {
             const ins = new ContextMenuModel();
 
             contextButtons.forEach(buttonGroup => {
@@ -132,7 +139,6 @@ export default {
 
             contextMenu.open(event.clientX, event.clientY, ins, menu => {
                 // 这里也可以定义点击menu的回调，可以对命令做一些处理
-                this.contextMenuOpen = false;
             });
         },
         copyFile() {
@@ -160,7 +166,6 @@ export default {
             this.download(this.selectedRows[0]);
         },
         renameFile() {
-            console.log('this.selectedRows', this.selectedRows);
             if (this.selectedRows.length !== 1) return;
             this.rename(this.selectedRows[0]);
         },
@@ -338,7 +343,7 @@ export default {
 
 <style lang="scss" scoped>
 .skyide-file-table {
-    height: calc(100% - 106px);
+    height: calc(100% - 104px);
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {
         display: none;
@@ -383,7 +388,10 @@ export default {
             background-color: #314065;
             border-top: none;
         }
-        .el-table__body-wrapper.is-scrolling-none {
+        .el-table__body-wrapper.is-scrolling-none,
+        .el-table__body-wrapper.is-scrolling-left,
+        .el-table__body-wrapper.is-scrolling-right,
+        .el-table__body-wrapper.is-scrolling-middle {
             background-color: #314065;
         }
     }

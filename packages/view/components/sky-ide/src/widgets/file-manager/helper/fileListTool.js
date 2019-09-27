@@ -94,8 +94,8 @@ export const contextButtons = [
                 name: BTN_NAMES.COPY,
                 label: t('view.file.Copy'),
                 shortcut: 'Ctrl+C',
-                disabled: () => {
-                    return false;
+                disabled() {
+                    return !this.selectedRows.length;
                 },
                 callback() {
                     this.app.commands.execute(CommandIDs.COPY);
@@ -105,8 +105,8 @@ export const contextButtons = [
                 name: BTN_NAMES.CUT,
                 label: t('view.file.Cut'),
                 shortcut: 'Ctrl+X',
-                disabled: () => {
-                    return false;
+                disabled() {
+                    return !this.selectedRows.length;
                 },
                 callback() {
                     this.app.commands.execute(CommandIDs.CUT);
@@ -133,8 +133,8 @@ export const contextButtons = [
                 name: BTN_NAMES.RENAME,
                 label: t('view.file.Rename'),
                 // shortcut: 'F2',
-                disabled: () => {
-                    return false;
+                disabled() {
+                    return !this.selectedRows.length;
                 },
                 callback() {
                     this.app.commands.execute(CommandIDs.RENAME);
@@ -144,8 +144,8 @@ export const contextButtons = [
                 name: BTN_NAMES.DELETE,
                 label: t('sdxCommon.Delete'),
                 // shortcut: 'Delete',
-                disabled: () => {
-                    return false;
+                disabled() {
+                    return !this.selectedRows.length;
                 },
                 callback() {
                     this.app.commands.execute(CommandIDs.DELETE);
@@ -155,8 +155,8 @@ export const contextButtons = [
                 name: BTN_NAMES.DOWNLOAD,
                 label: t('view.file.Download'),
                 // shortcut: 'Ctrl+D',
-                disabled: () => {
-                    return false;
+                disabled() {
+                    return !this.selectedRows.length;
                 },
                 callback() {
                     this.app.commands.execute(CommandIDs.DOWNLOAD);

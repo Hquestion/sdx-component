@@ -401,7 +401,7 @@
     /* This gives a magnification of about 125% in presentation mode over normal. */
     --jp-content-presentation-font-size1: 17px;
 
-    --jp-content-heading-line-height: 1;
+    --jp-content-heading-line-height: 1.5;
     --jp-content-heading-margin-top: 1.2em;
     --jp-content-heading-margin-bottom: 0.8em;
     --jp-content-heading-font-weight: 500;

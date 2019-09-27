@@ -265,8 +265,9 @@ export default {
                 kernelName: 'python3',
                 serverSettings: {
                     baseUrl: this.app.taskManager.task.externalUrl,
-                    wsUrl: this.app.taskManager.task.externalUrl,
-                    ideUuid: this.app.taskManager.ideUuid
+                    wsUrl: this.app.taskManager.task.externalUrl.replace('http://', 'ws://'),
+                    ideUuid: this.app.taskManager.ideUuid,
+                    WebSocket: WebSocket
                 }
             });
         },
@@ -309,14 +310,14 @@ export default {
         },
         async setupCompleter() {
             if (!this.session) {
-                console.warn('没有活动的session，创建completer失败！');
+                window.console.warn('没有活动的session，创建completer失败！');
                 if (this.completer) {
                     Widget.detach(this.completer);
                     this.completerHandler.dispose();
                 }
                 return;
             }
-            if (this.activeCell.cell_type !== 'code') {
+            if (!this.activeCell || this.activeCell.cell_type !== 'code') {
                 return;
             }
             const activeWidget = this.activeCellWidget || this.cellMap[this.notebook.cells[0].order];
@@ -383,6 +384,9 @@ export default {
             }
         },
         handleContextMenu(e) {
+            // 暂不支持
+            return;
+            // eslint-disable-next-line
             if (e.shiftKey) {
                 return;
             }

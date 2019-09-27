@@ -40,6 +40,7 @@
                 :title="t('view.skyide.Clear_Output')"
                 @click.native.stop="clearOutput"
                 :native-tooltip="true"
+                v-if="cellData.cell_type ==='code'"
             />
         </div>
     </div>
@@ -327,6 +328,13 @@ export default {
             .jp-RenderedMarkdown.jp-MarkdownOutput {
                 color: #fff;
             }
+            .jp-RenderedText pre {
+                color: #fff;
+            }
+            .jp-RenderedText[data-mime-type='application/vnd.jupyter.stderr'] pre{
+                color: #000;
+            }
+
         }
     }
 </style>

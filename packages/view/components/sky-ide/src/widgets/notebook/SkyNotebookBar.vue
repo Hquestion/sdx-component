@@ -28,13 +28,6 @@
                 markdown
             </SdxuButton>
             <SdxuButton
-                @click="insertRawCell"
-                v-if="false"
-                :native-tooltip="true"
-            >
-                +Raw
-            </SdxuButton>
-            <SdxuButton
                 @click="toggleMode()"
                 icon="sdx-icon sdx-zhuanhuandaima"
                 :native-tooltip="true"
@@ -73,6 +66,7 @@
                 icon="sdx-icon sdx-chongzi"
                 :title="t('view.skyide.debug')"
                 :native-tooltip="true"
+                @click="debugByCell"
             />
             <SdxuIconButton
                 @click="clearAllOutput"
@@ -230,7 +224,7 @@ export default {
             }
         },
         clearAllOutput() {
-            this.snb.cells.forEach(cell => {
+            this.snb.notebook.cells.forEach(cell => {
                 cell.outputs = [];
                 this.snb.cellMap[cell.order].model.outputs.clear();
             });

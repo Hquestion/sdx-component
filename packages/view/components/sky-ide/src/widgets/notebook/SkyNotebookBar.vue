@@ -151,7 +151,6 @@ export default {
     mixins: [locale],
     data() {
         return {
-            codeType: 'Python3',
             codeOptions: [{
                 value: 'python3',
                 label: 'Python 3'

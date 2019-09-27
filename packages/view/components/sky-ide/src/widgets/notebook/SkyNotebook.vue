@@ -489,12 +489,12 @@ export default {
 <style lang="scss" scoped>
 .sky-notebook {
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
     background: #242f49;
-    overflow-x: hidden;
     .sky-notebook__main {
         height: calc(100% - 48px);
         padding: 16px;
+        overflow: auto;
     }
 }
 </style>

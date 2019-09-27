@@ -127,7 +127,7 @@ export default {
                 })
             });
 
-            let cellWidget, model;
+            let cellWidget, model, extension;
             switch (this.cellData.cell_type) {
                 case 'code':
                     model = new CodeCellModel({
@@ -140,7 +140,8 @@ export default {
                         id: uuid()
                     }).initializeState();
                     // 设置编辑器的语言模式
-                    cellWidget.model.mimeType = this.findMimeTypeByExtension('py');
+                    extension = this.snb.notebook.metadata.language_info && this.snb.notebook.metadata.language_info.fileExtension || '.py';
+                    cellWidget.model.mimeType = this.findMimeTypeByExtension(extension.slice(1));
                     break;
                 case 'markdown':
                     cellWidget = this.cellWidget = new MarkdownCell({
@@ -245,6 +246,12 @@ export default {
         },
         changeCellType(type) {
             console.log(type);
+        },
+        updateCellMimeType() {
+            if (this.cellData.cell_type === 'code') {
+                let extension = this.snb.notebook.metadata.language_info && this.snb.notebook.metadata.language_info.fileExtension || '.py';
+                this.cellWidget.model.mimeType = this.findMimeTypeByExtension(extension.slice(1));
+            }
         }
     },
     mounted() {

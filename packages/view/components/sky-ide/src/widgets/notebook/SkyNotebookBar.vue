@@ -34,13 +34,6 @@
             >
                 {{ ( snb.activeCell && snb.activeCell.cell_type) === 'code' ? t('view.skyide.Turn_to_MD') : t('view.skyide.Turn_to_code') }}
             </SdxuButton>
-            <SdxuIconButton
-                @click="toggleMode('raw')"
-                v-if="false"
-                :native-tooltip="true"
-            >
-                切换为Raw
-            </SdxuIconButton>
             <span class="btnlist marginleft32">
                 <SdxuIconButton
                     @click="runNotebook"
@@ -54,12 +47,14 @@
                     size="small"
                     :title="t('sdxCommon.Run')"
                     :native-tooltip="true"
+                    @click="runCell"
                 />
                 <SdxuIconButton
                     icon="sdx-icon sdx-tingzhi1"
                     size="small"
                     :title="t('sdxCommon.Stop')"
                     :native-tooltip="true"
+                    @click="stop"
                 />
             </span>
             <SdxuIconButton
@@ -150,6 +145,7 @@ import SkyCommands from './SkyCommands';
 import SkyCodeSnippets from './SkyCodeSnippets';
 import {NotebookMode} from '../../config';
 import locale from '@sdx/utils/src/mixins/locale';
+import {CommandIDs} from '../../config/commands';
 export default {
     name: 'SkyNotebookBar',
     mixins: [locale],
@@ -157,10 +153,10 @@ export default {
         return {
             codeType: 'Python3',
             codeOptions: [{
-                value: 'Python3',
-                label: 'Python3'
+                value: 'python3',
+                label: 'Python 3'
             }, {
-                value: 'R',
+                value: 'ir',
                 label: 'R'
             }]
         };
@@ -178,6 +174,14 @@ export default {
                     this.snb.cancelDebug();
                 }
             }
+        },
+        codeType: {
+            get() {
+                return this.snb.notebook.metadata.kernelspec && this.snb.notebook.metadata.kernelspec.name;
+            },
+            set(val) {
+                this.snb.changeLangKernel(val);
+            }
         }
     },
     components: {
@@ -191,11 +195,14 @@ export default {
     inject: {
         snb: {
             default: {}
+        },
+        app: {
+            commands: {}
         }
     },
     methods: {
         saveNotebook() {
-            this.snb.save();
+            this.app.commands.execute(CommandIDs.SAVE_DOC);
         },
         insertCodeCell() {
             this.snb.insertCell('code');
@@ -214,17 +221,32 @@ export default {
         clearOutput() {
             if (this.snb.activeCell) {
                 this.snb.activateCell.outputs = [];
-                this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear();
+                if (this.snb.cellMap[this.snb.activeCellOrder].model.outputs &&  this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear) {
+                    this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear();
+                }
             }
         },
         clearAllOutput() {
             this.snb.notebook.cells.forEach(cell => {
                 cell.outputs = [];
-                this.snb.cellMap[cell.order].model.outputs.clear();
+                if (this.snb.cellMap[cell.order].model.outputs && this.snb.cellMap[cell.order].model.outputs.clear) {
+                    this.snb.cellMap[cell.order].model.outputs.clear && this.snb.cellMap[cell.order].model.outputs.clear();
+                }
+
             });
         },
         runNotebook() {
             this.snb.runNotebook();
+        },
+        runCell() {
+            this.app.commands.execute(CommandIDs.RUN_CELL);
+        },
+        stop() {
+            if (this.snb.isDebugMode) {
+                this.snb.cancelDebug();
+            } else {
+                this.snb.shutdownSession(true);
+            }
         },
         debugByCell() {
             this.snb.debugByCell();

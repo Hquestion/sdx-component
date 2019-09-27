@@ -67,3 +67,4 @@ export function extend(...rest) {
     // Return the modified object
     return target;
 }
+

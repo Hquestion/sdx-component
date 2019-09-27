@@ -43,6 +43,7 @@ import '@jupyterlab/completer/style/base.css';
 
 import contextMenu from '@sdx/ui/components/context-menu';
 import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/ui/components/context-menu';
+import notebookHelp from '../../mixins/notebookHelper';
 
 
 export default {
@@ -52,6 +53,7 @@ export default {
         SkyNotebookBar,
         SkyCell
     },
+    mixins: [notebookHelp],
     data() {
         return {
             notebook: {
@@ -138,25 +140,7 @@ export default {
                 });
                 cell.order = this.nextOrder();
                 this.notebook.cells = [cell];
-                this.notebook.metadata = {
-                    'kernelspec': {
-                        'display_name': 'Python 3',
-                        'language': 'python',
-                        'name': 'python3'
-                    },
-                    'language_info': {
-                        'codemirror_mode': {
-                            'name': 'ipython',
-                            'version': 3
-                        },
-                        'file_extension': '.py',
-                        'mimetype': 'text/x-python',
-                        'name': 'python',
-                        'nbconvert_exporter': 'python',
-                        'pygments_lexer': 'ipython3',
-                        'version': '3.6.5'
-                    }
-                };
+                this.notebook.metadata = this.makeMetadataByLang('python');
             } else if (this.isNbFile) {
                 let contentJSON = typeof content === 'string' ? JSON.parse(content) : content;
                 contentJSON.cells.forEach(cell => {
@@ -262,7 +246,7 @@ export default {
             await this.app.taskManager.run();
             return this.session = await Session.startNew({
                 path: this.file.path,
-                kernelName: 'python3',
+                kernelName: this.notebook.metadata.kernelspec.name,
                 serverSettings: {
                     baseUrl: this.app.taskManager.task.externalUrl,
                     wsUrl: this.app.taskManager.task.externalUrl.replace('http://', 'ws://'),
@@ -371,88 +355,101 @@ export default {
                     code += '\n';
                 });
                 return await saveFile(code, this.file.path, this.file.ownerId).then(res => {
-                    alert('保存成功');
                     return res;
                 });
             } else if (this.isNbFile) {
                 return await saveFile(JSON.stringify(this.notebook), this.file.path, this.file.ownerId).then(res => {
-                    alert('保存成功');
                     return res;
                 });
             } else {
                 return Promise.reject('File not support');
             }
         },
-        handleContextMenu(e) {
-            // 暂不支持
-            return;
-            // eslint-disable-next-line
-            if (e.shiftKey) {
-                return;
+        async changeLangKernel(lang) {
+            if (lang !== this.notebook.metadata.kernelspec.name) {
+                this.notebook.metadata = this.makeMetadataByLang(lang);
+                if (this.isDebugMode) {
+                    // 如果在debug模式，则切换session到当前语言
+                    await this.shutdownSession(false);
+                    await this.startSession();
+                } else if (this.session){
+                    // 如果当前存在session，则关闭session
+                    await this.shutdownSession(true);
+                }
+                // 修改IDE语法支持
+                this.updateNotebookMimeType();
             }
-            e.preventDefault();
+        },
+        handleContextMenu(e) {
+            // // 暂不支持
+            // return;
+            // // eslint-disable-next-line
+            // if (e.shiftKey) {
+            //     return;
+            // }
+            // e.preventDefault();
 
-            const ins = new ContextMenuModel();
-            const group = new ContextMenuGroupModel({
-                name: 'Action',
-                menus: [
-                    new ContextMenuItemModel({
-                        name: '22',
-                        label: 'xxs',
-                        icon: '',
-                    }),
-                    new ContextMenuItemModel({
-                        name: 'run:cell',
-                        label: 'Run Cell',
-                        icon: '',
-                        disabled: () => {
-                            return this.activeCell && this.activeCell.cell_type === 'raw';
-                        },
-                        callback: () => {
-                            this.app.commands.execute(CommandIDs.RUN_CELL);
-                        }
-                    }),
-                    new ContextMenuItemModel({
-                        name: '444',
-                        label: 'dddee',
-                        icon: '',
-                        shortcut: 'Ctrl+C'
-                    })
-                ]
-            });
-            ins.addGroup(group);
-            ins.addGroup(new ContextMenuGroupModel({
-                name: 'action2',
-                menus: [
-                    new ContextMenuItemModel({
-                        name: '22',
-                        label: 'xxs',
-                        icon: '',
-                    }),
-                    new ContextMenuItemModel({
-                        name: 'run:cell',
-                        label: 'Run Cell',
-                        icon: '',
-                        disabled: () => {
-                            return this.activeCell && this.activeCell.cell_type === 'raw';
-                        },
-                        callback: () => {
-                            this.app.commands.execute(CommandIDs.RUN_CELL);
-                        }
-                    }),
-                    new ContextMenuItemModel({
-                        name: '444',
-                        label: 'dddee',
-                        icon: '',
-                        shortcut: 'Ctrl+C'
-                    })
-                ]
-            }))
+            // const ins = new ContextMenuModel();
+            // const group = new ContextMenuGroupModel({
+            //     name: 'Action',
+            //     menus: [
+            //         new ContextMenuItemModel({
+            //             name: '22',
+            //             label: 'xxs',
+            //             icon: '',
+            //         }),
+            //         new ContextMenuItemModel({
+            //             name: 'run:cell',
+            //             label: 'Run Cell',
+            //             icon: '',
+            //             disabled: () => {
+            //                 return this.activeCell && this.activeCell.cell_type === 'raw';
+            //             },
+            //             callback: () => {
+            //                 this.app.commands.execute(CommandIDs.RUN_CELL);
+            //             }
+            //         }),
+            //         new ContextMenuItemModel({
+            //             name: '444',
+            //             label: 'dddee',
+            //             icon: '',
+            //             shortcut: 'Ctrl+C'
+            //         })
+            //     ]
+            // });
+            // ins.addGroup(group);
+            // ins.addGroup(new ContextMenuGroupModel({
+            //     name: 'action2',
+            //     menus: [
+            //         new ContextMenuItemModel({
+            //             name: '22',
+            //             label: 'xxs',
+            //             icon: '',
+            //         }),
+            //         new ContextMenuItemModel({
+            //             name: 'run:cell',
+            //             label: 'Run Cell',
+            //             icon: '',
+            //             disabled: () => {
+            //                 return this.activeCell && this.activeCell.cell_type === 'raw';
+            //             },
+            //             callback: () => {
+            //                 this.app.commands.execute(CommandIDs.RUN_CELL);
+            //             }
+            //         }),
+            //         new ContextMenuItemModel({
+            //             name: '444',
+            //             label: 'dddee',
+            //             icon: '',
+            //             shortcut: 'Ctrl+C'
+            //         })
+            //     ]
+            // }));
 
-            contextMenu.open(e.clientX,e.clientY, ins, menu => {
-                // 这里也可以定义点击menu的回调，可以对命令做一些处理,
+            // contextMenu.open(e.clientX,e.clientY, ins, menu => {
+            //     // 这里也可以定义点击menu的回调，可以对命令做一些处理,
 
-            });
+            // });
         }
     },
     watch: {

@@ -44,7 +44,7 @@ export default {
         flex-wrap: wrap;
         justify-content: flex-start;
         align-items: center;
-        padding: 16px;
+        padding: 12px 16px;
         & > div {
             & + div {
                 margin-left: 40px;

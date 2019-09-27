@@ -15,3 +15,19 @@ export function createSession(ideUuid, params) {
 export function shutdownSession(ideUuid, sessionId) {
     return httpService.remove(`${IDE_MANAGER_GATEWAY_BASE}/ides/${ideUuid}/notebook_sessions/${sessionId}`);
 }
+
+export function createTerminal(ideUuid) {
+    return httpService.post(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/terminals`);
+}
+
+export function getAllTerminals(ideUuid) {
+    return httpService.get(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/terminals`);
+}
+
+export function getTerminalStatus(ideUuid, terminalName) {
+    return httpService.get(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/terminals/${terminalName}`);
+}
+
+export function deleteTerminal(ideUuid, terminalName) {
+    return httpService.remove(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/terminals/${terminalName}`);
+}

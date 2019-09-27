@@ -668,7 +668,13 @@ export default {
             PleaseSelectUserOrGroup: '请选择用户或用户组',
             TensorBoard: '进入TensorBoard',
             ModelAnalysis: '模型解析',
-            CreateFolder: '新建文件夹'
+            CreateFolder: '新建文件夹',
+            SaveFor: '是否要保存对 ',
+            Change: ' 的更改？',
+            IfNotSave: '如果不保存，更改将丢失。',
+            Save: '保存',
+            NotSave: '不保存',
+            NotSupported: '暂不支持当前文件格式'
         },
         resourceManage: {
             ResourceManage: '资源管理',

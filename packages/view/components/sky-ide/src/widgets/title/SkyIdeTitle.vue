@@ -1,17 +1,22 @@
 <template>
     <div class="skyide-title">
         <div class="logo">
-            SkyIde
+            SkyIDE
         </div>
         <div class="content">
-            SDX_FULL项目
+            {{ app && app.taskManager && app.taskManager.task && app.taskManager.task.project && app.taskManager.task.project.name }}
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'SkyIdeTitle'
+    name: 'SkyIdeTitle',
+    inject: {
+        app: {
+            default: {}
+        }
+    },
 };
 </script>
 <style lang="scss" scoped>

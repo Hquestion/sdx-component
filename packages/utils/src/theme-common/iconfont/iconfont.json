@@ -1166,6 +1166,20 @@
       "font_class": "xiangshangyidong",
       "unicode": "e69c",
       "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "11105162",
+      "name": "弹窗警告",
+      "font_class": "danchuangjinggao",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "11105330",
+      "name": "skyIDE logo",
+      "font_class": "skyIDElogo",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
     }
   ]
 }

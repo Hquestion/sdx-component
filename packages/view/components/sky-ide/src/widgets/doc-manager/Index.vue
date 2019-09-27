@@ -56,15 +56,23 @@
         >
             <div slot="title">
                 <svg
-                    class="sdxu-dialog__icon"
+                    class="sdxu-dialog__logo"
                     aria-hidden="true"
                 >
                     <use xlink:href="#sdx-skyIDElogo" />
                 </svg>
                 SkyIDE
             </div>
-            <div>
-                <div>{{ `${t('view.file.SaveFor')}${app.doc.currentFile.name}${t('view.file.Change')}` }}</div>
+            <div class="content">
+                <svg
+                    class="sdxu-dialog__warning"
+                    aria-hidden="true"
+                >
+                    <use xlink:href="#sdx-danchuangjinggao" />
+                </svg>
+                <div class="content-title">
+                    {{ `${t('view.file.SaveFor')}${app.doc.currentFile.name}${t('view.file.Change')}` }}
+                </div>
                 <div>{{ t('view.file.IfNotSave') }}</div>
             </div>
             <span
@@ -280,41 +288,60 @@ export default {
             box-shadow: 0 6px 12px 3px rgba(0,0,0,0.50);
             border-radius: 4px;
             .el-dialog__header {
-            height: 40px;
-            line-height: 40px;
-            background: #46516C;
-            font-size: 14px;
-            color: #8796BD;
-            padding: 0;
-            padding-left: 40px;
-        }
-                .el-button--primary {
-                    background: #4880F8;
-                    color: #FFFFFF;
-                }
-                .el-button--primary:hover {
-                    background: #2554BA;
-                }
-                .el-button--default {
-                    background: #2A3246;
-                    border: 1px solid #C0D2FF;
-                    color: #C0D2FF;
-                }
-                .el-button--default:hover {
-                    color: #2A3246;
-                    background: #C0D2FF;
-                }
-                .sdxu-dialog__icon {
-                    width: 26px;
-                    height: 26px;
-                    vertical-align: -0.15em;
-                    fill: currentColor;
-                    overflow: hidden;
+                height: 40px;
+                line-height: 40px;
+                background: #46516C;
+                font-size: 14px;
+                color: #8796BD;
+                padding: 0;
+                padding-left: 52px;
+                border-radius: 4px 4px 0 0;
+            }
+            .el-button--primary {
+                background: #4880F8;
+                color: #FFFFFF;
+            }
+            .el-button--primary:hover {
+                background: #2554BA;
+            }
+            .el-button--default {
+                background: #2A3246;
+                border: 1px solid #C0D2FF;
+                color: #C0D2FF;
+            }
+            .el-button--default:hover {
+                color: #2A3246;
+                background: #C0D2FF;
+            }
+            .sdxu-dialog__logo {
+                width: 26px;
+                height: 26px;
+                top: 8px;
+                left: 16px;
+                position: absolute;
+            }
+            .content {
+                position: relative;
+                padding-left: 40px;
+                .sdxu-dialog__warning {
+                    width: 24px;
+                    height: 24px;
                     position: absolute;
-                    top: 8px;
-                    left: 16px;
+                    top: 6px;
+                    left:0;
                 }
-            
+                div{ 
+                    height: 26px;
+                    line-height: 26px;
+                    color: #C0D2FF;
+                    font-family: PingFangSC-Regular;
+                    font-size: 14px;
+                }
+                .content-title {
+                    font-family: PingFangSC-Medium;
+                    font-size: 16px;
+                }
+            }
             
         }
     }

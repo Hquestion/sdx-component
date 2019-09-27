@@ -9,17 +9,17 @@ export const SIDEBAR_TABS = [
         icon: 'sdx-wenjianguanlimoren',
         label: ''
     },
-    {
-        name: SIDEBAR_DATA,
-        icon: 'sdx-shujujiguanlimoren',
-        label: ''
-    }
+    // {
+    //     name: SIDEBAR_DATA,
+    //     icon: 'sdx-shujujiguanlimoren',
+    //     label: ''
+    // }
 ];
 
 export const SIDEBAR_WINDOWS = [
     {
         name: SIDEBAR_TERMINAL,
-        icon: 'sdx-terminalsmoren',
+        icon: 'sdx-terminalsbiaoqian',
         label: ''
     }
 ];

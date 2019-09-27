@@ -86,7 +86,6 @@ export default {
             padding-right: 40px;
             i:before {
                 color: #000;
-                background: #fff;
                 border-radius: 2px;
             }
         }

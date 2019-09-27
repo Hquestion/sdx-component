@@ -232,7 +232,7 @@ export default {
                     .sdx-terminalsbiaoqian {
                         margin-right: 8px;
                         background: #fff;
-                        border-radius: 4px;
+                        border-radius: 8px;
                         color: #000;
                     }
                     .el-tabs__item.is-active::before {

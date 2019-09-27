@@ -10,7 +10,7 @@
                 class="sdx-icon sdxu-input__icon sdx-icon-search"
             />
         </SdxuInput>
-        <div :style="{'max-height': contentMaxHeight, 'min-height': contentMinHeight}">
+        <div :style="{'height': contentMaxHeight, 'min-height': contentMinHeight}">
             <SdxuScroll>
                 <slot />
             </SdxuScroll>

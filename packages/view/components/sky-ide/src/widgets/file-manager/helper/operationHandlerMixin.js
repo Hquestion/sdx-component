@@ -171,17 +171,19 @@ export default {
             this.moveVisible = true;
         },
         handleCopy(source, target) {
-            target.path = target.isFile ? this.app.file.currentPath : target.path;
+            const targetPath = (!target || target.isFile) ? this.app.file.currentPath : target.path;
+            target = target || {};
             return new Promise(resolve => {
-                copy([source.path], target.path, target.ownerId, source.ownerId).then(() => {
+                copy([source.path], targetPath, target.ownerId || source.ownerId, source.ownerId).then(() => {
                     resolve();
                 });
             });
         },
         handleCut(source, target) {
-            target.path = target.isFile ? this.app.file.currentPath : target.path;
+            const targetPath = (!target || target.isFile) ? this.app.file.currentPath : target.path;
+            target = target || {};
             return new Promise(resolve => {
-                move(source.path, target.path, target.ownerId, source.ownerId).then(() => {
+                move(source.path, targetPath, target.ownerId || source.ownerId, source.ownerId).then(() => {
                     resolve();
                 });
             });

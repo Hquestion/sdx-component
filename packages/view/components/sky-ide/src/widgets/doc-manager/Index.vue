@@ -49,13 +49,13 @@
             </el-tab-pane>
         </el-tabs>
         <el-dialog
-            :title="`是否要保存对 ${app.doc.currentFile.name} 的更改?`"
+            :title="`${t('view.file.SaveFor')}${app.doc.currentFile.name}${t('view.file.Change')}`"
             :visible.sync="dialogVisible"
             width="460"
             :show-close="false"
             v-if="dialogVisible"
         >
-            <span>如果不保存, 更改将丢失。</span>
+            <span>{{ t('view.file.IfNotSave') }}</span>
             <span
                 slot="footer"
                 class="dialog-footer"
@@ -64,16 +64,16 @@
                     type="primary"
                     @click="saveAndClose"
                 >
-                    保存
+                    {{ t('view.file.Save') }}
                 </el-button>
                 <el-button
                     type="primary"
                     @click="cancelSave"
                 >
-                    不保存
+                    {{ t('view.file.NotSave') }}
                 </el-button>
                 <el-button @click="dialogVisible = false">
-                    取消
+                    {{ t('sdxCommon.Cancel') }}
                 </el-button>
             </span>
         </el-dialog>
@@ -83,6 +83,7 @@
 <script>
 import SkyEditorAdaptor from '../adaptor/SkyEditorAdaptor';
 import { composeFileKey } from '../../utils/utils';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     data() {
         return {
@@ -92,6 +93,7 @@ export default {
             fileEditorInstances: {}
         };
     },
+    mixins: [locale],
     components: {
         SkyEditorAdaptor
     },

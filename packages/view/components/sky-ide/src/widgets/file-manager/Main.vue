@@ -187,7 +187,7 @@ export default {
 .skyide-file-main {
     width: 100%;
     height: 100%;
-    padding: 0 10px;
+    padding: 0 10px 0 0;
     user-select: none;
     box-sizing: border-box;
     & /deep/ {

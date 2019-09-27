@@ -96,26 +96,26 @@
                     :native-tooltip="true"
                 />
             </el-popover>
-            <sdxu-button
-                placement="right"
+            <el-popover
+                ref="codeSnippetPop"
                 trigger="click"
-                style="margin-left: 10px;"
-                :native-tooltip="true"
+                placement="bottom-start"
+                popper-class="sky-popover"
+                width="300"
+                style="margin-left: 10px"
             >
-                {{ t('view.skyide.code_snippet') }}
-                <template slot="dropdown">
-                    <SdxuButton
-                        type="text"
-                        size="regular"
-                        block
-                        v-for="(item, index) in sinppets"
-                        :key="index"
-                        @click="addSnippet(item)"
-                    >
-                        {{ item.name }}
-                    </SdxuButton>
-                </template>
-            </sdxu-button>
+                <SkyCodeSnippets @close="$refs.codeSnippetPop.doClose()" />
+                <sdxu-button
+                    :native-tooltip="true"
+                    slot="reference"
+                >
+                    {{ t('view.skyide.code_snippet') }}
+                    <i
+                        class="sdx-icon sdx-xialaxuanxiang"
+                        style="font-size: 12px; margin-left: 5px;"
+                    />
+                </sdxu-button>
+            </el-popover>
         </div>
         <div>
             <el-switch
@@ -143,12 +143,11 @@
 
 <script>
 import { saveFile, readFile } from '@sdx/utils/src/api/file';
-import sinppets from '../../config/snippets';
-import SkyCodeCellModel from '../../model/CodeCell';
 import IconButton from '@sdx/ui/components/icon-button';
 import Button from '@sdx/ui/components/button';
 import { Select, Popover} from 'element-ui';
 import SkyCommands from './SkyCommands';
+import SkyCodeSnippets from './SkyCodeSnippets';
 import {NotebookMode} from '../../config';
 import locale from '@sdx/utils/src/mixins/locale';
 export default {
@@ -156,7 +155,6 @@ export default {
     mixins: [locale],
     data() {
         return {
-            sinppets,
             codeType: 'Python3',
             codeOptions: [{
                 value: 'Python3',
@@ -187,7 +185,8 @@ export default {
         [Button.name]: Button,
         [Select.name]: Select,
         [Popover.name]: Popover,
-        SkyCommands
+        SkyCommands,
+        SkyCodeSnippets
     },
     inject: {
         snb: {
@@ -200,11 +199,6 @@ export default {
         },
         insertCodeCell() {
             this.snb.insertCell('code');
-        },
-        addSnippet(item) {
-            this.snb.insertCell('code', new SkyCodeCellModel({
-                source: item.code
-            }));
         },
         insertMarkdownCell() {
             this.snb.insertCell('markdown');

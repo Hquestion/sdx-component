@@ -662,7 +662,8 @@ export default {
             Download_Now: '客户端下载',
             And_install_SkyDiscovery_File_Management_Client: '已安装文件管理客户端，',
             upload_or_download_operation_files_are_large: '当前上传的文件较大，请使用文件管理客户端操作',
-            Open_it_immediately: '立即打开'
+            Open_it_immediately: '立即打开',
+            PleaseSelectUserOrGroup: '请选择用户或用户组',
         },
         resourceManage: {
             ResourceManage: '资源管理',

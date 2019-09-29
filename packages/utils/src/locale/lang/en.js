@@ -663,7 +663,8 @@ export default {
             Download_Now: 'Download Client',
             And_install_SkyDiscovery_File_Management_Client: 'The file management client has been installed,',
             upload_or_download_operation_files_are_large: 'Currently uploaded files are large, please use file management client operation',
-            Open_it_immediately: 'Open it immediately'
+            Open_it_immediately: 'Open it immediately',
+            PleaseSelectUserOrGroup: 'Please select user or group',
         },
         resourceManage: {
             ResourceManage: 'Resource Management',

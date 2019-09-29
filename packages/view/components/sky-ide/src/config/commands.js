@@ -100,7 +100,8 @@ export function getCommandsTree(category) {
             category: category,
             commands: list.map(item => ({
                 label: CommandConfigs[item].label,
-                key: CommandConfigs[item].key
+                key: CommandConfigs[item].key,
+                commandId: item
             }))
         }];
     } else {
@@ -110,7 +111,8 @@ export function getCommandsTree(category) {
                 category: k,
                 commands: v.filter(item => registeredCommands.includes(item)).map(item => ({
                     label: CommandConfigs[item].label,
-                    key: CommandConfigs[item].key
+                    key: CommandConfigs[item].key,
+                    commandId: item
                 }))
             });
         });

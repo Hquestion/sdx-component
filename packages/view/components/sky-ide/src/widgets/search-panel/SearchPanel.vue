@@ -50,6 +50,7 @@ export default {
     background: #1F2942;
     color: #DDE5FE;
     padding: 10px;
+    box-shadow: 0 5px 10px 0 #0E162E;
     /deep/ {
         .sdxu-input--small .el-input__inner {
             height: 32px;

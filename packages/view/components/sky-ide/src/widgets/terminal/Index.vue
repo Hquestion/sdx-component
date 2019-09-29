@@ -14,7 +14,12 @@
                 closable
             >
                 <span slot="label">
-                    <i class="sdx-terminalsbiaoqian sdx-icon" />
+                    <svg
+                        class="tab-icon"
+                        aria-hidden="true"
+                    >
+                        <use xlink:href="#sdx-terminalsbiaoqian" />
+                    </svg>
                     <span class="title">{{ item.title }}</span>
                 </span>
                 <TerminalComp
@@ -229,11 +234,11 @@ export default {
                     .el-tabs__item:last-child::after,.el-tabs__item.is-active::after,.el-tabs__item:nth-last-child(2)::after {
                         width: 0;
                     }
-                    .sdx-terminalsbiaoqian {
+                    .tab-icon {
                         margin-right: 8px;
-                        background: #fff;
-                        border-radius: 8px;
-                        color: #000;
+                        width: 16px;
+                        height: 16px;
+                        vertical-align: middle;
                     }
                     .el-tabs__item.is-active::before {
                         content: "";

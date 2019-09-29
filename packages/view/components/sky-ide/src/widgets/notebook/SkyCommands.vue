@@ -2,7 +2,7 @@
     <search-panel
         class="sky-commands"
         @seach-value="seachValue"
-        content-max-height="408px"
+        content-max-height="300px"
     >
         <div
             class="tree"
@@ -19,6 +19,7 @@
                     class="commands"
                     v-for="(val, i) in item.commands"
                     :key="i"
+                    @click="clickCommand(val.commandId)"
                 >
                     <div>
                         <span
@@ -48,6 +49,11 @@ import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SkyCommands',
     mixins: [locale],
+    inject: {
+        app: {
+            default: {}
+        }
+    },
     components: {
         SearchPanel
     },
@@ -84,6 +90,9 @@ export default {
         matchingStringIndex,
         seachValue(value) {
             this.command = value;
+        },
+        clickCommand(id) {
+            this.app.commands.execute(id);
         }
     }
 };
@@ -92,17 +101,19 @@ export default {
 .sky-commands {
     color: #DDE5FE;
     .tree {
+        font-size: 12px;
         letter-spacing: 0.07px;
-        .category,.commands {
+        .category {
             height: 30px;
             line-height: 30px;
-            padding: 0 20px;
         }
         .category {
             border-bottom: 1px solid #3B64BE;
             font-family: HiraginoSansGB-W6;
         }
         .commands {
+            padding: 0 10px;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             font-family: PingFangSC-Regular;
@@ -112,6 +123,9 @@ export default {
                 font-weight: 700;
                 color: #fff;
             }
+        }
+        .commands:hover {
+            background: #34539B;
         }
     }
     .nodata {

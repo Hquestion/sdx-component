@@ -4,7 +4,12 @@
         :class="{'is-label': !!label, 'is-open': !!opened, 'is-terminal': name === 'SIDEBAR_TERMINAL'}"
         @click="handleSidebarClick"
     >
-        <i :class="[icon, 'sdx-icon']" />
+        <svg
+            class="sdxu-dialog__sidebar"
+            aria-hidden="true"
+        >
+            <use :xlink:href="`#${(icon === 'sdx-terminalsbiaoqian' && opened) ? 'sdx-terminalsdianji' : icon}`" />
+        </svg>
         <span v-if="label">{{ label }}</span>
     </div>
 </template>
@@ -55,15 +60,13 @@ export default {
         padding: 0 20px;
         cursor: default;
         height: 100%;
-        i {
-            font-size: 18px;
+        .sdxu-dialog__sidebar {
+            width: 18px;
+            height: 18px;
             transform: rotate(-90deg);
             color: rgb(171,181,206);
         }
         &.is-label {
-            i {
-                font-size: 12px;
-            }
             span {
                 cursor: default;
                 margin-left: 5px;
@@ -72,9 +75,6 @@ export default {
         }
         &.is-open {
             background: #536694;
-            i {
-                color:rgb(191,203,235) ;
-            }
         }
         &.is-open.is-terminal {
             background: none;
@@ -84,10 +84,6 @@ export default {
         }
         &.is-terminal {
             padding-right: 40px;
-            i:before {
-                color: #000;
-                border-radius: 2px;
-            }
         }
     }
 </style>

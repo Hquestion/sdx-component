@@ -10,9 +10,17 @@
         @click="handlerClick"
         v-loading="loading"
     >
-        <TextTooltip :title="title">
+        <TextTooltip
+            :title="title"
+            v-if="!nativeTooltip"
+        >
             <i :class="[icon]" />
         </TextTooltip>
+        <i
+            v-else
+            :class="[icon]"
+            :title="title"
+        />
     </div>
 </template>
 
@@ -52,6 +60,10 @@ export default {
             default: ''
         },
         loading: {
+            type: Boolean,
+            default: false
+        },
+        nativeTooltip: {
             type: Boolean,
             default: false
         }

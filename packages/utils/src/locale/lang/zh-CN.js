@@ -605,6 +605,8 @@ export default {
             CancelShare: '取消共享',
             Download: '下载',
             Copy: '拷贝',
+            Paste: '粘贴',
+            Cut: '剪切',
             Move: '移动',
             MoveOrCopy: '移动/拷贝',
             Rename: '重命名',
@@ -664,6 +666,15 @@ export default {
             upload_or_download_operation_files_are_large: '当前上传的文件较大，请使用文件管理客户端操作',
             Open_it_immediately: '立即打开',
             PleaseSelectUserOrGroup: '请选择用户或用户组',
+            TensorBoard: '进入TensorBoard',
+            ModelAnalysis: '模型解析',
+            CreateFolder: '新建文件夹',
+            SaveFor: '是否要保存对 ',
+            Change: ' 的更改？',
+            IfNotSave: '如果不保存，更改将丢失。',
+            Save: '保存',
+            NotSave: '不保存',
+            NotSupported: '暂不支持当前文件格式'
         },
         resourceManage: {
             ResourceManage: '资源管理',
@@ -775,6 +786,24 @@ export default {
             authorization: '授权',
             Are_you_sure_delete_it: '确定删除授权吗？',
             Can_not_be_restored_after_deletion: '删除后不可恢复哦'
+        },
+        skyide: {
+            close: '关闭',
+            shear: '剪切',
+            paste: '粘贴',
+            shift_up: '上移',
+            shift_down: '下移',
+            Clear_Output: '清除输出',
+            Kernel_is_not_connected: 'Kernel未连接',
+            Kernel_Connected: 'Kernel已连接',
+            save: '保存',
+            copy: '复制',
+            Turn_to_MD: '转为MD',
+            Turn_to_code: '转为code',
+            Run_all: '运行全部',
+            debug: '调试',
+            View_commands: '查看命令',
+            code_snippet: '代码片段'
         }
     },
     sdxCommon: {

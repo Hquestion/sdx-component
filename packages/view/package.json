@@ -30,9 +30,21 @@
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "dependencies": {
+        "@jupyterlab/cells": "^1.0.5",
+        "@jupyterlab/codemirror": "^1.0.5",
+        "@jupyterlab/completer": "^1.1.2",
+        "@jupyterlab/coreutils": "~3.1.0",
+        "@jupyterlab/mathjax2": "^1.1.0",
+        "@jupyterlab/rendermime": "^1.0.5",
+        "@jupyterlab/services": "^4.1.0",
+        "@jupyterlab/terminal": "^1.1.0",
         "@phosphor/commands": "^1.7.0",
+        "@phosphor/widgets": "^1.9.0",
         "@sdx/utils": "^1.1.27",
-        "fake-indexeddb": "^2.1.1"
+        "@skyide/services": "^1.1.2",
+        "fake-indexeddb": "^2.1.1",
+        "interactjs": "^1.6.1",
+        "vue-codemirror": "^4.0.6"
     },
     "peerDependencies": {
         "@sdx/ui": "^1.0.2",
@@ -43,7 +55,8 @@
         "echarts": "^4.2.1",
         "element-ui": "^2.7.2",
         "vue": "^2.6.10",
-        "vue-clipboard2": "^0.3.0"
+        "vue-clipboard2": "^0.3.0",
+        "vue-codemirror": "^4.0.6"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

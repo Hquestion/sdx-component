@@ -295,6 +295,16 @@ export function mkdir(path, ownerId) {
     });
 }
 
+export function makeFile(path, ownerId) {
+    let userInfo = shareCenter.getUser() || {};
+    return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files`, {
+        ownerId: ownerId || userInfo.userId,
+        path,
+        isFile: true,
+        autoRename: true
+    });
+}
+
 export function rename(path, newName, ownerId) {
     let userInfo = shareCenter.getUser() || {};
     return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/rename`, {
@@ -362,6 +372,36 @@ export function download(path, ownerId, filesystem = 'cephfs') {
     //     path,
     //     filesystem
     // });
+}
+
+export function readFile(path, ownerId, filesystem = 'cephfs') {
+    let userInfo = shareCenter.getUser() || {};
+    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/download`, {
+        ownerId: ownerId || userInfo.userId,
+        path,
+        filesystem,
+        disposition: 'inline'
+    }, {
+        responseType: 'text'
+    });
+}
+
+export function saveFile(content, path, ownerId, filesystem = 'cephfs') {
+    let userInfo = shareCenter.getUser() || {};
+    const pathList = path.split('/');
+    const name = pathList.pop();
+    const dirPath = `${pathList.join('/')}/`;
+    const file = new File([content], name);
+
+    const formData = new FormData();
+    formData.append('ownerId', ownerId || userInfo.userId);
+    formData.append('path', dirPath);
+    formData.append('filesystem', filesystem);
+    formData.append('overwrite', '1');
+    formData.append('files', file);
+    return httpService.post(`${FILE_MANAGE_GATEWAY_BASE}files/upload`, formData, {
+        ContentType: 'multipart/form-data'
+    });
 }
 
 export function pack(paths, ownerId) {

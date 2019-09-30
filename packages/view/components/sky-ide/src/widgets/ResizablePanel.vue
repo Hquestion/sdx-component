@@ -1,12 +1,16 @@
 <template>
-    <div class="resizable-panel" :style="rect">
-        <slot></slot>
+    <div
+        class="resizable-panel"
+        :style="rect"
+    >
+        <slot />
     </div>
 </template>
 
 <script>
 import emitter from '@sdx/utils/src/mixins/emitter';
 import interact from 'interactjs';
+import throttle from '@sdx/utils/src/helper/throttle';
 export default {
     name: 'ResizablePanel',
     componentName: 'ResizablePanel',
@@ -58,6 +62,11 @@ export default {
             isRootReady: false,
             order: 0
         };
+    },
+    inject: {
+        app: {
+            default: null
+        }
     },
     computed: {
         rect() {
@@ -114,7 +123,6 @@ export default {
                             children.forEach(item => {
                                 hToAssign -= item.fixed ? item.height : 0;
                             });
-                            console.log(this.childrenRatio);
                             if (child.fixed) {
                                 child.height = this.childrenRatio[index].ratio;
                             } else {
@@ -124,7 +132,7 @@ export default {
                         child.top = assigned;
                         child.left = 0;
                         child.assigned = true;
-                        assigned += child.height;
+                        assigned += child.collapse ? 0 : child.height;
                         interact(child.$el)
                             .resizable({
                                 edges: {
@@ -137,7 +145,8 @@ export default {
                         if (!child.collapse && index < children.length - 1) {
                             let nextChild = children[index+1];
                             if (!nextChild.collapse) {
-                                child.$el.style.borderBottom = '1px solid #dedede';
+                                // child.$el.style.borderBottom = '1px solid #dedede';
+                                child.$el.style.borderBottom = 'none';
                             } else {
                                 child.$el.style.borderBottom = 'none';
                             }
@@ -154,6 +163,12 @@ export default {
                             if (child.fixed || nextChild.fixed || !hasExpandChildAfter()) {
                                 return;
                             }
+                            const heightResizeDebounce = throttle((e, dist) => {
+                                nextChild.height = nextChild.height - dist;
+                                nextChild.top = nextChild.top + dist;
+
+                                child.height = e.rect.height;
+                            }, 200);
                             interact(child.$el)
                                 .resizable({
                                     edges: {
@@ -167,14 +182,27 @@ export default {
                                     let dist = e.rect.height - child.height;
                                     let height = nextChild.height - dist;
                                     if (height > nextChild.getPanelRealMinHeight() && e.rect.height > this.getPanelRealMinHeight()) {
-                                        nextChild.height = nextChild.height - dist;
-                                        nextChild.top = nextChild.top + dist;
+                                        nextChild.$el.style.height = `${nextChild.height - dist}px`;
+                                        nextChild.$el.style.top = `${nextChild.top + dist}px`;
+                                        child.$el.style.height = `${e.rect.height}px`;
 
-                                        child.height = e.rect.height;
-                                        // resize 之后重新计算分配比例
-                                        this.calcChildrenRatio('height');
+                                        clearTimeout(this.resizeHeightTimer);
+                                        this.resizeHeightTimer = setTimeout(() => {
+                                            nextChild.height = nextChild.height - dist;
+                                            nextChild.top = nextChild.top + dist;
+
+                                            child.height = e.rect.height;
+                                            // resize 之后重新计算分配比例
+                                            this.calcChildrenRatio('height');
+                                        }, 200);
                                     }
-                                });
+                                })
+                                .on('resizeend', e => {
+                                    if (this.app) {
+                                        this.app.syncLayout();
+                                    }
+                                })
+                            ;
                         }
                     });
                     // 计算children的分配比例，在调整时按照比例重新分配
@@ -199,7 +227,6 @@ export default {
                             children.forEach(item => {
                                 wToAssign -= item.fixed ? item.width : 0;
                             });
-                            console.log(this.childrenRatio);
                             if (child.fixed) {
                                 child.width = this.childrenRatio[index].ratio;
                             } else {
@@ -210,11 +237,12 @@ export default {
                         child.left = assigned;
                         child.top = 0;
                         child.assigned = true;
-                        assigned += child.width;
+                        assigned += child.collapse ? 0 : child.width;
                         if (index < children.length -1) {
                             let nextChild = children[index+1];
                             if (!nextChild.collapse) {
-                                child.$el.style.borderRight = '1px solid #dedede';
+                                // child.$el.style.borderRight = '1px solid #dedede';
+                                child.$el.style.borderRight = 'none';
                             } else {
                                 child.$el.style.borderRight = 'none';
                             }
@@ -234,13 +262,25 @@ export default {
                                     let dist = e.rect.width - child.width;
                                     let width = nextChild.width - dist;
                                     if (width > nextChild.minWidth && e.rect.width > this.minWidth) {
-                                        nextChild.width = nextChild.width - dist;
-                                        nextChild.left = nextChild.left + dist;
+                                        nextChild.$el.style.width = `${nextChild.width - dist}px`;
+                                        nextChild.$el.style.left = `${nextChild.left + dist}px`;
+                                        child.$el.style.width = `${e.rect.width}px`;
 
-                                        child.width = e.rect.width;
+                                        clearTimeout(this.resizeWidthTimer);
+                                        this.resizeWidthTimer = setTimeout(() => {
+                                            nextChild.width = nextChild.width - dist;
+                                            nextChild.left = nextChild.left + dist;
 
-                                        // resize 之后重新计算分配比例
-                                        this.calcChildrenRatio('width');
+                                            child.width = e.rect.width;
+
+                                            // resize 之后重新计算分配比例
+                                            this.calcChildrenRatio('width');
+                                        }, 200);
+                                    }
+                                })
+                                .on('resizeend', e => {
+                                    if (this.app) {
+                                        this.app.syncLayout();
                                     }
                                 })
                             ;
@@ -323,6 +363,11 @@ export default {
             if (this.$parent && this.$parent.$options.componentName === 'ResizablePanel') {
                 this.$parent.updateChildren(true);
             }
+        },
+        weight() {
+            if (this.$parent && this.$parent.$options.componentName === 'ResizablePanel') {
+                this.$parent.updateChildren(true);
+            }
         }
     },
     created() {
@@ -357,5 +402,6 @@ export default {
     .resizable-panel {
         position: absolute;
         touch-action: none;
+        overflow: hidden;
     }
 </style>

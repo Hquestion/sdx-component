@@ -14,5 +14,6 @@ module.exports = {
     'resource-statistics': './components/resource-statistics/index.js',
     'task-management': './components/task-management/index.js',
     'file': './components/file/index.js',
-    'skyflow': './components/skyflow/index.js'
+    'skyflow': './components/skyflow/index.js',
+    'sky-ide': './components/sky-ide/index.js'
 };

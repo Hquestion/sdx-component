@@ -1,16 +1,18 @@
 <template>
     <div class="unsupported-file">
-        暂不支持当前文件格式
+        {{ t('view.file.NotSupported') }}
     </div>
 </template>
 
 <script>
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'UnsupportedFile',
     data() {
         return {};
     },
-    components: {}
+    components: {},
+    mixins: [locale]
 };
 </script>
 
@@ -20,6 +22,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px 0;
+    // margin: 20px 0;
+    color: #fff;
 }
 </style>

@@ -35,11 +35,13 @@
     "peerDependencies": {
         "element-ui": "^2.7.2",
         "vue": "^2.6.10",
-        "vuescroll": "^4.12.2"
+        "vuescroll": "^4.12.2",
+        "popper.js": "^1.15.0"
     },
     "dependencies": {
         "@sdx/utils": "^1.1.27",
-        "dexie": "^2.0.4"
+        "dexie": "^2.0.4",
+        "popper.js": "^1.15.0"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

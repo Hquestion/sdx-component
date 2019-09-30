@@ -34,14 +34,15 @@
     },
     "dependencies": {
         "@sdx/utils": "^1.1.27",
-        "vue-codemirror-lite": "^1.0.4"
+        "vue-codemirror": "^4.0.6"
     },
     "peerDependencies": {
         "@sdx/ui": "^1.0.2",
         "@sdx/utils": "^1.0.2",
         "element-ui": "^2.7.2",
         "portal-vue": "^2.1.5",
-        "vue": "^2.6.10"
+        "vue": "^2.6.10",
+        "vue-codemirror": "^4.0.6"
     },
     "gitHead": "9755ff3a76ec81c4ddcf0083c4240fe6a678020d"
 }

@@ -133,3 +133,36 @@ export function systemType() {
     }
     return system;
 }
+
+// 支持字符串不连续匹配
+export function matchingString(oriStr,matStr) {
+    let [oriArr, matArr, index,res, resArr] = [oriStr.toLowerCase().trim().split(''), matStr.toLowerCase().trim().split(''), -1, false, []];
+    matArr.forEach(item => {
+        index = oriArr.findIndex(val => val === item);
+        oriArr = oriArr.slice(index + 1);
+        resArr.push(index);
+        let flag = resArr.findIndex(flagItem => flagItem === -1); 
+        if(flag > -1) {
+            res = false;
+        } else {
+            res = true;
+        }
+    });
+    if(!matArr.length) {
+        res = true;
+    }
+    return res;
+}
+
+// 2个字符串， 查找一个在另一个中的位置，可以分开字符匹配，返回匹配下标数组
+export function matchingStringIndex(oriStr,matStr) {
+    let [oriArr, matArr, indexArr, index] = [oriStr.toLowerCase().trim().split(''), matStr.toLowerCase().trim().split(''), [], -1];
+    matArr.forEach(item => {
+        index = oriArr.findIndex(val => val === item);
+        indexArr.push(index);
+        for(let i = 0; i <= index; i++) {
+            oriArr.splice(i , 1, null);
+        }
+    });
+    return indexArr;
+}

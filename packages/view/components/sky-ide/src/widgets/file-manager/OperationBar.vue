@@ -1,51 +1,42 @@
 <template>
-    <div class="sdxv-operation-bar">
-        <div class="sdxv-operation-bar__operations">
-            <SdxuButton
-                class="sdxv-operation-bar__operation-mkdir"
-                icon="sdx-icon sdx-icon-plus"
-                @click="createFolder"
-                v-if="canMkdir()"
-            >
-                {{ t('view.file.NewFolder') }}
-            </SdxuButton>
-            <SdxwFileSelect
-                class="sdxv-operation-bar__operation-upload"
-                ref="fileUploader"
-                source="local"
-                :inline="true"
-                :limit="-1"
-                dropdown-width="138px"
-                dropdown-placement="right"
-                :local-file-label="t('view.file.UploadFile')"
-                :local-folder-label="t('view.file.UploadFolder')"
-                :upload-params="makeUploadParams()"
-                :on-progress="handleProgress"
-                :on-success="removeUpload"
-                style="margin-left: 20px;margin-right: 20px;"
-                v-if="canUpload()"
-                :on-exceed-max-size="onExceedMaxSize"
-                :on-exceed-max-size-dir="onExceedMaxSizeDir"
-            >
-                {{ t('view.file.Upload') }}
-            </SdxwFileSelect>
-        </div>
+    <div class="skyide-operation-bar">
+        <SdxuButton
+            icon="sdx-icon sdx-tianjiawenjian"
+            icon-only
+            plain
+            @click="createFolder"
+            v-if="canMkdir()"
+            :title="t('view.file.CreateFolder')"
+        />
+
+        <UploadFile
+            class="skyide-operation-bar__operation-upload"
+            ref="fileUploader"
+            source="local"
+            :limit="-1"
+            :upload-params="makeUploadParams()"
+            :on-progress="handleProgress"
+            :on-success="removeUpload"
+            v-if="canUpload()"
+            :on-exceed-max-size="onExceedMaxSize"
+            :on-exceed-max-size-dir="onExceedMaxSizeDir"
+        />
     </div>
 </template>
 
 <script>
 import SdxuButton from '@sdx/ui/components/button';
-import SdxwFileSelect from '@sdx/widget/components/file-select';
 import batchOperationAuthMixin from './helper/batchOperationAuthMixin';
 import shareCenter from '@sdx/utils/src/helper/shareCenter';
 import { rootKinds } from './helper/fileListTool';
 import locale from '@sdx/utils/src/mixins/locale';
 import MessageBox from '@sdx/ui/components/message-box';
+import UploadFile from './UploadFile';
 export default {
     name: 'OperationBar',
     components: {
         SdxuButton,
-        [SdxwFileSelect.FileSelectMix.name]: SdxwFileSelect.FileSelectMix
+        UploadFile
     },
     inject: ['fileManager'],
     mixins: [batchOperationAuthMixin, locale],
@@ -98,9 +89,9 @@ export default {
             if (isWindows) {
                 url = `${STATIC_PATH}static/filemanage-client/windows/sky-filemanager-client.exe`;
             } else if (isMac) {
-                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.zip`;
+                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.dmg`;
             } else if (isLinux) {
-                url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.zip`;
+                url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.AppImage`;
             }
             return url;
         }
@@ -109,11 +100,21 @@ export default {
 </script>
 
 <style lang="scss">
-.sdxv-operation-bar {
+.skyide-operation-bar {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 15px;
+    justify-content: space-around;
+    align-items: center;
+    height: 56px;
+    background: #1C253D;
+    .sdxu-button--primary.is-plain {
+        color: #DDE5FE;
+        &:hover {
+            color: #fff;
+        }
+        .sdxu-button__icon {
+            font-size: 18px!important;
+        }
+    }
 }
 .fileClient {
     a {

@@ -45,7 +45,7 @@ export default {
             defaultValue: 'false'
           }, {
             params: 'loading',
-            describe: '首次请求日志全页面遮罩',
+            describe: '日志页面动画+遮罩，为true时，覆盖preLoading以及sufLoading效果',
             type: 'boolean',
             optionValue: 'true / false',
             defaultValue: 'false'

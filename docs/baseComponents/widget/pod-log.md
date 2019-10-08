@@ -39,14 +39,14 @@
 
 ```js
 import Vue from 'vue';
-import { SdxwPodLog } from '@sdx/widget';
+import { PodLog } from '@sdx/widget';
 
-Vue.use(SdxwPodLog);
+Vue.use(PodLog);
 
 // 也可以全量引入使用
-import SdxwPodLog from '@sdx/widget';
+import SdxWidget from '@sdx/widget';
 
-Vue.use(SdxwPodLog);
+Vue.use(SdxWidget);
 ```
 
 同时，还需引入scss文件:

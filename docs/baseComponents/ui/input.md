@@ -11,19 +11,23 @@
     <template>
         <div class="sdxui-input">
             <div>
-                <SdxuInput v-model="value" :searchable="true" size="small"></SdxuInput>
+                <SdxuInput placeholder="请输入关键字" v-model="value" type="search" size="small"></SdxuInput>
             </div>
             <div>
-                <SdxuInput v-model="value" :searchable="true" size="regular"></SdxuInput>
+                <SdxuInput placeholder="请输入关键字" v-model="value" type="search" @search="handleSearch" :searchable="true" size="regular"></SdxuInput>
             </div>
             <div>
-                <SdxuInput v-model="value" type="password"></SdxuInput>
+                <SdxuInput placeholder="请输入密码" v-model="value" type="password"></SdxuInput>
             </div>
             <div>
-                <SdxuInput v-model="value" type="password" :password-strength="true"></SdxuInput>
+                <SdxuInput placeholder="请输入密码" v-model="value" type="password" :password-strength="true"></SdxuInput>
             </div>
             <div>
-                <SdxuInput v-model="value" type="password" :password-visibleness="true"></SdxuInput>
+                <SdxuInput placeholder="请输入密码" v-model="value" type="password" :password-visibleness="true"></SdxuInput>
+            </div>
+            <div>
+                <span>行内输入框</span>
+                <SdxuInput placeholder="请输入内容" v-model="value" :inline="true"></SdxuInput>
             </div>
             <div>
                 <SdxuAutoComplete 
@@ -42,8 +46,7 @@
                     <template slot-scope="{ item }">
                         <div class="name" v-text="item.value">
                         </div>
-                        <span class="addr" v-text="item.address">
-                        </span>
+                        <span class="addr" v-text="item.address"></span>
                     </template>
                 </SdxuAutoComplete>
             </div>

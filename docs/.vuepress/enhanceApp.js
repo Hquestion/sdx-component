@@ -11,6 +11,23 @@ import '@sdx/view/theme/index.scss';
 
 import '../.vuepress/public/css/index.css'
 
+// const { JSDOM } = require('jsdom')
+// const dom = new JSDOM('<!doctype html><html><body></body></html>',
+// { url: 'http://localhost' })
+
+// global.window = dom.window
+// global.document = window.document
+// global.navigator = window.navigator
+
+
+// const mockScript = () => {
+//   const script = document.createElement('script');
+//   script.setAttribute('data-injectcss', '1');
+//   window.__iconfont__svg__cssinject__ = true;
+//   document.body.appendChild(script);
+// };
+// mockScript();
+
 export default ({
                     Vue, // VuePress 正在使用的 Vue 构造函数
                     options, // 附加到根实例的一些选项

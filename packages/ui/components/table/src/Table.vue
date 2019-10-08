@@ -7,7 +7,7 @@
         v-on="$listeners"
         style="width: 100%"
         ref="elTable"
-        :empty-text="t('ui.empty.noData')"
+        :empty-text="emptyText"
     >
         <slot />
     </el-table>
@@ -37,6 +37,15 @@ export default {
         rowId: {
             type: String,
             default: 'uuid'
+        },
+        emptyLabel: {
+            type: String,
+            default: ''
+        }
+    },
+    computed: {
+        emptyText() {
+            return this.emptyLabel || this.t('ui.empty.noData');
         }
     },
     methods: {

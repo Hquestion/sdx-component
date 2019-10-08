@@ -29,8 +29,8 @@
                 eventData: [
                     {
                         params: 'sortChange',
-                        describe: '排序改变',
-                        cbparams: '参数为（order）',
+                        describe: '排序改变，order改变',
+                        cbparams: '—',
                     }
                 ],
             }

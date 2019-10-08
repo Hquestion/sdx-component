@@ -65,7 +65,18 @@ Vue.use(SdxUI);
 @import '~@sdx/ui/lib/theme/table.scss';
 
 ```
-
+## SCSS定制
+```scss
+$sdxu-table-head-color: #303133 !default;
+$sdxu-table-header-height: 52px !default;
+$sdxu-table-td-height: 52px !default;
+$sdxu-table-cell-background:  #F7FAFF !default;
+$sdxu-table-header-background: #fff !default;
+$sdxu-table-header-fontsize: 14px !default;
+$sdxu-table-td-fontsize: 14px !default;
+$sdxu-table-table-margincolor: #fff !default;
+$sdxu-table-border-color: #EBEEF5 !default;
+```
 ## API
 
 <ui-table-api slot="api" />

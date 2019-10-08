@@ -1,10 +1,13 @@
 <template>
-    <div>
+    <div style="width: 560px">
         <Transfer
             :data="data"
             :tags.sync="tags"
             :default-keys.sync="defaultKeys"
             :tree-node-key="treeNodeKey"
+            :placeholder="placeholder"
+            :loading="loading"
+            :need-show-tags="needShowTags"
         />
     </div>
 </template>

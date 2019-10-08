@@ -2,7 +2,7 @@
     <div class="docs-table"> 
         <SdxuTable
             :data="tableData"
-            :highlight-key="'12'"
+            highlight-key='12'
             :params="params"
         >
             <el-table-column type="expand">
@@ -36,25 +36,25 @@ export default {
                 date: '2016-05-02',
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1518 弄',
-                key: '11',      
+                uuid: '11',      
                 desc: ' 那 v 啊女啊 v 那 v 啊美女 v 女你说的 v 你是女 in 在 v 你是 v 好似 u 凤凰文化'
             }, {
                 date: '2016-05-04',
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1517 弄',
-                key: '12',
+                uuid: '12',
                 desc: ' 中均居本佛为国内外 i 我无关无关无关无关无关发刚拿上 v 女你说的 v 你是女 in 在 v 你是 v 好似 u 凤凰文化'
             }, {
                 date: '2016-05-01',
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1519 弄',
-                key: '14',
+                uuid: '14',
                 desc: ' 关无关无高考文科贡嘎山的噶多少个民生凋敝民生凋敝没舍得不舍得把 v 说关无关无关发刚拿上 v 女你说的 v 你是女 in 在 v 你是 v 好似 u 凤凰文化'
             }, {
                 date: '2016-05-03',
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1516 弄',
-                key: '15',
+                uuid: '15',
                 desc: ' 中均居本佛为国内外 iv 你是女 in 在 v 你是 v 好似 u 凤凰文化'
             }],
             params: {

@@ -38,6 +38,27 @@
                         type: 'String',
                         optionValue: '--',
                         defaultValue: '--',
+                    },
+                    {
+                        params: 'placeholder',
+                        describe: '输入框的placeholder',
+                        type: 'String',
+                        optionValue: '--',
+                        defaultValue: '--',
+                    },
+                    {
+                        params: 'need-show-tags',
+                        describe: '是否需要展示tags',
+                        type: 'Boolean',
+                        optionValue: '--',
+                        defaultValue: 'false',
+                    },
+                    {
+                        params: 'loading',
+                        describe: 'tree loading',
+                        type: 'Boolean',
+                        optionValue: '--',
+                        defaultValue: 'false',
                     }
                 ],
             }

@@ -674,7 +674,8 @@ export default {
             IfNotSave: '如果不保存，更改将丢失。',
             Save: '保存',
             NotSave: '不保存',
-            NotSupported: '暂不支持当前文件格式'
+            NotSupported: '暂不支持当前文件格式',
+            Loading: '加载中...'
         },
         resourceManage: {
             ResourceManage: '资源管理',

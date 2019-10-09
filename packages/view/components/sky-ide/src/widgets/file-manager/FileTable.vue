@@ -19,6 +19,7 @@
             @row-dblclick="handlePathNameClick"
             @row-click="handleRowClick"
             @row-contextmenu="handleContextMenu"
+            :empty-label="emptyLabel"
         >
             <el-table-column
                 :label="t('view.file.FileName')"
@@ -69,6 +70,7 @@ import FileName from './FileName';
 
 import contextMenu from '@sdx/ui/components/context-menu';
 import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/ui/components/context-menu';
+import Clusterize from 'clusterize.js';
 
 const ROW_HEIGHT = 30;
 let isFirstSort = true;
@@ -96,7 +98,8 @@ export default {
             rootKinds,
             selectedRows: [],
             copyingRow: null,
-            cuttingRow: null
+            cuttingRow: null,
+            emptyLabel: ''
         };
     },
     computed: {
@@ -334,6 +337,13 @@ export default {
     },
     mounted() {
         this.init();
+        setTimeout(() => {
+            new Clusterize({
+                rows: document.querySelectorAll('.el-table__row'),
+                scrollElem: document.getElementById('scroll-area'),
+                contentElem: document.querySelector('.el-table__body tbody')
+            });
+        },2000);
     },
     beforeDestroy() {
         isFirstSort = true;

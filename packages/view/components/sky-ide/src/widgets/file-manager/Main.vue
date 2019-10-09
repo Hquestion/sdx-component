@@ -105,7 +105,7 @@ export default {
             this.loadedTotal = 0;
             this.searchKey = '';
         },
-        enterDirectory(dir, keepList) {
+        enterDirectory(dir, keepList, rowToScroll) {
             this.resetFlags(keepList);
             this.isSearch = false;
             // 更新路径
@@ -124,6 +124,7 @@ export default {
                 this.renderFiles = res.children;
                 this.total = res.childrenCount;
                 this.loadedTotal += fileList.length;
+                if (rowToScroll) this.$refs.fileTable.scrollToRow(rowToScroll);
                 this.loading = false;
             }, () => {
                 this.total = 0;
@@ -147,12 +148,21 @@ export default {
             });
         },
         loadFileList() {
-            return getFilesList({
-                start: (this.pageIndex - 1) * this.pageSize + 1,
-                count: -1,
-                path: this.currentPath,
-                orderBy: this.orderBy,
-                order: this.order
+            return new Promise(resolve => {
+                getFilesList({
+                    start: (this.pageIndex - 1) * this.pageSize + 1,
+                    count: -1,
+                    path: this.currentPath,
+                    orderBy: this.orderBy,
+                    order: this.order
+                }).then(res => {
+                    res.children.forEach(item => {
+                        if (item.path[0] !== '/') {
+                            item.path = `/${item.path}`;
+                        }
+                    });
+                    resolve(res);
+                });
             });
         },
         getRenderList() {

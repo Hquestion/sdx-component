@@ -56,10 +56,10 @@ export default {
             // this.fileManager.uploadingFiles = files;
             // this.fileManager.$refs.fileTask.checkTab('UPLOAD');
         },
-        removeUpload() {
+        removeUpload(fileList) {
             // this.$refs.fileUploader.handleRemove(file);
             // 目前先保留上传记录，不处理
-            this.fileManager.enterDirectory(this.fileManager.currentPath);
+            this.fileManager.enterDirectory(this.fileManager.currentPath, true, fileList.files[0]);
         },
         onExceedMaxSize() {
             let that = this;

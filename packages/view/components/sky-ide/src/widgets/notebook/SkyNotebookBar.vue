@@ -204,51 +204,31 @@ export default {
             this.app.commands.execute(CommandIDs.SAVE_DOC);
         },
         insertCodeCell() {
-            this.snb.insertCell('code');
+            this.app.commands.execute(CommandIDs.CELL_ADD_CODE);
         },
         insertMarkdownCell() {
-            this.snb.insertCell('markdown');
+            this.app.commands.execute(CommandIDs.CELL_ADD_MARKDOWN);
         },
         insertRawCell() {
             this.snb.insertCell('raw');
         },
         toggleMode() {
-            let modeType = this.snb && this.snb.activeCell && this.snb.activeCell.cell_type;
-            modeType = modeType === 'code' ? 'markdown' : 'code';
-            this.snb.changeCellType(modeType);
-        },
-        clearOutput() {
-            if (this.snb.activeCell) {
-                this.snb.activateCell.outputs = [];
-                if (this.snb.cellMap[this.snb.activeCellOrder].model.outputs &&  this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear) {
-                    this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear();
-                }
-            }
+            this.app.commands.execute(CommandIDs.CELL_TOGGLE_CODE);
         },
         clearAllOutput() {
-            this.snb.notebook.cells.forEach(cell => {
-                cell.outputs = [];
-                if (this.snb.cellMap[cell.order].model.outputs && this.snb.cellMap[cell.order].model.outputs.clear) {
-                    this.snb.cellMap[cell.order].model.outputs.clear && this.snb.cellMap[cell.order].model.outputs.clear();
-                }
-
-            });
+            this.app.commands.execute(CommandIDs.CELLS_OUTPUTS_CLEAR);
         },
         runNotebook() {
-            this.snb.runNotebook();
+            this.app.commands.execute(CommandIDs.CELLS_RUN);
         },
         runCell() {
-            this.app.commands.execute(CommandIDs.RUN_CELL);
+            this.app.commands.execute(CommandIDs.CELL_RUN);
         },
         stop() {
-            if (this.snb.isDebugMode) {
-                this.snb.cancelDebug();
-            } else {
-                this.snb.shutdownSession(true);
-            }
+            this.app.commands.execute(CommandIDs.CELLS_SHUTDOWN);
         },
         debugByCell() {
-            this.snb.debugByCell();
+            this.app.commands.execute(CommandIDs.CELLS_DEBUG);
         },
         changeSwitch() {
             window.console.log(this.kernelStatus);

@@ -10,28 +10,43 @@ export default function setupCommands(commands, app) {
     if (!isInit) return;
     isInit = false;
 
-    addCommand(commands, app, CommandIDs.RUN_CELL, async function(app) {
+    // notebook commands
+    addCommand(commands, app, CommandIDs.CELLS_RUN, async function(app) {
         let nb = app.docManager.getActiveNotebook();
-        if (!nb) return;
-        // if (nb.activeCell && nb.activeCell.cell_type === 'code') {
-        //     await app.taskManager.run();
-        //     let session = await Session.startNew({
-        //         path: '',
-        //         kernelName: 'python3',
-        //         serverSettings: {
-        //             baseUrl: '',
-        //             wsUrl: '',
-        //             ideUuid: app.taskManager.ideUuid
-        //         }
-        //     });
-        //
-        //     await CodeCell.execute(nb.activeCellWidget, session);
-        //     // 执行完之后再关闭kernel
-        //     await session.shutdown();
-        // } else if (nb.activeCell && nb.activeCell.cell_type === 'markdown') {
-        //     nb.activeCellWidget.rendered = true;
-        // }
-        nb.runCell(nb.activeCell, nb.activeCellWidget, nb.session, true);
+        if (nb) {
+            nb.runNotebook();
+        }
+    });
+
+    addCommand(commands, app, CommandIDs.CELLS_DEBUG, async function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        if (nb) {
+            nb.debugByCell();
+        }
+    });
+
+    addCommand(commands, app, CommandIDs.CELLS_SHUTDOWN, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        if (nb) {
+            if (nb.isDebugMode) {
+                nb.cancelDebug();
+            } else {
+                nb.shutdownSession(true);
+            }
+        }
+    });
+
+    addCommand(commands, app, CommandIDs.CELLS_OUTPUTS_CLEAR, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        if (nb) {
+            nb.notebook.cells.forEach(cell => {
+                cell.outputs = [];
+                if (nb.cellMap[cell.order].model.outputs && nb.cellMap[cell.order].model.outputs.clear) {
+                    nb.cellMap[cell.order].model.outputs.clear && nb.cellMap[cell.order].model.outputs.clear();
+                }
+
+            });
+        }
     });
 
     addCommand(commands, app, CommandIDs.COMPLETE, function execute(app) {
@@ -46,5 +61,87 @@ export default function setupCommands(commands, app) {
     addCommand(commands, app, CommandIDs.COMPLETER_SELECT, function execute(app) {
         let nb = app.docManager.getActiveNotebook();
         nb.completerHandler.completer.selectActive();
+    });
+
+    // cell commands
+    addCommand(commands, app, CommandIDs.CELL_CUT, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
+
+        nb.cuttingCell = nb.activeCell;
+        nb.notebook.cells.splice(index, 1);
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_PASTE, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
+
+        if (nb.cuttingCell) {
+            nb.notebook.cells.splice(index + 1, 0, nb.cuttingCell);
+            nb.cuttingCell = undefined;
+        }
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_MOVEDOWN, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
+
+        if (index < nb.notebook.cells.length - 1) {
+            let cellData = nb.activeCell;
+            nb.notebook.cells.splice(index, 1);
+            nb.notebook.cells.splice(index + 1, 0, cellData);
+        }
+    });
+    
+    addCommand(commands, app, CommandIDs.CELL_MOVEUP, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
+        if (index > 0) {
+            let cellData = nb.activeCell;
+            nb.notebook.cells.splice(index, 1);
+            nb.notebook.cells.splice(index - 1, 0, cellData);
+        }
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_DELETE, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
+        nb.notebook.cells.splice(index, 1);
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_OUTPUTS_CLEAR, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+        nb.activeCell.outputs = [];
+        nb.activeCellWidget._model._outputs.clear();
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_RUN, async function(app) {
+        let nb = app.docManager.getActiveNotebook();
+        if (!nb) return;
+        nb.runCell(nb.activeCell, nb.activeCellWidget, nb.session, true);
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_TOGGLE_CODE, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+
+        let modeType = nb && nb.activeCell && nb.activeCell.cell_type;
+        modeType = modeType === 'code' ? 'markdown' : 'code';
+        nb.changeCellType(modeType);
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_ADD_CODE, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+
+        nb.insertCell('code');
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_ADD_MARKDOWN, function execute(app) {
+        let nb = app.docManager.getActiveNotebook();
+
+        nb.insertCell('markdown');
+    });
+
+    addCommand(commands, app, CommandIDs.CELL_COPY, function execute(app) {
+        
     });
 }

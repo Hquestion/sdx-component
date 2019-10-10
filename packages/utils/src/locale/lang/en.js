@@ -805,7 +805,11 @@ export default {
             Run_all: 'Run all',
             debug: 'debug',
             View_commands: 'View commands',
-            code_snippet: 'code snippet'
+            code_snippet: 'code snippet',
+            Memory: 'Memory',
+            Model: 'Model',
+            Core: 'Core(s)',
+            Piece: 'Piece(s)'
         }
     },
     sdxCommon: {

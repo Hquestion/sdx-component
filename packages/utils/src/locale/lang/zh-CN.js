@@ -804,7 +804,11 @@ export default {
             Run_all: '运行全部',
             debug: '调试',
             View_commands: '查看命令',
-            code_snippet: '代码片段'
+            code_snippet: '代码片段',
+            Memory: '内存',
+            Model: '型号',
+            Core: '核',
+            Piece: '块'
         }
     },
     sdxCommon: {

@@ -1,33 +1,50 @@
 <template>
     <div class="resource-usage">
-        <div>
-            <span>kernel运行时长: </span>
-            <span>1h:15m</span>
-        </div>
-        <div>
+        <div v-if="cpu > 0">
             <span>CPU: </span>
-            <span>10%(4core)</span>
+            <span>{{ cpu }} ({{ t('view.skyide.Core') }})</span>
         </div>
-        <div>
-            <span>内存: </span>
-            <span>200MB(8GB)</span>
+        <div v-if="memory > 0">
+            <span>{{ t('view.skyide.Memory') }}: </span>
+            <span>{{ memory }} (GB)</span>
         </div>
-        <div>
-            <span>GPU(型号:xxx): </span>
-            <span>200MB(2块)</span>
-        </div>
-        <div>
-            <span>DISK: </span>
-            <span>200MB(8GB)</span>
+        <div v-if="gpu > 0">
+            <span>GPU({{ t('view.skyide.Model') }}:{{ gpuModel }}): </span>
+            <span>{{ gpu }} ({{ t('view.skyide.Piece') }})</span>
         </div>
     </div>
 </template>
 
 <script>
+import { parseMilli, byteToGB } from '@sdx/utils/lib/helper/transform';
+import locale from '@sdx/utils/src/mixins/locale';
+
 export default {
     name: 'ResourceUsage',
-    props: {
-
+    mixins: [locale],
+    inject: {
+        app: {
+            taskManager: {}
+        }
+    },
+    computed: {
+        cpu() {
+            return this.app.taskManager && this.app.taskManager.task && this.app.taskManager.task.quota && parseMilli(this.app.taskManager.task.quota.cpu) || 0;
+        },
+        memory() {
+            return this.app.taskManager && this.app.taskManager.task && this.app.taskManager.task.quota && byteToGB(this.app.taskManager.task.quota.memory) || 0;
+        },
+        gpu() {
+            return this.app.taskManager && this.app.taskManager.task && this.app.taskManager.task.quota && this.app.taskManager.task.quota.gpu || 0;
+        },
+        gpuModel() {
+            return this.app.taskManager && this.app.taskManager.task && this.app.taskManager.task.quota && this.app.taskManager.task.quota.gpuModel || '-';
+        }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            console.error(this.app);
+        });
     }
 };
 </script>

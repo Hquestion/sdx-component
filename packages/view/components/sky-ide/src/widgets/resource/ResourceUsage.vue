@@ -1,10 +1,10 @@
 <template>
     <div class="resource-usage">
-        <div v-if="cpu > 0">
+        <div>
             <span>CPU: </span>
             <span>{{ cpu }} ({{ t('view.skyide.Core') }})</span>
         </div>
-        <div v-if="memory > 0">
+        <div>
             <span>{{ t('view.skyide.Memory') }}: </span>
             <span>{{ memory }} (GB)</span>
         </div>
@@ -18,6 +18,7 @@
 <script>
 import { parseMilli, byteToGB } from '@sdx/utils/lib/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
+import { STATE_TYPE } from '@sdx/utils/src/const/task';
 
 export default {
     name: 'ResourceUsage',
@@ -28,23 +29,24 @@ export default {
         }
     },
     computed: {
+        task() {
+            return this.app.taskManager && this.app.taskManager.task || null;
+        },
+        isRunning() {
+            return this.task && [STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state) || false;
+        },
         cpu() {
-            return this.app.taskManager && this.app.taskManager.task && this.app.taskManager.task.quota && parseMilli(this.app.taskManager.task.quota.cpu) || 0;
+            return this.isRunning && this.task && this.task.quota && parseMilli(this.task.quota.cpu) || 0;
         },
         memory() {
-            return this.app.taskManager && this.app.taskManager.task && this.app.taskManager.task.quota && byteToGB(this.app.taskManager.task.quota.memory) || 0;
+            return this.isRunning && this.task && this.task.quota && byteToGB(this.task.quota.memory) || 0;
         },
         gpu() {
-            return this.app.taskManager && this.app.taskManager.task && this.app.taskManager.task.quota && this.app.taskManager.task.quota.gpu || 0;
+            return this.isRunning && this.task && this.task.quota && this.task.quota.gpu || 0;
         },
         gpuModel() {
-            return this.app.taskManager && this.app.taskManager.task && this.app.taskManager.task.quota && this.app.taskManager.task.quota.gpuModel || '-';
+            return this.isRunning && this.task && this.task.quota && this.task.quota.gpuModel || '-';
         }
-    },
-    mounted() {
-        this.$nextTick(() => {
-            console.error(this.app);
-        });
     }
 };
 </script>

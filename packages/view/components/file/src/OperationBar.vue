@@ -198,13 +198,13 @@ export default {
         //判断系统类型获取url
         getSystemUrl(){
             let url = '';
-            let STATIC_PATH = process.env.VUE_APP_STATIC_PATH;
+            let STATIC_PATH = '/';
             if (systemType() === 'Windows') {
                 url = `${STATIC_PATH}static/filemanage-client/windows/sky-filemanager-client.exe`;
             } else if (systemType() === 'Mac'){
-                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.zip`;
+                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.dmg`;
             } else if(systemType() === 'Linux'){
-                url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.zip`;
+                url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.AppImage`;
             }
             return url;
         }

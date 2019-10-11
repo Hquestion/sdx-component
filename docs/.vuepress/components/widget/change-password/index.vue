@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import SdxwChangePassword from '../../src/widget/change-password';
+import SdxwChangePassword from '@sdx/widget/components/change-password';
 export default {
   name: '',
     data() {

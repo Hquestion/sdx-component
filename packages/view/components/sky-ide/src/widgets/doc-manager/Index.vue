@@ -1,212 +1,206 @@
 <template>
-    <div class="doc-manager">
-        <div style="margin-bottom: 20px;">
-            <el-upload
-                class="upload-demo"
-                ref="upload"
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-change="handlePreview"
-                style="display: inline-block; margin-right: 10px;"
-                :file-list="fileList"
-                :show-file-list="false"
-                :auto-upload="false"
-            >
-                <el-button
-                    slot="trigger"
-                    size="small"
-                    type="primary"
-                >
-                    打开文件
-                </el-button>
-            </el-upload>
-            <el-button
-                size="small"
-                @click="saveCurrent"
-            >
-                保存当前
-            </el-button>
-            <el-button
-                size="small"
-                @click="saveAll"
-            >
-                保存全部
-            </el-button>
-        </div>
+    <div
+        class="sky-doc-manager"
+        tabindex="1"
+    >
         <el-tabs
-            v-model="activeDoc"
+            v-model="activeTab"
             type="card"
             closable
             @tab-remove="closeDoc"
+            :before-leave="beforeLeave"
             ref="tabs"
         >
             <el-tab-pane
-                v-for="(item) in openDocs"
+                v-for="(item) in app.doc.openFiles"
                 :key="item.path"
                 :name="item.path"
+                lazy
             >
                 <span slot="label">
-                    {{ item.title }}
+                    {{ item.name }}
                     <span
                         class="editing-state"
-                        v-show="item.isEditing"
+                        v-show="fileEditingStatus[composeFileKey(item)]"
                     >
                         *
                     </span>
                 </span>
                 <div>
-                    <code-editor
-                        :doc-item="item"
-                        @handleEditing="handleEditing"
-                        :code.sync="item.content"
-                        :mode="item.mode"
-                        v-if="item.mode && item.mode !== 'txt' && item.mode !== 'sky-notebook'"
-                    />
-                    <unsupported-file v-if="!item.mode" />
-                    <txt-render
-                        v-if="item.mode === 'txt'"
-                        :doc-item="item"
-                        @handleEditing="handleEditing"
-                        :code.sync="item.content"
+                    <sky-editor-adaptor
+                        :file="item"
+                        @modify="handleModify"
+                        ref="editor"
                     />
                 </div>
             </el-tab-pane>
+            <el-tab-pane
+                key="add"
+                name="add"
+                class="add-notebook"
+            >
+                <span
+                    slot="label"
+                >
+                    <i
+                        class="sdx-icon sdx-icon-plus"
+                    />
+                </span>
+            </el-tab-pane>
         </el-tabs>
         <el-dialog
-            :title="`是否要保存对 ${activeDocItem.title} 的更改?`"
             :visible.sync="dialogVisible"
-            width="20%"
+            width="520px"
             :show-close="false"
             v-if="dialogVisible"
         >
-            <span>如果不保存, 更改将丢失。</span>
+            <div slot="title">
+                <svg
+                    class="sdxu-dialog__logo"
+                    aria-hidden="true"
+                >
+                    <use xlink:href="#sdx-skyIDElogo" />
+                </svg>
+                SkyIDE
+            </div>
+            <div class="content">
+                <svg
+                    class="sdxu-dialog__warning"
+                    aria-hidden="true"
+                >
+                    <use xlink:href="#sdx-danchuangjinggao" />
+                </svg>
+                <div class="content-title">
+                    {{ `${t('view.file.SaveFor')}${app.doc.currentFile.name}${t('view.file.Change')}` }}
+                </div>
+                <div>{{ t('view.file.IfNotSave') }}</div>
+            </div>
             <span
                 slot="footer"
                 class="dialog-footer"
             >
                 <el-button
-                    type="primary"
-                    @click="saveAndClose"
+                    @click="cancelSave"
+                    size="small"
                 >
-                    保存
+                    {{ t('view.file.NotSave') }}
                 </el-button>
                 <el-button
-                    type="primary"
-                    @click="cancelSave"
+                    @click="dialogVisible = false"
+                    size="small"
                 >
-                    不保存
+                    {{ t('sdxCommon.Cancel') }}
                 </el-button>
-                <el-button @click="dialogVisible = false">
-                    取消
+                <el-button
+                    @click="saveAndClose"
+                    size="small"
+                    type="primary"
+                >
+                    {{ t('view.file.Save') }}
                 </el-button>
+                
             </span>
         </el-dialog>
     </div>
 </template>
 
 <script>
-import CodeEditor from './CodeEditor';
-import UnsupportedFile from './UnsupportedFile';
-import TxtRender from './TxtRender';
+import SkyEditorAdaptor from '../adaptor/SkyEditorAdaptor';
+import { composeFileKey } from '../../utils/utils';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     data() {
         return {
-            activeDoc: '',
-            openDocs: [],
-            activeDocItem: null,
+            activeTab: '',
             dialogVisible: false,
-            fileList: []
+            fileEditingStatus: {},
+            fileEditorInstances: {}
         };
     },
+    mixins: [locale],
     components: {
-        CodeEditor,
-        UnsupportedFile,
-        TxtRender
+        SkyEditorAdaptor
+    },
+    inject: {
+        app: {
+            default: () => {}
+        }
+    },
+    provide: {
+        doc() {
+            return this;
+        }
+    },
+    watch: {
+        activeTab(nVal) {
+            if (!nVal) return;
+            this.app.doc.currentFile = this.app.doc.openFiles.find(item => item.path === nVal);
+        }
     },
     methods: {
-        handlePreview(file) {
-            this.addDocFromFile(file);
-        },
-        switchRender(file) {
-            if (!file) return;
-            const fileName = file.name;
-            if (fileName.includes('.js')) {
-                file.mode = 'text/javascript';
-            } else if (fileName.includes('.java')) {
-                file.mode = 'text/x-java';
-            } else if (fileName.includes('.md')) {
-                file.mode = 'text/x-markdown';
-            } else if (fileName.includes('.txt')) {
-                file.mode = 'txt';
-            } else if (fileName.includes('.py') || fileName.includes('.ipynb')) {
-                file.mode = 'sky-notebook';
+        composeFileKey,
+        beforeLeave(active) {
+            if (active === 'add'){
+                this.app.makeFile();
+                return false;
             }
         },
-        addDocFromFile(file) {
-            let reader = new FileReader();
-            reader.onload = e => {
-                file.content = e.target.result;
-                file.title = file.name;
-                file.path = file.name;
-                this.addDocFromPath(file.path, file);
-            };
-            reader.readAsText(file.raw);
+        handleFileDelete(path) {
+            const item = this.app.doc.openFiles.find(item => item.path === path);
+            item && this.closeDoc(item.path, true);
         },
         saveCurrent() {
-            this.saveDoc(this.openDocs.find(item => item.path === this.activeDoc));
+            this.saveDoc(this.app.doc.openFiles.find(item => item.path === this.activeTab));
         },
         saveAll() {
-            this.openDocs.forEach(item => {
-                if (item.isEditing) {
+            this.app.doc.openFiles.forEach(item => {
+                if (this.fileEditingStatus[composeFileKey(item)]) {
                     this.saveDoc(item);
                 }
             });
         },
         saveDoc(item) {
-            item.isEditing = false;
-            this.$refs.tabs.$refs.nav.$forceUpdate();
+            const editor = this.$refs.editor.find(editor => editor.file.path === item.path);
+            editor.save && editor.save().then(() => {
+                this.$refs.tabs.$refs.nav.$forceUpdate();
+                this.$emit('refresh-tree');
+            });
+            this.$set(this.fileEditingStatus, this.composeFileKey(item), false);
         },
         cancelSave() {
-            this.activeDocItem.isEditing = false;
-            this.closeDoc(this.activeDoc);
+            this.$set(this.fileEditingStatus, this.composeFileKey(this.app.doc.currentFile), false);
+            this.closeDoc(this.activeTab);
             this.dialogVisible = false;
         },
         saveAndClose() {
-            this.saveDoc(this.activeDocItem);
-            this.closeDoc(this.activeDoc);
+            this.saveDoc(this.app.doc.currentFile);
+            this.closeDoc(this.activeTab);
             this.dialogVisible = false;
         },
-        handleEditing(item) {
-            item.isEditing = true;
+        handleModify(item) {
+            if (this.fileEditingStatus[this.composeFileKey(item)]) return;
+            this.$set(this.fileEditingStatus, this.composeFileKey(item), true);
             this.$refs.tabs.$refs.nav.$forceUpdate();
         },
-        async addDocFromPath(path, file) {
-            if (!path) return;
-            // make sure the doc has not been open already
-            this.activeDoc = path;
-            if (!this.openDocs.find(item => item.path === path)) {
-                this.switchRender(file);
-                let doc = file ? file : await this.fetchDoc(path);
-                this.openDocs.push({
-                    ...doc,
-                    isEditing: false
+        openFile(file) {
+            if (!file) return;
+            this.activeTab = file.path;
+            if (!this.app.doc.openFiles.find(item => item.path === file.path)) {
+                this.app.doc.openFiles.push(file);
+                this.app.doc.currentFile = file;
+                this.activeTab = file.path;
+                this.$nextTick(() => {
+                    const editor = this.$refs.editor.find(editor => editor.file.path === file.path);
+                    this.fileEditorInstances[this.composeFileKey(file)] = editor && editor.$refs.renderer;
                 });
-                this.activeDoc = doc.path;
             }
         },
-        fetchDoc(path) {
-            const random = Math.random().toString(3).substring(0, 6);
-            return Promise.resolve({
-                path: path + random,
-                title: 'docTitle' + random,
-                content: ''
-            });
-        },
-        closeDoc(target) {
-            let tabs = this.openDocs;
-            let activeName = this.activeDoc;
-            this.activeDocItem = this.openDocs.find(item => item.path === target);
-            if (this.activeDocItem.isEditing) {
-                this.activeDoc = target;
+        closeDoc(target, forceClose) {
+            let tabs = this.app.doc.openFiles;
+            let activeName = this.activeTab;
+            this.app.doc.currentFile = this.app.doc.openFiles.find(item => item.path === target);
+            if (this.fileEditingStatus[this.composeFileKey(this.app.doc.currentFile)] && !forceClose) {
+                this.activeTab = target;
                 this.dialogVisible = true;
             } else {
                 if (activeName === target) {
@@ -219,26 +213,139 @@ export default {
                         }
                     });
                 }
-                this.activeDoc = activeName;
-                this.openDocs = tabs.filter(tab => tab.path !== target);
+                this.activeTab = activeName;
+                const file = this.app.doc.openFiles.find(item => item.path === target);
+                delete this.fileEditorInstances[this.composeFileKey(file)];
+                this.app.doc.openFiles = tabs.filter(tab => tab.path !== target);
             }
+        },
+        getActiveNotebook() {
+            let activeFile = this.app.doc.openFiles.find(item => item.path === this.activeTab);
+            const editor = this.$refs.editor.find(editor => editor.file.path === activeFile.path);
+            return editor.$refs.renderer;
         }
     }
 };
 </script>
 
 <style scoped lang="scss">
-.doc-manager {
+.sky-doc-manager {
     height: 100%;
     width: 100%;
-    border: 1px solid red;
-}
-</style>
-
-<style lang="scss">
-.doc-manager {
-    .el-tabs__item .el-icon-close {
-        margin-left: 15px;
+    position: relative;
+    & /deep/ {
+        .el-tabs__item .el-icon-close {
+            margin-left: 15px;
+        }
+        .el-tabs__content {
+            position: initial;
+            overflow: initial;
+        }
+        .el-tabs--card > .el-tabs__header {
+            border-bottom: none;
+            background: #1C253D;
+        }
+        .el-tabs__nav {
+            display: flex;
+            border: none !important;
+            .el-tabs__item {
+                height: 56px;
+                display: flex;
+                align-items: center;
+                border: none;
+                color: #DDE5FE;
+                &.is-active {
+                    color: #DDE5FE;
+                    background: #273250;
+                }
+                &.is-closable {
+                    padding-left: 13px;
+                    padding-right: 13px;
+                }
+                .el-icon-close {
+                    font-size: 14px;
+                    width: 14px;
+                    margin-left: 30px;
+                    &:hover {
+                        background: none;
+                    }
+                }
+            }
+        }
+        #tab-add {
+            &.is-closable {
+                padding: 0 20px;
+                &:hover {
+                    color: #fff;
+                }
+            }
+            .el-icon-close {
+                display: none;
+            }
+        }
+        .el-dialog {
+            background: #2A3246;
+            box-shadow: 0 6px 12px 3px rgba(0,0,0,0.50);
+            border-radius: 4px;
+            .el-dialog__header {
+                height: 40px;
+                line-height: 40px;
+                background: #46516C;
+                font-size: 14px;
+                color: #8796BD;
+                padding: 0;
+                padding-left: 52px;
+                border-radius: 4px 4px 0 0;
+            }
+            .el-button--primary {
+                background: #4880F8;
+                color: #FFFFFF;
+            }
+            .el-button--primary:hover {
+                background: #2554BA;
+            }
+            .el-button--default {
+                background: #2A3246;
+                border: 1px solid #C0D2FF;
+                color: #C0D2FF;
+            }
+            .el-button--default:hover {
+                color: #2A3246;
+                background: #C0D2FF;
+            }
+            .sdxu-dialog__logo {
+                width: 26px;
+                height: 26px;
+                top: 8px;
+                left: 16px;
+                position: absolute;
+            }
+            .content {
+                position: relative;
+                padding-left: 40px;
+                .sdxu-dialog__warning {
+                    width: 24px;
+                    height: 24px;
+                    position: absolute;
+                    top: 6px;
+                    left:0;
+                }
+                div{ 
+                    height: 26px;
+                    line-height: 26px;
+                    color: #C0D2FF;
+                    font-family: PingFangSC-Regular;
+                    font-size: 14px;
+                }
+                .content-title {
+                    font-family: PingFangSC-Medium;
+                    font-size: 16px;
+                }
+            }
+            
+        }
     }
+
+
 }
 </style>

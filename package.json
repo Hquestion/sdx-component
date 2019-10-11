@@ -105,11 +105,11 @@
         "highlight.js": "^9.12.0",
         "interactjs": "^1.4.0-rc.13",
         "less-loader": "^4.1.0",
+        "popper.js": "^1.15.0",
         "portal-vue": "^2.1.5",
         "sh": "0.0.3",
         "vue": "^2.6.10",
         "vue-clipboard2": "^0.3.0",
-        "vue-codemirror-lite": "^1.0.4",
         "vue-highlight.js": "^2.2.0",
         "vuepress": "0.14.10",
         "vuescroll": "^4.12.2"

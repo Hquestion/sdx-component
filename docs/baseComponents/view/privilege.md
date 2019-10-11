@@ -5,15 +5,13 @@
 
 ## Examples
 
-<Common-BasicUsage>
-  <view-privilege-privilege />
-</Common-BasicUsage>
+![componentState](/view/privilege.png)
 
 
 ## Usage
 
 ```js
-import SdxvPrivilege from '@sdx/view/components/privilege';
+import SdxvPrivilege from '@sdx/view/lib/privilege';
 
 SdxvPrivilege.viewRouter.register(router, '/home');
 ```
@@ -30,7 +28,9 @@ const routeCfg = [{
     name: 'SdxvPrivilege',
     component: SdxvPrivilege,
     meta: {
-
+        breadcrumb: t('view.authority.Authority'),
+        system: 'manage',
+        isRoot: true,
     }
 }];
 
@@ -45,6 +45,5 @@ const viewRouter = {
 };
 
 export default { SdxvPrivilege, viewRouter };
-
 
 ```

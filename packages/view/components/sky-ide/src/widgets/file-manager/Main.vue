@@ -1,25 +1,20 @@
 <template>
-    <!-- <SdxuContentPanel
-        class="sdxv-file-main"
-    > -->
-    <div class="file-main">
+    <div
+        class="skyide-file-main"
+        tabindex="1"
+    >
         <OperationBar ref="operationBar" />
         <BreadcrumbBar ref="breadcrumbBar" />
         <FileTable ref="fileTable" />
     </div>
-    <!-- </SdxuContentPanel> -->
 </template>
 
 <script>
-// import SdxuContentPanel from '@sdx/ui/components/content-panel';
-import Dexie from 'dexie';
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 import BreadcrumbBar from './BreadcrumbBar';
 
 import { getFilesList } from '@sdx/utils/src/api/file';
-// import { getFilesList, getMyShare, getMyAcceptedShare, getProjectShare } from '@sdx/utils/src/api/file';
-// import { rootKinds, fixedRows, fixedRowsKeyMap, getDirRootKind, rootKindPathMap, PROJECT_SHARE_PATH, MY_SHARE_PATH, ACCEPTED_SHARE_PATH } from './helper/fileListTool';
 
 export default {
     name: 'SdxvFileMain',
@@ -33,8 +28,6 @@ export default {
             searchKey: '',
             // 动态渲染到列表中的文件列表
             renderFiles: [],
-            // 当前路径下的文件列表
-            fileList: [],
             // 当前路径下总文件数
             total: 0,
             // 当前路径下已加载的文件总数
@@ -78,29 +71,33 @@ export default {
             fileManager: this
         };
     },
+    inject: {
+        app: {
+            default: () => {}
+        }
+    },
+    computed: {
+        fileTable() {
+            return this.$refs.fileTable;
+        }
+    },
     methods: {
         isProjectRoot() {
             return false;
-            // return this.currentPath === PROJECT_SHARE_PATH;
         },
         isAcceptedRoot() {
             return false;
-            // return this.currentPath === ACCEPTED_SHARE_PATH;
         },
         isMyShareRoot() {
             return false;
-            // return this.currentPath === MY_SHARE_PATH;
         },
         isShareRoot() {
             return false;
-            // return !!fixedRowsKeyMap[this.currentPath];
         },
         resetFlags() {
             // 重置页码
             this.pageIndex = 1;
             // 重置缓存的fileList
-            this.renderFiles = [];
-            this.fileList = [];
             this.total = 0;
             this.loadedTotal = 0;
             this.searchKey = '';
@@ -111,36 +108,22 @@ export default {
             // 更新路径
             this.currentPath = dir;
             this.isRoot = dir === '/';
-            // this.rootKind = getDirRootKind(dir);
             // 修改为加载中，准备获取数据
             this.loading = true;
-            this.db.list.clear();
             // 滚动到页面顶部
             this.$refs.fileTable.init();
 
             let defer = this.loadFileList();
             return defer.then(res => {
                 let fileList = res.children;
+                this.renderFiles = res.children;
                 this.total = res.childrenCount;
+                this.loadedTotal += fileList.length;
                 this.loading = false;
-                return this.db.list.bulkAdd(fileList).then(() => {
-                    this.loadedTotal += fileList.length;
-                }, e => {
-                    window.console.error(e);
-                });
             }, () => {
-                let fileList = [];
                 this.total = 0;
                 this.loading = false;
-                return this.db.list.bulkAdd(fileList).then(() => {
-                    this.loadedTotal += fileList.length;
-                }, e => {
-                    window.console.error(e);
-                });
-            }).then(() => {
-                this.$nextTick(() => {
-                    this.$refs.fileTable.calcViewportVisible();
-                });
+                this.loadedTotal = 0;
             });
         },
         loadNextPage() {
@@ -151,12 +134,9 @@ export default {
             // 根据当前路径分页请求
             return this.loadFileList().then(res => {
                 let fileList = res.children;
+                this.renderFiles.push(...fileList);
                 this.loading = false;
-                return this.db.list.bulkAdd(fileList).then(() => {
-                    this.loadedTotal += fileList.length;
-                }, e => {
-                    window.console.log(e);
-                });
+                this.loadedTotal += fileList.length;
             }, () => {
                 this.loading = false;
             });
@@ -170,24 +150,21 @@ export default {
                 order: this.order
             });
         },
-        async getRenderList(offset, limit) {
+        getRenderList() {
             // 获取需要渲染到列表中的数据
-            return Object.freeze(await this.db.list.offset(offset).limit(limit).toArray());
+            return Promise.resolve(this.renderFiles);
         },
-        getUploadFiles() {
-            return this.$refs.operationBar.$refs.fileUploader.getUploadFiles();
+        refresh() {
+            this.enterDirectory(this.currentPath);
+        },
+        makeFile() {
+            this.$refs.fileTable.makeFile();
         }
     },
     created() {
-        // load data from storage
-        this.currentPath = '';
+        this.currentPath = this.app.file.currentPath;
     },
     mounted() {
-        const db = new Dexie('SkyIDE-File');
-        db.version(1).stores({
-            list: '++,path,ownerId,name,filesystem,isFile,mimeType,fileExtension,fileShareId,createdAt,updatedAt,size'
-        });
-        this.db = db;
         this.enterDirectory(this.currentPath);
         this.$refs.breadcrumbBar.buildBreadcrumb('');
     },
@@ -196,6 +173,7 @@ export default {
             if (val !== oldVal) {
                 this.enterDirectory(val);
                 this.$refs.breadcrumbBar.buildBreadcrumb(val);
+                this.app.file.currentPath = val;
             }
         },
         rootPath(val, oldVal) {
@@ -206,36 +184,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .sdxv-file-main {
-//     height: 100%;
-//     padding-top: 20px;
-//     /deep/ .sdxu-content-panel__main {
-//         padding-top: 10px;
-//     }
-// }
-</style>
-
-<style lang="scss">
-.file-main {
-    height: 1000px;
-    width: 400px;
+.skyide-file-main {
+    width: 100%;
+    height: 100%;
+    padding: 0 10px 0 0;
     user-select: none;
-    .el-table tr td,
-    .el-table tr th.is-leaf {
-        border-top: none;
-        height: 30px;
-        padding: 2px 0;
-    }
-    ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-        background-color: #fff;
-    }
-    ::-webkit-scrollbar-thumb {
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-        background-color: rgba(0, 0, 0, .1);
-        border-radius: 4px;
+    box-sizing: border-box;
+    & /deep/ {
+        .el-table tr td,
+        .el-table tr th.is-leaf {
+            border-top: none;
+            height: 30px;
+            padding: 2px 0;
+        }
     }
 }
 </style>

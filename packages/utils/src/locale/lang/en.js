@@ -607,6 +607,8 @@ export default {
             Download: 'Download',
             Copy: 'Copy',
             Move: 'Move',
+            PASTE: 'Paste',
+            Cut: 'Cut',
             MoveOrCopy: 'Move/Copy',
             Rename: 'Rename',
             CheckPath: 'Check Path',
@@ -663,7 +665,17 @@ export default {
             Download_Now: 'Download Client',
             And_install_SkyDiscovery_File_Management_Client: 'The file management client has been installed,',
             upload_or_download_operation_files_are_large: 'Currently uploaded files are large, please use file management client operation',
-            Open_it_immediately: 'Open it immediately'
+            Open_it_immediately: 'Open it immediately',
+            PleaseSelectUserOrGroup: 'Please select user or group',
+            TensorBoard: 'Go to TensorBoard',
+            ModelAnalysis: 'Model Analysis',
+            CreateFolder: 'Create Folder',
+            SaveFor: 'Are you sure to save change for ',
+            Change: ' ?',
+            IfNotSave: 'If you don\'t save, the changes will be lost.',
+            Save: 'Save',
+            NotSave: 'Don\'t Save',
+            NotSupported: 'File format not supported.'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',
@@ -775,6 +787,24 @@ export default {
             authorization: 'Authorization',
             Are_you_sure_delete_it: 'Are you sure you want to delete the authorization?',
             Can_not_be_restored_after_deletion: 'Can not be restored after deletion'
+        },
+        skyide: {
+            close: 'Close',
+            shear: 'Shear',
+            paste: 'Paste',
+            shift_up: 'Shift up',
+            shift_down: 'Shift down',
+            Clear_Output: 'Clear Output',
+            Kernel_is_not_connected: 'Kernel is not connected',
+            Kernel_Connected: 'Kernel Connected',
+            save: 'Save',
+            copy: 'Copy',
+            Turn_to_MD: 'Turn to MD',
+            Turn_to_code: 'Turn to code',
+            Run_all: 'Run all',
+            debug: 'debug',
+            View_commands: 'View commands',
+            code_snippet: 'code snippet'
         }
     },
     sdxCommon: {

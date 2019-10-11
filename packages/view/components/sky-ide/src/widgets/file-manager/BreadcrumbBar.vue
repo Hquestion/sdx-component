@@ -1,5 +1,5 @@
 <template>
-    <div class="sdxv-file-breadcrumb-bar">
+    <div class="skyide-file-breadcrumb-bar">
         <div class="file-breadcrumb">
             <EllipseBreadcrumb
                 :breadcrumb="list"
@@ -35,8 +35,9 @@ export default {
                 return { name, path };
             });
             pathObjArr.unshift({
-                name: this.t('view.file.AllFiles'),
-                path: ''
+                name: '',
+                path: '',
+                showIcon: true
             });
             this.list = pathObjArr;
             return pathObjArr;
@@ -50,11 +51,15 @@ export default {
 
 <style lang="scss" scoped>
     @import "~@sdx/utils/src/theme-common/var";
-    .sdxv-file-breadcrumb-bar {
+    .skyide-file-breadcrumb-bar {
+        height: 48px;
+        background: #314065;
+        color: #A0A5B8;
         display: flex;
+        padding-left: 10px;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        border-bottom: 1px solid #1C253D;
         .loaded-tip {
             color: $sdx-text-regular-color;
         }

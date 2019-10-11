@@ -8,7 +8,7 @@
 <ui-log-detail-index></ui-log-detail-index>
   <highlight-code slot="codeText" lang="vue">
     <template>
-        <SdxuLogDetail :content="content" height="600px" :preLoading="true" :sufLoading="true" :loading="true" />
+        <SdxuLogDetail :content="content" height="600px" :preLoading="preLoading" :sufLoading="sufLoading" :loading="loading" />
     </template>
 
     <script>
@@ -17,11 +17,31 @@
         name: 'LogDetail',
         data() {
             return {
-                content: '2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_36_piece0 on spark-1556271805760-driver-svc.5cad639a96c490000d8bcb00.svc:7079 in memory (size: 494.8 KB, free: 1961.2 MB)\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_36_piece0 on 198.168.49.147:36463 in memory (size: 494.8 KB, free: 1961.2 MB)\r\n
+                loading: true,
+                preLoading: true,
+                sufLoading: true,
+                content: '2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_36_piece0 on spark-1556271805760-driver-svc.5cad639a96c490000d8bcb00.svc:7079 in memory (size: 494.8 KB, free: 1961.2 MB)\r\n2019-04-26 11:13:46 INFO  BlockManagerInfo:54 - Removed broadcast_36_piece0 on 198.168.49.147:36463 in memory (size: 494.8 KB, free: 1961.2 MB)\r\n2019-04-26 11:13:46 INFO  ContextCleaner:54 - Cleaned accumulator 597
             };
         },
         components: {
             SdxuLogDetail
+        },
+        mounted() {
+            setTimeout(() => {
+                this.loading = false;
+                this.preLoading = true;
+                this.sufLoading = false;
+                setTimeout(() => {
+                    this.loading = false;
+                    this.preLoading = false;
+                    this.sufLoading = true;
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.preLoading = false;
+                        this.sufLoading = false;
+                    }, 2000)
+                }, 2000)
+            }, 2000)
         }
     }
     </script>
@@ -36,14 +56,14 @@
 
 ```js
 import Vue from 'vue';
-import { SdxuLogDetail } from '@sdx/ui';
+import { LogDetail } from '@sdx/ui';
 
-Vue.use(SdxuLogDetail);
+Vue.use(LogDetail);
 
 // 也可以全量引入使用
-import SdxWidget from '@sdx/ui';
+import SdxUI from '@sdx/ui';
 
-Vue.use(SdxWidget);
+Vue.use(SdxUI);
 ```
 
 同时，还需引入scss文件:

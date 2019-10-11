@@ -72,8 +72,9 @@ externals = [
     },
     nodeExternals({
         whitelist: [
-            /^codemirror/,
-            'vue-codemirror-lite'
+            /^@jupyter/,
+            /^@phosphor/,
+            'interactjs'
         ]
     })
 ];

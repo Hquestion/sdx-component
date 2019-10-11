@@ -1,15 +1,15 @@
 <template>
     <span
-        class="sdxv-file__item"
+        class="skyide-file__item"
         :class="{'is-no-zip-file' : row.isFile}"
     >
         <svg
-            class="sdxv-file__item-icon"
+            class="skyide-file__item-icon"
             aria-hidden="true"
         >
             <use :xlink:href="'#' + getFileIcon(row)" />
         </svg>
-        <div class="sdxv-file__item-name">
+        <div class="skyide-file__item-name">
             <span v-if="isEditingRow">
                 <SdxuInput
                     v-model="_value"
@@ -94,6 +94,7 @@ export default {
             this.$emit('cancel-rename');
         },
         handlePathNameClick(row) {
+            if (row.isFile) return;
             this.$emit('name-click', row);
         }
     }
@@ -102,30 +103,29 @@ export default {
 
 <style lang="scss">
     @import "~@sdx/utils/src/theme-common/var";
-    .sdxv-file__item {
+    .skyide-file__item {
         display: block;
         overflow: hidden;
-        &:hover {
+        /* &:hover {
             span {
                 color: $sdx-primary-color;
                 cursor: pointer;
             }
-        }
+        } */
         &.is-no-zip-file {
             &:hover {
                 span {
-                    color: $sdx-text-regular-color;
                     cursor: default;
                 }
             }
         }
-        .sdxv-file__item-icon {
+        .skyide-file__item-icon {
             width: 16px;
             height: 16px;
             margin-right: 10px;
             vertical-align: middle;
         }
-        .sdxv-file__item-name {
+        .skyide-file__item-name {
             display: inline-block;
             vertical-align: middle;
             .sdx-icon {
@@ -142,7 +142,7 @@ export default {
             }
         }
     }
-    .sdxv-file__item-name-scroller {
+    .skyide-file__item-name-scroller {
         & /deep/ .el-scrollbar__wrap {
             max-height: 400px !important;
         }

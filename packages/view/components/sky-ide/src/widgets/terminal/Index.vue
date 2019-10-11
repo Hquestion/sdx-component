@@ -190,13 +190,14 @@ export default {
             .el-tabs__header {
                 letter-spacing: 0.08px;
                 margin: 0;
+                border-bottom: 0;
                 .el-tabs__nav {
                     width: 100%;
                     position: relative;
                     border: 0;
                     div {
-                        height: 48px;
-                        line-height: 48px;
+                        height: 40px;
+                        line-height: 40px;
                         border: 0;
                         vertical-align: middle;
                         position: relative;
@@ -208,7 +209,7 @@ export default {
                         content: "";
                         display: block;
                         width: 1px;
-                        height: 48px;
+                        height: 40px;
                         position: absolute;
                         top: 0px;
                         background: #2C395A;
@@ -244,7 +245,7 @@ export default {
                         content: "";
                         display: block;
                         width: 1px;
-                        height: 48px;
+                        height: 40px;
                         position: absolute;
                         top: 0px;
                         background:#2A303E;

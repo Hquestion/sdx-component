@@ -61,8 +61,8 @@ export default {
         cursor: default;
         height: 100%;
         .sdxu-dialog__sidebar {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             transform: rotate(-90deg);
             color: rgb(171,181,206);
         }
@@ -77,7 +77,7 @@ export default {
             background: #536694;
         }
         &.is-open.is-terminal {
-            background: none;
+            background: #576DA0;
             i::before {
                 color:rgb(74,128,245) ;
             }

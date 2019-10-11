@@ -364,6 +364,7 @@ export default {
             }
             .CodeMirror-lines {
                 background: #151D32;
+                padding: 6px 0;
             }
             .jp-InputPrompt {
                 color: #F2F5FF;

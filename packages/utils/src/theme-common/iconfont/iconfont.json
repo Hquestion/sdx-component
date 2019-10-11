@@ -1180,6 +1180,48 @@
       "font_class": "skyIDElogo",
       "unicode": "e69e",
       "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "11189718",
+      "name": "terminals-默认",
+      "font_class": "terminals-moren",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "11189719",
+      "name": "terminals-选中",
+      "font_class": "terminals-xuanzhong",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "11190173",
+      "name": "启动kernel",
+      "font_class": "qidongkernel",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "11190223",
+      "name": "Debug标签",
+      "font_class": "Debugbiaoqian",
+      "unicode": "e703",
+      "unicode_decimal": 59139
+    },
+    {
+      "icon_id": "11191119",
+      "name": "关闭标签-当前",
+      "font_class": "guanbibiaoqian-dangqian",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "11191194",
+      "name": "停止kernel",
+      "font_class": "tingzhikernel",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
     }
   ]
 }

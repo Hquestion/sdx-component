@@ -64,6 +64,7 @@ import { Widget } from '@phosphor/widgets';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import { MathJaxTypesetter } from '@jupyterlab/mathjax2';
 import locale from '@sdx/utils/src/mixins/locale';
+import { CommandIDs } from '../../config/commands';
 export default {
     name: 'SkyCell',
     mixins: [locale],
@@ -215,34 +216,22 @@ export default {
             }
         },
         cutCell() {
-            this.snb.cuttingCell = this.cellData;
-            this.snb.notebook.cells.splice(this.index, 1);
+            this.app.commands.execute(CommandIDs.CELL_CUT);
         },
         pasteBelow() {
-            if (!this.snb.cuttingCell) {
-                return;
-            }
-            this.snb.notebook.cells.splice(this.index + 1, 0, this.snb.cuttingCell);
-            this.snb.cuttingCell = undefined;
+            this.app.commands.execute(CommandIDs.CELL_PASTE);
         },
         moveUp() {
-            if (this.index === 0) return;
-            let index = this.index;
-            this.snb.notebook.cells.splice(index, 1);
-            this.snb.notebook.cells.splice(index - 1, 0, this.cellData);
+            this.app.commands.execute(CommandIDs.CELL_MOVEUP);
         },
         moveDown() {
-            if (this.index === this.snb.notebook.cells.length - 1) return;
-            let index = this.index;
-            this.snb.notebook.cells.splice(index, 1);
-            this.snb.notebook.cells.splice(index + 1, 0, this.cellData);
+            this.app.commands.execute(CommandIDs.CELL_MOVEDOWN);
         },
         deleteCell() {
-            this.snb.notebook.cells.splice(this.index, 1);
+            this.app.commands.execute(CommandIDs.CELL_DELETE);
         },
         clearOutput() {
-            this.cellData.outputs = [];
-            this.cellWidget._model._outputs.clear();
+            this.app.commands.execute(CommandIDs.CELL_OUTPUTS_CLEAR);
         },
         changeCellType(type) {
             console.log(type);

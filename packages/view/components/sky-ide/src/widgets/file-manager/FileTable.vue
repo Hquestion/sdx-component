@@ -177,7 +177,8 @@ export default {
             this.deleteRow(this.selectedRows[0]);
         },
         init() {
-            this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+            // this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+            this.selectedRows = [];
         },
         mkdir() {
             if (this.editingRow) {
@@ -329,10 +330,20 @@ export default {
             this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
         },
         getTableRowClassName({row}) {
-            if (this.selectedRows.some(item => item.path === row.path)) {
+            if (this.selectedRows.some(item => (item && item.path) === (row && row.path))) {
                 return 'highlight-file-row';
             }
             return '';
+        },
+        scrollToRow(file) {
+            if (file.path[0] !== '/') {
+                file.path = `/${file.path}`;
+            }
+            const index = this.fileManager.renderFiles.findIndex(item => item.path === file.path);
+            setTimeout(() => {
+                this.$el.querySelector('.el-table__body-wrapper').scrollTop = (index - 10) * ROW_HEIGHT;
+                this.selectedRows.splice(0, 1, this.fileManager.renderFiles[index]);
+            }, 500);
         }
     },
     mounted() {

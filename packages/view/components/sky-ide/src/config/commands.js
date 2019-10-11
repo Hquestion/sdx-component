@@ -3,7 +3,21 @@ import { CommandRegistry } from '@phosphor/commands';
 let commands;
 
 export const CommandIDs = {
-    RUN_CELL: 'run:cell',
+    CELL_RUN: 'cell:run',
+    CELLS_DEBUG: 'cells:debug',
+    CELLS_SHUTDOWN: 'cells:shutdown',
+    CELLS_RUN: 'cells:run',
+    CELL_TOGGLE_CODE: 'cell:toggle:code',
+    CELL_ADD_CODE: 'cell:add:code',
+    CELL_ADD_MARKDOWN: 'cell:add:markdown',
+    CELL_COPY: 'cell:copy',
+    CELLS_OUTPUTS_CLEAR: 'cells:outputs:clear',
+    CELL_CUT: 'cell:cut',
+    CELL_PASTE: 'cell:paste',
+    CELL_MOVEUP: 'cell:moveup',
+    CELL_MOVEDOWN: 'cell:movedown',
+    CELL_DELETE: 'cell:delete',
+    CELL_OUTPUTS_CLEAR: 'cell:outputs:clear',
     COMPLETE: 'completer:invoke',
     COMPLETER_SELECT: 'completer:select',
     SAVE_DOC: 'save:doc',
@@ -16,13 +30,31 @@ export const CommandIDs = {
 };
 
 const notebookCommands = [
-    CommandIDs.RUN_CELL,
+    CommandIDs.CELLS_RUN,
+    CommandIDs.CELLS_DEBUG,
+    CommandIDs.CELLS_SHUTDOWN,
+    CommandIDs.CELLS_OUTPUTS_CLEAR,
     CommandIDs.COMPLETE,
     CommandIDs.COMPLETER_SELECT
 ];
 
+const cellCommands = [
+    CommandIDs.CELL_CUT,
+    CommandIDs.CELL_PASTE,
+    CommandIDs.CELL_MOVEDOWN,
+    CommandIDs.CELL_MOVEUP,
+    CommandIDs.CELL_DELETE,
+    CommandIDs.CELL_OUTPUTS_CLEAR,
+    CommandIDs.CELL_RUN,
+    CommandIDs.CELL_TOGGLE_CODE,
+    CommandIDs.CELL_ADD_CODE,
+    CommandIDs.CELL_ADD_MARKDOWN,
+    CommandIDs.CELL_COPY
+];
+
 const CommandCategories = {
-    'Notebook': notebookCommands
+    'Notebook': notebookCommands,
+    'Notebook Cell': cellCommands
 };
 
 export function initCommands() {
@@ -30,11 +62,29 @@ export function initCommands() {
 }
 
 export const CommandConfigs = {
-    [CommandIDs.RUN_CELL]: {
-        label: 'Run Cell',
+    [CommandIDs.CELLS_RUN]: {
+        label: 'Run All Cells',
         iconClass: '',
-        key: ['Shift Enter'],
-        selector: '.jp-InputArea-editor'
+        key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELLS_DEBUG]: {
+        label: 'Debug Cell',
+        iconClass: '',
+        key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELLS_SHUTDOWN]: {
+        label: 'Shutdown Session',
+        iconClass: '',
+        key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELLS_OUTPUTS_CLEAR]: {
+        label: 'Clear All Outputs',
+        iconClass: '',
+        key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
     },
     [CommandIDs.COMPLETE]: {
         label: 'Completer',
@@ -47,6 +97,72 @@ export const CommandConfigs = {
         iconClass: '',
         key: ['Enter'],
         selector: '.jp-mod-completer-active'
+    },
+    [CommandIDs.CELL_CUT]: {
+        label: 'Cut Cell',
+        iconClass: '',
+        key: ['Ctrl X'],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELL_PASTE]: {
+        label: 'Paste Cell',
+        iconClass: '',
+        key: ['Ctrl V'],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELL_MOVEDOWN]: {
+        label: 'Move Down',
+        iconClass: '',
+        key: [],
+        selector: '.jp-InputArea-editor'
+    },
+    [CommandIDs.CELL_MOVEUP]: {
+        label: 'Move Up',
+        iconClass: '',
+        key: [],
+        selector: '.jp-InputArea-editor'
+    },
+    [CommandIDs.CELL_DELETE]: {
+        label: 'Delete Cell',
+        iconClass: '',
+        key: ['Ctrl D'],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELL_OUTPUTS_CLEAR]: {
+        label: 'Clear Outputs',
+        iconClass: '',
+        key: [],
+        selector: '.jp-InputArea-editor'
+    },
+    [CommandIDs.CELL_RUN]: {
+        label: 'Run Cell',
+        iconClass: '',
+        key: ['Shift Enter'],
+        selector: '.jp-InputArea-editor'
+    },
+    [CommandIDs.CELL_TOGGLE_CODE]: {
+        label: 'Toggle Code',
+        iconClass: '',
+        key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELL_ADD_CODE]: {
+        label: 'Add Code',
+        iconClass: '',
+        key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELL_ADD_MARKDOWN]: {
+        label: 'Add Markdown',
+        iconClass: '',
+        key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.CELL_COPY]: {
+        label: 'Copy Cell',
+        iconClass: '',
+        key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
     },
     [CommandIDs.SAVE_DOC]: {
         label: 'Save',
@@ -92,18 +208,24 @@ export const CommandConfigs = {
     }
 };
 
-export function getCommandsTree(category) {
+export function getCommandsTree(categorys = []) {
     let registeredCommands = commands.listCommands();
-    if (category) {
-        let list = (CommandCategories[category] || []).filter(item => registeredCommands.includes(item));
-        return [{
-            category: category,
-            commands: list.map(item => ({
-                label: CommandConfigs[item].label,
-                key: CommandConfigs[item].key,
-                commandId: item
-            }))
-        }];
+    if (categorys.length > 0) {
+        let results = [];
+        categorys.forEach(category => {
+            let list = (CommandCategories[category] || []).filter(item => registeredCommands.includes(item));
+            if (list.length > 0) {
+                results.push({
+                    category: category,
+                    commands: list.map(item => ({
+                        label: CommandConfigs[item].label,
+                        key: CommandConfigs[item].key,
+                        commandId: item
+                    }))
+                });
+            }
+        });
+        return results;
     } else {
         let result = [];
         Object.entries(CommandCategories).forEach(([k, v]) => {

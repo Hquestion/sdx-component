@@ -406,7 +406,7 @@ export default {
             //                 return this.activeCell && this.activeCell.cell_type === 'raw';
             //             },
             //             callback: () => {
-            //                 this.app.commands.execute(CommandIDs.RUN_CELL);
+            //                 this.app.commands.execute(CommandIDs.CELL_RUN);
             //             }
             //         }),
             //         new ContextMenuItemModel({
@@ -434,7 +434,7 @@ export default {
             //                 return this.activeCell && this.activeCell.cell_type === 'raw';
             //             },
             //             callback: () => {
-            //                 this.app.commands.execute(CommandIDs.RUN_CELL);
+            //                 this.app.commands.execute(CommandIDs.CELL_RUN);
             //             }
             //         }),
             //         new ContextMenuItemModel({

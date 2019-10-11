@@ -86,7 +86,7 @@ export default {
                     }
                 };
                 saveFile(JSON.stringify(nbContent), res.path, res.ownerId).then(() => {
-                    this.fileManager.enterDirectory(this.fileManager.currentPath);
+                    this.fileManager.enterDirectory(this.fileManager.currentPath, true, res);
                     this.app.openFile(res);
                 });
             });
@@ -118,7 +118,7 @@ export default {
                     unlock(this.$el.querySelector('.el-table__body-wrapper'));
                     this.editingRow = null;
                     this.tempRowName = '';
-                    this.fileManager.enterDirectory(this.fileManager.currentPath);
+                    this.fileManager.enterDirectory(this.fileManager.currentPath, true);
                 }, () => {
                     unlock(this.$el.querySelector('.el-table__body-wrapper'));
                 });

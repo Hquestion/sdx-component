@@ -267,29 +267,49 @@ export default {
         &.is-active {
             & /deep/ {
                 .jp-Collapser {
-                    background: #03a9f4;
+                    background: #4880F8;
                     cursor: pointer;
                 }
             }
             .sky-cell-operations {
                 display: inline-block;
-                width: 200px;
+                width: 240px;
                 position: absolute;
                 z-index: 9;
                 right: 8px;
-                background: #34446B;
+                background: #2F406A;
                 box-shadow: 0 3px 6px 0 rgba(14,22,46,0.68);
                 border-radius: 4px;
-                height: 40px;
-                line-height: 40px;
-                padding: 0px 11px;
-                top: -12px
+                height: 32px;
+                line-height: 32px;
+                top: -12px;
+                .sdxu-icon-button {
+                    width: 40px;
+                    height: 32px;
+                    line-height: 32px;
+                    text-align: center;
+                    i {
+                        color:  #DDE5FE;
+                    }
+                }
+                .sdxu-icon-button:first-child {
+                    border-radius: 4px 0 0 4px;
+                }
+                .sdxu-icon-button:last-child {
+                    border-radius: 0px 4px 4px 0px;
+                }
+                .sdxu-icon-button:hover {
+                    background: #3764C6;
+                }
             }
             .sdxu-icon-button + .sdxu-icon-button {
-                margin-left: 16px;
+                margin-left: 0px;
             }
         }
         /deep/ {
+            .jp-Collapser {
+                background: #151D32;
+            }
             .jp-InputArea-editor {
                 border: 0;
                 background: none;
@@ -298,14 +318,18 @@ export default {
                 background: #1B2439;
                 padding: 0;
             }
+            .jp-Cell-inputArea {
+                background: #151D32;
+                padding: 16px 0;
+            }
             .jp-Placeholder {
                 height: 56px;
-                background: #242F49;
+                background: #222F4F;
                 .jp-MoreHorizIcon:before {
                     content: '...';
                     font-size: 31px;
                     position: relative;
-                    top: 0px;
+                    top: -1px;
                     letter-spacing: 13px;
                     font-weight: 900;
                     line-height: 42px;
@@ -313,9 +337,10 @@ export default {
                     display: block;
                     height: 56px;
                     padding: 0 20px;
-                    background: #1B2439;
+                    background: #151D32;
                     box-sizing: border-box;
                     color: #A0A5B8;
+                    left: -68px;
                 }
                 .jp-Placeholder-content .jp-MoreHorizIcon:hover {
                     border: none;
@@ -330,7 +355,20 @@ export default {
             .jp-RenderedText[data-mime-type='application/vnd.jupyter.stderr'] pre{
                 color: #000;
             }
-
+            .cm-s-seti .CodeMirror-gutters {
+                font-family: PingFangSC-Regular;
+                font-size: 12px;
+                color: #838EB5;
+                background-color: #222F4F;
+                border: none;
+            }
+            .CodeMirror-lines {
+                background: #151D32;
+                padding: 6px 0;
+            }
+            .jp-InputPrompt {
+                color: #F2F5FF;
+            }
         }
     }
 </style>

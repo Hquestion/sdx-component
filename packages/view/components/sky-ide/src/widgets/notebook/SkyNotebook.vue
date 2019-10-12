@@ -490,7 +490,7 @@ export default {
 .sky-notebook {
     height: 100%;
     overflow: hidden;
-    background: #242f49;
+    background: #222F4F;
     .sky-notebook__main {
         height: calc(100% - 48px);
         padding: 16px;

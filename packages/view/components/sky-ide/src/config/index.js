@@ -19,7 +19,7 @@ export const SIDEBAR_TABS = [
 export const SIDEBAR_WINDOWS = [
     {
         name: SIDEBAR_TERMINAL,
-        icon: 'sdx-terminalsbiaoqian',
+        icon: 'sdx-terminals-moren',
         label: ''
     }
 ];

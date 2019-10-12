@@ -59,7 +59,7 @@ export default {
 <style lang="scss" scoped>
     .sky-editor-adaptor {
         position: absolute;
-        top: 56px;
+        top: 40px;
         left: 0;
         bottom: 0;
         right: 0;

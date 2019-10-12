@@ -104,7 +104,7 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 56px;
+    height: 40px;
     background: #1C253D;
     .sdxu-button--primary.is-plain {
         color: #DDE5FE;

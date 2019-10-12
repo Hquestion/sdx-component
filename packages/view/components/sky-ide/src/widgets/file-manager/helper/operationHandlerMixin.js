@@ -129,19 +129,11 @@ export default {
             let content = t('view.file.CantRecoveryAfterDel');
             const shareContent = t('view.file.DeleteShareTip');
             if (row) {
-                if (row.fileShareId) {
-                    content = shareContent;
-                }
-                MessageBox.confirm.error({
-                    title: `${t('view.file.ConfirmToDel')}${row.name}${t('view.file.ConfirmConditionalWord')}`,
-                    content
-                }).then(() => {
-                    deletePath([row.path], row.ownerId).then(() => {
-                        // 删除之后刷新页面
-                        // this.fileManager.enterDirectory(this.fileManager.currentPath);
-                        this.fileManager.handleFileDelete(row);
-                        this.app.handleFileDelete(row.path);
-                    });
+                deletePath([row.path], row.ownerId).then(() => {
+                    // 删除之后刷新页面
+                    // this.fileManager.enterDirectory(this.fileManager.currentPath);
+                    this.fileManager.handleFileDelete(row);
+                    this.app.handleFileDelete(row.path);
                 });
             } else {
                 const checkedRows = this.fileManager.checked;

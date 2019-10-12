@@ -364,7 +364,7 @@ export default {
 
 <style lang="scss" scoped>
 .skyide-file-table {
-    height: calc(100% - 104px);
+    height: calc(100% - 80px);
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {
         display: none;
@@ -383,9 +383,14 @@ export default {
         &.el-table .cell {
             background-color: #314065;
         }
-        &.el-table td,
-        &.el-table th > .cell {
+        &.el-table td {
             color: #DDE5FE;
+            font-size: 12px;
+        }
+        &.el-table th > .cell {
+            font-size: 14px;
+            color: #A0A5B8;
+            font-weight: 400;
         }
         &.el-table tr,
         &.el-table th {

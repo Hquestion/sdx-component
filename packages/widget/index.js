@@ -19,6 +19,7 @@ import TaskRunningLimit from './components/task-running-limit';
 import Auth from './components/auth';
 import ShareForm from './components/share-form';
 import LangHandle from './components/lang-handle';
+import SubjectCard from './components/subject-card';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
@@ -41,7 +42,8 @@ const SdxWidget = {
     TaskRunningLimit,
     Auth,
     ShareForm,
-    LangHandle
+    LangHandle,
+    SubjectCard
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -62,6 +64,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     CodeEditor.install(vue);
     ResourceConfig.install(vue);
     TaskRunningLimit.install(vue);
+    SubjectCard.install(vue);
     vue.use(Auth);
     vue.use(ShareForm);
     vue.use(LangHandle);

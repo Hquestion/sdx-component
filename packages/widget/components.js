@@ -21,4 +21,5 @@ module.exports = {
     'share-form': './components/share-form/index.js',
     'task-running-limit': './components/task-running-limit/index.js',
     'lang-handle': './components/lang-handle/index.js',
+    'subject-card': './components/subject-card/index.js'
 };

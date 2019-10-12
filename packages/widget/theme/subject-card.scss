@@ -1,0 +1,71 @@
+@include block('subject-card',  $bem-namespace-widget) {
+    background: #FFFFFF;
+    box-shadow: 0 2px 4px 0 $sdxw-subject-card-shadow;
+    border-radius: $sdx-border-radius-large;
+    padding: $sdxw-subject-card-padding;
+    padding-bottom: 0;
+    
+    @include element('icon') {
+        width: $sdxw-subject-card-icon-size;
+        height: $sdxw-subject-card-icon-size;
+        border: 1px solid #BCC6D8;
+        border-radius: 4px;
+    }
+
+    @include element('content') {
+        width: calc(100% - 82px);
+        float: right;
+        font-size: 14px;
+        @include modifier('info') {
+            height: 24px;
+            line-height: 24px;
+            display: flex;
+            justify-content: space-between;
+            .left {
+                .title {
+                    font-size: 18px;
+                    color: #172B4D;
+                }
+                .task {
+                    background: #DFE2E7;
+                    border-radius: 12px;
+                    display: inline-block;
+                    margin-left: 12px;
+                    vertical-align: top;
+                    padding: 0 10px;
+                    font-size: 12px;
+                    color: #253858;            
+                }
+            }
+            .right {
+                color: #172B4D;
+                i {
+                    display: inline-block;
+                    width: 2px;
+                    height: 2px;
+                    background: #172b4d;
+                    border-radius: 2px;
+                    vertical-align: middle;
+                    margin: 0 10px;
+                }
+            }
+        }
+        @include modifier('description') {
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            word-break: break-all;
+            margin-top: 22px;
+            color: #6B778C;
+        }
+    }
+
+    @include element('footer') { 
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid #D8DEEA;
+        margin-top: 20px;
+        height: 62px;
+        line-height: 62px;
+    }
+}

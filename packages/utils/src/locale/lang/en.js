@@ -809,7 +809,10 @@ export default {
             Memory: 'Memory',
             Model: 'Model',
             Core: 'Core(s)',
-            Piece: 'Piece(s)'
+            Piece: 'Piece(s)',
+            State_Starting: 'Starting...',
+            State_Stopped: 'Disabled',
+            State_Stopping: 'Stopping...'
         }
     },
     sdxCommon: {

@@ -8,9 +8,9 @@
                 <i v-show="isStarting || isStopping" class="sdx-icon sdx-bianjizhong" />
             </div>
             <div class="kernel-state-label">
-                <span v-if="isStopped">{{ t('未启用') }}</span>
-                <span v-if="isStarting">{{ t('启用中...') }}</span>
-                <span v-if="isStopping">{{ t('终止中...') }}</span>
+                <span v-if="isStopped">{{ t('view.skyide.State_Stopped') }}</span>
+                <span v-if="isStarting">{{ t('view.skyide.State_Starting') }}</span>
+                <span v-if="isStopping">{{ t('view.skyide.State_Stopping') }}</span>
                 <span v-if="isRunning">{{ runningTime | seconds2HMS }}</span>
             </div>
         </div>

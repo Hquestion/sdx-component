@@ -34,3 +34,10 @@ export const NotebookMode = {
     EDIT: 'EDIT',
     READONLY: 'READONLY'
 };
+
+export const NotebookKernelState = {
+    STOPPED: 'STOPPED',
+    STARTING: 'STARTING',
+    RUNNING: 'RUNNING',
+    STOPPING: 'STOPPING'
+};

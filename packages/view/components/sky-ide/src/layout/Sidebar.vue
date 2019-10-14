@@ -32,7 +32,7 @@
 <script>
 import SidebarTrack from '../widgets/sidebar/SidebarTrack';
 import SidebarItem from '../widgets/sidebar/SidebarItem';
-import { SIDEBAR_TABS, SIDEBAR_WINDOWS } from '../config';
+import { SIDEBAR_TABS, SIDEBAR_WINDOWS, SIDEBAR_TERMINAL } from '../config';
 
 export default {
     name: 'Sidebar',
@@ -84,6 +84,11 @@ export default {
                 this.app.sidebar.activeWindows.splice(index, 1);
             } else {
                 this.app.sidebar.activeWindows.push(name);
+                if (name === SIDEBAR_TERMINAL) {
+                    this.$nextTick(() => {
+                        this.app.terminal.openTerminal(null, true);
+                    });
+                }
             }
         }
     }

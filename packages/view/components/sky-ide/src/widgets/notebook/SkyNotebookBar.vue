@@ -115,13 +115,7 @@
             </el-popover>
         </div>
         <div>
-            <el-switch
-                v-model="kernelStatus"
-                active-color="rgb(74,128,245)"
-                inactive-color="rgb(189,206,242)"
-                @change="changeSwitch"
-            />
-            <span class="switch-content">{{ kernelStatus ? t('view.skyide.Kernel_Connected') : t('view.skyide.Kernel_is_not_connected') }}</span>
+            <kernel-state></kernel-state>
             <el-select
                 v-model="codeType"
                 :popper-append-to-body="false"
@@ -138,13 +132,12 @@
 </template>
 
 <script>
-import { saveFile, readFile } from '@sdx/utils/src/api/file';
 import IconButton from '@sdx/ui/components/icon-button';
 import Button from '@sdx/ui/components/button';
 import { Select, Popover, Dropdown, DropdownMenu, DropdownItem} from 'element-ui';
 import SkyCommands from './SkyCommands';
 import SkyCodeSnippets from './SkyCodeSnippets';
-import {NotebookMode} from '../../config';
+import KernelState from './KernelState';
 import locale from '@sdx/utils/src/mixins/locale';
 import {CommandIDs} from '../../config/commands';
 export default {
@@ -164,7 +157,7 @@ export default {
     computed: {
         kernelStatus: {
             get() {
-                return this.snb.mode === NotebookMode.CELL_DEBUG;
+                return !!this.snb.session;
             },
             set(val) {
                 if (val) {
@@ -194,6 +187,7 @@ export default {
         [Dropdown.name]: Dropdown,
         [DropdownMenu.name]: DropdownMenu,
         [DropdownItem.name]: DropdownItem,
+        KernelState
     },
     inject: {
         snb: {
@@ -242,7 +236,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .sky-notebook-bar {
     background: #394C7E;
     height: 40px;
@@ -365,9 +359,6 @@ export default {
         }
     }
 }
-</style>
-
-<style lang="scss">
 .sky-popover {
     padding: 0 !important;
     border: 0 !important;
@@ -391,7 +382,7 @@ export default {
             color: #DDE5FE;
         }
         .el-dropdown-menu__item:hover {
-            background: #2A51A7; 
+            background: #2A51A7;
         }
         .popper__arrow::after {
             display: none;
@@ -399,3 +390,4 @@ export default {
     }
 }
 </style>
+

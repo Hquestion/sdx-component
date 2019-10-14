@@ -92,7 +92,7 @@ export default function setupCommands(commands, app) {
             nb.notebook.cells.splice(index + 1, 0, cellData);
         }
     });
-    
+
     addCommand(commands, app, CommandIDs.CELL_MOVEUP, function execute(app) {
         let nb = app.docManager.getActiveNotebook();
         let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
@@ -118,7 +118,7 @@ export default function setupCommands(commands, app) {
     addCommand(commands, app, CommandIDs.CELL_RUN, async function(app) {
         let nb = app.docManager.getActiveNotebook();
         if (!nb) return;
-        nb.runCell(nb.activeCell, nb.activeCellWidget, nb.session, true);
+        nb.runCell(nb.activeCell, nb.activeCellWidget, nb.session, !nb.isDebugMode);
     });
 
     addCommand(commands, app, CommandIDs.CELL_TOGGLE_CODE, function execute(app) {
@@ -142,6 +142,6 @@ export default function setupCommands(commands, app) {
     });
 
     addCommand(commands, app, CommandIDs.CELL_COPY, function execute(app) {
-        
+
     });
 }

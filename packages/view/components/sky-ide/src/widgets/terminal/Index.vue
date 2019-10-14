@@ -7,11 +7,12 @@
             :before-leave="beforeLeave"
         >
             <el-tab-pane
-                v-for="item in editableTabs"
+                v-for="(item, index) in editableTabs"
                 :key="item.title"
                 :label="item.title"
                 :name="item.name"
                 closable
+                lazy
             >
                 <span slot="label">
                     <svg
@@ -24,6 +25,8 @@
                 </span>
                 <TerminalComp
                     ref="terminal"
+                    :data="item"
+                    :index="index"
                     @terminalReady="terminalReady"
                     @terminalServe="terminalServe"
                 />
@@ -60,8 +63,10 @@ import '@jupyterlab/terminal/style/index.css';
 import {Tabs,TabPane} from 'element-ui/lib';
 import TerminalComp from './Terminal';
 import locale from '@sdx/utils/src/mixins/locale';
+
 export default {
     name: 'SkyTerminal',
+    componentName: 'SkyTerminalPanel',
     mixins: [locale],
     data(){
         return {
@@ -87,15 +92,6 @@ export default {
         },
     },
     methods: {
-        initTerminal() {
-            let newTabName = ++this.tabIndex + '';
-            this.editableTabs.push({
-                title: `Terminal${this.tabIndex}`,
-                name: newTabName,
-                content: ''
-            });
-            this.editableTabsValue = newTabName;
-        },
         removeTab(targetName) {
             // 判断删除后选中的tab
             let activeName = this.editableTabsValue;
@@ -108,12 +104,8 @@ export default {
                 }
             }
             this.editableTabsValue = activeName;
-            // 如果tab关完了，activeWindows也关闭
-            if(this.editableTabs.length === 1) {
-                this.app.sidebar.activeWindows = [];
-            }
             // 通过关闭tab 关闭 terminal 服务
-            let removeIndex = this.tabTerminal.findIndex(item => Object.keys(item)[0] == targetName);
+            let removeIndex = this.tabTerminal.findIndex(item => Object.keys(item)[0] === targetName);
             let terminalServe  = this.tabTerminal[removeIndex][Number(targetName)];
             terminalServe.shutdown({
                 name: terminalServe.name,
@@ -127,6 +119,13 @@ export default {
                 requestAnimationFrame(() => {
                     this.editableTabs.splice(index, 1);
                     this.tabTerminal.splice(removeIndex, 1);
+                    // 如果tab关完了，activeWindows也关闭
+                    if(this.editableTabs.length === 0) {
+                        this.app.sidebar.activeWindows = [];
+                        if (Object.keys(this.app.nbSessionMap).length === 0) {
+                            return this.app.taskManager.stop();
+                        }
+                    }
                 });
             });
         },
@@ -137,35 +136,48 @@ export default {
         beforeLeave(currentName) {
             //如果name是add，阻止切换添加tab
             if(currentName === 'add'){
-                this.initTerminal();
+                this.openTerminal();
                 return false;
             } else if(currentName === 'close') {
                 this.app.sidebar.activeWindows = [];
                 return false;
             }
         },
-        terminalServe(serve) {
+        terminalServe(serve, index) {
             // tabName 与 服务对应
             this.tabTerminal.push({
-                [this.tabIndex]: serve
+                [index]: serve
             });
+        },
+        openTerminal(session, isToggleVisible) {
+            if (this.editableTabs.length === 0) {
+                this.editableTabsValue= '1';
+                this.editableTabs= [];
+                this.tabIndex= 0;
+                this.ready= true;
+                this.tabTerminal= [];
+            }
+            if (isToggleVisible && this.editableTabs.length > 0) {
+                return;
+            }
+            let newTabName = ++this.tabIndex + '';
+            this.editableTabs.push({
+                title: `Terminal${this.tabIndex}`,
+                name: newTabName,
+                content: '',
+                session: session || null
+            });
+            this.editableTabsValue = newTabName;
         }
     },
-    watch: {
-        'app.terminalVisible': {
-            immediate: true,
-            deep: true,
-            handler(val) {
-                if(val && this.editableTabs.length === 0) {
-                    this.editableTabsValue= '1',
-                    this.editableTabs= [],
-                    this.tabIndex= 0,
-                    this.ready= true,
-                    this.tabTerminal= [];
-                    this.initTerminal();
-                }
-            }
-        }
+    mounted() {
+        this.$on('terminalSessionReady', (...rest) => {
+            console.log(rest);
+            rest.forEach(t => {
+                this.openTerminal(t);
+            });
+        });
+
     }
 };
 </script>
@@ -213,7 +225,7 @@ export default {
                         position: absolute;
                         top: 0px;
                         background: #2C395A;
-                        right: 0;  
+                        right: 0;
                     }
                     .el-tabs__item:last-child {
                         position: absolute;
@@ -249,7 +261,7 @@ export default {
                         position: absolute;
                         top: 0px;
                         background:#2A303E;
-                        left: -1px;  
+                        left: -1px;
                     }
                 }
             }

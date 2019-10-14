@@ -65,23 +65,11 @@
                 </ResizablePanel>
             </ResizablePanel>
         </div>
-        
-        <script
-            id="jupyter-config-data"
-            type="application/json"
-        >
-            {
-            "baseUrl": "http://localhost:8080",
-            "token": "",
-            "notebookPath": "Untitled.ipynb",
-            "mathjaxUrl": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
-            "mathjaxConfig": "TeX-AMS_CHTML-full,Safe"
-            }
-        </script>
     </div>
 </template>
 
 <script>
+import emitter from '@sdx/utils/src/mixins/emitter';
 import ResizablePanel from './widgets/ResizablePanel';
 import Sidebar from './layout/Sidebar';
 import { SIDEBAR_TERMINAL } from './config';
@@ -123,7 +111,7 @@ export default {
             app: this
         };
     },
-    mixins: [docManagerMixin, fileManagerMixin, ideInit],
+    mixins: [docManagerMixin, fileManagerMixin, ideInit, emitter],
     data() {
         return {
             commands: initCommands(),
@@ -253,6 +241,7 @@ export default {
         await this.prepareEnv();
         // 恢复布局
         this.recoveryLocal();
+        await this.sessionSpecs(this.taskManager.ideUuid);
         // 监听键盘事件
         window.addEventListener('keydown', event => {
             this.commands.processKeydownEvent(event);

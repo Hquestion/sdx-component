@@ -36,7 +36,8 @@
         "element-ui": "^2.7.2",
         "vue": "^2.6.10",
         "vuescroll": "^4.12.2",
-        "popper.js": "^1.15.0"
+        "popper.js": "^1.15.0",
+        "@sdx/utils": "^1.1.22"
     },
     "dependencies": {
         "@sdx/utils": "^1.1.22",

@@ -28,6 +28,9 @@
                 .title {
                     font-size: 18px;
                     color: #172B4D;
+                    &:hover {
+                        cursor: pointer;
+                    }
                 }
                 .task {
                     background: #DFE2E7;
@@ -37,7 +40,7 @@
                     vertical-align: top;
                     padding: 0 10px;
                     font-size: 12px;
-                    color: #253858;            
+                    color: #253858;
                 }
             }
             .right {
@@ -64,7 +67,7 @@
         }
     }
 
-    @include element('footer') { 
+    @include element('footer') {
         display: flex;
         justify-content: space-between;
         border-top: 1px solid #D8DEEA;

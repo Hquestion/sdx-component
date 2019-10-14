@@ -33,6 +33,7 @@ import SearchPanel from '../search-panel/SearchPanel';
 import locale from '@sdx/utils/src/mixins/locale';
 import sinppets from '../../config/snippets';
 import SkyCodeCellModel from '../../model/CodeCell';
+import undoAndRedo from '../../utils/undoAndRedo';
 export default {
     name: 'SkyCodeSnippets',
     mixins: [locale],
@@ -46,6 +47,9 @@ export default {
     },
     inject: {
         snb: {
+            default: {}
+        }, 
+        app: {
             default: {}
         }
     },
@@ -65,9 +69,19 @@ export default {
             this.search = value;
         },
         addSnippet(index) {
-            this.snb.insertCell('code', new SkyCodeCellModel({
-                source: sinppets[index].code
-            }));
+            let nb = this.snb;
+            let namespace = nb && nb.file && nb.file.path || '';
+            const editor = this.app.docManager.$refs.editor.find(item => item.file.path === namespace);
+            function operateFn() {
+                nb.insertCell('code', new SkyCodeCellModel({
+                    source: sinppets[index].code
+                }));
+            }
+            function revokeFn() {
+                nb.notebook.cells.splice(-1, 1);
+                editor.focus();
+            }
+            undoAndRedo.addOperation(namespace, operateFn, revokeFn);
             this.$emit('close');
         }
     }

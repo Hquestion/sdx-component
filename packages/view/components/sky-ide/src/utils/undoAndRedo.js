@@ -69,4 +69,6 @@ class UndoAndRedo {
     }
 }
 
-export default new UndoAndRedo();
+const undoAndRedo = new UndoAndRedo();
+
+export default undoAndRedo;

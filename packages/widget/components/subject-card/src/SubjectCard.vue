@@ -1,5 +1,5 @@
 <template>
-    <div 
+    <div
         class="sdxw-subject-card"
     >
         <svg
@@ -8,11 +8,14 @@
         >
             <use :xlink:href="`#${meta.icon}`" />
         </svg>
-        
+
         <div class="sdxw-subject-card__content">
             <div class="sdxw-subject-card__content--info">
                 <div class="left">
-                    <span class="title">
+                    <span
+                        class="title"
+                        @click="showDetail"
+                    >
                         {{ meta && meta.title }}
                     </span>
                     <span
@@ -83,11 +86,19 @@ export default {
     },
     data() {
         return {
-            
+
         };
     },
     methods: {
-        dateFormatter
+        dateFormatter,
+        showDetail() {
+            this.$router.push({
+                name: 'ProjectDetailNext',
+                params: {
+                    id: 'eb3f701c-0582-411b-a7dc-ed26956d81bf'
+                }
+            });
+        }
     }
 };
 </script>

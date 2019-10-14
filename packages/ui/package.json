@@ -1,6 +1,6 @@
 {
     "name": "@sdx/ui",
-    "version": "1.1.26",
+    "version": "1.1.31",
     "description": "iluvatar基础组件库",
     "keywords": [
         "ui"
@@ -40,7 +40,7 @@
         "@sdx/utils": "^1.1.22"
     },
     "dependencies": {
-        "@sdx/utils": "^1.1.22",
+        "@sdx/utils": "^1.1.27",
         "dexie": "^2.0.4",
         "popper.js": "^1.15.0"
     },

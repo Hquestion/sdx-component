@@ -37,9 +37,9 @@
 
 ```js
 import Vue from 'vue';
-import { SdxwTaskResourceList } from '@sdx/widget';
+import { TaskResourceList } from '@sdx/widget';
 
-Vue.use(SdxwTaskResourceList);
+Vue.use(TaskResourceList);
 
 // 也可以全量引入使用
 import SdxWidget from '@sdx/widget';

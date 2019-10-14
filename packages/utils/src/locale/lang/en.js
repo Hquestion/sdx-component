@@ -69,7 +69,7 @@ export default {
             LocaleFolder: 'Local Folder',
             PlatformFile: 'Platform File',
             ExistLargeFiles: 'Exist Large Files',
-            LargeFileNotUpload: 'Large files(>200M) will not upload',
+            LargeFileNotUpload: 'Uploaded files contain large files larger than 200 MB. Please use WinSCP (or similar tools) to upload large files.',
             TooManyFiles: 'Too Many Files',
             SelectMax: 'You can select at most',
             Files: 'Files',

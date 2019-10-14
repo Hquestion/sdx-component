@@ -102,11 +102,16 @@ export const getResourceConfigs = authWrapper(function (start = 1, count = -1, p
 export function deleteResourceConfig(uuid) {
     return httpService.remove(`${RESOURCE_MANAGE_GATEWAY_BASE}/resource_configs/${uuid}`);
 }
+// 首页
+export const getDashResourceStates = authWrapper(function (params) {
+    return  httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_states`, params);
+}, readAuths.SYSTEM_GLOBAL_RESOURCE_READ);
 
 export default {
     getResourceTmplList,
     deleteResourceTmpl,
     getResourceConfigDetail,
     createResourceTmpl,
-    getResourceConfigs
+    getResourceConfigs,
+    getDashResourceStates
 };

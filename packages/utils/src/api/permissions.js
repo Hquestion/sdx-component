@@ -18,11 +18,12 @@ export function updatePermission(params) {
 }
 
 /* export function getPermissionList(params) {
+
     return httpService.get(permissionsBaseUrl, params);
 } */
 
 export const getPermissionList = authWrapper(function (params) {
-    return httpService.get(permissionsBaseUrl, params);
+    return httpService.post(`${permissionsBaseUrl}/list`, params);
 }, readAuths.USER_PERMISSION_READ);
 
 export function getPermissionDetail(uuid) {

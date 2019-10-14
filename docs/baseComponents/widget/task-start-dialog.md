@@ -41,9 +41,9 @@
 
 ```js
 import Vue from 'vue';
-import { SdxwTaskStartDialog } from '@sdx/widget';
+import { TaskStartDialog } from '@sdx/widget';
 
-Vue.use(SdxwTaskStartDialog);
+Vue.use(TaskStartDialog);
 
 // 也可以全量引入使用
 import SdxWidget from '@sdx/widget';

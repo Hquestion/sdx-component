@@ -16,6 +16,10 @@
             <SdxuInput placeholder="请输入密码" v-model="value" type="password" :password-visibleness="true"></SdxuInput>
         </div>
         <div>
+            <span>行内输入框</span>
+            <SdxuInput placeholder="请输入内容" v-model="value" :inline="true"></SdxuInput>
+        </div>
+        <div>
             <SdxuAutoComplete 
                 popper-class="my-autocomplete"
                 v-model="state"

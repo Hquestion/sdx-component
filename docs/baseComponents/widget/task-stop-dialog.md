@@ -40,9 +40,9 @@
 
 ```js
 import Vue from 'vue';
-import { SdxwTaskStopDialog } from '@sdx/widget';
+import { TaskStopDialog } from '@sdx/widget';
 
-Vue.use(SdxwTaskStopDialog);
+Vue.use(TaskStopDialog);
 
 // 也可以全量引入使用
 import SdxWidget from '@sdx/widget';

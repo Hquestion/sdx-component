@@ -20,4 +20,7 @@ export default {
 </script>
 
 <style lang="scss">
+    .pod-log {
+        width: 100%;
+    }
 </style>

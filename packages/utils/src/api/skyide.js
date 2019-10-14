@@ -32,6 +32,11 @@ export function deleteTerminal(ideUuid, terminalName) {
     return httpService.remove(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/terminals/${terminalName}`);
 }
 
+export function getCodeTemplates(ideUuid) {
+    return httpService.get(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/extensions/code_template`);
+}
+
+
 export function getSessionSpecs(ideUuid) {
     return httpService.get(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/notebook_sessions`);
 }

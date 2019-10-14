@@ -4,7 +4,8 @@
     border-radius: $sdx-border-radius-large;
     padding: $sdxw-subject-card-padding;
     padding-bottom: 0;
-    
+    margin-bottom: 24px;
+
     @include element('icon') {
         width: $sdxw-subject-card-icon-size;
         height: $sdxw-subject-card-icon-size;
@@ -67,5 +68,10 @@
         margin-top: 20px;
         height: 62px;
         line-height: 62px;
+        .sdxu-button {
+            padding: 0;
+            padding-left: 32px;
+            margin-left: 0;
+        }
     }
 }

@@ -1,7 +1,10 @@
 import SubjectCard from './src/SubjectCard';
+import SubjectCardList from './src/SubjectCardList';
+const SubCard = { SubjectCard, SubjectCardList };
 
-SubjectCard.install = vue => {
+SubCard.install = vue => {
     vue.component(SubjectCard.name, SubjectCard);
+    vue.component(SubjectCardList.name, SubjectCardList);
 };
 
-export default SubjectCard;
+export default SubCard;

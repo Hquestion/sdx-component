@@ -2,44 +2,59 @@
     <div
         class="sdxw-subject-card"
     >
-        <svg
-            aria-hidden="true"
-            class="sdxw-subject-card__icon"
-        >
-            <use :xlink:href="`#${meta.icon}`" />
-        </svg>
+        <div class="sdxw-subject-card__header">
+            <svg
+                aria-hidden="true"
+                class="sdxw-subject-card__icon"
+            >
+                <use :xlink:href="`#${meta.icon}`" />
+            </svg>
 
-        <div class="sdxw-subject-card__content">
-            <div class="sdxw-subject-card__content--info">
-                <div class="left">
-                    <span
-                        class="title"
-                        @click="showDetail"
-                    >
-                        {{ meta && meta.title }}
-                    </span>
-                    <span
-                        class="task"
-                        v-if="meta.type"
-                    >
-                        {{ `${meta.taskNumber}个任务` }}
-                    </span>
+            <div class="sdxw-subject-card__content">
+                <div class="sdxw-subject-card__content--info">
+                    <div class="left">
+                        <span
+                            class="title"
+                            @click="showDetail"
+                        >
+                            {{ meta && meta.title }}
+                        </span>
+                        <span
+                            class="task"
+                            v-if="meta.type === 'project'"
+                        >
+                            {{ `${meta.taskNumber}个任务` }}
+                        </span>
+                    </div>
+                    <div class="right">
+                        <SdxwFoldLabel
+                            plain
+                            :type="meta.state && meta.state.type"
+                            :status="meta.state && meta.state.status"
+                            v-if="meta.type === 'task'"
+                        >
+                            {{ meta.state && meta.state.statusText || 'asffs' }}
+                        </SdxwFoldLabel>
+                        <i v-if="meta.type === 'task'" />
+                        <div class="creator">
+                            {{ (meta && meta.creator ) || '' }}
+                        </div>
+                        <i />
+                        <div>
+                            {{ `创建于${dateFormatter(meta && meta.createdAt)}` }}
+                        </div>
+                    </div>
                 </div>
-                <div class="right">
-                    <span class="creator">
-                        {{ (meta && meta.creator ) || '' }}
-                    </span>
-                    <i />
-                    <span>
-                        {{ `创建于${dateFormatter(meta && meta.createdAt)}` }}
-                    </span>
+                <div class="sdxw-subject-card__content--description">
+                    {{ meta && meta.description }}
                 </div>
-            </div>
-            <div class="sdxw-subject-card__content--description">
-                {{ meta && meta.description }}
             </div>
         </div>
-        <div class="sdxw-subject-card__footer">
+
+        <div
+            class="sdxw-subject-card__footer"
+            v-if="meta.footer !== false"
+        >
             <div class="toUrl">
                 <slot name="toUrl" />
             </div>
@@ -72,11 +87,13 @@
 import locale from '@sdx/utils/src/mixins/locale';
 import Button from '@sdx/ui/components/button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import FoldLabel from '@sdx/widget/components/fold-label';
 export default {
     name: 'SdxwSubjectCard',
     mixins: [locale],
     components: {
-        [Button.name]: Button
+        [Button.name]: Button,
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel
     },
     props: {
         meta: {

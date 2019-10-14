@@ -2,10 +2,12 @@
     background: #FFFFFF;
     box-shadow: 0 2px 4px 0 $sdxw-subject-card-shadow;
     border-radius: $sdx-border-radius-large;
+    margin-bottom: $sdxw-subject-card-padding;
     padding: $sdxw-subject-card-padding;
     padding-bottom: 0;
-    margin-bottom: 24px;
-
+    @include element('header') {
+        padding-bottom: $sdxw-subject-card-padding;
+    }
     @include element('icon') {
         width: $sdxw-subject-card-icon-size;
         height: $sdxw-subject-card-icon-size;
@@ -43,6 +45,7 @@
             }
             .right {
                 color: #172B4D;
+                display: flex;
                 i {
                     display: inline-block;
                     width: 2px;
@@ -50,7 +53,7 @@
                     background: #172b4d;
                     border-radius: 2px;
                     vertical-align: middle;
-                    margin: 0 10px;
+                    margin: 10px 10px;
                 }
             }
         }
@@ -68,7 +71,6 @@
         display: flex;
         justify-content: space-between;
         border-top: 1px solid #D8DEEA;
-        margin-top: 20px;
         height: 62px;
         line-height: 62px;
         .sdxu-button {

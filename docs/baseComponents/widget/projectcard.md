@@ -95,10 +95,9 @@
 
 ```js
 import Vue from 'vue';
-import { SdxwProjectCard, SdxwProjectCardList } from '@sdx/widget';
+import { ProjectCard } from '@sdx/widget';
 
-Vue.use(SdxwProjectCard);
-Vue.use(SdxwProjectCardList);
+Vue.use(ProjectCard);
 
 // 也可以全量引入使用
 import SdxWidget from '@sdx/widget';
@@ -155,7 +154,7 @@ $sdxw-project-card-mask-text-show-line-count: 4 !default;
 // 卡片文字大小
 $sdxw-project-card-font-size: $sdx-content-font-size !default;
 // 卡片操作图标大小
-$sdxw-project-card-operate-icon-size: $sdx-h2-font-size !default;
+$sdxw-project-card-operate-icon-size: 16px !default;
 // 卡片类型图标大小
 $sdxw-project-card-type-icon-size: 32px !default;
 // 卡片遮罩高度

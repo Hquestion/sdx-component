@@ -441,6 +441,7 @@ class Context {
             const paths = pattern.paths;
             const url = prefixRestApi(pattern.url);
             const result = pattern.result;
+            const method = (pattern.method || 'GET').toUpperCase();
             resultIdKeys[url] = pattern.resultIdKey || 'uuid';
             if (result !== undefined) {
                 resultKeys[url] = result;
@@ -458,7 +459,7 @@ class Context {
                 paths.forEach(path => scanObject(object, path, collector));
             }
             if (uuids.size > 0) {
-                requests.push(this._createRequest('GET', url, {uuids: [...uuids]}));
+                requests.push(this._createRequest(method, url, {uuids: [...uuids]}));
             }
         });
         if (requests.length > 0) {

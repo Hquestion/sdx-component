@@ -18,8 +18,9 @@ export let handler = wrap(function(ctx, request) {
         },
         {
             path: 'permissions.*',
-            url: 'http://tyk-gateway/user-manager/api/v1/permissions',
-            result: 'permissions'
+            url: 'http://tyk-gateway/user-manager/api/v1/permissions/list',
+            result: 'permissions',
+            method: 'POST'
         }
     );
 

@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import SdxwTaskResourceList from '@sdx/widget/components/task-list';
+const SdxwTaskResourceList = require('@sdx/widget/components/task-list').default;
+// import SdxwTaskResourceList from '@sdx/widget/components/task-list';
 
 export default {
     name: 'TaskListDemo',

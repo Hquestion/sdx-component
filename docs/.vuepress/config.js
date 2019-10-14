@@ -101,6 +101,7 @@ module.exports = {
     configureWebpack: {
         resolve: {
             alias: {
+                '@sdx/utils/src/theme-common/iconfont/iconfont.js': path.resolve(__dirname, './replace.js'),
                 '@sdx': path.resolve(__dirname, '../../packages')
             }
         },

@@ -11,10 +11,12 @@ const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks`;
 
 // 聚合拿到project
-export function getProjectList(params) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
-}
-
+// export function getProjectList(params) {
+//     return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
+// }
+export const getProjectList = authWrapper(params =>  httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params),
+    readAuths.PROJECT_PROJECT_READ
+);
 export const getProjectTemplates = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
 }, readAuths.PROJECT_TEMPLATE_PROJECT_READ);

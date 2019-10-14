@@ -44,12 +44,18 @@
                         type: 'boolean',
                         optionValue: 'true / false ',
                         defaultValue: 'false',
+                    }, {
+                        params: 'inline',
+                        describe: '输入框行内显示',
+                        type: 'boolean',
+                        optionValue: 'true / false ',
+                        defaultValue: 'false',
                     }
                 ],
                 eventData: [
                     {
                         params: 'search',
-                        describe: '点击图标搜索事件',
+                        describe: '当searchable为true时，点击搜索图标、按下enter或输入框失去焦点触发该事件',
                         cbparams: '—',
                     }
                 ],

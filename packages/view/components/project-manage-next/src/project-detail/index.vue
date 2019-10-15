@@ -90,7 +90,39 @@
                                 :key="index"
                                 :meta="item.meta"
                                 @operate="handleOperate"
-                            />
+                            >
+                                <template #toUrl>
+                                    <sdxu-button
+                                        :plain="true"
+                                        v-if="item.showOpenIde"
+                                    >
+                                        进入SkyIDE
+                                    </sdxu-button>
+                                    <div v-if="item.showJupyterLink">
+                                        <sdxu-button
+                                            :plain="true"
+                                        >
+                                            进入Jupyter Lab
+                                        </sdxu-button>
+                                        <sdxu-button
+                                            :plain="true"
+                                        >
+                                            进入Jupyter NoteBook
+                                        </sdxu-button>
+                                    </div>
+                                </template>
+                                <template #operations>
+                                    <sdxu-button
+                                        v-for="(el, i) in getOperationList(item, false, true)"
+                                        :key="i"
+                                        :icon="el.icon"
+                                        :plain="true"
+                                        @click="handleOperation(el.value, item)"
+                                    >
+                                        {{ t(el.label) }}
+                                    </sdxu-button>
+                                </template>
+                            </sdxw-subject-card>
                         </sdxw-subject-card-list>
                     </div>
                 </div>
@@ -247,7 +279,10 @@ export default {
                 this.total = res.total;
                 this.loading = false;
                 this.taskList.forEach(item => {
-                    const isOwn = getUser().userId === item.ownerId;
+                    const isOwn = getUser().userId === item.owner.uuid;
+                    item.showOpenIde = item.type === 'SKYIDE';
+                    // item.showJupyterLink = item.type === 'JUPYTER' && item.state === 'RUNNING' && item.externalUrl;
+                    item.showJupyterLink = item.type === 'JUPYTER';
                     item.meta = {
                         title: item.name,
                         description: item.description,

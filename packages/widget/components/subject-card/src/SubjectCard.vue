@@ -59,25 +59,30 @@
                 <slot name="toUrl" />
             </div>
             <div class="operation">
-                <slot name="operation" />
-                <sdxu-button
-                    type="primary"
-                    icon="sdx-icon sdx-icon-edit"
-                    :plain="true"
-                    v-if="meta.showEdit"
-                    @click="$emit('operate', {item: meta, type: 'edit'})"
-                >
-                    {{ t('widget.projectCard.title.Edit') }}
-                </sdxu-button>
-                <sdxu-button
-                    type="primary"
-                    icon="sdx-icon sdx-icon-delete"
-                    :plain="true"
-                    v-if="meta.showRemove"
-                    @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
-                >
-                    {{ t('widget.projectCard.title.Delete') }}
-                </sdxu-button>
+                <slot
+                    name="operations"
+                    v-if="meta.type === 'task'"
+                />
+                <div v-else>
+                    <sdxu-button
+                        type="primary"
+                        icon="sdx-icon sdx-icon-edit"
+                        :plain="true"
+                        v-if="meta.showEdit"
+                        @click="$emit('operate', {item: meta, type: 'edit'})"
+                    >
+                        {{ t('widget.projectCard.title.Edit') }}
+                    </sdxu-button>
+                    <sdxu-button
+                        type="primary"
+                        icon="sdx-icon sdx-icon-delete"
+                        :plain="true"
+                        v-if="meta.showRemove"
+                        @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
+                    >
+                        {{ t('widget.projectCard.title.Delete') }}
+                    </sdxu-button>
+                </div>
             </div>
         </div>
     </div>

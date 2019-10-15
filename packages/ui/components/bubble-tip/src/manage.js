@@ -3,7 +3,7 @@ import BubbleTip from './BubbleTip';
 import Popper from 'popper.js';
 import {isString} from '@sdx/utils/src/helper/tool';
 
-function bubbleTip(opt) {
+export default function bubbleTip(opt) {
     let tip = new Vue(BubbleTip).$mount();
     tip.type = opt.type || 'warning';
     tip.content = opt.content || '';
@@ -92,5 +92,3 @@ bubbleTip.close = function(ins) {
         window.console.error('[Bubble Tip]: instances not exists!');
     }
 };
-
-export default bubbleTip;

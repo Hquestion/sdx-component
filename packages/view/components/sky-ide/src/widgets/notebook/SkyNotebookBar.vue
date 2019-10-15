@@ -84,6 +84,7 @@
                 popper-class="sky-popover"
                 width="300"
                 style="margin-left: 32px"
+                @show="handlerCommandsShow"
             >
                 <SkyCommands />
                 <SdxuIconButton
@@ -139,10 +140,11 @@ import SkyCommands from './SkyCommands';
 import SkyCodeSnippets from './SkyCodeSnippets';
 import KernelState from './KernelState';
 import locale from '@sdx/utils/src/mixins/locale';
+import emitter from '@sdx/utils/src/mixins/emitter';
 import {CommandIDs} from '../../config/commands';
 export default {
     name: 'SkyNotebookBar',
-    mixins: [locale],
+    mixins: [locale, emitter],
     data() {
         return {
             codeOptions: [{
@@ -231,6 +233,9 @@ export default {
         },
         changeSwitch() {
             window.console.log(this.kernelStatus);
+        },
+        handlerCommandsShow() {
+            this.broadcast('SkyCommands', 'popoverShow');
         }
     },
 };

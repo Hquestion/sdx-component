@@ -23,6 +23,7 @@ import locale from '@sdx/utils/src/mixins/locale';
 import { getKernelSpecs } from '@sdx/utils/src/api/skyide';
 import dayjs from 'dayjs';
 import transformFilter from '@sdx/utils/src/mixins/transformFilter';
+import { BubbleTipManager } from '@sdx/ui/components/bubble-tip';
 
 export default {
     name: 'KernelState',
@@ -93,6 +94,14 @@ export default {
             } else {
                 this.kernelInfo = null;
                 this.cancelTimer();
+            }
+        },
+        isRunning(val) {
+            if (val) {
+                BubbleTipManager.warning({
+                    content: '当前Kernel30分钟内无活跃操作，将会自动断开连接释放资源。',
+                    ref: this.$el
+                });
             }
         }
     },

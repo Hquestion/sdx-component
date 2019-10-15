@@ -1,6 +1,6 @@
 {
     "name": "@sdx/ui",
-    "version": "2.0.0-alpha.0",
+    "version": "2.0.1-alpha.0",
     "description": "iluvatar基础组件库",
     "keywords": [
         "ui"
@@ -40,7 +40,7 @@
         "vuescroll": "^4.12.2"
     },
     "dependencies": {
-        "@sdx/utils": "^2.0.0-alpha.0",
+        "@sdx/utils": "^2.0.1-alpha.0",
         "dexie": "^2.0.4",
         "popper.js": "^1.15.0"
     },

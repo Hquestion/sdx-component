@@ -66,6 +66,7 @@ export default {
         .el-input__prefix {
             left: 8px;
             color: #A0A5B8;
+            top: 5px;
         }
         input.el-input__inner {
             border: 1px solid #435480;

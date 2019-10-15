@@ -28,7 +28,7 @@
                             :class="{'highLight': matchingStringIndex(val.label,command).includes(indexLabel)}"
                         >{{ val.label[indexLabel] }}</span>
                     </div>
-                    <div>{{ val.key }}</div>
+                    <div>{{ val.key.join(',') }}</div>
                 </div>
             </div>
         </div>

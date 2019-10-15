@@ -23,7 +23,7 @@
                             <task-icon :icon-class="task.class" />
                             <span
                                 class="sdxv-project-detail__task--name"
-                                :style="clientWidth > 2060 ? 'width: 160px' : 'width: 92px'"
+                                style="width: 160px"
                             >{{ task.name }}</span>
                             <SdxuIconButton
                                 icon="sdx-icon sdx-icon-circle-plus"
@@ -66,8 +66,8 @@
             <div class="sdxv-project-detail__content">
                 <div v-if="taskList.length">
                     <div>
-                        <sdxw-task-running-limit style="margin: 10px 0 20px 0;" />
-                        <task-card-list>
+                        <!-- <sdxw-task-running-limit style="margin: 10px 0 20px 0;" /> -->
+                        <!-- <task-card-list>
                             <task-card
                                 v-for="(item, index) in taskList"
                                 :key="index"
@@ -83,7 +83,15 @@
                                     />
                                 </template>
                             </task-card>
-                        </task-card-list>
+                        </task-card-list> -->
+                        <sdxw-subject-card-list>
+                            <sdxw-subject-card
+                                v-for="(item, index) in taskList"
+                                :key="index"
+                                :meta="item.meta"
+                                @operate="handleOperate"
+                            />
+                        </sdxw-subject-card-list>
                     </div>
                 </div>
                 <SdxuEmpty v-else />
@@ -113,17 +121,18 @@ import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
 import SortButton from '@sdx/ui/components/sort-button';
 import Empty from '@sdx/ui/components/empty';
-import TaskCard from './TaskCard';
-import TaskCardList from './TaskCardList';
+// import TaskCard from './TaskCard';
+// import TaskCardList from './TaskCardList';
+import SubCard from '@sdx/widget/components/subject-card';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import TaskIcon from './TaskIcon';
-import { getTaskList } from '@sdx/utils/src/api/project';
+import { getTaskList } from '@sdx/utils/src/api/task';
 import auth from '@sdx/widget/components/auth';
 import taskMixin from '@sdx/utils/src/mixins/task';
 import locale from '@sdx/utils/src/mixins/locale';
 import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
-import { getClientWidth } from '@sdx/utils/lib/helper/dom';
-import debounce from '@sdx/utils/src/helper/debounce';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import { STATE_MAP_FOLD_LABEL_TYPE } from '@sdx/utils/src/const/task';
 export default {
     name: 'SdxvProjectDetail',
     mixins: [taskMixin, locale],
@@ -138,69 +147,43 @@ export default {
             taskList: [],
             loading: false,
             refreshTimer: null,
+            iconOptions: {
+                SKYIDE: 'sdx-skyIDElogo',
+                CONTAINERDEV: 'sdx-Apache_Spark_logo',
+                JUPYTER: 'sdx-Jupter',
+                SKYFLOW: 'sdx-icon-tensorboard'
+            },
             taskOptions: [
                 {
-                    name: this.t('view.project.modelDev'),
+                    name: '开发工具',
                     tasks: [
                         {
-                            name: 'Jupyter',
+                            name: '新建Jupyter',
                             class: 'Jupter',
                             type: 'JUPYTER'
-                        }
-                    ]
-                },
-                {
-                    name: this.t('view.project.modelTraining'),
-                    tasks: [
+                        },
                         {
-                            name: 'Python',
+                            name: '新建SkyIDE',
                             class: 'icon-python',
                             type: 'PYTHON'
                         },
                         {
-                            name: 'Spark',
+                            name: '自定义容器',
                             class: 'Apache_Spark_logo',
                             type: 'SPARK'
-                        },
+                        }
+                    ]
+                },
+                {
+                    name: '可视化分析与建模',
+                    tasks: [
                         {
-                            name: 'TensorFlow',
-                            class: 'icon-tensorflow',
-                            type: 'TENSORFLOW'
-
-                        },
-                        {
-                            name: this.t('view.task.officiaType.TENSORFLOW_DIST'),
-                            class: 'icon-tensorflow',
-                            type: 'TENSORFLOW_DIST'
-                        },
-                        {
-                            name: this.t('view.task.officiaType.TENSORFLOW_AUTO_DIST'),
+                            name: '新建SkyFlow',
                             class: 'icon-tensorflow',
                             type: 'TENSORFLOW_AUTO_DIST'
                         }
                     ]
-                },
-                {
-                    name: this.t('view.project.modelAssess'),
-                    tasks: [
-
-                        {
-                            name: 'TensorBoard',
-                            class: 'icon-tensorboard',
-                            type: 'TENSORBOARD'
-                        }
-                    ]
-                },
-                {
-                    name: this.t('view.task.type.CONTAINERDEV'),
-                    tasks: [
-                        {
-                            name: 'ContainerDev',
-                            class: 'icon-docker',
-                            type: 'CONTAINERDEV'
-                        }
-                    ]
-                },
+                }
             ],
             clientWidth: 1500
         };
@@ -212,15 +195,7 @@ export default {
     directives: {
         auth
     },
-    mounted() {
-        this.clientWidth = getClientWidth();
-        this.__resizeHanlder = debounce(() => {
-            this.clientWidth = getClientWidth();
-        }, 300);
-        window.addEventListener('resize', this.__resizeHanlder);
-    },
     beforeDestroy () {
-        window.removeEventListener('resize', this.__resizeHanlder);
         clearInterval(this.refreshTimer);
         this.refreshTimer = null;
     },
@@ -234,8 +209,10 @@ export default {
         [TaskRunningLimit.name]: TaskRunningLimit,
         [Empty.name]: Empty,
         TaskIcon,
-        TaskCard,
-        TaskCardList
+        [SubCard.SubjectCard.name]: SubCard.SubjectCard,
+        [SubCard.SubjectCardList.name]: SubCard.SubjectCardList,
+        // TaskCard,
+        // TaskCardList
     },
     methods: {
         searchTask() {
@@ -269,14 +246,65 @@ export default {
                 this.taskList = res.items;
                 this.total = res.total;
                 this.loading = false;
-                if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
-                    if (!this.refreshTimer) {
-                        this.refreshTimer = setInterval(this.initList, 3000, true);
+                this.taskList.forEach(item => {
+                    const isOwn = getUser().userId === item.ownerId;
+                    item.meta = {
+                        title: item.name,
+                        description: item.description,
+                        creator: item.ownerName,
+                        createdAt: item.createdAt,
+                        showEdit: isOwn,
+                        showRemove: isOwn,
+                        type: 'task',
+                        icon: this.iconOptions[item.type],
+                        state: {}
+                    };
+                    item.meta.state.type = STATE_MAP_FOLD_LABEL_TYPE[item.state];
+                    switch(item.state) {
+                        case 'CREATED':
+                            item.meta.state.status = '';
+                            item.meta.state.statusText = this.t('view.task.state.CREATED');
+                            break;
+                        case 'LAUNCHING':
+                            item.meta.state.status = 'loading';
+                            item.meta.state.statusText = this.t('view.task.state.LAUNCHING');
+                            break;
+                        case 'LAUNCH_ABNORMAL':
+                            item.meta.state.status = 'warning';
+                            item.meta.state.statusText = this.t('view.task.state.LAUNCH_ABNORMAL');
+                            break;
+                        case 'RUNNING':
+                            item.meta.state.status = 'loading';
+                            item.meta.state.statusText = this.t('view.task.state.RUNNING');
+                            break;
+                        case 'FINISHED':
+                            item.meta.state.status = '';
+                            item.meta.state.statusText = this.t('view.task.state.FINISHED');
+                            break;
+                        case 'KILLED':
+                            item.meta.state.status = '';
+                            item.meta.state.statusText = this.t('view.task.state.KILLED');
+                            break;
+                        case 'FAILED':
+                            item.meta.state.status = 'warning';
+                            item.meta.state.statusText = this.t('view.task.state.FAILED');
+                            break;
+                        case 'KILLING':
+                            item.meta.state.status = 'loading';
+                            item.meta.state.statusText = this.t('view.task.state.KILLING');
+                            break;
+                        default:
+                            break;
                     }
-                } else {
-                    clearInterval(this.refreshTimer);
-                    this.refreshTimer = null;
-                }
+                });
+                // if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
+                //     if (!this.refreshTimer) {
+                //         this.refreshTimer = setInterval(this.initList, 3000, true);
+                //     }
+                // } else {
+                //     clearInterval(this.refreshTimer);
+                //     this.refreshTimer = null;
+                // }
             });
         },
         currentChange(val) {
@@ -286,7 +314,9 @@ export default {
         sortChange() {
             this.initList();
         },
-        getClientWidth
+        handleOperate() {
+
+        }
         // handleOperate(operation) {
         //     // console.log('operation', operation);
         //     switch(operation.type) {

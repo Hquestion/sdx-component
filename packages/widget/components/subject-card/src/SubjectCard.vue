@@ -31,15 +31,18 @@
                             plain
                             :type="meta.state && meta.state.type"
                             :status="meta.state && meta.state.status"
-                            v-if="meta.type === 'task'"
+                            v-if="meta.state && meta.state.type"
                         >
-                            {{ meta.state && meta.state.statusText || 'asffs' }}
+                            {{ meta.state && meta.state.statusText || 'null-state' }}
                         </SdxwFoldLabel>
-                        <i v-if="meta.type === 'task'" />
+                        <i
+                            v-if="meta.state && meta.state.type"
+                            class="customize-icon"
+                        />
                         <div class="creator">
                             {{ (meta && meta.creator ) || '' }}
                         </div>
-                        <i />
+                        <i class="customize-icon" />
                         <div>
                             {{ `创建于${dateFormatter(meta && meta.createdAt)}` }}
                         </div>
@@ -109,12 +112,14 @@ export default {
     methods: {
         dateFormatter,
         showDetail() {
-            this.$router.push({
-                name: 'ProjectDetailNext',
-                params: {
-                    id: 'eb3f701c-0582-411b-a7dc-ed26956d81bf'
-                }
-            });
+            if (this.meta.type === 'project') {
+                this.$router.push({
+                    name: 'ProjectDetailNext',
+                    params: {
+                        id: 'eb3f701c-0582-411b-a7dc-ed26956d81bf'
+                    }
+                });
+            }
         }
     }
 };

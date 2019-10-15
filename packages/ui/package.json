@@ -1,6 +1,6 @@
 {
     "name": "@sdx/ui",
-    "version": "1.1.31",
+    "version": "2.0.0-alpha.0",
     "description": "iluvatar基础组件库",
     "keywords": [
         "ui"
@@ -33,14 +33,14 @@
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "peerDependencies": {
+        "@sdx/utils": "^1.1.22",
         "element-ui": "^2.7.2",
-        "vue": "^2.6.10",
-        "vuescroll": "^4.12.2",
         "popper.js": "^1.15.0",
-        "@sdx/utils": "^1.1.22"
+        "vue": "^2.6.10",
+        "vuescroll": "^4.12.2"
     },
     "dependencies": {
-        "@sdx/utils": "^1.1.27",
+        "@sdx/utils": "^2.0.0-alpha.0",
         "dexie": "^2.0.4",
         "popper.js": "^1.15.0"
     },

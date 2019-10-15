@@ -17,7 +17,7 @@ const routeCfg = [
     {
         path: '/sdxv-project-manage-next',
         name: 'SdxvProjectManagement',
-        redirect: '/sdxv-project-manage/project-list',
+        redirect: '/sdxv-project-manage-next/project-list',
         component: ProjectManagement,
         meta: {
             breadcrumb: t('view.project.project')
@@ -34,7 +34,7 @@ const routeCfg = [
             },
             {
                 path: 'project-detail/:id',
-                name: 'ProjectDetail',
+                name: 'ProjectDetailNext',
                 component: ProjectDetail,
                 meta: {
                     breadcrumb: t('view.project.projectDetail')

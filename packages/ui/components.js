@@ -24,5 +24,7 @@ module.exports = {
     'radial-progress': './components/radial-progress/index.js',
     'sort-button': './components/sort-button/index.js',
     'text-tooltip': './components/text-tooltip/index.js',
-    'log-detail': './components/log-detail/index.js'
+    'log-detail': './components/log-detail/index.js',
+    'bubble-tip': './components/bubble-tip/index.js',
+    'context-menu': './components/context-menu/index.js'
 };

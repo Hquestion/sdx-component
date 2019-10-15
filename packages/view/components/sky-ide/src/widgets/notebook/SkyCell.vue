@@ -8,7 +8,7 @@
             <SdxuIconButton
                 icon="sdx-icon sdx-jianqiedaima"
                 :title="t('view.skyide.shear')"
-                @click.native.stop="cutCell" 
+                @click.native.stop="cutCell"
                 :native-tooltip="true"
             />
             <SdxuIconButton
@@ -32,7 +32,7 @@
             <SdxuIconButton
                 icon="sdx-icon sdx-shanchu"
                 :title="t('sdxCommon.Delete')"
-                @click.native.stop="deleteCell" 
+                @click.native.stop="deleteCell"
                 :native-tooltip="true"
             />
             <SdxuIconButton
@@ -159,7 +159,7 @@ export default {
                         model:  new RawCellModel({
                             cell: this.cellData
                         })
-                    }).initializeState(); 
+                    }).initializeState();
                     break;
             }
             cellWidget.editor.setOption('theme', 'seti');
@@ -263,6 +263,7 @@ export default {
         margin-top: 10px;
         .sky-cell-operations {
             display: none;
+            font-size: 0;
         }
         &.is-active {
             & /deep/ {

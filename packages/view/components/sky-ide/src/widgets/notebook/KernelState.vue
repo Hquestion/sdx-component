@@ -99,7 +99,8 @@ export default {
         isRunning(val) {
             if (val) {
                 console.log(BubbleTip);
-                BubbleTip.Manager.warning({
+                console.log(BubbleTip.__proto__);
+                BubbleTip.warning({
                     content: '当前Kernel30分钟内无活跃操作，将会自动断开连接释放资源。',
                     ref: this.$el
                 });

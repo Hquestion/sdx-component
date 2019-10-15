@@ -13,3 +13,5 @@ packages/ui/coverage/
 packages/view/coverage/
 packages/utils/coverage/
 packages/widget/coverage/
+docs/.DS_Store
+docs/baseComponents/.DS_Store

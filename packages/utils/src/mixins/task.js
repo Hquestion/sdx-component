@@ -15,14 +15,13 @@ export default {
         };
     },
     methods: {
-        getOperationList(row, isMonitor = false) {
+        getOperationList(row, isMonitor = false, hideDetail = false) {
             const currentUser = getUser();
             const ownerId = row.owner && row.owner.uuid || '';
             let isOwnerTask = currentUser && currentUser.userId === ownerId;
-            let list = STATE_TYPE_OPERATION[row.state];
+            let list = STATE_TYPE_OPERATION[row.state] || [];
             let isSkyflowExec = row.type === TASK_TYPE.SKYFLOW_EXEC;
             let isSecialTask = SPECIAL_TASK_TYPE.includes(row.type) && list.indexOf('edit') !== -1;
-
             if (isMonitor) {
                 list = list.filter(item => {
                     return MONITOR_ALLOW_OPERATION.includes(item);
@@ -34,8 +33,9 @@ export default {
             }
 
             list = list.filter(item => {
-                return (isSkyflowExec ? item !== 'detail' : item !== 'entry') 
-                && (isSecialTask ? item !== 'edit' : true);
+                return (isSkyflowExec ? item !== 'detail' : item !== 'entry')
+                && (isSecialTask ? item !== 'edit' : true)
+                && (hideDetail ? item !== 'detail' : true);
             });
 
             return list.map(item => {
@@ -44,24 +44,24 @@ export default {
         },
         handleOperation(operation, row) {
             switch(operation) {
-            case 'start':
-                this.handleStart(row);
-                break;
-            case 'kill':
-                this.handleKill(row);
-                break;
-            case 'detail':
-                this.handleDetail(row);
-                break;
-            case 'edit':
-                this.handleEdit(row);
-                break;
-            case 'remove':
-                this.handleDelete(row);
-                break;
-            case 'entry':
-                this.handleEntry(row);
-                break;
+                case 'start':
+                    this.handleStart(row);
+                    break;
+                case 'kill':
+                    this.handleKill(row);
+                    break;
+                case 'detail':
+                    this.handleDetail(row);
+                    break;
+                case 'edit':
+                    this.handleEdit(row);
+                    break;
+                case 'remove':
+                    this.handleDelete(row);
+                    break;
+                case 'entry':
+                    this.handleEntry(row);
+                    break;
             }
         },
         async handleStart(row) {

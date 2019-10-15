@@ -7,6 +7,6 @@ BubbleTip.install = Vue => {
     Vue.component(BubbleTip.name, BubbleTip);
 };
 
-export default BubbleTip;
+BubbleTip.Manager = Manager;
 
-export const BubbleTipManager = Manager;
+export default BubbleTip;

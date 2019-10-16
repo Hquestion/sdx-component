@@ -1,0 +1,40 @@
+@include block('create-task-card', $bem-namespace-view) {
+    width: 25%;
+    height: 150px;
+    min-width: 200px;
+    max-width: 300px;
+    background: #FFFFFF;
+    box-shadow: 0 2px 4px 0 #C2CDDE;
+    border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #C2CDDE;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+    padding: 20px 0;
+    &:hover {
+        cursor: pointer;
+        // border: 1px solid #98CDDE;
+        transform:scale(1.01);
+        transition: all .1s;
+    }
+    @include element('task-icon') {
+        height: 48px;
+        width: 48px;
+    }
+    @include element('create-label') {
+        margin: 10px 0;
+        @include modifier('text') {
+            font-size: 14px;
+            color: #172B4D;
+            margin-left: 5px;
+        }
+        .sdx-icon {
+            font-size: 14px;
+        }
+    }
+    @include element('task-type') {
+        color: #6B778C;
+    }
+}

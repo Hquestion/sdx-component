@@ -33,12 +33,11 @@
         "test:unit:coverage": "jest --passWithNoTests --coverage"
     },
     "dependencies": {
-        "@sdx/utils": "^2.0.2-alpha.0",
         "vue-codemirror": "^4.0.6"
     },
     "peerDependencies": {
         "@sdx/ui": "^1.0.2",
-        "@sdx/utils": "^1.0.2",
+        "@sdx/utils": "^2.0.2-alpha.0",
         "element-ui": "^2.7.2",
         "portal-vue": "^2.1.5",
         "vue": "^2.6.10",

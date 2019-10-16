@@ -286,6 +286,7 @@ export default {
 <style lang="scss" scoped>
 .sdxv-project-manage-list {
     position: relative;
+    
     .condition {
         display: flex;
         justify-content: space-between;

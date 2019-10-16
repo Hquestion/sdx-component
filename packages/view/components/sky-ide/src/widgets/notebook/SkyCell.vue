@@ -266,6 +266,7 @@ export default {
             font-size: 0;
         }
         &.is-active {
+            box-shadow: 0 5px 10px 0 #091023;
             & /deep/ {
                 .jp-Collapser {
                     background: #4880F8;

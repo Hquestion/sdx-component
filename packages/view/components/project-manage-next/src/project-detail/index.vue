@@ -1,39 +1,18 @@
 <template>
     <div class="sdxv-project-detail">
-        <sdxu-content-panel
+        <div
             class="sdxv-project-detail__create-task"
             v-auth.project.button="'TASK:CREATE'"
         >
-            <div class="sdxv-project-detail__create-task--content">
-                <div
-                    v-for="(tool,index) in taskOptions"
-                    :key="index"
-                    class="sdxv-project-detail__task-card"
-                >
-                    <div class="sdxv-project-detail__task-card-header">
-                        {{ tool.name }}
-                    </div>
-                    <div class="sdxv-project-detail__task-card-content">
-                        <div
-                            v-for="(task, index1) in tool.tasks"
-                            :key="index1"
-                            class="sdxv-project-detail__task"
-                            @click.capture="createTask(task)"
-                        >
-                            <task-icon :icon-class="task.class" />
-                            <span
-                                class="sdxv-project-detail__task--name"
-                                style="width: 160px"
-                            >{{ task.name }}</span>
-                            <SdxuIconButton
-                                icon="sdx-icon sdx-icon-circle-plus"
-                                class="sdxv-project-detail__task--button"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </sdxu-content-panel>
+            <create-task-card
+                v-for="(item,index) in createTaskOptions"
+                :key="index"
+                :icon-class="item.class"
+                :create-label="item.createLabel"
+                :task-type="item.taskType"
+                @click.native="createTask(item)"
+            />
+        </div>
         <sdxu-content-panel
             class="sdxv-project-detail__task-list"
             :title="t('view.project.taskList')"
@@ -66,24 +45,6 @@
             <div class="sdxv-project-detail__content">
                 <div v-if="taskList.length">
                     <div>
-                        <!-- <sdxw-task-running-limit style="margin: 10px 0 20px 0;" /> -->
-                        <!-- <task-card-list>
-                            <task-card
-                                v-for="(item, index) in taskList"
-                                :key="index"
-                                :meta="item"
-                            >
-                                <template #footer>
-                                    <SdxuIconButton
-                                        v-for="(el, i) in getOperationList(item)"
-                                        :key="i"
-                                        :icon="el.icon"
-                                        :title="t(el.label)"
-                                        @click="handleOperation(el.value, item)"
-                                    />
-                                </template>
-                            </task-card>
-                        </task-card-list> -->
                         <sdxw-subject-card-list>
                             <sdxw-subject-card
                                 v-for="(item, index) in taskList"
@@ -110,6 +71,12 @@
                                             进入Jupyter NoteBook
                                         </sdxu-button>
                                     </div>
+                                    <sdxu-button
+                                        :plain="true"
+                                        v-if="item.showRunningInfo"
+                                    >
+                                        查看执行记录
+                                    </sdxu-button>
                                 </template>
                                 <template #operations>
                                     <sdxu-button
@@ -153,11 +120,8 @@ import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
 import SortButton from '@sdx/ui/components/sort-button';
 import Empty from '@sdx/ui/components/empty';
-// import TaskCard from './TaskCard';
-// import TaskCardList from './TaskCardList';
 import SubCard from '@sdx/widget/components/subject-card';
 import { paginate } from '@sdx/utils/src/helper/tool';
-import TaskIcon from './TaskIcon';
 import { getTaskList } from '@sdx/utils/src/api/task';
 import auth from '@sdx/widget/components/auth';
 import taskMixin from '@sdx/utils/src/mixins/task';
@@ -165,6 +129,7 @@ import locale from '@sdx/utils/src/mixins/locale';
 import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import { STATE_MAP_FOLD_LABEL_TYPE } from '@sdx/utils/src/const/task';
+import CreateTaskCard from './CreateTaskCard';
 export default {
     name: 'SdxvProjectDetail',
     mixins: [taskMixin, locale],
@@ -185,36 +150,30 @@ export default {
                 JUPYTER: 'sdx-Jupter',
                 SKYFLOW: 'sdx-icon-tensorboard'
             },
-            taskOptions: [
+            createTaskOptions: [
                 {
-                    name: '开发工具',
-                    tasks: [
-                        {
-                            name: '新建Jupyter',
-                            class: 'Jupter',
-                            type: 'JUPYTER'
-                        },
-                        {
-                            name: '新建SkyIDE',
-                            class: 'icon-python',
-                            type: 'PYTHON'
-                        },
-                        {
-                            name: '自定义容器',
-                            class: 'Apache_Spark_logo',
-                            type: 'SPARK'
-                        }
-                    ]
+                    createLabel: '添加Jupyter任务',
+                    class: 'Jupter',
+                    type: 'JUPYTER',
+                    taskType: '开发工具'
                 },
                 {
-                    name: '可视化分析与建模',
-                    tasks: [
-                        {
-                            name: '新建SkyFlow',
-                            class: 'icon-tensorflow',
-                            type: 'TENSORFLOW_AUTO_DIST'
-                        }
-                    ]
+                    createLabel: '添加SkyIDE任务',
+                    class: 'icon-python',
+                    type: 'PYTHON',
+                    taskType: '开发工具'
+                },
+                {
+                    createLabel: '添加自定义容器任务',
+                    class: 'Apache_Spark_logo',
+                    type: 'SPARK',
+                    taskType: '开发工具'
+                },
+                {
+                    createLabel: '添加SkyFlow任务',
+                    class: 'icon-tensorflow',
+                    type: 'TENSORFLOW_AUTO_DIST',
+                    taskType: '可视化分析与建模'
                 }
             ],
             clientWidth: 1500
@@ -240,11 +199,9 @@ export default {
         [Pagination.name]: Pagination,
         [TaskRunningLimit.name]: TaskRunningLimit,
         [Empty.name]: Empty,
-        TaskIcon,
         [SubCard.SubjectCard.name]: SubCard.SubjectCard,
         [SubCard.SubjectCardList.name]: SubCard.SubjectCardList,
-        // TaskCard,
-        // TaskCardList
+        CreateTaskCard
     },
     methods: {
         searchTask() {
@@ -283,6 +240,7 @@ export default {
                     item.showOpenIde = item.type === 'SKYIDE';
                     // item.showJupyterLink = item.type === 'JUPYTER' && item.state === 'RUNNING' && item.externalUrl;
                     item.showJupyterLink = item.type === 'JUPYTER';
+                    item.showRunningInfo = item.type === 'SKYFLOW';
                     item.meta = {
                         title: item.name,
                         description: item.description,

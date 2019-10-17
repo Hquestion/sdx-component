@@ -171,7 +171,7 @@ export default {
                 {
                     createLabel: '添加SkyIDE任务',
                     class: 'icon-python',
-                    type: 'PYTHON',
+                    type: 'SKYIDE',
                     taskType: '开发工具'
                 },
                 {
@@ -183,7 +183,7 @@ export default {
                 {
                     createLabel: '添加SkyFlow任务',
                     class: 'icon-tensorflow',
-                    type: 'TENSORFLOW_AUTO_DIST',
+                    type: 'SKYFLOW',
                     taskType: '可视化分析与建模'
                 }
             ],

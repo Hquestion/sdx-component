@@ -92,13 +92,6 @@
                 label="数据配置"
             />
             <el-form-item
-                v-if="!cooperation"
-                prop="datasources"
-                :label="`${t('view.task.form.DataSource')}:`"
-            >
-                <data-source-select v-model="params.datasources" />
-            </el-form-item>
-            <el-form-item
                 prop="datasets"
                 :label="`${t('view.task.DataSet')}:`"
             >
@@ -115,7 +108,86 @@
                         :value="item.value"
                     />
                 </el-select>
+                <div class="form-tip">
+                    将数据集以只读方式挂载进目录
+                </div>
             </el-form-item>
+            <el-form-item
+                v-if="!cooperation"
+                prop="datasources"
+                :label="`${t('view.task.form.DataSource')}:`"
+            >
+                <data-source-select v-model="params.datasources" />
+                <div class="form-tip">
+                    将数据源的设置写入容器的环境变量
+                </div>
+            </el-form-item>
+            <SdxwExpandLabel
+                label="高级配置"
+                expandable
+                :expanded.sync="showMoreSetting"
+            />
+            <div v-show="showMoreSetting">
+                <el-form-item
+                    label="环境变量:"
+                >
+                    <SdxuInput
+                        v-model="params.environments"
+                        size="small"
+                        placeholder="--$参数名 参数值, 以空格分隔"
+                    />
+                </el-form-item>
+                <el-form-item
+                    label="启动命令:"
+                >
+                    <div style="display:flex;justify-content:space-between;width:560px;">
+                        <SdxuInput
+                            v-model="params.environments"
+                            size="small"
+                            placeholder="启动命令"
+                            style="width:270px"
+                        />
+                        <span>-</span>
+                        <SdxuInput
+                            v-model="params.environments"
+                            size="small"
+                            placeholder="参数"
+                            style="width:270px"
+                        />
+                    </div>
+                    <div class="form-tip">
+                        此处不设置, 则默认启动Container Dev
+                    </div>
+                </el-form-item>
+                <el-form-item
+                    label="输出路径:"
+                >
+                    <div>
+                        <SdxwFileSelect
+                            v-model="params.outputPaths"
+                            :string-model="true"
+                            check-type="folder"
+                            source="ceph"
+                        />
+                    </div>
+                    <div class="form-tip">
+                        存放训练输出的日志或模型等
+                    </div>
+                </el-form-item>
+                <el-form-item
+                    label="端口转发:"
+                >
+                    <div>
+                        <SdxuInput
+                            v-model="params.environments"
+                            size="small"
+                        />
+                    </div>
+                    <div class="form-tip">
+                        定义容器中的某一端口转发到容器外部
+                    </div>
+                </el-form-item>
+            </div>
         </el-form>
     </BaseForm>
 </template>
@@ -134,6 +206,7 @@ import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
 import ExpandLabel from '@sdx/widget/components/expand-label';
+import FileSelect from '@sdx/widget/components/file-select';
 export default {
     name: 'ContainerDevForm',
     mixins: [locale, projectDetailMixin],
@@ -145,7 +218,8 @@ export default {
         [Select.name]: Select,
         SdxuInput,
         SdxwResourceConfig,
-        DataSourceSelect
+        DataSourceSelect,
+        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix
     },
     props: {
         task: {
@@ -187,7 +261,9 @@ export default {
                     'GPU_MODEL': ''
                 },
                 datasources: [],
-                datasets: []
+                datasets: [],
+                environments: '',
+                outputPaths: ''
             },
             imageOptions: [],
             cpuObj: {},
@@ -219,7 +295,8 @@ export default {
             },
             datasetsOptions: [],
             cooperation:true,
-            dataReady: false
+            dataReady: false,
+            showMoreSetting: true
         };
     },
     computed: {

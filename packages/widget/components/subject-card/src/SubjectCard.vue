@@ -23,7 +23,7 @@
                             class="task"
                             v-if="meta.type === 'project'"
                         >
-                            {{ `${meta.taskNumber}个任务` }}
+                            {{ `${meta.taskNumber}${meta.taskNumber === 0 ? t('view.project.taskCount') : t('view.project.taskCounts')}` }}
                         </span>
                     </div>
                     <div class="right">
@@ -41,10 +41,11 @@
                         />
                         <div class="creator">
                             {{ (meta && meta.creator ) || '' }}
+                            <span v-if="getUser().userId === meta.owner.uuid">({{ t('view.project.oneself') }})</span>
                         </div>
                         <i class="customize-icon" />
                         <div>
-                            {{ `创建于${dateFormatter(meta && meta.createdAt)}` }}
+                            {{ `${t('view.project.Created')}${dateFormatter(meta && meta.createdAt)}` }}
                         </div>
                     </div>
                 </div>
@@ -66,7 +67,10 @@
                     name="operations"
                     v-if="meta.type === 'task'"
                 />
-                <div v-else>
+                <div
+                    v-else
+                    class="self"
+                >
                     <sdxu-button
                         type="primary"
                         icon="sdx-icon sdx-icon-edit"
@@ -96,6 +100,7 @@ import locale from '@sdx/utils/src/mixins/locale';
 import Button from '@sdx/ui/components/button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import FoldLabel from '@sdx/widget/components/fold-label';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'SdxwSubjectCard',
     mixins: [locale],
@@ -116,6 +121,7 @@ export default {
     },
     methods: {
         dateFormatter,
+        getUser,
         showDetail() {
             if (this.meta.type === 'project') {
                 this.$router.push({

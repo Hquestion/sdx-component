@@ -15,7 +15,7 @@
                     v-model="_value"
                     :inline="true"
                     size="small"
-                    style="width: 150px;"
+                    style="width: 60%;"
                 />
                 <i
                     class="sdx-icon sdx-icon-circle-outline accept-icon"
@@ -29,6 +29,7 @@
             <span
                 v-else
                 @click="handlePathNameClick(row)"
+                :title="row.name"
             >{{ row.name }}</span>
         </div>
     </span>
@@ -128,6 +129,10 @@ export default {
         .skyide-file__item-name {
             display: inline-block;
             vertical-align: middle;
+            width: 80%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             .sdx-icon {
                 margin-left: $sdx-margin / 2;
                 font-size: $sdx-h1-font-size;

@@ -12,21 +12,27 @@
                 :title="t('view.skyide.copy')"
                 :native-tooltip="true"
             />
-            <SdxuButton
-                @click="insertCodeCell"
-                icon="sdx-icon sdx-xinzengbiaoqian"
-                class="marginleft32"
-                :native-tooltip="true"
+            <el-dropdown
+                @command="insertCell"
+                trigger="click"
+                placement="bottom-start"
             >
-                code
-            </SdxuButton>
-            <SdxuButton
-                @click="insertMarkdownCell"
-                icon="sdx-icon sdx-xinzengbiaoqian"
-                :native-tooltip="true"
-            >
-                markdown
-            </SdxuButton>
+                <SdxuIconButton
+                    icon="sdx-icon sdx-xinzengbiaoqian"
+                    class="marginleft32 marginright8"
+                />
+                <el-dropdown-menu
+                    slot="dropdown"
+                    class="sky-notebook-bar-dropdown"
+                >
+                    <el-dropdown-item command="code">
+                        code
+                    </el-dropdown-item>
+                    <el-dropdown-item command="markdown">
+                        markdown
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
             <SdxuButton
                 @click="toggleMode()"
                 icon="sdx-icon sdx-zhuanhuandaima"
@@ -34,29 +40,25 @@
             >
                 {{ ( snb.activeCell && snb.activeCell.cell_type) === 'code' ? t('view.skyide.Turn_to_MD') : t('view.skyide.Turn_to_code') }}
             </SdxuButton>
-            <span class="btnlist marginleft32">
-                <SdxuIconButton
-                    @click="runNotebook"
-                    icon="sdx-icon sdx-quanbuyunhang"
-                    size="small"
-                    :title="t('view.skyide.Run_all')"
-                    :native-tooltip="true"
-                />
-                <SdxuIconButton
-                    icon="sdx-icon sdx-yunhang"
-                    size="small"
-                    :title="t('sdxCommon.Run')"
-                    :native-tooltip="true"
-                    @click="runCell"
-                />
-                <SdxuIconButton
-                    icon="sdx-icon sdx-tingzhi1"
-                    size="small"
-                    :title="t('sdxCommon.Stop')"
-                    :native-tooltip="true"
-                    @click="stop"
-                />
-            </span>
+            <SdxuIconButton
+                icon="sdx-icon sdx-yunhang"
+                :title="t('sdxCommon.Run')"
+                class="marginleft32"
+                :native-tooltip="true"
+                @click="runCell"
+            />
+            <SdxuIconButton
+                @click="runNotebook"
+                icon="sdx-icon sdx-quanbuyunhang"
+                :title="t('view.skyide.Run_all')"
+                :native-tooltip="true"
+            />
+            <SdxuIconButton
+                icon="sdx-icon sdx-tingzhi1"
+                :title="t('sdxCommon.Stop')"
+                :native-tooltip="true"
+                @click="stop"
+            />
             <SdxuIconButton
                 icon="sdx-icon sdx-chongzi"
                 :title="t('view.skyide.debug')"
@@ -122,7 +124,6 @@
             <span class="switch-content">{{ kernelStatus ? t('view.skyide.Kernel_Connected') : t('view.skyide.Kernel_is_not_connected') }}</span>
             <el-select
                 v-model="codeType"
-                placeholder="请选择"
                 :popper-append-to-body="false"
             >
                 <el-option
@@ -140,7 +141,7 @@
 import { saveFile, readFile } from '@sdx/utils/src/api/file';
 import IconButton from '@sdx/ui/components/icon-button';
 import Button from '@sdx/ui/components/button';
-import { Select, Popover} from 'element-ui';
+import { Select, Popover, Dropdown, DropdownMenu, DropdownItem} from 'element-ui';
 import SkyCommands from './SkyCommands';
 import SkyCodeSnippets from './SkyCodeSnippets';
 import {NotebookMode} from '../../config';
@@ -189,7 +190,10 @@ export default {
         [Select.name]: Select,
         [Popover.name]: Popover,
         SkyCommands,
-        SkyCodeSnippets
+        SkyCodeSnippets,
+        [Dropdown.name]: Dropdown,
+        [DropdownMenu.name]: DropdownMenu,
+        [DropdownItem.name]: DropdownItem,
     },
     inject: {
         snb: {
@@ -203,52 +207,33 @@ export default {
         saveNotebook() {
             this.app.commands.execute(CommandIDs.SAVE_DOC);
         },
-        insertCodeCell() {
-            this.snb.insertCell('code');
-        },
-        insertMarkdownCell() {
-            this.snb.insertCell('markdown');
+        insertCell(type) {
+            if(type === 'code') {
+                this.app.commands.execute(CommandIDs.CELL_ADD_CODE);
+            } else if(type === 'markdown') {
+                this.app.commands.execute(CommandIDs.CELL_ADD_MARKDOWN);
+            }
         },
         insertRawCell() {
             this.snb.insertCell('raw');
         },
         toggleMode() {
-            let modeType = this.snb && this.snb.activeCell && this.snb.activeCell.cell_type;
-            modeType = modeType === 'code' ? 'markdown' : 'code';
-            this.snb.changeCellType(modeType);
-        },
-        clearOutput() {
-            if (this.snb.activeCell) {
-                this.snb.activateCell.outputs = [];
-                if (this.snb.cellMap[this.snb.activeCellOrder].model.outputs &&  this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear) {
-                    this.snb.cellMap[this.snb.activeCellOrder].model.outputs.clear();
-                }
-            }
+            this.app.commands.execute(CommandIDs.CELL_TOGGLE_CODE);
         },
         clearAllOutput() {
-            this.snb.notebook.cells.forEach(cell => {
-                cell.outputs = [];
-                if (this.snb.cellMap[cell.order].model.outputs && this.snb.cellMap[cell.order].model.outputs.clear) {
-                    this.snb.cellMap[cell.order].model.outputs.clear && this.snb.cellMap[cell.order].model.outputs.clear();
-                }
-
-            });
+            this.app.commands.execute(CommandIDs.CELLS_OUTPUTS_CLEAR);
         },
         runNotebook() {
-            this.snb.runNotebook();
+            this.app.commands.execute(CommandIDs.CELLS_RUN);
         },
         runCell() {
-            this.app.commands.execute(CommandIDs.RUN_CELL);
+            this.app.commands.execute(CommandIDs.CELL_RUN);
         },
         stop() {
-            if (this.snb.isDebugMode) {
-                this.snb.cancelDebug();
-            } else {
-                this.snb.shutdownSession(true);
-            }
+            this.app.commands.execute(CommandIDs.CELLS_SHUTDOWN);
         },
         debugByCell() {
-            this.snb.debugByCell();
+            this.app.commands.execute(CommandIDs.CELLS_DEBUG);
         },
         changeSwitch() {
             window.console.log(this.kernelStatus);
@@ -259,9 +244,9 @@ export default {
 
 <style lang="scss" scoped>
 .sky-notebook-bar {
-    background: #35466D;
-    height: 48px;
-    line-height: 48px;
+    background: #394C7E;
+    height: 40px;
+    line-height: 40px;
     padding-left: 16px;
     font-family: PingFangSC-Regular;
     letter-spacing: 0.07px;
@@ -279,19 +264,7 @@ export default {
         line-height: 24px;
         text-align: center;
         border-radius: 4px;
-    }
-    .btnlist {
-        background: #4D639A;
-        border-radius: 4px;
-        height: 24px;
-        line-height: 21px;
-        vertical-align: middle;
-        display: inline-block;
-        padding: 0 8px;
-        margin-right: 8px;
-        .sdxu-icon-button {
-            @extend .basic-btn-style;
-        }
+        color: #DDE5FE;
     }
     .switch-content {
         font-family: PingFangSC-Regular;
@@ -301,15 +274,15 @@ export default {
     }
     .el-select {
         width: 120px;
-        height: 48px;
+        height: 40px;
         margin-left: 24px;
         /deep/ {
             .el-input__inner {
                 border-radius: 0;
                 border-color: transparent;
                 border: 0;
-                height: 48px;
-                background: #4880F8;
+                height: 40px;
+                background: #4E69AE;
                 font-family: PingFangSC-Regular;
                 font-size: 14px;
                 color: #DDE5FE;
@@ -338,7 +311,7 @@ export default {
     /deep/ {
         .sdxu-icon-button--regular {
             font-size: 14px;
-            background: #4D639A;
+            background: #4E69AE;
             @extend .basic-btn-style;
         }
         .sdxu-icon-button + .sdxu-icon-button, .sdxu-button + .sdxu-button {
@@ -346,7 +319,7 @@ export default {
         }
         .sdxu-button--regular  {
             border: none;
-            background: #4D639A;
+            background: #4E69AE;
             border-radius: 4px;
             font-size: 12px;
             color: #DDE5FE;
@@ -400,6 +373,29 @@ export default {
     border: 0 !important;
     .popper__arrow {
         display: none !important;
+    }
+}
+.sky-notebook-bar-dropdown.el-popper.el-dropdown-menu {
+    margin-top: 0 !important;
+    border: 0;
+    background: #344777;
+    box-shadow: 0 5px 10px 0 #0E162E;
+    border-radius: 4px;
+    font-size: 14px;
+    padding: 0;
+    /deep/ {
+        .el-dropdown-menu__item {
+            line-height: 40px;
+            height: 40px;
+            padding: 0 8px;
+            color: #DDE5FE;
+        }
+        .el-dropdown-menu__item:hover {
+            background: #2A51A7; 
+        }
+        .popper__arrow::after {
+            display: none;
+        }
     }
 }
 </style>

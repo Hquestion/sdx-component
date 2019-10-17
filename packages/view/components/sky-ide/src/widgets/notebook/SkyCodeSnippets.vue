@@ -31,8 +31,8 @@
 import { matchingString } from '@sdx/utils/src/helper/tool';
 import SearchPanel from '../search-panel/SearchPanel';
 import locale from '@sdx/utils/src/mixins/locale';
-import sinppets from '../../config/snippets';
 import SkyCodeCellModel from '../../model/CodeCell';
+import { getCodeTemplates } from '@sdx/utils/src/api/skyide';
 export default {
     name: 'SkyCodeSnippets',
     mixins: [locale],
@@ -41,18 +41,27 @@ export default {
     },
     data() {
         return {
-            search: ''
+            search: '',
+            sinppets: []
         };
     },
     inject: {
         snb: {
             default: {}
+        },
+        app: {
+            default: {}
         }
+    },
+    created() {
+        getCodeTemplates(this.app.taskManager.ideUuid).then(res => {
+            this.sinppets = res;
+        });
     },
     computed: {
         result() {
             let res = new Set();
-            sinppets.forEach(item => {
+            this.sinppets.forEach(item => {
                 if (matchingString(item.name, this.search)) {
                     res.add(item);
                 }
@@ -66,7 +75,7 @@ export default {
         },
         addSnippet(index) {
             this.snb.insertCell('code', new SkyCodeCellModel({
-                source: sinppets[index].code
+                source: this.sinppets[index].code
             }));
             this.$emit('close');
         }

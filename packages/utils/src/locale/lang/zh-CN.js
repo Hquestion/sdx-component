@@ -680,7 +680,8 @@ export default {
             IfNotSave: '如果不保存，更改将丢失。',
             Save: '保存',
             NotSave: '不保存',
-            NotSupported: '暂不支持当前文件格式'
+            NotSupported: '暂不支持当前文件格式',
+            Loading: '加载中...'
         },
         resourceManage: {
             ResourceManage: '资源管理',
@@ -809,7 +810,11 @@ export default {
             Run_all: '运行全部',
             debug: '调试',
             View_commands: '查看命令',
-            code_snippet: '代码片段'
+            code_snippet: '代码片段',
+            Memory: '内存',
+            Model: '型号',
+            Core: '核',
+            Piece: '块'
         }
     },
     sdxCommon: {

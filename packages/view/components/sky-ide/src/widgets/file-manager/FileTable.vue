@@ -19,6 +19,7 @@
             @row-dblclick="handlePathNameClick"
             @row-click="handleRowClick"
             @row-contextmenu="handleContextMenu"
+            :empty-label="emptyLabel"
         >
             <el-table-column
                 :label="t('view.file.FileName')"
@@ -69,6 +70,7 @@ import FileName from './FileName';
 
 import contextMenu from '@sdx/ui/components/context-menu';
 import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/ui/components/context-menu';
+import Clusterize from 'clusterize.js';
 
 const ROW_HEIGHT = 30;
 let isFirstSort = true;
@@ -96,7 +98,8 @@ export default {
             rootKinds,
             selectedRows: [],
             copyingRow: null,
-            cuttingRow: null
+            cuttingRow: null,
+            emptyLabel: ''
         };
     },
     computed: {
@@ -174,7 +177,8 @@ export default {
             this.deleteRow(this.selectedRows[0]);
         },
         init() {
-            this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+            // this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+            this.selectedRows = [];
         },
         mkdir() {
             if (this.editingRow) {
@@ -326,14 +330,31 @@ export default {
             this.$el.querySelector('.el-table__body-wrapper').scrollTop = 0;
         },
         getTableRowClassName({row}) {
-            if (this.selectedRows.some(item => item.path === row.path)) {
+            if (this.selectedRows.some(item => (item && item.path) === (row && row.path))) {
                 return 'highlight-file-row';
             }
             return '';
+        },
+        scrollToRow(file) {
+            if (file.path[0] !== '/') {
+                file.path = `/${file.path}`;
+            }
+            const index = this.fileManager.renderFiles.findIndex(item => item.path === file.path);
+            setTimeout(() => {
+                this.$el.querySelector('.el-table__body-wrapper').scrollTop = (index - 10) * ROW_HEIGHT;
+                this.selectedRows.splice(0, 1, this.fileManager.renderFiles[index]);
+            }, 500);
         }
     },
     mounted() {
         this.init();
+        setTimeout(() => {
+            new Clusterize({
+                rows: document.querySelectorAll('.el-table__row'),
+                scrollElem: document.getElementById('scroll-area'),
+                contentElem: document.querySelector('.el-table__body tbody')
+            });
+        },2000);
     },
     beforeDestroy() {
         isFirstSort = true;
@@ -343,7 +364,7 @@ export default {
 
 <style lang="scss" scoped>
 .skyide-file-table {
-    height: calc(100% - 104px);
+    height: calc(100% - 80px);
     overflow: hidden;
     & /deep/ .el-checkbox.is-disabled {
         display: none;
@@ -362,9 +383,14 @@ export default {
         &.el-table .cell {
             background-color: #314065;
         }
-        &.el-table td,
-        &.el-table th > .cell {
+        &.el-table td {
             color: #DDE5FE;
+            font-size: 12px;
+        }
+        &.el-table th > .cell {
+            font-size: 14px;
+            color: #A0A5B8;
+            font-weight: 400;
         }
         &.el-table tr,
         &.el-table th {

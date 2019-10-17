@@ -31,3 +31,7 @@ export function getTerminalStatus(ideUuid, terminalName) {
 export function deleteTerminal(ideUuid, terminalName) {
     return httpService.remove(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/terminals/${terminalName}`);
 }
+
+export function getCodeTemplates(ideUuid) {
+    return httpService.get(`${IDE_MANAGER_GATEWAY_BASE}ides/${ideUuid}/extensions/code_template`);
+}

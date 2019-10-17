@@ -681,7 +681,8 @@ export default {
             IfNotSave: 'If you don\'t save, the changes will be lost.',
             Save: 'Save',
             NotSave: 'Don\'t Save',
-            NotSupported: 'File format not supported.'
+            NotSupported: 'File format not supported.',
+            Loading: 'Loading...'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',
@@ -810,7 +811,11 @@ export default {
             Run_all: 'Run all',
             debug: 'debug',
             View_commands: 'View commands',
-            code_snippet: 'code snippet'
+            code_snippet: 'code snippet',
+            Memory: 'Memory',
+            Model: 'Model',
+            Core: 'Core(s)',
+            Piece: 'Piece(s)'
         }
     },
     sdxCommon: {

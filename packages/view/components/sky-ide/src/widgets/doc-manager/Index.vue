@@ -241,15 +241,16 @@ export default {
             position: initial;
             overflow: initial;
         }
-        .el-tabs--card > .el-tabs__header {
+        .el-tabs__header {
             border-bottom: none;
             background: #1C253D;
+            margin: 0;
         }
         .el-tabs__nav {
             display: flex;
             border: none !important;
             .el-tabs__item {
-                height: 56px;
+                height: 40px;
                 display: flex;
                 align-items: center;
                 border: none;

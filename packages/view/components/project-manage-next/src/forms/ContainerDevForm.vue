@@ -5,6 +5,7 @@
         :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-icon-docker"
         @commit="commit"
+        :type="`ContainerDev ${t('view.task.form.task')}`"
     >
         <el-form
             label-position="right"
@@ -15,6 +16,9 @@
             :rules="rules"
             :model="params"
         >
+            <SdxwExpandLabel
+                label="基本配置"
+            />
             <el-form-item
                 prop="name"
                 :label="`${t('view.task.taskName')}:`"
@@ -38,6 +42,9 @@
                     :placeholder="t('view.task.form.Please_enter_a_task_description')"
                 />
             </el-form-item>
+            <SdxwExpandLabel
+                label="环境配置"
+            />
             <el-form-item
                 prop="imageId"
                 :label="`${t('view.task.RuntimeEnvironment')}:`"
@@ -81,6 +88,9 @@
                     />
                 </div>
             </el-form-item>
+            <SdxwExpandLabel
+                label="数据配置"
+            />
             <el-form-item
                 v-if="!cooperation"
                 prop="datasources"
@@ -123,6 +133,7 @@ import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
+import ExpandLabel from '@sdx/widget/components/expand-label';
 export default {
     name: 'ContainerDevForm',
     mixins: [locale, projectDetailMixin],
@@ -130,6 +141,7 @@ export default {
         BaseForm,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
+        [ExpandLabel.name]: ExpandLabel,
         [Select.name]: Select,
         SdxuInput,
         SdxwResourceConfig,
@@ -255,7 +267,7 @@ export default {
         },
         commit() {
             if (!this.isGpuEnt) {
-                this.params.resourceConfig.EXECUTOR_GPUS = 0; 
+                this.params.resourceConfig.EXECUTOR_GPUS = 0;
                 this.params.resourceConfig.GPU_MODEL = '';
             }
             this.$refs.containerdev.validate().then(() => {

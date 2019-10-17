@@ -4,10 +4,11 @@
             size="small"
             v-model="command"
             @input="$emit('seach-value', command)"
+            :placeholder="t('sdxCommon.Search')"
         >
             <span
                 slot="prefix"
-                class="sdx-icon sdxu-input__icon sdx-icon-search"
+                class="sdx-icon sdx-icon-search"
             />
         </SdxuInput>
         <div :style="{'height': contentMaxHeight, 'min-height': contentMinHeight}">
@@ -21,8 +22,10 @@
 <script>
 import SdxuInput from '@sdx/ui/components/input';
 import SdxuScroll from '@sdx/ui/components/scroll';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SkySeachPanel',
+    mixins: [locale],
     components: {
         SdxuInput,
         SdxuScroll
@@ -47,23 +50,28 @@ export default {
 
 <style lang="scss" scoped>
 .sky-seach-panel {
-    background: #1F2942;
-    color: #DDE5FE;
+    background: #29395F;
     padding: 10px;
     box-shadow: 0 5px 10px 0 #0E162E;
+    border-radius: 4px;
     /deep/ {
         .sdxu-input--small .el-input__inner {
             height: 32px;
             line-height: 32px;
-            background: #2C3A60;
+            background: #435480;
             color: #DDE5FE;
+            border-radius: 4px;
+            font-size: 12px;
         }
         .el-input__prefix {
             left: 8px;
             color: #A0A5B8;
         }
         input.el-input__inner {
-            border: none !important;
+            border: 1px solid #435480;
+        }
+        input.el-input__inner:focus {
+            border: 1px solid #4880F8;
         }
         .__bar-is-vertical {
             background: #3A63BF !important;

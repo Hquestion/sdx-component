@@ -8,7 +8,7 @@
             class="sdxu-dialog__sidebar"
             aria-hidden="true"
         >
-            <use :xlink:href="`#${(icon === 'sdx-terminalsbiaoqian' && opened) ? 'sdx-terminalsdianji' : icon}`" />
+            <use :xlink:href="`#${(icon === 'sdx-terminals-moren' && opened) ? 'sdx-terminals-xuanzhong' : icon}`" />
         </svg>
         <span v-if="label">{{ label }}</span>
     </div>
@@ -57,12 +57,12 @@ export default {
         display: inline-flex;
         align-items: center;
         justify-content: flex-start;
-        padding: 0 20px;
+        padding: 0 12px;
         cursor: default;
         height: 100%;
         .sdxu-dialog__sidebar {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             transform: rotate(-90deg);
             color: rgb(171,181,206);
         }
@@ -77,13 +77,17 @@ export default {
             background: #536694;
         }
         &.is-open.is-terminal {
-            background: none;
+            background: #394C7E;
             i::before {
                 color:rgb(74,128,245) ;
             }
         }
         &.is-terminal {
             padding-right: 40px;
+            .sdxu-dialog__sidebar {
+                width: 72px;
+                height: 72px;
+            }
         }
     }
 </style>

@@ -1,33 +1,52 @@
 <template>
     <div class="resource-usage">
         <div>
-            <span>kernel运行时长: </span>
-            <span>1h:15m</span>
-        </div>
-        <div>
             <span>CPU: </span>
-            <span>10%(4core)</span>
+            <span>{{ cpu }} ({{ t('view.skyide.Core') }})</span>
         </div>
         <div>
-            <span>内存: </span>
-            <span>200MB(8GB)</span>
+            <span>{{ t('view.skyide.Memory') }}: </span>
+            <span>{{ memory }} (GB)</span>
         </div>
-        <div>
-            <span>GPU(型号:xxx): </span>
-            <span>200MB(2块)</span>
-        </div>
-        <div>
-            <span>DISK: </span>
-            <span>200MB(8GB)</span>
+        <div v-if="gpu > 0">
+            <span>GPU({{ t('view.skyide.Model') }}:{{ gpuModel }}): </span>
+            <span>{{ gpu }} ({{ t('view.skyide.Piece') }})</span>
         </div>
     </div>
 </template>
 
 <script>
+import { parseMilli, byteToGB } from '@sdx/utils/lib/helper/transform';
+import locale from '@sdx/utils/src/mixins/locale';
+import { STATE_TYPE } from '@sdx/utils/src/const/task';
+
 export default {
     name: 'ResourceUsage',
-    props: {
-
+    mixins: [locale],
+    inject: {
+        app: {
+            taskManager: {}
+        }
+    },
+    computed: {
+        task() {
+            return this.app.taskManager && this.app.taskManager.task || null;
+        },
+        isRunning() {
+            return this.task && [STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state) || false;
+        },
+        cpu() {
+            return this.isRunning && this.task && this.task.quota && parseMilli(this.task.quota.cpu) || 0;
+        },
+        memory() {
+            return this.isRunning && this.task && this.task.quota && byteToGB(this.task.quota.memory) || 0;
+        },
+        gpu() {
+            return this.isRunning && this.task && this.task.quota && this.task.quota.gpu || 0;
+        },
+        gpuModel() {
+            return this.isRunning && this.task && this.task.quota && this.task.quota.gpuModel || '-';
+        }
     }
 };
 </script>

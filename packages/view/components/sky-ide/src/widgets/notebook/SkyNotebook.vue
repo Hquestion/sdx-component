@@ -406,7 +406,7 @@ export default {
             //                 return this.activeCell && this.activeCell.cell_type === 'raw';
             //             },
             //             callback: () => {
-            //                 this.app.commands.execute(CommandIDs.RUN_CELL);
+            //                 this.app.commands.execute(CommandIDs.CELL_RUN);
             //             }
             //         }),
             //         new ContextMenuItemModel({
@@ -434,7 +434,7 @@ export default {
             //                 return this.activeCell && this.activeCell.cell_type === 'raw';
             //             },
             //             callback: () => {
-            //                 this.app.commands.execute(CommandIDs.RUN_CELL);
+            //                 this.app.commands.execute(CommandIDs.CELL_RUN);
             //             }
             //         }),
             //         new ContextMenuItemModel({
@@ -490,7 +490,7 @@ export default {
 .sky-notebook {
     height: 100%;
     overflow: hidden;
-    background: #242f49;
+    background: #222F4F;
     .sky-notebook__main {
         height: calc(100% - 48px);
         padding: 16px;

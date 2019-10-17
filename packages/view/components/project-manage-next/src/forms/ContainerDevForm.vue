@@ -3,7 +3,7 @@
         :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
         class="form-containerdev"
         :label-width="lang$ === 'en' ? 190 : 100"
-        icon="sdx-icon-docker"
+        icon="sdx-zidingyirongqirenwu"
         @commit="commit"
         :type="`ContainerDev ${t('view.task.form.task')}`"
     >

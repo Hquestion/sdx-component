@@ -1,4 +1,3 @@
-@import './task-icon.scss';
 @import './create-task-card.scss';
 @include block('project-detail', $bem-namespace-view) {
     @include element('create-task') {

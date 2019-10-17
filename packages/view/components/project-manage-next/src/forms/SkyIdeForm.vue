@@ -3,7 +3,7 @@
         :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyIDE ${t('view.task.form.task')}`"
         class="form-containerdev"
         :label-width="lang$ === 'en' ? 190 : 160"
-        icon="sdx-icon-docker"
+        icon="sdx-SkyIDErenwu"
         @commit="commit"
         :type="`SkyIDE ${t('view.task.form.task')}`"
     >

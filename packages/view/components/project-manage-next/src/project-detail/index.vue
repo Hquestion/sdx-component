@@ -156,33 +156,33 @@ export default {
             type: 'dev',
             refreshTimer: null,
             iconOptions: {
-                SKYIDE: 'sdx-skyIDElogo',
-                CONTAINERDEV: 'sdx-Apache_Spark_logo',
-                JUPYTER: 'sdx-Jupter',
-                SKYFLOW: 'sdx-icon-tensorboard'
+                SKYIDE: 'sdx-SkyIDErenwu',
+                CONTAINERDEV: 'sdx-zidingyirongqirenwu',
+                JUPYTER: 'sdx-Jupyterrenwu',
+                SKYFLOW: 'sdx-skyflowrenwu'
             },
             createTaskOptions: [
                 {
                     createLabel: '添加Jupyter任务',
-                    class: 'Jupter',
+                    class: 'sdx-Jupyterrenwu',
                     type: 'JUPYTER',
                     taskType: '开发工具'
                 },
                 {
                     createLabel: '添加SkyIDE任务',
-                    class: 'icon-python',
+                    class: 'sdx-SkyIDErenwu',
                     type: 'SKYIDE',
                     taskType: '开发工具'
                 },
                 {
                     createLabel: '添加自定义容器任务',
-                    class: 'Apache_Spark_logo',
+                    class: 'sdx-zidingyirongqirenwu',
                     type: 'CONTAINERDEV',
                     taskType: '开发工具'
                 },
                 {
                     createLabel: '添加SkyFlow任务',
-                    class: 'icon-tensorflow',
+                    class: 'sdx-skyflowrenwu',
                     type: 'SKYFLOW',
                     taskType: '可视化分析与建模'
                 }

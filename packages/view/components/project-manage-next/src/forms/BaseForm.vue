@@ -19,8 +19,13 @@
                 >
                     <div class="sdxv-project-task-form__task-type">
                         <!-- 图标插入 -->
-                        <div style="width: 40px;height: 40px;">
-                            <i :class="['sdx-icon' ,icon]" />
+                        <div style="width:40px;height:40px">
+                            <svg
+                                aria-hidden="true"
+                                style="width:40px;height:40px"
+                            >
+                                <use :xlink:href="`#${icon}`" />
+                            </svg>
                         </div>
                         <span style="margin-left: 16px;">
                             {{ type }}

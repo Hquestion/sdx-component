@@ -3,7 +3,12 @@
         <div
             class="sdxv-create-task-card__task-icon"
         >
-            <task-icon :icon-class="iconClass" />
+            <svg
+                aria-hidden="true"
+                style="width:48px;height:48px"
+            >
+                <use :xlink:href="`#${iconClass}`" />
+            </svg>
         </div>
         <div class="sdxv-create-task-card__create-label">
             <i class="sdx-icon sdx-icon-plus" />
@@ -19,7 +24,6 @@
 
 <script>
 import Button from '@sdx/ui/components/button';
-import TaskIcon from './TaskIcon';
 export default {
     name: 'CreateTaskCard',
     data() {
@@ -40,8 +44,7 @@ export default {
         }
     },
     components: {
-        [Button.name]: Button,
-        TaskIcon
+        [Button.name]: Button
     }
 };
 </script>

@@ -318,7 +318,7 @@ export default {
                 description: '项目描述：',
                 setTemplate: '设为模板：'
             },
-            selfCreateProject: '自建项目',
+            selfCreateProject: '私有项目',
             otherProject: '协作项目',
             taskList: '任务列表',
             enterTaskName: '请输入任务名',
@@ -326,7 +326,13 @@ export default {
             modelTraining: '模型训练',
             modelAssess: '模型评估',
             template: '模板',
-            privateAndShare: '自建与协作'
+            privateAndShare: '自建与协作',
+            templateProject: '模版项目',
+            allProject: '所有项目',
+            taskCounts: '个任务',
+            taskCount: '个任务',
+            Created: '创建于',
+            oneself: '自己'
         },
         skyflow: {
             skyflowList: '工作流列表',

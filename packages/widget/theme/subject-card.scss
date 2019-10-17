@@ -55,6 +55,12 @@
                     vertical-align: middle;
                     margin: 10px 10px;
                 }
+                .creator {
+                    span {
+                        font-family: PingFangSC-Regular;
+                        color: rgb(118,128,145);
+                    }
+                }
             }
         }
         @include modifier('description') {
@@ -78,10 +84,12 @@
             padding-left: 32px;
             margin-left: 0;
         }
-        .sdxu-button--primary.is-plain {
-            color: #42526e;
-            .sdxu-button__main {
-                font-size: 12px;
+        .self {
+            .sdxu-button--primary.is-plain {
+                color: #42526e;
+                .sdxu-button__main {
+                    font-size: 12px;
+                }
             }
         }
     }

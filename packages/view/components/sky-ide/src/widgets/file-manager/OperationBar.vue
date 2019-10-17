@@ -18,8 +18,6 @@
             :on-progress="handleProgress"
             :on-success="removeUpload"
             v-if="canUpload()"
-            :on-exceed-max-size="onExceedMaxSize"
-            :on-exceed-max-size-dir="onExceedMaxSizeDir"
         />
     </div>
 </template>
@@ -87,11 +85,11 @@ export default {
             const isMac = /macintosh|mac os x/i.test(navigator.userAgent);
             const isLinux = (String(navigator.platform).indexOf('Linux') > -1);
             if (isWindows) {
-                url = `${STATIC_PATH}static/filemanage-client/windows/sky-filemanager-client.exe`;
+                url = `${STATIC_PATH}static/filemanage-client/windows/iluvatar-filemanager-client.exe`;
             } else if (isMac) {
-                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.dmg`;
+                url = `${STATIC_PATH}static/filemanage-client/mac/iluvatar-filemanager-client.dmg`;
             } else if (isLinux) {
-                url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.AppImage`;
+                url = `${STATIC_PATH}static/filemanage-client/linux/iluvatar-filemanager-client.AppImage`;
             }
             return url;
         }

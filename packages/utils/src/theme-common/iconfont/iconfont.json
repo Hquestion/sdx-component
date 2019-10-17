@@ -1222,6 +1222,34 @@
       "font_class": "tingzhikernel",
       "unicode": "e6a2",
       "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "11344708",
+      "name": "SkyIDE任务",
+      "font_class": "SkyIDErenwu",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "11344711",
+      "name": "Jupyter任务",
+      "font_class": "Jupyterrenwu",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "11344773",
+      "name": "skyflow任务",
+      "font_class": "skyflowrenwu",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
+      "icon_id": "11344778",
+      "name": "自定义容器任务",
+      "font_class": "zidingyirongqirenwu",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
     }
   ]
 }

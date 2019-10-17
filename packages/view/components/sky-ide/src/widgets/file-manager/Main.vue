@@ -13,6 +13,7 @@
 import OperationBar from './OperationBar';
 import FileTable from './FileTable';
 import BreadcrumbBar from './BreadcrumbBar';
+import locale from '@sdx/utils/src/mixins/locale';
 
 import { getFilesList } from '@sdx/utils/src/api/file';
 
@@ -55,6 +56,7 @@ export default {
             uploadingFiles: []
         };
     },
+    mixins: [locale],
     props: {
         rootPath: {
             type: String,
@@ -94,20 +96,22 @@ export default {
         isShareRoot() {
             return false;
         },
-        resetFlags() {
+        resetFlags(keepList) {
             // 重置页码
             this.pageIndex = 1;
             // 重置缓存的fileList
+            if (!keepList) this.renderFiles = [];
             this.total = 0;
             this.loadedTotal = 0;
             this.searchKey = '';
         },
-        enterDirectory(dir) {
-            this.resetFlags();
+        enterDirectory(dir, keepList, rowToScroll) {
+            this.resetFlags(keepList);
             this.isSearch = false;
             // 更新路径
             this.currentPath = dir;
             this.isRoot = dir === '/';
+            this.$refs.fileTable.emptyLabel = this.t('view.file.Loading');
             // 修改为加载中，准备获取数据
             this.loading = true;
             // 滚动到页面顶部
@@ -116,9 +120,11 @@ export default {
             let defer = this.loadFileList();
             return defer.then(res => {
                 let fileList = res.children;
+                if (!fileList.length) this.$refs.fileTable.emptyLabel = '';
                 this.renderFiles = res.children;
                 this.total = res.childrenCount;
                 this.loadedTotal += fileList.length;
+                if (rowToScroll) this.$refs.fileTable.scrollToRow(rowToScroll);
                 this.loading = false;
             }, () => {
                 this.total = 0;
@@ -142,12 +148,21 @@ export default {
             });
         },
         loadFileList() {
-            return getFilesList({
-                start: (this.pageIndex - 1) * this.pageSize + 1,
-                count: this.pageSize,
-                path: this.currentPath,
-                orderBy: this.orderBy,
-                order: this.order
+            return new Promise(resolve => {
+                getFilesList({
+                    start: (this.pageIndex - 1) * this.pageSize + 1,
+                    count: -1,
+                    path: this.currentPath,
+                    orderBy: this.orderBy,
+                    order: this.order
+                }).then(res => {
+                    res.children.forEach(item => {
+                        if (item.path[0] !== '/') {
+                            item.path = `/${item.path}`;
+                        }
+                    });
+                    resolve(res);
+                });
             });
         },
         getRenderList() {
@@ -155,10 +170,13 @@ export default {
             return Promise.resolve(this.renderFiles);
         },
         refresh() {
-            this.enterDirectory(this.currentPath);
+            this.enterDirectory(this.currentPath, true);
         },
         makeFile() {
             this.$refs.fileTable.makeFile();
+        },
+        handleFileDelete(fileRemoved) {
+            this.renderFiles.splice(this.renderFiles.findIndex((item => item === fileRemoved)), 1);
         }
     },
     created() {
@@ -187,7 +205,6 @@ export default {
 .skyide-file-main {
     width: 100%;
     height: 100%;
-    padding: 0 10px 0 0;
     user-select: none;
     box-sizing: border-box;
     & /deep/ {

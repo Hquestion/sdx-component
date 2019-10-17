@@ -27,9 +27,9 @@ export default {
 </script>
 <style lang="scss" scoped>
     .skyide-title {
-        background: #1C253D;
-        height: 64px;
-        line-height: 64px;
+        background: #1E2948;;
+        height: 48px;
+        line-height: 48px;
         position: relative;
         display: flex;
         justify-content: center;
@@ -38,19 +38,19 @@ export default {
         .logo {
             position: absolute;
             left: 70px;
-            font-size: 24px;
+            font-size: 20px;
             color: #FFFFFF;
         }
         .ide-logo {
-            width: 44px;
+            width: 40px;
             left: 16px;
-            top: 10px;
-            height: 44px;
+            top: 4px;
+            height: 40px;
             position: absolute;
         }
         .content {
             font-family: PingFangSC-Regular;
-            font-size: 16px;
+            font-size: 14px;
             color: #FFFFFF;
         }
     }

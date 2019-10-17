@@ -64,7 +64,7 @@ export default {
     },
     computed: {
         commandTree() {
-            let [res, tree] = [new Set(), getCommandsTree('Notebook')];
+            let [res, tree] = [new Set(), getCommandsTree(['Notebook', 'Notebook Cell'])];
             tree.forEach(item => {
                 let commands =  new Set();
                 if (matchingString(item.category, this.command)) {

@@ -15,6 +15,9 @@
             :tags.sync="tags"
             :default-keys.sync="defaultKeys"
             :tree-node-key="treeNodeKey"
+            :placeholder="placeholder"
+            :loading="loading"
+            :need-show-tags="needShowTags"
         />
       </div>
     </template>
@@ -49,7 +52,26 @@ Vue.use(SdxUI);
 @import '~@sdx/ui/lib/theme/transfer.scss';
 
 ```
+## SCSS定制
+```scss
+$sdxu-transfer-width: 100% !default;
+$sdxu-transfer-default-width: 210px !default;
+$sdxu-transfer-default-height: 330px !default;
+$sdxu-transfer-height-tree: 220px !default;
+$sdxu-transfer-width-input: 179px !default;
+$sdxu-transfer-height-wrap: 238px !default;
+$sdxu-transfer-margin-small: 16px !default;
+$sdxu-transfer-height-moveicon: 36px !default;
+$sdxu-transfer-height-tagbox: 292px !default;
+$sdxu-transfer-margin-tag: 10px !default;
+$sdxu-transfer-background-taguser: #F4F7FD !default;
+$sdxu-transfer-background-taggroup: rgba(213,229,255,0.75) !default;
+$sdxu-transfer-background-tree:  #F7F9FD !default;
+$sdxu-transfer-background-icon-move: #f2f6fc !default;
+$sdxu-transfer-color-icon-move: #C0C4CC !default;
+$sdxu-transfer-expand-icon-padding: 4px !default;
 
+```
 ## API
 
 <ui-transfer-api slot="api" />

@@ -52,7 +52,7 @@ export default {
 <style lang="scss" scoped>
     @import "~@sdx/utils/src/theme-common/var";
     .skyide-file-breadcrumb-bar {
-        height: 48px;
+        height: 40px;
         background: #314065;
         color: #A0A5B8;
         display: flex;

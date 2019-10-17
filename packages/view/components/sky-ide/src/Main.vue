@@ -7,7 +7,7 @@
             >
                 <ResizablePanel
                     :fixed="true"
-                    :init-width="48"
+                    :init-width="40"
                     class="sdxv-skyide-sidebar"
                     tabindex="1"
                 >
@@ -38,6 +38,7 @@
                             :init-width="layout.doc.weight ? -1 : layout.doc.initWidth"
                             :weight="layout.doc.weight"
                             :min-width="layout.doc.minWidth"
+                            style="margin-left: 4px"
                         >
                             <ResizablePanel>
                                 <doc-manager
@@ -292,10 +293,10 @@ export default {
             left: 0;
             top: 0;
             width: 100%;
-            height: calc(100% - 72px);
-            margin-top: 72px;
+            height: calc(100% - 52px);
+            margin-top: 52px;
             .sdxv-skyide-sidebar {
-                background: #445580;
+                background: #394C7E;
             }
         }
     }

@@ -9,7 +9,7 @@
   <highlight-code slot="codeText" lang="vue">
     <template>
       <SdxuEmpty></SdxuEmpty>
-              <SdxuEmpty>自定义的什么内容都没有</SdxuEmpty>
+      <SdxuEmpty>自定义内容</SdxuEmpty>
     </template>
   </highlight-code>
 </Common-BasicUsage>

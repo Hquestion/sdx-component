@@ -13,15 +13,8 @@
                 @click.native="createTask(item)"
             />
         </div>
-        <sdxu-content-panel
-            class="sdxv-project-detail__task-list"
-            :title="t('view.project.taskList')"
-            v-loading="loading"
-        >
-            <div
-                slot="right"
-                class="sdxv-project-detail__actions"
-            >
+        <div class="sdxv-project-detail__search-filter">
+            <div class="sdxv-project-detail__search-filter--search">
                 <sdxu-input
                     v-model="searchName"
                     type="search"
@@ -36,13 +29,29 @@
                 >
                     {{ t('sdxCommon.Search') }}
                 </sdxu-button>
+            </div>
+            <div class="sdxv-project-detail__search-filter--filter">
                 <SdxuSortButton
                     :title="t('view.project.sortByCreateTime')"
                     @sortChange="sortChange"
                     :order.sync="order"
                 />
             </div>
+        </div>
+        <div>
             <div class="sdxv-project-detail__content">
+                <SdxuTabRadioGroup
+                    v-model="type"
+                    style="margin-bottom: 10px;"
+                >
+                    <SdxuTabRadioItem name="dev">
+                        开发任务
+                    </SdxuTabRadioItem>
+                    <SdxuTabRadioItem name="skyflow">
+                        可视化数据分析与建模任务
+                    </SdxuTabRadioItem>
+                </SdxuTabRadioGroup>
+
                 <div v-if="taskList.length">
                     <div>
                         <sdxw-subject-card-list>
@@ -108,7 +117,7 @@
                     @current-change="currentChange"
                 />
             </div>
-        </sdxu-content-panel>
+        </div>
     </div>
 </template>
 
@@ -116,6 +125,7 @@
 import ContentPanel from '@sdx/ui/components/content-panel';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
+import TabRadio from '@sdx/ui/components/tab-radio';
 import Pagination from '@sdx/ui/components/pagination';
 import IconButton from '@sdx/ui/components/icon-button';
 import SortButton from '@sdx/ui/components/sort-button';
@@ -143,6 +153,7 @@ export default {
             orderBy: 'createdAt',
             taskList: [],
             loading: false,
+            type: 'dev',
             refreshTimer: null,
             iconOptions: {
                 SKYIDE: 'sdx-skyIDElogo',
@@ -166,7 +177,7 @@ export default {
                 {
                     createLabel: '添加自定义容器任务',
                     class: 'Apache_Spark_logo',
-                    type: 'SPARK',
+                    type: 'CONTAINERDEV',
                     taskType: '开发工具'
                 },
                 {
@@ -199,6 +210,8 @@ export default {
         [Pagination.name]: Pagination,
         [TaskRunningLimit.name]: TaskRunningLimit,
         [Empty.name]: Empty,
+        [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
+        [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         [SubCard.SubjectCard.name]: SubCard.SubjectCard,
         [SubCard.SubjectCardList.name]: SubCard.SubjectCardList,
         CreateTaskCard
@@ -210,7 +223,7 @@ export default {
         createTask(task) {
             this.$router.push(
                 {
-                    name: 'CreateTask',
+                    name: 'CreateTaskNext',
                     params: {
                         type: task.type,
                         projectId: this.$route.params.id

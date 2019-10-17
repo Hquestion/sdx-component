@@ -16,7 +16,7 @@ ProjectManagement.install = vue => {
 const routeCfg = [
     {
         path: '/sdxv-project-manage-next',
-        name: 'SdxvProjectManagement',
+        name: 'SdxvProjectManagementNext',
         redirect: '/sdxv-project-manage-next/project-list',
         component: ProjectManagement,
         meta: {
@@ -25,7 +25,7 @@ const routeCfg = [
         children: [
             {
                 path: 'project-list',
-                name: 'SdxvProjectList',
+                name: 'SdxvProjectListNext',
                 component: ProjectList,
                 meta: {
                     breadcrumb: t('view.project.project'),
@@ -61,7 +61,7 @@ const routeCfg = [
             {
                 path: 'createTask/:type/:projectId',
                 component: FormView,
-                name: 'CreateTask',
+                name: 'CreateTaskNext',
                 meta: {
                     breadcrumb: t('view.project.createTask')
                 },
@@ -74,7 +74,7 @@ const routeCfg = [
             {
                 path: 'modifyTask/:type/:taskId/:projectId',
                 component: FormView,
-                name: 'EditTask',
+                name: 'EditTaskNext',
                 meta: {
                     breadcrumb: t('view.project.editTask')
                 },

@@ -78,5 +78,11 @@
             padding-left: 32px;
             margin-left: 0;
         }
+        .sdxu-button--primary.is-plain {
+            color: #42526e;
+            .sdxu-button__main {
+                font-size: 12px;
+            }
+        }
     }
 }

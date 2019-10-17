@@ -334,7 +334,13 @@ export default {
             modelTraining: 'Model Training',
             modelAssess: 'Model Assessment',
             template: 'Templates',
-            privateAndShare: 'Self Created And Cooperate'
+            privateAndShare: 'Self Created And Cooperate',
+            templateProject: 'Template Project',
+            allProject: 'All Project',
+            taskCounts: ' tasks',
+            taskCount: ' task',
+            Created: 'Created ',
+            oneself: 'Oneself'
         },
         skyflow: {
             skyflowList: 'Workflows List',

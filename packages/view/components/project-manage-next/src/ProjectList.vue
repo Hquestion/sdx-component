@@ -64,8 +64,7 @@
                 @tab-click="tabClick(tabName)"
             >
                 <el-tab-pane
-                    v-for="item in projectTabs"
-                    v-if="item.label"
+                    v-for="item in tabs"
                     :key="item.name"
                     :label="item.label"
                     :name="item.name"
@@ -123,19 +122,19 @@ export default {
         return {
             projectTabs: [
                 {
-                    label: '所有项目',
+                    label: this.t('view.project.allProject'),
                     name: ''
                 },
                 {
-                    label: '私有项目',
+                    label: this.t('view.project.selfCreateProject'),
                     name: 'private'
                 },
                 {
-                    label: '协作项目',
+                    label: this.t('view.project.otherProject'),
                     name: 'public'
                 },
                 {
-                    label: '模板项目',
+                    label: this.t('view.project.templateProject'),
                     name: 'template'
                 }
             ],
@@ -172,6 +171,12 @@ export default {
     created() {
         this.initProjectsList();
     },
+    computed: {
+        tabs() {
+            let tabs = this.projectTabs.filter(item => item.auth === true);
+            return tabs;
+        }
+    },
     methods: {
         // tab切换
         tabClick(name) {
@@ -185,13 +190,16 @@ export default {
         initProjectsList() {
             this.projectListLoading = true;
             this.projectsLoaded = false;
+            // 添加权限
             let [hasPrivateAuth, hasPublicAuth, hasTemplateAuth]=[auth.checkAuth('PROJECT-MANAGER:PROJECT:READ', 'API'),
                 auth.checkAuth('PROJECT-MANAGER:COOPERATE_PROJECT:CREATE', 'API'),
                 auth.checkAuth('PROJECT-MANAGER:TEMPLATE_PROJECT:READ', 'API'),
             ];
-            let projectType = [hasPrivateAuth ? 'private': '', hasPublicAuth ? 'public' : '', hasTemplateAuth ? 'template' : ''];
-            projectType = projectType.filter( item => item !== '');
-            console.log(hasPrivateAuth,hasPublicAuth ,hasTemplateAuth,projectType, 9999);
+            let allAuths = hasPrivateAuth || hasPublicAuth || hasTemplateAuth;
+            let auths = [allAuths, hasPrivateAuth, hasPublicAuth, hasTemplateAuth];
+            for(let i = 0; i < auths.length; i++) {
+                this.projectTabs[i].auth = auths[i];
+            }
             let params = {
                 name: this.searchName,
                 ...paginate(this.current, this.pageSize),
@@ -216,12 +224,14 @@ export default {
                 this.projectList = res.data.items;
                 this.projectList.forEach(item => {
                     const isOwn = getUser().userId === item.owner.uuid;
+                    
                     let tempalteWriteAuth = true;
                     if (item.isTempalte)  {
                         tempalteWriteAuth = auth.checkAuth('PROJECT-MANAGER:TEMPLATE_PROJECT:WRITE', 'BUTTON');
                     } else {
                         tempalteWriteAuth = true;
                     }
+                    
                     item.meta = Object.assign({}, item, {
                         title: item.name,
                         creator: item.owner.fullName,
@@ -230,6 +240,7 @@ export default {
                         showRemove: isOwn && tempalteWriteAuth,
                         type: 'project',
                         icon: 'sdx-icon-UserInfo',
+                        footer: isOwn && tempalteWriteAuth,
                         taskNumber: 6
                     });
                 });

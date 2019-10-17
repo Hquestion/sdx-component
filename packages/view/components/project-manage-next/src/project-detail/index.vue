@@ -255,6 +255,8 @@ export default {
                     item.showJupyterLink = item.type === 'JUPYTER';
                     item.showRunningInfo = item.type === 'SKYFLOW';
                     item.meta = {
+                        uuid: '123',
+                        owner: {uuid: 'd565e2c9-ee81-40b2-8acd-10f4359a6242'},
                         title: item.name,
                         description: item.description,
                         creator: item.ownerName,

@@ -1,18 +1,18 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} Jupyter ${t('view.task.form.task')}`"
-        class="form-jupyter"
-        :label-width="lang$ === 'en' ? 190 : 100"
-        icon="sdx-Jupter"
+        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyIDE ${t('view.task.form.task')}`"
+        class="form-containerdev"
+        :label-width="lang$ === 'en' ? 190 : 160"
+        icon="sdx-icon-docker"
         @commit="commit"
-        :type="`Jupyter ${t('view.task.form.task')}`"
+        :type="`SkyIDE ${t('view.task.form.task')}`"
     >
         <el-form
             label-position="right"
-            :label-width="lang$ === 'en' ? '190px' : '100px'"
+            :label-width="lang$ === 'en' ? '190px' : '160px'"
             slot="form"
             @submit.native.prevent
-            ref="jupyter"
+            ref="containerdev"
             :rules="rules"
             :model="params"
         >
@@ -20,8 +20,8 @@
                 label="基本配置"
             />
             <el-form-item
-                :label="`${t('view.task.taskName')}:`"
                 prop="name"
+                :label="`${t('view.task.taskName')}:`"
             >
                 <SdxuInput
                     v-model="params.name"
@@ -36,6 +36,7 @@
             >
                 <SdxuInput
                     type="textarea"
+                    :searchable="true"
                     v-model="params.description"
                     size="small"
                     :placeholder="t('view.task.form.Please_enter_a_task_description')"
@@ -121,6 +122,61 @@
                     将数据源的设置写入容器的环境变量
                 </div>
             </el-form-item>
+            <SdxwExpandLabel
+                label="高级配置"
+                expandable
+                :expanded.sync="showMoreSetting"
+            />
+            <div v-show="showMoreSetting">
+                <el-form-item
+                    label="是否启动自动释放资源:"
+                >
+                    <el-radio-group v-model="params.autoRelease">
+                        <el-radio
+                            :label="true"
+                        >
+                            {{ t('widget.shareForm.Yes') }}
+                        </el-radio>
+                        <el-radio
+                            :label="false"
+                        >
+                            {{ t('widget.shareForm.No') }}
+                        </el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                    label="Kernel自动释放时间:"
+                >
+                    <el-input-number
+                        v-model="params.kernelReleaseTime"
+                        :min="30"
+                        :max="InputNumberMax"
+                        :disabled="!params.autoRelease"
+                    />
+                    <span
+                        class="form-tip"
+                        style="margin-left:10px;"
+                    >
+                        超过指定时间Kernel将停止活跃
+                    </span>
+                </el-form-item>
+                <el-form-item
+                    label="Pod自动释放时间:"
+                >
+                    <el-input-number
+                        v-model="params.podReleaseTime"
+                        :min="30"
+                        :max="InputNumberMax"
+                        :disabled="!params.autoRelease"
+                    />
+                    <span
+                        class="form-tip"
+                        style="margin-left:10px;"
+                    >
+                        超过指定时间所有Kennel将断开连接
+                    </span>
+                </el-form-item>
+            </div>
         </el-form>
     </BaseForm>
 </template>
@@ -128,21 +184,21 @@
 <script>
 
 import BaseForm from './BaseForm';
-import Form from 'element-ui/lib/form';
-import FormItem from 'element-ui/lib/form-item';
-import Select from 'element-ui/lib/select';
+import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
+import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
+import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
-import { createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
-import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
 import ExpandLabel from '@sdx/widget/components/expand-label';
+import ElRadio from 'element-ui/lib/radio';
+import ElRadioGroup from 'element-ui/lib/radio-group';
 export default {
-    name: 'JupyterForm',
+    name: 'SkyIdeForm',
     mixins: [locale, projectDetailMixin],
     components: {
         BaseForm,
@@ -152,7 +208,10 @@ export default {
         [Select.name]: Select,
         SdxuInput,
         SdxwResourceConfig,
-        DataSourceSelect
+        DataSourceSelect,
+        [InputNumber.name]: InputNumber,
+        ElRadio,
+        ElRadioGroup
     },
     props: {
         task: {
@@ -180,10 +239,11 @@ export default {
         };
         return {
             params: {
+                uuid: '',
                 projectId: this.$route.params.projectId,
                 name: '',
                 description: '',
-                type: 'JUPYTER',
+                type: 'SkyIDE',
                 imageId: '',
                 resourceConfig: {
                     'EXECUTOR_INSTANCES': 1,
@@ -193,13 +253,14 @@ export default {
                     'GPU_MODEL': ''
                 },
                 datasources: [],
-                datasets: []
+                datasets: [],
+                autoRelease: false,
+                kernelReleaseTime: 0,
+                podReleaseTime: 0
             },
             imageOptions: [],
             cpuObj: {},
             gpuObj: {},
-            cooperation:true,
-            datasetsOptions: [],
             rules:  {
                 name: [
                     { required: true, message: this.t('view.task.form.Please_enter_the_task_name'), trigger: 'blur',
@@ -225,7 +286,10 @@ export default {
                     }
                 ],
             },
-            dataReady: false
+            datasetsOptions: [],
+            cooperation:true,
+            dataReady: false,
+            showMoreSetting: true
         };
     },
     computed: {
@@ -245,26 +309,21 @@ export default {
     },
     created() {
         this.imageList();
-        this.projectCooperation();
         this.getDataSetList();
+        // 判断是否协作
+        this.projectCooperation();
     },
     methods: {
         // 数据集列表
         getDataSetList() {
-            let params = '';
-            if (this.cooperation === false) {
-                params = '1,2,3';
-            } else if (this.cooperation === true) {
-                params = '1,3';
-            }
-            getDataSet({ share_kinds: params })
+            getDataSet({ share_kinds: '1,2,3' })
                 .then(data => {
                     this.datasetsOptions = data.data.options;
                 });
         },
         imageList() {
             const params = {
-                imageType: 'JUPYTER',
+                imageType: 'CONTAINER_DEV',
                 start: 1,
                 count: -1,
                 ownerId: getUser().userId || ''
@@ -281,7 +340,7 @@ export default {
                 this.params.resourceConfig.EXECUTOR_GPUS = 0;
                 this.params.resourceConfig.GPU_MODEL = '';
             }
-            this.$refs.jupyter.validate().then(() => {
+            this.$refs.containerdev.validate().then(() => {
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
                     .then (() => {
                         this.$router.go(-1);
@@ -289,6 +348,7 @@ export default {
             });
         }
     },
+
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
@@ -325,7 +385,7 @@ export default {
             };
         },
         'params.imageId'() {
-            this.$refs.jupyter.clearValidate('resourceConfig');
+            this.$refs.containerdev.clearValidate('resourceConfig');
         }
     }
 };

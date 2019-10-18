@@ -10,16 +10,22 @@
         >
             <el-form
                 label-position="right"
-                :label-width="lang$ === 'en' ? '190px' : '100px'"
+                :label-width="`${labelWidth}px`"
                 @submit.native.prevent
+                class="sdxv-project-task-form__panel--form"
             >
                 <el-form-item
                     :label="`任务类型:`"
                 >
                     <div class="sdxv-project-task-form__task-type">
                         <!-- 图标插入 -->
-                        <div style="width: 40px;height: 40px;">
-                            <i :class="['sdx-icon' ,icon]" />
+                        <div style="width:40px;height:40px">
+                            <svg
+                                aria-hidden="true"
+                                style="width:40px;height:40px"
+                            >
+                                <use :xlink:href="`#${icon}`" />
+                            </svg>
                         </div>
                         <span style="margin-left: 16px;">
                             {{ type }}
@@ -133,6 +139,15 @@ export default {
                 padding-top: 16px;
             }
             & /deep/  {
+                .sdxv-project-task-form__panel--form {
+                    .el-form-item {
+                        display: flex;
+                        align-items: center;
+                        .el-form-item__content {
+                            margin-left: 0!important;
+                        }
+                    }
+                }
                 .el-select {
                     width: 560px;
                 }
@@ -142,19 +157,19 @@ export default {
                 .sdxw-file-select {
                     width: 560px;
                 }
-                .el-form-item {
-                    display: flex;
-                    align-items: center;
-                }
                 .el-form-item__content {
                     position: relative;
-                    margin-left: 0!important;
                     .icon {
                         color: #F56C6C;
                         position: absolute;
                         top: 2px;
                         left: -83px;
                     }
+                }
+                .form-tip {
+                    font-size: 12px;
+                    color: #6B778C;
+                    line-height: 28px;
                 }
                 .is-lang-en {
                     .el-select {

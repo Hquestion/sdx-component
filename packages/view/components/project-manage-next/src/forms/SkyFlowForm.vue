@@ -1,15 +1,15 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
+        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyFlow ${t('view.task.form.task')}`"
         class="form-containerdev"
-        :label-width="lang$ === 'en' ? 190 : 100"
-        icon="sdx-zidingyirongqirenwu"
+        :label-width="lang$ === 'en' ? 190 : 160"
+        icon="sdx-skyflowrenwu"
         @commit="commit"
-        :type="`ContainerDev ${t('view.task.form.task')}`"
+        :type="`SkyFlow ${t('view.task.form.task')}`"
     >
         <el-form
             label-position="right"
-            :label-width="lang$ === 'en' ? '190px' : '100px'"
+            :label-width="lang$ === 'en' ? '190px' : '160px'"
             slot="form"
             @submit.native.prevent
             ref="containerdev"
@@ -129,63 +129,50 @@
             />
             <div v-show="showMoreSetting">
                 <el-form-item
-                    label="环境变量:"
+                    label="是否启动自动释放资源:"
                 >
-                    <SdxuInput
-                        v-model="params.environments"
-                        size="small"
-                        placeholder="--$参数名 参数值, 以空格分隔"
+                    <el-radio-group v-model="params.autoRelease">
+                        <el-radio
+                            :label="true"
+                        >
+                            {{ t('widget.shareForm.Yes') }}
+                        </el-radio>
+                        <el-radio
+                            :label="false"
+                        >
+                            {{ t('widget.shareForm.No') }}
+                        </el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item
+                    label="Kernel自动释放时间:"
+                >
+                    <el-input-number
+                        v-model="params.kernelReleaseTime"
+                        :min="30"
+                        :disabled="!params.autoRelease"
                     />
+                    <span
+                        class="form-tip"
+                        style="margin-left:10px;"
+                    >
+                        超过指定时间Kernel将停止活跃
+                    </span>
                 </el-form-item>
                 <el-form-item
-                    label="启动命令:"
+                    label="Pod自动释放时间:"
                 >
-                    <div style="display:flex;justify-content:space-between;width:560px;">
-                        <SdxuInput
-                            v-model="params.environments"
-                            size="small"
-                            placeholder="启动命令"
-                            style="width:270px"
-                        />
-                        <span>-</span>
-                        <SdxuInput
-                            v-model="params.environments"
-                            size="small"
-                            placeholder="参数"
-                            style="width:270px"
-                        />
-                    </div>
-                    <div class="form-tip">
-                        此处不设置, 则默认启动Container Dev
-                    </div>
-                </el-form-item>
-                <el-form-item
-                    label="输出路径:"
-                >
-                    <div>
-                        <SdxwFileSelect
-                            v-model="params.outputPaths"
-                            :string-model="true"
-                            check-type="folder"
-                            source="ceph"
-                        />
-                    </div>
-                    <div class="form-tip">
-                        存放训练输出的日志或模型等
-                    </div>
-                </el-form-item>
-                <el-form-item
-                    label="端口转发:"
-                >
-                    <div>
-                        <SdxuInput
-                            v-model="params.environments"
-                            size="small"
-                        />
-                    </div>
-                    <div class="form-tip">
-                        定义容器中的某一端口转发到容器外部
-                    </div>
+                    <el-input-number
+                        v-model="params.podReleaseTime"
+                        :min="30"
+                        :disabled="!params.autoRelease"
+                    />
+                    <span
+                        class="form-tip"
+                        style="margin-left:10px;"
+                    >
+                        超过指定时间所有Kennel将断开连接
+                    </span>
                 </el-form-item>
             </div>
         </el-form>
@@ -195,7 +182,7 @@
 <script>
 
 import BaseForm from './BaseForm';
-import {Form, FormItem, Select} from 'element-ui';
+import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
@@ -206,9 +193,10 @@ import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
 import ExpandLabel from '@sdx/widget/components/expand-label';
-import FileSelect from '@sdx/widget/components/file-select';
+import ElRadio from 'element-ui/lib/radio';
+import ElRadioGroup from 'element-ui/lib/radio-group';
 export default {
-    name: 'ContainerDevForm',
+    name: 'SkyFlowForm',
     mixins: [locale, projectDetailMixin],
     components: {
         BaseForm,
@@ -219,7 +207,9 @@ export default {
         SdxuInput,
         SdxwResourceConfig,
         DataSourceSelect,
-        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix
+        [InputNumber.name]: InputNumber,
+        ElRadio,
+        ElRadioGroup
     },
     props: {
         task: {
@@ -251,7 +241,7 @@ export default {
                 projectId: this.$route.params.projectId,
                 name: '',
                 description: '',
-                type: 'CONTAINERDEV',
+                type: 'SkyIDE',
                 imageId: '',
                 resourceConfig: {
                     'EXECUTOR_INSTANCES': 1,
@@ -262,8 +252,9 @@ export default {
                 },
                 datasources: [],
                 datasets: [],
-                environments: '',
-                outputPaths: ''
+                autoRelease: false,
+                kernelReleaseTime: 0,
+                podReleaseTime: 0
             },
             imageOptions: [],
             cpuObj: {},

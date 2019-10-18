@@ -3,7 +3,7 @@
         :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} Jupyter ${t('view.task.form.task')}`"
         class="form-jupyter"
         :label-width="lang$ === 'en' ? 190 : 100"
-        icon="sdx-Jupter"
+        icon="sdx-Jupyterrenwu"
         @commit="commit"
         :type="`Jupyter ${t('view.task.form.task')}`"
     >
@@ -91,13 +91,6 @@
                 label="数据配置"
             />
             <el-form-item
-                v-if="!cooperation"
-                prop="datasources"
-                :label="`${t('view.task.form.DataSource')}:`"
-            >
-                <data-source-select v-model="params.datasources" />
-            </el-form-item>
-            <el-form-item
                 prop="datasets"
                 :label="`${t('view.task.DataSet')}:`"
             >
@@ -114,6 +107,19 @@
                         :value="item.value"
                     />
                 </el-select>
+                <div class="form-tip">
+                    将数据集以只读方式挂载进目录
+                </div>
+            </el-form-item>
+            <el-form-item
+                v-if="!cooperation"
+                prop="datasources"
+                :label="`${t('view.task.form.DataSource')}:`"
+            >
+                <data-source-select v-model="params.datasources" />
+                <div class="form-tip">
+                    将数据源的设置写入容器的环境变量
+                </div>
             </el-form-item>
         </el-form>
     </BaseForm>

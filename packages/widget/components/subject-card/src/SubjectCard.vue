@@ -15,7 +15,7 @@
                     <div class="left">
                         <span
                             class="title"
-                            @click="showDetail"
+                            @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
                         >
                             {{ meta && meta.title }}
                         </span>
@@ -121,17 +121,7 @@ export default {
     },
     methods: {
         dateFormatter,
-        getUser,
-        showDetail() {
-            if (this.meta.type === 'project') {
-                this.$router.push({
-                    name: 'ProjectDetailNext',
-                    params: {
-                        id: 'eb3f701c-0582-411b-a7dc-ed26956d81bf'
-                    }
-                });
-            }
-        }
+        getUser
     }
 };
 </script>

@@ -59,9 +59,10 @@
             </div>
         </div>
         <div class="search">
-            <el-tabs
+            <sdxu-tabs
                 v-model="tabName"
                 @tab-click="tabClick(tabName)"
+                tab-style="button" 
             >
                 <el-tab-pane
                     v-for="item in tabs"
@@ -82,7 +83,7 @@
                     </sdxw-subject-card-list>
                     <SdxuEmpty v-else />
                 </el-tab-pane>
-            </el-tabs>
+            </sdxu-tabs>
         </div>
         <sdxu-pagination
             class="pagination"
@@ -106,7 +107,7 @@
 import locale from '@sdx/utils/src/mixins/locale';
 import auth from '@sdx/widget/components/auth';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
-import { Tabs, TabPane, Message } from 'element-ui';
+import { TabPane, Message } from 'element-ui';
 import SubCard from '@sdx/widget/components/subject-card';
 import Pagination from '@sdx/ui/components/pagination';
 import { removeProject, getProjectTemplates, getSelfCreatedProjects, getSharingProjects, getProjectList } from '@sdx/utils/src/api/project';
@@ -116,6 +117,7 @@ import MessageBox from '@sdx/ui/components/message-box';
 import SortButton from '@sdx/ui/components/sort-button';
 import CreateProject from './CreateProject';
 import Empty from '@sdx/ui/components/empty';
+import Tabs from '@sdx/ui/components/tab';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -167,6 +169,7 @@ export default {
         [SortButton.name]:SortButton,
         [CreateProject.name]: CreateProject,
         [Empty.name]: Empty,
+        [Tabs.name]: Tabs,
     },
     created() {
         this.initProjectsList();

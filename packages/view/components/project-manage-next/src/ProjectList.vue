@@ -1,6 +1,6 @@
 <template>
     <div class="sdxv-project-manage-list">
-        <div class="condition"> 
+        <div class="condition">
             <SdxwSearchLayout
                 @search="searchProject"
                 :block="false"
@@ -73,7 +73,7 @@
                         v-loading="projectListLoading"
                         v-if="projectList.length"
                     >
-                        <sdxw-subject-card 
+                        <sdxw-subject-card
                             v-for="(val, index) in projectList"
                             :key="index"
                             :meta="val.meta"
@@ -207,7 +207,7 @@ export default {
                 orderBy: 'createdAt',
                 type: this.tabName == 0 ? '' : this.tabName
             };
-            let fn = null; 
+            let fn = null;
             if(this.tabName == 0) {
                 fn = getProjectList;
             } else if (this.tabName === 'private') {
@@ -224,14 +224,14 @@ export default {
                 this.projectList = res.data.items;
                 this.projectList.forEach(item => {
                     const isOwn = getUser().userId === item.owner.uuid;
-                    
+
                     let tempalteWriteAuth = true;
                     if (item.isTempalte)  {
                         tempalteWriteAuth = auth.checkAuth('PROJECT-MANAGER:TEMPLATE_PROJECT:WRITE', 'BUTTON');
                     } else {
                         tempalteWriteAuth = true;
                     }
-                    
+
                     item.meta = Object.assign({}, item, {
                         title: item.name,
                         creator: item.owner.fullName,
@@ -272,12 +272,20 @@ export default {
                             });
                         }).catch(() => {});
                         break;
-                    case 'edit': 
-                        this.editingProject = Object.assign({}, operate.item, { 
+                    case 'edit':
+                        this.editingProject = Object.assign({}, operate.item, {
                             name: operate.item.title
                         });
                         this.showCreateProject('empty');
                         break;
+                    case 'detail':
+                        this.$router.push({
+                            name: 'ProjectDetailNext',
+                            params: {
+                                id: 'eb3f701c-0582-411b-a7dc-ed26956d81bf'
+                            }
+                        });
+
                 }
             }
         },
@@ -297,7 +305,7 @@ export default {
 <style lang="scss" scoped>
 .sdxv-project-manage-list {
     position: relative;
-    
+
     .condition {
         display: flex;
         justify-content: space-between;

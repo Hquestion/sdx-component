@@ -1,11 +1,11 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyIDE ${t('view.task.form.task')}`"
+        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyFlow ${t('view.task.form.task')}`"
         class="form-containerdev"
         :label-width="lang$ === 'en' ? 190 : 160"
-        icon="sdx-SkyIDErenwu"
+        icon="sdx-skyflowrenwu"
         @commit="commit"
-        :type="`SkyIDE ${t('view.task.form.task')}`"
+        :type="`SkyFlow ${t('view.task.form.task')}`"
     >
         <el-form
             label-position="right"
@@ -196,7 +196,7 @@ import ExpandLabel from '@sdx/widget/components/expand-label';
 import ElRadio from 'element-ui/lib/radio';
 import ElRadioGroup from 'element-ui/lib/radio-group';
 export default {
-    name: 'SkyIdeForm',
+    name: 'SkyFlowForm',
     mixins: [locale, projectDetailMixin],
     components: {
         BaseForm,
@@ -252,9 +252,9 @@ export default {
                 },
                 datasources: [],
                 datasets: [],
-                autoRelease: true,
-                kernelReleaseTime: 30,
-                podReleaseTime: 30
+                autoRelease: false,
+                kernelReleaseTime: 0,
+                podReleaseTime: 0
             },
             imageOptions: [],
             cpuObj: {},

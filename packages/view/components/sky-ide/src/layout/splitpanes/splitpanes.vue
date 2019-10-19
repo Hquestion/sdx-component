@@ -329,8 +329,6 @@ export default {
                         if (this.dblClickSplitter) {
                             elm.ondblclick = (event) => this.onSplitterDblClick(event, splitterIndex + 1);
                         }
-
-                        console.log('insert split');
                         child.before(elm);
                     } else if (!vm.visible || (preVM && !preVM.visible)) {
                         if (child.previousSibling && child.previousSibling.classList.contains('splitpanes__splitter')) {

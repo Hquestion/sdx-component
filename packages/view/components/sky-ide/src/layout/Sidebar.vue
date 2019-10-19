@@ -48,7 +48,9 @@ export default {
     data() {
         return {
             SIDEBAR_TABS,
-            SIDEBAR_WINDOWS
+            SIDEBAR_WINDOWS,
+            width: 0,
+            height: 0
         };
     },
     props: {
@@ -59,14 +61,6 @@ export default {
         active: {
             type: Array,
             default: () => []
-        }
-    },
-    computed: {
-        width() {
-            return this.$parent.height;
-        },
-        height() {
-            return this.$parent.width;
         }
     },
     methods: {
@@ -91,6 +85,11 @@ export default {
                 }
             }
         }
+    },
+    mounted() {
+        let { height, width } = this.$el.parentNode.getBoundingClientRect();
+        this.width = height;
+        this.height = width;
     }
 };
 </script>

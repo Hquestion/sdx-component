@@ -43,7 +43,7 @@ export default {
     data() {
         return {
             search: '',
-            sinppets: []
+            snippets: []
         };
     },
     inject: {
@@ -56,13 +56,13 @@ export default {
     },
     created() {
         getCodeTemplates(this.app.taskManager.ideUuid).then(res => {
-            this.sinppets = res;
+            this.snippets = res.snippets;
         });
     },
     computed: {
         result() {
             let res = new Set();
-            this.sinppets.forEach(item => {
+            this.snippets.forEach(item => {
                 if (matchingString(item.name, this.search)) {
                     res.add(item);
                 }
@@ -80,7 +80,7 @@ export default {
             const editor = this.app.docManager.$refs.editor.find(item => item.file.path === namespace);
             function operateFn() {
                 nb.insertCell('code', new SkyCodeCellModel({
-                    source: this.sinppets[index].code
+                    source: this.snippets[index].code
                 }));
             }
             function revokeFn() {

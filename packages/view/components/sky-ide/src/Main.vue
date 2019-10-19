@@ -4,6 +4,7 @@
         <div class="sdxv-sky-ide__frame">
             <ResizablePanel
                 child-direction="horizontal"
+                style="display: none;"
             >
                 <ResizablePanel
                     :fixed="true"
@@ -64,6 +65,33 @@
                     </ResizablePanel>
                 </ResizablePanel>
             </ResizablePanel>
+            <div class="sdxv-skyide-sidebar" style="width: 40px">
+                <Sidebar />
+            </div>
+            <Splitpanes class="sdxv-skyide-main" ref="editorMain" horizontal>
+                <Pane size="60">
+                    <Splitpanes>
+                        <Pane size="30" :visible="fileManagerVisible">
+                            <file-manager
+                                @open-file="openFile"
+                                ref="fileManager"
+                            />
+                        </Pane>
+                        <Pane size="70">
+                            <doc-manager
+                                ref="docManager"
+                                @refresh-tree="refreshTree"
+                            />
+                            <div class="resource">
+                                <ResourceUsage />
+                            </div>
+                        </Pane>
+                    </Splitpanes>
+                </Pane>
+                <Pane :visible="terminalVisible" size="40">
+                    <SkyTerminal ref="terminal" />
+                </Pane>
+            </Splitpanes>
         </div>
     </div>
 </template>
@@ -89,6 +117,8 @@ import { SIDEBAR_FILE } from './config';
 import { extend } from './utils/utils';
 import SkyIdeTitle from './widgets/title/SkyIdeTitle';
 import ResourceUsage from './widgets/resource/ResourceUsage';
+import { Splitpanes, Pane } from './layout/splitpanes/index';
+import 'splitpanes/dist/splitpanes.css';
 export default {
     name: 'Main',
     components: {
@@ -98,7 +128,9 @@ export default {
         FileManager,
         DocManager,
         SkyIdeTitle,
-        ResourceUsage
+        ResourceUsage,
+        Splitpanes,
+        Pane
     },
     props: {
         taskId: {
@@ -276,6 +308,15 @@ export default {
             :focus {
                 outline: none;
             }
+            .splitpanes__pane {
+                position: relative;
+            }
+            .splitpanes--horizontal>.splitpanes__splitter {
+                min-height: 10px;
+            }
+            .splitpanes--vertical>.splitpanes__splitter {
+                min-width: 10px;
+            }
         }
         .sdxv-sky-ide__frame {
             position: absolute;
@@ -284,8 +325,14 @@ export default {
             width: 100%;
             height: calc(100% - 52px);
             margin-top: 52px;
+            display: flex;
             .sdxv-skyide-sidebar {
                 background: #394C7E;
+                width: 40px;
+                height: 100%;
+            }
+            .sdxv-skyide-main {
+                width: 100%;
             }
         }
     }

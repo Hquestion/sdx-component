@@ -44,6 +44,7 @@
         "fake-indexeddb": "^2.1.1",
         "interactjs": "^1.6.1",
         "node-fetch": "^2.6.0",
+        "splitpanes": "^2.0.0",
         "vue-codemirror": "^4.0.6"
     },
     "peerDependencies": {

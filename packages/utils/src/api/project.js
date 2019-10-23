@@ -33,8 +33,15 @@ export const getTaskList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
 
-export function getProjectDetail(uuid) {
-    return httpService.get(`${projectApi}/${uuid}`);
+export function getProjectDetail(uuid, mock) {
+    if (mock) {
+        return Promise.resolve({
+            name: '风电项目'
+        });
+    } else {
+        return httpService.get(`${projectApi}/${uuid}`);
+
+    }
 }
 
 export function createProject(params) {

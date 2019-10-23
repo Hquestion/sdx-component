@@ -73,25 +73,31 @@
             class="sdxv-create-project__filter"
             v-if="createType === 'project'"
         >
+            <SdxwSearchLayout
+                @search="filterProjects"
+                :block="false"
+                align="left"
+            >
+                <SdxwSearchItem>
+                    <sdxu-input
+                        v-model="searchName"
+                        type="search"
+                        size="small"
+                        :placeholder="t('view.project.enterProjectName')"
+                    />
+                </SdxwSearchItem>
+            </SdxwSearchLayout>
             <SdxuTabRadioGroup
                 v-model="projectType"
                 @switch="switchProjectType"
             >
                 <SdxuTabRadioItem name="private">
-                    {{ t('view.project.selfCreateProject') }}
+                    {{ t('view.project.iconName.private') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="public">
-                    {{ t('view.project.otherProject') }}
+                    {{ t('view.project.iconName.cooperation') }}
                 </SdxuTabRadioItem>
             </SdxuTabRadioGroup>
-            <sdxu-input
-                v-model="searchName"
-                searchable
-                type="search"
-                size="small"
-                :placeholder="t('view.project.enterProjectName')"
-                @search="filterProjects"
-            />
         </div>
         <div v-loading="loading">
             <el-scrollbar
@@ -101,7 +107,7 @@
             >
                 <div
                     class="template-list"
-                    v-if="!!totalProjects.length"
+                    v-if="projectList.length || !projectsLoaded"
                 >
                     <sdxw-create-project-card
                         @operate="handleOperate"
@@ -111,10 +117,9 @@
                         :operate-type="createType"
                     />
                 </div>
+                <sdxu-empty v-else />
             </el-scrollbar>
-            <sdxu-empty v-else />
         </div>
-        
         <div
             slot="footer"
         >
@@ -150,6 +155,7 @@ import auth from '@sdx/widget/components/auth';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
 import Empty from '@sdx/ui/components/empty';
+import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 export default {
     name: 'SdxvCreateProject',
     data() {
@@ -176,7 +182,6 @@ export default {
                     }
                 ]
             },
-            title: this.t('view.project.createProject'),
             needRefresh: false,
             projectList: [],
             loading: false,
@@ -184,7 +189,8 @@ export default {
             totalProjects: [],
             searchName: '',
             selectedUsers: [],
-            selectedGroups: []
+            selectedGroups: [],
+            projectsLoaded: false,
         };
     },
     components: {
@@ -200,7 +206,9 @@ export default {
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         [SelectGroupUser.name]: SelectGroupUser,
-        [Empty.name]: Empty
+        [Empty.name]: Empty,
+        [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
+        [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
     },
     directives: {
         auth
@@ -228,6 +236,27 @@ export default {
     computed: {
         isEditing() {
             return !!this.data;
+        },
+        title() {
+            let title = '';
+            if (this.isEditing) {
+                if (this.createType === 'empty') {
+                    title =this.t('view.project.emptyEdit');
+                } else if(this.createType === 'template') {
+                    title =this.t('view.project.templateEdit');
+                } else if(this.createType === 'project') {
+                    title =this.t('view.project.copyEdit');
+                }
+            } else {
+                if (this.createType === 'empty') {
+                    title = this.t('view.project.emptyCreate');
+                } else if(this.createType === 'template') {
+                    title =this.t('view.project.templateCreate');
+                } else if(this.createType === 'project') {
+                    title =this.t('view.project.copyCreate');
+                }
+            }
+            return title;
         }
     },
     created() {
@@ -235,7 +264,6 @@ export default {
             Object.assign(this.projectForm, this.data);
             this.selectedGroups = this.data.groups;
             this.selectedUsers = this.data.users;
-            this.title = this.t('view.project.editProject');
         } else if (this.createType === 'template') {
             this.getProjectList('template');
         } else if (this.createType === 'project') {
@@ -244,7 +272,7 @@ export default {
     },
     methods: {
         filterProjects() {
-            this.projectList = [...this.totalProjects.filter(item => item.name.indexOf(this.searchName) > -1)];
+            this.projectList = [...this.totalProjects.filter(item => item.name.includes(this.searchName))];
         },
         switchProjectType(type) {
             this.projectType = type;
@@ -268,6 +296,7 @@ export default {
         },
         getProjectList(type, name) {
             this.loading = true;
+            this.projectsLoaded = false;
             const params = {
                 name: name || '',
                 start: 1,
@@ -278,9 +307,11 @@ export default {
             fn(params).then(res => {
                 this.projectList = res.data.items;
                 this.loading = false;
+                this.projectsLoaded = true;
                 this.totalProjects = [...this.projectList];
             }).finally(() => {
                 this.loading = false;
+                this.projectsLoaded = true;
             });
         },
         confirm() {

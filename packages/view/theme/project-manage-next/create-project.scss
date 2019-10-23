@@ -12,8 +12,18 @@
         align-items: center;
         justify-content: space-between;
         margin: 0 0px 20px 0;
-        .sdxu-input.sdxu-input--small.is-lang-en {
-            width: 232px;
+        height: 36px;
+        line-height: 36px;
+        .sdxu-input.sdxu-input--small {
+            width: 220px;
+        }
+        .sdxw-search-layout {
+            height: 36px;
+            line-height: 36px;
+            .sdxw-search-item {
+                margin-right: 24px;
+                width: 220px;
+            }
         }
     }
     .template-list {

@@ -235,13 +235,16 @@ export default {
                         tempalteWriteAuth = true;
                     }
                     // 图标
-                    let icon = '';
+                    let [icon, iconName] = ['',''];
                     if (item.type === 'private' && !item.isTemplate) {
                         icon = 'sdx-siyouxiangmu';
+                        iconName = this.t('view.project.iconName.private');
                     } else if(item.type === 'public' && !item.isTemplate) {
                         icon = 'sdx-xiezuoxiangmu';
+                        iconName = this.t('view.project.iconName.cooperation');
                     } else if(item.isTemplate === true) {
                         icon = 'sdx-mobanxiangmu';
+                        iconName = this.t('view.project.iconName.template');
                     }
                     item.meta = Object.assign({}, item, {
                         title: item.name,
@@ -251,6 +254,7 @@ export default {
                         showRemove: isOwn && tempalteWriteAuth,
                         type: 'project',
                         icon: icon,
+                        iconName:iconName, 
                         footer: isOwn && tempalteWriteAuth,
                         taskNumber: 6
                     });

@@ -168,11 +168,18 @@ export default {
                 session: session || null
             });
             this.editableTabsValue = newTabName;
+        },
+        handleResize() {
+            console.log(this.$refs);
+            if (this.$refs.terminal) {
+                this.$refs.terminal.forEach(item => {
+                    item.handleResize();
+                });
+            }
         }
     },
     mounted() {
         this.$on('terminalSessionReady', (...rest) => {
-            console.log(rest);
             rest.forEach(t => {
                 this.openTerminal(t);
             });

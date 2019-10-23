@@ -78,11 +78,11 @@ export default {
             let nb = this.snb;
             let namespace = nb && nb.file && nb.file.path || '';
             const editor = this.app.docManager.$refs.editor.find(item => item.file.path === namespace);
-            function operateFn() {
+            const operateFn = () => {
                 nb.insertCell('code', new SkyCodeCellModel({
                     source: this.snippets[index].code
                 }));
-            }
+            };
             function revokeFn() {
                 nb.notebook.cells.splice(-1, 1);
                 editor.focus();

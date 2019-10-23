@@ -37,7 +37,7 @@ export default {
     },
     'watch': {
         sizeNumber(size) {
-            if (this.visible) {
+            if (this.visible && size) {
                 this.$el.setAttribute('data-origin-size', size);
             }
             this.$parent.requestUpdate({

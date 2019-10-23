@@ -19,6 +19,8 @@
         @closed="dialogClosed"
         @open="dialogOpen"
         @opened="dialogOpened"
+        v-bind="$attrs"
+        v-on="$listeners"
     >
         <div
             slot="title"

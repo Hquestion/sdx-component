@@ -72,7 +72,7 @@
                 >
                     <sdxw-subject-card-list
                         v-loading="projectListLoading"
-                        v-if="projectList.length"
+                        v-if="projectList.length || !projectsLoaded"
                     >
                         <sdxw-subject-card
                             v-for="(val, index) in projectList"
@@ -234,7 +234,15 @@ export default {
                     } else {
                         tempalteWriteAuth = true;
                     }
-
+                    // 图标
+                    let icon = '';
+                    if (item.type === 'private' && !item.isTemplate) {
+                        icon = 'sdx-siyouxiangmu';
+                    } else if(item.type === 'public' && !item.isTemplate) {
+                        icon = 'sdx-xiezuoxiangmu';
+                    } else if(item.isTemplate === true) {
+                        icon = 'sdx-mobanxiangmu';
+                    }
                     item.meta = Object.assign({}, item, {
                         title: item.name,
                         creator: item.owner.fullName,
@@ -242,7 +250,7 @@ export default {
                         showEdit: isOwn && tempalteWriteAuth,
                         showRemove: isOwn && tempalteWriteAuth,
                         type: 'project',
-                        icon: 'sdx-icon-UserInfo',
+                        icon: icon,
                         footer: isOwn && tempalteWriteAuth,
                         taskNumber: 6
                     });

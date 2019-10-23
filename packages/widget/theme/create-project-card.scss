@@ -1,0 +1,55 @@
+@include block('create-project-card',  $bem-namespace-widget) { 
+    border: 1px solid #D8DEEA;
+    box-shadow: 0 0 14px 0 rgba(0,0,0,0.10);
+    border-radius: 2px;
+    width: 304px;
+    height: 187px;
+    padding: 18px 24px 16px 24px;
+    box-sizing: border-box;
+    @include element('header') {
+        margin-bottom: 12px;
+        height: 32px;
+        line-height: 32px;
+        display: flex;
+        svg {
+            width: 32px;
+            height: 32px;
+        }
+        span {
+            font-size: 16px;
+            color: #13264D;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            padding-left: 6px;
+        }
+    }
+    @include element('info') {
+        height: 30px;
+        line-height: 30px;
+        display: flex;
+        span:first-child {
+            color: #6B778C;
+            min-width: 56px;
+        }
+        span:last-child {
+            color: #13264D;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+    }
+    @include element('btn') {
+        height: 36px;
+        line-height: 36px;
+        background: #D7DBE2;
+        border-radius: 2px;
+        margin-top: 10px;
+        text-align: center;
+        color: #13264D;
+        cursor: pointer;
+        &:hover {
+            color: #1144AB;
+        }
+    }
+}

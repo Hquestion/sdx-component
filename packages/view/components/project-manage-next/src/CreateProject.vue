@@ -4,7 +4,7 @@
         @close="dialogClose"
         :close-on-click-modal="false"
         class="sdxv-create-project"
-        size="large"
+        width="720px"
         :no-footer="createType !== 'empty'"
     >
         <div
@@ -68,51 +68,53 @@
                 />
             </el-form-item>
         </el-form>
-        <el-scrollbar
-            :native="false"
-            wrap-class="sdxv-create-project__wrap"
-            v-if="createType !== 'empty'"
+        
+        <div
+            class="sdxv-create-project__filter"
+            v-if="createType === 'project'"
         >
-            <div
-                class="sdxv-create-project__filter"
-                v-if="createType === 'project'"
+            <SdxuTabRadioGroup
+                v-model="projectType"
+                @switch="switchProjectType"
             >
-                <SdxuTabRadioGroup
-                    v-model="projectType"
-                    @switch="switchProjectType"
-                >
-                    <SdxuTabRadioItem name="private">
-                        {{ t('view.project.selfCreateProject') }}
-                    </SdxuTabRadioItem>
-                    <SdxuTabRadioItem name="public">
-                        {{ t('view.project.otherProject') }}
-                    </SdxuTabRadioItem>
-                </SdxuTabRadioGroup>
-                <sdxu-input
-                    v-model="searchName"
-                    searchable
-                    type="search"
-                    size="small"
-                    :placeholder="t('view.project.enterProjectName')"
-                    @search="filterProjects"
-                />
-            </div>
-            <div v-loading="loading">
-                <sdxw-project-card-list
-                    class="sdxv-create-project__template-list"
+                <SdxuTabRadioItem name="private">
+                    {{ t('view.project.selfCreateProject') }}
+                </SdxuTabRadioItem>
+                <SdxuTabRadioItem name="public">
+                    {{ t('view.project.otherProject') }}
+                </SdxuTabRadioItem>
+            </SdxuTabRadioGroup>
+            <sdxu-input
+                v-model="searchName"
+                searchable
+                type="search"
+                size="small"
+                :placeholder="t('view.project.enterProjectName')"
+                @search="filterProjects"
+            />
+        </div>
+        <div v-loading="loading">
+            <el-scrollbar
+                :native="false"
+                wrap-class="sdxv-create-project__wrap"
+                v-if="createType !== 'empty'"
+            >
+                <div
+                    class="template-list"
                     v-if="!!totalProjects.length"
                 >
-                    <sdxw-project-card
+                    <sdxw-create-project-card
                         @operate="handleOperate"
                         v-for="(item, index) in projectList"
                         :key="index"
                         :meta="item"
                         :operate-type="createType"
                     />
-                </sdxw-project-card-list>
-                <sdxu-empty v-else />
-            </div>
-        </el-scrollbar>
+                </div>
+            </el-scrollbar>
+            <sdxu-empty v-else />
+        </div>
+        
         <div
             slot="footer"
         >
@@ -139,7 +141,7 @@ import Dialog from '@sdx/ui/components/dialog';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import TabRadio from '@sdx/ui/components/tab-radio';
-import Project from '@sdx/widget/components/projectcard';
+import ProjectCard from '@sdx/widget/components/create-project-card';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Radio, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
@@ -193,8 +195,7 @@ export default {
         [Input.name]: Input,
         [Button.name]: Button,
         [Transfer.name]: Transfer,
-        [Project.ProjectCard.name]: Project.ProjectCard,
-        [Project.ProjectCardList.name]: Project.ProjectCardList,
+        [ProjectCard.name]: ProjectCard,
         [Scrollbar.name]: Scrollbar,
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
@@ -331,4 +332,5 @@ export default {
     }
 };
 </script>
+
 

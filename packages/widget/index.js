@@ -22,6 +22,7 @@ import Auth from './components/auth';
 import ShareForm from './components/share-form';
 import LangHandle from './components/lang-handle';
 import SubjectCard from './components/subject-card';
+import CreateProjectCard from './components/create-project-card';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
@@ -47,7 +48,8 @@ const SdxWidget = {
     Auth,
     ShareForm,
     LangHandle,
-    SubjectCard
+    SubjectCard,
+    CreateProjectCard
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -71,6 +73,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     ResourceConfig.install(vue);
     TaskRunningLimit.install(vue);
     SubjectCard.install(vue);
+    CreateProjectCard.install(vue);
     vue.use(Auth);
     vue.use(ShareForm);
     vue.use(LangHandle);

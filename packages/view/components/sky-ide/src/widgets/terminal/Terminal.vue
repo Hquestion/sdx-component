@@ -55,7 +55,7 @@ export default {
         },
         handleResize() {
             setTimeout(()=> {
-                this.term.onFitRequest();
+                this.term && this.term.onFitRequest();
             },400);
         }
     }

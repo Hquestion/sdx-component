@@ -254,7 +254,7 @@ export default {
                             ownerId: node.data.ownerId,
                             fileExtension: this.accept,
                             onlyDirectory: this.checkType === 'folder',
-                            onlyFile: this.checkType === 'file'
+                            onlyFile: false
                         };
                         promise = getFilesList(params).then(res => {
                             return res.children;
@@ -276,7 +276,7 @@ export default {
                             ownerId: node.data.ownerId,
                             fileExtension: this.accept,
                             onlyDirectory: this.checkType === 'folder',
-                            onlyFile: this.checkType === 'file'
+                            onlyFile: false
                         };
                         promise = getFilesList(params).then(res => {
                             return res.children;
@@ -288,7 +288,7 @@ export default {
                         ownerId: this.userId,
                         fileExtension: this.accept,
                         onlyDirectory: this.checkType === 'folder',
-                        onlyFile: this.checkType === 'file'
+                        onlyFile: false
                     };
                     promise = getFilesList(params).then(res => {
                         return res.children;

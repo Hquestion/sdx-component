@@ -170,7 +170,6 @@ export default {
             this.editableTabsValue = newTabName;
         },
         handleResize() {
-            console.log(this.$refs);
             if (this.$refs.terminal) {
                 this.$refs.terminal.forEach(item => {
                     item.handleResize();

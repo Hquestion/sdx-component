@@ -53,7 +53,6 @@
 
 <script>
 import emitter from '@sdx/utils/src/mixins/emitter';
-import ResizablePanel from './widgets/ResizablePanel';
 import Sidebar from './layout/Sidebar';
 import {SIDEBAR_TERMINAL} from './config';
 import SkyTerminal from './widgets/terminal/Index';
@@ -79,7 +78,6 @@ export default {
     name: 'Main',
     components: {
         Sidebar,
-        ResizablePanel,
         SkyTerminal,
         FileManager,
         DocManager,
@@ -91,7 +89,7 @@ export default {
     props: {
         taskId: {
             type: String,
-            default: '0422abc2-c0c0-4b7f-b009-337df2d0f8c1'
+            default: ''
         }
     },
     provide() {

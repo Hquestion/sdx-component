@@ -1,9 +1,9 @@
 // sdxu-button
 $sdxu-button-min-width: 0px !default;
-$sdxu-button-padding: $sdx-padding !default;
+$sdxu-button-padding: $sdx-gap-small !default;
 $sdxu-button-height-regular: $sdx-form-element-height-large !default;
-$sdxu-button-height-small: $sdx-form-element-height-regular !default;
-$sdxu-button-default-border-color: #E4E7Ed !default;
+$sdxu-button-height-small: $sdx-form-element-height-small !default;
+$sdxu-button-default-border-color: $sdx-secondary-color--light6 !default;
 
 // 穿梭框
 $sdxu-transfer-width: 100% !default;
@@ -63,9 +63,9 @@ $sdxu-table-td-fontsize: 14px !default;
 $sdxu-table-table-margincolor: #fff !default;
 $sdxu-table-border-color: #EBEEF5 !default;
 // sdxu-tab-radio
-$sdxu-tab-radio-height: $sdx-form-element-height-regular !default;
-$sdxu-tab-radio-height-small: $sdx-form-element-height-small !default;
-$sdx-tab-radio-padding: 14px !default;
+$sdxu-tab-radio-height: $sdx-form-element-height-large !default;
+$sdxu-tab-radio-height-small: $sdx-form-element-height-regular !default;
+$sdx-tab-radio-padding: $sdx-gap-regular !default;
 
 // message-box
 $sdxu-messagebox-width: 600px !default;

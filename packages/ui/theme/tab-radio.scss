@@ -5,25 +5,31 @@
     padding: 0 $sdx-tab-radio-padding;
     text-align: center;
     cursor: pointer;
-    color: $sdx-text-regular-color;
+    color: $sdx-secondary-color;
     border-radius: $sdx-border-radius;
-    border: 1px solid $sdx-border-color;
+    border: none;
     font-size: 14px;
     box-sizing: border-box;
+    background: $sdx-secondary-color--light6;
+    position: relative;
     @include modifier('small') {
         height: $sdxu-tab-radio-height-small;
         line-height: $sdxu-tab-radio-height-small;
     }
     &:hover {
+        background: $sdx-primary-color--light5;
         color: $sdx-primary-color;
-        border: 1px solid rgba($sdx-primary-color, .6);
+    }
+    &:active {
+        color: $sdx-secondary-color--light8;
+        background: $sdx-primary-color--darker;
     }
     @include state('active') {
-        color: $sdx-primary-color;
-        border: 1px solid rgba($sdx-primary-color, .6) !important;
-        background: rgba($sdx-primary-color, 0.15);
-        & + .sdxu-tab-radio {
-            border-left: none;
+        color: $sdx-secondary-color--light8;
+        background: $sdx-primary-color--darker;
+        &:hover {
+            background: $sdx-primary-color--darker;
+            color: $sdx-secondary-color--light8;
         }
     }
 }
@@ -42,9 +48,18 @@
         }
         & + .sdxu-tab-radio {
             border-radius: 0;
+            &:before {
+                content: '\20';
+                display: inline-block;
+                width: 1px;
+                height: 100%;
+                background: $sdx-secondary-color--light8;
+                position: absolute;
+                left: -1px;
+                top: 0;
+            }
         }
         &:last-child {
-            border-right: 1px solid $sdx-border-color;
             border-top-right-radius: $sdx-border-radius;
             border-bottom-right-radius: $sdx-border-radius;
         }

@@ -5,7 +5,8 @@
     >
         <div v-if="taskList.length">
             <div>
-                <sdxw-subject-card-list>
+                <SdxwTaskRunningLimit style="margin-top: 20px;" />
+                <sdxw-subject-card-list style="margin-top: 20px;">
                     <sdxw-subject-card
                         v-for="(item, index) in taskList"
                         :key="index"
@@ -91,10 +92,22 @@ export default {
             total: 0,
             refreshTimer: null,
             iconOptions: {
-                SKYIDE: 'sdx-SkyIDErenwu',
-                CONTAINERDEV: 'sdx-zidingyirongqirenwu',
-                JUPYTER: 'sdx-Jupyterrenwu',
-                SKYFLOW: 'sdx-skyflowrenwu'
+                SKYIDE: {
+                    name: 'SkyIDE',
+                    icon: 'sdx-SkyIDErenwu'
+                },
+                CONTAINERDEV: {
+                    name: '自定义容器',
+                    icon: 'sdx-zidingyirongqirenwu'
+                },
+                JUPYTER: {
+                    name: 'Jupyter',
+                    icon: 'sdx-Jupyterrenwu'
+                },
+                SKYFLOW: {
+                    name: 'SkyFlow',
+                    icon: 'sdx-skyflowrenwu'
+                }
             },
             loading: false,
             taskList: [],
@@ -164,7 +177,8 @@ export default {
                         showEdit: isOwn,
                         showRemove: isOwn,
                         type: 'task',
-                        icon: this.iconOptions[item.type],
+                        icon: this.iconOptions[item.type].icon,
+                        iconName: this.iconOptions[item.type].name,
                         state: {}
                     };
                     item.meta.state.type = STATE_MAP_FOLD_LABEL_TYPE[item.state];

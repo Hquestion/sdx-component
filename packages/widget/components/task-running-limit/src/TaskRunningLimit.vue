@@ -4,7 +4,7 @@
         :title="t('widget.taskRunningLimit.info1') + maxGpuTime + t('widget.taskRunningLimit.info2') + maxCpuTime + t('widget.taskRunningLimit.info3')"
         type="info"
         show-icon
-        :closable="false"
+        closable
         style="height: 50px"
     />
 </template>

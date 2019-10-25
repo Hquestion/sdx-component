@@ -209,6 +209,8 @@ export default {
             }
         },
         getLogByMethod() {
+            this.start = 1;
+            this.end = 1;
             if (this.method === 'head') {
                 this.getForwardLog();
             } else {

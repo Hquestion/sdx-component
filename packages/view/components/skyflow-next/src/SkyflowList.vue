@@ -1,10 +1,12 @@
 <template>
     <div class="sdxv-skyflow-list">
+        <div class="title">
+            Skyflow任务A执行记录
+        </div>
         <div class="condition">
             <SdxwSearchLayout>
                 <SdxwSearchItem label="时间">
                     <el-date-picker
-                        v-model="value1"
                         type="monthrange"
                         range-separator="-"
                         start-placeholder="开始月份"
@@ -28,7 +30,10 @@
                 </SdxwSearchItem>
             </SdxwSearchLayout>
             <SkyflowTable />
-            <sdxu-pagination />
+            <sdxu-pagination
+                class="pagination"
+                v-if="false"
+            />
         </div>
     </div>
 </template>
@@ -69,3 +74,20 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+.sdxv-skyflow-list {
+    .condition {
+        .sdxw-search-layout {
+            background: #FFFFFF;
+            box-shadow: 0 2px 4px 0 #C2CDDE;
+            margin: 24px 0;
+        }
+    }
+    .pagination {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 30px;
+    }
+}
+</style>

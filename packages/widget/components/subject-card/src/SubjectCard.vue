@@ -3,13 +3,16 @@
         class="sdxw-subject-card"
     >
         <div class="sdxw-subject-card__header">
-            <svg
-                aria-hidden="true"
-                class="sdxw-subject-card__icon"
-            >
-                <use :xlink:href="`#${meta.icon}`" />
-            </svg>
-
+            <div class="sdxw-subject-card__icon">
+                <svg
+                    aria-hidden="true"
+                >
+                    <use :xlink:href="`#${meta.icon}`" />
+                </svg>
+                <div>
+                    {{ meta.iconName }}
+                </div>
+            </div>
             <div class="sdxw-subject-card__content">
                 <div class="sdxw-subject-card__content--info">
                     <div class="left">

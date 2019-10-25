@@ -307,11 +307,14 @@ export default {
             createTask: '新建任务',
             editTask: '编辑任务',
             projectList: '项目列表',
-            createProject: '新建项目',
+            createProject: '创建新项目',
             editProject: '编辑项目',
-            emptyCreate: '空白创建',
-            templateCreate: '模板创建',
-            copyCreate: '复制创建',
+            emptyCreate: '创建空白项目',
+            templateCreate: '创建模板项目',
+            copyCreate: '创建复制创建',
+            emptyEdit: '编辑空白项目',
+            templateEdit: '编辑模板项目',
+            copyEdit: '编辑复制创建',
             sortByCreateTime: '按创建时间排序',
             enterProjectName: '请输入项目名称',
             enterProjectDescription: '请输入项目描述',
@@ -335,7 +338,12 @@ export default {
             taskCounts: '个任务',
             taskCount: '个任务',
             Created: '创建于',
-            oneself: '自己'
+            oneself: '自己',
+            iconName: {
+                cooperation: '协作项目',
+                private: '私有项目',
+                template: '模版项目',
+            }
         },
         skyflow: {
             skyflowList: '工作流列表',

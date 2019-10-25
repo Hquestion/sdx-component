@@ -3,16 +3,34 @@
     box-shadow: 0 2px 4px 0 $sdxw-subject-card-shadow;
     border-radius: $sdx-border-radius-large;
     margin-bottom: $sdxw-subject-card-padding;
-    padding: $sdxw-subject-card-padding;
+    padding: $sdxw-subject-card-top-padding $sdxw-subject-card-padding $sdxw-subject-card-padding $sdxw-subject-card-padding;
     padding-bottom: 0;
     @include element('header') {
         padding-bottom: $sdxw-subject-card-padding;
     }
     @include element('icon') {
+        border: 1px solid #D8DEEA;
+        border-radius: 2px;
         width: $sdxw-subject-card-icon-size;
         height: $sdxw-subject-card-icon-size;
-        border: 1px solid #BCC6D8;
-        border-radius: 4px;
+        display: inline-block;
+        text-align: center;
+        position: relative;
+        svg {
+            width: 36px;
+            height: 36px;
+            margin-top: 4px;
+        }
+        div {
+            display: inline-block;
+            position: absolute;
+            bottom: 0;
+            background: rgb(237, 239,242);
+            width: 100%;
+            left: 0;
+            height: $sdxw-subject-card-padding;
+            line-height: $sdxw-subject-card-padding;
+        }
     }
 
     @include element('content') {
@@ -24,6 +42,7 @@
             line-height: 24px;
             display: flex;
             justify-content: space-between;
+            padding-top: 4px;
             .left {
                 .title {
                     font-size: 18px;

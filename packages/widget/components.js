@@ -14,6 +14,7 @@ module.exports = {
     'share-setting': './components/share-setting/index.js',
     'pod-log': './components/pod-log/index.js',
     'task-list': './components/task-list/index.js',
+    'general-task-list': './components/general-task-list/index.js',
     'task-start-dialog': './components/task-start-dialog/index.js',
     'task-stop-dialog': './components/task-stop-dialog/index.js',
     'code-editor': './components/code-editor/index.js',
@@ -22,5 +23,6 @@ module.exports = {
     'share-form': './components/share-form/index.js',
     'task-running-limit': './components/task-running-limit/index.js',
     'lang-handle': './components/lang-handle/index.js',
-    'subject-card': './components/subject-card/index.js'
+    'subject-card': './components/subject-card/index.js',
+    'create-project-card': './components/create-project-card/index.js',
 };

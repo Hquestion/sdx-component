@@ -4,7 +4,7 @@
         @close="dialogClose"
         :close-on-click-modal="false"
         class="sdxv-create-project"
-        size="large"
+        width="720px"
         :no-footer="createType !== 'empty'"
     >
         <div
@@ -68,51 +68,58 @@
                 />
             </el-form-item>
         </el-form>
-        <el-scrollbar
-            :native="false"
-            wrap-class="sdxv-create-project__wrap"
-            v-if="createType !== 'empty'"
+        
+        <div
+            class="sdxv-create-project__filter"
+            v-if="createType === 'project'"
         >
-            <div
-                class="sdxv-create-project__filter"
-                v-if="createType === 'project'"
+            <SdxwSearchLayout
+                @search="filterProjects"
+                :block="false"
+                align="left"
             >
-                <SdxuTabRadioGroup
-                    v-model="projectType"
-                    @switch="switchProjectType"
+                <SdxwSearchItem>
+                    <sdxu-input
+                        v-model="searchName"
+                        type="search"
+                        size="small"
+                        :placeholder="t('view.project.enterProjectName')"
+                    />
+                </SdxwSearchItem>
+            </SdxwSearchLayout>
+            <SdxuTabRadioGroup
+                v-model="projectType"
+                @switch="switchProjectType"
+            >
+                <SdxuTabRadioItem name="private">
+                    {{ t('view.project.iconName.private') }}
+                </SdxuTabRadioItem>
+                <SdxuTabRadioItem name="public">
+                    {{ t('view.project.iconName.cooperation') }}
+                </SdxuTabRadioItem>
+            </SdxuTabRadioGroup>
+        </div>
+        <div v-loading="loading">
+            <el-scrollbar
+                :native="false"
+                wrap-class="sdxv-create-project__wrap"
+                v-if="createType !== 'empty'"
+            >
+                <div
+                    class="template-list"
+                    v-if="projectList.length || !projectsLoaded"
                 >
-                    <SdxuTabRadioItem name="private">
-                        {{ t('view.project.selfCreateProject') }}
-                    </SdxuTabRadioItem>
-                    <SdxuTabRadioItem name="public">
-                        {{ t('view.project.otherProject') }}
-                    </SdxuTabRadioItem>
-                </SdxuTabRadioGroup>
-                <sdxu-input
-                    v-model="searchName"
-                    searchable
-                    type="search"
-                    size="small"
-                    :placeholder="t('view.project.enterProjectName')"
-                    @search="filterProjects"
-                />
-            </div>
-            <div v-loading="loading">
-                <sdxw-project-card-list
-                    class="sdxv-create-project__template-list"
-                    v-if="!!totalProjects.length"
-                >
-                    <sdxw-project-card
+                    <sdxw-create-project-card
                         @operate="handleOperate"
                         v-for="(item, index) in projectList"
                         :key="index"
                         :meta="item"
                         :operate-type="createType"
                     />
-                </sdxw-project-card-list>
+                </div>
                 <sdxu-empty v-else />
-            </div>
-        </el-scrollbar>
+            </el-scrollbar>
+        </div>
         <div
             slot="footer"
         >
@@ -139,7 +146,7 @@ import Dialog from '@sdx/ui/components/dialog';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import TabRadio from '@sdx/ui/components/tab-radio';
-import Project from '@sdx/widget/components/projectcard';
+import ProjectCard from '@sdx/widget/components/create-project-card';
 import SelectGroupUser from '@sdx/widget/components/select-group-user';
 import { Form, FormItem, Message, Radio, Scrollbar } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
@@ -148,6 +155,7 @@ import auth from '@sdx/widget/components/auth';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
 import Empty from '@sdx/ui/components/empty';
+import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 export default {
     name: 'SdxvCreateProject',
     data() {
@@ -174,7 +182,6 @@ export default {
                     }
                 ]
             },
-            title: this.t('view.project.createProject'),
             needRefresh: false,
             projectList: [],
             loading: false,
@@ -182,7 +189,8 @@ export default {
             totalProjects: [],
             searchName: '',
             selectedUsers: [],
-            selectedGroups: []
+            selectedGroups: [],
+            projectsLoaded: false,
         };
     },
     components: {
@@ -193,13 +201,14 @@ export default {
         [Input.name]: Input,
         [Button.name]: Button,
         [Transfer.name]: Transfer,
-        [Project.ProjectCard.name]: Project.ProjectCard,
-        [Project.ProjectCardList.name]: Project.ProjectCardList,
+        [ProjectCard.name]: ProjectCard,
         [Scrollbar.name]: Scrollbar,
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         [SelectGroupUser.name]: SelectGroupUser,
-        [Empty.name]: Empty
+        [Empty.name]: Empty,
+        [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
+        [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
     },
     directives: {
         auth
@@ -227,6 +236,27 @@ export default {
     computed: {
         isEditing() {
             return !!this.data;
+        },
+        title() {
+            let title = '';
+            if (this.isEditing) {
+                if (this.createType === 'empty') {
+                    title =this.t('view.project.emptyEdit');
+                } else if(this.createType === 'template') {
+                    title =this.t('view.project.templateEdit');
+                } else if(this.createType === 'project') {
+                    title =this.t('view.project.copyEdit');
+                }
+            } else {
+                if (this.createType === 'empty') {
+                    title = this.t('view.project.emptyCreate');
+                } else if(this.createType === 'template') {
+                    title =this.t('view.project.templateCreate');
+                } else if(this.createType === 'project') {
+                    title =this.t('view.project.copyCreate');
+                }
+            }
+            return title;
         }
     },
     created() {
@@ -234,7 +264,6 @@ export default {
             Object.assign(this.projectForm, this.data);
             this.selectedGroups = this.data.groups;
             this.selectedUsers = this.data.users;
-            this.title = this.t('view.project.editProject');
         } else if (this.createType === 'template') {
             this.getProjectList('template');
         } else if (this.createType === 'project') {
@@ -243,7 +272,7 @@ export default {
     },
     methods: {
         filterProjects() {
-            this.projectList = [...this.totalProjects.filter(item => item.name.indexOf(this.searchName) > -1)];
+            this.projectList = [...this.totalProjects.filter(item => item.name.includes(this.searchName))];
         },
         switchProjectType(type) {
             this.projectType = type;
@@ -267,6 +296,7 @@ export default {
         },
         getProjectList(type, name) {
             this.loading = true;
+            this.projectsLoaded = false;
             const params = {
                 name: name || '',
                 start: 1,
@@ -277,9 +307,11 @@ export default {
             fn(params).then(res => {
                 this.projectList = res.data.items;
                 this.loading = false;
+                this.projectsLoaded = true;
                 this.totalProjects = [...this.projectList];
             }).finally(() => {
                 this.loading = false;
+                this.projectsLoaded = true;
             });
         },
         confirm() {
@@ -331,4 +363,5 @@ export default {
     }
 };
 </script>
+
 

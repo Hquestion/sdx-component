@@ -13,13 +13,13 @@ module.exports = {
         index: './ui/index.js'
     },
     output: {
-        filename: "[name].js",
+        filename: '[name].js',
         path: path.resolve(__dirname, '../packages/ui/lib'),
         publicPath: './',
-        library: "IluvatarUI",
-        libraryTarget: "commonjs2",
+        library: 'IluvatarUI',
+        libraryTarget: 'commonjs2',
         // chunkFilename: "[id].js",
-        libraryExport: "default"
+        libraryExport: 'default'
     },
     externals: [
         '@sdx/utils/lib/mixins/locale',
@@ -48,11 +48,11 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ['style-loader',"css-loader"]
+                use: ['style-loader','css-loader']
             },
             {
                 test: /\.scss$/,
-                use: ['style-loader', "css-loader", "sass-loader"]
+                use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.(svg|otf|ttf|woff2?|eot|gif|png|jpe?g)(\?\S*)?$/,

@@ -215,14 +215,14 @@ class TableLayout {
         const observers = this.observers;
         observers.forEach(observer => {
             switch (event) {
-            case 'columns':
-                observer.onColumnsChange(this);
-                break;
-            case 'scrollable':
-                observer.onScrollableChange(this);
-                break;
-            default:
-                throw new Error(`Table Layout don't have event ${event}.`);
+                case 'columns':
+                    observer.onColumnsChange(this);
+                    break;
+                case 'scrollable':
+                    observer.onScrollableChange(this);
+                    break;
+                default:
+                    throw new Error(`Table Layout don't have event ${event}.`);
             }
         });
     }

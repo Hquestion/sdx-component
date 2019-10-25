@@ -1,17 +1,31 @@
 <template>
-    <TaskDetail :task="task" />
+    <div class="sdxv-task-detail-view">
+        <template v-if="task">
+            <div class="sdxv-task-detail-view__name">
+                {{ task && task.name || '' }}
+            </div>
+            <div class="sdxv-task-detail-view__info">
+                <TaskInfoPanel :task="task" />
+            </div>
+            <div class="sdxv-task-detail-view__detail">
+                <TaskDetailPanel :task="task" />
+            </div>
+        </template>
+    </div>
 </template>
 
 <script>
 import { getTaskDetail } from '@sdx/utils/src/api/project';
 import { TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
-import TaskDetail from './TaskDetail';
+import TaskDetailPanel from './TaskDetailPanel';
+import TaskInfoPanel from './TaskInfoPanel';
 const POLLING_PERIOD = 3 * 1000;
 
 export default {
     name: 'TaskDetailView',
     components: {
-        TaskDetail
+        TaskDetailPanel,
+        TaskInfoPanel
     },
     props: {
         taskId: {
@@ -36,7 +50,7 @@ export default {
             if (this.taskId) {
                 getTaskDetail(this.taskId)
                     .then(data => {
-                        this.task = data;
+                        this.task = data || null;
                     }).catch(e => {
                         this.task = null;
                     });

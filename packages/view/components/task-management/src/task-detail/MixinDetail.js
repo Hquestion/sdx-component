@@ -1,12 +1,4 @@
-import SdxvDetailContainer from './common/DetailContainer';
-import SdxvLogList from './common/LogList';
-import SdxvBaseInfoItem from './common/BaseInfoItem';
-import SdxvSaveAsDialog from './common/SaveAsDialog';
-import SdxvDataInfo from './common/DataInfo';
-import SdxvMonitorInfo from './common/MonitorInfo';
-import SdxwFoldLabel from '@sdx/widget/components/fold-label';
-import SdxuButton from '@sdx/ui/components/button';
-import SdxuEmpty from '@sdx/ui/components/empty';
+
 import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, TASK_TYPE, TASK_TYPE_LABEL } from '@sdx/utils/src/const/task';
 import { byteToGB, parseMilli, dateFormatter } from '@sdx/utils/src/helper/transform';
 import { t } from '@sdx/utils/src/locale';
@@ -17,17 +9,6 @@ export default {
             type: Object,
             default: null
         }
-    },
-    components: {
-        SdxvDetailContainer,
-        SdxvLogList,
-        SdxuButton,
-        SdxvSaveAsDialog,
-        SdxvBaseInfoItem,
-        SdxvDataInfo,
-        SdxvMonitorInfo,
-        SdxuEmpty,
-        [SdxwFoldLabel.FoldLabel.name]: SdxwFoldLabel.FoldLabel
     },
     data() {
         this.STATE_TYPE = STATE_TYPE;

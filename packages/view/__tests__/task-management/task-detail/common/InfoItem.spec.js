@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
-import BaseInfoItem from '../../../../components/task-management/src/task-detail/common/BaseInfoItem';
+import BaseInfoItem from '../../../../components/task-management/src/task-detail/common/InfoItem';
 
-describe('BaseInfoItem', () => {
+describe('InfoItem', () => {
 
     it('test prop label', () => {
         const wrapper = shallowMount(BaseInfoItem, {

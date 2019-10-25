@@ -32,4 +32,9 @@
             line-height: $sdx-log-line-height;
         }
     }
+
+    @include state('dark') {
+        background-color: #3E4757;
+        color: #fff;
+    }
 }

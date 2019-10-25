@@ -639,6 +639,9 @@
   outline: none;
   background: transparent;
 }
+.jp-Cell * {
+    box-sizing: unset !important;
+}
 
 /*-----------------------------------------------------------------------------
 | Common input/output

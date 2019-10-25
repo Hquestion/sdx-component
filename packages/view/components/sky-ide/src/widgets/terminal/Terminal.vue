@@ -16,6 +16,16 @@ export default {
             term: null
         };
     },
+    props: {
+        data: {
+            type: Object,
+            default: undefined
+        },
+        index: {
+            type: Number,
+            default: 1
+        }
+    },
     inject: ['app'],
     mounted() {
         this.createTerminal();
@@ -28,22 +38,24 @@ export default {
         async createTerminal() {
             this.$emit('terminalReady', false);
             await this.app.taskManager.run();
-            const terminal = await TerminalSession.startNew({
-                serverSettings: {
-                    baseUrl: this.app.taskManager.task.externalUrl,
-                    wsUrl: this.app.taskManager.task.externalUrl.replace('http://', 'ws://'),
-                    ideUuid: this.app.taskManager.ideUuid,
-                    WebSocket: WebSocket
-                }
-            });
-            this.$emit('terminalServe', terminal);
+            let terminal;
+            if (this.data.session) {
+                terminal = await TerminalSession.connectTo(this.data.session.name, {
+                    serverSettings: this.app.makeSettings()
+                });
+            } else {
+                terminal = await TerminalSession.startNew({
+                    serverSettings: this.app.makeSettings()
+                });
+            }
+            this.$emit('terminalServe', terminal, this.index + 1);
             this.term = new Terminal(terminal, { theme: 'dark' });
             Widget.attach(this.term, this.$el);
             this.$emit('terminalReady', true);
         },
-        handleResize() { 
+        handleResize() {
             setTimeout(()=> {
-                this.term.onFitRequest();
+                this.term && this.term.onFitRequest();
             },400);
         }
     }

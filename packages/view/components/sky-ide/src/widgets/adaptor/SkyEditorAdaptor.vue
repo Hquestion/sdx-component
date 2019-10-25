@@ -40,6 +40,9 @@ export default {
         },
         handlerModify(file) {
             this.$emit('modify', file);
+        },
+        focus() {
+            this.$el.focus();
         }
     },
     computed: {

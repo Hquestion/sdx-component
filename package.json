@@ -22,6 +22,7 @@
         "lint": "eslint examples/*.js packages/**/*.js --fix",
         "publish": "lerna publish",
         "bootstrap": "npm i && lerna bootstrap --hoist && cd examples && npm i",
+        "link": "lerna link --force-local",
         "release": "standard-version",
         "cm": "git-cz",
         "build:gateway": "lerna run build:gateway --scope=@sdx/utils",
@@ -94,6 +95,7 @@
     },
     "dependencies": {
         "@babel/polyfill": "^7.4.4",
+        "@skyide/services": "^1.1.5",
         "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
         "axios": "^0.18.1",
         "clusterize.js": "^0.18.1",

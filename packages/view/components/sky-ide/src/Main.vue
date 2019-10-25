@@ -2,93 +2,63 @@
     <div class="sdxv-sky-ide">
         <SkyIdeTitle class="title" />
         <div class="sdxv-sky-ide__frame">
-            <ResizablePanel
-                child-direction="horizontal"
+            <div
+                class="sdxv-skyide-sidebar"
+                style="width: 40px"
             >
-                <ResizablePanel
-                    :fixed="true"
-                    :init-width="40"
-                    class="sdxv-skyide-sidebar"
-                    tabindex="1"
-                >
-                    <Sidebar />
-                </ResizablePanel>
-                <ResizablePanel ref="editorMain">
-                    <ResizablePanel
-                        child-direction="horizontal"
-                        :init-width="layout.editorWin.weight ? -1 : layout.editorWin.initWidth"
-                        :weight="layout.editorWin.weight"
-                        :min-width="layout.editorWin.minWidth"
-                        ref="editorWin"
-                    >
-                        <ResizablePanel
-                            :init-width="layout.file.weight ? -1 : layout.file.initWidth"
-                            :weight="layout.file.weight"
-                            :min-width="layout.file.minWidth"
-                            :collapse="!leftPanelVisible"
+                <Sidebar />
+            </div>
+            <Splitpanes
+                class="sdxv-skyide-main"
+                ref="editorMain"
+                horizontal
+                @resize="handleEditorMainResize"
+            >
+                <Pane :size="layout.editorWin.size">
+                    <Splitpanes @resize="handleDocResize">
+                        <Pane
+                            :size="layout.file.size"
+                            :min-size="layout.file.minSize"
+                            :max-size="layout.file.maxSize"
+                            :visible="fileManagerVisible"
                         >
                             <file-manager
-                                v-show="fileManagerVisible"
                                 @open-file="openFile"
                                 ref="fileManager"
                             />
-                        </ResizablePanel>
-                        <ResizablePanel
-                            child-direction="vertical"
-                            :init-width="layout.doc.weight ? -1 : layout.doc.initWidth"
-                            :weight="layout.doc.weight"
-                            :min-width="layout.doc.minWidth"
-                            style="margin-left: 4px"
-                        >
-                            <ResizablePanel>
-                                <doc-manager
-                                    ref="docManager"
-                                    @refresh-tree="refreshTree"
-                                />
-                            </ResizablePanel>
-                            <ResizablePanel
-                                :fixed="true"
-                                :init-height="40"
-                            >
+                        </Pane>
+                        <Pane :size="layout.doc.size">
+                            <doc-manager
+                                ref="docManager"
+                                @refresh-tree="refreshTree"
+                            />
+                            <div class="resource">
                                 <ResourceUsage />
-                            </ResizablePanel>
-                        </ResizablePanel>
-                    </ResizablePanel>
-                    <ResizablePanel
-                        :init-height="layout.terminal.weight ? -1 : layout.terminal.initHeight"
-                        :weight="layout.terminal.weight"
-                        :min-height="layout.terminal.minHeight"
-                        :collapse="!terminalVisible"
-                    >
-                        <SkyTerminal ref="terminal" />
-                    </ResizablePanel>
-                </ResizablePanel>
-            </ResizablePanel>
+                            </div>
+                        </Pane>
+                    </Splitpanes>
+                </Pane>
+                <Pane
+                    :visible="terminalVisible"
+                    :size="layout.terminal.size"
+                    :min-size="layout.terminal.minSize"
+                    :max-size="layout.terminal.maxSize"
+                >
+                    <SkyTerminal ref="terminal" />
+                </Pane>
+            </Splitpanes>
         </div>
-        
-        <script
-            id="jupyter-config-data"
-            type="application/json"
-        >
-            {
-            "baseUrl": "http://localhost:8080",
-            "token": "",
-            "notebookPath": "Untitled.ipynb",
-            "mathjaxUrl": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
-            "mathjaxConfig": "TeX-AMS_CHTML-full,Safe"
-            }
-        </script>
     </div>
 </template>
 
 <script>
-import ResizablePanel from './widgets/ResizablePanel';
+import emitter from '@sdx/utils/src/mixins/emitter';
 import Sidebar from './layout/Sidebar';
-import { SIDEBAR_TERMINAL } from './config';
+import {SIDEBAR_TERMINAL} from './config';
 import SkyTerminal from './widgets/terminal/Index';
 import FileManager from './widgets/file-manager/Main';
 import DocManager from './widgets/doc-manager/Index';
-import { initCommands } from './config/commands';
+import {initCommands} from './config/commands';
 import docManagerMixin from '../src/mixins/docManagerMixin';
 import fileManagerMixin from '../src/mixins/fileManagerMixin';
 import ideInit from '../src/mixins/ideInit';
@@ -97,25 +67,29 @@ import setupDocCommands from './widgets/doc-manager/setupCommands';
 import setupNbCommands from './widgets/notebook/setupCommands';
 import setupFileCommands from './widgets/file-manager/setupCommands';
 
-import { SIDEBAR_FILE } from './config';
-import { extend } from './utils/utils';
+import {SIDEBAR_FILE} from './config';
+import {extend} from './utils/utils';
 import SkyIdeTitle from './widgets/title/SkyIdeTitle';
 import ResourceUsage from './widgets/resource/ResourceUsage';
+import {Splitpanes, Pane} from './layout/splitpanes/index';
+import 'splitpanes/dist/splitpanes.css';
+
 export default {
     name: 'Main',
     components: {
         Sidebar,
-        ResizablePanel,
         SkyTerminal,
         FileManager,
         DocManager,
         SkyIdeTitle,
-        ResourceUsage
+        ResourceUsage,
+        Splitpanes,
+        Pane
     },
     props: {
         taskId: {
             type: String,
-            default: '69f10cad-1493-432f-ae5b-7374e9eadd65'
+            default: ''
         }
     },
     provide() {
@@ -123,7 +97,7 @@ export default {
             app: this
         };
     },
-    mixins: [docManagerMixin, fileManagerMixin, ideInit],
+    mixins: [docManagerMixin, fileManagerMixin, ideInit, emitter],
     data() {
         return {
             commands: initCommands(),
@@ -133,24 +107,20 @@ export default {
             },
             layout: {
                 editorWin: {
-                    initWidth: -1,
-                    weight: 1,
-                    minWidth: 20
+                    size: 60
                 },
                 file: {
-                    initWidth: 400,
-                    weight: undefined,
-                    minWidth: 50
+                    size: 30,
+                    minSize: 10,
+                    maxSize: 60
                 },
                 doc: {
-                    initWidth: -1,
-                    weight: 1,
-                    minWidth: 1055
+                    size: 70
                 },
                 terminal: {
-                    initHeight: 400,
-                    minHeight: 50,
-                    weight: undefined
+                    size: 40,
+                    maxSize: 80,
+                    minSize: 10
                 }
             },
             doc: {
@@ -189,7 +159,7 @@ export default {
                 const restorerJSON = JSON.parse(restorer);
                 // this.layout = extend(this.layout, restorerJSON.layout);
                 Object.keys(this.layout).forEach((key) => {
-                    this.layout[key].weight = restorerJSON.layout && restorerJSON.layout[key] && restorerJSON.layout[key].weight;
+                    this.layout[key].size = restorerJSON.layout && restorerJSON.layout[key] && restorerJSON.layout[key].size;
                 });
                 this.sidebar = extend(this.sidebar, restorerJSON.sidebar);
                 this.doc = extend(this.doc, restorerJSON.doc);
@@ -200,29 +170,24 @@ export default {
             }
         },
         calcEditorMainWeight() {
-            const editorMainChildrenRatio = this.$refs.editorMain.childrenRatio;
-            const editorWinChildrenRatio = this.$refs.editorWin.childrenRatio;
             let layout = {
                 editorWin: {
-                    weight: editorMainChildrenRatio[0].ratio
+                    weight: this.layout.editorWin.size
                 },
                 terminal: {
-                    weight: editorMainChildrenRatio[1].ratio
+                    weight: this.layout.terminal.size
                 },
                 file: {
-                    weight: editorWinChildrenRatio[0].ratio
+                    weight: this.layout.file.size
                 },
                 doc: {
-                    weight: editorWinChildrenRatio[1].ratio
+                    weight: this.layout.doc.size
                 }
             };
             return layout;
         },
         syncLayout() {
             let layout = this.calcEditorMainWeight();
-            Object.keys(this.layout).forEach((key) => {
-                this.layout[key].weight = layout[key].weight;
-            });
             let restorer = localStorage.getItem('SkyIDERestorer');
             if (restorer) {
                 restorer = JSON.parse(restorer);
@@ -246,6 +211,16 @@ export default {
                 file: this.file
             };
             localStorage.setItem('SkyIDERestorer', JSON.stringify(restorer));
+        },
+        handleEditorMainResize(e) {
+            this.layout.editorWin.size = e[0].size;
+            this.layout.terminal.size = e[1].size;
+            // 刷新terminal
+            this.$refs.terminal.handleResize();
+        },
+        handleDocResize(e) {
+            this.layout.file.size = e[0].size;
+            this.layout.doc.size = e[1].size;
         }
     },
     async mounted() {
@@ -253,6 +228,7 @@ export default {
         await this.prepareEnv();
         // 恢复布局
         this.recoveryLocal();
+        await this.sessionSpecs(this.taskManager.ideUuid);
         // 监听键盘事件
         window.addEventListener('keydown', event => {
             this.commands.processKeydownEvent(event);
@@ -263,6 +239,7 @@ export default {
         setupFileCommands(this.commands, this.fileManager);
         setupNbCommands(this.commands, this);
         this.timer = setInterval(() => {
+            this.syncLayout();
             this.prepareRestoreData();
         }, 1000);
     },
@@ -282,12 +259,26 @@ export default {
         top: 0;
         width: 100%;
         height: 100%;
-        background: rgb(18,23,36);
+        background: rgb(18, 23, 36);
+
         & /deep/ {
             :focus {
                 outline: none;
             }
+
+            .splitpanes__pane {
+                position: relative;
+            }
+
+            .splitpanes--horizontal > .splitpanes__splitter {
+                min-height: 10px;
+            }
+
+            .splitpanes--vertical > .splitpanes__splitter {
+                min-width: 10px;
+            }
         }
+
         .sdxv-sky-ide__frame {
             position: absolute;
             left: 0;
@@ -295,8 +286,16 @@ export default {
             width: 100%;
             height: calc(100% - 52px);
             margin-top: 52px;
+            display: flex;
+
             .sdxv-skyide-sidebar {
                 background: #394C7E;
+                width: 40px;
+                height: 100%;
+            }
+
+            .sdxv-skyide-main {
+                width: 100%;
             }
         }
     }

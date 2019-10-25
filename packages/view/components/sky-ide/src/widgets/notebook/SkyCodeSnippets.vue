@@ -32,6 +32,7 @@ import { matchingString } from '@sdx/utils/src/helper/tool';
 import SearchPanel from '../search-panel/SearchPanel';
 import locale from '@sdx/utils/src/mixins/locale';
 import SkyCodeCellModel from '../../model/CodeCell';
+import undoAndRedo from '../../utils/undoAndRedo';
 import { getCodeTemplates } from '@sdx/utils/src/api/skyide';
 export default {
     name: 'SkyCodeSnippets',
@@ -74,9 +75,19 @@ export default {
             this.search = value;
         },
         addSnippet(index) {
-            this.snb.insertCell('code', new SkyCodeCellModel({
-                source: this.snippets[index].code.join('\n')
-            }));
+            let nb = this.snb;
+            let namespace = nb && nb.file && nb.file.path || '';
+            const editor = this.app.docManager.$refs.editor.find(item => item.file.path === namespace);
+            const operateFn = () => {
+                nb.insertCell('code', new SkyCodeCellModel({
+                    source: this.snippets[index].code.join('\n')
+                }));
+            };
+            function revokeFn() {
+                nb.notebook.cells.splice(-1, 1);
+                editor.focus();
+            }
+            undoAndRedo.addOperation(namespace, operateFn, revokeFn);
             this.$emit('close');
         }
     }

@@ -825,7 +825,10 @@ export default {
             Memory: '内存',
             Model: '型号',
             Core: '核',
-            Piece: '块'
+            Piece: '块',
+            State_Starting: '启动中...',
+            State_Stopped: '未启用',
+            State_Stopping: '终止中...'
         }
     },
     sdxCommon: {

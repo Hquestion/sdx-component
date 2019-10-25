@@ -20,6 +20,8 @@ export const CommandIDs = {
     CELL_OUTPUTS_CLEAR: 'cell:outputs:clear',
     COMPLETE: 'completer:invoke',
     COMPLETER_SELECT: 'completer:select',
+    UNDO: 'notebook:undo',
+    REDO: 'notebook:redo',
     SAVE_DOC: 'save:doc',
     RENAME: 'file:rename',
     DELETE: 'file:delete',
@@ -35,7 +37,9 @@ const notebookCommands = [
     CommandIDs.CELLS_SHUTDOWN,
     CommandIDs.CELLS_OUTPUTS_CLEAR,
     CommandIDs.COMPLETE,
-    CommandIDs.COMPLETER_SELECT
+    CommandIDs.COMPLETER_SELECT,
+    CommandIDs.UNDO,
+    CommandIDs.REDO
 ];
 
 const cellCommands = [
@@ -162,6 +166,18 @@ export const CommandConfigs = {
         label: 'Copy Cell',
         iconClass: '',
         key: [],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.UNDO]: {
+        label: 'Undo',
+        iconClass: '',
+        key: ['Ctrl Z'],
+        selector: '.sky-doc-manager .sky-editor-adaptor'
+    },
+    [CommandIDs.REDO]: {
+        label: 'Redo',
+        iconClass: '',
+        key: ['Ctrl Shift Z'],
         selector: '.sky-doc-manager .sky-editor-adaptor'
     },
     [CommandIDs.SAVE_DOC]: {

@@ -1,11 +1,50 @@
 // todo: color value
-$sdx-primary-color: #4781F8 !default;
-$sdx-warning-color: #FF882B !default;
-$sdx-success-color: #26C8A9 !default;
-$sdx-danger-color: #FF5E5E !default;
+$sdx-primary-color: #1144AB !default;
+$sdx-secondary-color: #13264D !default;
+$sdx-warning-color: #FF991F !default;
+$sdx-success-color: #00875A !default;
+$sdx-danger-color: #DE350B !default;
 $sdx-info-color: #909399 !default;
-$sdx-disable-color: #C0CDE6 !default;
+$sdx-disable-color: #DFE2E7 !default;
 $sdx-mark-color: #4781F8 !default;
+
+$sdx-primary-color--darker: #0E388C !default;
+$sdx-primary-color--light1: #0052CC !default;
+$sdx-primary-color--light2: #0065FF !default;
+$sdx-primary-color--light3: #4CAAFF !default;
+$sdx-primary-color--light4: #B3D4FF !default;
+$sdx-primary-color--light5: #DEEBFF !default;
+
+$sdx-secondary-color--darker: #071737 !default; // 激活态
+$sdx-secondary-color--light1: #253858 !default; // 一级标题外文字
+$sdx-secondary-color--light2: #505F79 !default; // 按钮颜色
+$sdx-secondary-color--light3: #6E7C94 !default; // 描述/次要文字
+$sdx-secondary-color--light4: #8E9BB1 !default; // 禁用或占位文字
+$sdx-secondary-color--light5: #C2CDDE !default; // 卡片阴影
+$sdx-secondary-color--light6: #D8DEEA !default; // 分割线/边框色
+$sdx-secondary-color--light7: #EDEFF2 !default; // 页面背景色
+$sdx-secondary-color--light8: #FFFFFF !default; // 白色
+
+$sdx-danger-color--darker: #BF2600 !default;
+$sdx-danger-color--light1: #FF5630 !default;
+$sdx-danger-color--light2: #FF7452 !default;
+$sdx-danger-color--light3: #FF8F73 !default;
+$sdx-danger-color--light4: #FFBDAD !default;
+$sdx-danger-color--light5: #FFEBE5 !default;
+
+$sdx-success-color--darker: #006644 !default;
+$sdx-success-color--light1: #36B37E !default;
+$sdx-success-color--light2: #57D9A3 !default;
+$sdx-success-color--light3: #79F2C0 !default;
+$sdx-success-color--light4: #ABF5D1 !default;
+$sdx-success-color--light5: #E2FFEE !default;
+
+$sdx-warning-color-darker: #FF8B00 !default;
+$sdx-warning-color-light1: #FFAB00 !default;
+$sdx-warning-color-light2: #FFC400 !default;
+$sdx-warning-color-light3: #FFE380 !default;
+$sdx-warning-color-light4: #FFF0B3 !default;
+$sdx-warning-color-light5: #FFFAE6 !default;
 
 $sdx-status-create: $sdx-success-color !default; // 新生
 $sdx-status-dying: $sdx-warning-color !default; // 死亡的路上
@@ -17,7 +56,10 @@ $sdx-status-exception: #EB9A0A !default; // 异常
 $sdx-status-die: #FF6C29 !default; // 死了
 
 
-$sdx-primary-hover-color: #2D6CEE !default;
+$sdx-primary-hover-color: $sdx-primary-color--light2 !default;
+$sdx-outline-color: $sdx-primary-color--light3 !default;
+$sdx-active-color: $sdx-primary-color--darker !default;
+
 
 $sdx-text-primary-color: #303133 !default;
 $sdx-text-regular-color: #606266 !default;
@@ -46,6 +88,10 @@ $sdx-h1-font-size: 18px !default;
 $sdx-h2-font-size: 16px !default;
 $sdx-content-font-size: 14px !default;
 $sdx-help-font-size: 12px !default;
+
+$sdx-gap-small: 16px !default;
+$sdx-gap-regular: 24px !default;
+$sdx-gap-large: 32px !default;
 
 // iconfont path
 $sdx-base-iconfont-path: '~@sdx/utils/src/theme-common/iconfont/' !default;

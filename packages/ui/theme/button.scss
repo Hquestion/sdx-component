@@ -6,7 +6,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     display: inline-block;
     height: $sdxu-button-height-regular;
     min-width: $sdxu-button-min-width;
-    padding: 0 $sdx-padding;
+    padding: 0 $sdx-gap-small;
     line-height: $sdxu-button-height-regular;
     border-radius: $sdx-border-radius;
     background: $sdx-primary-color;
@@ -17,6 +17,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     box-sizing: border-box;
     position: relative;
     font-size: 0;
+    outline: none;
     @include element('main') {
         font-size: 14px;
     }
@@ -54,6 +55,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             background: $sdx-primary-hover-color;
             border: 1px solid $sdx-primary-hover-color;
         }
+        &:focus {
+            background: $sdx-primary-color--darker;
+            border: 1px solid $sdx-outline-color;
+        }
+        &:active {
+            background: $sdx-primary-color--darker;
+            border: 1px solid $sdx-primary-color--darker;
+        }
         @include state('plain') {
             color: $sdx-primary-color;
             border: none;
@@ -75,7 +84,13 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include state('disabled') {
             cursor: not-allowed;
             pointer-events: none;
-            opacity: 0.6;
+            //opacity: 0.6;
+            background: $sdx-secondary-color--light6;
+            color: $sdx-secondary-color--light4;
+            border: 1px solid $sdx-secondary-color--light6;
+            & .sdx-icon{
+                color: $sdx-secondary-color--light6;
+            }
         }
         .sdxu-button__icon--dropdown {
             .sdx-icon {
@@ -91,6 +106,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             color: $sdx-primary-color;
             border: 1px solid $sdx-primary-color;
         }
+        &:focus {
+            border: 1px solid $sdx-outline-color;
+            color: $sdx-outline-color;
+        }
+        &:active {
+            color: $sdx-primary-color--darker;
+            border: 1px solid $sdx-primary-color--darker;
+        }
         @include state('plain') {
             color: $sdx-text-regular-color;
             border: none;
@@ -102,23 +125,37 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include state('disabled') {
             cursor: not-allowed;
             pointer-events: none;
-            opacity: 0.4;
+            color: $sdx-primary-color--light4;
         }
     }
     @include modifier('text') {
         background: transparent;
-        color: $sdx-text-regular-color;
+        color: $sdx-primary-color;
         border: none;
-        padding: 0;
         min-width: 0;
         &:hover {
-            color: $sdx-primary-color;
+            color: $sdx-primary-hover-color;
             border: none;
+            & .sdxu-button__main {
+                text-decoration: underline;
+            }
+        }
+        &:focus {
+            border: 1px solid $sdx-outline-color;
+            & .sdxu-button__main {
+                text-decoration: none;
+            }
+        }
+        &:active {
+            border: none;
+            & .sdxu-button__main {
+                text-decoration: none;
+            }
         }
         @include state('disabled') {
             cursor: not-allowed;
             pointer-events: none;
-            opacity: 0.4;
+            color: $sdx-secondary-color--light4;
         }
     }
     @include state('loading') {
@@ -194,8 +231,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             z-index: 3;
             //border: 1px solid $sdx-border-color;
             box-sizing: border-box;
-            box-shadow: 1px 1px 8px 1px rgba(87,127,255,0.17);
-            padding: 5px;
+            box-shadow: 0 1px 4px 0 rgba(75,91,123,0.50);
             & /deep/ .sdxu-button {
                 display: block;
                 border: none;
@@ -203,14 +239,14 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 text-align: left;
                 padding: 0;
                 margin-left: 0 !important;
-                text-indent: $sdx-padding;
+                text-indent: $sdx-gap-small;
                 &:first-child {
                     border-top: none;
                 }
                 &:hover {
-                    color: #457FF6;
-                    background: #F7FAFF;
-                    border-radius: $sdx-border-radius;
+                    color: $sdx-secondary-color;
+                    background: $sdx-secondary-color--light7;
+                    border: none;
                 }
             }
         }

@@ -25,5 +25,7 @@ module.exports = {
     'sort-button': './components/sort-button/index.js',
     'text-tooltip': './components/text-tooltip/index.js',
     'log-detail': './components/log-detail/index.js',
-    tabs: './components/tab/index.js'
+    tabs: './components/tab/index.js',
+    'bubble-tip': './components/bubble-tip/index.js',
+    'context-menu': './components/context-menu/index.js'
 };

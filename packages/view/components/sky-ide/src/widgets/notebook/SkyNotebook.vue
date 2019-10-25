@@ -37,7 +37,7 @@ import SkyRawCellModel from '../../model/RawCell';
 
 import {CommandIDs, initCommands} from '../../config/commands';
 
-import { NotebookMode } from '../../config';
+import { NotebookMode, NotebookKernelState } from '../../config';
 
 import '@jupyterlab/completer/style/base.css';
 
@@ -68,7 +68,8 @@ export default {
             session: null,
             mode: NotebookMode.EDIT,
             completer: null,
-            completerHandler: null
+            completerHandler: null,
+            kernelState: NotebookKernelState.STOPPED
         };
     },
     props: {
@@ -140,7 +141,7 @@ export default {
                 });
                 cell.order = this.nextOrder();
                 this.notebook.cells = [cell];
-                this.notebook.metadata = this.makeMetadataByLang('python');
+                this.notebook.metadata = this.makeMetadataByLang('python3');
             } else if (this.isNbFile) {
                 let contentJSON = typeof content === 'string' ? JSON.parse(content) : content;
                 contentJSON.cells.forEach(cell => {
@@ -241,38 +242,52 @@ export default {
          */
         async startSession() {
             if (this.session) {
-                return await this.session;
+                return this.session;
             }
+            this.kernelState = NotebookKernelState.STARTING;
             await this.app.taskManager.run();
-            return this.session = await Session.startNew({
+            this.session = await Session.startNew({
                 path: this.file.path,
                 kernelName: this.notebook.metadata.kernelspec.name,
-                serverSettings: {
-                    baseUrl: this.app.taskManager.task.externalUrl,
-                    wsUrl: this.app.taskManager.task.externalUrl.replace('http://', 'ws://'),
-                    ideUuid: this.app.taskManager.ideUuid,
-                    WebSocket: WebSocket
-                }
+                serverSettings: this.app.makeSettings()
             });
+            this.app.nbSessionMap[this.file.path] = this.session;
+            this.kernelState = NotebookKernelState.RUNNING;
+            return this.session;
         },
 
         /**
          * 连接到session,用于恢复状态。
          * 例如：在刷新时重新连接到之前session
          */
-        async connectToSession() {
-            // TODO
+        async connectToSession(sessionList) {
+            if (!this.initConnection) {
+                if (!this.session) {
+                    let session = sessionList.find(session => session.path.replace('/user', '') === this.file.path);
+                    if (session) {
+                        this.session = await Session.connectTo(session, this.app.makeSettings());
+                        this.mode = NotebookMode.CELL_DEBUG;
+                        this.app.nbSessionMap[this.file.path] = this.session;
+                        this.kernelState = NotebookKernelState.RUNNING;
+                    }
+                }
+                this.initConnection = true;
+            }
         },
 
         async shutdownSession(shutdownTask = true) {
-            if (!this.session) return await true;
+            if (!this.session) return true;
+            this.kernelState = NotebookKernelState.STOPPING;
             await this.session.shutdown();
+            delete this.app.nbSessionMap[this.file.path];
+            this.mode = NotebookMode.EDIT;
             this.session = null;
             // 同时停止任务
-            if (shutdownTask) {
+            if (shutdownTask && (!this.app.terminal.tabTerminal || this.app.terminal.tabTerminal.length === 0)) {
                 await this.app.taskManager.stop();
             }
-            return await true;
+            this.kernelState = NotebookKernelState.STOPPED;
+            return true;
         },
         /**
          * 按cell调试
@@ -480,8 +495,15 @@ export default {
             }
         }
     },
-    mounted() {
-
+    async created() {
+        // 恢复session连接
+        const self = this;
+        this.$on('sessionReady', async () => {
+            await self.connectToSession(self.app.sessionList);
+        });
+        if (this.app.sessionList && this.app.sessionList.length > 0) {
+            await this.connectToSession(this.app.sessionList);
+        }
     }
 };
 </script>

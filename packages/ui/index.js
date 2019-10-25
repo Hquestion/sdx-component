@@ -23,6 +23,8 @@ import SortButton from './components/sort-button';
 import TextTooltip from './components/text-tooltip';
 import LogDetail from './components/log-detail';
 import Tabs from './components/tab';
+import ContextMenu from './components/context-menu';
+import BubbleTip from './components/bubble-tip';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxUI = {
@@ -50,7 +52,9 @@ const SdxUI = {
     SortButton,
     TextTooltip,
     LogDetail,
-    Tabs
+    Tabs,
+    ContextMenu,
+    BubbleTip
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -79,6 +83,8 @@ SdxUI.install = (vue, { i18n } = {}) => {
     TextTooltip.install(vue);
     LogDetail.install(vue);
     Tabs.install(vue);
+    ContextMenu.install(vue);
+    BubbleTip.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

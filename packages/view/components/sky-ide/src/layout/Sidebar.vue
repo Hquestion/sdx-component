@@ -32,7 +32,7 @@
 <script>
 import SidebarTrack from '../widgets/sidebar/SidebarTrack';
 import SidebarItem from '../widgets/sidebar/SidebarItem';
-import { SIDEBAR_TABS, SIDEBAR_WINDOWS } from '../config';
+import { SIDEBAR_TABS, SIDEBAR_WINDOWS, SIDEBAR_TERMINAL } from '../config';
 
 export default {
     name: 'Sidebar',
@@ -48,7 +48,9 @@ export default {
     data() {
         return {
             SIDEBAR_TABS,
-            SIDEBAR_WINDOWS
+            SIDEBAR_WINDOWS,
+            width: 0,
+            height: 0
         };
     },
     props: {
@@ -59,14 +61,6 @@ export default {
         active: {
             type: Array,
             default: () => []
-        }
-    },
-    computed: {
-        width() {
-            return this.$parent.height;
-        },
-        height() {
-            return this.$parent.width;
         }
     },
     methods: {
@@ -84,8 +78,18 @@ export default {
                 this.app.sidebar.activeWindows.splice(index, 1);
             } else {
                 this.app.sidebar.activeWindows.push(name);
+                if (name === SIDEBAR_TERMINAL) {
+                    this.$nextTick(() => {
+                        this.app.terminal.openTerminal(null, true);
+                    });
+                }
             }
         }
+    },
+    mounted() {
+        let { height, width } = this.$el.parentNode.getBoundingClientRect();
+        this.width = height;
+        this.height = width;
     }
 };
 </script>

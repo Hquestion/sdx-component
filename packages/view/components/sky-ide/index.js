@@ -3,13 +3,14 @@ import SkyNotebook from './src/widgets/notebook/SkyNotebook';
 
 const routeCfg = [
     {
-        path: '/sdxv-skyide',
+        path: '/sdxv-skyide/:taskId',
         name: 'SdxvSkyIDE',
         component: Main,
         meta: {
             system: 'user',
             isRoot: true
-        }
+        },
+        props: true
     }
 ];
 

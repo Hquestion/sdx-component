@@ -1,5 +1,6 @@
 <template>
     <div
+        tabindex="1"
         :class="['sdxu-button',
                  `sdxu-button--${size}`,
                  `sdxu-button--${type}`,

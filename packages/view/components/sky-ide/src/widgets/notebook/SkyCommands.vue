@@ -28,7 +28,7 @@
                             :class="{'highLight': matchingStringIndex(val.label,command).includes(indexLabel)}"
                         >{{ val.label[indexLabel] }}</span>
                     </div>
-                    <div>{{ val.key }}</div>
+                    <div>{{ val.key.join(',') }}</div>
                 </div>
             </div>
         </div>
@@ -48,6 +48,7 @@ import SearchPanel from '../search-panel/SearchPanel';
 import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SkyCommands',
+    componentName: 'SkyCommands',
     mixins: [locale],
     inject: {
         app: {
@@ -59,11 +60,22 @@ export default {
     },
     data() {
         return {
-            command: ''
+            command: '',
+            commandTree: []
         };
     },
     computed: {
-        commandTree() {
+
+    },
+    methods: {
+        matchingStringIndex,
+        seachValue(value) {
+            this.command = value;
+        },
+        clickCommand(id) {
+            this.app.commands.execute(id);
+        },
+        initCommandTree() {
             let [res, tree] = [new Set(), getCommandsTree(['Notebook', 'Notebook Cell'])];
             tree.forEach(item => {
                 let commands =  new Set();
@@ -83,17 +95,13 @@ export default {
                     }
                 }
             });
-            return [...res];
+            this.commandTree = [...res];
         }
     },
-    methods: {
-        matchingStringIndex,
-        seachValue(value) {
-            this.command = value;
-        },
-        clickCommand(id) {
-            this.app.commands.execute(id);
-        }
+    mounted() {
+        this.$on('popoverShow', () => {
+            this.initCommandTree();
+        });
     }
 };
 </script>

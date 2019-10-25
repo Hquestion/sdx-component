@@ -183,7 +183,7 @@ export default {
                             <a target="_blank" href={url}>{that.t('view.file.Download_Now')}</a>
                             <div class={that.lang$ === 'en' ? 'english' : 'chinese'}>
                                 <span>{that.t('view.file.And_install_SkyDiscovery_File_Management_Client')}</span>
-                                <a href='sdx-file-management://'>{that.t('view.file.Open_it_immediately')}</a>
+                                <a href='sdx-file://'>{that.t('view.file.Open_it_immediately')}</a>
                             </div>
                         </div>
                     );
@@ -200,11 +200,11 @@ export default {
             let url = '';
             let STATIC_PATH = '/';
             if (systemType() === 'Windows') {
-                url = `${STATIC_PATH}static/filemanage-client/windows/sky-filemanager-client.exe`;
+                url = `${STATIC_PATH}static/filemanage-client/windows/iluvatar-filemanager-client.exe`;
             } else if (systemType() === 'Mac'){
-                url = `${STATIC_PATH}static/filemanage-client/mac/sky-filemanager-client.dmg`;
+                url = `${STATIC_PATH}static/filemanage-client/mac/iluvatar-filemanager-client.dmg`;
             } else if(systemType() === 'Linux'){
-                url = `${STATIC_PATH}static/filemanage-client/linux/sky-filemanager-client.AppImage`;
+                url = `${STATIC_PATH}static/filemanage-client/linux/iluvatar-filemanager-client.AppImage`;
             }
             return url;
         }

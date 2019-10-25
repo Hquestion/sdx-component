@@ -108,6 +108,7 @@
 import SkyEditorAdaptor from '../adaptor/SkyEditorAdaptor';
 import { composeFileKey } from '../../utils/utils';
 import locale from '@sdx/utils/src/mixins/locale';
+import undoAndRedo from '../../utils/undoAndRedo';
 export default {
     data() {
         return {
@@ -198,6 +199,11 @@ export default {
         closeDoc(target, forceClose) {
             let tabs = this.app.doc.openFiles;
             let activeName = this.activeTab;
+            let activeFile = this.app.doc.openFiles.find(item => item.path === this.activeTab);
+            // 清空撤销队列
+            if (activeFile && activeFile.path) {
+                undoAndRedo.clearQueueByNamespace(activeFile.path);
+            }
             this.app.doc.currentFile = this.app.doc.openFiles.find(item => item.path === target);
             if (this.fileEditingStatus[this.composeFileKey(this.app.doc.currentFile)] && !forceClose) {
                 this.activeTab = target;

@@ -59,31 +59,31 @@
             </div>
         </div>
         <div class="search">
-            <sdxu-tabs
+            <SdxuTabRadioGroup
                 v-model="tabName"
-                @tab-click="tabClick(tabName)"
-                tab-style="button" 
+                @switch="tabClick"
+                class="radio-group"
             >
-                <el-tab-pane
+                <SdxuTabRadioItem
                     v-for="item in tabs"
                     :key="item.name"
-                    :label="item.label"
                     :name="item.name"
                 >
-                    <sdxw-subject-card-list
-                        v-loading="projectListLoading"
-                        v-if="projectList.length || !projectsLoaded"
-                    >
-                        <sdxw-subject-card
-                            v-for="(val, index) in projectList"
-                            :key="index"
-                            :meta="val.meta"
-                            @operate="handleOperate"
-                        />
-                    </sdxw-subject-card-list>
-                    <SdxuEmpty v-else />
-                </el-tab-pane>
-            </sdxu-tabs>
+                    {{ item.label }}
+                </SdxuTabRadioItem>
+            </SdxuTabRadioGroup>
+            <sdxw-subject-card-list
+                v-loading="projectListLoading"
+                v-if="projectList.length || !projectsLoaded"
+            >
+                <sdxw-subject-card
+                    v-for="(val, index) in projectList"
+                    :key="index"
+                    :meta="val.meta"
+                    @operate="handleOperate"
+                />
+            </sdxw-subject-card-list>
+            <SdxuEmpty v-else />
         </div>
         <sdxu-pagination
             class="pagination"
@@ -107,7 +107,7 @@
 import locale from '@sdx/utils/src/mixins/locale';
 import auth from '@sdx/widget/components/auth';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
-import { TabPane, Message } from 'element-ui';
+import { Message } from 'element-ui';
 import SubCard from '@sdx/widget/components/subject-card';
 import Pagination from '@sdx/ui/components/pagination';
 import { removeProject, getProjectTemplates, getSelfCreatedProjects, getSharingProjects, getProjectList } from '@sdx/utils/src/api/project';
@@ -117,7 +117,7 @@ import MessageBox from '@sdx/ui/components/message-box';
 import SortButton from '@sdx/ui/components/sort-button';
 import CreateProject from './CreateProject';
 import Empty from '@sdx/ui/components/empty';
-import Tabs from '@sdx/ui/components/tab';
+import TabRadio from '@sdx/ui/components/tab-radio';
 export default {
     name: 'SdxvProjectList',
     data() {
@@ -161,15 +161,14 @@ export default {
     components: {
         [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
-        [Tabs.name]: Tabs,
-        [TabPane.name]: TabPane,
+        [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
+        [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
         [SubCard.SubjectCard.name]: SubCard.SubjectCard,
         [SubCard.SubjectCardList.name]: SubCard.SubjectCardList,
         [Pagination.name]: Pagination,
         [SortButton.name]:SortButton,
         [CreateProject.name]: CreateProject,
         [Empty.name]: Empty,
-        [Tabs.name]: Tabs,
     },
     created() {
         this.initProjectsList();
@@ -320,7 +319,11 @@ export default {
 <style lang="scss" scoped>
 .sdxv-project-manage-list {
     position: relative;
-
+    .search {
+        .sdxu-tab-radio-group {
+            margin-bottom: 32px;
+        }
+    }
     .condition {
         display: flex;
         justify-content: space-between;

@@ -1,24 +1,19 @@
-@import './create-task-card.scss';
-@include block('project-detail', $bem-namespace-view) {
+@include block('dev-platform', $bem-namespace-view) {
     @include element('title') {
         font-size: 24px;
         color: #13264D;
         margin-bottom: 20px;
     }
-    @include element('create-task') {
-        display: flex;
-        align-items: center;
-    }
     @include element('search-filter') {
         margin: 20px 0 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         @include modifier('search') {
             display: flex;
-            margin-bottom: 20px;
         }
         @include modifier('sort') {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
         .sdx-icon {
             font-size: 14px;

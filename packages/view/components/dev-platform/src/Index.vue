@@ -1,23 +1,10 @@
 <template>
-    <div class="sdxv-project-detail">
-        <div class="sdxv-project-detail__title">
-            {{ title }}
+    <div class="sdxv-dev-platform">
+        <div class="sdxv-dev-platform__title">
+            任务列表
         </div>
-        <div
-            class="sdxv-project-detail__create-task"
-            v-auth.project.button="'TASK:CREATE'"
-        >
-            <create-task-card
-                v-for="(item,index) in createTaskOptions"
-                :key="index"
-                :icon-class="item.class"
-                :create-label="item.createLabel"
-                :task-type="item.taskType"
-                @click.native="createTask(item)"
-            />
-        </div>
-        <div class="sdxv-project-detail__search-filter">
-            <div class="sdxv-project-detail__search-filter--search">
+        <div class="sdxv-dev-platform__search-filter">
+            <div class="sdxv-dev-platform__search-filter--search">
                 <sdxu-input
                     v-model="searchName"
                     type="search"
@@ -34,24 +21,51 @@
                 </sdxu-button>
             </div>
 
-            <div class="sdxv-project-detail__search-filter--sort">
-                <SdxuTabRadioGroup
-                    v-model="type"
+            <div class="sdxv-dev-platform__search-filter--sort">
+                <div
+                    v-auth.project.button="'TASK:CREATE'"
                 >
-                    <SdxuTabRadioItem name="dev">
-                        开发任务
-                    </SdxuTabRadioItem>
-                    <SdxuTabRadioItem name="skyflow">
-                        可视化数据分析与建模任务
-                    </SdxuTabRadioItem>
-                </SdxuTabRadioGroup>
-                <div class="sdxv-project-detail__search-filter--filter">
-                    <SdxuSortButton
-                        :title="t('view.project.sortByCreateTime')"
-                        @sortChange="sortChange"
-                        :order.sync="order"
-                    />
+                    <sdxu-button
+                        placement="right"
+                        size="small"
+                        trigger="click"
+                        style="margin-right: 10px;"
+                        v-auth.project.button="'PROJECT:CREATE'"
+                    >
+                        创建新任务
+                        <template slot="dropdown">
+                            <SdxuButton
+                                type="text"
+                                size="regular"
+                                block
+                                @click="showCreateProject('empty')"
+                            >
+                                Jupyter任务
+                            </SdxuButton>
+                            <SdxuButton
+                                type="text"
+                                size="regular"
+                                block
+                                @click="showCreateProject('template')"
+                            >
+                                SkyIde任务
+                            </SdxuButton>
+                            <SdxuButton
+                                type="text"
+                                size="regular"
+                                block
+                                @click="showCreateProject('project')"
+                            >
+                                自定义容器任务
+                            </SdxuButton>
+                        </template>
+                    </sdxu-button>
                 </div>
+                <SdxuSortButton
+                    :title="t('view.project.sortByCreateTime')"
+                    @sortChange="sortChange"
+                    :order.sync="order"
+                />
             </div>
         </div>
         <SdxwGeneralTaskList />
@@ -62,10 +76,8 @@
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import SortButton from '@sdx/ui/components/sort-button';
-import TabRadio from '@sdx/ui/components/tab-radio';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
-import CreateTaskCard from './CreateTaskCard';
 import SdxwGeneralTaskList from '@sdx/widget/components/general-task-list';
 import { getProjectDetail } from '@sdx/utils/src/api/project';
 export default {
@@ -119,10 +131,7 @@ export default {
         [Input.name]: Input,
         [Button.name]: Button,
         [SortButton.name]: SortButton,
-        CreateTaskCard,
-        SdxwGeneralTaskList,
-        [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
-        [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
+        SdxwGeneralTaskList
     },
     methods: {
         searchTask() {

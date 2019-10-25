@@ -1,21 +1,28 @@
 <template>
     <div
         class="sdxw-expand-label"
-        @click.capture="switchExpand"
-        :class="expandable ? 'hoverable' : ''"
     >
-        <span class="sdxw-expand-label__text">
-            {{ label }}
-        </span>
-        <span
-            class="sdxw-expand-label__icon"
-            v-if="expandable"
+        <div
+            class="sdxw-expand-label__main"
+            @click.capture="switchExpand"
+            :class="expandable ? 'hoverable' : ''"
         >
-            <SdxuIconButton
-                :icon="expandedTemp ? 'sdx-icon sdx-icon-arrow-down' : 'sdx-icon sdx-icon-arrow-right'"
-                size="small"
-            />
-        </span>
+            <span class="sdxw-expand-label__main--text">
+                {{ label }}
+            </span>
+            <span
+                class="sdxw-expand-label__main--icon"
+                v-if="expandable"
+            >
+                <SdxuIconButton
+                    :icon="expandedTemp ? 'sdx-icon sdx-icon-arrow-down' : 'sdx-icon sdx-icon-arrow-right'"
+                    size="small"
+                />
+            </span>
+        </div>
+        <div class="sdxw-expand-label__right">
+            <slot name="right" />
+        </div>
     </div>
 </template>
 

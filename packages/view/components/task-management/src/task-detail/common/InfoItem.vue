@@ -2,7 +2,8 @@
     <div
         class="sdxv-info-container__item"
         :class="{ 'is-multi-line': multiLine,
-                  'is-strip': strip }"
+                  'is-strip': strip,
+                  'is-whole-line': wholeLine }"
     >
         <div class="sdxv-info-container__item--label">
             <slot name="label">
@@ -30,13 +31,16 @@ export default {
         },
         multiLine: {
             type: Boolean,
-            default: false
+            default: true
         },
         strip: {
             type: Boolean,
             default: false
-        }
-            
+        },
+        wholeLine: {
+            type: Boolean,
+            default: false
+        }  
     }
 };
 </script>

@@ -1,39 +1,37 @@
 <template>
-    <SdxuContentPanel
-        :title="method"
+    <div
         class="sdxv-log-info"
+        :class="{'is-dark': isDark}"
     >
-        <template
-            #right
-        >
-            <div class="sdxv-log-info__switch">
-                <div class="sdxv-log-info__switch--item">
-                    <span>{{ t('view.task.AutoPull') }}：</span>
-                    <el-switch
-                        v-model="autoPull"
-                    />
-                </div>
-                <div class="sdxv-log-info__switch--item">
-                    <span>{{ t('view.task.RollingFollow') }}：</span>
-                    <el-switch
-                        v-model="followScroll"
-                    />
-                </div>
+        <div class="sdxv-log-info__switch">
+            <div class="sdxv-log-info__switch--item">
+                <span>{{ t('view.task.AutoPull') }}：</span>
+                <el-switch
+                    v-model="autoPull"
+                    active-color="#3a845d"
+                    inactive-color="#6B778C"
+                />
             </div>
-        </template>
-        <template #default>
-            <SdxwPodLog
-                :auto-pull="autoPull"
-                :follow-scroll="followScroll"
-                :method="method"
-                :pod-name="podName"
-            />
-        </template>
-    </SdxuContentPanel>
+            <div class="sdxv-log-info__switch--item">
+                <span>{{ t('view.task.RollingFollow') }}：</span>
+                <el-switch
+                    v-model="followScroll"
+                    active-color="#3a845d"
+                    inactive-color="#6B778C"
+                />
+            </div>
+        </div>
+        <SdxwPodLog
+            :auto-pull="autoPull"
+            :follow-scroll="followScroll"
+            :method="method"
+            :pod-name="podName"
+            :is-dark="isDark"
+        />
+    </div>
 </template>
 
 <script>
-import SdxuContentPanel from '@sdx/ui/components/content-panel';
 import SdxwPodLog from '@sdx/widget/components/pod-log';
 import ElSwitch from 'element-ui/lib/switch';
 
@@ -44,7 +42,6 @@ export default {
     name: 'SdxvLogInfo',
     mixins: [locale],
     components: {
-        SdxuContentPanel,
         SdxwPodLog,
         ElSwitch
     },
@@ -56,6 +53,10 @@ export default {
         method: {
             type: String,
             default: ''
+        },
+        isDark: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

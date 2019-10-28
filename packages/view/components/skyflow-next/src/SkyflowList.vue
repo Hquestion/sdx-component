@@ -5,7 +5,7 @@
         </div>
         <div class="condition">
             <SdxwSearchLayout>
-                <SdxwSearchItem label="时间">
+                <SdxwSearchItem label="时间：">
                     <el-date-picker
                         type="monthrange"
                         range-separator="-"
@@ -14,7 +14,7 @@
                         size="medium"
                     />
                 </SdxwSearchItem>
-                <SdxwSearchItem label="选择实例">
+                <SdxwSearchItem label="执行方式：">
                     <el-select
                         size="medium"
                     >
@@ -29,11 +29,16 @@
                     </el-select>
                 </SdxwSearchItem>
             </SdxwSearchLayout>
-            <SkyflowTable />
-            <sdxu-pagination
-                class="pagination"
-                v-if="false"
-            />
+            <div class="table">
+                <SdxuScroll>
+                    <SkyflowTable />
+                    <sdxu-pagination
+                        class="pagination"
+                        :page-size="10"
+                        :total="45"
+                    />
+                </SdxuScroll>
+            </div>
         </div>
     </div>
 </template>
@@ -45,6 +50,7 @@ import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import { Select, Option } from 'element-ui';
 import SkyflowTable from './SkyflowTable';
 import SdxuPagination from '@sdx/ui/components/pagination';
+import SdxuScroll from '@sdx/ui/components/scroll';
 export default {
     name: 'SdxvSkyflowList',
     data() {
@@ -58,7 +64,8 @@ export default {
         [Select.name]: Select,
         [Option.name]: Option,
         SkyflowTable,
-        SdxuPagination
+        SdxuPagination,
+        SdxuScroll
     },
     created() {
        
@@ -77,17 +84,28 @@ export default {
 
 <style lang="scss" scoped>
 .sdxv-skyflow-list {
+    .title {
+        font-size: 24px;
+        color: #13264D;
+    }
     .condition {
         .sdxw-search-layout {
             background: #FFFFFF;
             box-shadow: 0 2px 4px 0 #C2CDDE;
-            margin: 24px 0;
+            margin: 32px 0 24px 0;
         }
     }
     .pagination {
         display: flex;
         justify-content: flex-end;
         margin-top: 30px;
+    }
+    .table {
+        background: #FFFFFF;
+        box-shadow: 0 2px 4px 0 #C2CDDE;
+        border-radius: 2px;
+        padding: 24px;
+        height: calc(100vh - 302px);
     }
 }
 </style>

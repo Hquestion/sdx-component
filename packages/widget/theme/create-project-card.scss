@@ -1,19 +1,18 @@
 @include block('create-project-card',  $bem-namespace-widget) { 
-    border: 1px solid #D8DEEA;
-    box-shadow: 0 0 14px 0 rgba(0,0,0,0.10);
-    border-radius: 2px;
+    box-shadow: 0 $sdx-border-radius $sdx-border-radius-large 0 $sdx-secondary-color--light5;
+    border-radius: $sdx-border-radius;
     width: 304px;
     height: 187px;
     padding: 18px 24px 16px 24px;
     box-sizing: border-box;
     @include element('header') {
         margin-bottom: 12px;
-        height: 32px;
-        line-height: 32px;
+        height: $sdx-form-element-height-small;
+        line-height: $sdx-form-element-height-small;
         display: flex;
         svg {
-            width: 32px;
-            height: 32px;
+            width: $sdx-form-element-height-small;
+            height: $sdx-form-element-height-small;
         }
         span {
             font-size: 16px;
@@ -40,8 +39,8 @@
         }
     }
     @include element('btn') {
-        height: 36px;
-        line-height: 36px;
+        height: $sdx-form-element-height-regular;
+        line-height: $sdx-form-element-height-regular;
         background: #D7DBE2;
         border-radius: 2px;
         margin-top: 10px;

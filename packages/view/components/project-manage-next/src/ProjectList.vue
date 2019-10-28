@@ -1,5 +1,8 @@
 <template>
     <div class="sdxv-project-manage-list">
+        <div class="title">
+            {{ t('view.project.projectList') }}
+        </div>
         <div class="condition">
             <SdxwSearchLayout
                 @search="searchProject"
@@ -255,7 +258,7 @@ export default {
                         icon: icon,
                         iconName:iconName, 
                         footer: isOwn && tempalteWriteAuth,
-                        taskNumber: 6
+                        taskNumber: item.taskCount
                     });
                 });
                 this.total = res.data.total;
@@ -319,9 +322,14 @@ export default {
 <style lang="scss" scoped>
 .sdxv-project-manage-list {
     position: relative;
+    .title {
+        font-size: 24px;
+        color: #13264D;
+        margin-bottom: 32px;
+    }
     .search {
         .sdxu-tab-radio-group {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
     }
     .condition {

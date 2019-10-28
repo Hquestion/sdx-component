@@ -232,6 +232,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             //border: 1px solid $sdx-border-color;
             box-sizing: border-box;
             box-shadow: 0 1px 4px 0 rgba(75,91,123,0.50);
+            padding: 0 !important;
             & /deep/ .sdxu-button {
                 display: block;
                 border: none;
@@ -244,9 +245,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                     border-top: none;
                 }
                 &:hover {
-                    color: $sdx-secondary-color;
-                    background: $sdx-secondary-color--light7;
+                    color: $sdx-secondary-color !important;
+                    background: $sdx-secondary-color--light7 !important;
                     border: none;
+                    .sdxu-button__main {
+                        text-decoration: none !important;
+                    }
                 }
             }
         }

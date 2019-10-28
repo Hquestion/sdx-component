@@ -10,6 +10,8 @@
                 <SdxuButton type="primary" size="regular" :loading="true">loading</SdxuButton>
             </p>
             <p>
+                <SdxuButton type="text" size="regular" icon="sdx-icon-location-outline">plain</SdxuButton>
+                <SdxuButton type="default" size="regular" :plain="true" icon="sdx-icon-location-outline">启动</SdxuButton>
                 <SdxuButton type="primary" size="regular" :plain="true">plain</SdxuButton>
                 <SdxuButton type="primary" size="regular" :disabled="true">禁用</SdxuButton>
                 <SdxuButton type="default" size="regular" :shadow="true">投影</SdxuButton>

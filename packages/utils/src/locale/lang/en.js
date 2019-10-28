@@ -16,6 +16,13 @@ export default {
         },
         panel: {
             noContent: 'No Content'
+        },
+        pagination: {
+            showEveryPage: '',
+            unit: 'per page',
+            total: 'totally',
+            page: 'pages',
+            recordCount: 'records'
         }
     },
     widget: {

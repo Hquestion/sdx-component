@@ -192,7 +192,7 @@ export default {
             ResourceInformation: '资源信息',
             DataInformation: '数据信息',
             RealTimeMonitor: '实时监控',
-            DataSourceInformation: '数据源信息',
+            DataSource: '数据源',
             LogInformation: '日志信息',
             DataSet: '数据集',
             Core: '核',

@@ -17,68 +17,23 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('info-container', $bem-namespace-view) {
-    display: flex;
-    flex-flow: row wrap;
-    margin: 0 $sdx-margin;
-    @include element('item') {
-        width: 50%;
-        min-height: 20px;
-        min-width: 350px;
+    padding: 1px 0; // 这里设置的上下padding为1px是为了限制子元素的margin超出范围
+
+    @include element('box') {
         display: flex;
-        align-items: flex-start;
-        padding: 0 $sdx-padding;
-        font-family: PingFangSC-Regular;
-        font-size: 14px;
-
-        &:nth-child(1), &:nth-child(2) {
-            margin-top: 0;
-        }
-
-        @include modifier('label') {
-            flex: none;
-            width: 140px;
-            height: 40px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            word-break: break-all;
-            color: #6B778C;
-        }
-
-        @include modifier('value') {
-            word-break: break-all;
-            flex: auto;
-            display: flex;
-            align-items: center;
-            color: #13264D;
-            min-height: 40px;
-            .sdxw-fold-label {
-                padding: 0;
-                text-align: left;
-                display: flex;
-                align-items: center;
-            }
-        }
-
-        @include state('strip') {
-            div:nth-child(2) {
-                height: 40px;
-            }
-        }
-
-        @include state('multi-line') {
-            div:nth-child(2) {
-                height: auto;
-            }
-        }
-
-        @include state('whole-line') {
-            width: 100%;
-        }
+        flex-flow: row wrap;
+        margin: -9px 0px; // 这里多设置的-1px是为了将父元素设置的padding为1px抵消
+    }
+    @include element('item') {
+        margin: 8px 0px;
     }
 
     @include state('background') {
         background-color: #F2F6FC;
+    }
+
+    & + .sdxv-info-container {
+        margin-top: 16px;
     }
 
     .sdxv-info-container__item.is-lang-en {
@@ -90,6 +45,62 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             align-items: flex-start;
             word-break: break-all;
         }
+    }
+}
+
+@include block('info-item', $bem-namespace-view) {
+    width: 50%;
+    min-height: 20px;
+    min-width: 350px;
+    padding: 0 $sdx-padding;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    display: flex;
+    align-items: flex-start;
+
+    @include element('label') {
+        flex: none;
+        width: 140px;
+        height: 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        word-break: break-all;
+        color: #6B778C;
+    }
+
+    @include element('value') {
+        word-break: break-all;
+        flex: auto;
+        display: flex;
+        align-items: center;
+        color: #13264D;
+        min-height: 20px;
+        .sdxw-fold-label {
+            padding: 0;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    @include state('strip') {
+        div:nth-child(2) {
+            height: 40px;
+        }
+    }
+
+    @include state('multi-line') {
+        @include element('label') {
+            height: 40px;
+        }
+        @include element('value') {
+            height: auto;
+        }
+    }
+
+    @include state('whole-line') {
+        width: 100%;
     }
 }
 
@@ -183,16 +194,18 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @include block('data-info', $bem-namespace-view) {
 
     @include element('container') {
-        margin-left:-$sdx-margin;
-        margin-right:-$sdx-margin;
+        margin:(-8px) (-$sdx-margin);
         display: flex;
         flex-wrap: wrap;
         align-content: flex-start;
+
+        @include modifier('item') {
+            margin: 8px $sdx-margin;
+        }
     }
 }
 
 @include block('data-datasource', $bem-namespace-view) {
-    margin: 0 $sdx-margin; // 这里设置margin: 20px;是为了子元素自动排版间隔相同距离，需要外框设置margin: -20px;
     width: 280px;
     border-radius: 2px;
     border: 1px solid #D8DEEA;
@@ -210,12 +223,15 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         background-color: rgba(#F2F6FC, 0.4);
 
         @include modifier('item') {
+            &:last-child {
+                margin-top: 8px;
+            }
             span:first-child {
-                font-size: 13px;
-                color: #606266;
+                font-size: 14px;
+                color: #6B778C;
             }
             span:last-child {
-                color: #262B3E;
+                color: #13264D;
                 margin-left: $sdx-margin;
             }
         }
@@ -223,7 +239,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('data-dataset', $bem-namespace-view) {
-    margin: 0 $sdx-margin;
     background-color: #EDEFF2;
     width: 280px;
     height: 40px;

@@ -282,27 +282,22 @@ export default {
         getOptionsByName(name) {
             let text = '';
             let yAxisName = '';
-            let color = '';
             switch (name) {
                 case 'usedCpu':
                     text = this.t('view.task.CPUUsageRate');
                     yAxisName = '(%)';
-                    color = '#0052CC';
                     break;
                 case 'usedMem':
                     text = this.t('view.task.MemoryUsage');
                     yAxisName = '(MB)';
-                    color = '#6554C0';
                     break;
                 case 'usedGpu':
                     text = this.t('view.task.GPUUsageRate');
                     yAxisName = '(%)';
-                    color = '#00A3BF';
                     break;
                 case 'usedGpuMem':
                     text = this.t('view.task.GPUMemoryUsage');
                     yAxisName = '(MB)';
-                    color = '#6554C0';
             }
             return {
                 ...CHART_DEFAULT_OPTION,
@@ -317,7 +312,7 @@ export default {
                     data: [{
                         name: text,
                         textStyle: {
-                            color
+                            color: '#13264D'
                         }
                     }]
                 },

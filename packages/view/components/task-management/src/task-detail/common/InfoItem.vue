@@ -1,16 +1,16 @@
 <template>
     <div
-        class="sdxv-info-container__item"
+        class="sdxv-info-container__item sdxv-info-item"
         :class="{ 'is-multi-line': multiLine,
                   'is-strip': strip,
                   'is-whole-line': wholeLine }"
     >
-        <div class="sdxv-info-container__item--label">
+        <div class="sdxv-info-item__label">
             <slot name="label">
                 {{ label }}：
             </slot>
         </div>
-        <div class="sdxv-info-container__item--value">
+        <div class="sdxv-info-item__value">
             <slot name="value">
                 {{ value || '-' }}
             </slot>
@@ -31,7 +31,7 @@ export default {
         },
         multiLine: {
             type: Boolean,
-            default: true
+            default: false
         },
         strip: {
             type: Boolean,

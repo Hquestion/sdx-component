@@ -3,7 +3,9 @@
         class="sdxv-info-container"
         :class="{'is-background': background}"
     >
-        <slot />
+        <div class="sdxv-info-container__box">
+            <slot />
+        </div>
     </div>
 </template>
 

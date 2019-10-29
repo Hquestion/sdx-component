@@ -192,7 +192,7 @@ export default {
             ResourceInformation: 'Resource Information',
             DataInformation: 'Data Information',
             RealTimeMonitor: 'Real Time Monitor',
-            DataSourceInformation: 'DataSource Information',
+            DataSource: 'DataSource',
             LogInformation: 'Log Information',
             DataSet: 'DataSet',
             Core: 'Core',

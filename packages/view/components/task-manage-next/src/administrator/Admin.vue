@@ -1,13 +1,13 @@
 <template>
     <div class="sdxv-task-manage-admin">
         <TaskManageHeader @headerInfo="headerInfo" />
-        <TaskList v-if="taskType === 'task'" />
-        <ExecuteList v-else />
+        <ExecuteList v-if="taskType === 'task'" />
+        <TaskList v-else />
     </div>
 </template>
 
 <script>
-import TaskManageHeader from '../TaskManageHeader';
+import TaskManageHeader from './AdminHeader';
 import TaskList from './TaskList';
 import ExecuteList from './ExecuteList';
 export default {

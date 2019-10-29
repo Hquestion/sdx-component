@@ -5,7 +5,22 @@
                 v-for="(item) in infoList"
                 :key="item.title"
             >
-                gg
+                <div>
+                    <div class="total">
+                        {{ item.total }}
+                    </div>
+                    <div class="title">
+                        {{ item.title }}
+                    </div>
+                    <div class="progress">
+                        <span>手动</span>
+                        <el-progress
+                            :percentage="50"
+                            :show-text="false"
+                        />
+                        <span>调度</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="condition">
@@ -103,6 +118,7 @@
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
+import { Row, Col, Progress } from 'element-ui';
 export default {
     name: 'SdxvExecutelist',
     data() {
@@ -110,31 +126,31 @@ export default {
             infoList: [
                 {
                     total: 123,
-                    title: '执行记录总数',
+                    title: '执行总数',
                     manual: 63,
                     dispatch: 60
                 },
                 {
                     total: 123,
-                    title: '执行记录总数',
+                    title: '执行总数',
                     manual: 63,
                     dispatch: 60
                 },
                 {
                     total: 123,
-                    title: '执行记录总数',
+                    title: '执行总数',
                     manual: 63,
                     dispatch: 60
                 },
                 {
                     total: 123,
-                    title: '执行记录总数',
+                    title: '执行总数',
                     manual: 63,
                     dispatch: 60
                 },
                 {
                     total: 123,
-                    title: '执行记录总数',
+                    title: '执行总数',
                     manual: 63,
                     dispatch: 60
                 },
@@ -145,7 +161,10 @@ export default {
     components: {
         [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
-        SdxuTable
+        SdxuTable,
+        [Row.name]: Row,
+        [Col.name]: Col,
+        [Progress.name]: Progress
     },
 };
 </script>
@@ -155,21 +174,63 @@ export default {
     .panel {
         background: #FFFFFF;
         box-shadow: 0 2px 4px 0 #C2CDDE;
-        border-radius: 4px;
+        border-radius: 2px;
+    }
+    .condition {
+        margin-bottom: 24px;
+        .sdxw-search-layout {
+            @extend .panel;
+        }
     }
     .info {
-        display: flex;
-        justify-content: space-between;
-        height: 168px;
-        @extend .panel;
-        div {
+        margin:0  -12px;
+        height: 152px;
+        margin-bottom: 24px;
+        &>div {
             width: 20%;
             text-align: center;
-            border-right: 1px solid #E4E7ED;
+            padding: 0 12px;
+            height: 152px;
+            float: left;
+            &>div {
+                height: 152px;
+                @extend .panel;
+                .total {
+                    font-size: 40px;
+                    color: #1144AB;
+                    height: 80px;
+                    line-height: 72px;
+                    padding-top: 10px;
+                }
+                .title {
+                    display: inline-block;
+                    background: #DEEBFF;
+                    border-radius: 2px;
+                    height: 24px;
+                    line-height: 24px;
+                    padding: 0 8px;
+                    margin-bottom: 10px;
+                }
+                .progress {
+                    span {
+                        font-size: 12px;
+                        color: #6E7C94;
+                    }
+                }
+            }
         }
-        div:last-child {
-            border-right: none;
+        & /deep/ {
+            .el-progress {
+                display: inline-block;
+                width: calc(100% - 116px);
+                margin: 0 6px;
+            }
         }
+    }
+    .table {
+        @extend .panel;
+        padding: 24px;
+        height: calc(100vh - 302px);
     }
 }
 </style>

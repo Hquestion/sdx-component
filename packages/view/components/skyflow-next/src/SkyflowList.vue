@@ -84,26 +84,27 @@ export default {
 
 <style lang="scss" scoped>
 .sdxv-skyflow-list {
+    .panel {
+        background: #FFFFFF;
+        box-shadow: 0 2px 4px 0 #C2CDDE;
+        border-radius: 2px;
+    }
     .title {
         font-size: 24px;
         color: #13264D;
     }
     .condition {
         .sdxw-search-layout {
-            background: #FFFFFF;
-            box-shadow: 0 2px 4px 0 #C2CDDE;
-            margin: 32px 0 24px 0;
+            @extend .panel;
         }
     }
     .pagination {
         display: flex;
         justify-content: flex-end;
-        margin-top: 30px;
+        margin-top: 24px;
     }
     .table {
-        background: #FFFFFF;
-        box-shadow: 0 2px 4px 0 #C2CDDE;
-        border-radius: 2px;
+        @extend .panel;
         padding: 24px;
         height: calc(100vh - 302px);
     }

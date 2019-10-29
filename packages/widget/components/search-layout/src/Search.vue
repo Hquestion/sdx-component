@@ -12,18 +12,17 @@
             :inline="true"
             :label-width="labelWidth"
             @submit.native.prevent
+            size="medium"
         >
             <slot />
             <div class="sdxw-search-layout__btn">
                 <SdxuButton
                     type="primary"
-                    size="small"
                     @click="handleSearch"
                 >
                     {{ t('sdxCommon.Search') }}
                 </SdxuButton>
                 <SdxuButton
-                    size="small"
                     @click="handleReset"
                     type="primary"
                     :invert="true"
@@ -38,17 +37,7 @@
             class="sdxw-search-layout__show"
             v-if="minVisible < $slots.default.length"
         >
-            <SdxuButton
-                type="primary"
-                size="small"
-                :plain="true"
-                @click="showItem"
-            >
-                {{ singlerow ? t('sdxCommon.expand') : t('sdxCommon.retract') }}
-                <i
-                    :class="['sdx-icon',singlerow ? 'sdx-icon-arrow-down' : 'sdx-icon-arrow-up']"
-                />
-            </SdxuButton>
+            <i :class="['sdx-icon', 'sdx-cebianlanzhankaiICON', singlerow ? '' : 'is-reverse']" @click="showItem"></i>
         </div>
     </div>
 </template>
@@ -141,6 +130,11 @@ export default {
                 item.componentInstance.itemIndex = index;
             }
         });
+        if (this.$slots.default.length === 1) {
+            this.$slots.default[0].componentInstance.$on('enter', () => {
+                this.$emit('search');
+            });
+        }
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.init);

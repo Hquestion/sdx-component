@@ -30,6 +30,19 @@ export default {
             type: String,
             default: ''
         }
+    },
+    methods: {
+        emitEnter(e) {
+            if (e.keyCode  === 13) {
+                this.$emit('enter');
+            }
+        }
+    },
+    mounted() {
+        this.$slots.default[0].elm.querySelector('input').addEventListener('keyup', this.emitEnter);
+    },
+    beforeDestroy() {
+        this.$slots.default[0].elm.querySelector('input').removeEventListener('keyup', this.emitEnter);
     }
 };
 </script>

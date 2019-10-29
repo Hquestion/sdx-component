@@ -1,6 +1,6 @@
 @include block('task-resource-list', $bem-namespace-widget) {
     .sdxu-input, .el-select {
-        width: 300px;
+        width: 240px;
     }
 
     @include element('pagination') {

@@ -1,4 +1,4 @@
-// 文字截断 text truncation 
+// 文字截断 text truncation
 @mixin text-truncation($line-clamp: 1, $word-break: break-all) {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -33,12 +33,22 @@
     &::-webkit-input-placeholder {
         @content
     }
-  
+
     &::-moz-placeholder {
         @content
     }
-  
+
     &:-ms-input-placeholder {
         @content
     }
+}
+
+.shadow {
+    box-shadow: 0 2px 4px 0 $sdx-secondary-color--light5;
+}
+.border {
+    border: 1px solid $sdx-secondary-color--light6;
+}
+.radius {
+    border-radius: $sdx-border-radius-large;
 }

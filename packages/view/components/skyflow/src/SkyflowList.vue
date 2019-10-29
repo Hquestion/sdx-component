@@ -14,7 +14,7 @@
                         <sdxu-input
                             v-model="searchName"
                             type="search"
-                            size="small"
+                            size="regular"
                             :placeholder="t('view.skyflow.enterSkyflowName')"
                         />
                     </SdxwSearchItem>
@@ -23,7 +23,7 @@
             <div class="sdxv-skyflow__tool--right">
                 <sdxu-button
                     placement="right"
-                    size="small"
+                    size="regular"
                     trigger="click"
                     style="margin-right: 10px;"
                     v-auth.skyflow.button="'FLOW:CREATE'"

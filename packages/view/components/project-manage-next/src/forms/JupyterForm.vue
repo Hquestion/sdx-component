@@ -180,7 +180,6 @@ export default {
         };
         return {
             params: {
-                projectId: this.$route.params.projectId,
                 name: '',
                 description: '',
                 type: 'JUPYTER',

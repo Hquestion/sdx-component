@@ -38,7 +38,7 @@
                                 type="text"
                                 size="regular"
                                 block
-                                @click="showCreateProject('empty')"
+                                @click="createTask('JUPYTER')"
                             >
                                 Jupyter任务
                             </SdxuButton>
@@ -46,7 +46,7 @@
                                 type="text"
                                 size="regular"
                                 block
-                                @click="showCreateProject('template')"
+                                @click="createTask('SKYIDE')"
                             >
                                 SkyIde任务
                             </SdxuButton>
@@ -54,7 +54,7 @@
                                 type="text"
                                 size="regular"
                                 block
-                                @click="showCreateProject('project')"
+                                @click="createTask('CONTAINERDEV')"
                             >
                                 自定义容器任务
                             </SdxuButton>
@@ -136,13 +136,15 @@ export default {
     methods: {
         searchTask() {
         },
-        createTask(task) {
+        createTask(type) {
             this.$router.push(
                 {
                     name: 'CreateTaskNext',
                     params: {
-                        type: task.type,
-                        projectId: this.$route.params.id
+                        type: type
+                    },
+                    query: {
+                        from: 'devPlatform'
                     }
                 }
             );

@@ -248,7 +248,6 @@ export default {
         return {
             params: {
                 uuid: '',
-                projectId: this.$route.params.projectId,
                 name: '',
                 description: '',
                 type: 'CONTAINERDEV',

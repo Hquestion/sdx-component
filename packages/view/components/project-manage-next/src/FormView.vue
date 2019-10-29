@@ -1,6 +1,5 @@
 <template>
     <component
-        v-if="taskId && task || projectId"
         :is="formComp"
         :project-id="projectId"
         :kind-single-instance="kindSingleInstance"
@@ -70,7 +69,7 @@ export default {
     },
     beforeDestroy() {
         this.pollingId && clearInterval(this.pollingId);
-        this.pollingId = null;    
+        this.pollingId = null;
     }
 };
 </script>

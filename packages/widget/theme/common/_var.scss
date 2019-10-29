@@ -71,7 +71,13 @@ $sdxw-resource-label-height: 40px !default;
 $sdxw-resource-require-color: #F56C6C !default;
 
 // subject-card
-$sdxw-subject-card-shadow: #C2CDDE !default;
-$sdxw-subject-card-padding: 24px !default;
+$sdxw-subject-card-icon-name: 20px !default;
 $sdxw-subject-card-icon-size: 72px !default;
 $sdxw-subject-card-top-padding: 16px !default;
+$sdxw-subject-card-task-padding: 8px !default;
+$sdxw-subject-card-info-color: #172B4D !default;
+$sdxw-subject-card-btn-color: #42526E !default;
+
+// create-project-card
+$sdxw-create-project-card-width: 304px !default;
+$sdxw-create-project-card-height: 187px !default;

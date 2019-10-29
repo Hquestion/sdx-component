@@ -1,83 +1,85 @@
 @include block('subject-card',  $bem-namespace-widget) {
     background: #FFFFFF;
-    box-shadow: 0 2px 4px 0 $sdxw-subject-card-shadow;
+    box-shadow: 0 2px 4px 0 $sdx-secondary-color--light5;
     border-radius: $sdx-border-radius-large;
-    margin-bottom: $sdxw-subject-card-padding;
-    padding: $sdxw-subject-card-top-padding $sdxw-subject-card-padding $sdxw-subject-card-padding $sdxw-subject-card-padding;
+    margin-bottom: $sdx-gap-regular;
+    padding: $sdx-gap-small $sdx-gap-regular $sdx-gap-regular $sdx-gap-regular;
     padding-bottom: 0;
     @include element('header') {
-        padding-bottom: $sdxw-subject-card-padding;
+        padding-bottom: $sdx-gap-regular;
     }
     @include element('icon') {
-        border: 1px solid #D8DEEA;
-        border-radius: 2px;
+        border: 1px solid $sdx-secondary-color--light6;
+        border-radius: $sdx-border-radius;
         width: $sdxw-subject-card-icon-size;
         height: $sdxw-subject-card-icon-size;
         display: inline-block;
         text-align: center;
         position: relative;
         svg {
-            width: 36px;
-            height: 36px;
-            margin-top: 4px;
+            width: $sdx-form-element-height-regular;
+            height: $sdx-form-element-height-regular;
+            margin-top: $sdx-border-radius-large;
         }
         div {
             display: inline-block;
             position: absolute;
             bottom: 0;
-            background: rgb(237, 239,242);
+            background: $sdx-secondary-color--light7;
             width: 100%;
             left: 0;
-            height: $sdxw-subject-card-padding;
-            line-height: $sdxw-subject-card-padding;
+            height: $sdxw-subject-card-icon-name;
+            line-height: $sdxw-subject-card-icon-name;
+            font-size: $sdx-help-font-size;
+            color: $sdx-secondary-color--light3;
         }
     }
 
     @include element('content') {
         width: calc(100% - 82px);
         float: right;
-        font-size: 14px;
+        font-size: $sdx-content-font-size;
         @include modifier('info') {
             height: 24px;
             line-height: 24px;
             display: flex;
             justify-content: space-between;
-            padding-top: 4px;
+            padding-top: $sdx-border-radius-large;
             .left {
                 .title {
-                    font-size: 18px;
-                    color: #172B4D;
+                    font-size: $sdx-h1-font-size;
+                    color: $sdxw-subject-card-info-color;
                     &:hover {
                         cursor: pointer;
+                        color: $sdx-primary-color;
                     }
                 }
                 .task {
-                    background: #DFE2E7;
-                    border-radius: 12px;
+                    background: $sdx-disable-color;
+                    border-radius: $sdx-border-radius;
                     display: inline-block;
-                    margin-left: 12px;
+                    margin-left: $sdx-gap-small;
                     vertical-align: top;
-                    padding: 0 10px;
-                    font-size: 12px;
-                    color: #253858;
+                    padding: 0 $sdxw-subject-card-task-padding;
+                    font-size: $sdx-help-font-size;
+                    color: $sdx-secondary-color--light1;
                 }
             }
             .right {
-                color: #172B4D;
+                color: $sdxw-subject-card-info-color;
                 display: flex;
                 .customize-icon {
                     display: inline-block;
-                    width: 2px;
-                    height: 2px;
-                    background: #172b4d;
-                    border-radius: 2px;
+                    width: $sdx-border-radius;
+                    height: $sdx-border-radius;
+                    background: $sdxw-subject-card-info-color;
+                    border-radius: $sdx-border-radius;
                     vertical-align: middle;
-                    margin: 10px 10px;
+                    margin: $sdx-help-font-size $sdx-help-font-size;
                 }
                 .creator {
                     span {
-                        font-family: PingFangSC-Regular;
-                        color: rgb(118,128,145);
+                        color: $sdx-secondary-color--light3;
                     }
                 }
             }
@@ -88,26 +90,26 @@
             white-space:nowrap;
             word-break: break-all;
             margin-top: 22px;
-            color: #6B778C;
+            color: $sdx-secondary-color--light3;
         }
     }
 
     @include element('footer') {
         display: flex;
         justify-content: space-between;
-        border-top: 1px solid #D8DEEA;
+        border-top: 1px solid $sdx-secondary-color--light6;
         height: 62px;
         line-height: 62px;
         .sdxu-button {
             padding: 0;
-            padding-left: 32px;
+            padding-left: $sdx-gap-large;
             margin-left: 0;
         }
         .self {
             .sdxu-button--primary.is-plain {
-                color: #42526e;
+                color: $sdxw-subject-card-btn-color;
                 .sdxu-button__main {
-                    font-size: 12px;
+                    font-size: $sdx-help-font-size;
                 }
             }
         }

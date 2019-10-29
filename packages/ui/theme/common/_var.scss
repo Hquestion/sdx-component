@@ -39,10 +39,10 @@ $sdxu-input-strength-color-none: $sdx-none-color !default;
 $sdxu-icon-hover: $sdx-primary-color !default;
 // sdxu-pagination
 $sdxu-pagination-active-background-color: $sdx-primary-color !default; // 当前激活pager背景色
-$sdxu-pagination-text-color: rgba(96,98,102,1) !default;   // 非激活pager字体颜色
+$sdxu-pagination-text-color: $sdx-secondary-color !default;   // 非激活pager字体颜色
 $sdxu-pagination-background: #fff !default;  // 非激活pager背景
-$sdxu-pagination-pager-space: 4px !default;  // pager之间间距
-$sdxu-pagination-pager-border: 1px solid rgba(217,217,217,1) !default;  // pager边框
+$sdxu-pagination-pager-space: 5px !default;  // pager之间间距
+$sdxu-pagination-pager-border: 1px solid $sdx-secondary-color--light6 !default;  // pager边框
 
 // sdxu-dialog
 $sdxu-dialog-small-size-width: 460px !default;

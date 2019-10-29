@@ -12,7 +12,7 @@
         </div>
         <el-pagination
             background
-            layout="total, prev, pager, next"
+            layout="prev, pager, next"
             :total="total"
             :current-page.sync="current"
             :page-size="pageSize"

@@ -9,6 +9,8 @@
     @include element('main') {
         border-left: 4px solid #1144AB;
         padding-left: 12px;
+        display: flex;
+        align-items: center;
 
         &.hoverable:hover {
             cursor: pointer;

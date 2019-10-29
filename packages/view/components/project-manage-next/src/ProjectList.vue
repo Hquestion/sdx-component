@@ -23,7 +23,7 @@
                     placement="right"
                     size="small"
                     trigger="click"
-                    style="margin-right: 20px;"
+                    style="margin-right: 24px; vertical-align: middle"
                     v-auth.project.button="'PROJECT:CREATE'"
                 >
                     {{ t('view.project.createProject') }}
@@ -58,6 +58,7 @@
                     :title="t('view.project.sortByCreateTime')"
                     @sortChange="sortChange"
                     :order.sync="order"
+                    style="vertical-align: middle"
                 />
             </div>
         </div>
@@ -187,6 +188,7 @@ export default {
         tabClick(name) {
             name = name == 0 ? '' : this.tabName;
             this.type = name;
+            this.current = 1;
             this.initProjectsList();
         },
         searchProject() {

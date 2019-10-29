@@ -17,12 +17,15 @@
             <span>{{ t('view.project.Created') }}：</span>
             <span>{{ dateFormatter(meta.createdAt) }}</span>
         </div>
-        <div
+        <SdxuButton
             @click="$emit('operate', {id: meta.uuid, type: 'project'})"
+            type="default"
+            size="small"
+            block
             class="sdxw-create-project-card__btn"
         >
-            <span>{{ t('widget.projectCard.SelectProject') }}</span>
-        </div>
+            {{ t('widget.projectCard.SelectProject') }}
+        </SdxuButton>
     </div> 
 </template>
 
@@ -30,6 +33,7 @@
 import IconButton from '@sdx/ui/components/icon-button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
+import SdxuButton from '@sdx/ui/components/button';
 export default {
     name: 'SdxwCreateProjectCard',
     props: {
@@ -53,7 +57,8 @@ export default {
         }
     },
     components: {
-        [IconButton.name]: IconButton
+        [IconButton.name]: IconButton,
+        SdxuButton
     },
     methods: {
         dateFormatter

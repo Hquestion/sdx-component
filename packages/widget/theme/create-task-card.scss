@@ -1,4 +1,4 @@
-@include block('create-task-card', $bem-namespace-view) {
+@include block('create-task-card', $bem-namespace-widget) {
     width: 25%;
     height: 150px;
     min-width: 200px;

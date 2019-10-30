@@ -5,7 +5,9 @@
         :label-width="lang$ === 'en' ? 190 : 160"
         icon="sdx-SkyIDErenwu"
         @commit="commit"
+        :show-create-project="showCreateProject"
         :type="`SkyIDE ${t('view.task.form.task')}`"
+        @create-project-close="createProjectClose"
     >
         <el-form
             label-position="right"
@@ -41,6 +43,37 @@
                     size="small"
                     :placeholder="t('view.task.form.Please_enter_a_task_description')"
                 />
+            </el-form-item>
+            <el-form-item
+                label="关联项目:"
+                prop="project"
+                v-if="!projectId"
+            >
+                <el-select
+                    v-model="params.project"
+                    size="small"
+                    placeholder="请选择关联项目"
+                    style="width:420px;margin-right:10px;"
+                    filterable
+                    @change="projectSelected"
+                >
+                    <el-option
+                        v-for="item in projectOptions"
+                        :key="item.uuid"
+                        :label="item.name"
+                        :value="item.uuid"
+                    />
+                </el-select>
+                <SdxuButton
+                    type="primary"
+                    invert
+                    size="small"
+                    class="create-project-button"
+                    @click="createProject"
+                >
+                    <i class="sdx-icon sdx-xinjianhao" />
+                    创建新项目
+                </SdxuButton>
             </el-form-item>
             <SdxwExpandLabel
                 label="环境配置"
@@ -182,6 +215,7 @@
 <script>
 
 import BaseForm from './BaseForm';
+import Button from '@sdx/ui/components/button';
 import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
@@ -209,7 +243,8 @@ export default {
         DataSourceSelect,
         [InputNumber.name]: InputNumber,
         ElRadio,
-        ElRadioGroup
+        ElRadioGroup,
+        [Button.name]: Button
     },
     props: {
         task: {
@@ -253,8 +288,10 @@ export default {
                 datasets: [],
                 autoRelease: true,
                 kernelReleaseTime: 30,
-                podReleaseTime: 30
+                podReleaseTime: 30,
+                project: ''
             },
+            projectId: this.$route.params.projectId,
             imageOptions: [],
             cpuObj: {},
             gpuObj: {},
@@ -266,6 +303,9 @@ export default {
                         }
                     },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                project: [
+                    { required: true, message: '请选择关联项目', trigger: 'change'}
                 ],
                 description: [
                     {
@@ -309,6 +349,7 @@ export default {
         this.getDataSetList();
         // 判断是否协作
         this.projectCooperation();
+        this.getProjectList();
     },
     methods: {
         // 数据集列表
@@ -317,6 +358,9 @@ export default {
                 .then(data => {
                     this.datasetsOptions = data.data.options;
                 });
+        },
+        projectSelected(project) {
+            this.projectCooperation(project);
         },
         imageList() {
             const params = {

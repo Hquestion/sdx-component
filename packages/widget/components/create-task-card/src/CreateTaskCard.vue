@@ -1,7 +1,7 @@
 <template>
-    <div class="sdxv-create-task-card">
+    <div class="sdxw-create-task-card">
         <div
-            class="sdxv-create-task-card__task-icon"
+            class="sdxw-create-task-card__task-icon"
         >
             <svg
                 aria-hidden="true"
@@ -10,13 +10,13 @@
                 <use :xlink:href="`#${iconClass}`" />
             </svg>
         </div>
-        <div class="sdxv-create-task-card__create-label">
+        <div class="sdxw-create-task-card__create-label">
             <i class="sdx-icon sdx-icon-plus" />
-            <span class="sdxv-create-task-card__create-label--text">
+            <span class="sdxw-create-task-card__create-label--text">
                 {{ createLabel }}
             </span>
         </div>
-        <div class="sdxv-create-task-card__task-type">
+        <div class="sdxw-create-task-card__task-type">
             {{ taskType }}
         </div>
     </div>
@@ -25,7 +25,7 @@
 <script>
 import Button from '@sdx/ui/components/button';
 export default {
-    name: 'CreateTaskCard',
+    name: 'SdxwCreateTaskCard',
     data() {
         return {};
     },

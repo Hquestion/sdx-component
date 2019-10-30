@@ -13,7 +13,7 @@
             <span>{{ t('sdxCommon.Creator') }}：</span>
             <span>{{ (meta.owner && meta.owner.fullName) || '' }}</span>
         </div>
-        <div class="sdxw-create-project-card__info">
+        <div class="sdxw-create-project-card__info time">
             <span>{{ t('view.project.Created') }}：</span>
             <span>{{ dateFormatter(meta.createdAt) }}</span>
         </div>
@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import IconButton from '@sdx/ui/components/icon-button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuButton from '@sdx/ui/components/button';
@@ -57,7 +56,6 @@ export default {
         }
     },
     components: {
-        [IconButton.name]: IconButton,
         SdxuButton
     },
     methods: {

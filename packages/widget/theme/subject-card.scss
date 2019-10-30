@@ -40,11 +40,11 @@
         float: right;
         font-size: $sdx-content-font-size;
         @include modifier('info') {
-            height: 24px;
-            line-height: 24px;
+            height: $sdx-gap-regular;
+            line-height: $sdx-gap-regular;
             display: flex;
             justify-content: space-between;
-            padding-top: $sdx-border-radius-large;
+            padding-top: $sdxw-subject-card-task-padding;
             .left {
                 .title {
                     font-size: $sdx-h1-font-size;
@@ -89,7 +89,7 @@
             text-overflow:ellipsis;
             white-space:nowrap;
             word-break: break-all;
-            margin-top: 22px;
+            margin-top: $sdx-h1-font-size;
             color: $sdx-secondary-color--light3;
         }
     }
@@ -98,8 +98,8 @@
         display: flex;
         justify-content: space-between;
         border-top: 1px solid $sdx-secondary-color--light6;
-        height: 62px;
-        line-height: 62px;
+        height: $sdxw-subject-card-footer-height;
+        line-height: $sdxw-subject-card-footer-height;
         .sdxu-button {
             padding: 0;
             padding-left: $sdx-gap-large;
@@ -112,6 +112,58 @@
                     font-size: $sdx-help-font-size;
                 }
             }
+        }
+    }
+    
+    @include modifier('task') {
+        .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+        .infoStyle {
+            height: $sdx-gap-regular;
+            line-height: $sdx-gap-regular;
+            display: flex;
+            justify-content: space-between;
+            .left {
+                @extend .ellipsis;
+                height: $sdx-gap-regular;
+                .title {
+                    font-size: $sdx-h1-font-size;
+                    color: $sdxw-subject-card-info-color;
+                    &:hover {
+                        cursor: pointer;
+                        color: $sdx-primary-color;
+                    }
+                }
+            }
+        }
+        @include element('header') {
+            padding-bottom: 0;
+        }
+        @include element('content') {
+            @include modifier('top') {
+                padding-top: $sdxw-subject-card-task-padding;
+                @extend .infoStyle;
+            }
+            @include modifier('bottom') {
+                color: $sdxw-subject-card-info-color;
+                padding-top: $sdx-gap-small;
+                display: flex;
+                .creator {
+                    padding-right: $sdxw-subject-card-task-padding;
+                    span {
+                        color: $sdx-secondary-color--light3;
+                    }
+                }
+            }
+        }
+        @include element('taskdesc') {
+            @extend .ellipsis;
+            color: $sdx-secondary-color--light3;
+            padding: $sdx-gap-small 0 $sdx-gap-regular 0;
         }
     }
 }

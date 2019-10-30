@@ -1,6 +1,6 @@
 <template>
     <div
-        class="sdxw-subject-card"
+        :class="['sdxw-subject-card', `sdxw-subject-card--${meta.type}`]"
     >
         <div class="sdxw-subject-card__header">
             <div class="sdxw-subject-card__icon">
@@ -13,7 +13,10 @@
                     {{ meta.iconName }}
                 </div>
             </div>
-            <div class="sdxw-subject-card__content">
+            <div
+                class="sdxw-subject-card__content"
+                v-if="meta.type === 'project'"
+            >
                 <div class="sdxw-subject-card__content--info">
                     <div class="left">
                         <span
@@ -24,9 +27,38 @@
                         </span>
                         <span
                             class="task"
-                            v-if="meta.type === 'project'"
                         >
                             {{ `${meta.taskNumber}${meta.taskNumber === 0 ? t('view.project.taskCount') : t('view.project.taskCounts')}` }}
+                        </span>
+                    </div>
+                    <div class="right">
+                        <div class="creator">
+                            {{ (meta && meta.creator ) || '' }}
+                            <span v-if="getUser().userId === meta.owner.uuid">({{ t('view.project.oneself') }})</span>
+                        </div>
+                        <i class="customize-icon" />
+                        <div>
+                            {{ `${t('view.project.Created')}${dateFormatter(meta && meta.createdAt)}` }}
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="sdxw-subject-card__content--description"
+                >
+                    {{ meta && meta.description }}
+                </div>
+            </div>
+            <div
+                v-if="meta.type === 'task'"
+                class="sdxw-subject-card__content"
+            >
+                <div class="sdxw-subject-card__content--top">
+                    <div class="left">
+                        <span
+                            class="title"
+                            @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
+                        >
+                            {{ meta && meta.title }}
                         </span>
                     </div>
                     <div class="right">
@@ -38,26 +70,25 @@
                         >
                             {{ meta.state && meta.state.statusText || 'null-state' }}
                         </SdxwFoldLabel>
-                        <i
-                            v-if="meta.state && meta.state.type"
-                            class="customize-icon"
-                        />
-                        <div class="creator">
-                            {{ (meta && meta.creator ) || '' }}
-                            <span v-if="getUser().userId === meta.owner.uuid">({{ t('view.project.oneself') }})</span>
-                        </div>
-                        <i class="customize-icon" />
-                        <div>
-                            {{ `${t('view.project.Created')}${dateFormatter(meta && meta.createdAt)}` }}
-                        </div>
                     </div>
                 </div>
-                <div class="sdxw-subject-card__content--description">
-                    {{ meta && meta.description }}
+                <div class="sdxw-subject-card__content--bottom">
+                    <div class="creator">
+                        {{ (meta && meta.creator ) || '' }}
+                        <span v-if="getUser().userId === meta.owner.uuid">({{ t('view.project.oneself') }})</span>
+                    </div>
+                    <div>
+                        {{ `${t('view.project.Created')}${dateFormatter(meta && meta.createdAt)}` }}
+                    </div>
                 </div>
             </div>
         </div>
-
+        <div
+            class="sdxw-subject-card__taskdesc"
+            v-if="meta.type === 'task'"
+        >
+            {{ meta && meta.description }}
+        </div>
         <div
             class="sdxw-subject-card__footer"
             v-if="meta.footer !== false"
@@ -115,7 +146,7 @@ export default {
         meta: {
             type: Object,
             default: () => {}
-        }
+        },
     },
     data() {
         return {

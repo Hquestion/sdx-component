@@ -27,7 +27,7 @@
                     type="primary"
                     :invert="true"
                     :plain="true"
-                    v-if="$slots.default.length > 2"
+                    v-if="children.length > 2"
                 >
                     {{ t('sdxCommon.Reset') }}
                 </SdxuButton>
@@ -35,7 +35,7 @@
         </el-form>
         <div
             class="sdxw-search-layout__show"
-            v-if="minVisible < $slots.default.length"
+            v-if="minVisible < children.length"
         >
             <i :class="['sdx-icon', 'sdx-cebianlanzhankaiICON', singlerow ? '' : 'is-reverse']" @click="showItem"></i>
         </div>
@@ -50,6 +50,7 @@ import FormItem from 'element-ui/lib/form-item';
 import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxwSearchLayout',
+    componentName: 'SdxwSearchLayout',
     mixins: [locale],
     data() {
         return {
@@ -60,7 +61,8 @@ export default {
             active: {
                 items: 2
             },
-            minVisible: 2
+            minVisible: 2,
+            children: []
         };
     },
     provide() {
@@ -108,15 +110,26 @@ export default {
                 return;
             }
             this.elWidthValue = this.$el.offsetWidth;
-            // window.console.log('容器宽度:', this.elWidthValue);
-            this.searchItemWidth = this.$slots.default[0].elm.offsetWidth;
-            // window.console.log('元素宽度:', this.searchItemWidth);
-            this.minVisible = Math.floor((this.elWidthValue - 300) / this.searchItemWidth);
-            // window.console.log('最小显示个数:', this.minVisible);
+            this.searchItemWidth = this.$slots.default[0].elm.offsetWidth + 10;
+            this.minVisible = Math.floor((this.elWidthValue - 280) / this.searchItemWidth);
             if (this.singlerow) {
                 this.active.items = this.minVisible;
             } else {
                 this.active.items = 100;
+            }
+        },
+        orderChildren() {
+            let children = this.$slots.default.filter(child => !!child.componentInstance && child.componentInstance.visible);
+            this.children = children;
+            children.forEach((item, index) => {
+                if(item.componentInstance) {
+                    item.componentInstance.itemIndex = index;
+                }
+            });
+            if (children.length === 1) {
+                children[0].componentInstance.$on('enter', () => {
+                    this.$emit('search');
+                });
             }
         }
     },
@@ -125,16 +138,11 @@ export default {
         this.$nextTick(()=> {
             this.init();
         });
-        this.$slots.default.forEach((item, index) => {
-            if(item.componentInstance && item.componentInstance) {
-                item.componentInstance.itemIndex = index;
-            }
-        });
-        if (this.$slots.default.length === 1) {
-            this.$slots.default[0].componentInstance.$on('enter', () => {
-                this.$emit('search');
-            });
-        }
+        this.orderChildren();
+    },
+    created() {
+        this.$on('add-item', this.orderChildren);
+        this.$on('remove-item', this.orderChildren);
     },
     beforeDestroy() {
         window.removeEventListener('resize', this.init);

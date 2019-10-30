@@ -99,7 +99,7 @@
                     </sdxw-search-item>
                     <sdxw-search-item
                         :label="t('view.image.SearchImageState')"
-                        v-show="projectType === 'task'"
+                        :visible="projectType === 'task'"
                     >
                         <el-select
                             v-model="state"
@@ -119,7 +119,7 @@
                     </sdxw-search-item>
                     <sdxw-search-item
                         :label="t('view.image.SearchBuildType')"
-                        v-show="imageKind !== 'basic'"
+                        :visible="imageKind !== 'basic'"
                     >
                         <el-select
                             v-model="buildType"
@@ -342,23 +342,23 @@ export default {
             this.resetVariables();
             this.imageKind = tab.name;
             switch (tab.name) {
-            case 'basic':
-                this.buildType = 'BASIC';
-                break;
-            case 'private':
-                this.shareType = 'PRIVATE';
-                this.isOwner = 'true';
-                break;
-            case 'myShare':
-                this.shareType = 'PUBLIC';
-                this.isOwner = 'true';
-                break;
-            case 'otherShare':
-                this.shareType = 'PUBLIC';
-                this.isOwner = 'false';
-                break;
-            default:
-                break;
+                case 'basic':
+                    this.buildType = 'BASIC';
+                    break;
+                case 'private':
+                    this.shareType = 'PRIVATE';
+                    this.isOwner = 'true';
+                    break;
+                case 'myShare':
+                    this.shareType = 'PUBLIC';
+                    this.isOwner = 'true';
+                    break;
+                case 'otherShare':
+                    this.shareType = 'PUBLIC';
+                    this.isOwner = 'false';
+                    break;
+                default:
+                    break;
             }
             this.$nextTick(() => {
                 this.updateTable();

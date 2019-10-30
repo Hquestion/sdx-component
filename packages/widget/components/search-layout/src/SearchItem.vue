@@ -1,6 +1,7 @@
 <template>
     <div
         class="sdxw-search-item"
+        v-show="visible"
     >
         <el-form-item
             :label="label"
@@ -12,9 +13,12 @@
 </template>
 
 <script>
-import { Form, FormItem } from 'element-ui';
+import Form from 'element-ui/lib/form';
+import FormItem from 'element-ui/lib/form-item';
+import emitter from '@sdx/utils/src/mixins/emitter';
 export default {
     name: 'SdxwSearchItem',
+    mixins: [emitter],
     inject: ['active'],
     data() {
         return {
@@ -29,6 +33,10 @@ export default {
         label: {
             type: String,
             default: ''
+        },
+        visible: {
+            type: Boolean,
+            default: true
         }
     },
     methods: {
@@ -38,11 +46,25 @@ export default {
             }
         }
     },
+    watch: {
+        visible: {
+            immediate: true,
+            handler(val) {
+                if (val) {
+                    this.dispatch('SdxwSearchLayout', 'add-item', this);
+                } else {
+                    this.dispatch('SdxwSearchLayout', 'remove-item', this);
+                }
+            }
+        }
+    },
     mounted() {
         this.$slots.default[0].elm.querySelector('input').addEventListener('keyup', this.emitEnter);
+        this.dispatch('SdxwSearchLayout', 'add-item', this);
     },
     beforeDestroy() {
         this.$slots.default[0].elm.querySelector('input').removeEventListener('keyup', this.emitEnter);
+        this.dispatch('SdxwSearchLayout', 'remove-item', this);
     }
 };
 </script>

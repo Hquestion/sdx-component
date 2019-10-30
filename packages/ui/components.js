@@ -26,5 +26,6 @@ module.exports = {
     'text-tooltip': './components/text-tooltip/index.js',
     'log-detail': './components/log-detail/index.js',
     'bubble-tip': './components/bubble-tip/index.js',
-    'context-menu': './components/context-menu/index.js'
+    'context-menu': './components/context-menu/index.js',
+    'dropdown-tip': './components/dropdown-tip/index.js'
 };

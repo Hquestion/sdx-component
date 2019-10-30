@@ -24,6 +24,7 @@ import TextTooltip from './components/text-tooltip';
 import LogDetail from './components/log-detail';
 import ContextMenu from './components/context-menu';
 import BubbleTip from './components/bubble-tip';
+import DropdownTip from './components/dropdown-tip';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxUI = {
@@ -52,7 +53,8 @@ const SdxUI = {
     TextTooltip,
     LogDetail,
     ContextMenu,
-    BubbleTip
+    BubbleTip,
+    DropdownTip
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -82,6 +84,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     LogDetail.install(vue);
     ContextMenu.install(vue);
     BubbleTip.install(vue);
+    DropdownTip.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

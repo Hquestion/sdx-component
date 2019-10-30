@@ -41,7 +41,8 @@ module.exports = {
                         'ui/lazyList',
                         'ui/radial-progress',
                         'ui/log-detail',
-                        'ui/sort-button'
+                        'ui/sort-button',
+                        'ui/dropdown-tip'
                     ]
                 },
                 {

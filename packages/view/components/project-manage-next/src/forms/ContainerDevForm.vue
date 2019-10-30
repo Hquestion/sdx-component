@@ -121,6 +121,15 @@
                     />
                 </div>
             </el-form-item>
+            <el-form-item
+                prop="instanceNumber"
+                label="实例个数:"
+            >
+                <el-input-number
+                    v-model="params.instanceNumber"
+                    :min="1"
+                />
+            </el-form-item>
             <SdxwExpandLabel
                 label="数据配置"
             />
@@ -229,7 +238,7 @@
 
 import BaseForm from './BaseForm';
 import Button from '@sdx/ui/components/button';
-import {Form, FormItem, Select} from 'element-ui';
+import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
 import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
@@ -253,6 +262,7 @@ export default {
         [Button.name]: Button,
         SdxuInput,
         SdxwResourceConfig,
+        [InputNumber.name]: InputNumber,
         DataSourceSelect,
         [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix
     },
@@ -298,7 +308,8 @@ export default {
                 datasets: [],
                 environments: '',
                 outputPaths: '',
-                project: ''
+                project: '',
+                instanceNumber: 1
             },
             projectId: this.$route.params.projectId,
             imageOptions: [],
@@ -321,6 +332,9 @@ export default {
                         validator: descValidator,
                         trigger: 'blur'
                     }
+                ],
+                instanceNumber: [
+                    { required: true, message: '请输入实例个数', trigger: 'change'}
                 ],
                 imageId: [
                     { required: true, message: this.t('view.task.form.Please_select_the_operating_environment'), trigger: 'change' }

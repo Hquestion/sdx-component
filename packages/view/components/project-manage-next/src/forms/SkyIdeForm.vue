@@ -45,6 +45,19 @@
                 />
             </el-form-item>
             <el-form-item
+                label="文件目录:"
+                prop="directory"
+            >
+                <div>
+                    <SdxwFileSelect
+                        v-model="params.directory"
+                        :string-model="true"
+                        check-type="folder"
+                        source="ceph"
+                    />
+                </div>
+            </el-form-item>
+            <el-form-item
                 label="关联项目:"
                 prop="project"
                 v-if="!projectId"
@@ -229,6 +242,7 @@ import projectDetailMixin from './projectDetailMixin';
 import ExpandLabel from '@sdx/widget/components/expand-label';
 import ElRadio from 'element-ui/lib/radio';
 import ElRadioGroup from 'element-ui/lib/radio-group';
+import FileSelect from '@sdx/widget/components/file-select';
 export default {
     name: 'SkyIdeForm',
     mixins: [locale, projectDetailMixin],
@@ -244,7 +258,8 @@ export default {
         [InputNumber.name]: InputNumber,
         ElRadio,
         ElRadioGroup,
-        [Button.name]: Button
+        [Button.name]: Button,
+        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix
     },
     props: {
         task: {
@@ -289,7 +304,8 @@ export default {
                 autoRelease: true,
                 kernelReleaseTime: 30,
                 podReleaseTime: 30,
-                project: ''
+                project: '',
+                directory: ''
             },
             projectId: this.$route.params.projectId,
             imageOptions: [],
@@ -306,6 +322,9 @@ export default {
                 ],
                 project: [
                     { required: true, message: '请选择关联项目', trigger: 'change'}
+                ],
+                directory: [
+                    { required: true, message: '请选择文件目录', trigger: 'blur'}
                 ],
                 description: [
                     {

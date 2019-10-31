@@ -6,11 +6,14 @@
         <div v-if="taskList.length">
             <div>
                 <SdxwTaskRunningLimit style="margin-top: 20px;" />
-                <sdxw-subject-card-list style="margin-top: 20px;">
+                <sdxw-subject-card-list
+                    class="sdxw-general-task-list__container"
+                >
                     <sdxw-subject-card
                         v-for="(item, index) in taskList"
                         :key="index"
                         :meta="item.meta"
+                        class="sdxw-general-task-list__container--element"
                     >
                         <template #toUrl>
                             <sdxu-button

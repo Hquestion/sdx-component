@@ -1,10 +1,21 @@
 @include block('search-layout', $bem-namespace-widget) {
     position: relative;
     @include modifier('block') {
-        padding: $sdx-padding;
-        padding-bottom: 0;
-        padding-right: 100px;
+        padding: $sdx-gap-regular 64px 0 $sdx-gap-regular;
         background: $sdxw-search-background;
+        &:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            margin: 3px;
+            z-index: 2;
+            @extend .shadow;
+        }
+
     }
     @include modifier('align-left') {
         text-align: left;
@@ -14,38 +25,55 @@
     }
     @include element('show') {
         position: absolute;
-        top: $sdx-margin / 2;
-        right: 0;
+        right: $sdx-gap-regular;
+        bottom: $sdx-gap-regular;
+        width: 24px;
+        height: 42px;
+        background: $sdx-secondary-color--light7;
+        i.sdx-icon {
+            display: inline-block;
+            width: 24px;
+            height: 42px;
+            font-size: 19px;
+            will-change: transform;
+            transition: transform ease-in 0.2s;
+            cursor: pointer;
+            transform: rotate(90deg) translateY(5px) translateX(6px);
+            transform-origin: 50% calc(50% - 4px);
+            &.is-reverse{
+                transform: rotate(270deg) translateY(5px);
+            }
+        }
     }
     @include element('btn') {
         display: inline-block;
         vertical-align: middle;
-        margin-bottom: 22px;
+        margin-bottom: 26px;
     }
     .el-form {
         display: inline-block;
         line-height:$sdx-form-element-height-regular;
     }
-    .sdx-icon {
-        font-size: $sdx-help-font-size;
-    }
 }
 
 @include block('search-item', $bem-namespace-widget) {
-    height: $sdx-form-element-height-regular;
-    line-height: $sdx-form-element-height-regular;
+    height: $sdx-form-element-height-large;
+    line-height: $sdx-form-element-height-large;
     margin-bottom: $sdx-margin;
     vertical-align: middle;
     position: relative;
     top:$sdxw-search-item-top;
     margin-right: $sdx-margin / 2;
     display: inline-block;
-    .el-form-item__label {
-        color: $sdxw-breadcrumb-current-text-color;
-        font-size: $sdx-content-font-size;
-    }
-    .el-form-item__content {
-        line-height: $sdx-form-element-height-regular;
-        width: $sdxw-search-content-width;
+    .el-form-item {
+        margin-bottom: $sdx-gap-regular;
+        .el-form-item__label {
+            color: $sdx-secondary-color--light3;
+            font-size: $sdx-content-font-size;
+        }
+        .el-form-item__content {
+            line-height: $sdx-form-element-height-large;
+            width: $sdxw-search-content-width;
+        }
     }
 }

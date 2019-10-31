@@ -1,9 +1,9 @@
 $ilv-primary-color: #fa8373 !default;
 
 //breadcrumb
-$sdxw-breadcrumb-previous-text-color: #606266 !default;  // 面包屑可跳转层级字体颜色
-$sdxw-breadcrumb-current-text-color: #303133 !default;  // 当前层级字体颜色
-$sdxw-breadcrumb-seperator-color: #606266 !default;  // 分隔符颜色
+$sdxw-breadcrumb-previous-text-color: $sdx-secondary-color--light3 !default;  // 面包屑可跳转层级字体颜色
+$sdxw-breadcrumb-current-text-color: #000 !default;  // 当前层级字体颜色
+$sdxw-breadcrumb-seperator-color: $sdx-secondary-color--light3 !default;  // 分隔符颜色
 $sdxw-breadcrumb-seperator-margin: 4px !default;  // 分隔符margin
 
 // fold-label
@@ -50,11 +50,11 @@ $sdxw-project-card-type-icon-size: 32px !default;
 $sdxw-project-card-mask-height: 128px !default;
 
 // searchLayout
-$sdxw-search-background: rgba(245,245,245,1) !default;
+$sdxw-search-background: $sdx-secondary-color--light8 !default;
 $sdxw-search-padding-right: 280px !default;
 $sdxw-search-item-margin: 6px !default;
-$sdxw-search-item-top: -2px !default;
-$sdxw-search-content-width: 300px !default;
+$sdxw-search-item-top: 0 !default;
+$sdxw-search-content-width: 240px !default;
 
 // file-select 文件选择
 $sdx-file-select-node-height: 32px !default;

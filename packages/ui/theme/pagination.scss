@@ -4,27 +4,38 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/pagination';
 
 @include block('pagination', $bem-namespace-ui) {
-    &.el-pagination.is-background .el-pager li:not(.disabled).active {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    .el-pagination.is-background .el-pager li:not(.disabled).active {
         background-color: $sdxu-pagination-active-background-color;
         border: none;
     }
 
-    &.el-pagination {
+    .el-pagination {
         line-height: 1.7em;
         padding: 2px 0;
     }
 
-    &.el-pagination.is-background .btn-prev,
-    &.el-pagination.is-background .btn-next,
-    &.el-pagination.is-background .el-pager li {
+    .el-pagination.is-background .btn-prev,
+    .el-pagination.is-background .btn-next,
+    .el-pagination.is-background .el-pager li {
         background: $sdxu-pagination-background;
         color: $sdxu-pagination-text-color;
+        border: 1px solid #D8DEEA;
+        border-radius: 2px;
         margin: 0 $sdxu-pagination-pager-space;
         border: $sdxu-pagination-pager-border;
         font-size: 14px;
         font-weight: 400;
     }
-    &.el-pagination.is-background .btn-next {
+    .el-pagination.is-background .btn-next {
         margin-right: 0 !important;
+    }
+    @include element('count') {
+        font-size: 14px;
+        color: $sdx-secondary-color--light4;
+        letter-spacing: 0;
     }
 }

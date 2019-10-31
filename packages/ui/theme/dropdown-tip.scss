@@ -1,0 +1,18 @@
+@include block('dropdown-tip', $bem-namespace-ui) {
+    @include element('popper') {
+        &.el-popper {
+            padding: 0;
+        }
+    }
+    @include element('title') {
+        background: $sdx-secondary-color;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        color: #fff;
+    }
+    @include element('content') {
+        min-height: 32px;
+        background: $sdx-secondary-color--light7;
+    }
+}

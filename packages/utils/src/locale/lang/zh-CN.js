@@ -16,6 +16,13 @@ export default {
         },
         panel: {
             noContent: '暂无内容'
+        },
+        pagination: {
+            showEveryPage: '每页显示',
+            unit: '条',
+            total: '共',
+            page: '页',
+            recordCount: '条记录'
         }
     },
     widget: {

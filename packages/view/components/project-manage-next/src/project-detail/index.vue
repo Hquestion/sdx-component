@@ -7,7 +7,7 @@
             class="sdxv-project-detail__create-task"
             v-auth.project.button="'TASK:CREATE'"
         >
-            <create-task-card
+            <sdxw-create-task-card
                 v-for="(item,index) in createTaskOptions"
                 :key="index"
                 :icon-class="item.class"
@@ -65,7 +65,7 @@ import SortButton from '@sdx/ui/components/sort-button';
 import TabRadio from '@sdx/ui/components/tab-radio';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
-import CreateTaskCard from './CreateTaskCard';
+import CreateTaskCard from '@sdx/widget/components/create-task-card';
 import SdxwGeneralTaskList from '@sdx/widget/components/general-task-list';
 import { getProjectDetail } from '@sdx/utils/src/api/project';
 export default {
@@ -119,7 +119,7 @@ export default {
         [Input.name]: Input,
         [Button.name]: Button,
         [SortButton.name]: SortButton,
-        CreateTaskCard,
+        [CreateTaskCard.name]: CreateTaskCard,
         SdxwGeneralTaskList,
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,

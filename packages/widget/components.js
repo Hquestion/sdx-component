@@ -25,4 +25,5 @@ module.exports = {
     'lang-handle': './components/lang-handle/index.js',
     'subject-card': './components/subject-card/index.js',
     'create-project-card': './components/create-project-card/index.js',
+    'create-task-card': './components/create-task-card/index.js',
 };

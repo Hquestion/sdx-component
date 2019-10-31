@@ -1,19 +1,32 @@
 <template>
-    <el-pagination
-        background
-        layout="total, prev, pager, next"
-        :total="total"
-        :current-page.sync="current"
-        :page-size="pageSize"
-        :disabled="disabled"
-        :pager-count="pagerCount"
-        @current-change="currentChange"
-        class="sdxu-pagination"
-    />
+    <div class="sdxu-pagination">
+        <div class="sdxu-pagination__count">
+            <span>{{t('ui.pagination.showEveryPage')}}</span>
+            {{pageSize}}
+            <span>{{t('ui.pagination.unit')}}</span>,
+            <span>{{t('ui.pagination.total')}}</span>
+            {{pagerCount}}
+            <span>{{t('ui.pagination.page')}}</span>,
+            {{total}}
+            <span>{{t('ui.pagination.recordCount')}}</span>
+        </div>
+        <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="total"
+            :current-page.sync="current"
+            :page-size="pageSize"
+            :disabled="disabled"
+            :pager-count="pagerCount"
+            @current-change="currentChange"
+        />
+    </div>
+
 </template>
 
 <script>
 import Pagination from 'element-ui/lib/pagination';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'SdxuPagination',
     data() {
@@ -21,6 +34,7 @@ export default {
             current: this.currentPage
         };
     },
+    mixins: [locale],
     watch: {
         currentPage(nVal) {
             this.current = nVal;

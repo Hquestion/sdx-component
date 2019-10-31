@@ -43,5 +43,9 @@
         "vue": "^2.6.10",
         "vue-codemirror": "^4.0.6"
     },
+    "devDependencies": {
+        "@sdx/ui": "^1.0.2",
+        "@sdx/utils": "^2.0.2-alpha.0"
+    },
     "gitHead": "e9761c175fe80a7f4bd6f9ce6ba1f1abb66f24c5"
 }

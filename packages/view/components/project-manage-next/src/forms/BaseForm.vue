@@ -59,6 +59,11 @@
                 </SdxuButton>
             </div>
         </SdxuContentPanel>
+        <sdxv-create-project
+            :visible.sync="createProjectVisible"
+            v-if="createProjectVisible"
+            @close="createProjectClose(arguments)"
+        />
     </div>
 </template>
 
@@ -70,6 +75,7 @@ import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
 import locale from '@sdx/utils/src/mixins/locale';
 import { t } from '@sdx/utils/src/locale';
+import CreateProject from '../CreateProject';
 export default {
     name: 'BaseForm',
     mixins: [locale],
@@ -93,18 +99,28 @@ export default {
         commitTitle: {
             type: String,
             default: () => t('sdxCommon.Confirm')
+        },
+        showCreateProject: {
+            type: Boolean,
+            default: false
+        }
+    },
+    watch: {
+        showCreateProject(nVal) {
+            this.createProjectVisible = nVal;
         }
     },
     data() {
         return {
+            createProjectVisible: false
         };
     },
-
     components: {
         SdxuButton,
         [ContentPanel.name]: ContentPanel,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
+        [CreateProject.name]: CreateProject
     },
     methods: {
         handleCommit() {
@@ -113,7 +129,10 @@ export default {
         handleCancel() {
             this.$router.go(-1);
         },
-        t
+        t,
+        createProjectClose(args) {
+            this.$emit('create-project-close', args);
+        },
     },
     created() {
 
@@ -187,6 +206,18 @@ export default {
                         }
                     }
                 }
+                .create-project-button {
+                    width: 130px;
+                    border: 1px solid #D8DEEA;
+                    border-radius: 2px;
+                    height: 36px;
+                    color: #13264D;
+                    &:hover {
+                        background: none;
+                        border: 1px solid #4781F8;
+                    }
+                }
+
             }
             .sdx-icon {
                 width: 40px;

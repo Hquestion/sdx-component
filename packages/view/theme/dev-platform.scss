@@ -4,6 +4,10 @@
         color: #13264D;
         margin-bottom: 20px;
     }
+    @include element('create-task') {
+        display: flex;
+        align-items: center;
+    }
     @include element('search-filter') {
         margin: 20px 0 0 0;
         display: flex;

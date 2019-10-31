@@ -5,7 +5,9 @@
         :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-Jupyterrenwu"
         @commit="commit"
+        :show-create-project="showCreateProject"
         :type="`Jupyter ${t('view.task.form.task')}`"
+        @create-project-close="createProjectClose"
     >
         <el-form
             label-position="right"
@@ -40,6 +42,37 @@
                     size="small"
                     :placeholder="t('view.task.form.Please_enter_a_task_description')"
                 />
+            </el-form-item>
+            <el-form-item
+                label="关联项目:"
+                prop="project"
+                v-if="!projectId"
+            >
+                <el-select
+                    v-model="params.project"
+                    size="small"
+                    placeholder="请选择关联项目"
+                    style="width:420px;margin-right:10px;"
+                    filterable
+                    @change="projectSelected"
+                >
+                    <el-option
+                        v-for="item in projectOptions"
+                        :key="item.uuid"
+                        :label="item.name"
+                        :value="item.uuid"
+                    />
+                </el-select>
+                <SdxuButton
+                    type="primary"
+                    invert
+                    size="small"
+                    class="create-project-button"
+                    @click="createProject"
+                >
+                    <i class="sdx-icon sdx-xinjianhao" />
+                    创建新项目
+                </SdxuButton>
             </el-form-item>
             <SdxwExpandLabel
                 label="环境配置"
@@ -128,6 +161,7 @@
 <script>
 
 import BaseForm from './BaseForm';
+import Button from '@sdx/ui/components/button';
 import Form from 'element-ui/lib/form';
 import FormItem from 'element-ui/lib/form-item';
 import Select from 'element-ui/lib/select';
@@ -147,6 +181,7 @@ export default {
     components: {
         BaseForm,
         [Form.name]: Form,
+        [Button.name]: Button,
         [FormItem.name]: FormItem,
         [ExpandLabel.name]: ExpandLabel,
         [Select.name]: Select,
@@ -192,8 +227,10 @@ export default {
                     'GPU_MODEL': ''
                 },
                 datasources: [],
-                datasets: []
+                datasets: [],
+                project: ''
             },
+            projectId: this.$route.params.projectId,
             imageOptions: [],
             cpuObj: {},
             gpuObj: {},
@@ -207,6 +244,9 @@ export default {
                         }
                     },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                project: [
+                    { required: true, message: '请选择关联项目', trigger: 'change'}
                 ],
                 description: [
                     {
@@ -246,6 +286,7 @@ export default {
         this.imageList();
         this.projectCooperation();
         this.getDataSetList();
+        this.getProjectList();
     },
     methods: {
         // 数据集列表
@@ -260,6 +301,9 @@ export default {
                 .then(data => {
                     this.datasetsOptions = data.data.options;
                 });
+        },
+        projectSelected(project) {
+            this.projectCooperation(project);
         },
         imageList() {
             const params = {

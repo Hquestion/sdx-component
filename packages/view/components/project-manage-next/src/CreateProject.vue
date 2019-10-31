@@ -68,7 +68,6 @@
                 />
             </el-form-item>
         </el-form>
-        
         <div
             class="sdxv-create-project__filter"
             v-if="createType === 'project'"
@@ -191,6 +190,7 @@ export default {
             selectedUsers: [],
             selectedGroups: [],
             projectsLoaded: false,
+            projectCreated: ''
         };
     },
     components: {
@@ -332,12 +332,13 @@ export default {
                         this.dialogVisible = false;
                     }).catch(() => {});
                 } else {
-                    createProject(this.projectForm).then(() => {
+                    createProject(this.projectForm).then((res) => {
                         Message({
                             message: this.t('sdxCommon.CreateSuccess'),
                             type: 'success'
                         });
                         this.needRefresh = true;
+                        this.projectCreated = res.uuid;
                         this.dialogVisible = false;
                     }).catch(() => {});
                 }
@@ -355,7 +356,7 @@ export default {
                 };
             }
             this.$emit('update:visible', false);
-            this.$emit('close', this.needRefresh);
+            this.$emit('close', this.needRefresh, this.projectCreated);
         },
         cancel() {
             this.dialogVisible = false;

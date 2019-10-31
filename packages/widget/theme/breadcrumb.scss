@@ -10,15 +10,19 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     .el-breadcrumb__item:last-child .el-breadcrumb__inner a,
     .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover {
         color: $sdxw-breadcrumb-current-text-color;
-        font-weight: 600;
+        font-size: 14px;
+        font-weight: normal;
     }
     .el-breadcrumb__inner.is-link,
     .el-breadcrumb__inner a {
         color: $sdxw-breadcrumb-previous-text-color;
-        font-weight: 400;
+        font-size: 14px;
+        font-weight: normal;
     }
     .el-breadcrumb__separator {
         color: $sdxw-breadcrumb-seperator-color;
         margin: 0 $sdxw-breadcrumb-seperator-margin;
+        font-size: 14px;
+        font-weight: normal;
     }
 }

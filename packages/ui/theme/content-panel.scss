@@ -65,7 +65,6 @@
         }
     }
     @include element('footer') {
-        display: flex;
-        justify-content: flex-end;
+
     }
 }

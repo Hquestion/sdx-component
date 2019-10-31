@@ -3,6 +3,19 @@
         <div class="sdxv-dev-platform__title">
             任务列表
         </div>
+        <div
+            class="sdxv-dev-platform__create-task"
+            v-auth.project.button="'TASK:CREATE'"
+        >
+            <sdxw-create-task-card
+                v-for="(item,index) in createTaskOptions"
+                :key="index"
+                :icon-class="item.class"
+                :create-label="item.createLabel"
+                :task-type="item.taskType"
+                @click.native="createTask(item)"
+            />
+        </div>
         <div class="sdxv-dev-platform__search-filter">
             <div class="sdxv-dev-platform__search-filter--search">
                 <sdxu-input
@@ -22,45 +35,6 @@
             </div>
 
             <div class="sdxv-dev-platform__search-filter--sort">
-                <div
-                    v-auth.project.button="'TASK:CREATE'"
-                >
-                    <sdxu-button
-                        placement="right"
-                        size="small"
-                        trigger="click"
-                        style="margin-right: 10px;"
-                        v-auth.project.button="'PROJECT:CREATE'"
-                    >
-                        创建新任务
-                        <template slot="dropdown">
-                            <SdxuButton
-                                type="text"
-                                size="regular"
-                                block
-                                @click="createTask('JUPYTER')"
-                            >
-                                Jupyter任务
-                            </SdxuButton>
-                            <SdxuButton
-                                type="text"
-                                size="regular"
-                                block
-                                @click="createTask('SKYIDE')"
-                            >
-                                SkyIde任务
-                            </SdxuButton>
-                            <SdxuButton
-                                type="text"
-                                size="regular"
-                                block
-                                @click="createTask('CONTAINERDEV')"
-                            >
-                                自定义容器任务
-                            </SdxuButton>
-                        </template>
-                    </sdxu-button>
-                </div>
                 <SdxuSortButton
                     :title="t('view.project.sortByCreateTime')"
                     @sortChange="sortChange"
@@ -80,8 +54,9 @@ import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxwGeneralTaskList from '@sdx/widget/components/general-task-list';
 import { getProjectDetail } from '@sdx/utils/src/api/project';
+import CreateTaskCard from '@sdx/widget/components/create-task-card';
 export default {
-    name: 'SdxvProjectDetail',
+    name: 'SdxvDevPlatform',
     mixins: [locale],
     data() {
         return {
@@ -107,12 +82,6 @@ export default {
                     class: 'sdx-zidingyirongqirenwu',
                     type: 'CONTAINERDEV',
                     taskType: '开发工具'
-                },
-                {
-                    createLabel: '添加SkyFlow任务',
-                    class: 'sdx-skyflowrenwu',
-                    type: 'SKYFLOW',
-                    taskType: '可视化分析与建模'
                 }
             ],
             clientWidth: 1500,
@@ -131,17 +100,18 @@ export default {
         [Input.name]: Input,
         [Button.name]: Button,
         [SortButton.name]: SortButton,
+        [CreateTaskCard.name]: CreateTaskCard,
         SdxwGeneralTaskList
     },
     methods: {
         searchTask() {
         },
-        createTask(type) {
+        createTask(task) {
             this.$router.push(
                 {
                     name: 'CreateTaskNext',
                     params: {
-                        type: type
+                        type: task.type
                     },
                     query: {
                         from: 'devPlatform'

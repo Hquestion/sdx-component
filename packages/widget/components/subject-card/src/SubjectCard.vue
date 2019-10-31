@@ -19,7 +19,10 @@
             >
                 <div class="sdxw-subject-card__content--info">
                     <div class="left">
-                        <span class="title">
+                        <span
+                            class="title"
+                            @click="$emit('operate', {id: meta.uuid, type: 'detail'})"
+                        >
                             {{ meta && meta.title }}
                         </span>
                         <span

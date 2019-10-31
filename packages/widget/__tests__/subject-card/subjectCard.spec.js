@@ -90,48 +90,4 @@ describe('SdxwSubjectCard', () => {
         expect(mockFn).toBeCalled();
         expect(mockFn).toHaveBeenCalledTimes(2);
     });
-
-    it('test prop cardType', () => {
-        const wrapper = mount(SdxwSubjectCard, {
-            localVue,
-            propsData: {
-                operateType: 'template'
-            },
-        });
-
-        wrapper.find('.sdxw-project-card__footer--select').trigger('click');
-        expect(mockFn).toBeCalled();
-        expect(mockFn).toHaveBeenCalledTimes(1);
-        expect(type).toBe('template');
-
-        wrapper.setProps({
-            operateType: 'project'
-        });
-        wrapper.find('.sdxw-project-card__footer--select').trigger('click');
-        expect(type).toBe('project');
-    });
-
-    it('test event mouseover and mouseout', () => {
-        const wrapper = mount(SdxwSubjectCard, {
-            localVue,
-            propsData: {
-                meta: {
-                    description: 'test'
-                }
-            }
-        });
-
-        wrapper.trigger('mouseover');
-        expect(wrapper.vm.showMask).toBe(true);
-        expect(wrapper.vm.showMask).toBe(true);
-        wrapper.trigger('mouseout');
-        expect(wrapper.vm.showMask).toBe(false);
-
-        wrapper.setProps({
-            meta: {}
-        });
-
-        wrapper.trigger('mouseover');
-        expect(wrapper.vm.showMask).toBe(false);
-    });
 })

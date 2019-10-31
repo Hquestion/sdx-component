@@ -1,15 +1,16 @@
 <template>
     <div class="sdxu-pagination">
-        <div class="sdxu-pagination__count">
+        <div class="sdxu-pagination__count" v-show="indicate">
             <span>{{t('ui.pagination.showEveryPage')}}</span>
             {{pageSize}}
             <span>{{t('ui.pagination.unit')}}</span>,
             <span>{{t('ui.pagination.total')}}</span>
-            {{pagerCount}}
+            {{pageCount}}
             <span>{{t('ui.pagination.page')}}</span>,
             {{total}}
             <span>{{t('ui.pagination.recordCount')}}</span>
         </div>
+        <div></div>
         <el-pagination
             background
             layout="prev, pager, next"
@@ -40,6 +41,11 @@ export default {
             this.current = nVal;
         }
     },
+    computed: {
+        pageCount() {
+            return Math.ceil(this.total / this.pageSize);
+        }
+    },
     components: {
         [Pagination.name]: Pagination
     },
@@ -63,6 +69,10 @@ export default {
         pagerCount: {
             type: Number,
             default: 7
+        },
+        indicator: {
+            type: Boolean,
+            default: true
         }
     },
     methods: {

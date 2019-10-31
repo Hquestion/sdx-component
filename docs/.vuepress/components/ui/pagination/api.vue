@@ -42,6 +42,12 @@
                         type: 'boolean',
                         optionValue: '—',
                         defaultValue: 'false',
+                    }, {
+                        params: 'indicator',
+                        describe: '是否显示左侧分页指示器',
+                        type: 'boolean',
+                        optionValue: '—',
+                        defaultValue: 'true',
                     }
                 ],
                 eventData: [

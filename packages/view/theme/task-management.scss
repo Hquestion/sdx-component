@@ -1,0 +1,50 @@
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@include block('task-management', $bem-namespace-view) {
+
+    @include element('title') {
+        font-family: PingFangSC-Medium;
+        font-size: 24px;
+        color: #13264D;
+        letter-spacing: 0;
+    }
+
+    @include element('tab') {
+        margin-top: $sdx-gap-large;
+    }
+
+    @include element('table') {
+        margin-top: $sdx-gap-regular;
+    }
+}
+
+@include block('task-execute-list', $bem-namespace-view) {
+    
+    .el-date-editor--daterange.el-input__inner {
+        width: auto;
+        .el-range-input {
+            &::placeholder {
+                color: #8E9BB1;
+            }
+        }
+    }
+
+    @include element('table') {
+        margin-top: $sdx-gap-regular;
+
+        @include modifier('pagination') {
+            margin-top: $sdx-gap-regular;
+        }
+    }
+}
+
+@include block('timing-task-list', $bem-namespace-view) {
+
+    @include element('table') {
+        margin-top: $sdx-gap-regular;
+
+        @include modifier('pagination') {
+            margin-top: $sdx-gap-regular;
+        }
+    }
+}

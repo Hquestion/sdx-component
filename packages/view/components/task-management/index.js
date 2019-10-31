@@ -1,5 +1,5 @@
 import TaskView from './src/index';
-import TaskManagement from './src/TaskManagement';
+import TaskManagement from './src/TaskManagementView';
 import TaskDetailView from './src/task-detail/TaskDetailView';
 import { t } from '@sdx/utils/src/locale';
 

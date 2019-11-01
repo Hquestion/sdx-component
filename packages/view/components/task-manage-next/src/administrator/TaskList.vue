@@ -1,37 +1,35 @@
 <template>
     <div class="sdxv-task-manage-tasklist">
-        <div class="condition">
-            <SdxwSearchLayout ref="searchLayout">
-                <SdxwSearchItem label="任务名称：">
-                    <el-select
-                        size="medium"
-                    >
-                        <el-option />
-                    </el-select>
-                </SdxwSearchItem>
-                <SdxwSearchItem label="创建人：">
-                    <el-select
-                        size="medium"
-                    >
-                        <el-option />
-                    </el-select>
-                </SdxwSearchItem>
-                <SdxwSearchItem label="所属组：">
-                    <el-select
-                        size="medium"
-                    >
-                        <el-option />
-                    </el-select>
-                </SdxwSearchItem>
-                <SdxwSearchItem label="类型：">
-                    <el-select
-                        size="medium"
-                    >
-                        <el-option />
-                    </el-select>
-                </SdxwSearchItem>
-            </SdxwSearchLayout>
-        </div>
+        <SdxwSearchLayout ref="searchLayout">
+            <SdxwSearchItem label="任务名称：">
+                <el-select
+                    size="large"
+                >
+                    <el-option />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem label="创建人：">
+                <el-select
+                    size="large"
+                >
+                    <el-option />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem label="所属组：">
+                <el-select
+                    size="large"
+                >
+                    <el-option />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem label="类型：">
+                <el-select
+                    size="large"
+                >
+                    <el-option />
+                </el-select>
+            </SdxwSearchItem>
+        </SdxwSearchLayout>
         <div class="table">
             <SdxuScroll>
                 <sdxu-table>
@@ -128,20 +126,13 @@ export default {
         box-shadow: 0 2px 4px 0 #C2CDDE;
         border-radius: 2px;
     }
-    .condition {
-        .sdxw-search-layout { 
-            @extend .panel;
-        }
-    }
     .table {
         @extend .panel;
         margin-top: 24px;
-        height: calc(100vh - 366px);
+        height: calc(100vh - 378px);
         padding: 24px;
     }
     .pagination {
-        display: flex;
-        justify-content: flex-end;
         margin-top: 24px;
     }
 }

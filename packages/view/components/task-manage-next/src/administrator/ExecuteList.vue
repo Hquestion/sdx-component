@@ -4,18 +4,21 @@
             <div
                 v-for="(item) in infoList"
                 :key="item.title"
+                :class="item.class"
             >
                 <div>
-                    <div class="total">
-                        {{ item.total }}
-                    </div>
                     <div class="title">
                         {{ item.title }}
+                    </div>
+                    <div class="total">
+                        {{ item.total }}
                     </div>
                     <div class="progress">
                         <span>手动</span>
                         <el-progress
+                            :stroke-width="8"
                             :percentage="50"
+                            color="#1144AB"
                             :show-text="false"
                         />
                         <span>调度</span>
@@ -23,48 +26,46 @@
                 </div>
             </div>
         </div>
-        <div class="condition">
-            <SdxwSearchLayout>
-                <SdxwSearchItem label="类型:">
-                    <el-select
-                        size="medium"
-                    >
-                        <el-option />
-                    </el-select>
-                </SdxwSearchItem>
-                <SdxwSearchItem label="状态">
-                    <el-select
-                        size="medium"
-                    >
-                        <el-option />
-                    </el-select>
-                </SdxwSearchItem>
-                <SdxwSearchItem label="状态">
-                    <el-select
-                        size="medium"
-                    >
-                        <el-option />
-                    </el-select>
-                </SdxwSearchItem>
+        <SdxwSearchLayout>
+            <SdxwSearchItem label="类型:">
+                <el-select
+                    size="large"
+                >
+                    <el-option />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem label="状态">
+                <el-select
+                    size="large"
+                >
+                    <el-option />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem label="状态">
+                <el-select
+                    size="large"
+                >
+                    <el-option />
+                </el-select>
+            </SdxwSearchItem>
                 
-                <SdxwSearchItem label="时间">
-                    <el-date-picker
-                        type="monthrange"
-                        range-separator="-"
-                        start-placeholder="开始月份"
-                        end-placeholder="结束月份"
-                        size="medium"
-                    />
-                </SdxwSearchItem>
-                <SdxwSearchItem label="状态">
-                    <el-select
-                        size="medium"
-                    >
-                        <el-option />
-                    </el-select>
-                </SdxwSearchItem>
-            </SdxwSearchLayout>
-        </div>
+            <SdxwSearchItem label="时间">
+                <el-date-picker
+                    type="monthrange"
+                    range-separator="-"
+                    start-placeholder="开始月份"
+                    end-placeholder="结束月份"
+                    size="large"
+                />
+            </SdxwSearchItem>
+            <SdxwSearchItem label="状态">
+                <el-select
+                    size="large"
+                >
+                    <el-option />
+                </el-select>
+            </SdxwSearchItem>
+        </SdxwSearchLayout>
         <div class="table">
             <sdxu-table>
                 <el-table-column
@@ -128,31 +129,36 @@ export default {
                     total: 123,
                     title: '执行总数',
                     manual: 63,
-                    dispatch: 60
+                    dispatch: 60,
+                    class: 'execute'
                 },
                 {
                     total: 123,
-                    title: '执行总数',
+                    title: '排队中',
                     manual: 63,
-                    dispatch: 60
+                    dispatch: 60,
+                    class: 'queuing'
                 },
                 {
                     total: 123,
-                    title: '执行总数',
+                    title: '运行中',
                     manual: 63,
-                    dispatch: 60
+                    dispatch: 60,
+                    class: 'running'
                 },
                 {
                     total: 123,
-                    title: '执行总数',
+                    title: '运行成功',
                     manual: 63,
-                    dispatch: 60
+                    dispatch: 60,
+                    class: 'success'
                 },
                 {
                     total: 123,
-                    title: '执行总数',
+                    title: '运行失败',
                     manual: 63,
-                    dispatch: 60
+                    dispatch: 60,
+                    class: 'fail'
                 },
             ]
         };
@@ -176,12 +182,6 @@ export default {
         box-shadow: 0 2px 4px 0 #C2CDDE;
         border-radius: 2px;
     }
-    .condition {
-        margin-bottom: 24px;
-        .sdxw-search-layout {
-            @extend .panel;
-        }
-    }
     .info {
         margin:0  -12px;
         height: 152px;
@@ -195,21 +195,15 @@ export default {
             &>div {
                 height: 152px;
                 @extend .panel;
+                padding: 20px;
+                box-sizing: border-box;
                 .total {
-                    font-size: 40px;
-                    color: #1144AB;
-                    height: 80px;
-                    line-height: 72px;
-                    padding-top: 10px;
+                    font-size: 48px;
+                    height: 74px;
+                    line-height: 74px;
                 }
                 .title {
                     display: inline-block;
-                    background: #DEEBFF;
-                    border-radius: 2px;
-                    height: 24px;
-                    line-height: 24px;
-                    padding: 0 8px;
-                    margin-bottom: 10px;
                 }
                 .progress {
                     span {
@@ -217,6 +211,26 @@ export default {
                         color: #6E7C94;
                     }
                 }
+            }
+        }
+        .execute {
+            .total, .title {
+                color: #1144AB;
+            }
+        }
+        .queuing, .running {
+            .total, .title {
+                color: #FF9400;;
+            }
+        }
+        .success {
+            .total, .title {
+                color: #008A56;
+            }
+        }
+        .fail {
+            .total, .title {
+                color: #F11600;
             }
         }
         & /deep/ {
@@ -230,7 +244,8 @@ export default {
     .table {
         @extend .panel;
         padding: 24px;
-        height: calc(100vh - 302px);
+        height: calc(100vh - 554px);
+        margin-top: 24px;
     }
 }
 </style>

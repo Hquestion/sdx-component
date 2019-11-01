@@ -20,7 +20,7 @@
                             <div
                                 v-for="(item, i) in datasets"
                                 :key="i"
-                                class="sdxv-data-dataset"
+                                class="sdxv-data-info__container--item sdxv-data-dataset"
                             >
                                 {{ item.name }}
                             </div>
@@ -32,7 +32,7 @@
                 v-if="datasources.length"
             >
                 <SdxvInfoItem
-                    :label="t('view.task.DataSourceInformation')"
+                    :label="t('view.task.DataSource')"
                     :whole-line="true"
                     :multi-line="true"
                     :strip="false"
@@ -42,18 +42,18 @@
                             <div
                                 v-for="(item, i) in datasources"
                                 :key="i"
-                                class="sdxv-data-datasource"
+                                class="sdxv-data-info__container--item sdxv-data-datasource"
                             >
                                 <div class="sdxv-data-datasource__name">
                                     {{ item.name }}
                                 </div>
                                 <div class="sdxv-data-datasource__info">
                                     <div class="sdxv-data-datasource__info--item">
-                                        <span>SKYTSDB_HOST: </span>
+                                        <span>SKYTSDB_HOST:</span>
                                         <span>{{ item.host }}</span>
                                     </div>
                                     <div class="sdxv-data-datasource__info--item">
-                                        <span>SKYTSDB_PORT: </span>
+                                        <span>SKYTSDB_PORT:</span>
                                         <span>{{ item.port }}</span>
                                     </div>
                                 </div>

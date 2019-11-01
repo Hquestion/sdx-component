@@ -13,7 +13,6 @@
                     <sdxu-input
                         v-model="searchName"
                         type="search"
-                        size="small"
                         :placeholder="t('view.project.enterProjectName')"
                     />
                 </SdxwSearchItem>
@@ -21,7 +20,6 @@
             <div>
                 <sdxu-button
                     placement="right"
-                    size="small"
                     trigger="click"
                     style="margin-right: 24px; vertical-align: middle"
                     v-auth.project.button="'PROJECT:CREATE'"
@@ -337,10 +335,6 @@ export default {
     .condition {
         display: flex;
         justify-content: space-between;
-    }
-    .pagination {
-        display: flex;
-        justify-content: flex-end;
     }
 }
 </style>

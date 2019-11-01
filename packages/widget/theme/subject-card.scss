@@ -46,6 +46,12 @@
             justify-content: space-between;
             padding-top: $sdxw-subject-card-task-padding;
             .left {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                word-break: break-all;
+                height: $sdx-gap-regular;
+                max-width: calc(100% - 340px);
                 .title {
                     font-size: $sdx-h1-font-size;
                     color: $sdxw-subject-card-info-color;

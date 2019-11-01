@@ -1,7 +1,6 @@
 <template>
     <div class="sdxu-sort-button">
         <sdxu-button
-            size="small"
             type="default"
             @click="sortChange"
         >

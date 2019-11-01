@@ -68,7 +68,6 @@
                 />
             </el-form-item>
         </el-form>
-
         <div
             class="sdxv-create-project__filter"
             v-if="createType === 'project'"

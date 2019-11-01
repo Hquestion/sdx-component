@@ -1,6 +1,6 @@
 <template>
     <div class="sdxu-pagination">
-        <div class="sdxu-pagination__count" v-show="indicate">
+        <div class="sdxu-pagination__count" v-show="indicator">
             <span>{{t('ui.pagination.showEveryPage')}}</span>
             {{pageSize}}
             <span>{{t('ui.pagination.unit')}}</span>,

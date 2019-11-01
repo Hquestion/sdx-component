@@ -1,14 +1,22 @@
 <template>
     <div class="sdxu-appender">
-        <div class="sdxu-appender__prefix" v-if="$slots.prefix || prefix" @click="handlePrefixClick">
+        <div
+            class="sdxu-appender__prefix"
+            v-if="$slots.prefix || prefix"
+            @click="handlePrefixClick"
+        >
             <slot name="prefix">
-                <i :class="['sdx-icon', prefix]"></i>
+                <i :class="['sdx-icon', 'sdxu-appender__icon', prefix]" />
             </slot>
         </div>
-        <slot></slot>
-        <div class="sdxu-appender__postfix" v-if="$slots.postfix || postfix" @click="handlePostfixClick">
+        <slot />
+        <div
+            class="sdxu-appender__postfix"
+            v-if="$slots.postfix || postfix"
+            @click="handlePostfixClick"
+        >
             <slot name="postfix">
-                <i :class="['sdx-icon', postfix]"></i>
+                <i :class="['sdx-icon', 'sdxu-appender__icon', postfix]" />
             </slot>
         </div>
     </div>

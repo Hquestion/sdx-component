@@ -6,18 +6,14 @@
         width: auto;
         margin-right: $sdx-gap-large;
         display: inline-block;
-        i.sdx-icon {
-            font-size: 22px;
-            color: $sdx-secondary-color--light4;
-        }
     }
     @include element('postfix') {
         width: auto;
         margin-left: $sdx-gap-large;
         display: inline-block;
-        i.sdx-icon {
-            font-size: 22px;
-            color: $sdx-secondary-color--light4;
-        }
+    }
+    @include element('icon') {
+        font-size: 22px;
+        color: $sdx-secondary-color--light4;
     }
 }

@@ -1,0 +1,23 @@
+@include block('appender', $bem-namespace-ui) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    @include element('prefix') {
+        width: auto;
+        margin-right: $sdx-gap-large;
+        display: inline-block;
+        i.sdx-icon {
+            font-size: 22px;
+            color: $sdx-secondary-color--light4;
+        }
+    }
+    @include element('postfix') {
+        width: auto;
+        margin-left: $sdx-gap-large;
+        display: inline-block;
+        i.sdx-icon {
+            font-size: 22px;
+            color: $sdx-secondary-color--light4;
+        }
+    }
+}

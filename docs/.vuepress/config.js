@@ -42,7 +42,8 @@ module.exports = {
                         'ui/radial-progress',
                         'ui/log-detail',
                         'ui/sort-button',
-                        'ui/dropdown-tip'
+                        'ui/dropdown-tip',
+                        'ui/appender'
                     ]
                 },
                 {

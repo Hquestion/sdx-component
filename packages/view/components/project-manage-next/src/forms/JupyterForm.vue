@@ -48,31 +48,33 @@
                 prop="project"
                 v-if="!projectId"
             >
-                <el-select
-                    v-model="params.project"
-                    size="small"
-                    placeholder="请选择关联项目"
-                    style="width:420px;margin-right:10px;"
-                    filterable
-                    @change="projectSelected"
-                >
-                    <el-option
-                        v-for="item in projectOptions"
-                        :key="item.uuid"
-                        :label="item.name"
-                        :value="item.uuid"
-                    />
-                </el-select>
-                <SdxuButton
-                    type="primary"
-                    invert
-                    size="small"
-                    class="create-project-button"
-                    @click="createProject"
-                >
-                    <i class="sdx-icon sdx-xinjianhao" />
-                    创建新项目
-                </SdxuButton>
+                <SdxuAppender style="width: 560px;">
+                    <el-select
+                        v-model="params.project"
+                        size="small"
+                        placeholder="请选择关联项目"
+                        filterable
+                        @change="projectSelected"
+                    >
+                        <el-option
+                            v-for="item in projectOptions"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid"
+                        />
+                    </el-select>
+                    <SdxuButton
+                        type="primary"
+                        invert
+                        slot="postfix"
+                        size="small"
+                        class="create-project-button"
+                        @click="createProject"
+                    >
+                        <i class="sdx-icon sdx-xinjianhao" />
+                        创建新项目
+                    </SdxuButton>
+                </SdxuAppender>
             </el-form-item>
             <SdxwExpandLabel
                 label="环境配置"
@@ -81,14 +83,13 @@
                 prop="imageId"
                 :label="`${t('view.task.RuntimeEnvironment')}:`"
             >
-                <div style="display:flex;">
+                <SdxuAppender style="width: 560px;">
                     <el-select
                         v-model="params.imageId"
                         :searchable="true"
                         size="small"
                         @change="getImagePackages"
                         :placeholder="t('view.task.form.Please_select_the_operating_environment')"
-                        style="width:530px;margin-right:10px;"
                     >
                         <el-option
                             v-for="item in imageOptions"
@@ -101,6 +102,7 @@
                         title="镜像中包含版本信息"
                         width="260px"
                         :disabled="!packagesList.length"
+                        slot="postfix"
                     >
                         <SdxuIconButton
                             slot="ref"
@@ -122,7 +124,7 @@
                             </SdxuScroll>
                         </div>
                     </SdxuDropdownTip>
-                </div>
+                </SdxuAppender>
             </el-form-item>
             <el-form-item
                 prop="resourceConfig"
@@ -207,6 +209,7 @@ import ExpandLabel from '@sdx/widget/components/expand-label';
 import DropdownTip from '@sdx/ui/components/dropdown-tip';
 import IconButton from '@sdx/ui/components/icon-button';
 import Scroll from '@sdx/ui/components/scroll';
+import Appender from '@sdx/ui/components/appender';
 export default {
     name: 'JupyterForm',
     mixins: [locale, projectDetailMixin],
@@ -222,7 +225,8 @@ export default {
         [Scroll.name]: Scroll,
         SdxuInput,
         SdxwResourceConfig,
-        DataSourceSelect
+        DataSourceSelect,
+        [Appender.name]: Appender,
     },
     props: {
         task: {

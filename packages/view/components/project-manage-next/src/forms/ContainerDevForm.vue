@@ -49,31 +49,34 @@
                 prop="project"
                 v-if="!projectId"
             >
-                <el-select
-                    v-model="params.project"
-                    size="small"
-                    placeholder="请选择关联项目"
-                    style="width:420px;margin-right:10px;"
-                    filterable
-                    @change="projectSelected"
-                >
-                    <el-option
-                        v-for="item in projectOptions"
-                        :key="item.uuid"
-                        :label="item.name"
-                        :value="item.uuid"
-                    />
-                </el-select>
-                <SdxuButton
-                    type="primary"
-                    invert
-                    size="small"
-                    class="create-project-button"
-                    @click="createProject"
-                >
-                    <i class="sdx-icon sdx-xinjianhao" />
-                    创建新项目
-                </SdxuButton>
+                <SdxuAppender style="width: 560px">
+                    <el-select
+                        v-model="params.project"
+                        size="small"
+                        placeholder="请选择关联项目"
+                        style="width:420px;margin-right:10px;"
+                        filterable
+                        @change="projectSelected"
+                    >
+                        <el-option
+                            v-for="item in projectOptions"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid"
+                        />
+                    </el-select>
+                    <SdxuButton
+                        type="primary"
+                        invert
+                        slot="postfix"
+                        size="small"
+                        class="create-project-button"
+                        @click="createProject"
+                    >
+                        <i class="sdx-icon sdx-xinjianhao" />
+                        创建新项目
+                    </SdxuButton>
+                </SdxuAppender>
             </el-form-item>
             <SdxwExpandLabel
                 label="环境配置"
@@ -82,19 +85,48 @@
                 prop="imageId"
                 :label="`${t('view.task.RuntimeEnvironment')}:`"
             >
-                <el-select
-                    v-model="params.imageId"
-                    :searchable="true"
-                    size="small"
-                    :placeholder="t('view.task.form.Please_select_the_operating_environment')"
-                >
-                    <el-option
-                        v-for="item in imageOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
+                <SdxuAppender style="width: 560px;">
+                    <el-select
+                        v-model="params.imageId"
+                        :searchable="true"
+                        size="small"
+                        @change="getImagePackages"
+                        :placeholder="t('view.task.form.Please_select_the_operating_environment')"
+                    >
+                        <el-option
+                            v-for="item in imageOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        />
+                    </el-select>
+                    <SdxuDropdownTip
+                        title="镜像中包含版本信息"
+                        width="260px"
+                        :disabled="!packagesList.length"
+                        slot="postfix"
+                    >
+                        <SdxuIconButton
+                            slot="ref"
+                            size="large"
+                            icon="sdx-icon sdx-icon-warning"
+                        />
+                        <div
+                            style="height: 300px"
+                        >
+                            <SdxuScroll>
+                                <div
+                                    v-for="(item, index) in packagesList"
+                                    :key="index"
+                                    class="package-info__item"
+                                >
+                                    <div>{{ item.name }}</div>
+                                    <div>{{ item.version }}</div>
+                                </div>
+                            </SdxuScroll>
+                        </div>
+                    </SdxuDropdownTip>
+                </SdxuAppender>
             </el-form-item>
             <el-form-item
                 prop="resourceConfig"
@@ -250,6 +282,11 @@ import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
 import ExpandLabel from '@sdx/widget/components/expand-label';
 import FileSelect from '@sdx/widget/components/file-select';
+import Appender from '@sdx/ui/components/appender';
+import DropdownTip from '@sdx/ui/components/dropdown-tip';
+import IconButton from '@sdx/ui/components/icon-button';
+import Scroll from '@sdx/ui/components/scroll';
+
 export default {
     name: 'ContainerDevForm',
     mixins: [locale, projectDetailMixin],
@@ -264,7 +301,11 @@ export default {
         SdxwResourceConfig,
         [InputNumber.name]: InputNumber,
         DataSourceSelect,
-        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix
+        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
+        [Appender.name]: Appender,
+        [DropdownTip.name]: DropdownTip,
+        [IconButton.name]: IconButton,
+        [Scroll.name]: Scroll,
     },
     props: {
         task: {

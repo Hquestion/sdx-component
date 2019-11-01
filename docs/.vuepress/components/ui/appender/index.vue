@@ -16,6 +16,12 @@
             <SdxuInput v-model="val" style="flex: 1"></SdxuInput>
         </SdxuAppender>
     </p>
+    <p>
+        <SdxuAppender prefix="sdx-tiaofutishi" style="width: 500px;">
+            <SdxuInput v-model="val" style="flex: 1"></SdxuInput>
+            <SdxuButton type="default" slot="postfix">创建项目</SdxuButton>
+        </SdxuAppender>
+    </p>
 </div>
 </template>
 

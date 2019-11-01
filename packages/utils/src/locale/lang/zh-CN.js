@@ -124,6 +124,9 @@ export default {
     },
     view: {
         task: {
+            TaskManagementList: '任务管理列表',
+            TaskExecuteList: '任务执行列表',
+            TimingTaskList: '定时任务列表',
             stopTask: '确定要终止选中的任务吗？',
             deleteTask: '此操作将会永久删除该任务，是否继续？',
             killTask: '此操作将终止该任务，是否继续？',

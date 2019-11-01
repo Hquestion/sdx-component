@@ -1,15 +1,15 @@
 <template>
     <div class="sdxv-task-management">
         <div class="sdxv-task-management__title">
-            任务管理列表
+            {{ t('view.task.TaskManagementList') }}
         </div>
         <div class="sdxv-task-management__tab">
             <TabRadioGroup v-model="currentTab">
                 <TabRadioItem name="execute">
-                    任务执行列表
+                    {{ t('view.task.TaskExecuteList') }}
                 </TabRadioItem> 
                 <TabRadioItem name="timing">
-                    定时任务列表
+                    {{ t('view.task.TimingTaskList') }}
                 </TabRadioItem>
             </TabRadioGroup>
         </div>
@@ -24,9 +24,11 @@
 import TabRadio from '@sdx/ui/components/tab-radio';
 import TaskExecuteList from './TaskExecuteList';
 import TimingTaskList from './TimingTaskList';
+import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'SdxvTaskManagementView',
+    mixins: [locale],
     components: {
         TabRadioGroup: TabRadio.TabRadioGroup,
         TabRadioItem: TabRadio.TabRadioItem,

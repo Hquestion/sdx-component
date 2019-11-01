@@ -9,13 +9,13 @@
                 <SdxwSearchItem :label="t('view.task.taskName') + ':'">
                     <SdxuInput
                         v-model="taskName"
-                        :placeholder="t('view.task.PleaseEnter')"
+                        :placeholder="t('view.task.PleaseInput')"
                     />
                 </SdxwSearchItem>
                 <SdxwSearchItem :label="t('sdxCommon.Creator') + ':'">
                     <SdxuInput
                         v-model="creator"
-                        :placeholder="t('view.task.PleaseEnter')"
+                        :placeholder="t('view.task.PleaseInput')"
                     />
                 </SdxwSearchItem>
                 <SdxwSearchItem :label="t('view.task.isOpen') + ':'">

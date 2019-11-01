@@ -31,6 +31,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
     @include element('table') {
         margin-top: $sdx-gap-regular;
+        background: #FFFFFF;
+        box-shadow: 0 2px 4px 0 #C2CDDE;
+        border-radius: 2px;
+        border-radius: 2px;
+        padding: 24px;
 
         @include modifier('pagination') {
             margin-top: $sdx-gap-regular;
@@ -42,6 +47,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
     @include element('table') {
         margin-top: $sdx-gap-regular;
+        background: #FFFFFF;
+        box-shadow: 0 2px 4px 0 #C2CDDE;
+        border-radius: 2px;
+        border-radius: 2px;
+        padding: 24px;
 
         @include modifier('pagination') {
             margin-top: $sdx-gap-regular;

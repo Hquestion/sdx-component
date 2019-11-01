@@ -9,13 +9,13 @@
                 <SdxwSearchItem :label="t('view.task.taskName') + ':'">
                     <SdxuInput
                         v-model="taskName"
-                        :placeholder="t('view.task.PleaseEnter')"
+                        :placeholder="t('view.task.PleaseInput')"
                     />
                 </SdxwSearchItem>
                 <SdxwSearchItem :label="t('sdxCommon.Creator') + ':'">
                     <SdxuInput
                         v-model="creator"
-                        :placeholder="t('view.task.PleaseEnter')"
+                        :placeholder="t('view.task.PleaseInput')"
                     />
                 </SdxwSearchItem>
                 <SdxwSearchItem :label="t('view.task.taskType') + ':'">
@@ -61,6 +61,7 @@
                     <el-date-picker
                         v-model="selectedDate"
                         type="daterange"
+                        size="large"
                         :start-placeholder="t('view.task.startTime')"
                         :end-placeholder="t('view.task.stopTime')"
                     />

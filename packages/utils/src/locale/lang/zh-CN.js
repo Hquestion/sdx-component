@@ -130,7 +130,7 @@ export default {
             saveIntoImage: '将当前任务转存为镜像，再次启动此任务时恢复到当前环境',
             searchName: '名称搜索',
             searchPlaceholder: '请输入任务名称、项目名称或创建人',
-            PleaseEnter: '请输入',
+            PleaseInput: '请输入',
             taskType: '任务类型',
             taskState: '任务状态',
             taskName: '任务名称',

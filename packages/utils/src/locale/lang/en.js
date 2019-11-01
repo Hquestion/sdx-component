@@ -130,7 +130,7 @@ export default {
             saveIntoImage: 'Save the current task to an image and restore it to the current environment when it is restarted',
             searchName: 'Name Search',
             searchPlaceholder: 'Please enter a task name, project name, or creator',
-            PleaseEnter: 'Please Enter',
+            PleaseInput: 'Please Input',
             taskType: 'Task Type',
             taskState: 'Task State',
             taskName: 'Task Name',

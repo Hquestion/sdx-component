@@ -3,39 +3,49 @@
         class="sdxv-monitor-info"
         v-loading="isLoading"
     >
-        <div class="sdxv-monitor-info__select">
-            <span>{{ t('view.task.SelectAnInstance') }}：</span>
-            <el-select
-                v-model="currentPod"
-                size="small"
-            >
-                <el-option
-                    v-for="pod in pods"
-                    :key="pod.name"
-                    :value="pod.name"
-                    :label="pod.name"
-                />
-            </el-select>
-        </div>
-        <div class="sdxv-monitor-info__chart">
-            <div
-                class="sdxv-monitor-info__chart--item"
-                ref="usedCpu"
+        <SdxwExpandLabel :label="t('view.task.RealTimeMonitor')" />
+        <div class="sdxv-monitor-info__content">
+            <SdxuEmpty
+                v-if="isEmpty"
+                :empty-content="t('view.task.NoRealMonitor')"
+                empty-type="sdx-wushuju"
             />
-            <div
-                class="sdxv-monitor-info__chart--item"
-                ref="usedMem"
-            />
-            <div
-                v-if="hasGpu"
-                class="sdxv-monitor-info__chart--item"
-                ref="usedGpu"
-            />
-            <div
-                v-if="hasGpu"
-                class="sdxv-monitor-info__chart--item"
-                ref="usedGpuMem"
-            />
+            <template v-else>
+                <div class="sdxv-monitor-info__select">
+                    <span>{{ t('view.task.SelectAnInstance') }}：</span>
+                    <el-select
+                        v-model="currentPod"
+                        size="small"
+                    >
+                        <el-option
+                            v-for="pod in pods"
+                            :key="pod.name"
+                            :value="pod.name"
+                            :label="pod.name"
+                        />
+                    </el-select>
+                </div>
+                <div class="sdxv-monitor-info__chart">
+                    <div
+                        class="sdxv-monitor-info__chart--item"
+                        ref="usedCpu"
+                    />
+                    <div
+                        class="sdxv-monitor-info__chart--item"
+                        ref="usedMem"
+                    />
+                    <div
+                        v-if="hasGpu"
+                        class="sdxv-monitor-info__chart--item"
+                        ref="usedGpu"
+                    />
+                    <div
+                        v-if="hasGpu"
+                        class="sdxv-monitor-info__chart--item"
+                        ref="usedGpuMem"
+                    />
+                </div>
+            </template>
         </div>
     </div>
 </template>
@@ -48,89 +58,9 @@ import echarts from 'echarts';
 import { dateFormatter, byteToMB } from '@sdx/utils/src/helper/transform';
 import { getPodResourceStatus } from '@sdx/utils/src/api/system';
 import locale from '@sdx/utils/src/mixins/locale';
-
-const CHART_DEFAULT_OPTION = {
-    // 监t图的基本配置
-    title: {
-        text: '', // 需要自己设置
-        textStyle: {
-            fontSize: 14,
-            color: '#333'
-        },
-        left: '10px',
-        top: '10px'
-    },
-    tooltip: {
-        trigger: 'axis',
-        backgroundColor: 'rgba(245, 245, 245, 0.8)',
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        textStyle: {
-            color: '#000'
-        },
-        extraCssText: 'width: 200px',
-        formatter: null // 需要自己设置
-    },
-    // legend: {
-    //     data: [] // 需要自己设置
-    // },
-    grid: {
-        left: '70px',
-        right: '70px'
-    },
-    axisPointer: {
-        link: { xAxisIndex: 'all' },
-        label: {
-            show: true,
-            backgroundColor: '#777'
-        }
-    },
-    xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        axisPointer: {
-            label: {
-                show: true,
-                backgroundColor: '#777'
-            }
-        },
-        axisLine: {
-            lineStyle: {
-                color: '#C4C6CF'
-            }
-        },
-        axisTick: {
-            show: false
-        },
-        axisLabel: {
-            color: '#606266',
-            rotate: 10,
-            margin: 40,
-            align: 'center'
-        },
-        data: [] // 需要自己设置
-    },
-    yAxis: {
-        name: '', // 需要自己设置
-        scale: false,
-        type: 'value',
-        axisLine: {
-            show: false
-        },
-        axisTick: {
-            show: false
-        },
-        axisLabel: {
-            color: '#606266',
-            align: 'right'
-        },
-        splitLine: {
-            show: false
-        }
-    },
-    series: [] // 需要自己设置
-};
+import SdxuEmpty from '@sdx/ui/components/empty';
+import SdxwExpandLabel from '@sdx/widget/components/expand-label';
+import CHART_DEFAULT_OPTION from './MonitorConfig';
 
 const POLLING_PERIOD = 15 * 1000;
 
@@ -139,9 +69,15 @@ export default {
     mixins: [locale],
     components: {
         [Select.name]: Select,
-        [Option.name]: Option
+        [Option.name]: Option,
+        SdxwExpandLabel: SdxwExpandLabel.ExpandLabel,
+        SdxuEmpty
     },
     props: {
+        isEmpty: {
+            type: Boolean,
+            default: false
+        },
         pods: {
             type: Array,
             default: () => []
@@ -157,7 +93,7 @@ export default {
     },
     data() {
         return {
-            currentPod: this.pods[0].name,
+            currentPod: this.pods[0] && this.pods[0].name || '',
             chartInstance: {
                 // chart实例的挂载点
                 usedCpu: null,
@@ -173,22 +109,24 @@ export default {
     methods: {
         /** 获图表数据 */
         fetchData(showLoading = true) {
-            const params = {
-                timeRange: '15m',
-                metricInterval: '3s'
-            };
-            if (showLoading) {
-                this.isLoading = true;
+            if (this.currentPod) {
+                const params = {
+                    timeRange: '15m',
+                    metricInterval: '3s'
+                };
+                if (showLoading) {
+                    this.isLoading = true;
+                }
+                getPodResourceStatus(this.currentPod, params).then(data => {
+                    this.statList = data.stats;
+                    this.processData();
+                    this.isLoading = false;
+                }).catch(() => {
+                    this.statList = [];
+                    this.processData();
+                    this.isLoading = false;
+                });
             }
-            getPodResourceStatus(this.currentPod, params).then(data => {
-                this.statList = data.stats;
-                this.processData();
-                this.isLoading = false;
-            }).catch(() => {
-                this.statList = [];
-                this.processData();
-                this.isLoading = false;
-            });
         },
         /** 将获取的数据处理成 chart 需要的形式 */
         processData() {
@@ -199,8 +137,24 @@ export default {
                     name: this.t('view.task.CPUUsageRate'),
                     type: 'line',
                     itemStyle: {
-                        color: '#4781F8',
+                        color: '#0052CC',
                         borderWidth: 2
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: '#0052CC'
+                            }, {
+                                offset: 1,
+                                color: '#fff'
+                            }]
+                        }
                     },
                     data: this.statList.map(item =>
                         (parseFloat(item.cpu) * 100).toFixed(2)
@@ -213,8 +167,24 @@ export default {
                     name: this.t('view.task.MemoryUsage'),
                     type: 'line',
                     itemStyle: {
-                        color: '#9E5BF8',
+                        color: '#00A3BF',
                         borderWidth: 2
+                    },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0,
+                                color: '#00A3BF'
+                            }, {
+                                offset: 1,
+                                color: '#fff'
+                            }]
+                        }
                     },
                     data: this.statList.map(item =>
                         parseFloat(byteToMB(item.memory))
@@ -228,8 +198,24 @@ export default {
                         name: this.t('view.task.GPUUsageRate'),
                         type: 'line',
                         itemStyle: {
-                            color: '#4781F8',
+                            color: '#6554C0',
                             borderWidth: 2
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0,
+                                    color: '#6554C0'
+                                }, {
+                                    offset: 1,
+                                    color: '#fff'
+                                }]
+                            }
                         },
                         data: this.statList.map(item =>
                             (parseFloat(item.gpu) * 100).toFixed(2)
@@ -242,8 +228,24 @@ export default {
                         name: this.t('view.task.GPUMemoryUsage'),
                         type: 'line',
                         itemStyle: {
-                            color: '#9E5BF8',
+                            color: '#6554C0',
                             borderWidth: 2
+                        },
+                        areaStyle: {
+                            color: {
+                                type: 'linear',
+                                x: 0,
+                                y: 0,
+                                x2: 0,
+                                y2: 1,
+                                colorStops: [{
+                                    offset: 0,
+                                    color: '#6554C0'
+                                }, {
+                                    offset: 1,
+                                    color: '#fff'
+                                }]
+                            }
                         },
                         data: this.statList.map(item =>
                             parseFloat(byteToMB(item.gpuMemory))
@@ -280,33 +282,40 @@ export default {
         getOptionsByName(name) {
             let text = '';
             let yAxisName = '';
-            // let data = this[`${name}SeriesData`];
             switch (name) {
-            case 'usedCpu':
-                text = this.t('view.task.CPUUsageRate');
-                yAxisName = '(%)';
-                break;
-            case 'usedMem':
-                text = this.t('view.task.MemoryUsage');
-                yAxisName = '(MB)';
-                break;
-            case 'usedGpu':
-                text = this.t('view.task.GPUUsageRate');
-                yAxisName = '(%)';
-                break;
-            case 'usedGpuMem':
-                text = this.t('view.task.GPUMemoryUsage');
-                yAxisName = '(MB)';
+                case 'usedCpu':
+                    text = this.t('view.task.CPUUsageRate');
+                    yAxisName = '(%)';
+                    break;
+                case 'usedMem':
+                    text = this.t('view.task.MemoryUsage');
+                    yAxisName = '(MB)';
+                    break;
+                case 'usedGpu':
+                    text = this.t('view.task.GPUUsageRate');
+                    yAxisName = '(%)';
+                    break;
+                case 'usedGpuMem':
+                    text = this.t('view.task.GPUMemoryUsage');
+                    yAxisName = '(MB)';
             }
             return {
                 ...CHART_DEFAULT_OPTION,
-                title: {
-                    ...CHART_DEFAULT_OPTION.title,
-                    text: text
-                },
-                // legend: {
-                //     data: data.map(item => item.name)
+                // title: {
+                //     ...CHART_DEFAULT_OPTION.title,
+                //     text: text
                 // },
+                legend: {
+                    icon: 'rect',
+                    borderColor: '#000',
+                    selectedMode: false,
+                    data: [{
+                        name: text,
+                        textStyle: {
+                            color: '#13264D'
+                        }
+                    }]
+                },
                 xAxis: {
                     ...CHART_DEFAULT_OPTION.xAxis,
                     data: this.xAxisData

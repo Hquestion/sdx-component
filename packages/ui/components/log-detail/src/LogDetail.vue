@@ -1,6 +1,7 @@
 <template>
     <div
         class="sdxu-log-detail"
+        :class="{'is-dark': isDark}"
         :style="{ height: height }"
         v-loading="loading"
     >
@@ -49,6 +50,10 @@ export default {
             default: false
         },
         loading: {
+            type: Boolean,
+            default: false
+        },
+        isDark: {
             type: Boolean,
             default: false
         }

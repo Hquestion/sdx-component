@@ -1343,13 +1343,6 @@
       "unicode_decimal": 59060
     },
     {
-      "icon_id": "11362440",
-      "name": "操作:浏览",
-      "font_class": "caozuoliulan",
-      "unicode": "e721",
-      "unicode_decimal": 59169
-    },
-    {
       "icon_id": "11362442",
       "name": "单选框:选中",
       "font_class": "danxuankuangxuanzhong",
@@ -1600,27 +1593,6 @@
       "font_class": "danchuangchahaojinggao",
       "unicode": "e71a",
       "unicode_decimal": 59162
-    },
-    {
-      "icon_id": "11472378",
-      "name": "操作:更多:Default",
-      "font_class": "caozuogengduoDefault",
-      "unicode": "e730",
-      "unicode_decimal": 59184
-    },
-    {
-      "icon_id": "11472380",
-      "name": "操作:更多:hover",
-      "font_class": "caozuogengduohover",
-      "unicode": "e734",
-      "unicode_decimal": 59188
-    },
-    {
-      "icon_id": "11472381",
-      "name": "筛选条件:展开",
-      "font_class": "shaixuantiaojianzhankai",
-      "unicode": "e735",
-      "unicode_decimal": 59189
     }
   ]
 }

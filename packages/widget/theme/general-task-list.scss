@@ -1,0 +1,20 @@
+@include block('general-task-list', $bem-namespace-widget) {
+    @include element('container') {
+        display: flex;
+        margin-top: 20px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        @include modifier('element') {
+            flex: 50%;
+            max-width: calc(50% - 10px);
+            margin-bottom: 20px !important;
+        }
+    }
+    @include element('footer') {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 0;
+    }
+}

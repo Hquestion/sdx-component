@@ -5,6 +5,7 @@ module.exports = {
     'userinfo-dialog': './components/userinfo-dialog/index.js',
     'change-password': './components/change-password/index.js',
     'fold-label': './components/fold-label/index.js',
+    'expand-label': './components/expand-label/index.js',
     projectcard: './components/projectcard/index.js',
     'select-group-user': './components/select-group-user/index.js',
     'file-select': './components/file-select/index.js',
@@ -13,6 +14,7 @@ module.exports = {
     'share-setting': './components/share-setting/index.js',
     'pod-log': './components/pod-log/index.js',
     'task-list': './components/task-list/index.js',
+    'general-task-list': './components/general-task-list/index.js',
     'task-start-dialog': './components/task-start-dialog/index.js',
     'task-stop-dialog': './components/task-stop-dialog/index.js',
     'code-editor': './components/code-editor/index.js',
@@ -21,4 +23,7 @@ module.exports = {
     'share-form': './components/share-form/index.js',
     'task-running-limit': './components/task-running-limit/index.js',
     'lang-handle': './components/lang-handle/index.js',
+    'subject-card': './components/subject-card/index.js',
+    'create-project-card': './components/create-project-card/index.js',
+    'create-task-card': './components/create-task-card/index.js',
 };

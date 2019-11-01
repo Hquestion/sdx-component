@@ -1,0 +1,175 @@
+@include block('subject-card',  $bem-namespace-widget) {
+    background: #FFFFFF;
+    box-shadow: 0 2px 4px 0 $sdx-secondary-color--light5;
+    border-radius: $sdx-border-radius-large;
+    margin-bottom: $sdx-gap-regular;
+    padding: $sdx-gap-small $sdx-gap-regular $sdx-gap-regular $sdx-gap-regular;
+    padding-bottom: 0;
+    @include element('header') {
+        padding-bottom: $sdx-gap-regular;
+    }
+    @include element('icon') {
+        border: 1px solid $sdx-secondary-color--light6;
+        border-radius: $sdx-border-radius;
+        width: $sdxw-subject-card-icon-size;
+        height: $sdxw-subject-card-icon-size;
+        display: inline-block;
+        text-align: center;
+        position: relative;
+        svg {
+            width: $sdx-form-element-height-regular;
+            height: $sdx-form-element-height-regular;
+            margin-top: $sdx-border-radius-large;
+        }
+        div {
+            display: inline-block;
+            position: absolute;
+            bottom: 0;
+            background: $sdx-secondary-color--light7;
+            width: 100%;
+            left: 0;
+            height: $sdxw-subject-card-icon-name;
+            line-height: $sdxw-subject-card-icon-name;
+            font-size: $sdx-help-font-size;
+            color: $sdx-secondary-color--light3;
+        }
+    }
+
+    @include element('content') {
+        width: calc(100% - 82px);
+        float: right;
+        font-size: $sdx-content-font-size;
+        @include modifier('info') {
+            height: $sdx-gap-regular;
+            line-height: $sdx-gap-regular;
+            display: flex;
+            justify-content: space-between;
+            padding-top: $sdxw-subject-card-task-padding;
+            .left {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                word-break: break-all;
+                height: $sdx-gap-regular;
+                max-width: calc(100% - 340px);
+                .title {
+                    font-size: $sdx-h1-font-size;
+                    color: $sdxw-subject-card-info-color;
+                    &:hover {
+                        cursor: pointer;
+                        color: $sdx-primary-color;
+                    }
+                }
+                .task {
+                    background: $sdx-disable-color;
+                    border-radius: $sdx-border-radius;
+                    display: inline-block;
+                    margin-left: $sdx-gap-small;
+                    vertical-align: top;
+                    padding: 0 $sdxw-subject-card-task-padding;
+                    font-size: $sdx-help-font-size;
+                    color: $sdx-secondary-color--light1;
+                }
+            }
+            .right {
+                color: $sdxw-subject-card-info-color;
+                display: flex;
+                .customize-icon {
+                    display: inline-block;
+                    width: $sdx-border-radius;
+                    height: $sdx-border-radius;
+                    background: $sdxw-subject-card-info-color;
+                    border-radius: $sdx-border-radius;
+                    vertical-align: middle;
+                    margin: $sdx-help-font-size $sdx-help-font-size;
+                }
+                .creator {
+                    span {
+                        color: $sdx-secondary-color--light3;
+                    }
+                }
+            }
+        }
+        @include modifier('description') {
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            word-break: break-all;
+            margin-top: $sdx-h1-font-size;
+            color: $sdx-secondary-color--light3;
+        }
+    }
+
+    @include element('footer') {
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid $sdx-secondary-color--light6;
+        height: $sdxw-subject-card-footer-height;
+        line-height: $sdxw-subject-card-footer-height;
+        .sdxu-button {
+            padding: 0;
+            padding-left: $sdx-gap-large;
+            margin-left: 0;
+        }
+        .self {
+            .sdxu-button--primary.is-plain {
+                color: $sdxw-subject-card-btn-color;
+                .sdxu-button__main {
+                    font-size: $sdx-help-font-size;
+                }
+            }
+        }
+    }
+    
+    @include modifier('task') {
+        .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+        .infoStyle {
+            height: $sdx-gap-regular;
+            line-height: $sdx-gap-regular;
+            display: flex;
+            justify-content: space-between;
+            .left {
+                @extend .ellipsis;
+                height: $sdx-gap-regular;
+                .title {
+                    font-size: $sdx-h1-font-size;
+                    color: $sdxw-subject-card-info-color;
+                    &:hover {
+                        cursor: pointer;
+                        color: $sdx-primary-color;
+                    }
+                }
+            }
+        }
+        @include element('header') {
+            padding-bottom: 0;
+        }
+        @include element('content') {
+            @include modifier('top') {
+                padding-top: $sdxw-subject-card-task-padding;
+                @extend .infoStyle;
+            }
+            @include modifier('bottom') {
+                color: $sdxw-subject-card-info-color;
+                padding-top: $sdx-gap-small;
+                display: flex;
+                .creator {
+                    padding-right: $sdxw-subject-card-task-padding;
+                    span {
+                        color: $sdx-secondary-color--light3;
+                    }
+                }
+            }
+        }
+        @include element('taskdesc') {
+            @extend .ellipsis;
+            color: $sdx-secondary-color--light3;
+            padding: $sdx-gap-small 0 $sdx-gap-regular 0;
+        }
+    }
+}

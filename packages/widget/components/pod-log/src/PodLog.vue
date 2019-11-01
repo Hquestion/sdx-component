@@ -5,6 +5,7 @@
         :loading="loading"
         :content="logContent"
         @scroll="handleScroll"
+        :is-dark="isDark"
         ref="log"
     />
 </template>
@@ -53,6 +54,10 @@ export default {
             validator: value => {
                 return ['user', 'system'].includes(value);
             }
+        },
+        isDark: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -202,24 +207,10 @@ export default {
                 // 向后获取日志
                 this.getForwardLog();
             }
-        }
-    },
-    created() {
-        if (this.type === 'user') {
-            this.getTaskInfo().then(() => {
-                if (this.method === 'head') {
-                    this.getForwardLog();
-                } else {
-                    this.getCodeInfo();
-                    if (this.followScroll) {
-                        this.gotoBottom();
-                    }
-                    if (this.autoPull) {
-                        this.startAutoPull();
-                    }
-                }
-            });
-        } else {
+        },
+        getLogByMethod() {
+            this.start = 1;
+            this.end = 1;
             if (this.method === 'head') {
                 this.getForwardLog();
             } else {
@@ -233,6 +224,15 @@ export default {
             }
         }
     },
+    created() {
+        if (this.type === 'user') {
+            this.getTaskInfo().then(() => {
+                this.getLogByMethod();
+            });
+        } else {
+            this.getLogByMethod();
+        }
+    },
     beforeDestroy() {
         this.stopAutoPull();
     },
@@ -243,6 +243,12 @@ export default {
             } else {
                 this.stopAutoPull();
             }
+        },
+        podName() {
+            this.getLogByMethod();
+        },
+        method() {
+            this.getLogByMethod();
         }
     }
 };

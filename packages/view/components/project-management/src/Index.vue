@@ -4,10 +4,6 @@
 
 <script>
 export default {
-    name: 'SdxvProjectManagement',
-    data() {
-        return {
-        };
-    }
+    name: 'SdxvProjectManage'
 };
 </script>

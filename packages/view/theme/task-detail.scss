@@ -17,54 +17,23 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('info-container', $bem-namespace-view) {
-    display: flex;
-    flex-flow: row wrap;
-    margin: 0 $sdx-margin;
-    @include element('item') {
-        width: 50%;
-        min-height: 20px;
-        min-width: 350px;
+    padding: 1px 0; // 这里设置的上下padding为1px是为了限制子元素的margin超出范围
+
+    @include element('box') {
         display: flex;
-        padding: 0 $sdx-padding;
-        margin-top: 14px;
-        &:nth-child(1), &:nth-child(2) {
-            margin-top: 0;
-        }
-
-        @include modifier('label') {
-            flex: none;
-            width: 140px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-start;
-            word-break: break-all;
-        }
-
-        @include modifier('value') {
-            word-break: break-all;
-            flex: auto;
-            display: flex;
-            align-items: flex-start;
-            .sdxw-fold-label {
-                padding: 0;
-                text-align: left;
-                height: inherit;
-            }
-        }
-
-        @include state('multi-line') {
-            height: auto;
-        }
-
-        @include state('strip') {
-            height: 40px;
-            margin: 0;
-            align-items: center;
-        }
+        flex-flow: row wrap;
+        margin: -9px 0px; // 这里多设置的-1px是为了将父元素设置的padding为1px抵消
+    }
+    @include element('item') {
+        margin: 8px 0px;
     }
 
     @include state('background') {
         background-color: #F2F6FC;
+    }
+
+    & + .sdxv-info-container {
+        margin-top: 16px;
     }
 
     .sdxv-info-container__item.is-lang-en {
@@ -79,17 +48,97 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
 }
 
-@include block('log-list', $bem-namespace-view) {
+@include block('info-item', $bem-namespace-view) {
+    width: 50%;
+    min-height: 20px;
+    min-width: 350px;
     padding: 0 $sdx-padding;
+    font-family: PingFangSC-Regular;
+    font-size: 14px;
+    display: flex;
+    align-items: flex-start;
 
-    @include element('item') {
+    @include element('label') {
+        flex: none;
+        width: 140px;
+        height: 20px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        word-break: break-all;
+        color: #6B778C;
+    }
+
+    @include element('value') {
+        word-break: break-all;
+        flex: auto;
+        display: flex;
+        align-items: center;
+        color: #13264D;
+        min-height: 20px;
+        .sdxw-fold-label {
+            padding: 0;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    @include state('strip') {
+        div:nth-child(2) {
+            height: 40px;
+        }
+    }
+
+    @include state('multi-line') {
+        @include element('label') {
+            height: 40px;
+        }
+        @include element('value') {
+            height: auto;
+        }
+    }
+
+    @include state('whole-line') {
+        width: 100%;
+    }
+}
+
+@include block('log-view', $bem-namespace-view) {
+
+    @include element('content') {
+        padding: 0 $sdx-padding;
+    }
+
+    @include element('bar') {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        height: 52px;
-        margin-top: $sdx-margin;
-        padding: 0 20px;
-        background-color: rgba(#F2F6FC, 0.8);
+        margin: 24px 0;
+
+        @include modifier('select') {
+            span:first-child {
+                font-size: 14px;
+                color: #6B778C;
+            }
+            .el-select {
+                width: 348px;
+            }
+        }
+
+        @include modifier('method') {
+            border-radius: 2px;
+            .sdxu-tab-radio {
+                background-color: #D7DBE2;
+                border-color: #D7DBE2;
+                color: #13264D;
+
+                &.is-active {
+                    background-color: #13264D;
+                    border-color: #13264D;
+                    color: #fff;
+                }
+            }
+        }
     }
 }
 
@@ -110,62 +159,59 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('log-info', $bem-namespace-view) {
+    border-radius: 2px;
 
     @include element('switch') {
+        height: 64px;
         display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-right: 24px;
 
         @include modifier('item') {
             display: flex;
             align-items: center;
-            margin-right: 40px;
+            margin-right: 32px;
             &:last-child {
                 margin-right: 0;
+            }
+        }
+    }
+
+    @include state('dark') {
+        background-color: #6B778C;
+        @include element('switch') {
+            @include modifier('item') {
+                color: #fff;
+                .el-switch__core {
+                    border-color: #fff !important;
+                }
             }
         }
     }
 }
 
 @include block('data-info', $bem-namespace-view) {
-    padding: 0 $sdx-padding;
 
     @include element('container') {
-        margin-top: 40px;
-        &:first-child {
-            margin-top: 0;
-        }
+        margin:(-8px) (-$sdx-margin);
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
 
-        @include modifier('title') {
-            display: block;
-            font-size:14px;
-            color:rgba(48,49,51,1);
-            line-height:20px;
-            margin-bottom: 20px;
-            &:before {
-                content: ' ';
-                display: inline-block;
-                width: 3px;
-                height: 14px;
-                background: #4781F8;
-                vertical-align: middle;
-                margin-right: 12px;
-            }
-        }
-
-        @include modifier('content') {
-            margin: -$sdx-margin / 2;
-            display: flex;
-            flex-wrap: wrap;
-            align-content: flex-start;
+        @include modifier('item') {
+            margin: 8px $sdx-margin;
         }
     }
 }
 
 @include block('data-datasource', $bem-namespace-view) {
-    margin: $sdx-margin / 2; // 这里设置margin: 10px;是为了子元素自动排版间隔相同距离，需要外框设置margin: -10px;
     width: 280px;
+    border-radius: 2px;
+    border: 1px solid #D8DEEA;
 
     @include element('name') {
-        background-color: #F2F6FC;
+        background: #EDEFF2;
         text-align: center;
         height: 40px;
         line-height: 40px;
@@ -177,12 +223,15 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         background-color: rgba(#F2F6FC, 0.4);
 
         @include modifier('item') {
+            &:last-child {
+                margin-top: 8px;
+            }
             span:first-child {
-                font-size: 13px;
-                color: #606266;
+                font-size: 14px;
+                color: #6B778C;
             }
             span:last-child {
-                color: #262B3E;
+                color: #13264D;
                 margin-left: $sdx-margin;
             }
         }
@@ -190,34 +239,26 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('data-dataset', $bem-namespace-view) {
-    margin: $sdx-margin / 2;
-    background-color:  #F2F6FC;
+    background-color: #EDEFF2;
     width: 280px;
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: $sdx-primary-color;
-}
-
-@include block('has-nothing', $bem-namespace-view) {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    @include element('icon') {
-        width: 12em;
-        height: 12em;
-        vertical-align: -0.15em;
-        fill: currentColor;
-        overflow: hidden;
-    }
+    color: #1144AB;
 }
 
 @include block('monitor-info', $bem-namespace-view) {
-    padding: 0 $sdx-padding;
+
+    @include element('content') {
+        padding: 0 $sdx-padding;
+    }
 
     @include element('select') {
+        span:first-child {
+            font-size: 14px;
+            color: #6B778C;
+        }
         .el-select {
             width: 348px;
         }
@@ -231,8 +272,112 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
         @include modifier('item') {
             flex-grow: 1;
-            height: 460px;
+            height: 400px;
             width: 35%;
         }
+    }
+}
+
+@include block('task-detail-view', $bem-namespace-view) {
+    @include element('name') {
+        font-family: PingFangSC-Medium;
+        font-size: 24px;
+        color: #13264D;
+        letter-spacing: 0;
+    }
+    @include element('info') {
+        margin: 16px 0 24px;
+    }
+}
+
+@include block('task-info', $bem-namespace-view) {
+    background: #FFF;
+    box-shadow: 0 2px 4px 0 #C2CDDE;
+    border-radius: 2px;
+    padding: 32px 24px 0 24px;
+
+    @include element('first') {
+        padding-bottom: 24px;
+        display: flex;
+        border-bottom: 1px solid #D8DEEA;
+
+        @include modifier('icon') {
+            margin-right: 32px;
+        }
+
+        @include modifier('desc') {
+            div:nth-child(1) {
+                height: 28px;
+                font-family: PingFangSC-Medium;
+                font-size: 20px;
+                color: #13264D;
+                letter-spacing: 0;
+            }
+            div:nth-child(2) {
+                font-family: PingFangSC-Regular;
+                font-size: 14px;
+                color: #6B778C;
+                text-align: justify;
+                line-height: 22px;
+            }
+        }
+    }
+
+    @include element('icon') {
+        width: 64px;
+        height: 64px;
+        border-radius: 32px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .sdx-icon {
+            color: #fff;
+            font-size: 32px;
+        }
+    }
+
+    @include element('second') {
+        height: 62px;
+        margin-left: 104px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    @include element('label') {
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #6B778C;
+    }
+
+    @include element('value') {
+        ont-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #13264D;
+    }
+}
+
+@include block('task-detail', $bem-namespace-view) {
+    background: #FFF;
+    box-shadow: 0 2px 4px 0 #C2CDDE;
+    border-radius: 2px;
+    padding: 16px 24px 24px 24px;
+
+    .el-tabs__item {
+        font-family: PingFangSC-Regular;
+        font-size: 18px;
+        color: #6B778C;
+
+        &.is-active {
+            font-family: PingFangSC-Medium;
+            color: #1144AB;
+        }
+    }
+    .el-tabs__nav-wrap::after {
+        background-color: #D8DEEA; 
+    }
+    .el-tabs__active-bar {
+        background-color: #1144AB;
     }
 }

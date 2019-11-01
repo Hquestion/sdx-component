@@ -80,7 +80,7 @@ export default {
             const editor = this.app.docManager.$refs.editor.find(item => item.file.path === namespace);
             const operateFn = () => {
                 nb.insertCell('code', new SkyCodeCellModel({
-                    source: this.snippets[index].code
+                    source: this.snippets[index].code.join('\n')
                 }));
             };
             function revokeFn() {

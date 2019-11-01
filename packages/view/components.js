@@ -15,5 +15,7 @@ module.exports = {
     'task-management': './components/task-management/index.js',
     'file': './components/file/index.js',
     'skyflow': './components/skyflow/index.js',
-    'sky-ide': './components/sky-ide/index.js'
+    'sky-ide': './components/sky-ide/index.js',
+    'project-management-next': './components/project-management-next/index.js',
+    'dev-platform': './components/dev-platform/index.js'
 };

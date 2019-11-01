@@ -72,7 +72,6 @@ import {extend} from './utils/utils';
 import SkyIdeTitle from './widgets/title/SkyIdeTitle';
 import ResourceUsage from './widgets/resource/ResourceUsage';
 import {Splitpanes, Pane} from './layout/splitpanes/index';
-import 'splitpanes/dist/splitpanes.css';
 
 export default {
     name: 'Main',

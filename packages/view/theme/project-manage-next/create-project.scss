@@ -1,0 +1,38 @@
+@include block('create-project', $bem-namespace-view) {
+    @include element('wrap') {
+        height: 50vh;
+        .el-scrollbar__wrap {
+            .el-scrollbar__view {
+                margin: 0 10px;
+            }
+        }
+    }
+    @include element('filter') {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 0px 20px 0;
+        height: 36px;
+        line-height: 36px;
+        .sdxu-input.sdxu-input--small {
+            width: 220px;
+        }
+        .sdxw-search-layout {
+            height: 36px;
+            line-height: 36px;
+            .sdxw-search-item {
+                margin-right: 24px;
+                width: 220px;
+            }
+        }
+    }
+    .template-list {
+        display: flex;
+        justify-content: space-around;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .sdxw-create-project-card {
+            margin: 12px 0;
+        }
+    }
+}

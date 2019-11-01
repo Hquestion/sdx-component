@@ -1,7 +1,6 @@
 import TaskView from './src/index';
-import TaskManagement from './src/TaskManagement';
+import TaskManagement from './src/TaskManagementView';
 import TaskDetailView from './src/task-detail/TaskDetailView';
-import TaskLogInfo from './src/task-detail/common/LogInfo';
 import { t } from '@sdx/utils/src/locale';
 
 TaskManagement.install = vue => {
@@ -31,15 +30,6 @@ const routeCfg = [{
             meta: {
                 breadcrumb: t('view.task.TaskDetail')
             }
-        },
-        {
-            path: 'sdxv-task-log/:method/:podName',
-            name: 'SdxvTaskManagementTaskLog',
-            props: true,
-            component: TaskLogInfo,
-            meta: {
-                breadcrumb: t('view.image.LogDetail')
-            }
         }
     ]
 }];
@@ -53,4 +43,4 @@ const viewRouter = {
     register
 };
 
-export default { TaskManagement, viewRouter, TaskDetailView, TaskLogInfo };
+export default { TaskManagement, viewRouter, TaskDetailView };

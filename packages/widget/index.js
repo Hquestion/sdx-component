@@ -1,6 +1,7 @@
 // 这里会暴露所有组件
 import Breadcrumb from './components/breadcrumb';
 import FoldLabel from './components/fold-label';
+import ExpandLabel from './components/expand-label';
 import ChangePassword from './components/change-password';
 import UserinfoDialog from './components/userinfo-dialog';
 import ProjectCard from './components/projectcard';
@@ -11,6 +12,7 @@ import UserPicker from './components/user-picker';
 import ShareSetting from './components/share-setting';
 import PodLog from './components/pod-log';
 import TaskResourceList from './components/task-list';
+import GeneralTaskList from './components/general-task-list';
 import TaskStartDialog from './components/task-start-dialog';
 import TaskStopDialog from './components/task-stop-dialog';
 import CodeEditor from './components/code-editor';
@@ -19,11 +21,15 @@ import TaskRunningLimit from './components/task-running-limit';
 import Auth from './components/auth';
 import ShareForm from './components/share-form';
 import LangHandle from './components/lang-handle';
+import SubjectCard from './components/subject-card';
+import CreateProjectCard from './components/create-project-card';
+import CreateTaskCard from './components/create-task-card';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
     Breadcrumb,
     FoldLabel,
+    ExpandLabel,
     ProjectCard,
     ChangePassword,
     UserinfoDialog,
@@ -33,6 +39,7 @@ const SdxWidget = {
     UserPicker,
     ShareSetting,
     TaskResourceList,
+    GeneralTaskList,
     PodLog,
     TaskStartDialog,
     TaskStopDialog,
@@ -41,12 +48,16 @@ const SdxWidget = {
     TaskRunningLimit,
     Auth,
     ShareForm,
-    LangHandle
+    LangHandle,
+    SubjectCard,
+    CreateProjectCard,
+    CreateTaskCard
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
     Breadcrumb.install(vue);
     FoldLabel.install(vue);
+    ExpandLabel.install(vue);
     ChangePassword.install(vue);
     UserinfoDialog.install(vue);
     ProjectCard.install(vue);
@@ -57,11 +68,15 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     ShareSetting.install(vue);
     PodLog.install(vue);
     TaskResourceList.install(vue);
+    GeneralTaskList.install(vue);
     TaskStartDialog.install(vue);
     TaskStopDialog.install(vue);
     CodeEditor.install(vue);
     ResourceConfig.install(vue);
     TaskRunningLimit.install(vue);
+    SubjectCard.install(vue);
+    CreateProjectCard.install(vue);
+    CreateTaskCard.install(vue);
     vue.use(Auth);
     vue.use(ShareForm);
     vue.use(LangHandle);

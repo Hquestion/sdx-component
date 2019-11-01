@@ -1,0 +1,47 @@
+@include block('create-project-card',  $bem-namespace-widget) { 
+    box-shadow: 0 0 14px 0 rgba(0,0,0,0.10);
+    border-radius: $sdx-border-radius;
+    border: 1px solid $sdx-secondary-color--light6;
+    width: $sdxw-create-project-card-width;
+    height: $sdxw-create-project-card-height;
+    padding:$sdx-h1-font-size $sdx-gap-regular $sdx-gap-small $sdx-gap-regular;
+    box-sizing: border-box;
+    @include element('header') {
+        margin-bottom: $sdx-gap-small;
+        height: $sdx-form-element-height-small;
+        line-height: $sdx-form-element-height-small;
+        display: flex;
+        svg {
+            width: $sdx-form-element-height-small;
+            height: $sdx-form-element-height-small;
+        }
+        span {
+            font-size: $sdx-h2-font-size;
+            color: $sdx-secondary-color;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            padding-left: 6px;
+        }
+    }
+    @include element('info') {
+        height: $sdx-gap-regular;
+        line-height: $sdx-gap-regular;
+        display: flex;
+        span:first-child {
+            color: $sdx-secondary-color--light3;
+            min-width: 56px;
+        }
+        span:last-child {
+            color: $sdx-secondary-color;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+    }
+    @include element('btn') {
+        margin-top: $sdx-gap-small;
+        height: $sdx-form-element-height-regular;
+        line-height: $sdx-form-element-height-regular;
+    }
+}

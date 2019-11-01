@@ -2,6 +2,7 @@
 @import "resource-manage";
 @import "privilege";
 @import "./project-management/index.scss";
+@import "./project-manage-next/index.scss";
 @import "./image-management/index.scss";
 @import "./model-manage/index.scss";
 @import "./skyflow/index.scss";
@@ -12,3 +13,5 @@
 @import "task-detail";
 @import "resource-statistics";
 @import "component-state";
+@import "dev-platform";
+@import "task-management";

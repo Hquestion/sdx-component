@@ -283,6 +283,12 @@ export default {
                 Please_enter_the_number_of_calculated_node_instances: '请输入计算节点实例个数',
                 Please_enter_the_number_of_parameter_server_instances: '请输入参数服务器实例个数',
                 Need_to_configure_master_CPU_memory: '需要配置主节点CPU/内存'
+            },
+            tipCard: {
+                TotalExecution: '执行总数',
+                Queuing: '排队中',
+                SuccessfulOperation: '运行成功',
+                OperationFailure: '运行失败'
             }
         },
         monitor: {

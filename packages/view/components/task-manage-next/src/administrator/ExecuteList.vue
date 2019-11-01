@@ -67,47 +67,81 @@
             </SdxwSearchItem>
         </SdxwSearchLayout>
         <div class="table">
-            <sdxu-table>
+            <sdxu-table
+                :data="table"
+            >
                 <el-table-column
-                    :data="table"
-                    :label="'任务名称'"
+                 
+                    label="执行ID"
                 />
                 <el-table-column
-               
-                    :label="'类型'"
+                    prop="name"
+                    :label="t('view.task.taskName')"
+                />
+                <el-table-column
+                    prop="type"
+                    :label="t('view.task.taskType')"
                 /> 
                 <el-table-column
-               
-                    :label="'配置GPU'"
-                /> 
-                <el-table-column
-               
-                    :label="'配置内存'"
-                />
-                <el-table-column
-               
-                    :label="'配置GPU'"
-                />
-                <el-table-column
-               
-                    :label="'创建人'"
+                    prop="owner_id"
+                    :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
                
                     :label="'所属组'"
                 />
                 <el-table-column
-               
-                    :label="'创建时间'"
+                    prop="execute_type"
+                    :label="t('view.task.executeType')"
+                /> 
+                <el-table-column
+                    prop="cron_start_time"
+                    :label="t('view.task.executeStartTime')"
+                    sortable
+                >
+                    <template
+                        slot-scope="scope"
+                    >
+                        {{ dateFormatter(scope.row.created_at) }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="cron_end_time"
+                    :label="t('view.task.executeStopTime')"
+                    sortable
+                >
+                    <template
+                        slot-scope="scope"
+                    >
+                        {{ dateFormatter(scope.row.created_at) }}
+                    </template>
+                </el-table-column>
+                <el-table-column 
+                    sortable
+                    prop="repeat_times"
+                    :label="t('view.task.executeTime')"
                 />
                 <el-table-column
                     :label="t('sdxCommon.Operation')"
+                    min-width="172px"
                 >
                     <template #default="{ row }">
-                        <sdxu-icon-button
-                            icon="sdx-icon sdx-icon-delete"
-                            :title="t('sdxCommon.Delete')"
-                        />
+                        <SdxuIconButtonGroup>
+                            <SdxuButton
+                                type="primary"
+                                size="regular"
+                                :plain="true"
+                            >
+                                {{ '取消执行' }} 
+                            </SdxuButton>
+                            <SdxuButton
+                                type="primary"
+                                size="regular"
+                                :plain="true"
+                            >
+                                {{ '详情' }}
+                            </SdxuButton>
+                        </SdxuIconButtonGroup>
                     </template>
                 </el-table-column>
             </sdxu-table>
@@ -120,6 +154,7 @@ import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
+import {dateFormatter} from '@sdx/utils/src/helper/transform';
 export default {
     name: 'SdxvExecutelist',
     data() {
@@ -127,40 +162,41 @@ export default {
             infoList: [
                 {
                     total: 123,
-                    title: '执行总数',
+                    title: this.t('view.task.tipCard.TotalExecution'),
                     manual: 63,
                     dispatch: 60,
                     class: 'execute'
                 },
                 {
                     total: 123,
-                    title: '排队中',
+                    title:  this.t('view.task.tipCard.Queuing'),
                     manual: 63,
                     dispatch: 60,
                     class: 'queuing'
                 },
                 {
                     total: 123,
-                    title: '运行中',
+                    title: this.t('view.task.state.RUNNING'),
                     manual: 63,
                     dispatch: 60,
                     class: 'running'
                 },
                 {
                     total: 123,
-                    title: '运行成功',
+                    title:  this.t('view.task.tipCard.SuccessfulOperation'),
                     manual: 63,
                     dispatch: 60,
                     class: 'success'
                 },
                 {
                     total: 123,
-                    title: '运行失败',
+                    title:  this.t('view.task.tipCard.OperationFailure'),
                     manual: 63,
                     dispatch: 60,
                     class: 'fail'
                 },
-            ]
+            ],
+            table: []
         };
     },
     mixins: [locale],
@@ -172,6 +208,151 @@ export default {
         [Col.name]: Col,
         [Progress.name]: Progress
     },
+    methods: {
+        dateFormatter,
+    },
+    created() {
+        this.table = [
+            {
+                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+                'created_at': '2019-10-17T08:49:14.195000Z',
+                'updated_at': '2019-10-17T08:49:14.194000Z',
+                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+                'name': 'dylan-jupyter',
+                'description': null,
+                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
+                'auto_image_id': null,
+                'type': 'JUPYTER',
+                'quota': {
+                    'cpu': 2,
+                    'gpu': 1,
+                    'memory': 4294967296,
+                    'gpu_model': ''
+                },
+                'resource_config': {
+                    'DEPLOY': {
+                        'requests': {
+                            'cpu': 2,
+                            'memory': 4294967296,
+                            'nvidia.com/gpu': 0
+                        },
+                        'labels': {
+                            'gpu.model': ''
+                        },
+                        'instance': 1
+                    }
+                },
+                'execute_type': 'MANUAL',
+                'delay': 0,
+                'trigger': null,
+                'priority': 2,
+                'crontab': null,
+                'cron_start_time': null,
+                'cron_end_time': null,
+                'repeat_times': null,
+                'concurrent_type': 'SKIP',
+                'error_handling': 'CANCEL',
+                'notifications': {},
+                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
+                'state': 'CREATED',
+                'datasources': [],
+                'datasets': [],
+                'home_path': '/usr/dylan'
+            },
+            {
+                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+                'created_at': '2019-10-17T08:49:14.195000Z',
+                'updated_at': '2019-10-17T08:49:14.194000Z',
+                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+                'name': 'dylan-jupyter',
+                'description': null,
+                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
+                'auto_image_id': null,
+                'type': 'JUPYTER',
+                'quota': {
+                    'cpu': 2,
+                    'gpu': 1,
+                    'memory': 4294967296,
+                    'gpu_model': ''
+                },
+                'resource_config': {
+                    'DEPLOY': {
+                        'requests': {
+                            'cpu': 2,
+                            'memory': 4294967296,
+                            'nvidia.com/gpu': 0
+                        },
+                        'labels': {
+                            'gpu.model': ''
+                        },
+                        'instance': 1
+                    }
+                },
+                'execute_type': 'MANUAL',
+                'delay': 0,
+                'trigger': null,
+                'priority': 2,
+                'crontab': null,
+                'cron_start_time': null,
+                'cron_end_time': null,
+                'repeat_times': null,
+                'concurrent_type': 'SKIP',
+                'error_handling': 'CANCEL',
+                'notifications': {},
+                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
+                'state': 'CREATED',
+                'datasources': [],
+                'datasets': [],
+                'home_path': '/usr/dylan'
+            },
+            {
+                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+                'created_at': '2019-10-17T08:49:14.195000Z',
+                'updated_at': '2019-10-17T08:49:14.194000Z',
+                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+                'name': 'dylan-jupyter',
+                'description': null,
+                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
+                'auto_image_id': null,
+                'type': 'JUPYTER',
+                'quota': {
+                    'cpu': 2,
+                    'gpu': 1,
+                    'memory': 4294967296,
+                    'gpu_model': ''
+                },
+                'resource_config': {
+                    'DEPLOY': {
+                        'requests': {
+                            'cpu': 2,
+                            'memory': 4294967296,
+                            'nvidia.com/gpu': 0
+                        },
+                        'labels': {
+                            'gpu.model': ''
+                        },
+                        'instance': 1
+                    }
+                },
+                'execute_type': 'MANUAL',
+                'delay': 0,
+                'trigger': null,
+                'priority': 2,
+                'crontab': null,
+                'cron_start_time': null,
+                'cron_end_time': null,
+                'repeat_times': null,
+                'concurrent_type': 'SKIP',
+                'error_handling': 'CANCEL',
+                'notifications': {},
+                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
+                'state': 'CREATED',
+                'datasources': [],
+                'datasets': [],
+                'home_path': '/usr/dylan'
+            }
+        ];
+    }
 };
 </script>
 
@@ -246,6 +427,9 @@ export default {
         padding: 24px;
         height: calc(100vh - 554px);
         margin-top: 24px;
+        .sdxu-button {
+            padding: 0;
+        }
     }
 }
 </style>

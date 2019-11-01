@@ -32,7 +32,7 @@ export default {
     data() {
         return {
             searchName: '',
-            taskType: 'task'
+            taskType: 'execute'
         };
     },
     created() {

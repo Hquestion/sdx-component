@@ -283,8 +283,13 @@ export default {
                 Please_enter_the_number_of_calculated_node_instances: 'Please enter the number of calculated node instances',
                 Please_enter_the_number_of_parameter_server_instances: 'Please enter the number of parameter server instances',
                 Need_to_configure_master_CPU_memory: 'Master CPU/memory needs to be configured'
+            },
+            tipCard: {
+                TotalExecution: 'Total execution',
+                Queuing: 'Queuing',
+                SuccessfulOperation: 'Successful operation',
+                OperationFailure: 'Operation failure'
             }
-
         },
         monitor: {
             resourceStatistic: {

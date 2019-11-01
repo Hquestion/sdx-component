@@ -81,19 +81,48 @@
                 prop="imageId"
                 :label="`${t('view.task.RuntimeEnvironment')}:`"
             >
-                <el-select
-                    v-model="params.imageId"
-                    :searchable="true"
-                    size="small"
-                    :placeholder="t('view.task.form.Please_select_the_operating_environment')"
-                >
-                    <el-option
-                        v-for="item in imageOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
+                <div style="display:flex;">
+                    <el-select
+                        v-model="params.imageId"
+                        :searchable="true"
+                        size="small"
+                        @change="getImagePackages"
+                        :placeholder="t('view.task.form.Please_select_the_operating_environment')"
+                        style="width:530px;margin-right:10px;"
+                    >
+                        <el-option
+                            v-for="item in imageOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        />
+                    </el-select>
+                    <SdxuDropdownTip
+                        title="镜像中包含版本信息"
+                        width="260px"
+                        :disabled="!packagesList.length"
+                    >
+                        <SdxuIconButton
+                            slot="ref"
+                            size="large"
+                            icon="sdx-icon sdx-icon-warning"
+                        />
+                        <div
+                            style="height: 300px"
+                        >
+                            <SdxuScroll>
+                                <div
+                                    v-for="(item, index) in packagesList"
+                                    :key="index"
+                                    class="package-info__item"
+                                >
+                                    <div>{{ item.name }}</div>
+                                    <div>{{ item.version }}</div>
+                                </div>
+                            </SdxuScroll>
+                        </div>
+                    </SdxuDropdownTip>
+                </div>
             </el-form-item>
             <el-form-item
                 prop="resourceConfig"
@@ -175,6 +204,9 @@ import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
 import ExpandLabel from '@sdx/widget/components/expand-label';
+import DropdownTip from '@sdx/ui/components/dropdown-tip';
+import IconButton from '@sdx/ui/components/icon-button';
+import Scroll from '@sdx/ui/components/scroll';
 export default {
     name: 'JupyterForm',
     mixins: [locale, projectDetailMixin],
@@ -185,6 +217,9 @@ export default {
         [FormItem.name]: FormItem,
         [ExpandLabel.name]: ExpandLabel,
         [Select.name]: Select,
+        [DropdownTip.name]: DropdownTip,
+        [IconButton.name]: IconButton,
+        [Scroll.name]: Scroll,
         SdxuInput,
         SdxwResourceConfig,
         DataSourceSelect
@@ -373,3 +408,14 @@ export default {
     }
 };
 </script>
+
+<style lang="scss">
+.package-info__item {
+    height: 30px;
+    padding: 10px;
+    border-bottom: 1px solid #D8DEEA;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+</style>

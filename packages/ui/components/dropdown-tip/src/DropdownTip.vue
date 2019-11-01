@@ -2,22 +2,28 @@
     <div class="sdxu-dropdown-tip">
         <el-popover
             placement="bottom"
-            :width="width"
             trigger="hover"
             :visible-arrow="false"
             :popper-options="popperOption"
+            :disabled="disabled"
             popper-class="sdxu-dropdown-tip__popper"
         >
             <slot
                 name="ref"
                 slot="reference"
             />
-            <div class="sdxu-dropdown-tip__title" v-show="$slots.title || title">
+            <div
+                class="sdxu-dropdown-tip__title"
+                v-show="$slots.title || title"
+            >
                 <slot name="title">
                     {{ title }}
                 </slot>
             </div>
-            <div class="sdxu-dropdown-tip__content">
+            <div
+                class="sdxu-dropdown-tip__content"
+                :style="{width: width}"
+            >
                 <slot />
             </div>
         </el-popover>
@@ -35,6 +41,10 @@ export default {
         title: {
             type: String,
             default: ''
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

@@ -1,10 +1,12 @@
 import { getProjectDetail, getProjectList } from '@sdx/utils/src/api/project';
+import { getPackagesByUuid } from '@sdx/utils/src/api/image';
 export default {
     data() {
         return {
             showCreateProject: false,
             projectOptions: [],
-            projectCreated: ''
+            projectCreated: '',
+            packagesList: []
         };
     },
     watch: {
@@ -42,7 +44,15 @@ export default {
         createProjectClose(args) {
             this.projectCreated = args[1] || '';
             this.showCreateProject = false;
+        },
+        getImagePackages(uuid) {
+            this.packagesList = [];
+            getPackagesByUuid(uuid, {
+                start: 1,
+                count: -1
+            }).then(res => {
+                this.packagesList = res.data || [];
+            });
         }
-
     }
 };

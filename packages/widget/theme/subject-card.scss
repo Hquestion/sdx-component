@@ -34,140 +34,119 @@
             color: $sdx-secondary-color--light3;
         }
     }
-
     @include element('content') {
         width: calc(100% - 82px);
         float: right;
         font-size: $sdx-content-font-size;
-        @include modifier('info') {
-            height: $sdx-gap-regular;
-            line-height: $sdx-gap-regular;
-            display: flex;
-            justify-content: space-between;
-            padding-top: $sdxw-subject-card-task-padding;
-            .left {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                word-break: break-all;
-                height: $sdx-gap-regular;
-                max-width: calc(100% - 340px);
-                .title {
-                    font-size: $sdx-h1-font-size;
-                    color: $sdxw-subject-card-info-color;
-                    &:hover {
-                        cursor: pointer;
-                        color: $sdx-primary-color;
-                    }
-                }
-                .task {
-                    background: $sdx-disable-color;
-                    border-radius: $sdx-border-radius;
-                    display: inline-block;
-                    margin-left: $sdx-gap-small;
-                    vertical-align: top;
-                    padding: 0 $sdxw-subject-card-task-padding;
-                    font-size: $sdx-help-font-size;
-                    color: $sdx-secondary-color--light1;
-                }
-            }
-            .right {
-                color: $sdxw-subject-card-info-color;
-                display: flex;
-                .customize-icon {
-                    display: inline-block;
-                    width: $sdx-border-radius;
-                    height: $sdx-border-radius;
-                    background: $sdxw-subject-card-info-color;
-                    border-radius: $sdx-border-radius;
-                    vertical-align: middle;
-                    margin: $sdx-help-font-size $sdx-help-font-size;
-                }
-                .creator {
-                    span {
-                        color: $sdx-secondary-color--light3;
-                    }
-                }
-            }
-        }
-        @include modifier('description') {
-            overflow:hidden;
-            text-overflow:ellipsis;
-            white-space:nowrap;
-            word-break: break-all;
-            margin-top: $sdx-h1-font-size;
-            color: $sdx-secondary-color--light3;
-        }
     }
-
     @include element('footer') {
         display: flex;
         justify-content: space-between;
         border-top: 1px solid $sdx-secondary-color--light6;
         height: $sdxw-subject-card-footer-height;
         line-height: $sdxw-subject-card-footer-height;
-        .sdxu-button {
-            padding: 0;
-            padding-left: $sdx-gap-large;
-            margin-left: 0;
-        }
-        .self {
-            .sdxu-button--primary.is-plain {
-                color: $sdxw-subject-card-btn-color;
-                .sdxu-button__main {
-                    font-size: $sdx-help-font-size;
-                }
-            }
-        }
     }
-    
-    @include modifier('task') {
-        .ellipsis {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            word-break: break-all;
-        }
-        .infoStyle {
-            height: $sdx-gap-regular;
-            line-height: $sdx-gap-regular;
-            display: flex;
-            justify-content: space-between;
-            .left {
-                @extend .ellipsis;
+
+
+    @include modifier('large') {
+        @include element('content') {
+            @include modifier('info') {
                 height: $sdx-gap-regular;
-                .title {
-                    font-size: $sdx-h1-font-size;
+                line-height: $sdx-gap-regular;
+                display: flex;
+                justify-content: space-between;
+                padding-top: $sdxw-subject-card-task-padding;
+                & > div:first-child {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    word-break: break-all;
+                    height: $sdx-gap-regular;
+                    max-width: calc(100% - 340px);
+                    & > div:first-child {
+                        font-size: $sdx-h1-font-size;
+                        color: $sdxw-subject-card-info-color;
+                        &:hover {
+                            cursor: pointer;
+                            color: $sdx-primary-color;
+                        }
+                    }
+                    @include element('taskCount') {
+                        background: $sdx-disable-color;
+                        border-radius: $sdx-border-radius;
+                        display: inline-block;
+                        margin-left: $sdx-gap-small;
+                        vertical-align: top;
+                        padding: 0 $sdxw-subject-card-task-padding;
+                        font-size: $sdx-help-font-size;
+                        color: $sdx-secondary-color--light1;
+                    }
+                }
+                & > div:last-child {
                     color: $sdxw-subject-card-info-color;
-                    &:hover {
-                        cursor: pointer;
-                        color: $sdx-primary-color;
+                    display: flex;
+                    i {
+                        display: inline-block;
+                        width: $sdx-border-radius;
+                        height: $sdx-border-radius;
+                        background: $sdxw-subject-card-info-color;
+                        border-radius: $sdx-border-radius;
+                        vertical-align: middle;
+                        margin: $sdx-help-font-size $sdx-help-font-size;
+                    }
+                    & > div:first-child {
+                        span {
+                            color: $sdx-secondary-color--light3;
+                        }
                     }
                 }
             }
-        }
-        @include element('header') {
-            padding-bottom: 0;
-        }
-        @include element('content') {
-            @include modifier('top') {
-                padding-top: $sdxw-subject-card-task-padding;
-                @extend .infoStyle;
+            @include modifier('description') {
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+                word-break: break-all;
+                margin-top: $sdx-h1-font-size;
+                color: $sdx-secondary-color--light3;
             }
-            @include modifier('bottom') {
-                color: $sdxw-subject-card-info-color;
-                padding-top: $sdx-gap-small;
-                display: flex;
-                .creator {
-                    padding-right: $sdxw-subject-card-task-padding;
-                    span {
-                        color: $sdx-secondary-color--light3;
+        }
+    }
+
+    @include modifier('small') {
+        @include element('content') {
+            @include modifier('info') {
+                & > div:first-child {
+                    height: $sdx-gap-regular;
+                    line-height: $sdx-gap-regular;
+                    display: flex;
+                    justify-content: space-between;
+                    padding-top: $sdxw-subject-card-task-padding;
+                    & > div:first-child {
+                        font-size: $sdx-h1-font-size;
+                        color: $sdxw-subject-card-info-color;
+                        &:hover {
+                            cursor: pointer;
+                            color: $sdx-primary-color;
+                        }
+                    }
+                }
+                & > div:last-child {
+                    display: flex;
+                    color: $sdxw-subject-card-info-color;
+                    display: flex;
+                    & > div:first-child {
+                        span {
+                            color: $sdx-secondary-color--light3;
+                        }
                     }
                 }
             }
         }
         @include element('taskdesc') {
-            @extend .ellipsis;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;;
             color: $sdx-secondary-color--light3;
             padding: $sdx-gap-small 0 $sdx-gap-regular 0;
         }

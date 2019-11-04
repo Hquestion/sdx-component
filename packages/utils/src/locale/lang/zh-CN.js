@@ -324,7 +324,11 @@ export default {
                 TotalExecution: '执行总数',
                 Queuing: '排队中',
                 SuccessfulOperation: '运行成功',
-                OperationFailure: '运行失败'
+                OperationFailure: '运行失败',
+                Manual: '手动',
+                Dispatch: '调度',
+                SubordinateGroup: '所属组',
+                Type: '类型'
             }
         },
         monitor: {

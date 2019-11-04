@@ -14,14 +14,14 @@
                         {{ item.total }}
                     </div>
                     <div class="progress">
-                        <span>手动</span>
+                        <span>{{ t('view.task.tipCard.Manual') }}</span>
                         <el-progress
                             :stroke-width="8"
                             :percentage="50"
                             color="#1144AB"
                             :show-text="false"
                         />
-                        <span>调度</span>
+                        <span>{{ t('view.task.tipCard.Dispatch') }}</span>
                     </div>
                 </div>
             </div>

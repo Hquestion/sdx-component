@@ -82,6 +82,7 @@
                     v-for="(val, index) in projectList"
                     :key="index"
                     :meta="val.meta"
+                    size="large"
                     @operate="handleOperate"
                 />
             </sdxw-subject-card-list>
@@ -254,7 +255,6 @@ export default {
                         tempalteWriteAuth: tempalteWriteAuth,
                         showEdit: isOwn && tempalteWriteAuth,
                         showRemove: isOwn && tempalteWriteAuth,
-                        type: 'project',
                         icon: icon,
                         iconName:iconName, 
                         footer: isOwn && tempalteWriteAuth,

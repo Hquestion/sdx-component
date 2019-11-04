@@ -2,27 +2,27 @@
     <div class="sdxv-task-manage-tasklist">
         <SdxwSearchLayout ref="searchLayout">
             <SdxwSearchItem :label="`${t('view.task.taskName')}：`">
-                <el-select
+                <SdxuInput
+                    
                     size="large"
-                >
-                    <el-option />
-                </el-select>
+                    type="search"
+                />
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('sdxCommon.Creator')}：`">
+                <SdxuInput
+                   
+                    size="large"
+                    type="search"
+                />
+            </SdxwSearchItem>
+            <SdxwSearchItem :label="`${t('view.task.tipCard.SubordinateGroup')}：`">
                 <el-select
                     size="large"
                 >
                     <el-option />
                 </el-select>
             </SdxwSearchItem>
-            <SdxwSearchItem label="所属组：">
-                <el-select
-                    size="large"
-                >
-                    <el-option />
-                </el-select>
-            </SdxwSearchItem>
-            <SdxwSearchItem label="类型：">
+            <SdxwSearchItem :label="`${t('view.task.tipCard.Type')}：`">
                 <el-select
                     size="large"
                 >

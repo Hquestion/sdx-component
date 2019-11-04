@@ -325,7 +325,11 @@ export default {
                 TotalExecution: 'Total execution',
                 Queuing: 'Queuing',
                 SuccessfulOperation: 'Successful operation',
-                OperationFailure: 'Operation failure'
+                OperationFailure: 'Operation failure',
+                Manual: 'Manual',
+                Dispatch: 'Dispatch',
+                SubordinateGroup: 'Subordinate group',
+                Type: 'Type'
             }
         },
         monitor: {

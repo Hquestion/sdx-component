@@ -15,7 +15,7 @@
                         :meta="item.meta"
                         class="sdxw-general-task-list__container--element"
                     >
-                        <template #toUrl>
+                        <template #footerLeft>
                             <sdxu-button
                                 :plain="true"
                                 v-if="item.showOpenIde"
@@ -41,7 +41,7 @@
                                 {{ t('view.task.ShowRunningRecord') }}
                             </sdxu-button>
                         </template>
-                        <template #operations>
+                        <template #footerRight>
                             <sdxu-button
                                 v-for="(el, i) in getOperationList(item, false, true)"
                                 :key="i"
@@ -179,7 +179,6 @@ export default {
                         createdAt: item.createdAt,
                         showEdit: isOwn,
                         showRemove: isOwn,
-                        type: 'task',
                         icon: this.iconOptions[item.type].icon,
                         iconName: this.iconOptions[item.type].name,
                         state: {}

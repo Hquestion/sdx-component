@@ -1,7 +1,7 @@
 
 import httpService from '../http-service';
 
-import { TASK_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_BASE } from './config';
+import { TASK_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_BASE, PROJECT_MANAGE_GATEWAY_BASE } from './config';
 
 import readAuths from './config';
 import { authWrapper } from './helper';
@@ -273,6 +273,12 @@ export function stopTask(uuid, params) {
 }
 
 export function createTask(params) {
+    console.log(params);
+    if(params.projectId) {
+        // todo 有项目ID调project-manager的接口
+    } else {
+        // todo 无项目ID直接调Task-Manager的接口
+    }
     return httpService.post(taskApi, params);
 }
 

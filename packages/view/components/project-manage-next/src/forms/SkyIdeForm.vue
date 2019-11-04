@@ -263,7 +263,7 @@ import BaseForm from './BaseForm';
 import Button from '@sdx/ui/components/button';
 import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
+import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/task';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
@@ -330,7 +330,7 @@ export default {
                 uuid: '',
                 name: '',
                 description: '',
-                type: 'SkyIDE',
+                type: 'SKYIDE',
                 imageId: '',
                 resourceConfig: {
                     'EXECUTOR_INSTANCES': 1,

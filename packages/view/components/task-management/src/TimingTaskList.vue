@@ -100,7 +100,7 @@
                                 :key="i"
                                 :title="t(item.label)"
                                 @click="handleOperation(item.value, row)"
-                                :plain="true"
+                                type="link"
                             >
                                 {{ t(item.label) }}
                             </SdxuButton>

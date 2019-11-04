@@ -169,7 +169,7 @@
                         <SdxuIconButtonGroup>
                             <SdxuButton
                                 v-for="(item, i) in getOperationList(row)"
-                                :plain="true"
+                                type="link"
                                 :key="i"
                                 @click="handleOperation(item.value, row)"
                             >

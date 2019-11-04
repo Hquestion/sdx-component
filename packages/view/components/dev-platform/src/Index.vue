@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-dev-platform">
         <div class="sdxv-dev-platform__title">
-            任务列表
+            {{ t('view.task.TaskList') }}
         </div>
         <div
             class="sdxv-dev-platform__create-task"
@@ -66,22 +66,22 @@ export default {
             type: 'dev',
             createTaskOptions: [
                 {
-                    createLabel: '添加Jupyter任务',
+                    createLabel: this.t('view.project.addJupyter'),
                     class: 'sdx-Jupyterrenwu',
                     type: 'JUPYTER',
-                    taskType: '开发工具'
+                    taskType: this.t('view.project.devTool')
                 },
                 {
-                    createLabel: '添加SkyIDE任务',
+                    createLabel: this.t('view.project.addSkyIde'),
                     class: 'sdx-SkyIDErenwu',
                     type: 'SKYIDE',
-                    taskType: '开发工具'
+                    taskType: this.t('view.project.devTool')
                 },
                 {
-                    createLabel: '添加自定义容器任务',
+                    createLabel: this.t('view.project.addContainerDev'),
                     class: 'sdx-zidingyirongqirenwu',
                     type: 'CONTAINERDEV',
-                    taskType: '开发工具'
+                    taskType: this.t('view.project.devTool')
                 }
             ],
             clientWidth: 1500,

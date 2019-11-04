@@ -19,54 +19,54 @@
             :model="params"
         >
             <SdxwExpandLabel
-                label="基本配置"
+                :label="t('view.task.BasicSetting')"
             />
             <el-form-item
                 prop="name"
-                label="工作流名称:"
+                :label="`${t('view.task.WorkflowName')}:`"
             >
                 <SdxuInput
                     v-model="params.name"
                     :searchable="true"
                     size="small"
-                    placeholder="请输入工作流名称"
+                    :placeholder="t('view.task.EnterWorkflowName')"
                 />
             </el-form-item>
             <el-form-item
                 prop="description"
-                label="工作流描述:"
+                :label="`${t('view.task.WorkflowDesc')}:`"
             >
                 <SdxuInput
                     type="textarea"
                     :searchable="true"
                     v-model="params.description"
                     size="small"
-                    placeholder="请输入工作流描述"
+                    :placeholder="t('view.task.EnterWorkflowDesc')"
                 />
             </el-form-item>
             <el-form-item
                 prop="params"
-                label="参数:"
+                :label="`${t('view.task.Params')}:`"
             >
                 <SdxuInput
                     :searchable="true"
                     v-model="params.params"
                     size="small"
-                    placeholder="请输入工作流参数"
+                    :placeholder="t('view.task.EnterWorkflowParam')"
                 />
                 <div class="form-tip">
-                    工作流的参数, 可以覆盖工作流中节点的同名参数
+                    {{ t('view.task.WorkflowParamTip') }}
                 </div>
             </el-form-item>
             <el-form-item
-                label="关联项目:"
+                :label="`${t('view.task.RelatedProject')}:`"
                 prop="project"
                 v-if="!projectId"
             >
                 <el-select
                     v-model="params.project"
                     size="small"
-                    placeholder="请选择关联项目"
+                    :placeholder="t('view.task.EnterRelatedProject')"
                     style="width:420px;margin-right:10px;"
                     filterable
                 >
@@ -85,7 +85,7 @@
                     @click="createProject"
                 >
                     <i class="sdx-icon sdx-xinjianhao" />
-                    创建新项目
+                    {{ t('view.task.CreateProject') }}
                 </SdxuButton>
             </el-form-item>
         </el-form>
@@ -142,7 +142,7 @@ export default {
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 project: [
-                    { required: true, message: '请选择关联项目', trigger: 'change'}
+                    { required: true, message: this.t('view.task.EnterRelatedProject'), trigger: 'change'}
                 ],
                 description: [
                     {

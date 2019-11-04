@@ -19,7 +19,7 @@
             :model="params"
         >
             <SdxwExpandLabel
-                label="基本配置"
+                :label="t('view.task.BasicSetting')"
             />
             <el-form-item
                 prop="name"
@@ -45,7 +45,7 @@
                 />
             </el-form-item>
             <el-form-item
-                label="关联项目:"
+                :label="`${t('view.task.RelatedProject')}:`"
                 prop="project"
                 v-if="!projectId"
             >
@@ -53,7 +53,7 @@
                     <el-select
                         v-model="params.project"
                         size="small"
-                        placeholder="请选择关联项目"
+                        :placeholder="`${t('view.task.EnterRelatedProject')}`"
                         style="width:420px;margin-right:10px;"
                         filterable
                         @change="projectSelected"
@@ -74,12 +74,12 @@
                         @click="createProject"
                     >
                         <i class="sdx-icon sdx-xinjianhao" />
-                        创建新项目
+                        {{ t('view.task.CreateProject') }}
                     </SdxuButton>
                 </SdxuAppender>
             </el-form-item>
             <SdxwExpandLabel
-                label="环境配置"
+                :label="`${t('view.task.EnvSetting')}`"
             />
             <el-form-item
                 prop="imageId"
@@ -101,7 +101,7 @@
                         />
                     </el-select>
                     <SdxuDropdownTip
-                        title="镜像中包含版本信息"
+                        :title="`${t('view.task.ImagePacInfo')}`"
                         width="260px"
                         :disabled="!packagesList.length"
                         slot="postfix"
@@ -155,7 +155,7 @@
             </el-form-item>
             <el-form-item
                 prop="instanceNumber"
-                label="实例个数:"
+                :label="`${t('view.task.InstanceNum')}:`"
             >
                 <el-input-number
                     v-model="params.instanceNumber"
@@ -163,7 +163,7 @@
                 />
             </el-form-item>
             <SdxwExpandLabel
-                label="数据配置"
+                :label="`${t('view.task.DataSetting')}`"
             />
             <el-form-item
                 prop="datasets"
@@ -183,7 +183,7 @@
                     />
                 </el-select>
                 <div class="form-tip">
-                    将数据集以只读方式挂载进目录
+                    {{ t('view.task.DatasetInfo') }}
                 </div>
             </el-form-item>
             <el-form-item
@@ -193,48 +193,48 @@
             >
                 <data-source-select v-model="params.datasources" />
                 <div class="form-tip">
-                    将数据源的设置写入容器的环境变量
+                    {{ t('view.task.DataSourceInfo') }}
                 </div>
             </el-form-item>
             <SdxwExpandLabel
-                label="高级配置"
+                :label="`${t('view.task.AdvanceSetting')}`"
                 expandable
                 :expanded.sync="showMoreSetting"
             />
             <div v-show="showMoreSetting">
                 <el-form-item
-                    label="环境变量:"
+                    :label="`${t('view.task.EnvVars')}:`"
                 >
                     <SdxuInput
                         v-model="params.environments"
                         size="small"
-                        placeholder="--$参数名 参数值, 以空格分隔"
+                        :placeholder="`${t('view.task.EnvVarsPlaceholder')}`"
                     />
                 </el-form-item>
                 <el-form-item
-                    label="启动命令:"
+                    :label="`${t('view.task.StartCommand')}:`"
                 >
                     <div style="display:flex;justify-content:space-between;width:560px;">
                         <SdxuInput
                             v-model="params.environments"
                             size="small"
-                            placeholder="启动命令"
+                            :placeholder="`${t('view.task.StartCommand')}`"
                             style="width:270px"
                         />
                         <span>-</span>
                         <SdxuInput
                             v-model="params.environments"
                             size="small"
-                            placeholder="参数"
+                            :placeholder="`${t('view.task.Params')}`"
                             style="width:270px"
                         />
                     </div>
                     <div class="form-tip">
-                        此处不设置, 则默认启动Container Dev
+                        {{ t('view.task.StartCommandTip') }}
                     </div>
                 </el-form-item>
                 <el-form-item
-                    label="输出路径:"
+                    :label="`${t('view.task.OutputPath')}:`"
                 >
                     <div>
                         <SdxwFileSelect
@@ -245,11 +245,11 @@
                         />
                     </div>
                     <div class="form-tip">
-                        存放训练输出的日志或模型等
+                        {{ t('view.task.OutputPathTip') }}
                     </div>
                 </el-form-item>
                 <el-form-item
-                    label="端口转发:"
+                    :label="`${t('view.task.PortRoute')}:`"
                 >
                     <div>
                         <SdxuInput
@@ -258,7 +258,7 @@
                         />
                     </div>
                     <div class="form-tip">
-                        定义容器中的某一端口转发到容器外部
+                        {{ t('view.task.PortRouteTip') }}
                     </div>
                 </el-form-item>
             </div>
@@ -366,7 +366,7 @@ export default {
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 project: [
-                    { required: true, message: '请选择关联项目', trigger: 'change'}
+                    { required: true, message: this.t('view.task.EnterRelatedProject'), trigger: 'change'}
                 ],
                 description: [
                     {
@@ -375,7 +375,7 @@ export default {
                     }
                 ],
                 instanceNumber: [
-                    { required: true, message: '请输入实例个数', trigger: 'change'}
+                    { required: true, message: this.t('view.task.EnterInstanceNum'), trigger: 'change'}
                 ],
                 imageId: [
                     { required: true, message: this.t('view.task.form.Please_select_the_operating_environment'), trigger: 'change' }

@@ -19,7 +19,7 @@
             :model="params"
         >
             <SdxwExpandLabel
-                label="基本配置"
+                :label="t('view.task.BasicSetting')"
             />
             <el-form-item
                 :label="`${t('view.task.taskName')}:`"
@@ -44,7 +44,7 @@
                 />
             </el-form-item>
             <el-form-item
-                label="关联项目:"
+                :label="`${t('view.task.RelatedProject')}:`"
                 prop="project"
                 v-if="!projectId"
             >
@@ -52,7 +52,7 @@
                     <el-select
                         v-model="params.project"
                         size="small"
-                        placeholder="请选择关联项目"
+                        :placeholder="t('view.task.EnterRelatedProject')"
                         filterable
                         @change="projectSelected"
                     >
@@ -72,12 +72,12 @@
                         @click="createProject"
                     >
                         <i class="sdx-icon sdx-xinjianhao" />
-                        创建新项目
+                        {{ t('view.task.CreateProject') }}
                     </SdxuButton>
                 </SdxuAppender>
             </el-form-item>
             <SdxwExpandLabel
-                label="环境配置"
+                :label="t('view.task.EnvSetting')"
             />
             <el-form-item
                 prop="imageId"
@@ -99,7 +99,7 @@
                         />
                     </el-select>
                     <SdxuDropdownTip
-                        title="镜像中包含版本信息"
+                        :title="t('view.task.ImagePacInfo')"
                         width="260px"
                         :disabled="!packagesList.length"
                         slot="postfix"
@@ -152,7 +152,7 @@
                 </div>
             </el-form-item>
             <SdxwExpandLabel
-                label="数据配置"
+                :label="t('view.task.DataSetting')"
             />
             <el-form-item
                 prop="datasets"
@@ -172,7 +172,7 @@
                     />
                 </el-select>
                 <div class="form-tip">
-                    将数据集以只读方式挂载进目录
+                    {{ t('view.task.DatasetInfo') }}
                 </div>
             </el-form-item>
             <el-form-item
@@ -182,7 +182,7 @@
             >
                 <data-source-select v-model="params.datasources" />
                 <div class="form-tip">
-                    将数据源的设置写入容器的环境变量
+                    {{ t('view.task.DataSourceInfo') }}
                 </div>
             </el-form-item>
         </el-form>
@@ -285,7 +285,7 @@ export default {
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 project: [
-                    { required: true, message: '请选择关联项目', trigger: 'change'}
+                    { required: true, message: this.t('view.task.EnterRelatedProject'), trigger: 'change'}
                 ],
                 description: [
                     {

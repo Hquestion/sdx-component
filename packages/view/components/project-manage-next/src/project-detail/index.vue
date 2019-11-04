@@ -39,10 +39,10 @@
                     v-model="type"
                 >
                     <SdxuTabRadioItem name="dev">
-                        开发任务
+                        {{ t('view.project.devTask') }}
                     </SdxuTabRadioItem>
                     <SdxuTabRadioItem name="skyflow">
-                        可视化数据分析与建模任务
+                        {{ t('view.project.skyflowTask') }}
                     </SdxuTabRadioItem>
                 </SdxuTabRadioGroup>
                 <div class="sdxv-project-detail__search-filter--filter">
@@ -79,28 +79,28 @@ export default {
             type: 'dev',
             createTaskOptions: [
                 {
-                    createLabel: '添加Jupyter任务',
+                    createLabel: this.t('view.project.addJupyter'),
                     class: 'sdx-Jupyterrenwu',
                     type: 'JUPYTER',
-                    taskType: '开发工具'
+                    taskType: this.t('view.project.devTool')
                 },
                 {
-                    createLabel: '添加SkyIDE任务',
+                    createLabel: this.t('view.project.addSkyIde'),
                     class: 'sdx-SkyIDErenwu',
                     type: 'SKYIDE',
-                    taskType: '开发工具'
+                    taskType: this.t('view.project.devTool')
                 },
                 {
-                    createLabel: '添加自定义容器任务',
+                    createLabel: this.t('view.project.addContainerDev'),
                     class: 'sdx-zidingyirongqirenwu',
                     type: 'CONTAINERDEV',
-                    taskType: '开发工具'
+                    taskType: this.t('view.project.devTool')
                 },
                 {
-                    createLabel: '添加SkyFlow任务',
+                    createLabel: this.t('view.project.addSkyflow'),
                     class: 'sdx-skyflowrenwu',
                     type: 'SKYFLOW',
-                    taskType: '可视化分析与建模'
+                    taskType: this.t('view.project.skyflowType')
                 }
             ],
             clientWidth: 1500,

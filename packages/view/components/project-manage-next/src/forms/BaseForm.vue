@@ -15,7 +15,7 @@
                 class="sdxv-project-task-form__panel--form"
             >
                 <el-form-item
-                    :label="`任务类型:`"
+                    :label="`${t('view.task.taskType')}:`"
                 >
                     <div class="sdxv-project-task-form__task-type">
                         <!-- 图标插入 -->

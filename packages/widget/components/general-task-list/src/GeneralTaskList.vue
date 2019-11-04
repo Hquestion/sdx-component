@@ -20,25 +20,25 @@
                                 :plain="true"
                                 v-if="item.showOpenIde"
                             >
-                                进入SkyIDE
+                                {{ t('view.task.EnterIde') }}
                             </sdxu-button>
                             <div v-if="item.showJupyterLink">
                                 <sdxu-button
                                     :plain="true"
                                 >
-                                    进入Jupyter Lab
+                                    {{ t('view.task.EnterJupyterlab') }}
                                 </sdxu-button>
                                 <sdxu-button
                                     :plain="true"
                                 >
-                                    进入Jupyter NoteBook
+                                    {{ t('view.task.EnterNotebook') }}
                                 </sdxu-button>
                             </div>
                             <sdxu-button
                                 :plain="true"
                                 v-if="item.showRunningInfo"
                             >
-                                查看执行记录
+                                {{ t('view.task.ShowRunningRecord') }}
                             </sdxu-button>
                         </template>
                         <template #operations>
@@ -100,7 +100,7 @@ export default {
                     icon: 'sdx-SkyIDErenwu'
                 },
                 CONTAINERDEV: {
-                    name: '自定义容器',
+                    name: this.t('view.task.type.CONTAINERDEV'),
                     icon: 'sdx-zidingyirongqirenwu'
                 },
                 JUPYTER: {

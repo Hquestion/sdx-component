@@ -22,6 +22,7 @@
                     <el-select
                         v-model="selectedType"
                         size="large"
+                        :placeholder="t('sdxCommon.PleaseSelect')"
                     >
                         <el-option
                             v-for="item in taskTypeList"
@@ -35,6 +36,7 @@
                     <el-select
                         v-model="selectedExecuteType"
                         size="large"
+                        :placeholder="t('sdxCommon.PleaseSelect')"
                     >
                         <el-option
                             v-for="item in executeTypeList"
@@ -48,6 +50,7 @@
                     <el-select
                         v-model="selectedState"
                         size="large"
+                        :placeholder="t('sdxCommon.PleaseSelect')"
                     >
                         <el-option
                             v-for="item in taskStateList"
@@ -82,7 +85,7 @@
                     min-width="112px"
                 />
                 <el-table-column
-                    prop=""
+                    prop="execution_id"
                     :label="t('view.task.executeID')"
                     min-width="56px"
                 />
@@ -101,33 +104,33 @@
                     min-width="64px"
                 />
                 <el-table-column
-                    prop=""
+                    prop="execute_type"
                     :label="t('view.task.executeType')"
                     min-width="70px"
                 />
                 <el-table-column
-                    prop="startedAt"
+                    prop="started_at"
                     :label="t('view.task.executeStartTime')"
                     sortable="custom"
                     :sort-orders="sortOrders"
-                    min-width="120px"
+                    min-width="132px"
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.startedAt) }}
+                            {{ formatDate(row.started_at) }}
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="stoppedAt"
+                    prop="stoped_at"
                     :label="t('view.task.executeStopTime')"
                     sortable="custom"
                     :sort-orders="sortOrders"
-                    min-width="120px"
+                    min-width="132px"
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.stoppedAt) }}
+                            {{ formatDate(row.stoped_at) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -139,7 +142,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                        <!-- // todo: -->
+                            {{ dealTime(row.started_at, row.stoped_at) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -164,13 +167,14 @@
                 >
                     <template #default="{ row }">
                         <SdxuIconButtonGroup>
-                            <SdxuIconButton
-                                v-for="(item, i) in getOperationList(row, monitor)"
+                            <SdxuButton
+                                v-for="(item, i) in getOperationList(row)"
+                                :plain="true"
                                 :key="i"
-                                :icon="item.icon"
-                                :title="t(item.label)"
                                 @click="handleOperation(item.value, row)"
-                            />
+                            >
+                                {{ t(item.label) }}
+                            </SdxuButton>
                         </SdxuIconButtonGroup>
                     </template>
                 </el-table-column>
@@ -190,13 +194,296 @@
 import TaskManagementMixin from './TaskManagementMixin';
 import locale from '@sdx/utils/src/mixins/locale';
 
+const data = [
+    {
+        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
+        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        'concurrent_type': 'SKIP',
+        'created_at': '2019-10-18T07:50:17.748000Z',
+        'delay': 0, 'state': 'CREATED',
+        'error_handling': 'CANCEL',
+        'execute_type': 'MANUAL',
+        'home_path': '/test/jupyter',
+        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
+        'name': 'jupyter-task-test',
+        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+        'priority': 2,
+        'quota': {
+            'cpu': 2,
+            'gpu': 0,
+            'gpu_model': '',
+            'memory': 4294967296
+        },
+        'resource_config': {
+            'DEPLOY': {
+                'instance': 1,
+                'labels': {
+                    'gpu.model': ''
+                },
+                'requests': {
+                    'cpu': 2,
+                    'memory': 4294967296,
+                    'nvidia.com/gpu': 0
+                }
+            }
+        },
+        'type': 'JUPYTER',
+        'updated_at': '2019-10-18T07:50:17.748000Z',
+        'started_at': '2019-10-18T07:50:17.748000Z',
+        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'owner': {
+            fullName: 'zhangsan'
+        }
+    },
+    {
+        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
+        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        'concurrent_type': 'SKIP',
+        'created_at': '2019-10-18T07:50:17.748000Z',
+        'delay': 0, 'state': 'LAUNCHING',
+        'error_handling': 'CANCEL',
+        'execute_type': 'MANUAL',
+        'home_path': '/test/jupyter',
+        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
+        'name': 'jupyter-task-test',
+        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+        'priority': 2,
+        'quota': {
+            'cpu': 2,
+            'gpu': 0,
+            'gpu_model': '',
+            'memory': 4294967296
+        },
+        'resource_config': {
+            'DEPLOY': {
+                'instance': 1,
+                'labels': {
+                    'gpu.model': ''
+                },
+                'requests': {
+                    'cpu': 2,
+                    'memory': 4294967296,
+                    'nvidia.com/gpu': 0
+                }
+            }
+        },
+        'type': 'JUPYTER',
+        'updated_at': '2019-10-18T07:50:17.748000Z',
+        'started_at': '2019-10-18T07:50:17.748000Z',
+        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'owner': {
+            fullName: 'zhangsan'
+        }
+    },
+    {
+        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
+        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        'concurrent_type': 'SKIP',
+        'created_at': '2019-10-18T07:50:17.748000Z',
+        'delay': 0, 'state': 'RUNNING',
+        'error_handling': 'CANCEL',
+        'execute_type': 'MANUAL',
+        'home_path': '/test/jupyter',
+        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
+        'name': 'jupyter-task-test',
+        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+        'priority': 2,
+        'quota': {
+            'cpu': 2,
+            'gpu': 0,
+            'gpu_model': '',
+            'memory': 4294967296
+        },
+        'resource_config': {
+            'DEPLOY': {
+                'instance': 1,
+                'labels': {
+                    'gpu.model': ''
+                },
+                'requests': {
+                    'cpu': 2,
+                    'memory': 4294967296,
+                    'nvidia.com/gpu': 0
+                }
+            }
+        },
+        'type': 'JUPYTER',
+        'updated_at': '2019-10-18T07:50:17.748000Z',
+        'started_at': '2019-10-18T07:50:17.748000Z',
+        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'owner': {
+            fullName: 'zhangsan'
+        }
+    },
+    {
+        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
+        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        'concurrent_type': 'SKIP',
+        'created_at': '2019-10-18T07:50:17.748000Z',
+        'delay': 0, 'state': 'FINISHED',
+        'error_handling': 'CANCEL',
+        'execute_type': 'MANUAL',
+        'home_path': '/test/jupyter',
+        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
+        'name': 'jupyter-task-test',
+        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+        'priority': 2,
+        'quota': {
+            'cpu': 2,
+            'gpu': 0,
+            'gpu_model': '',
+            'memory': 4294967296
+        },
+        'resource_config': {
+            'DEPLOY': {
+                'instance': 1,
+                'labels': {
+                    'gpu.model': ''
+                },
+                'requests': {
+                    'cpu': 2,
+                    'memory': 4294967296,
+                    'nvidia.com/gpu': 0
+                }
+            }
+        },
+        'type': 'JUPYTER',
+        'updated_at': '2019-10-18T07:50:17.748000Z',
+        'started_at': '2019-10-18T07:50:17.748000Z',
+        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'owner': {
+            fullName: 'zhangsan'
+        }
+    },
+    {
+        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
+        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        'concurrent_type': 'SKIP',
+        'created_at': '2019-10-18T07:50:17.748000Z',
+        'delay': 0, 'state': 'KILLED',
+        'error_handling': 'CANCEL',
+        'execute_type': 'MANUAL',
+        'home_path': '/test/jupyter',
+        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
+        'name': 'jupyter-task-test',
+        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+        'priority': 2,
+        'quota': {
+            'cpu': 2,
+            'gpu': 0,
+            'gpu_model': '',
+            'memory': 4294967296
+        },
+        'resource_config': {
+            'DEPLOY': {
+                'instance': 1,
+                'labels': {
+                    'gpu.model': ''
+                },
+                'requests': {
+                    'cpu': 2,
+                    'memory': 4294967296,
+                    'nvidia.com/gpu': 0
+                }
+            }
+        },
+        'type': 'JUPYTER',
+        'updated_at': '2019-10-18T07:50:17.748000Z',
+        'started_at': '2019-10-18T07:50:17.748000Z',
+        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'owner': {
+            fullName: 'zhangsan'
+        }
+    },
+    {
+        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
+        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        'concurrent_type': 'SKIP',
+        'created_at': '2019-10-18T07:50:17.748000Z',
+        'delay': 0, 'state': 'FAILED',
+        'error_handling': 'CANCEL',
+        'execute_type': 'MANUAL',
+        'home_path': '/test/jupyter',
+        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
+        'name': 'jupyter-task-test',
+        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+        'priority': 2,
+        'quota': {
+            'cpu': 2,
+            'gpu': 0,
+            'gpu_model': '',
+            'memory': 4294967296
+        },
+        'resource_config': {
+            'DEPLOY': {
+                'instance': 1,
+                'labels': {
+                    'gpu.model': ''
+                },
+                'requests': {
+                    'cpu': 2,
+                    'memory': 4294967296,
+                    'nvidia.com/gpu': 0
+                }
+            }
+        },
+        'type': 'JUPYTER',
+        'updated_at': '2019-10-18T07:50:17.748000Z',
+        'started_at': '2019-10-18T07:50:17.748000Z',
+        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'owner': {
+            fullName: 'zhangsan'
+        }
+    },
+    {
+        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
+        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        'concurrent_type': 'SKIP',
+        'created_at': '2019-10-18T07:50:17.748000Z',
+        'delay': 0, 'state': 'KILLING',
+        'error_handling': 'CANCEL',
+        'execute_type': 'MANUAL',
+        'home_path': '/test/jupyter',
+        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
+        'name': 'jupyter-task-test',
+        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+        'priority': 2,
+        'quota': {
+            'cpu': 2,
+            'gpu': 0,
+            'gpu_model': '',
+            'memory': 4294967296
+        },
+        'resource_config': {
+            'DEPLOY': {
+                'instance': 1,
+                'labels': {
+                    'gpu.model': ''
+                },
+                'requests': {
+                    'cpu': 2,
+                    'memory': 4294967296,
+                    'nvidia.com/gpu': 0
+                }
+            }
+        },
+        'type': 'JUPYTER',
+        'updated_at': '2019-10-18T07:50:17.748000Z',
+        'started_at': '2019-10-18T07:50:17.748000Z',
+        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'owner': {
+            fullName: 'zhangsan'
+        }
+    },
+];     
+
 export default {
     mixins: [TaskManagementMixin, locale],
     data() {
         return {
             loading: false,
             defaultSort: {
-                prop: 'startedAt',
+                prop: 'started_at',
                 order: 'descending'
             },
             sortOrders: ['descending', 'ascending', null],
@@ -207,11 +494,12 @@ export default {
             selectedState: '',
             selectedExecuteType: '',
             selectedDate: '',
-            taskResourceList: [],
+            taskResourceList: data,
+            // taskResourceList: [],
             params: {
                 name: '',
                 order: 'desc',
-                orderBy: 'startedAt',
+                orderBy: 'started_at',
             }
         };
     },
@@ -221,7 +509,7 @@ export default {
         },
         handleSortChange({prop, order}) {
             this.params.order = order === 'ascending' ? 'asc' : 'desc';
-            this.params.orderBy = prop || 'startedAt';
+            this.params.orderBy = prop || 'started_at';
             this.page = 1;
         },
         handleSearch() {

@@ -4,49 +4,73 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/table';
 
 @include block('table', $bem-namespace-ui) {
-    &.el-table td {
-        border-bottom: none;
-        border-top: 1px solid $sdxu-table-border-color;
-        color: $sdx-text-regular-color;
-        height: $sdxu-table-td-height;
-        font-size:$sdxu-table-td-fontsize;
-    }
     &.el-table {
         border-bottom: 1px solid $sdxu-table-border-color;
-    }
-    &.el-table td {
-        border-bottom: none;
-        border-top: 1px solid $sdxu-table-border-color;
-        color: $sdx-text-regular-color;
-        height: $sdxu-table-td-height;
-        font-size:$sdxu-table-td-fontsize;
-    }
-
-    &.el-table th.is-leaf {
-        height: $sdxu-table-header-height;
-        background: $sdxu-table-header-background;
-        font-size: $sdxu-table-header-fontsize;
-        border-bottom: none;
-    }
-    &.el-table::before {
-        height: 0px;
-    }
-    &.el-table th > .cell {
-        font-weight: 700;
-        color: $sdxu-table-head-color;
-    }
-    .el-table__body tr:hover > td {
-        background: $sdxu-table-cell-background
-    }
-    .el-table__expanded-cell{
-        background: $sdxu-table-cell-background !important ;
-        border-top: 10px solid $sdxu-table-table-margincolor !important;
-        border-bottom: 10px solid $sdxu-table-table-margincolor !important;
-    }
-    &.el-table .highlight-row, .hover-row {
-        background: $sdxu-table-cell-background
-    }
-    .el-table__empty-block {
-        border-top: 1px solid $sdxu-table-border-color;
+        &::before {
+            height: 0;
+        }
+        td {
+            border-bottom: none;
+            border-top: 1px solid $sdxu-table-border-color;
+            color: $sdx-text-regular-color;
+            height: $sdxu-table-td-height;
+            font-size:$sdxu-table-td-fontsize;
+        }
+        th {
+            &.is-leaf {
+                height: $sdxu-table-header-height;
+                background: $sdxu-table-header-background;
+                font-size: $sdxu-table-header-fontsize;
+                border-bottom: none;
+            }
+            & > .cell {
+                font-weight: 700;
+                color: $sdxu-table-head-color;
+            }
+        }
+        .el-table__body tr:hover > td {
+            background: $sdxu-table-cell-background
+        }
+        .el-table__expanded-cell{
+            background: $sdxu-table-cell-background !important ;
+            border-top: 10px solid $sdxu-table-table-margincolor !important;
+            border-bottom: 10px solid $sdxu-table-table-margincolor !important;
+        }
+        .highlight-row, .hover-row {
+            background: $sdxu-table-cell-background
+        }
+        .el-table__empty-block {
+            border-top: 1px solid $sdxu-table-border-color;
+        }
+        &.is-light {
+            &.el-table--border {
+                border: 1px solid $sdx-secondary-color--light6;
+                td, th {
+                    border-right: 1px solid $sdx-secondary-color--light6;
+                    border-bottom: none;
+                }
+                td {
+                    border-top: 1px solid $sdx-secondary-color--light6;
+                }
+            }
+            td {
+                padding: 0;
+                color: $sdx-secondary-color;
+                height: $sdxu-table-light-td-height;
+                font-size:$sdxu-table-td-fontsize;
+            }
+            th {
+                padding: 0;
+                &.is-leaf {
+                    height: $sdxu-table-light-header-height;
+                    background: $sdxu-table-light-header-background;
+                    font-size: $sdxu-table-header-fontsize;
+                }
+                & > .cell {
+                    font-weight: normal;
+                    color: $sdx-secondary-color;
+                }
+            }
+        }
     }
 }

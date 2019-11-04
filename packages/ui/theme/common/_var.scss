@@ -38,10 +38,10 @@ $sdxu-input-strength-color-strong: $sdx-success-color !default;
 $sdxu-input-strength-color-none: $sdx-none-color !default;
 $sdxu-icon-hover: $sdx-primary-color !default;
 // sdxu-pagination
-$sdxu-pagination-active-background-color: $sdx-primary-color !default; // 当前激活pager背景色
+$sdxu-pagination-active-background-color: $sdx-secondary-color !default; // 当前激活pager背景色
 $sdxu-pagination-text-color: $sdx-secondary-color !default;   // 非激活pager字体颜色
 $sdxu-pagination-background: #fff !default;  // 非激活pager背景
-$sdxu-pagination-pager-space: 5px !default;  // pager之间间距
+$sdxu-pagination-pager-space: 4px !default;  // pager之间间距
 $sdxu-pagination-pager-border: 1px solid $sdx-secondary-color--light6 !default;  // pager边框
 
 // sdxu-dialog
@@ -62,6 +62,9 @@ $sdxu-table-header-fontsize: 14px !default;
 $sdxu-table-td-fontsize: 14px !default;
 $sdxu-table-table-margincolor: #fff !default;
 $sdxu-table-border-color: #EBEEF5 !default;
+$sdxu-table-light-header-height: 40px !default;
+$sdxu-table-light-td-height: 40px !default;
+$sdxu-table-light-header-background: $sdx-secondary-color--light7 !default;
 // sdxu-tab-radio
 $sdxu-tab-radio-height: $sdx-form-element-height-large !default;
 $sdxu-tab-radio-height-small: $sdx-form-element-height-regular !default;

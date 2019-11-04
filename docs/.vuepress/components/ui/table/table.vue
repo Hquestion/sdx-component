@@ -1,9 +1,34 @@
 <template>
-    <div class="docs-table"> 
+    <div class="docs-table">
         <SdxuTable
             :data="tableData"
             highlight-key='12'
             :params="params"
+        >
+            <el-table-column type="expand">
+                <template slot-scope="props">
+                    <span>{{ props.row.desc }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="date"
+                label="日期"
+            />
+            <el-table-column
+                prop="name"
+                label="姓名"
+            />
+            <el-table-column
+                prop="address"
+                label="地址"
+            />
+        </SdxuTable>
+        <br>
+        <SdxuTable
+            :data="tableData"
+            highlight-key='12'
+            :params="params"
+            :light="true"
         >
             <el-table-column type="expand">
                 <template slot-scope="props">
@@ -36,7 +61,7 @@ export default {
                 date: '2016-05-02',
                 name: '王小虎',
                 address: '上海市普陀区金沙江路 1518 弄',
-                uuid: '11',      
+                uuid: '11',
                 desc: ' 那 v 啊女啊 v 那 v 啊美女 v 女你说的 v 你是女 in 在 v 你是 v 好似 u 凤凰文化'
             }, {
                 date: '2016-05-04',
@@ -65,7 +90,7 @@ export default {
         SdxuTable,
         [TableColumn.name]: TableColumn
     },
-   
+
 };
 </script>
 

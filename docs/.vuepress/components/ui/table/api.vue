@@ -45,7 +45,14 @@
                         type: '',
                         optionValue: '--',
                         defaultValue: '--',
-                    } 
+                    },
+                    {
+                        params: 'light',
+                        describe: '轻量模式',
+                        type: 'Boolean',
+                        optionValue: '--',
+                        defaultValue: 'false',
+                    }
                 ],
             }
         },

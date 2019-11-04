@@ -1,7 +1,8 @@
 <template>
     <el-table
-        class="sdxu-table"
+        :class="['sdxu-table', light ? 'is-light' : '']"
         :data="data"
+        :border="light"
         :row-style="tableRowStyle"
         v-bind="$attrs"
         v-on="$listeners"
@@ -41,6 +42,10 @@ export default {
         emptyLabel: {
             type: String,
             default: ''
+        },
+        light: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

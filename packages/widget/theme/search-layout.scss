@@ -58,7 +58,7 @@
 @include block('search-item', $bem-namespace-widget) {
     height: $sdx-form-element-height-large;
     line-height: $sdx-form-element-height-large;
-    margin-bottom: $sdx-margin;
+    margin-bottom: 26px;
     vertical-align: middle;
     position: relative;
     top:$sdxw-search-item-top;

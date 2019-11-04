@@ -6,7 +6,8 @@
             :visible-arrow="false"
             :popper-options="popperOption"
             :disabled="disabled"
-            popper-class="sdxu-dropdown-tip__popper"
+            :popper-class="popperClasses"
+            v-model="visible"
         >
             <slot
                 name="ref"
@@ -45,6 +46,31 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        popperClass: {
+            type: String,
+            default: ''
+        },
+        popperVisible: {
+            type: Boolean,
+            default: false
+        }
+    },
+    model: {
+        prop: 'popperVisible',
+        event: 'visible'
+    },
+    computed: {
+        popperClasses() {
+            return `${this.popperClass} sdxu-dropdown-tip__popper`;
+        },
+        visible: {
+            get() {
+                return this.popperVisible;
+            },
+            set(val) {
+                this.$emit('visible', val);
+            }
         }
     },
     data() {

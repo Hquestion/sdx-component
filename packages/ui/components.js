@@ -28,5 +28,6 @@ module.exports = {
     'bubble-tip': './components/bubble-tip/index.js',
     'context-menu': './components/context-menu/index.js',
     'dropdown-tip': './components/dropdown-tip/index.js',
-    'appender': './components/appender/index.js'
+    'appender': './components/appender/index.js',
+    'button-group': './components/button-group/index.js'
 };

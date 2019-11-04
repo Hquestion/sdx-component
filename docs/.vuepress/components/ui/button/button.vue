@@ -6,6 +6,7 @@
                 <SdxuButton type="primary">primary</SdxuButton>
                 <SdxuButton type="primary" size="small">small</SdxuButton>
                 <SdxuButton type="text" size="small">text</SdxuButton>
+                <SdxuButton type="link" size="small">text</SdxuButton>
                 <SdxuButton type="primary" size="regular" :invert="true">invert</SdxuButton>
                 <SdxuButton type="primary" size="regular" :loading="true">loading</SdxuButton>
             </p>
@@ -42,19 +43,40 @@
                     </template>
                 </SdxuButton>
             </p>
+            <p>
+                <SdxuButtonGroup>
+                    <sdxu-button type="text">
+                        启动
+                    </sdxu-button>
+                    <sdxu-button type="text">
+                        停止
+                    </sdxu-button>
+                    <sdxu-button type="text">
+                        详情
+                    </sdxu-button>
+                    <sdxu-button type="text">
+                        删除
+                    </sdxu-button>
+                    <sdxu-button type="text">
+                        分享
+                    </sdxu-button>
+                </SdxuButtonGroup>
+            </p>
         </div>
     </div>
 </template>
 
 <script>
 import SdxuButton from '@sdx/ui/components/button';
+import SdxuButtonGroup from '@sdx/ui/components/button-group';
 export default {
     name: 'ButtonDemo',
     data() {
         return {};
     },
     components: {
-        SdxuButton
+        SdxuButton,
+        SdxuButtonGroup
     }
 }
 </script>

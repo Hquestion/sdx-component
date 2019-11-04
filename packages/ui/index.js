@@ -26,6 +26,7 @@ import ContextMenu from './components/context-menu';
 import BubbleTip from './components/bubble-tip';
 import DropdownTip from './components/dropdown-tip';
 import Appender from './components/appender';
+import ButtonGroup from './components/button-group';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxUI = {
@@ -56,7 +57,8 @@ const SdxUI = {
     ContextMenu,
     BubbleTip,
     DropdownTip,
-    Appender
+    Appender,
+    ButtonGroup
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -88,6 +90,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     BubbleTip.install(vue);
     DropdownTip.install(vue);
     Appender.install(vue);
+    ButtonGroup.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

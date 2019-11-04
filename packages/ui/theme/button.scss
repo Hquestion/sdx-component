@@ -128,29 +128,46 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             color: $sdx-primary-color--light4;
         }
     }
-    @include modifier('text') {
+    @include modifier('link') {
         background: transparent;
         color: $sdx-primary-color;
         border: none;
         min-width: 0;
+        padding: 0;
         &:hover {
             color: $sdx-primary-hover-color;
             border: none;
-            & .sdxu-button__main {
-                text-decoration: underline;
-            }
+            text-decoration: underline;
         }
         &:focus {
-            border: 1px solid $sdx-outline-color;
-            & .sdxu-button__main {
-                text-decoration: none;
-            }
+            text-decoration: none;
         }
         &:active {
             border: none;
-            & .sdxu-button__main {
-                text-decoration: none;
-            }
+            text-decoration: none;
+        }
+        @include state('disabled') {
+            cursor: not-allowed;
+            pointer-events: none;
+            color: $sdx-secondary-color--light4;
+        }
+    }
+    @include modifier('text') {
+        background: transparent;
+        color: $sdx-secondary-color--light3;
+        border: none;
+        min-width: 0;
+        padding: 0;
+        &:hover {
+            color: $sdx-primary-hover-color;
+            border: none;
+        }
+        &:focus {
+            text-decoration: none;
+        }
+        &:active {
+            border: none;
+            text-decoration: none;
         }
         @include state('disabled') {
             cursor: not-allowed;
@@ -191,11 +208,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
     @include element('icon') {
         font-size: 14px !important;
-        margin-right: 10px;
+        margin-right: $sdx-gap-mini;
         box-sizing: border-box;
         @include modifier('dropdown') {
             font-size: 12px !important;
-            margin-left: 10px;
+            margin-left: $sdx-gap-mini;
             box-sizing: border-box;
             display: inline-block;
             transition: transform ease-in-out 0.2s;
@@ -256,6 +273,39 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
     }
     & + .sdxu-button {
-        margin-left: $sdx-margin;
+        margin-left: $sdx-gap-regular;
+    }
+}
+
+@include block('button-group', $bem-namespace-ui) {
+    font-size: 0;
+    .sdxu-dropdown-tip {
+        display: inline-block;
+        margin-left: $sdx-gap-regular;
+        i {
+            outline: none;
+            cursor: pointer;
+        }
+    }
+    @include element('popper') {
+        min-width: 72px;
+        ul,li {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+        }
+        li {
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+            color: $sdx-secondary-color;
+            background: $sdx-secondary-color--light8;
+            padding: 0 $sdx-gap-small;
+            cursor: pointer;
+            &:hover {
+                background: $sdx-secondary-color--light7;
+            }
+        }
     }
 }

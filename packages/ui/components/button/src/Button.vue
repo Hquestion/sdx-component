@@ -183,12 +183,14 @@ export default {
     },
     mounted() {
         document.addEventListener('click', this.hideDropdown);
+        this.dispatch('SdxuButtonGroup', 'button-add');
         this.$on('sdxu.button.hideDropdown', () => {
             !this.keepDropdownOpen && (this.dropdownVisible = false);
         });
     },
     beforeDestroy() {
         document.removeEventListener('click', this.hideDropdown);
+        this.dispatch('SdxuButtonGroup', 'button-remove');
         this.$off('sdxu.button.hideDropdown');
     }
 };

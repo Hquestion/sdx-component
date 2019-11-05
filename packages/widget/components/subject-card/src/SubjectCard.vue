@@ -36,7 +36,7 @@
                                 :status="meta.state && meta.state.status"
                                 v-if="meta.state && meta.state.type && size === 'small'"
                             >
-                                {{ meta.state && meta.state.statusText || 'null-state' }}
+                                {{ meta.state && meta.state.statusText }}
                             </SdxwFoldLabel>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                     v-if="size === 'large'"
                     class="sdxw-subject-card__content--description"
                 >
-                    {{ meta && meta.description }}
+                    {{ (meta && meta.description) ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
             class="sdxw-subject-card__taskdesc"
             v-if="size === 'small'"
         >
-            {{ meta && meta.description }}
+            {{ (meta && meta.description) ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}
         </div>
         <div
             class="sdxw-subject-card__footer"
@@ -74,28 +74,7 @@
                 <slot name="footerLeft" />
             </div>
             <div>
-                <slot
-                    name="footerRight"
-                >
-                    <div>
-                        <sdxu-button
-                            type="text"
-                            icon="sdx-icon sdx-icon-edit"
-                            v-if="meta.showEdit"
-                            @click="$emit('operate', {item: meta, type: 'edit'})"
-                        >
-                            {{ t('widget.projectCard.title.Edit') }}
-                        </sdxu-button>
-                        <sdxu-button
-                            type="text"
-                            icon="sdx-icon sdx-icon-delete"
-                            v-if="meta.showRemove"
-                            @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
-                        >
-                            {{ t('widget.projectCard.title.Delete') }}
-                        </sdxu-button>
-                    </div>
-                </slot>
+                <slot name="footerRight" />
             </div>
         </div>
     </div>

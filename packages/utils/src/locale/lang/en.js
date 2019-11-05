@@ -56,7 +56,8 @@ export default {
                 ViewDetail: 'View Detail',
                 Edit: 'Edit',
                 Delete: 'Delete'
-            }
+            },
+            NoDescriptionAdded: 'No Description Added'
         },
         shareSetting: {
             title: 'Share Setting',

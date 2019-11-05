@@ -17,25 +17,25 @@
                     >
                         <template #footerLeft>
                             <sdxu-button
-                                :plain="true"
+                                type="link"
                                 v-if="item.showOpenIde"
                             >
                                 {{ t('view.task.EnterIde') }}
                             </sdxu-button>
                             <div v-if="item.showJupyterLink">
                                 <sdxu-button
-                                    :plain="true"
+                                    type="link"
                                 >
                                     {{ t('view.task.EnterJupyterlab') }}
                                 </sdxu-button>
                                 <sdxu-button
-                                    :plain="true"
+                                    type="link"
                                 >
                                     {{ t('view.task.EnterNotebook') }}
                                 </sdxu-button>
                             </div>
                             <sdxu-button
-                                :plain="true"
+                                type="link"
                                 v-if="item.showRunningInfo"
                             >
                                 {{ t('view.task.ShowRunningRecord') }}
@@ -46,8 +46,8 @@
                                 v-for="(el, i) in getOperationList(item, false, true)"
                                 :key="i"
                                 :icon="el.icon"
-                                :plain="true"
                                 @click="handleOperation(el.value, item)"
+                                type="text"
                             >
                                 {{ t(el.label) }}
                             </sdxu-button>

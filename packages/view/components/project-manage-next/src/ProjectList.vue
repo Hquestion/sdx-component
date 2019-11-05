@@ -84,7 +84,28 @@
                     :meta="val.meta"
                     size="large"
                     @operate="handleOperate"
-                />
+                >
+                    <template #footerRight>
+                        <div>
+                            <sdxu-button
+                                type="text"
+                                icon="sdx-icon sdx-icon-edit"
+                                v-if="val.meta.showEdit"
+                                @click="$emit('operate', {item: meta, type: 'edit'})"
+                            >
+                                {{ t('widget.projectCard.title.Edit') }}
+                            </sdxu-button>
+                            <sdxu-button
+                                type="text"
+                                icon="sdx-icon sdx-icon-delete"
+                                v-if="val.meta.showRemove"
+                                @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
+                            >
+                                {{ t('widget.projectCard.title.Delete') }}
+                            </sdxu-button>
+                        </div>
+                    </template>
+                </sdxw-subject-card>
             </sdxw-subject-card-list>
             <SdxuEmpty v-else />
         </div>

@@ -5,9 +5,6 @@
     margin-bottom: $sdx-gap-regular;
     padding: $sdx-gap-small $sdx-gap-regular $sdx-gap-regular $sdx-gap-regular;
     padding-bottom: 0;
-    @include element('header') {
-        padding-bottom: $sdx-gap-regular;
-    }
     @include element('icon') {
         border: 1px solid $sdx-secondary-color--light6;
         border-radius: $sdx-border-radius;
@@ -49,6 +46,9 @@
 
 
     @include modifier('large') {
+        @include element('header') {
+            padding-bottom: $sdx-gap-regular;
+        }
         @include element('content') {
             @include modifier('info') {
                 height: $sdx-gap-regular;
@@ -63,7 +63,12 @@
                     word-break: break-all;
                     height: $sdx-gap-regular;
                     max-width: calc(100% - 340px);
+                    display: flex;
                     & > div:first-child {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        word-break: break-all;
                         font-size: $sdx-h1-font-size;
                         color: $sdxw-subject-card-info-color;
                         &:hover {
@@ -124,6 +129,11 @@
                     & > div:first-child {
                         font-size: $sdx-h1-font-size;
                         color: $sdxw-subject-card-info-color;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        word-break: break-all;
+                        height: $sdx-gap-regular;
                         &:hover {
                             cursor: pointer;
                             color: $sdx-primary-color;
@@ -134,9 +144,11 @@
                     display: flex;
                     color: $sdxw-subject-card-info-color;
                     display: flex;
+                    margin-top: $sdx-h1-font-size;
                     & > div:first-child {
                         span {
                             color: $sdx-secondary-color--light3;
+                            margin-right:$sdx-help-font-size;
                         }
                     }
                 }
@@ -146,7 +158,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            word-break: break-all;;
+            word-break: break-all;
             color: $sdx-secondary-color--light3;
             padding: $sdx-gap-small 0 $sdx-gap-regular 0;
         }

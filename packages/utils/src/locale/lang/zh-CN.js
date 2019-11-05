@@ -56,7 +56,8 @@ export default {
                 ViewDetail: '查看详情',
                 Edit: '编辑',
                 Delete: '删除'
-            }
+            },
+            NoDescriptionAdded: '没有添加描述'
         },
         shareSetting: {
             title: '共享设置',

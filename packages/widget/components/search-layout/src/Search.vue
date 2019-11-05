@@ -24,9 +24,7 @@
                 </SdxuButton>
                 <SdxuButton
                     @click="handleReset"
-                    type="primary"
-                    :invert="true"
-                    :plain="true"
+                    type="default"
                     v-if="children.length > 2"
                 >
                     {{ t('sdxCommon.Reset') }}

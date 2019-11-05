@@ -6,7 +6,7 @@ $sdx-success-color: #00875A !default;
 $sdx-danger-color: #DE350B !default;
 $sdx-info-color: #909399 !default;
 $sdx-disable-color: #DFE2E7 !default;
-$sdx-mark-color: #4781F8 !default;
+$sdx-mark-color: $sdx-primary-color !default;
 
 $sdx-primary-color--darker: #0E388C !default;
 $sdx-primary-color--light1: #0052CC !default;

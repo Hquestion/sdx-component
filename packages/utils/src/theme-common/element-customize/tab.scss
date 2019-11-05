@@ -1,0 +1,24 @@
+@import "~element-ui/lib/theme-chalk/tabs.css";
+
+.el-tabs__item {
+    padding: 0 $sdx-gap-regular;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    color: $sdx-secondary-color--light3;
+    font-weight: normal;
+    font-family: PingFangSC-Regular;
+    &:hover {
+        color: $sdx-primary-color;
+    }
+    &:active {
+        color: $sdx-primary-color--darker;
+    }
+    &.is-active {
+        color: $sdx-primary-color;
+        font-weight: 500;
+    }
+}
+.el-tabs__active-bar {
+    background: $sdx-primary-color;
+}

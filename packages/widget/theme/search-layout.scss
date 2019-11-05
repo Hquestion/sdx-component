@@ -14,6 +14,15 @@
             z-index: 2;
             @extend .shadow;
         }
+        .sdxw-search-item {
+            margin-bottom: 26px;
+            .el-form-item {
+                margin-bottom: 24px;
+            }
+        }
+        .sdxw-search-layout__btn {
+            margin-bottom: 26px;
+        }
 
     }
     @include modifier('align-left') {
@@ -47,7 +56,7 @@
     @include element('btn') {
         display: inline-block;
         vertical-align: middle;
-        margin-bottom: 26px;
+        margin-bottom: 0;
     }
     .el-form {
         display: inline-block;
@@ -58,14 +67,14 @@
 @include block('search-item', $bem-namespace-widget) {
     height: $sdx-form-element-height-large;
     line-height: $sdx-form-element-height-large;
-    margin-bottom: 26px;
+    margin-bottom: 0;
     vertical-align: middle;
     position: relative;
     top:$sdxw-search-item-top;
     margin-right: $sdx-margin / 2;
     display: inline-block;
     .el-form-item {
-        margin-bottom: $sdx-gap-regular;
+        margin-bottom: 0;
         .el-form-item__label {
             color: $sdx-secondary-color--light3;
             font-size: $sdx-content-font-size;

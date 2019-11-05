@@ -128,7 +128,7 @@ export default {
             height: 24px;
             line-height: 24px;
             .highLight {
-                font-weight: 700;
+                font-weight: 600;
                 color: #fff;
             }
         }

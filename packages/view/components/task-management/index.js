@@ -1,6 +1,7 @@
 import TaskView from './src/index';
 import TaskManagement from './src/TaskManagementView';
 import TaskDetailView from './src/task-detail/TaskDetailView';
+import TaskManageAdmin from './src/administrator/Admin';
 import { t } from '@sdx/utils/src/locale';
 
 TaskManagement.install = vue => {
@@ -17,6 +18,15 @@ const routeCfg = [{
             path: 'sdxv-task-list',
             name: 'SdxvTaskList',
             component: TaskManagement,
+            meta: {
+                breadcrumb: t('view.task.TaskManagement'),
+                isRoot: true
+            },
+        },
+        {
+            path: 'sdxv-task-admin',
+            name: 'SdxvTaskAdmin',
+            component: TaskManageAdmin,
             meta: {
                 breadcrumb: t('view.task.TaskManagement'),
                 isRoot: true

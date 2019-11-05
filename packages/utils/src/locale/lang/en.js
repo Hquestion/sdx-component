@@ -332,7 +332,8 @@ export default {
                 Manual: 'Manual',
                 Dispatch: 'Dispatch',
                 SubordinateGroup: 'Subordinate group',
-                Type: 'Type'
+                Type: 'Type',
+                Detail: 'Detail'
             }
         },
         monitor: {

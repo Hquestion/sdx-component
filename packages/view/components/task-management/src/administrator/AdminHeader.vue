@@ -8,10 +8,10 @@
             @switch="switchTaskType"
             class="radio-group"
         >
-            <SdxuTabRadioItem name="execute">
-                {{ '任务执行列表' }}
-            </SdxuTabRadioItem>
             <SdxuTabRadioItem name="task">
+                {{ '任务列表' }}
+            </SdxuTabRadioItem>
+            <SdxuTabRadioItem name="execute">
                 {{ '定时任务列表' }}
             </SdxuTabRadioItem>
         </SdxuTabRadioGroup>
@@ -32,7 +32,7 @@ export default {
     data() {
         return {
             searchName: '',
-            taskType: 'execute'
+            taskType: 'task'
         };
     },
     created() {

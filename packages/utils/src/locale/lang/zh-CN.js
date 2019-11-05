@@ -331,7 +331,8 @@ export default {
                 Manual: '手动',
                 Dispatch: '调度',
                 SubordinateGroup: '所属组',
-                Type: '类型'
+                Type: '类型',
+                Detail: '详情'
             }
         },
         monitor: {

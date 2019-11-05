@@ -1,68 +1,42 @@
 <template>
-    <div class="sdxv-task-manage-executelist">
-        <div class="info">
-            <div
-                v-for="(item) in infoList"
-                :key="item.title"
-                :class="item.class"
-            >
-                <div>
-                    <div class="title">
-                        {{ item.title }}
-                    </div>
-                    <div class="total">
-                        {{ item.total }}
-                    </div>
-                    <div class="progress">
-                        <span>{{ t('view.task.tipCard.Manual') }}</span>
-                        <el-progress
-                            :stroke-width="8"
-                            :percentage="50"
-                            color="#1144AB"
-                            :show-text="false"
-                        />
-                        <span>{{ t('view.task.tipCard.Dispatch') }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <SdxwSearchLayout>
-            <SdxwSearchItem label="类型:">
-                <el-select
-                    size="large"
-                >
-                    <el-option />
-                </el-select>
-            </SdxwSearchItem>
-            <SdxwSearchItem label="状态">
-                <el-select
-                    size="large"
-                >
-                    <el-option />
-                </el-select>
-            </SdxwSearchItem>
-            <SdxwSearchItem label="状态">
-                <el-select
-                    size="large"
-                >
-                    <el-option />
-                </el-select>
-            </SdxwSearchItem>
-                
-            <SdxwSearchItem label="时间">
-                <el-date-picker
-                    type="monthrange"
-                    range-separator="-"
-                    start-placeholder="开始月份"
-                    end-placeholder="结束月份"
-                    size="large"
+    <div class="sdxv-task-manage-tasklist">
+        <SdxwSearchLayout
+            :label-width="lang$ ==='en' ? '120px' : '100px'"
+            @search="handleSearch"
+            @reset="handleReset"
+        >
+            <SdxwSearchItem :label="`${t('view.task.taskName')}：`">
+                <SdxuInput
+                    :placeholder="t('view.task.PleaseInput')"
+                    v-model="name"
                 />
             </SdxwSearchItem>
-            <SdxwSearchItem label="状态">
+            <SdxwSearchItem :label="`${t('sdxCommon.Creator')}：`">
+                <SdxuInput
+                    v-model="ownerId"
+                    :placeholder="t('view.task.PleaseInput')"
+                />
+            </SdxwSearchItem>
+            <SdxwSearchItem :label="`${t('view.task.tipCard.SubordinateGroup')}：`">
                 <el-select
                     size="large"
+                    :placeholder="t('sdxCommon.PleaseSelect')"
                 >
                     <el-option />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem :label="`${t('view.task.tipCard.Type')}：`">
+                <el-select
+                    size="large"
+                    :placeholder="t('sdxCommon.PleaseSelect')"
+                    v-model="type"
+                >
+                    <el-option
+                        v-for="item in taskType"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
                 </el-select>
             </SdxwSearchItem>
         </SdxwSearchLayout>
@@ -70,10 +44,6 @@
             <sdxu-table
                 :data="table"
             >
-                <el-table-column
-                 
-                    label="执行ID"
-                />
                 <el-table-column
                     prop="name"
                     :label="t('view.task.taskName')"
@@ -87,61 +57,52 @@
                     :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
-               
-                    :label="'所属组'"
-                />
-                <el-table-column
-                    prop="execute_type"
-                    :label="t('view.task.executeType')"
+                    prop="quota.cpu"
+                    :label="'CPU'"
+                    sortable
                 /> 
                 <el-table-column
-                    prop="cron_start_time"
-                    :label="t('view.task.executeStartTime')"
+                    prop="quota.memory"
+                    :label="t('view.task.Memory')"
                     sortable
-                >
-                    <template
-                        slot-scope="scope"
-                    >
-                        {{ dateFormatter(scope.row.created_at) }}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="cron_end_time"
-                    :label="t('view.task.executeStopTime')"
-                    sortable
-                >
-                    <template
-                        slot-scope="scope"
-                    >
-                        {{ dateFormatter(scope.row.created_at) }}
-                    </template>
-                </el-table-column>
-                <el-table-column 
-                    sortable
-                    prop="repeat_times"
-                    :label="t('view.task.executeTime')"
                 />
+                <el-table-column
+                    prop="quota.gpu"
+                    :label="'GPU'"
+                    sortable
+                />
+                
+                <el-table-column
+               
+                    :label="t('view.task.tipCard.SubordinateGroup')"
+                />
+                <el-table-column
+                    prop="created_at"
+                    :label="t('sdxCommon.CreatedTime')"
+                >
+                    <template
+                        slot-scope="scope"
+                    >
+                        {{ dateFormatter(scope.row.created_at) }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     :label="t('sdxCommon.Operation')"
                     min-width="172px"
                 >
                     <template #default="{ row }">
-                        <SdxuIconButtonGroup>
-                            <SdxuButton
-                                type="primary"
-                                size="regular"
-                                :plain="true"
-                            >
-                                {{ '取消执行' }} 
-                            </SdxuButton>
-                            <SdxuButton
-                                type="primary"
-                                size="regular"
-                                :plain="true"
-                            >
-                                {{ '详情' }}
-                            </SdxuButton>
-                        </SdxuIconButtonGroup>
+                        <SdxuButton
+                            size="regular"
+                            type="link"
+                        >
+                            {{ t('view.task.tipCard.Detail') }} 
+                        </SdxuButton>
+                        <SdxuButton
+                            type="link"
+                            size="regular"
+                        >
+                            {{ t('sdxCommon.Delete') }}
+                        </SdxuButton>
                     </template>
                 </el-table-column>
             </sdxu-table>
@@ -153,63 +114,41 @@
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
-import { Row, Col, Progress } from 'element-ui';
+import SdxuPagination from '@sdx/ui/components/pagination';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import Button from '@sdx/ui/components/button';
+import {taskType} from '../tool/config';
 export default {
-    name: 'SdxvExecutelist',
-    data() {
-        return {
-            infoList: [
-                {
-                    total: 123,
-                    title: this.t('view.task.tipCard.TotalExecution'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'execute'
-                },
-                {
-                    total: 123,
-                    title:  this.t('view.task.tipCard.Queuing'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'queuing'
-                },
-                {
-                    total: 123,
-                    title: this.t('view.task.state.RUNNING'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'running'
-                },
-                {
-                    total: 123,
-                    title:  this.t('view.task.tipCard.SuccessfulOperation'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'success'
-                },
-                {
-                    total: 123,
-                    title:  this.t('view.task.tipCard.OperationFailure'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'fail'
-                },
-            ],
-            table: []
-        };
-    },
+    name: 'SdxvTaskList',
     mixins: [locale],
     components: {
         [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
         SdxuTable,
-        [Row.name]: Row,
-        [Col.name]: Col,
-        [Progress.name]: Progress
+        [Button.name]: Button,
+        SdxuPagination,
+    },
+    data() {
+        return {
+            taskType,
+            table: [],
+            name: '',
+            ownerId: '',
+            groupId: '',
+            type: ''
+        };
     },
     methods: {
         dateFormatter,
+        handleSearch() {
+
+        },
+        handleReset() {
+
+        }
+    },
+    mounted() {
+        
     },
     created() {
         this.table = [
@@ -357,79 +296,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sdxv-task-manage-executelist {
+.sdxv-task-manage-tasklist {
+    & /deep/ {
+        .__view {
+            width: 100% !important;
+        }
+    }
     .panel {
         background: #FFFFFF;
         box-shadow: 0 2px 4px 0 #C2CDDE;
         border-radius: 2px;
     }
-    .info {
-        margin:0  -12px;
-        height: 152px;
-        margin-bottom: 24px;
-        &>div {
-            width: 20%;
-            text-align: center;
-            padding: 0 12px;
-            height: 152px;
-            float: left;
-            &>div {
-                height: 152px;
-                @extend .panel;
-                padding: 20px;
-                box-sizing: border-box;
-                .total {
-                    font-size: 48px;
-                    height: 74px;
-                    line-height: 74px;
-                }
-                .title {
-                    display: inline-block;
-                }
-                .progress {
-                    span {
-                        font-size: 12px;
-                        color: #6E7C94;
-                    }
-                }
-            }
-        }
-        .execute {
-            .total, .title {
-                color: #1144AB;
-            }
-        }
-        .queuing, .running {
-            .total, .title {
-                color: #FF9400;;
-            }
-        }
-        .success {
-            .total, .title {
-                color: #008A56;
-            }
-        }
-        .fail {
-            .total, .title {
-                color: #F11600;
-            }
-        }
-        & /deep/ {
-            .el-progress {
-                display: inline-block;
-                width: calc(100% - 116px);
-                margin: 0 6px;
-            }
-        }
-    }
     .table {
         @extend .panel;
-        padding: 24px;
-        height: calc(100vh - 554px);
         margin-top: 24px;
+        padding: 24px;
         .sdxu-button {
             padding: 0;
         }
+    }
+    .pagination {
+        margin-top: 24px;
     }
 }
 </style>

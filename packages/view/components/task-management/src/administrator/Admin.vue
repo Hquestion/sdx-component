@@ -1,8 +1,8 @@
 <template>
     <div class="sdxv-task-manage-admin">
         <TaskManageHeader @headerInfo="headerInfo" />
-        <ExecuteList v-if="taskType === 'task'" />
-        <TaskList v-else />
+        <TaskList v-if="taskType === 'task'" />
+        <ExecuteList v-else />
     </div>
 </template>
 

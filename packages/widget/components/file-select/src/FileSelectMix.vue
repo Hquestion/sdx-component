@@ -355,6 +355,7 @@ export default {
                     this.$refs.fileSelect.clearInputValue();
                     this.handleRemove(file);
                     reject(file);
+                    return;
                 }
                 if (file.size > this.maxSize) {
                     this.$emit('exceed-max-size', file);

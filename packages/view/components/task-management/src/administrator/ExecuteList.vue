@@ -171,6 +171,10 @@
                     :label="t('sdxCommon.Status')"
                 />
                 <el-table-column
+                    prop="state"
+                    :label="t('sdxCommon.Status')"
+                />
+                <el-table-column
                     :label="t('sdxCommon.Operation')"
                     min-width="130px"
                 >

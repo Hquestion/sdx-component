@@ -81,7 +81,9 @@ export default {
             TooManyFiles: '文件过多',
             SelectMax: '最多选择',
             Files: '个文件',
-            UseSearchTip: '没有找到？请使用搜索功能'
+            UseSearchTip: '没有找到？请使用搜索功能',
+            FileTypeError: '文件类型错误',
+            PleaseSelectRightFile: '请选择正确的文件类型！'
         },
         shareForm: {
             ShareToGlobal: '共享至全局：',

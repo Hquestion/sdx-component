@@ -24,6 +24,8 @@
                 :on-success="removeUpload"
                 style="margin-left: 20px;margin-right: 20px;"
                 v-if="canUpload()"
+                :on-exceed-max-size="onExceedMaxSize"
+                :on-exceed-max-size-dir="onExceedMaxSizeDir"
             >
                 {{ t('view.file.Upload') }}
             </SdxwFileSelect>
@@ -174,7 +176,7 @@ export default {
             // 目前先保留上传记录，不处理
         },
         onExceedMaxSize() {
-            let [that,url]  = [this,this.getSystemUrl()];   
+            let [that,url]  = [this,this.getSystemUrl()];
             MessageBox.custom.warning({
                 title: this.t('view.file.upload_or_download_operation_files_are_large'),
                 content(h){
@@ -189,8 +191,8 @@ export default {
                     );
                 }
             });
-            
-            
+
+
         },
         onExceedMaxSizeDir() {
             this.onExceedMaxSize();

@@ -81,7 +81,9 @@ export default {
             TooManyFiles: 'Too Many Files',
             SelectMax: 'You can select at most',
             Files: 'Files',
-            UseSearchTip: 'Can\'t find your files? Try search.'
+            UseSearchTip: 'Can\'t find your files? Try search.',
+            FileTypeError: 'Error file type',
+            PleaseSelectRightFile: 'Please select the accepted files!'
         },
         shareForm: {
             ShareToGlobal: 'Global Share:',

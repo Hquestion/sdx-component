@@ -5,6 +5,7 @@
     >
         <div class="sdxw-file-select__main">
             <SdxuButton
+                type="default"
                 trigger="click"
                 :icon="icon"
                 :keep-dropdown-open="true"
@@ -345,6 +346,16 @@ export default {
         },
         beforeUpload(file) {
             return new Promise((resolve, reject) => {
+                const extension = file.name.split('.')[-1, 1];
+                if (this.accept && this.accept.indexOf(extension) < 0) {
+                    this.$notify.error({
+                        title: this.t('widget.fileSelect.FileTypeError'),
+                        message: this.t('widget.fileSelect.PleaseSelectRightFile')
+                    });
+                    this.$refs.fileSelect.clearInputValue();
+                    this.handleRemove(file);
+                    reject(file);
+                }
                 if (file.size > this.maxSize) {
                     this.$emit('exceed-max-size', file);
                     if (this.onExceedMaxSize && typeof this.onExceedMaxSize === 'function') {

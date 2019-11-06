@@ -272,6 +272,10 @@ export function removeTask(uuid, params) {
     return httpService.remove(`${taskApi}/${uuid}`, params);
 }
 
+export function taskList(params) {
+    return httpService.get(`${taskApi}tasks`, params);
+}
+
 export function startTask(uuid, params) {
     return httpService.post(`${taskApi}/${uuid}/start`, params);
 }

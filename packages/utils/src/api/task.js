@@ -1,14 +1,14 @@
 
 import httpService from '../http-service';
 
-import { TASK_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_BASE, PROJECT_MANAGE_GATEWAY_BASE } from './config';
+import { TASK_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_BASE } from './config';
 
 import readAuths from './config';
 import { authWrapper } from './helper';
 
 const taskApi = `${TASK_MANAGE_GATEWAY_BASE}`;
 
-export const getTaskList = authWrapper(function (params) {
+export const getTaskList = authWrapper(function () {
     // return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
     return Promise.resolve({
         items: [
@@ -260,6 +260,9 @@ export const getTaskList = authWrapper(function (params) {
     });
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
 
+export function taskList(params) {
+    return httpService.get(`${taskApi}tasks`, params);
+}
 export function removeTask(uuid) {
     return httpService.remove(`${taskApi}/${uuid}`);
 }
@@ -273,7 +276,6 @@ export function stopTask(uuid, params) {
 }
 
 export function createTask(params) {
-    console.log(params);
     if(params.projectId) {
         // todo 有项目ID调project-manager的接口
     } else {

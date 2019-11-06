@@ -8,12 +8,12 @@
             <SdxwSearchItem :label="`${t('view.task.taskName')}：`">
                 <SdxuInput
                     :placeholder="t('view.task.PleaseInput')"
-                    v-model="name"
+                    v-model="params.name"
                 />
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('sdxCommon.Creator')}：`">
                 <SdxuInput
-                    v-model="ownerId"
+                    v-model="params.ownerId"
                     :placeholder="t('view.task.PleaseInput')"
                 />
             </SdxwSearchItem>
@@ -21,6 +21,7 @@
                 <el-select
                     size="large"
                     :placeholder="t('sdxCommon.PleaseSelect')"
+                    v-model="params.groupId"
                 >
                     <el-option />
                 </el-select>
@@ -29,7 +30,7 @@
                 <el-select
                     size="large"
                     :placeholder="t('sdxCommon.PleaseSelect')"
-                    v-model="type"
+                    v-model="params.type"
                 >
                     <el-option
                         v-for="item in taskType"
@@ -43,6 +44,8 @@
         <div class="table">
             <sdxu-table
                 :data="table"
+                @sort-change="handleSortChange"
+                :default-sort="defaultSort"
             >
                 <el-table-column
                     prop="name"
@@ -106,6 +109,13 @@
                     </template>
                 </el-table-column>
             </sdxu-table>
+            <SdxuPagination
+                v-if="total"
+                :current-page.sync="page"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="handlePageChange"
+            />
         </div>
     </div>
 </template>
@@ -115,9 +125,12 @@ import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuPagination from '@sdx/ui/components/pagination';
-import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import Button from '@sdx/ui/components/button';
-import {taskType} from '../tool/config';
+import { taskType } from '../tool/config';
+import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
+import { taskList } from '@sdx/utils/src/api/task';
+import { getGroups } from '@sdx/utils/src/api/user';
 export default {
     name: 'SdxvTaskList',
     mixins: [locale],
@@ -132,165 +145,76 @@ export default {
         return {
             taskType,
             table: [],
-            name: '',
-            ownerId: '',
-            groupId: '',
-            type: ''
+            defaultSort: {
+                prop: 'quota.cpu',
+                order: 'descending'
+            },
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            params: {
+                name: '',
+                ownerId: '',
+                groupId: '',
+                type: '',
+                start: 1,
+                count: 10,
+                order: 'desc',
+                orderBy: 'CPU'
+            }
         };
     },
     methods: {
         dateFormatter,
+        getGroupList(){
+            // const params = {
+            //     start: 1,
+            //     count: -1,
+            //     order: 'desc',
+            //     orderBy: 'createdAt',
+            // };
+        },
+        getTaskList() {
+            const params = Object.assign({}, this.params, {
+                ...paginate(this.current, this.pageSize),
+            });
+            removeBlankAttr(params);
+            taskList(params).then(res => {
+                this.table = res.data;
+                this.total = res.total;
+            });
+        },
+        // 根据prop获取orderBy， 譬如 quota.cpu 得到 CPU
+        getOrderBy(prop) {
+            return (prop.slice(prop.indexOf('.') + 1)).toUpperCase();
+        },
+        handleSortChange({prop, order}) {
+            this.params.order = order === 'ascending' ? 'asc' : 'desc';
+            this.params.orderBy = this.getOrderBy(prop) || 'CPU';
+            this.page = 1;
+            this.getTaskList();
+        },
         handleSearch() {
-
+            this.current = 1;
+            this.getTaskList();
         },
         handleReset() {
-
+            this.params = {
+                name: '',
+                ownerId: '',
+                groupId: '',
+                type: '',
+                start: 1,
+                count: 10,
+                order: 'desc',
+                orderBy: 'CPU'
+            };
+            this.current = 1;
+            this.getTaskList();
         }
     },
-    mounted() {
-        
-    },
     created() {
-        this.table = [
-            {
-                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-                'created_at': '2019-10-17T08:49:14.195000Z',
-                'updated_at': '2019-10-17T08:49:14.194000Z',
-                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-                'name': 'dylan-jupyter',
-                'description': null,
-                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
-                'auto_image_id': null,
-                'type': 'JUPYTER',
-                'quota': {
-                    'cpu': 2,
-                    'gpu': 1,
-                    'memory': 4294967296,
-                    'gpu_model': ''
-                },
-                'resource_config': {
-                    'DEPLOY': {
-                        'requests': {
-                            'cpu': 2,
-                            'memory': 4294967296,
-                            'nvidia.com/gpu': 0
-                        },
-                        'labels': {
-                            'gpu.model': ''
-                        },
-                        'instance': 1
-                    }
-                },
-                'execute_type': 'MANUAL',
-                'delay': 0,
-                'trigger': null,
-                'priority': 2,
-                'crontab': null,
-                'cron_start_time': null,
-                'cron_end_time': null,
-                'repeat_times': null,
-                'concurrent_type': 'SKIP',
-                'error_handling': 'CANCEL',
-                'notifications': {},
-                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
-                'state': 'CREATED',
-                'datasources': [],
-                'datasets': [],
-                'home_path': '/usr/dylan'
-            },
-            {
-                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-                'created_at': '2019-10-17T08:49:14.195000Z',
-                'updated_at': '2019-10-17T08:49:14.194000Z',
-                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-                'name': 'dylan-jupyter',
-                'description': null,
-                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
-                'auto_image_id': null,
-                'type': 'JUPYTER',
-                'quota': {
-                    'cpu': 2,
-                    'gpu': 1,
-                    'memory': 4294967296,
-                    'gpu_model': ''
-                },
-                'resource_config': {
-                    'DEPLOY': {
-                        'requests': {
-                            'cpu': 2,
-                            'memory': 4294967296,
-                            'nvidia.com/gpu': 0
-                        },
-                        'labels': {
-                            'gpu.model': ''
-                        },
-                        'instance': 1
-                    }
-                },
-                'execute_type': 'MANUAL',
-                'delay': 0,
-                'trigger': null,
-                'priority': 2,
-                'crontab': null,
-                'cron_start_time': null,
-                'cron_end_time': null,
-                'repeat_times': null,
-                'concurrent_type': 'SKIP',
-                'error_handling': 'CANCEL',
-                'notifications': {},
-                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
-                'state': 'CREATED',
-                'datasources': [],
-                'datasets': [],
-                'home_path': '/usr/dylan'
-            },
-            {
-                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-                'created_at': '2019-10-17T08:49:14.195000Z',
-                'updated_at': '2019-10-17T08:49:14.194000Z',
-                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-                'name': 'dylan-jupyter',
-                'description': null,
-                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
-                'auto_image_id': null,
-                'type': 'JUPYTER',
-                'quota': {
-                    'cpu': 2,
-                    'gpu': 1,
-                    'memory': 4294967296,
-                    'gpu_model': ''
-                },
-                'resource_config': {
-                    'DEPLOY': {
-                        'requests': {
-                            'cpu': 2,
-                            'memory': 4294967296,
-                            'nvidia.com/gpu': 0
-                        },
-                        'labels': {
-                            'gpu.model': ''
-                        },
-                        'instance': 1
-                    }
-                },
-                'execute_type': 'MANUAL',
-                'delay': 0,
-                'trigger': null,
-                'priority': 2,
-                'crontab': null,
-                'cron_start_time': null,
-                'cron_end_time': null,
-                'repeat_times': null,
-                'concurrent_type': 'SKIP',
-                'error_handling': 'CANCEL',
-                'notifications': {},
-                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
-                'state': 'CREATED',
-                'datasources': [],
-                'datasets': [],
-                'home_path': '/usr/dylan'
-            }
-        ];
+        this.getTaskList();
     }
 };
 </script>

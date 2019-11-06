@@ -2,7 +2,7 @@ import { t } from '@sdx/utils/src/locale';
 export const taskType = [
     {
         value: '',
-        label: '全部'
+        label: t('sdxCommon.All')
     },
     {
         value: 'JUPYTER',
@@ -14,7 +14,7 @@ export const taskType = [
     },
     {
         value: 'CONTAINER_DEV',
-        label: '自定义容器'
+        label: t('view.task.type.CONTAINERDEV')
     },
     {
         value: 'SKYFLOW',
@@ -22,6 +22,9 @@ export const taskType = [
     },
     {
         value: 'MODELSERVICE',
-        label: '模型服务'
+        label: t('view.task.type.MODELSERVICE')
     }
+];
+export const executeType = [
+    
 ];

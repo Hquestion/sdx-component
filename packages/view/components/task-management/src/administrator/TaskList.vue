@@ -23,7 +23,12 @@
                     :placeholder="t('sdxCommon.PleaseSelect')"
                     v-model="params.groupId"
                 >
-                    <el-option />
+                    <el-option
+                        v-for="item in groups"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
                 </el-select>
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('view.task.tipCard.Type')}：`">
@@ -145,6 +150,7 @@ export default {
         return {
             taskType,
             table: [],
+            groups: [],
             defaultSort: {
                 prop: 'quota.cpu',
                 order: 'descending'
@@ -167,12 +173,20 @@ export default {
     methods: {
         dateFormatter,
         getGroupList(){
-            // const params = {
-            //     start: 1,
-            //     count: -1,
-            //     order: 'desc',
-            //     orderBy: 'createdAt',
-            // };
+            const params = {
+                start: 1,
+                count: -1,
+                order: 'desc',
+                orderBy: 'createdAt',
+            };
+            getGroups(params).then(res => {
+                res.groups.forEach(item => {
+                    this.groups.push({
+                        value: item.uuid,
+                        label: item.name
+                    });
+                });
+            });
         },
         getTaskList() {
             const params = Object.assign({}, this.params, {
@@ -215,6 +229,7 @@ export default {
     },
     created() {
         this.getTaskList();
+        this.getGroupList();
     }
 };
 </script>

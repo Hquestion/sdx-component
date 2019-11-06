@@ -127,6 +127,7 @@ export default {
     },
     view: {
         task: {
+            CancellationOfExecution: 'Cancellation Of Execution',
             TaskManagementList: 'Task Management List',
             TaskExecuteList: 'Task Execute List',
             TimingTaskList: 'Timing Task List',
@@ -270,7 +271,8 @@ export default {
                 TENSORFLOW_SERVING: 'TENSORFLOW_SERVING',
                 SPARK_SERVING: 'SPARK_SERVING',
                 PMML_SERVING: 'PMML_SERVING',
-                SKYFLOW_EXEC: 'SKYFLOW_EXEC'
+                SKYFLOW_EXEC: 'SKYFLOW_EXEC',
+                MODELSERVICE: 'MODELSERVICE'
             },
             officiaType: {
                 TENSORFLOW_DIST: 'TensorFlow_DIST',

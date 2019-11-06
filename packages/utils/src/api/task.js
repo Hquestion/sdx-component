@@ -259,10 +259,15 @@ export const getTaskList = authWrapper(function () {
         total: 8
     });
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
-
+// full 版本任务列表
 export function taskList(params) {
     return httpService.get(`${taskApi}tasks`, params);
 }
+// full 版本执行列表
+export function executionList(params) {
+    return httpService.get(`${taskApi}executions`, params);
+}
+
 export function removeTask(uuid) {
     return httpService.remove(`${taskApi}/${uuid}`);
 }

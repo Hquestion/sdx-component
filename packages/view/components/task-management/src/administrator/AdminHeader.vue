@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-task-manage-header">
         <div class="title">
-            {{ '任务管理列表' }}
+            {{ t('view.task.TaskManagementList') }}
         </div>
         <SdxuTabRadioGroup
             v-model="taskType"
@@ -9,10 +9,10 @@
             class="radio-group"
         >
             <SdxuTabRadioItem name="task">
-                {{ '任务列表' }}
+                {{ t('view.task.TaskList') }}
             </SdxuTabRadioItem>
             <SdxuTabRadioItem name="execute">
-                {{ '定时任务列表' }}
+                {{ t('view.task.TaskExecuteList') }}
             </SdxuTabRadioItem>
         </SdxuTabRadioGroup>
     </div>

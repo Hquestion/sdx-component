@@ -127,6 +127,7 @@ export default {
     },
     view: {
         task: {
+            CancellationOfExecution: '取消执行',
             TaskManagementList: '任务管理列表',
             TaskExecuteList: '任务执行列表',
             TimingTaskList: '定时任务列表',
@@ -269,7 +270,8 @@ export default {
                 TENSORFLOW_SERVING: 'TENSORFLOW模型服务',
                 SPARK_SERVING: 'SPARK模型服务',
                 PMML_SERVING: 'PMML模型服务',
-                SKYFLOW_EXEC: 'SKYFLOW执行记录'
+                SKYFLOW_EXEC: 'SKYFLOW执行记录',
+                MODELSERVICE: '模型服务'
             },
             officiaType: {
                 TENSORFLOW_DIST: 'TensorFlow分布式',

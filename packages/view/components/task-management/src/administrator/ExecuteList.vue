@@ -27,46 +27,77 @@
             </div>
         </div>
         <SdxwSearchLayout
-            :label-width="lang$ ==='en' ? '120px' : '80px'"
+            :label-width="lang$ ==='en' ? '120px' : '100px'"
         >
-            <SdxwSearchItem label="类型:">
+            <SdxwSearchItem :label="`${t('view.task.taskName')}：`">
+                <SdxuInput
+                    :placeholder="t('view.task.PleaseInput')"
+                    v-model="params.name"
+                />
+            </SdxwSearchItem>
+            <SdxwSearchItem :label="`${t('sdxCommon.Creator')}：`">
+                <SdxuInput
+                    v-model="params.ownerId"
+                    :placeholder="t('view.task.PleaseInput')"
+                />
+            </SdxwSearchItem>
+            <SdxwSearchItem :label="`${t('view.task.tipCard.SubordinateGroup')}：`">
+                <el-select
+                    size="large"
+                    :placeholder="t('sdxCommon.PleaseSelect')"
+                    v-model="params.groupId"
+                >
+                    <el-option
+                        v-for="item in groups"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem :label="`${t('view.task.tipCard.Type')}：`">
+                <el-select
+                    size="large"
+                    :placeholder="t('sdxCommon.PleaseSelect')"
+                    v-model="params.type"
+                >
+                    <el-option
+                        v-for="item in taskType"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem :label="`${t('view.task.executeType')}：`">
+                <el-select
+                    size="large"
+                    :placeholder="t('sdxCommon.PleaseSelect')"
+                    v-model="params.type"
+                >
+                    <el-option
+                        v-for="item in executeType"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
+                </el-select>
+            </SdxwSearchItem>
+            <SdxwSearchItem :label="`${t('sdxCommon.Status')}：`">
                 <el-select
                     size="large"
                 >
                     <el-option />
                 </el-select>
-            </SdxwSearchItem>
-            <SdxwSearchItem label="状态">
-                <el-select
-                    size="large"
-                >
-                    <el-option />
-                </el-select>
-            </SdxwSearchItem>
-            <SdxwSearchItem label="状态">
-                <el-select
-                    size="large"
-                >
-                    <el-option />
-                </el-select>
-            </SdxwSearchItem>
-                
+            </SdxwSearchItem>  
             <SdxwSearchItem :label="`${t('view.task.executeTimeRange')}：`">
                 <el-date-picker
-                   
                     type="daterange"
                     size="large"
                     :start-placeholder="t('view.task.startTime')"
                     :end-placeholder="t('view.task.stopTime')"
                 />
-            </SdxwSearchItem>
-            <SdxwSearchItem label="状态">
-                <el-select
-                    size="large"
-                >
-                    <el-option />
-                </el-select>
-            </SdxwSearchItem>
+            </SdxwSearchItem>    
         </SdxwSearchLayout>
         <div class="table">
             <sdxu-table
@@ -74,7 +105,7 @@
             >
                 <el-table-column
                  
-                    label="执行ID"
+                    :label="t('view.task.executeID')"
                 />
                 <el-table-column
                     prop="name"
@@ -82,7 +113,7 @@
                 />
                 <el-table-column
                     prop="type"
-                    :label="t('view.task.taskType')"
+                    :label="t('view.task.tipCard.Type')"
                 /> 
                 <el-table-column
                     prop="owner_id"
@@ -90,7 +121,7 @@
                 />
                 <el-table-column
                
-                    :label="'所属组'"
+                    :label="t('view.task.tipCard.SubordinateGroup')"
                 />
                 <el-table-column
                     prop="execute_type"
@@ -100,6 +131,7 @@
                     prop="cron_start_time"
                     :label="t('view.task.executeStartTime')"
                     sortable
+                    min-width="130px"
                 >
                     <template
                         slot-scope="scope"
@@ -111,6 +143,7 @@
                     prop="cron_end_time"
                     :label="t('view.task.executeStopTime')"
                     sortable
+                    min-width="130px"
                 >
                     <template
                         slot-scope="scope"
@@ -120,12 +153,17 @@
                 </el-table-column>
                 <el-table-column 
                     sortable
+                    min-width="100px"
                     prop="repeat_times"
                     :label="t('view.task.executeTime')"
                 />
+                <el-table-column 
+                    prop="state"
+                    :label="t('sdxCommon.Status')"
+                />
                 <el-table-column
                     :label="t('sdxCommon.Operation')"
-                    min-width="172px"
+                    min-width="130px"
                 >
                     <template #default="{ row }">
                         <SdxuIconButtonGroup>
@@ -134,14 +172,14 @@
                                 size="regular"
                                 :plain="true"
                             >
-                                {{ '取消执行' }} 
+                                {{ t('view.task.CancellationOfExecution') }} 
                             </SdxuButton>
                             <SdxuButton
                                 type="primary"
                                 size="regular"
                                 :plain="true"
                             >
-                                {{ '详情' }}
+                                {{ t('view.task.tipCard.Detail') }}
                             </SdxuButton>
                         </SdxuIconButtonGroup>
                     </template>
@@ -157,10 +195,14 @@ import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import { taskType, executeType } from '../tool/config';
+import { getGroups } from '@sdx/utils/src/api/user';
 export default {
     name: 'SdxvExecuteList',
     data() {
         return {
+            taskType,
+            executeType,
             infoList: [
                 {
                     total: 123,
@@ -198,7 +240,25 @@ export default {
                     class: 'fail'
                 },
             ],
-            table: []
+            table: [],
+            current: 1,
+            pageSize: 10,
+            total: 0,
+            groups: [],
+            params: {
+                name: '',
+                ownerId: '',
+                groupId: '',
+                type: '',
+                executionType: '',
+                state: '',
+                cronStartTime: '',
+                cronEndTime: '',
+                order: 'desc',
+                orderBy: 'cronStartTime',
+                start: 1,
+                count: 10,
+            }
         };
     },
     mixins: [locale],
@@ -212,8 +272,25 @@ export default {
     },
     methods: {
         dateFormatter,
+        getGroupList(){
+            const params = {
+                start: 1,
+                count: -1,
+                order: 'desc',
+                orderBy: 'createdAt',
+            };
+            getGroups(params).then(res => {
+                res.groups.forEach(item => {
+                    this.groups.push({
+                        value: item.uuid,
+                        label: item.name
+                    });
+                });
+            });
+        },
     },
     created() {
+        this.getGroupList();
         this.table = [
             {
                 '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
@@ -419,7 +496,7 @@ export default {
         & /deep/ {
             .el-progress {
                 display: inline-block;
-                width: calc(100% - 116px);
+                width: calc(100% - 60px);
                 margin: 0 6px;
             }
         }

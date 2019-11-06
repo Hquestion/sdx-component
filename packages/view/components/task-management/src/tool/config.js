@@ -47,3 +47,6 @@ export const executeType = [
         label: t('view.task.EventTriggering')
     }
 ];
+export const executeType = [
+
+];

@@ -89,7 +89,7 @@
                 >
                     <el-option />
                 </el-select>
-            </SdxwSearchItem>  
+            </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('view.task.executeTimeRange')}：`">
                 <el-date-picker
                     v-model="date"
@@ -99,7 +99,7 @@
                     :end-placeholder="t('view.task.stopTime')"
                     value-format="yyyy-MM-dd"
                 />
-            </SdxwSearchItem>    
+            </SdxwSearchItem>
         </SdxwSearchLayout>
         <div class="table">
             <sdxu-table
@@ -120,19 +120,19 @@
                 <el-table-column
                     prop="type"
                     :label="t('view.task.tipCard.Type')"
-                /> 
+                />
                 <el-table-column
                     prop="ownerId"
                     :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
-               
+
                     :label="t('view.task.tipCard.SubordinateGroup')"
                 />
                 <el-table-column
                     prop="executeType"
                     :label="t('view.task.executeType')"
-                /> 
+                />
                 <el-table-column
                     prop="cronStartTime"
                     :label="t('view.task.executeStartTime')"
@@ -157,7 +157,7 @@
                         {{ dateFormatter(scope.row.cronEndTime) }}
                     </template>
                 </el-table-column>
-                <el-table-column 
+                <el-table-column
                     sortable
                     min-width="100px"
                     :label="t('view.task.executeTime')"
@@ -166,7 +166,11 @@
                         {{ timeDuration(row.cronStartTime, row.cronEndTime) }}
                     </template>
                 </el-table-column>
-                <el-table-column 
+                <el-table-column
+                    prop="state"
+                    :label="t('sdxCommon.Status')"
+                />
+                <el-table-column
                     prop="state"
                     :label="t('sdxCommon.Status')"
                 />
@@ -181,7 +185,7 @@
                                 size="regular"
                                 :plain="true"
                             >
-                                {{ t('view.task.CancellationOfExecution') }} 
+                                {{ t('view.task.CancellationOfExecution') }}
                             </SdxuButton>
                             <SdxuButton
                                 type="primary"
@@ -349,7 +353,7 @@ export default {
                 'datasets': [],
                 'homePath': '/usr/dylan'
             }
-            
+
         ];
     }
 };

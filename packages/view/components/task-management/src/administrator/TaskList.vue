@@ -59,7 +59,7 @@
                 <el-table-column
                     prop="type"
                     :label="t('view.task.taskType')"
-                /> 
+                />
                 <el-table-column
                     prop="owner_id"
                     :label="t('sdxCommon.Creator')"
@@ -68,7 +68,7 @@
                     prop="quota.cpu"
                     :label="'CPU'"
                     sortable
-                /> 
+                />
                 <el-table-column
                     prop="quota.memory"
                     :label="t('view.task.Memory')"
@@ -79,9 +79,9 @@
                     :label="'GPU'"
                     sortable
                 />
-                
+
                 <el-table-column
-               
+
                     :label="t('view.task.tipCard.SubordinateGroup')"
                 />
                 <el-table-column
@@ -103,7 +103,7 @@
                             size="regular"
                             type="link"
                         >
-                            {{ t('view.task.tipCard.Detail') }} 
+                            {{ t('view.task.tipCard.Detail') }}
                         </SdxuButton>
                         <SdxuButton
                             type="link"

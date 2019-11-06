@@ -129,7 +129,7 @@
                 </SdxuAppender>
             </el-form-item>
             <el-form-item
-                prop="resourceConfig"
+                prop="resourceConfigObj"
                 :label="`${t('view.task.form.ResourceAllocation')}:`"
             >
                 <i class="icon">*</i>
@@ -214,24 +214,23 @@
                 <el-form-item
                     :label="`${t('view.task.StartCommand')}:`"
                 >
-                    <div style="display:flex;justify-content:space-between;width:560px;">
-                        <SdxuInput
-                            v-model="params.environments"
-                            size="small"
-                            :placeholder="`${t('view.task.StartCommand')}`"
-                            style="width:270px"
-                        />
-                        <span>-</span>
-                        <SdxuInput
-                            v-model="params.environments"
-                            size="small"
-                            :placeholder="`${t('view.task.Params')}`"
-                            style="width:270px"
-                        />
-                    </div>
+                    <SdxuInput
+                        v-model="params.environments"
+                        size="small"
+                        :placeholder="`${t('view.task.StartCommand')}`"
+                    />
                     <div class="form-tip">
                         {{ t('view.task.StartCommandTip') }}
                     </div>
+                </el-form-item>
+                <el-form-item
+                    :label="`${t('view.task.StartParams')}:`"
+                >
+                    <SdxuInput
+                        v-model="params.environments"
+                        size="small"
+                        :placeholder="`${t('view.task.Params')}`"
+                    />
                 </el-form-item>
                 <el-form-item
                     :label="`${t('view.task.OutputPath')}:`"
@@ -252,10 +251,45 @@
                     :label="`${t('view.task.PortRoute')}:`"
                 >
                     <div>
-                        <SdxuInput
-                            v-model="params.environments"
-                            size="small"
-                        />
+                        <div
+                            v-for="(item, index) in params.portRoutes"
+                            :key="index"
+                            style="display:flex;justify-content:space-between;width:580px;margin:5px 0;"
+                        >
+                            <el-select
+                                v-model="item.protocol"
+                                style="width:230px;"
+                            >
+                                <el-option
+                                    v-for="option in protocolOptions"
+                                    :key="option"
+                                    :label="option"
+                                    :value="option"
+                                />
+                            </el-select>
+                            <span>-</span>
+                            <SdxuInput
+                                v-model.number="item.port"
+                                style="width:230px;"
+                                :placeholder="`${t('view.task.PortNumber')}`"
+                            />
+                            <div style="width:70px;">
+                                <sdxu-button
+                                    v-if="!index"
+                                    invert
+                                    @click="handleProtChange(true)"
+                                >
+                                    <i class="sdx-icon sdx-icon-plus" />
+                                </sdxu-button>
+                                <sdxu-button
+                                    v-if="index===1"
+                                    invert
+                                    @click="handleProtChange()"
+                                >
+                                    <i class="sdx-icon sdx-bianzu3" />
+                                </sdxu-button>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-tip">
                         {{ t('view.task.PortRouteTip') }}
@@ -272,7 +306,7 @@ import BaseForm from './BaseForm';
 import Button from '@sdx/ui/components/button';
 import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
+import {  createProjectTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
@@ -286,6 +320,8 @@ import Appender from '@sdx/ui/components/appender';
 import DropdownTip from '@sdx/ui/components/dropdown-tip';
 import IconButton from '@sdx/ui/components/icon-button';
 import Scroll from '@sdx/ui/components/scroll';
+
+const RESOURCE_KEY = 'DEPLOY';
 
 export default {
     name: 'ContainerDevForm',
@@ -316,15 +352,15 @@ export default {
     data() {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
-                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
+                if(value[RESOURCE_KEY].requests.cpu === 0 || value[RESOURCE_KEY].requests.cpu === null || isNaN(value[RESOURCE_KEY].requests.cpu)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
-                } else if (value.EXECUTOR_GPUS === 0 || value.EXECUTOR_GPUS === null || isNaN(value.EXECUTOR_GPUS)) {
+                } else if (value[RESOURCE_KEY].labels['gpu.model'] === 0 || value[RESOURCE_KEY].labels['gpu.model'] === null || isNaN(value[RESOURCE_KEY].labels['gpu.model'])) {
                     callback(new Error(this.t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
-                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
+                if(value[RESOURCE_KEY].requests.cpu === 0 || value[RESOURCE_KEY].requests.cpu === null || isNaN(value[RESOURCE_KEY].requests.cpu)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
@@ -338,19 +374,31 @@ export default {
                 description: '',
                 type: 'CONTAINERDEV',
                 imageId: '',
-                resourceConfig: {
-                    'EXECUTOR_INSTANCES': 1,
-                    'EXECUTOR_CPUS': 0,
-                    'EXECUTOR_GPUS': 0,
-                    'EXECUTOR_MEMORY': 0,
-                    'GPU_MODEL': ''
+                resourceConfigObj: {
+                    [RESOURCE_KEY]: {
+                        requests: {
+                            cpu: 0,
+                            memory: 0,
+                            'nvidia.com/gpu': 0
+                        },
+                        labels: {
+                            'gpu.model': '',
+                        },
+                        instance: 1
+                    }
                 },
                 datasources: [],
                 datasets: [],
                 environments: '',
                 outputPaths: '',
                 project: '',
-                instanceNumber: 1
+                instanceNumber: 1,
+                portRoutes: [
+                    {
+                        protocol: 'HTTP',
+                        port: ''
+                    }
+                ]
             },
             projectId: this.$route.params.projectId,
             imageOptions: [],
@@ -380,7 +428,7 @@ export default {
                 imageId: [
                     { required: true, message: this.t('view.task.form.Please_select_the_operating_environment'), trigger: 'change' }
                 ],
-                resourceConfig: [
+                resourceConfigObj: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -390,7 +438,8 @@ export default {
             datasetsOptions: [],
             cooperation:true,
             dataReady: false,
-            showMoreSetting: true
+            showMoreSetting: true,
+            protocolOptions: ['HTTP', 'TCP']
         };
     },
     computed: {
@@ -417,6 +466,16 @@ export default {
     },
     methods: {
         // 数据集列表
+        handleProtChange(adding) {
+            if (adding) {
+                this.params.portRoutes.push({
+                    protocol: 'HTTP',
+                    port: ''
+                });
+            } else {
+                this.params.portRoutes.pop();
+            }
+        },
         getDataSetList() {
             getDataSet({ share_kinds: '1,2,3' })
                 .then(data => {
@@ -442,11 +501,12 @@ export default {
         },
         commit() {
             if (!this.isGpuEnt) {
-                this.params.resourceConfig.EXECUTOR_GPUS = 0;
-                this.params.resourceConfig.GPU_MODEL = '';
+                this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'] = 0;
+                this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'] = '';
             }
             this.$refs.containerdev.validate().then(() => {
-                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
+                this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
+                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
                     .then (() => {
                         this.$router.go(-1);
                     });
@@ -457,36 +517,49 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
+            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
             this.cpuObj = {
-                cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
-                memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),
-                uuid: `${this.params.resourceConfig.EXECUTOR_CPUS/1000}-${this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024)}`
+                cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
+                memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfig[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
             };
             this.gpuObj = {
-                label:this.params.resourceConfig.GPU_MODEL,
-                count: this.params.resourceConfig.EXECUTOR_GPUS,
-                uuid: `${this.params.resourceConfig.GPU_MODEL}-${this.params.resourceConfig.EXECUTOR_GPUS}`
+                label: this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
+                count: this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'],
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfig[RESOURCE_KEY].requests['nvidia.com/gpu']}`
             };
             this.$nextTick(()=> {
                 this.dataReady = true;
             });
         },
         cpuObj(val) {
-            this.params.resourceConfig = {
-                'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': val.cpu * 1000,
-                'EXECUTOR_GPUS': this.params.resourceConfig.EXECUTOR_GPUS,
-                'EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
-                'GPU_MODEL': this.params.resourceConfig.GPU_MODEL
+            this.params.resourceConfigObj = {
+                [RESOURCE_KEY]: {
+                    requests: {
+                        cpu: val.cpu * 1000,
+                        memory: val.memory * 1024* 1024*1024,
+                        'nvidia.com/gpu': this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu']
+                    },
+                    labels: {
+                        'gpu.model': this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
+                    },
+                    instance: 1
+                }
             };
         },
         gpuObj(val) {
-            this.params.resourceConfig = {
-                'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': this.params.resourceConfig.EXECUTOR_CPUS,
-                'EXECUTOR_GPUS': val.count,
-                'EXECUTOR_MEMORY': this.params.resourceConfig.EXECUTOR_MEMORY,
-                'GPU_MODEL': val.label
+            this.params.resourceConfigObj = {
+                [RESOURCE_KEY]: {
+                    requests: {
+                        cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu,
+                        memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory,
+                        'nvidia.com/gpu': val.count
+                    },
+                    labels: {
+                        'gpu.model': val.label,
+                    },
+                    instance: 1
+                }
             };
         },
         'params.imageId'() {

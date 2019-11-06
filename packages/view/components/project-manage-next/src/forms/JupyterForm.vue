@@ -127,7 +127,7 @@
                 </SdxuAppender>
             </el-form-item>
             <el-form-item
-                prop="resourceConfig"
+                prop="resourceConfigObj"
                 :label="`${t('view.task.form.ResourceAllocation')}:`"
             >
                 <i class="icon">*</i>
@@ -199,7 +199,8 @@ import Select from 'element-ui/lib/select';
 import SdxuInput from '@sdx/ui/components/input';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
-import { createTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
+import { updateTask, getDataSet} from '@sdx/utils/src/api/project';
+import { createProjectTask } from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
@@ -210,6 +211,9 @@ import DropdownTip from '@sdx/ui/components/dropdown-tip';
 import IconButton from '@sdx/ui/components/icon-button';
 import Scroll from '@sdx/ui/components/scroll';
 import Appender from '@sdx/ui/components/appender';
+
+const RESOURCE_KEY = 'DEPLOY';
+
 export default {
     name: 'JupyterForm',
     mixins: [locale, projectDetailMixin],
@@ -237,15 +241,15 @@ export default {
     data() {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
-                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
+                if(value[RESOURCE_KEY].requests.cpu === 0 || value[RESOURCE_KEY].requests.cpu === null || isNaN(value[RESOURCE_KEY].requests.cpu)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
-                } else if (value.EXECUTOR_GPUS === 0 || value.EXECUTOR_GPUS === null || isNaN(value.EXECUTOR_GPUS)) {
+                } else if (value[RESOURCE_KEY].labels['gpu.model'] === 0 || value[RESOURCE_KEY].labels['gpu.model'] === null || isNaN(value[RESOURCE_KEY].labels['gpu.model'])) {
                     callback(new Error(this.t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
-                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
+                if(value[RESOURCE_KEY].requests.cpu === 0 || value[RESOURCE_KEY].requests.cpu === null || isNaN(value[RESOURCE_KEY].requests.cpu)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
@@ -258,12 +262,18 @@ export default {
                 description: '',
                 type: 'JUPYTER',
                 imageId: '',
-                resourceConfig: {
-                    'EXECUTOR_INSTANCES': 1,
-                    'EXECUTOR_CPUS': 0,
-                    'EXECUTOR_GPUS': 0,
-                    'EXECUTOR_MEMORY': 0,
-                    'GPU_MODEL': ''
+                resourceConfigObj: {
+                    [RESOURCE_KEY]: {
+                        requests: {
+                            cpu: 0,
+                            memory: 0,
+                            'nvidia.com/gpu': 0
+                        },
+                        labels: {
+                            'gpu.model': '',
+                        },
+                        instance: 1
+                    }
                 },
                 datasources: [],
                 datasets: [],
@@ -296,7 +306,7 @@ export default {
                 imageId: [
                     { required: true, message: this.t('view.task.form.Please_select_the_operating_environment'), trigger: 'change' }
                 ],
-                resourceConfig: [
+                resourceConfigObj: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -360,11 +370,12 @@ export default {
         },
         commit() {
             if (!this.isGpuEnt) {
-                this.params.resourceConfig.EXECUTOR_GPUS = 0;
-                this.params.resourceConfig.GPU_MODEL = '';
+                this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'] = 0;
+                this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'] = '';
             }
             this.$refs.jupyter.validate().then(() => {
-                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
+                this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
+                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
                     .then (() => {
                         this.$router.go(-1);
                     });
@@ -374,36 +385,49 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
+            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
             this.cpuObj = {
-                cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
-                memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),
-                uuid: `${this.params.resourceConfig.EXECUTOR_CPUS/1000}-${this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024)}`
+                cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
+                memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfig[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
             };
             this.gpuObj = {
-                label:this.params.resourceConfig.GPU_MODEL,
-                count: this.params.resourceConfig.EXECUTOR_GPUS,
-                uuid: `${this.params.resourceConfig.GPU_MODEL}-${this.params.resourceConfig.EXECUTOR_GPUS}`
+                label: this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
+                count: this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'],
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfig[RESOURCE_KEY].requests['nvidia.com/gpu']}`
             };
             this.$nextTick(()=> {
                 this.dataReady = true;
             });
         },
         cpuObj(val) {
-            this.params.resourceConfig = {
-                'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': val.cpu * 1000,
-                'EXECUTOR_GPUS': this.params.resourceConfig.EXECUTOR_GPUS,
-                'EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
-                'GPU_MODEL': this.params.resourceConfig.GPU_MODEL
+            this.params.resourceConfigObj = {
+                [RESOURCE_KEY]: {
+                    requests: {
+                        cpu: val.cpu * 1000,
+                        memory: val.memory * 1024* 1024*1024,
+                        'nvidia.com/gpu': this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu']
+                    },
+                    labels: {
+                        'gpu.model': this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
+                    },
+                    instance: 1
+                }
             };
         },
         gpuObj(val) {
-            this.params.resourceConfig = {
-                'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': this.params.resourceConfig.EXECUTOR_CPUS,
-                'EXECUTOR_GPUS': val.count,
-                'EXECUTOR_MEMORY': this.params.resourceConfig.EXECUTOR_MEMORY,
-                'GPU_MODEL': val.label
+            this.params.resourceConfigObj = {
+                [RESOURCE_KEY]: {
+                    requests: {
+                        cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu,
+                        memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory,
+                        'nvidia.com/gpu': val.count
+                    },
+                    labels: {
+                        'gpu.model': val.label,
+                    },
+                    instance: 1
+                }
             };
         },
         'params.imageId'() {

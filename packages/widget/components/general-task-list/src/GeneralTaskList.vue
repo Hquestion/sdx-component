@@ -80,6 +80,7 @@ import Empty from '@sdx/ui/components/empty';
 import SubCard from '@sdx/widget/components/subject-card';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import { getTaskList } from '@sdx/utils/src/api/task';
+import { getProjectTasks } from '@sdx/utils/src/api/project';
 import taskMixin from '@sdx/utils/src/mixins/task';
 import locale from '@sdx/utils/src/mixins/locale';
 import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
@@ -133,11 +134,11 @@ export default {
             type: String,
             default: ''
         },
-        taskType: {
+        taskCategory: {
             type: String,
-            default: 'dev'
+            default: ''
         },
-        taskName: {
+        name: {
             type: String,
             default: ''
         },
@@ -154,78 +155,96 @@ export default {
         initList(hideLoading) {
             this.loading = hideLoading ? false : true;
             const params = {
-                name: this.taskName,
+                name: this.name,
                 ...paginate(this.current, this.pageSize),
                 order: this.order,
                 orderBy: this.orderBy,
-                projectId: this.projectId,
-                taskType: this.taskType
             };
-            getTaskList(params).then(res => {
-                this.taskList = res.items;
-                this.total = res.total;
-                this.loading = false;
-                this.taskList.forEach(item => {
-                    const isOwn = getUser().userId === item.owner.uuid;
-                    item.showOpenIde = item.type === 'SKYIDE';
-                    item.showJupyterLink = item.type === 'JUPYTER';
-                    item.showRunningInfo = item.type === 'SKYFLOW';
-                    item.meta = {
-                        uuid: '123',
-                        owner: {uuid: 'd565e2c9-ee81-40b2-8acd-10f4359a6242'},
-                        title: item.name,
-                        description: item.description,
-                        creator: item.ownerName,
-                        createdAt: item.createdAt,
-                        showEdit: isOwn,
-                        showRemove: isOwn,
-                        icon: this.iconOptions[item.type].icon,
-                        iconName: this.iconOptions[item.type].name,
-                        state: {}
-                    };
-                    item.meta.state.type = STATE_MAP_FOLD_LABEL_TYPE[item.state];
-                    switch(item.state) {
-                        case 'CREATED':
-                            item.meta.state.status = '';
-                            item.meta.state.statusText = this.t('view.task.state.CREATED');
-                            break;
-                        case 'LAUNCHING':
-                            item.meta.state.status = 'loading';
-                            item.meta.state.statusText = this.t('view.task.state.LAUNCHING');
-                            break;
-                        case 'LAUNCH_ABNORMAL':
-                            item.meta.state.status = 'warning';
-                            item.meta.state.statusText = this.t('view.task.state.LAUNCH_ABNORMAL');
-                            break;
-                        case 'RUNNING':
-                            item.meta.state.status = 'loading';
-                            item.meta.state.statusText = this.t('view.task.state.RUNNING');
-                            break;
-                        case 'FINISHED':
-                            item.meta.state.status = '';
-                            item.meta.state.statusText = this.t('view.task.state.FINISHED');
-                            break;
-                        case 'KILLED':
-                            item.meta.state.status = '';
-                            item.meta.state.statusText = this.t('view.task.state.KILLED');
-                            break;
-                        case 'FAILED':
-                            item.meta.state.status = 'warning';
-                            item.meta.state.statusText = this.t('view.task.state.FAILED');
-                            break;
-                        case 'KILLING':
-                            item.meta.state.status = 'loading';
-                            item.meta.state.statusText = this.t('view.task.state.KILLING');
-                            break;
-                        default:
-                            break;
-                    }
+
+            if (this.projectId) {
+                params.taskCategory = this.taskCategory;
+                getProjectTasks(this.projectId, params).then(res => {
+                    console.log('res', res);
+                    this.handleResp(res);
+                }).catch(() => {
+                    this.loading = false;
+                    this.taskList = [];
                 });
-            });
+            } else {
+                params.projectId = this.projectId;
+                getTaskList(params).then(res => {
+                    console.log('res', res);
+                    this.handleResp(res);
+                }).catch(() => {
+                    this.loading = false;
+                    this.taskList = [];
+                });
+            }
         },
         currentChange(val) {
             this.current = val;
             this.initList();
+        },
+        handleResp(res) {
+            this.taskList = res.items;
+            this.total = res.total;
+            this.loading = false;
+            this.taskList.forEach(item => {
+                const isOwn = getUser().userId === item.owner.uuid;
+                item.showOpenIde = item.type === 'SKYIDE';
+                item.showJupyterLink = item.type === 'JUPYTER';
+                item.showRunningInfo = item.type === 'SKYFLOW';
+                item.meta = {
+                    uuid: '123',
+                    owner: {uuid: 'd565e2c9-ee81-40b2-8acd-10f4359a6242'},
+                    title: item.name,
+                    description: item.description,
+                    creator: item.ownerName,
+                    createdAt: item.createdAt,
+                    showEdit: isOwn,
+                    showRemove: isOwn,
+                    icon: this.iconOptions[item.type].icon,
+                    iconName: this.iconOptions[item.type].name,
+                    state: {}
+                };
+                item.meta.state.type = STATE_MAP_FOLD_LABEL_TYPE[item.state];
+                switch(item.state) {
+                    case 'CREATED':
+                        item.meta.state.status = '';
+                        item.meta.state.statusText = this.t('view.task.state.CREATED');
+                        break;
+                    case 'LAUNCHING':
+                        item.meta.state.status = 'loading';
+                        item.meta.state.statusText = this.t('view.task.state.LAUNCHING');
+                        break;
+                    case 'LAUNCH_ABNORMAL':
+                        item.meta.state.status = 'warning';
+                        item.meta.state.statusText = this.t('view.task.state.LAUNCH_ABNORMAL');
+                        break;
+                    case 'RUNNING':
+                        item.meta.state.status = 'loading';
+                        item.meta.state.statusText = this.t('view.task.state.RUNNING');
+                        break;
+                    case 'FINISHED':
+                        item.meta.state.status = '';
+                        item.meta.state.statusText = this.t('view.task.state.FINISHED');
+                        break;
+                    case 'KILLED':
+                        item.meta.state.status = '';
+                        item.meta.state.statusText = this.t('view.task.state.KILLED');
+                        break;
+                    case 'FAILED':
+                        item.meta.state.status = 'warning';
+                        item.meta.state.statusText = this.t('view.task.state.FAILED');
+                        break;
+                    case 'KILLING':
+                        item.meta.state.status = 'loading';
+                        item.meta.state.statusText = this.t('view.task.state.KILLING');
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
     }
 };

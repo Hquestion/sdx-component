@@ -9,7 +9,7 @@
         align-items: center;
     }
     @include element('search-filter') {
-        margin: 20px 0 0 0;
+        margin: 24px 0 0 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -21,6 +21,10 @@
         }
         .sdx-icon {
             font-size: 14px;
+        }
+        .sdxw-search-item,
+        .sdxw-search-layout__btn {
+            margin-bottom: 0;
         }
     }
 }

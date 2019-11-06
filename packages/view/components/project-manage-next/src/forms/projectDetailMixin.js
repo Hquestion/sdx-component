@@ -52,6 +52,8 @@ export default {
                 count: -1
             }).then(res => {
                 this.packagesList = res.data || [];
+            }).catch(() => {
+                this.packagesList = [];
             });
         }
     }

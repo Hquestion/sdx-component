@@ -1,7 +1,7 @@
 <template>
     <BaseForm
         :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyIDE ${t('view.task.form.task')}`"
-        class="form-containerdev"
+        class="form-skyide"
         :label-width="lang$ === 'en' ? 190 : 160"
         icon="sdx-SkyIDErenwu"
         @commit="commit"
@@ -14,7 +14,7 @@
             :label-width="lang$ === 'en' ? '190px' : '160px'"
             slot="form"
             @submit.native.prevent
-            ref="containerdev"
+            ref="skyide"
             :rules="rules"
             :model="params"
         >
@@ -46,11 +46,11 @@
             </el-form-item>
             <el-form-item
                 :label="`${t('view.task.FilePath')}:`"
-                prop="directory"
+                prop="displayPath"
             >
                 <div>
                     <SdxwFileSelect
-                        v-model="params.directory"
+                        v-model="params.displayPath"
                         :string-model="true"
                         check-type="folder"
                         source="ceph"
@@ -142,7 +142,7 @@
                 </SdxuAppender>
             </el-form-item>
             <el-form-item
-                prop="resourceConfig"
+                prop="resourceConfigObj"
                 :label="`${t('view.task.form.ResourceAllocation')}:`"
             >
                 <i class="icon">*</i>
@@ -209,7 +209,7 @@
                 <el-form-item
                     :label="`${t('view.task.AutoRelease')}:`"
                 >
-                    <el-radio-group v-model="params.autoRelease">
+                    <el-radio-group v-model="autoRelease">
                         <el-radio
                             :label="true"
                         >
@@ -224,11 +224,11 @@
                 </el-form-item>
                 <el-form-item
                     :label="`${t('view.task.KernalReleaseTime')}:`"
+                    v-if="autoRelease"
                 >
                     <el-input-number
-                        v-model="params.kernelReleaseTime"
-                        :min="30"
-                        :disabled="!params.autoRelease"
+                        v-model="notebookKernelExpireTime"
+                        :min="3"
                     />
                     <span
                         class="form-tip"
@@ -239,11 +239,11 @@
                 </el-form-item>
                 <el-form-item
                     :label="`${t('view.task.PodReleaseTime')}:`"
+                    v-if="autoRelease"
                 >
                     <el-input-number
-                        v-model="params.podReleaseTime"
+                        v-model="podExpireTime"
                         :min="30"
-                        :disabled="!params.autoRelease"
                     />
                     <span
                         class="form-tip"
@@ -263,7 +263,8 @@ import BaseForm from './BaseForm';
 import Button from '@sdx/ui/components/button';
 import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-import {  createTask, updateTask, getDataSet} from '@sdx/utils/src/api/task';
+import { updateTask, getDataSet } from '@sdx/utils/src/api/task';
+import { createProjectTask } from '@sdx/utils/src/api/project';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
@@ -279,6 +280,9 @@ import Appender from '@sdx/ui/components/appender';
 import DropdownTip from '@sdx/ui/components/dropdown-tip';
 import IconButton from '@sdx/ui/components/icon-button';
 import Scroll from '@sdx/ui/components/scroll';
+
+const RESOURCE_KEY = 'DEPLOY';
+
 export default {
     name: 'SkyIdeForm',
     mixins: [locale, projectDetailMixin],
@@ -310,15 +314,15 @@ export default {
     data() {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
-                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
+                if(value[RESOURCE_KEY].requests.cpu === 0 || value[RESOURCE_KEY].requests.cpu === null || isNaN(value[RESOURCE_KEY].requests.cpu)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
-                } else if (value.EXECUTOR_GPUS === 0 || value.EXECUTOR_GPUS === null || isNaN(value.EXECUTOR_GPUS)) {
+                } else if (value[RESOURCE_KEY].labels['gpu.model'] === 0 || value[RESOURCE_KEY].labels['gpu.model'] === null || isNaN(value[RESOURCE_KEY].labels['gpu.model'])) {
                     callback(new Error(this.t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
-                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
+                if(value[RESOURCE_KEY].requests.cpu === 0 || value[RESOURCE_KEY].requests.cpu === null || isNaN(value[RESOURCE_KEY].requests.cpu)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
@@ -332,22 +336,28 @@ export default {
                 description: '',
                 type: 'SKYIDE',
                 imageId: '',
-                resourceConfig: {
-                    'EXECUTOR_INSTANCES': 1,
-                    'EXECUTOR_CPUS': 0,
-                    'EXECUTOR_GPUS': 0,
-                    'EXECUTOR_MEMORY': 0,
-                    'GPU_MODEL': ''
+                resourceConfigObj: {
+                    [RESOURCE_KEY]: {
+                        requests: {
+                            cpu: 0,
+                            memory: 0,
+                            'nvidia.com/gpu': 0
+                        },
+                        labels: {
+                            'gpu.model': '',
+                        },
+                        instance: 1
+                    }
                 },
                 datasources: [],
                 datasets: [],
-                autoRelease: true,
-                kernelReleaseTime: 30,
-                podReleaseTime: 30,
                 project: '',
-                directory: ''
+                displayPath: ''
             },
             projectId: this.$route.params.projectId,
+            autoRelease: true,
+            notebookKernelExpireTime: 3,
+            podExpireTime: 30,
             imageOptions: [],
             cpuObj: {},
             gpuObj: {},
@@ -363,7 +373,7 @@ export default {
                 project: [
                     { required: true, message: this.t('view.task.EnterRelatedProject'), trigger: 'change'}
                 ],
-                directory: [
+                displayPath: [
                     { required: true, message: this.t('view.task.EnterFilePath'), trigger: 'blur'}
                 ],
                 description: [
@@ -375,7 +385,7 @@ export default {
                 imageId: [
                     { required: true, message: this.t('view.task.form.Please_select_the_operating_environment'), trigger: 'change' }
                 ],
-                resourceConfig: [
+                resourceConfigObj: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -423,7 +433,7 @@ export default {
         },
         imageList() {
             const params = {
-                imageType: 'CONTAINER_DEV',
+                imageType: 'JUPYTER',
                 start: 1,
                 count: -1,
                 ownerId: getUser().userId || ''
@@ -437,11 +447,14 @@ export default {
         },
         commit() {
             if (!this.isGpuEnt) {
-                this.params.resourceConfig.EXECUTOR_GPUS = 0;
-                this.params.resourceConfig.GPU_MODEL = '';
+                this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'] = 0;
+                this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'] = '';
             }
-            this.$refs.containerdev.validate().then(() => {
-                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createTask(this.params))
+            this.params.notebookKernelExpireTime = !this.autoRelease ? 0 : this.notebookKernelExpireTime * 60;
+            this.params.podExpireTime = !this.autoRelease ? 0 : this.podExpireTime * 60;
+            this.$refs.skyide.validate().then(() => {
+                this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
+                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
                     .then (() => {
                         this.$router.go(-1);
                     });
@@ -452,40 +465,56 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
+            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
             this.cpuObj = {
-                cpu: this.params.resourceConfig.EXECUTOR_CPUS/1000,
-                memory: this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024),
-                uuid: `${this.params.resourceConfig.EXECUTOR_CPUS/1000}-${this.params.resourceConfig.EXECUTOR_MEMORY / (1024*1024*1024)}`
+                cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
+                memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfig[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
             };
             this.gpuObj = {
-                label:this.params.resourceConfig.GPU_MODEL,
-                count: this.params.resourceConfig.EXECUTOR_GPUS,
-                uuid: `${this.params.resourceConfig.GPU_MODEL}-${this.params.resourceConfig.EXECUTOR_GPUS}`
+                label: this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
+                count: this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'],
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfig[RESOURCE_KEY].requests['nvidia.com/gpu']}`
             };
+            this.autoRelease = this.params.notebookKernelExpireTime === 0 && this.params.podExpireTime === 0;
+            this.notebookKernelExpireTime = this.params.notebookKernelExpireTime / 60;
+            this.podExpireTime = this.params.podExpireTime / 60;
             this.$nextTick(()=> {
                 this.dataReady = true;
             });
         },
         cpuObj(val) {
-            this.params.resourceConfig = {
-                'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': val.cpu * 1000,
-                'EXECUTOR_GPUS': this.params.resourceConfig.EXECUTOR_GPUS,
-                'EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
-                'GPU_MODEL': this.params.resourceConfig.GPU_MODEL
+            this.params.resourceConfigObj = {
+                [RESOURCE_KEY]: {
+                    requests: {
+                        cpu: val.cpu * 1000,
+                        memory: val.memory * 1024* 1024*1024,
+                        'nvidia.com/gpu': this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu']
+                    },
+                    labels: {
+                        'gpu.model': this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
+                    },
+                    instance: 1
+                }
             };
         },
         gpuObj(val) {
-            this.params.resourceConfig = {
-                'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': this.params.resourceConfig.EXECUTOR_CPUS,
-                'EXECUTOR_GPUS': val.count,
-                'EXECUTOR_MEMORY': this.params.resourceConfig.EXECUTOR_MEMORY,
-                'GPU_MODEL': val.label
+            this.params.resourceConfigObj = {
+                [RESOURCE_KEY]: {
+                    requests: {
+                        cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu,
+                        memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory,
+                        'nvidia.com/gpu': val.count
+                    },
+                    labels: {
+                        'gpu.model': val.label,
+                    },
+                    instance: 1
+                }
             };
         },
         'params.imageId'() {
-            this.$refs.containerdev.clearValidate('resourceConfig');
+            this.$refs.skyide.clearValidate('resourceConfig');
         }
     }
 };

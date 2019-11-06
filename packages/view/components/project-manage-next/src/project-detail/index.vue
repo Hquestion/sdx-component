@@ -18,43 +18,48 @@
         </div>
         <div class="sdxv-project-detail__search-filter">
             <div class="sdxv-project-detail__search-filter--search">
-                <sdxu-input
-                    v-model="searchName"
-                    type="search"
-                    size="small"
-                    :placeholder="t('view.project.enterTaskName')"
-                    style="width: 300px;"
-                />
-                <sdxu-button
-                    size="small"
-                    @click="searchTask"
-                    style="margin: 0 30px 0 20px;"
+                <sdxw-search-layout
+                    @search="searchTask"
+                    :block="false"
                 >
-                    {{ t('sdxCommon.Search') }}
-                </sdxu-button>
+                    <sdxw-search-item>
+                        <sdxu-input
+                            v-model="searchName"
+                            type="search"
+                            :placeholder="t('view.model.searchModelName')"
+                        />
+                    </sdxw-search-item>
+                </sdxw-search-layout>
             </div>
 
             <div class="sdxv-project-detail__search-filter--sort">
                 <SdxuTabRadioGroup
                     v-model="type"
                 >
-                    <SdxuTabRadioItem name="dev">
+                    <SdxuTabRadioItem name="DEVELOP">
                         {{ t('view.project.devTask') }}
                     </SdxuTabRadioItem>
-                    <SdxuTabRadioItem name="skyflow">
+                    <SdxuTabRadioItem name="VISUAL">
                         {{ t('view.project.skyflowTask') }}
                     </SdxuTabRadioItem>
                 </SdxuTabRadioGroup>
                 <div class="sdxv-project-detail__search-filter--filter">
                     <SdxuSortButton
                         :title="t('view.project.sortByCreateTime')"
-                        @sortChange="sortChange"
+                        @sortChange="searchTask"
                         :order.sync="order"
                     />
                 </div>
             </div>
         </div>
-        <SdxwGeneralTaskList />
+        <SdxwGeneralTaskList
+            :project-id="projectId"
+            ref="taskList"
+            :task-category="type"
+            :name="searchName"
+            :order="order"
+            :order-by="orderBy"
+        />
     </div>
 </template>
 
@@ -66,6 +71,7 @@ import TabRadio from '@sdx/ui/components/tab-radio';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
 import CreateTaskCard from '@sdx/widget/components/create-task-card';
+import SearchLayout from  '@sdx/widget/components/search-layout';
 import SdxwGeneralTaskList from '@sdx/widget/components/general-task-list';
 import { getProjectDetail } from '@sdx/utils/src/api/project';
 export default {
@@ -76,7 +82,7 @@ export default {
             searchName: '',
             order: 'desc',
             orderBy: 'createdAt',
-            type: 'dev',
+            type: 'DEVELOP',
             createTaskOptions: [
                 {
                     createLabel: this.t('view.project.addJupyter'),
@@ -104,14 +110,23 @@ export default {
                 }
             ],
             clientWidth: 1500,
-            title: ''
+            title: '',
+            projectId: ''
         };
+    },
+    watch: {
+        type(nVal) {
+            if (nVal) {
+                this.searchTask();
+            }
+        }
     },
     directives: {
         auth
     },
     created() {
-        getProjectDetail(this.$route.params.id, true).then(res => {
+        this.projectId = this.$route.params.id;
+        getProjectDetail(this.projectId, true).then(res => {
             this.title = res.name;
         });
     },
@@ -123,9 +138,12 @@ export default {
         SdxwGeneralTaskList,
         [TabRadio.TabRadioGroup.name]: TabRadio.TabRadioGroup,
         [TabRadio.TabRadioItem.name]: TabRadio.TabRadioItem,
+        [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem
     },
     methods: {
         searchTask() {
+            this.$refs.taskList.initList();
         },
         createTask(task) {
             this.$router.push(
@@ -137,8 +155,6 @@ export default {
                     }
                 }
             );
-        },
-        sortChange() {
         }
     }
 };

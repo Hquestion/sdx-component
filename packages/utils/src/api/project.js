@@ -33,6 +33,14 @@ export const getTaskList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
 
+export function getProjectTasks(uuid, params) {
+    return httpService.get(`${projectApi}/${uuid}/tasks`, params);
+}
+
+export function createProjectTask(uuid, params) {
+    return httpService.post(`${projectApi}/${uuid}/tasks`, params);
+}
+
 export function getProjectDetail(uuid, mock) {
     if (mock) {
         return Promise.resolve({
@@ -67,6 +75,7 @@ export function startTask(uuid, params) {
 export function stopTask(uuid, params) {
     return httpService.post(`${taskApi}/${uuid}/stop`, params);
 }
+
 export function createTask(params) {
     return httpService.post(taskApi, params);
 }
@@ -106,5 +115,7 @@ export default {
     updateTask,
     getDataSet,
     getTaskDataSource,
-    getTaskDetailBackEnd
+    getTaskDetailBackEnd,
+    getProjectTasks,
+    createProjectTask
 };

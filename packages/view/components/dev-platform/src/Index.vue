@@ -18,20 +18,19 @@
         </div>
         <div class="sdxv-dev-platform__search-filter">
             <div class="sdxv-dev-platform__search-filter--search">
-                <sdxu-input
-                    v-model="searchName"
-                    type="search"
-                    size="small"
-                    :placeholder="t('view.project.enterTaskName')"
-                    style="width: 300px;"
-                />
-                <sdxu-button
-                    size="small"
-                    @click="searchTask"
-                    style="margin: 0 30px 0 20px;"
+                <sdxw-search-layout
+                    @search="searchTask"
+                    style="width: 100%"
+                    :block="false"
                 >
-                    {{ t('sdxCommon.Search') }}
-                </sdxu-button>
+                    <sdxw-search-item>
+                        <sdxu-input
+                            v-model="searchName"
+                            type="search"
+                            :placeholder="t('view.project.enterTaskName')"
+                        />
+                    </sdxw-search-item>
+                </sdxw-search-layout>
             </div>
 
             <div class="sdxv-dev-platform__search-filter--sort">
@@ -52,6 +51,7 @@ import Button from '@sdx/ui/components/button';
 import SortButton from '@sdx/ui/components/sort-button';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
+import SearchLayout from  '@sdx/widget/components/search-layout';
 import SdxwGeneralTaskList from '@sdx/widget/components/general-task-list';
 import { getProjectDetail } from '@sdx/utils/src/api/project';
 import CreateTaskCard from '@sdx/widget/components/create-task-card';
@@ -101,7 +101,9 @@ export default {
         [Button.name]: Button,
         [SortButton.name]: SortButton,
         [CreateTaskCard.name]: CreateTaskCard,
-        SdxwGeneralTaskList
+        SdxwGeneralTaskList,
+        [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
+        [SearchLayout.SearchItem.name]: SearchLayout.SearchItem
     },
     methods: {
         searchTask() {

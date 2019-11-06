@@ -9,10 +9,8 @@
         align-items: center;
     }
     @include element('search-filter') {
-        margin: 20px 0 0 0;
+        margin: 24px 0 0 0;
         @include modifier('search') {
-            display: flex;
-            margin-bottom: 20px;
         }
         @include modifier('sort') {
             display: flex;

@@ -127,6 +127,10 @@ export default {
     },
     view: {
         task: {
+            ManualExecution: '手动执行',
+            TimingExecution: '定时执行',
+            MultipleExecution: '多次执行',
+            EventTriggering: '事件触发',
             CancellationOfExecution: '取消执行',
             TaskManagementList: '任务管理列表',
             TaskExecuteList: '任务执行列表',

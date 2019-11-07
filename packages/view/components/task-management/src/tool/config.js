@@ -26,5 +26,24 @@ export const taskType = [
     }
 ];
 export const executeType = [
-    
+    {
+        value: '',
+        label: t('sdxCommon.All')
+    },
+    {
+        value: 'MANUAL',
+        label: t('view.task.ManualExecution')
+    },
+    {
+        value: 'CRONTAB',
+        label: t('view.task.TimingExecution')
+    },
+    {
+        value: 'REPEAT',
+        label: t('view.task.MultipleExecution')
+    },
+    {
+        value: 'TRIGGER',
+        label: t('view.task.EventTriggering')
+    }
 ];

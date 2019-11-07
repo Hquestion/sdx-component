@@ -127,6 +127,10 @@ export default {
     },
     view: {
         task: {
+            ManualExecution: 'Manual Execution',
+            TimingExecution: 'Timing Execution',
+            MultipleExecution: 'Multiple Execution',
+            EventTriggering: 'Event Triggering',
             CancellationOfExecution: 'Cancellation Of Execution',
             TaskManagementList: 'Task Management List',
             TaskExecuteList: 'Task Execute List',

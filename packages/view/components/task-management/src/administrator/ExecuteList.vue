@@ -73,7 +73,7 @@
                 <el-select
                     size="large"
                     :placeholder="t('sdxCommon.PleaseSelect')"
-                    v-model="params.type"
+                    v-model="params.executionType"
                 >
                     <el-option
                         v-for="item in executeType"
@@ -92,10 +92,12 @@
             </SdxwSearchItem>  
             <SdxwSearchItem :label="`${t('view.task.executeTimeRange')}：`">
                 <el-date-picker
+                    v-model="date"
                     type="daterange"
                     size="large"
                     :start-placeholder="t('view.task.startTime')"
                     :end-placeholder="t('view.task.stopTime')"
+                    value-format="yyyy-MM-dd"
                 />
             </SdxwSearchItem>    
         </SdxwSearchLayout>
@@ -104,9 +106,13 @@
                 :data="table"
             >
                 <el-table-column
-                 
+                    prop="_id"
                     :label="t('view.task.executeID')"
-                />
+                >
+                    <template #default="{ row }">
+                        {{ row._id.slice(0,5) }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="name"
                     :label="t('view.task.taskName')"
@@ -116,7 +122,7 @@
                     :label="t('view.task.tipCard.Type')"
                 /> 
                 <el-table-column
-                    prop="owner_id"
+                    prop="ownerId"
                     :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
@@ -124,11 +130,11 @@
                     :label="t('view.task.tipCard.SubordinateGroup')"
                 />
                 <el-table-column
-                    prop="execute_type"
+                    prop="executeType"
                     :label="t('view.task.executeType')"
                 /> 
                 <el-table-column
-                    prop="cron_start_time"
+                    prop="cronStartTime"
                     :label="t('view.task.executeStartTime')"
                     sortable
                     min-width="130px"
@@ -136,11 +142,11 @@
                     <template
                         slot-scope="scope"
                     >
-                        {{ dateFormatter(scope.row.created_at) }}
+                        {{ dateFormatter(scope.row.cronStartTime) }}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="cron_end_time"
+                    prop="cronEndTime"
                     :label="t('view.task.executeStopTime')"
                     sortable
                     min-width="130px"
@@ -148,15 +154,18 @@
                     <template
                         slot-scope="scope"
                     >
-                        {{ dateFormatter(scope.row.created_at) }}
+                        {{ dateFormatter(scope.row.cronEndTime) }}
                     </template>
                 </el-table-column>
                 <el-table-column 
                     sortable
                     min-width="100px"
-                    prop="repeat_times"
                     :label="t('view.task.executeTime')"
-                />
+                >
+                    <template #default="{ row }">
+                        {{ timeDuration(row.cronStartTime, row.cronEndTime) }}
+                    </template>
+                </el-table-column>
                 <el-table-column 
                     prop="state"
                     :label="t('sdxCommon.Status')"
@@ -194,7 +203,7 @@ import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
-import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
 import { taskType, executeType } from '../tool/config';
 import { getGroups } from '@sdx/utils/src/api/user';
 export default {
@@ -203,6 +212,7 @@ export default {
         return {
             taskType,
             executeType,
+            date: '',
             infoList: [
                 {
                     total: 123,
@@ -272,6 +282,7 @@ export default {
     },
     methods: {
         dateFormatter,
+        timeDuration,
         getGroupList(){
             const params = {
                 start: 1,
@@ -294,13 +305,13 @@ export default {
         this.table = [
             {
                 '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-                'created_at': '2019-10-17T08:49:14.195000Z',
-                'updated_at': '2019-10-17T08:49:14.194000Z',
-                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
+                'createdAt': '2019-10-17T08:49:14.195000Z',
+                'updatedAt': '2019-10-17T08:49:14.194000Z',
+                'ownerId': '99b3d464-0992-4c2f-b127-370895cab26d',
                 'name': 'dylan-jupyter',
                 'description': null,
-                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
-                'auto_image_id': null,
+                'imageId': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
+                'autoImageId': null,
                 'type': 'JUPYTER',
                 'quota': {
                     'cpu': 2,
@@ -308,7 +319,7 @@ export default {
                     'memory': 4294967296,
                     'gpu_model': ''
                 },
-                'resource_config': {
+                'resourceConfig': {
                     'DEPLOY': {
                         'requests': {
                             'cpu': 2,
@@ -321,115 +332,24 @@ export default {
                         'instance': 1
                     }
                 },
-                'execute_type': 'MANUAL',
+                'executeType': 'MANUAL',
                 'delay': 0,
                 'trigger': null,
                 'priority': 2,
                 'crontab': null,
-                'cron_start_time': null,
-                'cron_end_time': null,
-                'repeat_times': null,
-                'concurrent_type': 'SKIP',
-                'error_handling': 'CANCEL',
+                'cronStartTime': '2019-10-17T08:49:14.194000Z',
+                'cronEndTime': '2019-10-17T08:59:12.194000Z',
+                'repeatTimes': null,
+                'concurrentType': 'SKIP',
+                'errorHandling': 'CANCEL',
                 'notifications': {},
-                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
+                'taskId': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
                 'state': 'CREATED',
                 'datasources': [],
                 'datasets': [],
-                'home_path': '/usr/dylan'
-            },
-            {
-                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-                'created_at': '2019-10-17T08:49:14.195000Z',
-                'updated_at': '2019-10-17T08:49:14.194000Z',
-                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-                'name': 'dylan-jupyter',
-                'description': null,
-                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
-                'auto_image_id': null,
-                'type': 'JUPYTER',
-                'quota': {
-                    'cpu': 2,
-                    'gpu': 1,
-                    'memory': 4294967296,
-                    'gpu_model': ''
-                },
-                'resource_config': {
-                    'DEPLOY': {
-                        'requests': {
-                            'cpu': 2,
-                            'memory': 4294967296,
-                            'nvidia.com/gpu': 0
-                        },
-                        'labels': {
-                            'gpu.model': ''
-                        },
-                        'instance': 1
-                    }
-                },
-                'execute_type': 'MANUAL',
-                'delay': 0,
-                'trigger': null,
-                'priority': 2,
-                'crontab': null,
-                'cron_start_time': null,
-                'cron_end_time': null,
-                'repeat_times': null,
-                'concurrent_type': 'SKIP',
-                'error_handling': 'CANCEL',
-                'notifications': {},
-                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
-                'state': 'CREATED',
-                'datasources': [],
-                'datasets': [],
-                'home_path': '/usr/dylan'
-            },
-            {
-                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-                'created_at': '2019-10-17T08:49:14.195000Z',
-                'updated_at': '2019-10-17T08:49:14.194000Z',
-                'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-                'name': 'dylan-jupyter',
-                'description': null,
-                'image_id': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
-                'auto_image_id': null,
-                'type': 'JUPYTER',
-                'quota': {
-                    'cpu': 2,
-                    'gpu': 1,
-                    'memory': 4294967296,
-                    'gpu_model': ''
-                },
-                'resource_config': {
-                    'DEPLOY': {
-                        'requests': {
-                            'cpu': 2,
-                            'memory': 4294967296,
-                            'nvidia.com/gpu': 0
-                        },
-                        'labels': {
-                            'gpu.model': ''
-                        },
-                        'instance': 1
-                    }
-                },
-                'execute_type': 'MANUAL',
-                'delay': 0,
-                'trigger': null,
-                'priority': 2,
-                'crontab': null,
-                'cron_start_time': null,
-                'cron_end_time': null,
-                'repeat_times': null,
-                'concurrent_type': 'SKIP',
-                'error_handling': 'CANCEL',
-                'notifications': {},
-                'task_id': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
-                'state': 'CREATED',
-                'datasources': [],
-                'datasets': [],
-                'home_path': '/usr/dylan'
+                'homePath': '/usr/dylan'
             }
+            
         ];
     }
 };

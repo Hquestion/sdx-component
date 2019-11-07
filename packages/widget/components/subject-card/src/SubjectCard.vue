@@ -3,7 +3,10 @@
         :class="['sdxw-subject-card', `sdxw-subject-card--${size}`]"
     >
         <div class="sdxw-subject-card__header">
-            <div class="sdxw-subject-card__icon">
+            <div
+                class="sdxw-subject-card__icon"
+                v-if="cardIcon"
+            >
                 <svg
                     aria-hidden="true"
                 >
@@ -14,7 +17,7 @@
                 </div>
             </div>
             <div
-                class="sdxw-subject-card__content"
+                :class="['sdxw-subject-card__content', `sdxw-subject-card__content--${cardIcon}`]"
             >
                 <div class="sdxw-subject-card__content--info">
                     <div>
@@ -66,6 +69,9 @@
         >
             {{ (meta && meta.description) ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}
         </div>
+        <div>
+            <slot name="cardLabel" />
+        </div>
         <div
             class="sdxw-subject-card__footer"
             v-if="meta.footer !== false"
@@ -101,6 +107,10 @@ export default {
         size: {
             type: String,
             default: 'small'
+        },
+        cardIcon: {
+            type: Boolean,
+            default: true
         }
     },
     data() {

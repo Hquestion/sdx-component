@@ -5,6 +5,9 @@
     margin-bottom: $sdx-gap-regular;
     padding: $sdx-gap-small $sdx-gap-regular $sdx-gap-regular $sdx-gap-regular;
     padding-bottom: 0;
+    @include element('header') {
+        height: $sdxw-subject-card-icon-size;
+    }
     @include element('icon') {
         border: 1px solid $sdx-secondary-color--light6;
         border-radius: $sdx-border-radius;
@@ -35,6 +38,9 @@
         width: calc(100% - 82px);
         float: right;
         font-size: $sdx-content-font-size;
+        @include modifier('false') {
+            width: calc(100%);
+        }
     }
     @include element('footer') {
         display: flex;
@@ -47,7 +53,7 @@
 
     @include modifier('large') {
         @include element('header') {
-            padding-bottom: $sdx-gap-regular;
+            margin-bottom: $sdx-gap-regular;
         }
         @include element('content') {
             @include modifier('info') {

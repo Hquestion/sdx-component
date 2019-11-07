@@ -356,6 +356,7 @@ export default {
     .condition {
         display: flex;
         justify-content: space-between;
+        margin-bottom: 24px;
     }
 }
 </style>

@@ -16,6 +16,6 @@ module.exports = {
     'file': './components/file/index.js',
     'skyflow': './components/skyflow/index.js',
     'sky-ide': './components/sky-ide/index.js',
-    'project-management-next': './components/project-manage-next/index.js',
+    'project-manage-next': './components/project-manage-next/index.js',
     'dev-platform': './components/dev-platform/index.js'
 };

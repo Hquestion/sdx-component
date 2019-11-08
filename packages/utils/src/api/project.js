@@ -41,6 +41,10 @@ export function createProjectTask(uuid, params) {
     return httpService.post(`${projectApi}/${uuid}/tasks`, params);
 }
 
+export function removeProjectTask(uuid, taskId) {
+    return httpService.remove(`${projectApi}/${uuid}/tasks/${taskId}`);
+}
+
 export function getProjectDetail(uuid, mock) {
     if (mock) {
         return Promise.resolve({
@@ -48,7 +52,6 @@ export function getProjectDetail(uuid, mock) {
         });
     } else {
         return httpService.get(`${projectApi}/${uuid}`);
-
     }
 }
 
@@ -117,5 +120,6 @@ export default {
     getTaskDataSource,
     getTaskDetailBackEnd,
     getProjectTasks,
-    createProjectTask
+    createProjectTask,
+    removeProjectTask
 };

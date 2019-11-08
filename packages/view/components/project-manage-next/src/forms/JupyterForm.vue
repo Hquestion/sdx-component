@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} Jupyter ${t('view.task.form.task')}`"
+        :title="`${params.uuid || params.Id ? t('view.task.form.edit'):t('view.task.form.create')} Jupyter ${t('view.task.form.task')}`"
         class="form-jupyter"
         :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-Jupyterrenwu"
@@ -199,8 +199,8 @@ import Select from 'element-ui/lib/select';
 import SdxuInput from '@sdx/ui/components/input';
 import { getImageList } from '@sdx/utils/src/api/image';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
-import { updateTask, getDataSet} from '@sdx/utils/src/api/project';
-import { createProjectTask } from '@sdx/utils/src/api/project';
+import { getDataSet, createProjectTask} from '@sdx/utils/src/api/project';
+import { updateTask } from '@sdx/utils/src/api/task';
 import { nameWithChineseValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
@@ -375,7 +375,8 @@ export default {
             }
             this.$refs.jupyter.validate().then(() => {
                 this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
-                (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
+                const id = this.params.uuid || this.params.Id;
+                (id ? updateTask(id,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
                     .then (() => {
                         this.$router.go(-1);
                     });
@@ -385,7 +386,7 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
-            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
+            this.params.resourceConfigObj = JSON.parse(JSON.stringify(this.params.resourceConfig));
             this.cpuObj = {
                 cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
                 memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),

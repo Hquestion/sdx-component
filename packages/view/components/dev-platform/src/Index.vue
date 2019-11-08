@@ -36,12 +36,17 @@
             <div class="sdxv-dev-platform__search-filter--sort">
                 <SdxuSortButton
                     :title="t('view.project.sortByCreateTime')"
-                    @sortChange="sortChange"
+                    @sortChange="searchTask"
                     :order.sync="order"
                 />
             </div>
         </div>
-        <SdxwGeneralTaskList />
+        <SdxwGeneralTaskList
+            :name="searchName"
+            ref="taskList"
+            :order="order"
+            :order-by="orderBy"
+        />
     </div>
 </template>
 
@@ -63,7 +68,6 @@ export default {
             searchName: '',
             order: 'desc',
             orderBy: 'createdAt',
-            type: 'dev',
             createTaskOptions: [
                 {
                     createLabel: this.t('view.project.addJupyter'),
@@ -107,6 +111,9 @@ export default {
     },
     methods: {
         searchTask() {
+            this.$nextTick(() => {
+                this.$refs.taskList.initList();
+            });
         },
         createTask(task) {
             this.$router.push(

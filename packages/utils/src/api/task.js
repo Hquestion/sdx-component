@@ -6,11 +6,11 @@ import { TASK_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, DATA_MANAGE_GATEWAY_BAS
 import readAuths from './config';
 import { authWrapper } from './helper';
 
-const taskApi = `${TASK_MANAGE_GATEWAY_BASE}`;
+const taskApi = `${TASK_MANAGE_GATEWAY_BASE}tasks`;
 
-export const getTaskList = authWrapper(function () {
-    // return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
-    return Promise.resolve({
+export const getTaskList = authWrapper(function (params) {
+    return httpService.get(taskApi, params);
+    /* return Promise.resolve({
         items: [
             {
                 'uuid': 'c22192b0-c752-4a8e-98d0-3bd15f591b34',
@@ -257,7 +257,7 @@ export const getTaskList = authWrapper(function () {
             }
         ],
         total: 8
-    });
+    }); */
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
 // full 版本任务列表
 export function taskList(params) {
@@ -292,9 +292,10 @@ export function createTask(params) {
 export function getTaskDetail(uuid) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-detail`, {uuid});
 }
+
 // 任务编辑的时候不需要聚合
-export function getTaskDetailBackEnd(uuid) {
-    return httpService.get(`${taskApi}/${uuid}`);
+export function getTaskDetailBackEnd(uuid, params) {
+    return httpService.get(`${taskApi}/${uuid}`, params);
 }
 
 export function updateTask(uuid,params) {

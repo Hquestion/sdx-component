@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
+        :title="`${params.uuid || params.Id ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
         class="form-containerdev"
         :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-zidingyirongqirenwu"
@@ -215,7 +215,7 @@
                     :label="`${t('view.task.StartCommand')}:`"
                 >
                     <SdxuInput
-                        v-model="params.environments"
+                        v-model="params.startCommand"
                         size="small"
                         :placeholder="`${t('view.task.StartCommand')}`"
                     />
@@ -227,7 +227,7 @@
                     :label="`${t('view.task.StartParams')}:`"
                 >
                     <SdxuInput
-                        v-model="params.environments"
+                        v-model="params.startArgsStr"
                         size="small"
                         :placeholder="`${t('view.task.Params')}`"
                     />
@@ -252,7 +252,7 @@
                 >
                     <div>
                         <div
-                            v-for="(item, index) in params.portRoutes"
+                            v-for="(item, index) in params.forwardPorts"
                             :key="index"
                             style="display:flex;justify-content:space-between;width:580px;margin:5px 0;"
                         >
@@ -390,10 +390,13 @@ export default {
                 datasources: [],
                 datasets: [],
                 environments: '',
+                startCommand: '',
+                startArgs: [],
+                startArgsStr: '',
                 outputPaths: '',
                 project: '',
                 instanceNumber: 1,
-                portRoutes: [
+                forwardPorts: [
                     {
                         protocol: 'HTTP',
                         port: ''
@@ -468,12 +471,12 @@ export default {
         // 数据集列表
         handleProtChange(adding) {
             if (adding) {
-                this.params.portRoutes.push({
+                this.params.forwardPorts.push({
                     protocol: 'HTTP',
                     port: ''
                 });
             } else {
-                this.params.portRoutes.pop();
+                this.params.forwardPorts.pop();
             }
         },
         getDataSetList() {
@@ -504,8 +507,10 @@ export default {
                 this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'] = 0;
                 this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'] = '';
             }
+            this.params.resourceConfigObj[RESOURCE_KEY].instance = this.params.instanceNumber;
             this.$refs.containerdev.validate().then(() => {
                 this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
+                this.params.startArgs = this.params.startArgsStr.split('/');
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
                     .then (() => {
                         this.$router.go(-1);
@@ -517,7 +522,10 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
-            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
+            this.params.resourceConfigObj = JSON.parse(JSON.stringify(this.params.resourceConfig));
+            this.params.resourceConfigObj[RESOURCE_KEY].instance = this.params.instanceNumber;
+            this.params.instanceNumber = this.params.resourceConfigObj[RESOURCE_KEY].instance;
+            this.params.startArgsStr = this.params.startArgs.join('/');
             this.cpuObj = {
                 cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
                 memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),

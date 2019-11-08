@@ -277,7 +277,7 @@ export default {
                         showEdit: isOwn && tempalteWriteAuth,
                         showRemove: isOwn && tempalteWriteAuth,
                         icon: icon,
-                        iconName:iconName, 
+                        iconName:iconName,
                         footer: isOwn && tempalteWriteAuth,
                         taskNumber: item.taskCount
                     });
@@ -320,7 +320,7 @@ export default {
                         this.$router.push({
                             name: 'ProjectDetailNext',
                             params: {
-                                id: 'eb3f701c-0582-411b-a7dc-ed26956d81bf'
+                                id: operate.id
                             }
                         });
 

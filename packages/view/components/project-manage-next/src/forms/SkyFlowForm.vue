@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyFlow ${t('view.task.form.task')}`"
+        :title="`${params.uuid || params.Id ? t('view.task.form.edit') : t('view.task.form.create')} SkyFlow ${t('view.task.form.task')}`"
         class="form-containerdev"
         :label-width="lang$ === 'en' ? 190 : 160"
         icon="sdx-skyflowrenwu"

@@ -46,7 +46,7 @@
                                 v-for="(el, i) in getOperationList(item, false, true)"
                                 :key="i"
                                 :icon="el.icon"
-                                @click="handleOperation(el.value, item)"
+                                @click="handleOperation(el.value, item, projectId)"
                                 type="text"
                             >
                                 {{ t(el.label) }}
@@ -81,10 +81,10 @@ import SubCard from '@sdx/widget/components/subject-card';
 import { paginate } from '@sdx/utils/src/helper/tool';
 import { getTaskList } from '@sdx/utils/src/api/task';
 import { getProjectTasks } from '@sdx/utils/src/api/project';
-import taskMixin from '@sdx/utils/src/mixins/task';
+import taskMixin from '@sdx/utils/src/mixins/taskNext';
 import locale from '@sdx/utils/src/mixins/locale';
 import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
-import { getUser } from '@sdx/utils/src/helper/shareCenter';
+// import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import { STATE_MAP_FOLD_LABEL_TYPE } from '@sdx/utils/src/const/task';
 export default {
     name: 'SdxwGeneralTaskList',
@@ -114,7 +114,7 @@ export default {
                 }
             },
             loading: false,
-            taskList: [],
+            taskList: []
         };
     },
     components: {
@@ -128,6 +128,10 @@ export default {
     created() {
         this.initList();
         this.fetchDataMinxin = this.initList;
+    },
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
     },
     props: {
         projectId: {
@@ -153,6 +157,10 @@ export default {
     },
     methods: {
         initList(hideLoading) {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             this.loading = hideLoading ? false : true;
             const params = {
                 name: this.name,
@@ -164,16 +172,13 @@ export default {
             if (this.projectId) {
                 params.taskCategory = this.taskCategory;
                 getProjectTasks(this.projectId, params).then(res => {
-                    console.log('res', res);
                     this.handleResp(res);
                 }).catch(() => {
                     this.loading = false;
                     this.taskList = [];
                 });
             } else {
-                params.projectId = this.projectId;
                 getTaskList(params).then(res => {
-                    console.log('res', res);
                     this.handleResp(res);
                 }).catch(() => {
                     this.loading = false;
@@ -186,23 +191,34 @@ export default {
             this.initList();
         },
         handleResp(res) {
-            this.taskList = res.items;
+            this.taskList = res.items || res.data;
             this.total = res.total;
             this.loading = false;
+            if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
+                if (!this.refreshTimer) {
+                    this.refreshTimer = setInterval(this.initList, 3000, true);
+                }
+            } else {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             this.taskList.forEach(item => {
-                const isOwn = getUser().userId === item.owner.uuid;
+                // const isOwn = getUser().userId === item.owner.uuid;
+                // const isOwn = getUser().userId === item.owner_id;
+                item.owner = {
+                    uuid: item.ownerId
+                };
+                item.uuid = item.Id;
                 item.showOpenIde = item.type === 'SKYIDE';
                 item.showJupyterLink = item.type === 'JUPYTER';
                 item.showRunningInfo = item.type === 'SKYFLOW';
                 item.meta = {
-                    uuid: '123',
-                    owner: {uuid: 'd565e2c9-ee81-40b2-8acd-10f4359a6242'},
+                    uuid: item.Id,
+                    owner: {uuid: item.ownerId},
                     title: item.name,
                     description: item.description,
-                    creator: item.ownerName,
+                    creator: item.name,
                     createdAt: item.createdAt,
-                    showEdit: isOwn,
-                    showRemove: isOwn,
                     icon: this.iconOptions[item.type].icon,
                     iconName: this.iconOptions[item.type].name,
                     state: {}

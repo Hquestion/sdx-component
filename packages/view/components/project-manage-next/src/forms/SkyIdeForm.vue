@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyIDE ${t('view.task.form.task')}`"
+        :title="`${params.uuid || params.Id ? t('view.task.form.edit') : t('view.task.form.create')} SkyIDE ${t('view.task.form.task')}`"
         class="form-skyide"
         :label-width="lang$ === 'en' ? 190 : 160"
         icon="sdx-SkyIDErenwu"
@@ -465,7 +465,7 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
-            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
+            this.params.resourceConfigObj = JSON.parse(JSON.stringify(this.params.resourceConfig));
             this.cpuObj = {
                 cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
                 memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),

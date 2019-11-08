@@ -117,7 +117,9 @@ export default {
     watch: {
         type(nVal) {
             if (nVal) {
-                this.searchTask();
+                this.$nextTick(() => {
+                    this.searchTask();
+                });
             }
         }
     },

@@ -11,11 +11,13 @@
     @include element('search-filter') {
         margin: 24px 0 0 0;
         @include modifier('search') {
+
         }
         @include modifier('sort') {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 24px;
         }
         .sdx-icon {
             font-size: 14px;

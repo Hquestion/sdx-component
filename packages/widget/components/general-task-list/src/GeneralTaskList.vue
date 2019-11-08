@@ -194,7 +194,7 @@ export default {
             this.taskList = res.items || res.data;
             this.total = res.total;
             this.loading = false;
-            if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING'))) {
+            if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING' || item.state === 'Pending'))) {
                 if (!this.refreshTimer) {
                     this.refreshTimer = setInterval(this.initList, 3000, true);
                 }
@@ -208,12 +208,11 @@ export default {
                 item.owner = {
                     uuid: item.ownerId
                 };
-                item.uuid = item.Id;
                 item.showOpenIde = item.type === 'SKYIDE';
                 item.showJupyterLink = item.type === 'JUPYTER';
                 item.showRunningInfo = item.type === 'SKYFLOW';
                 item.meta = {
-                    uuid: item.Id,
+                    uuid: item.uuid,
                     owner: {uuid: item.ownerId},
                     title: item.name,
                     description: item.description,

@@ -1,6 +1,5 @@
 import { OPERATION_INFO, STATE_TYPE_OPERATION, MONITOR_ALLOW_OPERATION, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION, SPECIAL_TASK_TYPE } from '../const/task';
-import { removeProjectTask } from '../api/project';
-import { startTask, stopTask } from '../api/task';
+import { startTask, stopTask, removeTask } from '../api/task';
 import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
@@ -58,7 +57,7 @@ export default {
                     this.handleEdit(row, projectId);
                     break;
                 case 'remove':
-                    this.handleDelete(row, projectId);
+                    this.handleDelete(row);
                     break;
                 case 'entry':
                     this.handleEntry(row);
@@ -125,7 +124,7 @@ export default {
         handleEntry(row) {
             window.open(`/#/editor/${row.project.uuid}/${row.uuid}`);
         },
-        async handleDelete(row, projectId) {
+        async handleDelete(row) {
             let that = this;
             try {
                 await SdxuMessageBox.warning({
@@ -133,7 +132,7 @@ export default {
                     content: ''
                 });
 
-                removeProjectTask(projectId, row.uuid).then(() => {
+                removeTask(row.uuid, { type: row.type }).then(() => {
                     this.fetchDataMinxin && this.fetchDataMinxin();
                 });
             } catch (e) {

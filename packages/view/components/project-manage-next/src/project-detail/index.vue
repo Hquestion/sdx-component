@@ -128,8 +128,8 @@ export default {
     },
     created() {
         this.projectId = this.$route.params.id;
-        getProjectDetail(this.projectId, true).then(res => {
-            this.title = res.name;
+        getProjectDetail(this.projectId).then(res => {
+            this.title = res.data.name;
         });
     },
     components: {

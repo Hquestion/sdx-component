@@ -209,18 +209,18 @@
                 <el-form-item
                     :label="`${t('view.task.AutoRelease')}:`"
                 >
-                    <el-radio-group v-model="autoRelease">
-                        <el-radio
-                            :label="true"
-                        >
-                            {{ t('widget.shareForm.Yes') }}
-                        </el-radio>
-                        <el-radio
-                            :label="false"
-                        >
-                            {{ t('widget.shareForm.No') }}
-                        </el-radio>
-                    </el-radio-group>
+                    <el-radio
+                        :label="true"
+                        v-model="autoRelease"
+                    >
+                        {{ t('widget.shareForm.Yes') }}
+                    </el-radio>
+                    <el-radio
+                        :label="false"
+                        v-model="autoRelease"
+                    >
+                        {{ t('widget.shareForm.No') }}
+                    </el-radio>
                 </el-form-item>
                 <el-form-item
                     :label="`${t('view.task.KernalReleaseTime')}:`"
@@ -476,7 +476,7 @@ export default {
                 count: this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'],
                 uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfig[RESOURCE_KEY].requests['nvidia.com/gpu']}`
             };
-            this.autoRelease = this.params.notebookKernelExpireTime === 0 && this.params.podExpireTime === 0;
+            this.autoRelease = this.params.notebookKernelExpireTime !== 0 && this.params.podExpireTime !== 0;
             this.notebookKernelExpireTime = this.params.notebookKernelExpireTime / 60;
             this.podExpireTime = this.params.podExpireTime / 60;
             this.$nextTick(()=> {

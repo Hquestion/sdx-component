@@ -94,14 +94,14 @@ export function byteFormatter(byte) {
     return Math.floor(byte / Math.pow(k, i)) + ' ' + sizes[i];
 }
 
-export function dateFormatter(date) {
+export function dateFormatter(date, fmt = 'YYYY-MM-DD HH:mm:ss') {
     if(!date) return '-';
     if (isString(date)) {
-        return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+        return dayjs(date).format(fmt);
     } else if (date instanceof Date) {
-        return dayjs(date).format('YYYY-MM-DD HH:mm:ss');
+        return dayjs(date).format(fmt);
     } else if (date instanceof dayjs) {
-        return date.format('YYYY-MM-DD HH:mm:ss');
+        return date.format(fmt);
     } else {
         return date;
     }

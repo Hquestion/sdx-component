@@ -1,92 +1,131 @@
 
 import { t } from '../locale';
 
-export const TASK_TYPE = {
-    SPARK: 'SPARK',
-    PYTHON: 'PYTHON',
-    JUPYTER: 'JUPYTER',
-    TENSORBOARD: 'TENSORBOARD',
-    TENSORFLOW: 'TENSORFLOW',
-    TENSORFLOW_DIST: 'TENSORFLOW_DIST',
-    TENSORFLOW_AUTO_DIST: 'TENSORFLOW_AUTO_DIST',
-    CONTAINERDEV: 'CONTAINERDEV',
-    DATA_SERVICE: 'DATA_SERVICE',
-    TENSORFLOW_SERVING: 'TENSORFLOW_SERVING',
-    SPARK_SERVING: 'SPARK_SERVING',
-    PMML_SERVING: 'PMML_SERVING',
-    SKYFLOW_EXEC: 'SKYFLOW_EXEC',
-    SKYFLOW: 'SKYFLOW',
-    SKYIDE: 'SKYIDE'
-};
+function generateObj(arr, property = 'value') {
+    let obj = {};
+    arr.forEach(item => {
+        if (item.value) {
+            obj[item.value] = item[property];
+        }
+    });
+    return obj;
+}
 
-export const TASK_TYPE_LABEL = { // 对应的值是国际化的词条值
-    SPARK: 'view.task.type.SPARK',
-    PYTHON: 'view.task.type.PYTHON',
-    JUPYTER: 'view.task.type.JUPYTER',
-    TENSORBOARD: 'view.task.type.TENSORBOARD',
-    TENSORFLOW: 'view.task.type.TENSORFLOW',
-    TENSORFLOW_DIST: 'view.task.type.TENSORFLOW_DIST',
-    TENSORFLOW_AUTO_DIST: 'view.task.type.TENSORFLOW_AUTO_DIST',
-    CONTAINERDEV: 'view.task.type.CONTAINERDEV',
-    DATA_SERVICE: 'view.task.type.DATA_SERVICE',
-    TENSORFLOW_SERVING: 'view.task.type.TENSORFLOW_SERVING',
-    SPARK_SERVING: 'view.task.type.SPARK_SERVING',
-    PMML_SERVING: 'view.task.type.PMML_SERVING',
-    SKYFLOW_EXEC: 'view.task.type.SKYFLOW_EXEC'
-};
+// 任务状态列表
+export const TASK_TYPE = [
+    {
+        value: '',
+        label: t('sdxCommon.All')
+    },
+    {
+        value: 'JUPYTER',
+        label: 'Jupyter'
+    },
+    {
+        value: 'SKYIDE',
+        label: 'SkyIDE'
+    },
+    {
+        value: 'CONTAINER_DEV',
+        label: t('view.task.type.CONTAINERDEV')
+    },
+    {
+        value: 'SKYFLOW',
+        label: 'SkyFlow'
+    },
+    {
+        value: 'MODELSERVICE',
+        label: t('view.task.type.MODELSERVICE')
+    }
+];
+// 任务状态 label
+export const TASK_TYPE_LABEL = generateObj(TASK_TYPE, 'label');
+// 任务状态 value
+export const TASK_TYPE_VALUE = generateObj(TASK_TYPE);
 
-export const STATE_TYPE = {
-    CREATED: 'CREATED',
-    LAUNCHING: 'LAUNCHING',
-    LAUNCH_ABNORMAL: 'LAUNCH_ABNORMAL',
-    RUNNING: 'RUNNING',
-    FINISHED: 'FINISHED',
-    KILLED: 'KILLED',
-    FAILED: 'FAILED',
-    KILLING: 'KILLING'
-};
+// 执行类型列表
+export const EXECUTE_TYPE = [
+    {
+        value: '',
+        label: t('sdxCommon.All')
+    },
+    {
+        value: 'MANUAL',
+        label: t('view.task.ManualExecution')
+    },
+    {
+        value: 'CRONTAB',
+        label: t('view.task.TimingExecution')
+    },
+    {
+        value: 'REPEAT',
+        label: t('view.task.MultipleExecution')
+    },
+    {
+        value: 'TRIGGER',
+        label: t('view.task.EventTriggering')
+    }
+];
+// 执行类型label obj
+export const EXECUTE_TYPE_LABEL = generateObj(EXECUTE_TYPE, 'label');
+// 执行类型value obj
+export const EXECUTE_TYPE_VALUE = generateObj(EXECUTE_TYPE);
 
-export const STATE_TYPE_LABEL = { // 对应的值是国际化的词条值
-    CREATED: 'view.task.state.CREATED',
-    LAUNCHING: 'view.task.state.LAUNCHING',
-    LAUNCH_ABNORMAL: 'view.task.state.LAUNCH_ABNORMAL',
-    RUNNING: 'view.task.state.RUNNING',
-    FINISHED: 'view.task.state.FINISHED',
-    KILLED: 'view.task.state.KILLED',
-    FAILED: 'view.task.state.FAILED',
-    KILLING: 'view.task.state.KILLING'
-};
+// 状态列表
+export const STATE_TYPE = [
+    {
+        value: '',
+        label: t('sdxCommon.All')
+    },
+    {
+        value: 'Scheduling',
+        label: t('view.task.state.Scheduling'),
+        operation: ['start', 'detail', 'entry', 'edit', 'remove']
+    },
+    {
+        value: 'Pending',
+        label: t('view.task.state.Pending'),
+        operation: ['kill', 'detail', 'entry']
+    },
+    {
+        value: 'Running',
+        label: t('view.task.state.Running'),
+        operation: ['kill', 'detail', 'entry']
+    },
+    {
+        value: 'Terminating',
+        label: t('view.task.state.Terminating'),
+        operation: ['detail', 'entry']
+    },
+    {
+        value: 'Terminated',
+        label: t('view.task.state.Terminated'),
+        operation: ['start', 'detail', 'entry', 'edit', 'remove']
+    },
+    {
+        value: 'Succeeded',
+        label: t('view.task.state.Succeeded'),
+        operation: ['start', 'detail', 'entry', 'edit', 'remove']
+    },
+    {
+        value: 'Failed',
+        label: t('view.task.state.Failed'),
+        operation: ['start', 'detail', 'entry', 'edit', 'remove']
+    },
+    {
+        value: 'Error',
+        label: t('view.task.state.Error'),
+        operation: ['start', 'detail', 'entry', 'edit', 'remove']
+    }
+];
+// 状态label
+export const STATE_TYPE_LABEL = generateObj(STATE_TYPE, 'label');
+// 状态value
+export const STATE_TYPE_VALUE = generateObj(STATE_TYPE);
+// 状态对应的操作
+export const STATE_TYPE_OPERATION = generateObj(STATE_TYPE, 'operation');
 
-export const STATE_TYPE_OPERATION = {
-    CREATED: ['start', 'detail', 'entry', 'edit', 'remove'],
-    LAUNCHING: ['kill', 'detail', 'entry'],
-    LAUNCH_ABNORMAL: ['start', 'detail', 'entry', 'edit', 'remove'],
-    RUNNING: ['kill', 'detail', 'entry'],
-    FINISHED: ['start', 'detail', 'entry', 'edit', 'remove'],
-    KILLED: ['start', 'detail', 'entry', 'edit', 'remove'],
-    FAILED: ['start', 'detail', 'entry', 'edit', 'remove'],
-    KILLING: ['detail', 'entry']
-};
-
-export const STATE_MAP_FOLD_LABEL_TYPE = {
-    CREATED: 'create',
-    LAUNCHING: 'processing',
-    LAUNCH_ABNORMAL: 'exception',
-    RUNNING: 'running',
-    FINISHED: 'finish',
-    KILLED: 'die',
-    FAILED: 'error',
-    KILLING: 'dying'
-};
-
-export const POD_STATE_TYPE = { // 对应的值是国际化的词条值
-    failed: 'view.monitor.componentState.state.failed',
-    pending: 'view.monitor.componentState.state.pending',
-    running: 'view.monitor.componentState.state.running',
-    succeeded: 'view.monitor.componentState.state.succeeded',
-    unknown: 'view.monitor.componentState.state.unknown'
-};
-
+// 操作信息
 export const OPERATION_INFO = {
     start: {
         label: 'view.task.operation.start',
@@ -119,6 +158,27 @@ export const OPERATION_INFO = {
         icon: 'sdx-icon sdx-huabu'
     }
 };
+
+export const STATE_MAP_FOLD_LABEL_TYPE = {
+    CREATED: 'create',
+    LAUNCHING: 'processing',
+    LAUNCH_ABNORMAL: 'exception',
+    RUNNING: 'running',
+    FINISHED: 'finish',
+    KILLED: 'die',
+    FAILED: 'error',
+    KILLING: 'dying'
+};
+
+export const POD_STATE_TYPE = { // 对应的值是国际化的词条值
+    failed: 'view.monitor.componentState.state.failed',
+    pending: 'view.monitor.componentState.state.pending',
+    running: 'view.monitor.componentState.state.running',
+    succeeded: 'view.monitor.componentState.state.succeeded',
+    unknown: 'view.monitor.componentState.state.unknown'
+};
+
+
 
 
 export const MONITOR_ALLOW_OPERATION = ['start', 'detail', 'kill'];

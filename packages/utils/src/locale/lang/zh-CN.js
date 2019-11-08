@@ -282,14 +282,14 @@ export default {
                 TENSORFLOW_AUTO_DIST: 'TensorFlow自动并行',
             },
             state: {
-                CREATED: '创建成功',
-                LAUNCHING: '启动中',
-                LAUNCH_ABNORMAL: '启动异常',
-                RUNNING: '运行中',
-                FINISHED: '已完成',
-                KILLED: '已终止',
-                FAILED: '失败',
-                KILLING: '终止中'
+                Scheduling: '调度中',
+                Pending: '启动中',
+                Running: '运行中',
+                Terminating: '终止中',
+                Terminated: '已终止',
+                Succeeded: '成功',
+                Failed: '失败',
+                Error: '错误'
             },
             operation: {
                 start: '运行',

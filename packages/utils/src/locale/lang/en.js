@@ -283,14 +283,14 @@ export default {
                 TENSORFLOW_AUTO_DIST: 'TensorFlow_AUTO_DIST',
             },
             state: {
-                CREATED: 'CREATED',
-                LAUNCHING: 'LAUNCHING',
-                LAUNCH_ABNORMAL: 'LAUNCH_ABNORMAL',
-                RUNNING: 'RUNNING',
-                FINISHED: 'FINISHED',
-                KILLED: 'KILLED',
-                FAILED: 'FAILED',
-                KILLING: 'KILLING'
+                Scheduling: 'Scheduling',
+                Pending: 'Pending',
+                Running: 'Running',
+                Terminating: 'Terminating',
+                Terminated: 'Terminated',
+                Succeeded: 'Succeeded',
+                Failed: 'Failed',
+                Error: 'Error'
             },
             operation: {
                 start: 'start',

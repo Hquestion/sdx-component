@@ -160,14 +160,14 @@ export const OPERATION_INFO = {
 };
 
 export const STATE_MAP_FOLD_LABEL_TYPE = {
-    CREATED: 'create',
-    LAUNCHING: 'processing',
-    LAUNCH_ABNORMAL: 'exception',
-    RUNNING: 'running',
-    FINISHED: 'finish',
-    KILLED: 'die',
-    FAILED: 'error',
-    KILLING: 'dying'
+    Scheduling: 'create',
+    Pending: 'processing',
+    Failed: 'exception',
+    Running: 'running',
+    Succeeded: 'finish',
+    Terminated: 'die',
+    Error: 'error',
+    Terminating: 'dying'
 };
 
 export const POD_STATE_TYPE = { // 对应的值是国际化的词条值

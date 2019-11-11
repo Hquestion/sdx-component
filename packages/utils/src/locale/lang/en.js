@@ -235,6 +235,8 @@ export default {
             DataSourceInfo: 'Set container\'s environment variables from datasource\'s setting',
             AdvanceSetting: 'Advanced Setting',
             EnvVars: 'Environment Variables',
+            ParamName: 'Parameter name',
+            ParamValue: 'Parameter value',
             EnvVarsPlaceholder: '--$name value, seperated by space',
             StartCommand: 'Start Command',
             StartParams: 'Start Params',

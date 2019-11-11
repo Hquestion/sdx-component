@@ -274,7 +274,6 @@ import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
 import ExpandLabel from '@sdx/widget/components/expand-label';
 import ElRadio from 'element-ui/lib/radio';
-import ElRadioGroup from 'element-ui/lib/radio-group';
 import FileSelect from '@sdx/widget/components/file-select';
 import Appender from '@sdx/ui/components/appender';
 import DropdownTip from '@sdx/ui/components/dropdown-tip';
@@ -297,7 +296,6 @@ export default {
         DataSourceSelect,
         [InputNumber.name]: InputNumber,
         ElRadio,
-        ElRadioGroup,
         [Button.name]: Button,
         [Appender.name]: Appender,
         [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
@@ -465,16 +463,16 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
-            this.params.resourceConfigObj = JSON.parse(JSON.stringify(this.params.resourceConfig));
+            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
             this.cpuObj = {
                 cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
                 memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),
-                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfig[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
             };
             this.gpuObj = {
                 label: this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
                 count: this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'],
-                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfig[RESOURCE_KEY].requests['nvidia.com/gpu']}`
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu']}`
             };
             this.autoRelease = this.params.notebookKernelExpireTime !== 0 && this.params.podExpireTime !== 0;
             this.notebookKernelExpireTime = this.params.notebookKernelExpireTime / 60;

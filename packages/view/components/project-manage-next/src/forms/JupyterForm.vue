@@ -386,16 +386,16 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
-            this.params.resourceConfigObj = JSON.parse(JSON.stringify(this.params.resourceConfig));
+            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
             this.cpuObj = {
                 cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
                 memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),
-                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfig[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
             };
             this.gpuObj = {
                 label: this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
                 count: this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'],
-                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfig[RESOURCE_KEY].requests['nvidia.com/gpu']}`
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu']}`
             };
             this.$nextTick(()=> {
                 this.dataReady = true;

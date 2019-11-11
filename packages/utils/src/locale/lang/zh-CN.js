@@ -235,6 +235,8 @@ export default {
             DataSourceInfo: '将数据源的设置写入容器的环境变量',
             AdvanceSetting: '高级配置',
             EnvVars: '环境变量',
+            ParamName: '参数名',
+            ParamValue: '参数值',
             EnvVarsPlaceholder: '--$参数名 参数值, 以空格分隔',
             StartCommand: '启动命令',
             StartParams: '启动参数',

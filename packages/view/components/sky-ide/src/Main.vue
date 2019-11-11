@@ -24,6 +24,7 @@
                         >
                             <file-manager
                                 @open-file="openFile"
+                                :root-path="file.currentPath"
                                 ref="fileManager"
                             />
                         </Pane>
@@ -54,6 +55,7 @@
 <script>
 import emitter from '@sdx/utils/src/mixins/emitter';
 import Sidebar from './layout/Sidebar';
+import { getTaskDetailBackEnd } from '@sdx/utils/src/api/task';
 import {SIDEBAR_TERMINAL} from './config';
 import SkyTerminal from './widgets/terminal/Index';
 import FileManager from './widgets/file-manager/Main';
@@ -124,11 +126,14 @@ export default {
             },
             doc: {
                 currentFile: null,
-                openFiles: []
+                openFiles: [],
+                taskOpenFileMap: []
             },
             file: {
-                currentPath: ''
-            }
+                currentPath: '',
+                taskPathMap: []
+            },
+            taskUuid: this.$route.params.taskId
         };
     },
     computed: {
@@ -167,6 +172,22 @@ export default {
             } else {
                 // 没有的话使用默认配置
             }
+            this.recoverFileManager();
+            this.recoverDocManager();
+        },
+        recoverFileManager() {
+            const params = {
+                type: 'SKYIDE'
+            };
+            getTaskDetailBackEnd(this.taskUuid, params).then(res => {
+                const item = this.file.taskPathMap && this.file.taskPathMap.find(item => item.task === this.taskUuid);
+                // this.file.currentPath = item ? item.path : res.displayPath.split(':').pop();
+                this.$set(this.file, 'currentPath', item ? item.path : res.displayPath.split(':').pop());
+            });
+        },
+        recoverDocManager() {
+            const item = this.doc.taskOpenFileMap && this.doc.taskOpenFileMap.find(item => item.task === this.taskUuid);
+            this.$set(this.doc, 'openFiles', item ? item.openFiles : []);
         },
         calcEditorMainWeight() {
             let layout = {
@@ -202,6 +223,27 @@ export default {
                 stored = JSON.parse(stored);
             } else {
                 stored = {};
+            }
+            // 处理file-manager任务和路径映射
+            let item = this.file.taskPathMap && this.file.taskPathMap.find(item => item.task === this.taskUuid);
+            if (item) {
+                item.path = this.file.currentPath;
+            } else {
+                if (!this.file.taskPathMap) this.file.taskPathMap = [];
+                this.file.taskPathMap.push({
+                    task: this.taskUuid,
+                    path: this.file.currentPath
+                });
+            }
+            item = this.doc.taskOpenFileMap && this.doc.taskOpenFileMap.find(item => item.task === this.taskId);
+            if (item) {
+                item.openFiles = this.doc.openFiles;
+            } else {
+                if (!this.doc.taskOpenFileMap) this.doc.taskOpenFileMap = [];
+                this.doc.taskOpenFileMap.push({
+                    task: this.taskUuid,
+                    openFiles: this.doc.openFiles
+                });
             }
             const restorer = {
                 ...stored,

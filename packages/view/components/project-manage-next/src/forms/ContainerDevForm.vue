@@ -205,11 +205,46 @@
                 <el-form-item
                     :label="`${t('view.task.EnvVars')}:`"
                 >
-                    <SdxuInput
-                        v-model="params.environments"
+                    <!-- <SdxuInput
+                        v-model="params.environmentsStr"
                         size="small"
                         :placeholder="`${t('view.task.EnvVarsPlaceholder')}`"
-                    />
+                    /> -->
+                    <div>
+                        <div
+                            v-for="(item, index) in params.environments"
+                            :key="index"
+                            style="display:flex;justify-content:space-between;width:580px;margin:5px 0;"
+                        >
+                            <SdxuInput
+                                v-model="item.name"
+                                style="width:230px;"
+                                :placeholder="`${t('view.task.ParamName')}`"
+                            />
+                            <span>-</span>
+                            <SdxuInput
+                                v-model="item.value"
+                                style="width:230px;"
+                                :placeholder="`${t('view.task.ParamValue')}`"
+                            />
+                            <div style="width:70px;">
+                                <sdxu-button
+                                    v-if="!index"
+                                    invert
+                                    @click="handleEnvironChange(true)"
+                                >
+                                    <i class="sdx-icon sdx-icon-plus" />
+                                </sdxu-button>
+                                <sdxu-button
+                                    v-if="index===1"
+                                    invert
+                                    @click="handleEnvironChange()"
+                                >
+                                    <i class="sdx-icon sdx-bianzu3" />
+                                </sdxu-button>
+                            </div>
+                        </div>
+                    </div>
                 </el-form-item>
                 <el-form-item
                     :label="`${t('view.task.StartCommand')}:`"
@@ -237,7 +272,7 @@
                 >
                     <div>
                         <SdxwFileSelect
-                            v-model="params.outputPaths"
+                            v-model="params.outputPath"
                             :string-model="true"
                             check-type="folder"
                             source="ceph"
@@ -306,7 +341,8 @@ import BaseForm from './BaseForm';
 import Button from '@sdx/ui/components/button';
 import {Form, FormItem, Select, InputNumber} from 'element-ui';
 import SdxuInput from '@sdx/ui/components/input';
-import {  createProjectTask, updateTask, getDataSet} from '@sdx/utils/src/api/project';
+import {  createProjectTask, getDataSet} from '@sdx/utils/src/api/project';
+import { updateTask } from '@sdx/utils/src/api/task';
 import { getImageList } from '@sdx/utils/src/api/image';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
@@ -372,7 +408,7 @@ export default {
                 uuid: '',
                 name: '',
                 description: '',
-                type: 'CONTAINERDEV',
+                type: 'CONTAINER_DEV',
                 imageId: '',
                 resourceConfigObj: {
                     [RESOURCE_KEY]: {
@@ -389,11 +425,17 @@ export default {
                 },
                 datasources: [],
                 datasets: [],
-                environments: '',
+                environments: [
+                    {
+                        name: '',
+                        value: ''
+                    }
+                ],
                 startCommand: '',
                 startArgs: [],
                 startArgsStr: '',
-                outputPaths: '',
+                outputPaths: [],
+                outputPath: '',
                 project: '',
                 instanceNumber: 1,
                 forwardPorts: [
@@ -479,6 +521,16 @@ export default {
                 this.params.forwardPorts.pop();
             }
         },
+        handleEnvironChange(adding) {
+            if (adding) {
+                this.params.environments.push({
+                    name: '',
+                    value: ''
+                });
+            } else {
+                this.params.environments.pop();
+            }
+        },
         getDataSetList() {
             getDataSet({ share_kinds: '1,2,3' })
                 .then(data => {
@@ -510,7 +562,10 @@ export default {
             this.params.resourceConfigObj[RESOURCE_KEY].instance = this.params.instanceNumber;
             this.$refs.containerdev.validate().then(() => {
                 this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
-                this.params.startArgs = this.params.startArgsStr.split('/');
+                this.params.forwardPorts = this.params.forwardPorts.filter(item => !!item.port);
+                this.params.environments = this.params.environments.filter(item => !!item.value && !!item.name);
+                this.params.startArgs = this.params.startArgsStr.split('/').filter(item => !!item);
+                if (this.params.outputPath) this.params.outputPaths = [this.params.outputPath];
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
                     .then (() => {
                         this.$router.go(-1);
@@ -522,19 +577,21 @@ export default {
     watch: {
         task(nval) {
             this.params = { ...this.params, ...nval};
-            this.params.resourceConfigObj = JSON.parse(JSON.stringify(this.params.resourceConfig));
-            this.params.resourceConfigObj[RESOURCE_KEY].instance = this.params.instanceNumber;
+            this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
             this.params.instanceNumber = this.params.resourceConfigObj[RESOURCE_KEY].instance;
             this.params.startArgsStr = this.params.startArgs.join('/');
+            this.params.outputPath = this.params.outputPaths.length ? this.params.outputPaths[0] : '';
+            if (!this.params.forwardPorts.length) this.params.forwardPorts = [{protocol: 'HTTP',port: ''}];
+            if (!this.params.environments.length) this.params.environments = [{name: '',value: ''}];
             this.cpuObj = {
                 cpu: this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000,
                 memory: this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024),
-                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfig[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].requests.cpu/1000}-${this.params.resourceConfigObj[RESOURCE_KEY].requests.memory / (1024*1024*1024)}`
             };
             this.gpuObj = {
                 label: this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
                 count: this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'],
-                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfig[RESOURCE_KEY].requests['nvidia.com/gpu']}`
+                uuid: `${this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model']}-${this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu']}`
             };
             this.$nextTick(()=> {
                 this.dataReady = true;

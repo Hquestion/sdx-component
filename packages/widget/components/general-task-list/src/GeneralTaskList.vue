@@ -19,6 +19,7 @@
                             <sdxu-button
                                 type="link"
                                 v-if="item.showOpenIde"
+                                @click="gotoIde(item)"
                             >
                                 {{ t('view.task.EnterIde') }}
                             </sdxu-button>
@@ -85,7 +86,7 @@ import taskMixin from '@sdx/utils/src/mixins/taskNext';
 import locale from '@sdx/utils/src/mixins/locale';
 import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
 // import { getUser } from '@sdx/utils/src/helper/shareCenter';
-import { STATE_MAP_FOLD_LABEL_TYPE } from '@sdx/utils/src/const/task';
+import { STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL } from '@sdx/utils/src/const/task';
 export default {
     name: 'SdxwGeneralTaskList',
     mixins: [taskMixin, locale],
@@ -100,7 +101,7 @@ export default {
                     name: 'SkyIDE',
                     icon: 'sdx-SkyIDErenwu'
                 },
-                CONTAINERDEV: {
+                CONTAINER_DEV: {
                     name: this.t('view.task.type.CONTAINERDEV'),
                     icon: 'sdx-zidingyirongqirenwu'
                 },
@@ -186,6 +187,9 @@ export default {
                 });
             }
         },
+        gotoIde(item) {
+            window.open(`/#/sdxv-skyide/${item.uuid}`);
+        },
         currentChange(val) {
             this.current = val;
             this.initList();
@@ -194,7 +198,7 @@ export default {
             this.taskList = res.items || res.data;
             this.total = res.total;
             this.loading = false;
-            if (this.taskList.length && this.taskList.find(item => (item.state === 'LAUNCHING' || item.state === 'RUNNING' || item.state === 'KILLING' || item.state === 'Pending'))) {
+            if (this.taskList.length && this.taskList.find(item => (item.state === 'Terminating' || item.state === 'Running' || item.state === 'Pending' || item.state === 'Scheduling' || item.state === 'Error'))) {
                 if (!this.refreshTimer) {
                     this.refreshTimer = setInterval(this.initList, 3000, true);
                 }
@@ -224,37 +228,37 @@ export default {
                 };
                 item.meta.state.type = STATE_MAP_FOLD_LABEL_TYPE[item.state];
                 switch(item.state) {
-                    case 'CREATED':
+                    case 'Scheduling':
                         item.meta.state.status = '';
-                        item.meta.state.statusText = this.t('view.task.state.CREATED');
+                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
-                    case 'LAUNCHING':
+                    case 'Pending':
                         item.meta.state.status = 'loading';
-                        item.meta.state.statusText = this.t('view.task.state.LAUNCHING');
+                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
-                    case 'LAUNCH_ABNORMAL':
+                    case 'Failed':
                         item.meta.state.status = 'warning';
-                        item.meta.state.statusText = this.t('view.task.state.LAUNCH_ABNORMAL');
+                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
-                    case 'RUNNING':
+                    case 'Running':
                         item.meta.state.status = 'loading';
-                        item.meta.state.statusText = this.t('view.task.state.RUNNING');
+                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
-                    case 'FINISHED':
+                    case 'Succeeded':
                         item.meta.state.status = '';
-                        item.meta.state.statusText = this.t('view.task.state.FINISHED');
+                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
-                    case 'KILLED':
+                    case 'Terminated':
                         item.meta.state.status = '';
-                        item.meta.state.statusText = this.t('view.task.state.KILLED');
+                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
-                    case 'FAILED':
+                    case 'Error':
                         item.meta.state.status = 'warning';
-                        item.meta.state.statusText = this.t('view.task.state.FAILED');
+                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
-                    case 'KILLING':
+                    case 'Terminating':
                         item.meta.state.status = 'loading';
-                        item.meta.state.statusText = this.t('view.task.state.KILLING');
+                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
                     default:
                         break;

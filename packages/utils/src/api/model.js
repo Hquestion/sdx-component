@@ -93,6 +93,11 @@ export function getVersionInputFormat(modelId, versionId) {
     return httpService.get(`${modelApi}/${modelId}/versions/${versionId}/input-format`);
 }
 
+// 服务列表
+export function getServiceList(params) {
+    return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services`, params);
+}
+
 export default {
     getModelList,
     getModelInfo,

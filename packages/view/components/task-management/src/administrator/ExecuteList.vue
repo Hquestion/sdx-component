@@ -73,7 +73,7 @@
                 <el-select
                     size="large"
                     :placeholder="t('sdxCommon.PleaseSelect')"
-                    v-model="params.type"
+                    v-model="params.executionType"
                 >
                     <el-option
                         v-for="item in executeType"
@@ -92,6 +92,7 @@
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('view.task.executeTimeRange')}：`">
                 <el-date-picker
+                    v-model="date"
                     type="daterange"
                     size="large"
                     :start-placeholder="t('view.task.startTime')"
@@ -105,9 +106,13 @@
                 :data="table"
             >
                 <el-table-column
-
+                    prop="_id"
                     :label="t('view.task.executeID')"
-                />
+                >
+                    <template #default="{ row }">
+                        {{ row._id.slice(0,5) }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="name"
                     :label="t('view.task.taskName')"
@@ -155,21 +160,12 @@
                 <el-table-column
                     sortable
                     min-width="100px"
-                    prop="repeat_times"
                     :label="t('view.task.executeTime')"
                 >
                     <template #default="{ row }">
                         {{ timeDuration(row.cronStartTime, row.cronEndTime) }}
                     </template>
                 </el-table-column>
-                <el-table-column
-                    prop="state"
-                    :label="t('sdxCommon.Status')"
-                />
-                <el-table-column
-                    prop="state"
-                    :label="t('sdxCommon.Status')"
-                />
                 <el-table-column
                     prop="state"
                     :label="t('sdxCommon.Status')"
@@ -207,7 +203,7 @@ import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
-import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
 import { taskType, executeType } from '../tool/config';
 import { getGroups } from '@sdx/utils/src/api/user';
 export default {
@@ -216,6 +212,7 @@ export default {
         return {
             taskType,
             executeType,
+            date: '',
             infoList: [
                 {
                     total: 123,
@@ -285,6 +282,7 @@ export default {
     },
     methods: {
         dateFormatter,
+        timeDuration,
         getGroupList(){
             const params = {
                 start: 1,

@@ -67,7 +67,6 @@
             style="margin-bottom: 30px;"
             :title="t('view.skyflow.template')"
             v-loading="templatesLoading"
-            v-auth.skyflow.button="'TEMPLATE_FLOW:READ'"
         >
             <div v-if="templatesList.length || !templatesLoaded">
                 <SdxuTabRadioGroup
@@ -102,7 +101,6 @@
         </sdxu-content-panel>
         <sdxu-content-panel
             :title="t('view.skyflow.privateAndShare')"
-            v-auth.skyflow.button="'FLOW:READ'"
             class="sdxv-skyflow__bottom-panel"
             :fullscreen="true"
         >
@@ -297,37 +295,37 @@ export default {
         handleOperate(operation) {
             if (operation && operation.type) {
                 switch(operation.type) {
-                case 'delete':
-                    MessageBox({
-                        title: this.t('view.skyflow.removeWorkflowConfirm'),
-                        content: this.t('sdxCommon.ConfirmRemove')
-                    }).then(() => {
-                        removeWorkflow(operation.id).then(() => {
-                            Message({
-                                message: this.t('sdxCommon.RemoveSuccess'),
-                                type: 'success'
+                    case 'delete':
+                        MessageBox({
+                            title: this.t('view.skyflow.removeWorkflowConfirm'),
+                            content: this.t('sdxCommon.ConfirmRemove')
+                        }).then(() => {
+                            removeWorkflow(operation.id).then(() => {
+                                Message({
+                                    message: this.t('sdxCommon.RemoveSuccess'),
+                                    type: 'success'
+                                });
+                                this.initList(true);
                             });
-                            this.initList(true);
+                        }).catch(() => {});
+                        break;
+                    case 'edit':
+                        this.editingWorkflow = { ...operation.item };
+                        this.showCreateWorkflow('empty');
+                        break;
+                    case 'detail':
+                        this.$router.push({
+                            name: 'SdxvRunningInfo',
+                            params: {
+                                id: operation.id
+                            }
                         });
-                    }).catch(() => {});
-                    break;
-                case 'edit':
-                    this.editingWorkflow = { ...operation.item };
-                    this.showCreateWorkflow('empty');
-                    break;
-                case 'detail':
-                    this.$router.push({
-                        name: 'SdxvRunningInfo',
-                        params: {
-                            id: operation.id
-                        }
-                    });
-                    break;
-                case 'canvas':
-                    window.open(`${window.location.origin}/#/editor/${operation.id}`);
-                    break;
-                default:
-                    break;
+                        break;
+                    case 'canvas':
+                        window.open(`${window.location.origin}/#/editor/${operation.id}`);
+                        break;
+                    default:
+                        break;
                 }
             }
         },

@@ -72,6 +72,7 @@
         </div>
         <OnlineTesting :visible.sync="onlineTestingVisible" />
         <PublishPlatform :visible.sync="publishPlatformVisible" />
+        <GrayscaleRelease :visible.sync="grayscaleReleaseVisible" />
     </div>
 </template>
 
@@ -84,6 +85,7 @@ import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import OnlineTesting from '../service-dialog/OnlineTesting';
 import PublishPlatform from '../service-dialog/PublishPlatform';
+import GrayscaleRelease from '../service-dialog/GrayscaleRelease';
 export default {
     name: 'SdxvModelService',
     mixins: [locale],
@@ -101,7 +103,8 @@ export default {
             pageSize: 10,
             total: 0,
             onlineTestingVisible: false,
-            publishPlatformVisible:false
+            publishPlatformVisible:false,
+            grayscaleReleaseVisible:false
         };
     },
     components: {
@@ -110,7 +113,8 @@ export default {
         SdxuTable,
         SdxuPagination,
         OnlineTesting,
-        PublishPlatform
+        PublishPlatform,
+        GrayscaleRelease
     },
     created() {
         this.getServices();
@@ -125,8 +129,9 @@ export default {
             });
         },
         handleSearch() {
-            this.onlineTestingVisible = true;
+            // this.onlineTestingVisible = true;
             // this.publishPlatformVisible = true;
+            this.grayscaleReleaseVisible = true;
             this.current = 1; 
             this.getServices();
         },

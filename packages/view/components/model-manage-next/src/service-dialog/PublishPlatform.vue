@@ -118,7 +118,7 @@
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuDialog from '@sdx/ui/components/dialog';
-import {Select, Option, Upload, Tag}  from 'element-ui';
+import {Select, Option, Upload, Tag, Form, FormItem}  from 'element-ui';
 import SdxuButton from '@sdx/ui/components/button';
 export default {
     name: 'SdxvPublishPlatform',
@@ -141,6 +141,8 @@ export default {
         [Upload.name]: Upload,
         SdxuButton,
         [Tag.name]: Tag,
+        [Form.name]: Form,
+        [FormItem.name]: FormItem,
     },
     props: {
         visible: {

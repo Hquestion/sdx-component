@@ -159,7 +159,7 @@ class Context {
     }
 
     _log(level, message) {
-        return;
+        // return;
         // eslint-disable-next-line
         if (level >= this.config.logLevel) {
             const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
@@ -188,8 +188,8 @@ class Context {
      * @param params The URL parameters in a dictionary; if missing, an empty dictionary is used
      * @returns {{headers: {}, relative_url: *, method: *}} A Tyk request
      */
-    createGetRequest(url, params) {
-        return this._createRequest(METHODS.GET, url, params);
+    createGetRequest(url, params, body) {
+        return this._createRequest(METHODS.GET, url, params, body);
     }
 
     /**
@@ -225,7 +225,7 @@ class Context {
         return this._createRequest(METHODS.PUT, url, body);
     }
 
-    _createRequest(method, url, data = {}) {
+    _createRequest(method, url, data = {}, payload = undefined) {
         const req = {
             method,
             headers: {},
@@ -255,6 +255,9 @@ class Context {
             });
             if (query.length > 0) {
                 req.relative_url += '?' + query.join('&');
+            }
+            if (payload) {
+                req.body = JSON.stringify(payload);
             }
         } else {
             req.headers[CONTENT_TYPE_HEADER] = CONTENT_TYPE_APPLICATION_JSON;

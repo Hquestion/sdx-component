@@ -106,8 +106,10 @@ function handler(resp, preventDefaultNotify) {
     if (specialCodeHandler) {
         if (specialCodeHandler[httpCode]) {
             specialCodeHandler[httpCode](httpCode, code, resp);
+            return;
         } else if (specialCodeHandler[code]) {
             specialCodeHandler[httpCode](httpCode, code, resp);
+            return;
         }
     }
     if (preventDefaultError) {

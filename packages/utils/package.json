@@ -27,7 +27,7 @@
         "test:unit": "jest --passWithNoTests --no-cache",
         "test:unit:coverage": "jest --passWithNoTests --coverage",
         "build": "babel src --out-dir lib && gulp copy && webpack --config ./build/webpack.gateway.js",
-        "build:gateway": "webpack --watch --config ./build/webpack.gateway.js"
+        "build:gateway": "webpack --config ./build/webpack.gateway.js"
     },
     "peerDependencies": {
         "@sdx/widget": "^2.0.2-alpha.0",

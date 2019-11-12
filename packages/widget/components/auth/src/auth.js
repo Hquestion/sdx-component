@@ -42,7 +42,7 @@ const getUserRightsByTag = tag => {
     if(!tag) {
         return permissions;
     }
-    const tagPermissions = permissions.filter(permission => permission.tags.includes(tag.toLowerCase()) || permission.tags.includes(tag.toUpperCase()));
+    const tagPermissions = permissions.filter(permission => (permission.tags || []).includes(tag.toLowerCase()) || (permission.tags || []).includes(tag.toUpperCase()));
     return tagPermissions.map(item => item.key);
 };
 

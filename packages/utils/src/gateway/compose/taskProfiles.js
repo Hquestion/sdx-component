@@ -1,31 +1,30 @@
 import wrap from '../wrap';
 
 export let handler = wrap(function(ctx, request) {
-    let name = request.Params.name && request.Params.name[0];
     let username = request.Params.username && request.Params.username[0];
-    if (name && name.trim()) {
-        const users = ctx.sendRequest(ctx.createGetRequest(
-            'http://tyk-gateway/user-manager/api/v1/users',
-            {username: [name], fullName: [name]}), true);
-        const projects = ctx.sendRequest(ctx.createGetRequest(
-            'http://tyk-gateway/project-manager/api/v1/projects',
-            {name: [name], count: [-1]}), true);
-        const userList = users.users || [];
-        const projectList = projects.data && projects.data.items || [];
-        request.Params.ownerOrProjectIds = [...userList.map(item => item.uuid), ...projectList.map(item => item.uuid)];
-    } else if (username && username.trim()) {
+    let group = request.Params.group && request.Params.group[0];
+    if (username && username.trim()) {
         // 根据名称获取用户uuid
         const users = ctx.sendRequest(ctx.createGetRequest(
             'http://tyk-gateway/user-manager/api/v1/users',
             {username: [username], fullName: [username]}), true);
         const userList = users.users || [];
-        request.Params.ownerIds = userList.map(item => item.uuid);
+        request.Body.ownerIds = userList.map(item => item.uuid);
         delete request.Params.username;
     }
-    ctx.info('[Request Params]: ' + JSON.stringify(request.Params));
+    if (group) {
+        const users = ctx.sendRequest(ctx.createGetRequest(
+            `http://tyk-gateway/user-manager/api/v1/groups/${group}`
+        ), true).users;
+        ctx.debug('[taskProfiles]: Query Group Users' + JSON.stringify(users));
+        request.Body.ownerIds = (request.Body.ownerIds || []).concat(users.map(item => item.uuid));
+        delete request.Params.group;
+    }
+    ctx.info('[TaskProfiles Request Params]: ' + JSON.stringify(request.Params));
+    ctx.info('[TaskProfiles Request Body]: ' + JSON.stringify(request.Body));
     const projects = ctx.sendRequest(ctx.createGetRequest(
         'http://tyk-gateway/project-manager/api/v1/tasks',
-        request.Params));
+        request.Params, request.Body));
 
     ctx.resolveUuids(projects,
         {
@@ -35,19 +34,12 @@ export let handler = wrap(function(ctx, request) {
             // 请求异常时，将id替换为errorReplaceKey;
             // 如使用data.items.*.ownerId在获取用户失败时，将会替换为data.items.*.ownerId: {[errorReplaceKey]: data.items.*.ownerId}
             errorReplaceKey: 'uuid'
-        },
-        {
-            path: 'items.*.projectId',
-            url: 'http://tyk-gateway/project-manager/api/v1/projects',
-            result: 'data.items',
-            errorReplaceKey: 'uuid'
         }
     );
 
     ctx.info('task profiles result: ' + JSON.stringify(projects));
 
     ctx.rename(projects, 'items.*.ownerId', 'owner');
-    ctx.rename(projects, 'items.*.projectId', 'project');
 
     return ctx.createResponse(200, projects);
 });

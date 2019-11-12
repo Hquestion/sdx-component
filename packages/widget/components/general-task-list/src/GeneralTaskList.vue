@@ -26,11 +26,13 @@
                             <div v-if="item.showJupyterLink">
                                 <sdxu-button
                                     type="link"
+                                    @click="handleExternalLink(item, 'lab?')"
                                 >
                                     {{ t('view.task.EnterJupyterlab') }}
                                 </sdxu-button>
                                 <sdxu-button
                                     type="link"
+                                    @click="handleExternalLink(item, 'tree?')"
                                 >
                                     {{ t('view.task.EnterNotebook') }}
                                 </sdxu-button>
@@ -194,6 +196,9 @@ export default {
             this.current = val;
             this.initList();
         },
+        handleExternalLink(meta, param) {
+            window.open(`${meta.externalUrl}/` + (param ? `${param}` : ''));
+        },
         handleResp(res) {
             this.taskList = res.items || res.data;
             this.total = res.total;
@@ -213,7 +218,7 @@ export default {
                     uuid: item.ownerId
                 };
                 item.showOpenIde = item.type === 'SKYIDE';
-                item.showJupyterLink = item.type === 'JUPYTER';
+                item.showJupyterLink = item.type === 'JUPYTER' && item.state === 'Running' && item.externalUrl;
                 item.showRunningInfo = item.type === 'SKYFLOW';
                 item.meta = {
                     uuid: item.uuid,
@@ -228,10 +233,11 @@ export default {
                 };
                 item.meta.state.type = STATE_MAP_FOLD_LABEL_TYPE[item.state];
                 switch(item.state) {
-                    case 'Scheduling':
+                    case 'Created':
                         item.meta.state.status = '';
                         item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
                         break;
+                    case 'Scheduling':
                     case 'Pending':
                         item.meta.state.status = 'loading';
                         item.meta.state.statusText = STATE_TYPE_LABEL[item.state];

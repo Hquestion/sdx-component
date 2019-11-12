@@ -286,6 +286,7 @@ export default {
                 TENSORFLOW_AUTO_DIST: 'TensorFlow自动并行',
             },
             state: {
+                Created: '创建完成',
                 Scheduling: '调度中',
                 Pending: '启动中',
                 Running: '运行中',

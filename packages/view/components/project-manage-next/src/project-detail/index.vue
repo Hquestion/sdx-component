@@ -99,7 +99,7 @@ export default {
                 {
                     createLabel: this.t('view.project.addContainerDev'),
                     class: 'sdx-zidingyirongqirenwu',
-                    type: 'CONTAINERDEV',
+                    type: 'CONTAINER_DEV',
                     taskType: this.t('view.project.devTool')
                 },
                 {

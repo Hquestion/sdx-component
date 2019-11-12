@@ -287,6 +287,7 @@ export default {
                 TENSORFLOW_AUTO_DIST: 'TensorFlow_AUTO_DIST',
             },
             state: {
+                Created: 'Created',
                 Scheduling: 'Scheduling',
                 Pending: 'Pending',
                 Running: 'Running',

@@ -78,9 +78,14 @@ export const STATE_TYPE = [
         label: t('sdxCommon.All')
     },
     {
+        value: 'Created',
+        label: t('view.task.state.Created'),
+        operation: ['start', 'detail', 'entry', 'edit', 'remove']
+    },
+    {
         value: 'Scheduling',
         label: t('view.task.state.Scheduling'),
-        operation: ['start', 'detail', 'entry', 'edit', 'remove']
+        operation: ['kill', 'detail', 'entry']
     },
     {
         value: 'Pending',
@@ -160,7 +165,8 @@ export const OPERATION_INFO = {
 };
 
 export const STATE_MAP_FOLD_LABEL_TYPE = {
-    Scheduling: 'create',
+    Created: 'create',
+    Scheduling: 'processing',
     Pending: 'processing',
     Failed: 'exception',
     Running: 'running',

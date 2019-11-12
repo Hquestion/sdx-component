@@ -27,7 +27,7 @@
                         <el-option
                             v-for="item in taskTypeList"
                             :key="item.value"
-                            :label="t(item.label)"
+                            :label="item.label"
                             :value="item.value"
                         />
                     </el-select>
@@ -41,7 +41,7 @@
                         <el-option
                             v-for="item in executeTypeList"
                             :key="item.value"
-                            :label="t(item.label)"
+                            :label="item.label"
                             :value="item.value"
                         />
                     </el-select>
@@ -55,7 +55,7 @@
                         <el-option
                             v-for="item in taskStateList"
                             :key="item.value"
-                            :label="t(item.label)"
+                            :label="item.label"
                             :value="item.value"
                         />
                     </el-select>
@@ -65,6 +65,7 @@
                         v-model="selectedDate"
                         type="daterange"
                         size="large"
+                        value-format="yyyy-MM-dd"
                         :start-placeholder="t('view.task.startTime')"
                         :end-placeholder="t('view.task.stopTime')"
                     />
@@ -78,6 +79,7 @@
                 :default-sort="defaultSort"
                 v-loading="loading"
                 :empty-text="t('sdxCommon.NoData')"
+                :row-key="row => row.taskId || row._id"
             >
                 <el-table-column
                     prop="name"
@@ -85,7 +87,7 @@
                     min-width="112px"
                 />
                 <el-table-column
-                    prop="execution_id"
+                    prop="_id"
                     :label="t('view.task.executeID')"
                     min-width="56px"
                 />
@@ -104,33 +106,33 @@
                     min-width="64px"
                 />
                 <el-table-column
-                    prop="execute_type"
+                    prop="executeType"
                     :label="t('view.task.executeType')"
                     min-width="70px"
                 />
                 <el-table-column
-                    prop="started_at"
-                    :label="t('view.task.executeStartTime')"
+                    prop="startedAt"
+                    :label="t('view.task.startedAt')"
                     sortable="custom"
                     :sort-orders="sortOrders"
                     min-width="132px"
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.started_at) }}
+                            {{ formatDate(row.startedAt) }}
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="stoped_at"
-                    :label="t('view.task.executeStopTime')"
+                    prop="stopedAt"
+                    :label="t('view.task.stopedAt')"
                     sortable="custom"
                     :sort-orders="sortOrders"
                     min-width="132px"
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.stoped_at) }}
+                            {{ formatDate(row.stopedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -142,7 +144,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ dealTime(row.started_at, row.stoped_at) }}
+                            {{ dealTime(row.startedAt, row.stopedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -191,18 +193,23 @@
 </template>
 
 <script>
-import TaskManagementMixin from './TaskManagementMixin';
+import { executionList } from '@sdx/utils/src/api/task';
 import locale from '@sdx/utils/src/mixins/locale';
+import { TASK_TYPE, EXECUTE_TYPE, STATE_TYPE, TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
+
+import TaskManagementMixin from './TaskManagementMixin';
+
+// todo: 操作
 
 const data = [
     {
         'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
         'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
+        'createdAt': '2019-10-18T07:50:17.748000Z',
         'delay': 0, 'state': 'CREATED',
         'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
+        'executeType': 'MANUAL',
         'home_path': '/test/jupyter',
         'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
         'name': 'jupyter-task-test',
@@ -229,20 +236,20 @@ const data = [
         },
         'type': 'JUPYTER',
         'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T08:50:17.748000Z',
         'owner': {
             fullName: 'zhangsan'
         }
     },
     {
         'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
         'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
+        'createdAt': '2019-10-18T07:50:17.748000Z',
         'delay': 0, 'state': 'LAUNCHING',
         'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
+        'executeType': 'MANUAL',
         'home_path': '/test/jupyter',
         'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
         'name': 'jupyter-task-test',
@@ -269,20 +276,20 @@ const data = [
         },
         'type': 'JUPYTER',
         'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T08:50:17.748000Z',
         'owner': {
             fullName: 'zhangsan'
         }
     },
     {
         'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
         'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
+        'createdAt': '2019-10-18T07:50:17.748000Z',
         'delay': 0, 'state': 'RUNNING',
         'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
+        'executeType': 'MANUAL',
         'home_path': '/test/jupyter',
         'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
         'name': 'jupyter-task-test',
@@ -309,20 +316,20 @@ const data = [
         },
         'type': 'JUPYTER',
         'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T08:50:17.748000Z',
         'owner': {
             fullName: 'zhangsan'
         }
     },
     {
         'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
         'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
+        'createdAt': '2019-10-18T07:50:17.748000Z',
         'delay': 0, 'state': 'FINISHED',
         'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
+        'executeType': 'MANUAL',
         'home_path': '/test/jupyter',
         'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
         'name': 'jupyter-task-test',
@@ -349,20 +356,20 @@ const data = [
         },
         'type': 'JUPYTER',
         'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T08:50:17.748000Z',
         'owner': {
             fullName: 'zhangsan'
         }
     },
     {
         'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
         'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
+        'createdAt': '2019-10-18T07:50:17.748000Z',
         'delay': 0, 'state': 'KILLED',
         'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
+        'executeType': 'MANUAL',
         'home_path': '/test/jupyter',
         'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
         'name': 'jupyter-task-test',
@@ -389,20 +396,20 @@ const data = [
         },
         'type': 'JUPYTER',
         'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T08:50:17.748000Z',
         'owner': {
             fullName: 'zhangsan'
         }
     },
     {
         'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
         'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
+        'createdAt': '2019-10-18T07:50:17.748000Z',
         'delay': 0, 'state': 'FAILED',
         'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
+        'executeType': 'MANUAL',
         'home_path': '/test/jupyter',
         'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
         'name': 'jupyter-task-test',
@@ -429,20 +436,20 @@ const data = [
         },
         'type': 'JUPYTER',
         'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T08:50:17.748000Z',
         'owner': {
             fullName: 'zhangsan'
         }
     },
     {
         'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
+        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
         'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
+        'createdAt': '2019-10-18T07:50:17.748000Z',
         'delay': 0, 'state': 'KILLING',
         'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
+        'executeType': 'MANUAL',
         'home_path': '/test/jupyter',
         'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
         'name': 'jupyter-task-test',
@@ -469,13 +476,15 @@ const data = [
         },
         'type': 'JUPYTER',
         'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T08:50:17.748000Z',
         'owner': {
             fullName: 'zhangsan'
         }
     },
 ];     
+
+const POLLING_PERIOD = 3 * 1000;
 
 export default {
     mixins: [TaskManagementMixin, locale],
@@ -483,40 +492,120 @@ export default {
         return {
             loading: false,
             defaultSort: {
-                prop: 'started_at',
+                prop: 'startedAt',
                 order: 'descending'
             },
             sortOrders: ['descending', 'ascending', null],
-            taskTypeList: [],
-            taskStateList: [],
-            executeTypeList: [],
+            taskTypeList: TASK_TYPE,
+            taskStateList: STATE_TYPE,
+            executeTypeList: EXECUTE_TYPE,
             selectedType: '',
             selectedState: '',
             selectedExecuteType: '',
             selectedDate: '',
-            taskResourceList: data,
-            // taskResourceList: [],
+            // taskResourceList: data,
+            taskResourceList: [],
             params: {
                 name: '',
                 order: 'desc',
-                orderBy: 'started_at',
-            }
+                orderBy: 'startedAt',
+                ownerId: '',
+                type: '',
+                executionType: '',
+                state: '',
+                cronStartTime: '',
+                cronEndTime: '',
+                start: 1, 
+                count: 10
+            },
+            pollingId: 0
         };
     },
+    computed: {
+        queryParams() {
+            let params = {
+                ownerId: this.currentUser.userId
+            };
+            if (Array.isArray(this.selectedDate)) {
+                params.cronStartTime = this.selectedDate[0];
+                params.cronEndTime = this.selectedDate[1];
+            }
+            return Object.assign({}, this.params, params, {
+                start: (this.page - 1) * this.pageSize + 1,
+                count: this.pageSize
+            });
+        },
+        needPolling() {
+            return this.taskResourceList.some(item =>  {
+                return TASK_POLLING_STATE_TYPE.includes(item.state);
+            });
+        }
+    },
     methods: {
-        fetchData() {
-
+        fetchData(showLoading = true) {
+            this.loading = showLoading;
+            executionList(this.queryParams)
+                .then(data => {
+                    this.taskResourceList = data.data;
+                    this.total = data.total;
+                    this.loading = false;
+                    if (this.taskResourceList.some(item =>  {
+                        return TASK_POLLING_STATE_TYPE.includes(item.state);
+                    })) {
+                        this.startPolling();
+                    }
+                })
+                .catch(err => {
+                    window.console.error(err);
+                    this.taskResourceList = [];
+                    this.loading = false;
+                });
         },
         handleSortChange({prop, order}) {
             this.params.order = order === 'ascending' ? 'asc' : 'desc';
-            this.params.orderBy = prop || 'started_at';
+            this.params.orderBy = prop || 'startedAt';
             this.page = 1;
         },
         handleSearch() {
-
+            this.params.type = this.selectedType;
+            this.params.executionType = this.selectedExecuteType;
+            this.params.state = this.selectedState;
+            this.params.name = this.taskName;
+            // todo: creator
+            this.params.creator = this.creator;
+            this.page = 1;
         },
         handleReset() {
-
+            this.params.name = '';
+            this.params.type = '';
+            this.params.executionType = '';
+            this.params.state = '';
+            this.params.creator = '';
+            this.selectedDate = '';
+            this.page = 1;
+        },
+        startPolling() {
+            if (!this._isDestroyed) {
+                this.pollingId && clearTimeout(this.pollingId);
+                this.pollingId = setTimeout(() => {
+                    this.fetchData(false);
+                }, POLLING_PERIOD);
+            }
+        },
+        stopPolling() {
+            this.pollingId && clearTimeout(this.pollingId);
+            this.pollingId = null;
+        }
+    },
+    created() {
+        this.fetchData();
+    },
+    beforeDestroy() {
+        this.stopPolling();
+    },
+    watch: {
+        queryParams() {
+            this.fetchData();
         }
     }
 };

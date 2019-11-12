@@ -39,12 +39,12 @@ import ElTabPane from 'element-ui/lib/tab-pane';
 import MonitorInfo from './common/MonitorInfo';
 import LogView from './common/LogView';
 import BaseInfoContainer from './common/BaseInfoContainer';
-import { STATE_TYPE } from '@sdx/utils/src/const/task';
 import locale from '@sdx/utils/src/mixins/locale';
+import MixinDetail from './MixinDetail';
 
 export default {
     name: 'TaskDetailPanel',
-    mixins: [locale],
+    mixins: [locale, MixinDetail],
     components: {
         ElTabs,
         ElTabPane,
@@ -52,36 +52,10 @@ export default {
         LogView,
         BaseInfoContainer
     },
-    props: {
-        task: {
-            type: Object,
-            required: true
-        }
-    },
     data() {
         return {
             activeTab: 'base'
         };
-    },
-    computed: {
-        hasRealMonitor() {
-            return this.task && ![STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.CREATED, STATE_TYPE.LAUNCHING].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
-        },
-        hasLog() {
-            return this.task && ![STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.CREATED, STATE_TYPE.LAUNCHING].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
-        },
-        isRunning() {
-            return this.task && [STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state);
-        },
-        hasGpu() {
-            let has = false;
-            if (this.task && this.task.resourceConfig) {
-                has = Object.keys(this.task.resourceConfig).some(item => {
-                    return item.includes('GPUS') && this.task.resourceConfig[item] > 0;
-                });
-            }
-            return has;
-        }
     }
 };
 </script>

@@ -11,7 +11,7 @@ function generateObj(arr, property = 'value') {
     return obj;
 }
 
-// 任务状态列表
+// 任务类型列表
 export const TASK_TYPE = [
     {
         value: '',
@@ -71,6 +71,7 @@ export const EXECUTE_TYPE_LABEL = generateObj(EXECUTE_TYPE, 'label');
 // 执行类型value obj
 export const EXECUTE_TYPE_VALUE = generateObj(EXECUTE_TYPE);
 
+// todo:
 // 状态列表
 export const STATE_TYPE = [
     {
@@ -80,7 +81,7 @@ export const STATE_TYPE = [
     {
         value: 'Created',
         label: t('view.task.state.Created'),
-        operation: ['start', 'detail', 'entry', 'edit', 'remove']
+        operation: []
     },
     {
         value: 'Scheduling',
@@ -129,7 +130,21 @@ export const STATE_TYPE_LABEL = generateObj(STATE_TYPE, 'label');
 export const STATE_TYPE_VALUE = generateObj(STATE_TYPE);
 // 状态对应的操作
 export const STATE_TYPE_OPERATION = generateObj(STATE_TYPE, 'operation');
+// 需要轮训的状态列表
+export const TASK_POLLING_STATE_TYPE = [STATE_TYPE_VALUE.Scheduling, STATE_TYPE_VALUE.Pending, STATE_TYPE_VALUE.Running, STATE_TYPE_VALUE.Terminating, STATE_TYPE_VALUE.Error];
+// 状态映射按钮类型
+export const STATE_MAP_FOLD_LABEL_TYPE = {
+    Created: 'create',
+    Pending: 'processing',
+    Error: 'exception',
+    Running: 'running',
+    Succeeded: 'finish',
+    Terminated: 'die',
+    Failed: 'error',
+    Terminating: 'dying'
+};
 
+// todo:
 // 操作信息
 export const OPERATION_INFO = {
     start: {
@@ -164,17 +179,19 @@ export const OPERATION_INFO = {
     }
 };
 
-export const STATE_MAP_FOLD_LABEL_TYPE = {
-    Created: 'create',
-    Scheduling: 'processing',
-    Pending: 'processing',
-    Failed: 'exception',
-    Running: 'running',
-    Succeeded: 'finish',
-    Terminated: 'die',
-    Error: 'error',
-    Terminating: 'dying'
-};
+// 定时任务启动状态
+export const TIMING_TASK_STARTUP_STATE = [
+    {
+        label: '是',
+        value: true
+    }, 
+    {
+        label: '否',
+        value: false
+    }
+];
+
+
 
 export const POD_STATE_TYPE = { // 对应的值是国际化的词条值
     failed: 'view.monitor.componentState.state.failed',
@@ -185,12 +202,10 @@ export const POD_STATE_TYPE = { // 对应的值是国际化的词条值
 };
 
 
-
-
 export const MONITOR_ALLOW_OPERATION = ['start', 'detail', 'kill'];
 
 export const NON_OWNER_TASK_OPERATION = ['detail'];
 
-export const TASK_POLLING_STATE_TYPE = [STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.LAUNCHING, STATE_TYPE.KILLING, STATE_TYPE.RUNNING];
+
 
 export const SPECIAL_TASK_TYPE = [TASK_TYPE.PMML_SERVING, TASK_TYPE.SPARK_SERVING, TASK_TYPE.TENSORFLOW_SERVING, TASK_TYPE.SKYFLOW_EXEC, TASK_TYPE.DATA_SERVICE];

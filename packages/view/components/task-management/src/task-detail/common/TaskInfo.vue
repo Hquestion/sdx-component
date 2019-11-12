@@ -37,7 +37,7 @@
 <script>
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
-import { TASK_TYPE } from '@sdx/utils/src/const/task';
+import { TASK_TYPE_VALUE } from '@sdx/utils/src/const/task';
 
 export default {
     name: 'TaskInfo',
@@ -52,37 +52,26 @@ export default {
         iconInfo() {
             let iconInfo = {};
             switch(this.task.type) {
-                case TASK_TYPE.SPARK:
-                    iconInfo.icon = 'sdx-Apache_Spark_logo';
-                    iconInfo.color = 'red';
+                case TASK_TYPE_VALUE.SKYIDE:
+                    iconInfo.icon = 'sdx-SkyIDErenwu';
+                    iconInfo.color = '#6cb3f9';
                     break;
-                case TASK_TYPE.PYTHON:
-                    iconInfo.icon = 'sdx-icon-python';
-                    iconInfo.color = 'green';
+                case TASK_TYPE_VALUE.CONTAINER_DEV:
+                    iconInfo.icon = 'sdx-zidingyirongqirenwu';
+                    iconInfo.color = '#46a1bc';
                     break;
-                case TASK_TYPE.JUPYTER:
+                case TASK_TYPE_VALUE.JUPYTER:
                     iconInfo.icon = 'sdx-Jupter';
                     iconInfo.color = '#FF882B';
                     break;
-                case TASK_TYPE.TENSORBOARD:
+                case TASK_TYPE_VALUE.MODELSERVICE:
                     iconInfo.icon = 'sdx-icon-tensorboard';
                     iconInfo.color = 'yellow';
                     break;
-                case TASK_TYPE.TENSORFLOW:
-                case TASK_TYPE.TENSORFLOW_DIST:
-                case TASK_TYPE.TENSORFLOW_AUTO_DIST:
-                    iconInfo.icon = 'sdx-icon-tensorflow';
-                    iconInfo.color = 'blue';
+                case TASK_TYPE_VALUE.SKYFLOW:
+                    iconInfo.icon = 'sdx-skyflowrenwu';
+                    iconInfo.color = '#6158ba';
                     break;
-                case TASK_TYPE.CONTAINERDEV:
-                    iconInfo.icon = 'sdx-icon-docker';
-                    iconInfo.color = 'pink';
-                    break;
-                case TASK_TYPE.DATA_SERVICE:
-                    iconInfo.icon = 'sdx-huabu';
-                    iconInfo.color = 'gray';
-                    break;
-                
             }
             return iconInfo;
         }

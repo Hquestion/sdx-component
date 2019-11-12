@@ -6,6 +6,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 
 import ElTableColumn from 'element-ui/lib/table-column';
 import ElSelect from 'element-ui/lib/select';
@@ -38,7 +39,8 @@ export default {
             creator: '',
             page: 1,
             pageSize: 10,
-            total: 0
+            total: 0,
+            currentUser: getUser()
         };
     },
     methods: {

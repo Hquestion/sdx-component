@@ -41,6 +41,7 @@
                 :default-sort="defaultSort"
                 v-loading="loading"
                 :empty-text="t('sdxCommon.NoData')"
+                :row-key="row => row.taskId || row._id"
             >
                 <el-table-column
                     prop="name"
@@ -53,28 +54,28 @@
                     min-width="64px"
                 />
                 <el-table-column
-                    prop="cron_start_time"
-                    :label="t('view.task.executeStartTime')"
+                    prop="startedAt"
+                    :label="t('view.task.startedAt')"
                     sortable="custom"
                     :sort-orders="sortOrders"
                     min-width="120px"
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.cron_start_time) }}
+                            {{ formatDate(row.startedAt) }}
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="cron_end_time"
-                    :label="t('view.task.executeStopTime')"
+                    prop="stopedAt"
+                    :label="t('view.task.stopedAt')"
                     sortable="custom"
                     :sort-orders="sortOrders"
                     min-width="120px"
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.cron_end_time) }}
+                            {{ formatDate(row.stopedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -122,6 +123,8 @@
 <script>
 import TaskManagementMixin from './TaskManagementMixin';
 import locale from '@sdx/utils/src/mixins/locale';
+import { TIMING_TASK_STARTUP_STATE } from '@sdx/utils/src/const/task';
+import { executionList } from '@sdx/utils/src/api/task';
 
 const data = [
     {
@@ -160,8 +163,8 @@ const data = [
         'updated_at': '2019-10-18T07:50:17.748000Z',
         'started_at': '2019-10-18T07:50:17.748000Z',
         'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'cron_start_time': '2019-10-18T07:50:17.748000Z',
-        'cron_end_time': '2019-10-18T10:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T10:50:17.748000Z',
         'crontab': '* * * * *',
         'owner': {
             fullName: 'zhangsan'
@@ -203,8 +206,8 @@ const data = [
         'updated_at': '2019-10-18T07:50:17.748000Z',
         'started_at': '2019-10-18T07:50:17.748000Z',
         'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'cron_start_time': '2019-10-18T07:50:17.748000Z',
-        'cron_end_time': '2019-10-18T10:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T10:50:17.748000Z',
         'crontab': '* * * * *',
         'owner': {
             fullName: 'zhangsan'
@@ -246,8 +249,8 @@ const data = [
         'updated_at': '2019-10-18T07:50:17.748000Z',
         'started_at': '2019-10-18T07:50:17.748000Z',
         'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'cron_start_time': '2019-10-18T07:50:17.748000Z',
-        'cron_end_time': '2019-10-18T10:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T10:50:17.748000Z',
         'crontab': '* * * * *',
         'owner': {
             fullName: 'zhangsan'
@@ -289,8 +292,8 @@ const data = [
         'updated_at': '2019-10-18T07:50:17.748000Z',
         'started_at': '2019-10-18T07:50:17.748000Z',
         'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'cron_start_time': '2019-10-18T07:50:17.748000Z',
-        'cron_end_time': '2019-10-18T10:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T10:50:17.748000Z',
         'crontab': '* * * * *',
         'owner': {
             fullName: 'zhangsan'
@@ -332,8 +335,8 @@ const data = [
         'updated_at': '2019-10-18T07:50:17.748000Z',
         'started_at': '2019-10-18T07:50:17.748000Z',
         'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'cron_start_time': '2019-10-18T07:50:17.748000Z',
-        'cron_end_time': '2019-10-18T10:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T10:50:17.748000Z',
         'crontab': '* * * * *',
         'owner': {
             fullName: 'zhangsan'
@@ -375,8 +378,8 @@ const data = [
         'updated_at': '2019-10-18T07:50:17.748000Z',
         'started_at': '2019-10-18T07:50:17.748000Z',
         'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'cron_start_time': '2019-10-18T07:50:17.748000Z',
-        'cron_end_time': '2019-10-18T10:50:17.748000Z',
+        'startedAt': '2019-10-18T07:50:17.748000Z',
+        'stopedAt': '2019-10-18T10:50:17.748000Z',
         'crontab': '* * * * *',
         'owner': {
             fullName: 'zhangsan'
@@ -384,17 +387,12 @@ const data = [
     },
 ];
 
+// todo: 轮询
 export default {
     mixins: [TaskManagementMixin, locale],
-    props: {
-        searchStr: {
-            type: String,
-            default: ''
-        }
-    },
     data() {
         return {
-            startupTypeList: [],
+            startupTypeList: TIMING_TASK_STARTUP_STATE,
             selectedStartupType: '',
             // taskResourceList: [],
             taskResourceList: data,
@@ -408,12 +406,37 @@ export default {
                 name: '',
                 order: 'desc',
                 orderBy: 'startedAt',
+                ownerId: '',
+                start: 1,
+                count: 10,
+                isOpen: ''
             }
         };
     },
+    computed: {
+        queryParams() {
+            let params = {
+                ownerId: this.currentUser.userId
+            };
+            return Object.assign({}, this.params, params, {
+                start: (this.page - 1) * this.pageSize + 1,
+                count: this.pageSize
+            });
+        },
+    },
     methods: {
         fetchData() {
-            
+            this.loading = false;
+            executionList(this.queryParams)
+                .then(data => {
+                    this.taskResourceList = data.data;
+                    this.total = data.total;
+                })
+                .catch(err => {
+                    window.console.error(err);
+                    this.taskResourceList = [];
+                    this.loading = false;
+                });
         },
         handleSortChange({prop, order}) {
             this.params.order = order === 'ascending' ? 'asc' : 'desc';
@@ -421,10 +444,24 @@ export default {
             this.page = 1;
         },
         handleSearch() {
-
+            this.params.name = this.taskName;
+            this.params.creator = this.creator;
+            this.params.isOpen = this.selectedStartupType;
+            this.page = 1;
         },
         handleReset() {
-
+            this.params.name = '';
+            this.params.creator = '';
+            this.params.isOpen = '';
+            this.page = 1;
+        }
+    },
+    created() {
+        this.fetchData();
+    },
+    watch: {
+        queryParams() {
+            this.fetchData();
         }
     }
 };

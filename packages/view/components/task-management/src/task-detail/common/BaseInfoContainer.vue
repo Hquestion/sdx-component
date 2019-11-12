@@ -3,20 +3,16 @@
         <div class="sdxv-base-info-container__item">
             <SdxwExpandLabel :label="t('view.task.RunningInformation')">
                 <template #right>
-                    <!-- todo: -->
+                    <SdxuButton
+                        v-if="isJUPYTER || isSKYIDE || isCONTAINERDEV"
+                        type="link"
+                        @click="handleSaveAsImage"
+                    >
+                        {{ t('view.task.SaveAsImage') }}
+                    </SdxuButton>
                 </template>
             </SdxwExpandLabel>
             <SdxvInfoContainer>
-                <SdxvInfoItem
-                    v-if="isSPARK"
-                    :label="t('view.task.MainClassName')"
-                    :value="task.mainClass"
-                />
-                <SdxvInfoItem
-                    v-if="isPYTHON || isSPARK || isTENSORFLOW_AUTO_DIST || isTENSORFLOW || isTENSORFLOW_DIST"
-                    :label="t('view.task.SourceCode')"
-                    :value="task.sourcePaths[0]"
-                />
                 <SdxvInfoItem
                     :label="t('view.task.RuntimeEnvironment')"
                     :value="task && task.image && task.image.name || ''"
@@ -33,36 +29,6 @@
                     </template>
                 </SdxvInfoItem>
                 <SdxvInfoItem
-                    v-if="isTENSORBOARD"
-                    :label="t('view.task.LogDirectory')"
-                    :value="task.logPaths[0]"
-                />
-                <SdxvInfoItem
-                    v-if="isJUPYTER"
-                    :label="t('view.task.InstanceCount')"
-                    :value="task.resourceConfig.EXECUTOR_INSTANCES"
-                />
-                <SdxvInfoItem
-                    v-if="isPYTHON || isSPARK || isTENSORFLOW_AUTO_DIST || isTENSORFLOW || isTENSORFLOW_DIST"
-                    :label="t('view.task.StartupParameter')"
-                    :value="task.args"
-                />
-                <SdxvInfoItem
-                    v-if="isTENSORFLOW_AUTO_DIST"
-                    :label="t('view.task.TrainingOutputDirectory')"
-                    :value="task.outputPaths[0]"
-                />
-                <SdxvInfoItem
-                    v-if="isCONTAINERDEV"
-                    label="IP"
-                    :value="task.ip"
-                />
-                <SdxvInfoItem
-                    v-if="isCONTAINERDEV"
-                    :label="t('view.task.Port')"
-                    :value="task.assignedPort"
-                />
-                <SdxvInfoItem
                     :label="t('view.task.StartupTime')"
                     :value="task && dateFormatter(task.startedAt) || ''"
                 />
@@ -73,6 +39,11 @@
                 <SdxvInfoItem
                     :label="t('view.task.RunningTime')"
                     :value="task ? dealTime(task.startedAt, task.stoppedAt) : ''"
+                />
+                <SdxvInfoItem
+                    v-if="isSKYIDE"
+                    :label="t('view.task.FilePath')"
+                    :value="task.home_path"
                 />
                 <SdxvInfoItem
                     v-if="isCONTAINERDEV"
@@ -94,81 +65,60 @@
                         </span>
                     </template>
                 </SdxvInfoItem>
+                <!-- // todo: 列表 -->
                 <SdxvInfoItem
-                    v-if="isJUPYTER && isRunning"
-                    :label="t('view.task.ExternalLinks')"
+                    v-if="isCONTAINERDEV"
+                    :label="t('view.task.EnvVars')"
+                    :value="task.environments"
+                />
+                <SdxvInfoItem
+                    v-if="isCONTAINERDEV"
+                    :label="t('view.task.StartCommand')"
+                    :value="task.startCommand"
+                />
+                <SdxvInfoItem
+                    v-if="isCONTAINERDEV"
+                    :label="t('view.task.StartupParameter')"
+                    :value="task.startArgs"
+                />
+                <!-- // todo: 结果输出 -->
+                <!-- <SdxvInfoItem
+                    v-if="isCONTAINERDEV"
+                    :label="t('view.task.结果输出')"
+                    :value="task.args"
+                /> -->
+                <SdxvInfoItem
+                    v-if="isCONTAINERDEV"
+                    :whole-line="true"
+                    :label="t('view.task.PortRoute')"
                 >
-                    <template
-                        #value
-                    >
-                        <span
-                            class="sdxv-task-detail__external"
-                            :plain="true"
-                            @click="goJupyter('lab?')"
+                    <template #value>
+                        <SdxuTable
+                            :light="true"
+                            :data="task.forwardPorts"
+                            :empty-text="t('sdxCommon.NoData')"
                         >
-                            Jupyter lab
-                        </span>
-                        <span
-                            class="sdxv-task-detail__external"
-                            :plain="true"
-                            @click="goJupyter('tree?')"
-                        >
-                            Jupyter notebook
-                        </span>
+                            <el-table-column
+                                prop="protocol"
+                                :label="t('view.task.Protocol')"
+                            />
+                            <el-table-column
+                                prop="port"
+                                :label="t('view.task.Port')"
+                            />
+                            <el-table-column
+                                prop="link"
+                                :label="t('view.task.Link')"
+                            />
+                        </SdxuTable>
                     </template>
                 </SdxvInfoItem>
             </SdxvInfoContainer>
         </div>
         <div class="sdxv-base-info-container__item">
             <SdxwExpandLabel :label="t('view.task.ResourceInformation')" />
-            <template v-if="isTENSORFLOW_AUTO_DIST || isTENSORFLOW_DIST">
-                <SdxvInfoContainer
-                    v-if="!isTENSORFLOW_DIST"
-                    :background="true"
-                >
-                    <SdxvInfoItem
-                        :label="t('view.task.MainNodeCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.TF_MASTER_CPUS || 0) + t('view.task.Core')"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.MainNodeMemory')"
-                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.TF_MASTER_MEMORY || 0) + 'GB'"
-                    />
-                </SdxvInfoContainer>
-                <SdxvInfoContainer>
-                    <SdxvInfoItem
-                        :label="t('view.task.ParametricServerCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.TF_PS_CPUS || 0) + t('view.task.Core')"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.ParametricServerMemory')"
-                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.TF_PS_MEMORY || 0) + 'GB'"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.ParametricServerInstanceCount')"
-                        :value="task && task.resourceConfig && (task.resourceConfig.TF_PS_INSTANCES || task.resourceConfig.TF_EXECUTOR_INSTANCES) || 0 + t('view.task.Count')"
-                    />
-                </SdxvInfoContainer>
-                <SdxvInfoContainer :background="true">
-                    <SdxvInfoItem
-                        :label="t('view.task.ComputationalNodeCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.TF_WORKER_CPUS || 0) + t('view.task.Core')"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.ComputationalNodeMemory')"
-                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.TF_WORKER_MEMORY || 0) + 'GB'"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.ComputationalNodeGPU')"
-                        :value="task && task.resourceConfig && task.resourceConfig.TF_WORKER_GPUS || 0 + t('view.task.Block')"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.ComputationalNodeInstanceCount')"
-                        :value="task && task.resourceConfig && (task.resourceConfig.TF_WORKER_INSTANCES || task.resourceConfig.TF_EXECUTOR_INSTANCES) || 0 + t('view.task.Count')"
-                    />
-                </SdxvInfoContainer>
-            </template>
-            <template v-else-if="isDATA_SERVICE || isSPARK">
+            <!-- // todo: data service -->
+            <!-- <template v-if="isDATA_SERVICE || isSPARK">
                 <SdxvInfoContainer>
                     <SdxvInfoItem
                         :label="t('view.task.DriverCPU')"
@@ -193,21 +143,25 @@
                         :value="task && task.resourceConfig && task.resourceConfig.SPARK_EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
                     />
                 </SdxvInfoContainer>
-            </template>
-            <template v-else>
+            </template> -->
+            <template>
                 <SdxvInfoContainer>
                     <SdxvInfoItem
                         label="CPU"
                         :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.EXECUTOR_CPUS || 0) + t('view.task.Core')"
                     />
                     <SdxvInfoItem
-                        v-if="!isTENSORBOARD"
                         label="GPU"
                         :value="(task && task.resourceConfig && task.resourceConfig.EXECUTOR_GPUS || 0) + t('view.task.Block')"
                     />
                     <SdxvInfoItem
                         :label="t('view.task.Memory')"
                         :value="byteToGb(task && task.resourceConfig && task.resourceConfig.EXECUTOR_MEMORY || 0) + 'GB'"
+                    />
+                    <SdxvInfoItem
+                        v-if="isCONTAINERDEV"
+                        :label="t('view.task.ExectorInstanceCount')"
+                        :value="task && task.resourceConfig && task.resourceConfig.EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
                     />
                 </SdxvInfoContainer>
             </template>
@@ -220,6 +174,11 @@
                 :datasets="task.datasets"
             />
         </div>
+        <SdxvSaveAsDialog
+            v-if="dialogVisible"
+            :visible.sync="dialogVisible"
+            :task="task"
+        />
     </div>
 </template>
 
@@ -233,6 +192,9 @@ import SdxvInfoContainer from './InfoContainer';
 import SdxvInfoItem from './InfoItem';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxvSaveAsDialog from './SaveAsDialog';
+import SdxuButton from '@sdx/ui/components/button';
+import SdxuTable from '@sdx/ui/comonents/table';
+import ElTableColumn from 'element-ui/lib/table-column';
 
 export default {
     name: 'BaseInfoContainer',
@@ -245,7 +207,11 @@ export default {
         SdxvInfoContainer,
         SdxvInfoItem,
         SdxwExpandLabel: SdxwExpandLabel.ExpandLabel,
-        [SdxwFoldLabel.FoldLabel.name]: SdxwFoldLabel.FoldLabel
+        [SdxwFoldLabel.FoldLabel.name]: SdxwFoldLabel.FoldLabel,
+        SdxuButton,
+        SdxvSaveAsDialog,
+        SdxuTable,
+        ElTableColumn
     },
     data() {
         return {
@@ -258,6 +224,9 @@ export default {
         },
         goJupyter(param) {
             window.open(`${this.task.external_url}/${param}`);
+        },
+        handleSaveAsImage() {
+            this.dialogVisible = true;
         }
     }
 };

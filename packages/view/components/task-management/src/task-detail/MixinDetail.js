@@ -1,5 +1,5 @@
 
-import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, TASK_TYPE, TASK_TYPE_LABEL } from '@sdx/utils/src/const/task';
+import { STATE_TYPE_VALUE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, TASK_TYPE_VALUE } from '@sdx/utils/src/const/task';
 import { byteToGB, parseMilli, dateFormatter } from '@sdx/utils/src/helper/transform';
 import { t } from '@sdx/utils/src/locale';
 
@@ -11,68 +11,53 @@ export default {
         }
     },
     data() {
-        this.STATE_TYPE = STATE_TYPE;
         this.STATE_TYPE_LABEL = STATE_TYPE_LABEL;
         this.STATE_MAP_FOLD_LABEL_TYPE = STATE_MAP_FOLD_LABEL_TYPE;
-        this.TASK_TYPE_LABEL = TASK_TYPE_LABEL;
+        this.STATE_TYPE_VALUE = STATE_TYPE_VALUE;
         return {};
     },
+    // todo:
     computed: {
         stateIcon() {
             let icon = '';
             if (!this.task) {
                 icon = '';
-            } else if ([STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state)) {
+            } else if ([STATE_TYPE_VALUE.Pending, STATE_TYPE_VALUE.Running, STATE_TYPE_VALUE.Terminating].includes(this.task.state)) {
                 icon = 'loading';
-            } else if ([STATE_TYPE.FAILED, STATE_TYPE.LAUNCH_ABNORMAL].includes(this.task.state)) {
+            } else if ([STATE_TYPE_VALUE.Failed, STATE_TYPE_VALUE.Error].includes(this.task.state)) {
                 icon = 'warning';
             }
             return icon;
         },
         hasRealMonitor() {
-            return this.task && ![STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.CREATED, STATE_TYPE.LAUNCHING].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
+            return this.task && ![STATE_TYPE_VALUE.Error, STATE_TYPE_VALUE.Created, STATE_TYPE_VALUE.Pending, STATE_TYPE_VALUE.Scheduling].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
         },
         hasLog() {
-            return this.task && ![STATE_TYPE.LAUNCH_ABNORMAL, STATE_TYPE.CREATED, STATE_TYPE.LAUNCHING].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
+            return this.task && ![STATE_TYPE_VALUE.Error, STATE_TYPE_VALUE.Created, STATE_TYPE_VALUE.Pending, STATE_TYPE_VALUE.Scheduling].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
         },
         hasDataInfo() {
             return this.task && ((this.task.datasources && this.task.datasources.length > 0) || (this.task.datasets && this.task.datasets.length > 0));
         },
         isRunning() {
-            return this.task && [STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state);
-        },
-        isModelTask() {
-            return this.task && [TASK_TYPE.TENSORFLOW_SERVING, TASK_TYPE.SPARK_SERVING, TASK_TYPE.PMML_SERVING].includes(this.task.type);
-        },
-        isSPARK() {
-            return this.task && this.task.type === TASK_TYPE.SPARK;
-        },
-        isPYTHON() {
-            return this.task && this.task.type === TASK_TYPE.PYTHON;
+            return this.task && [STATE_TYPE_VALUE.Running, STATE_TYPE_VALUE.Terminating].includes(this.task.state);
         },
         isJUPYTER() {
-            return this.task && this.task.type === TASK_TYPE.JUPYTER;
+            return this.task && this.task.type === TASK_TYPE_VALUE.JUPYTER;
         },
-        isTENSORBOARD() {
-            return this.task && this.task.type === TASK_TYPE.TENSORBOARD;
-        },
-        isTENSORFLOW() {
-            return this.task && this.task.type === TASK_TYPE.TENSORFLOW;
-        },
-        isTENSORFLOW_DIST() {
-            return this.task && this.task.type === TASK_TYPE.TENSORFLOW_DIST;
-        },
-        isTENSORFLOW_AUTO_DIST() {
-            return this.task && this.task.type === TASK_TYPE.TENSORFLOW_AUTO_DIST;
+        isSKYIDE() {
+            return this.task && this.task.type === TASK_TYPE_VALUE.SKYIDE;
         },
         isCONTAINERDEV() {
-            return this.task && this.task.type === TASK_TYPE.CONTAINERDEV;
+            return this.task && this.task.type === TASK_TYPE_VALUE.CONTAINER_DEV;
         },
-        isDATA_SERVICE() {
-            return this.task && this.task.type === TASK_TYPE.DATA_SERVICE;
+        isSKYFLOW() {
+            return this.task && this.task.type === TASK_TYPE_VALUE.isSKYFLOW;
+        },
+        isMODELSERVICE() {
+            return this.task && this.task.type === TASK_TYPE_VALUE.MODELSERVICE;
         },
         showSaveAsImage() {
-            return (this.isJUPYTER || this.isCONTAINERDEV) && this.task.state === STATE_TYPE.RUNNING;
+            return (this.isJUPYTER || this.isCONTAINERDEV) && this.task.state === STATE_TYPE_VALUE.Running;
         },
         hasGpu() {
             let has = false;
@@ -82,7 +67,31 @@ export default {
                 });
             }
             return has;
-        }
+        },
+    
+
+        // isSPARK() {
+        //     return this.task && this.task.type === TASK_TYPE.SPARK;
+        // },
+        // isPYTHON() {
+        //     return this.task && this.task.type === TASK_TYPE.PYTHON;
+        // },
+        // isTENSORBOARD() {
+        //     return this.task && this.task.type === TASK_TYPE.TENSORBOARD;
+        // },
+        // isTENSORFLOW() {
+        //     return this.task && this.task.type === TASK_TYPE.TENSORFLOW;
+        // },
+        // isTENSORFLOW_DIST() {
+        //     return this.task && this.task.type === TASK_TYPE.TENSORFLOW_DIST;
+        // },
+        // isTENSORFLOW_AUTO_DIST() {
+        //     return this.task && this.task.type === TASK_TYPE.TENSORFLOW_AUTO_DIST;
+        // },
+        // isDATA_SERVICE() {
+        //     return this.task && this.task.type === TASK_TYPE.DATA_SERVICE;
+        // },
+
     },
     methods: {
         dealTime(startTime, endTime) {

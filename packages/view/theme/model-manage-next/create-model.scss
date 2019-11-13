@@ -1,0 +1,9 @@
+@include block('create-model', $bem-namespace-view) {
+    @include element('version') {
+        background: #EDEFF2;
+        padding-left: 10px;
+    }
+    @include element('form') {
+        padding-right: 20px;
+    }
+}

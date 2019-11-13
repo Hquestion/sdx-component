@@ -1,0 +1,11 @@
+@include block('model-list', $bem-namespace-view) {
+    @include element('title') {
+        font-size: 24px;
+        color: #13264D;
+    }
+    @include element('sort') {
+        display: flex;
+        justify-content: space-between;
+        margin: 30px 0 24px 0;
+    }
+}

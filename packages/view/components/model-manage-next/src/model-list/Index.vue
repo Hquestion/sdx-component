@@ -9,18 +9,97 @@
                 @switch="switchModelType"
             >
                 <SdxuTabRadioItem name="ALL">
-                    {{ t('view.model.tabs.all') }}
+                    所有模型
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="PRIVATE">
-                    {{ t('view.model.tabs.private') }}
+                    私有模型
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="MY_SHARE">
-                    {{ t('view.model.tabs.myShare') }}
+                    我的共享
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="OTHER_SHARE">
-                    {{ t('view.model.tabs.otherShare') }}
+                    他人共享
                 </SdxuTabRadioItem>
             </SdxuTabRadioGroup>
+            <div>
+                <sdxu-button
+                    placement="right"
+                    trigger="click"
+                    style="margin-right: 24px; vertical-align: middle"
+                >
+                    导入模型
+                    <template slot="dropdown">
+                        <SdxuButton
+                            type="text"
+                            size="regular"
+                            block
+                            @click="createModel"
+                        >
+                            新建模型
+                        </SdxuButton>
+                        <SdxuButton
+                            type="text"
+                            size="regular"
+                            block
+                        >
+                            添加已有版本
+                        </SdxuButton>
+                    </template>
+                </sdxu-button>
+                <SdxuSortButton
+                    :title="t('view.project.sortByCreateTime')"
+                    @sortChange="sortChange"
+                    :order.sync="order"
+                    style="vertical-align: middle"
+                />
+            </div>
+        </div>
+        <div class="sdxv-model-list__filter">
+            <sdxw-search-layout
+                @search="search"
+            >
+                <sdxw-search-item label="模型名称:">
+                    <sdxu-input
+                        v-model="searchName"
+                        type="search"
+                        size="small"
+                        :placeholder="t('view.model.searchModelName')"
+                    />
+                </sdxw-search-item>
+                <sdxw-search-item label="模型类型:">
+                    <sdxu-input
+                        v-model="searchName"
+                        type="search"
+                        size="small"
+                        :placeholder="t('view.model.searchModelName')"
+                    />
+                </sdxw-search-item>
+                <sdxw-search-item label="模型标签:">
+                    <sdxu-input
+                        v-model="searchName"
+                        type="search"
+                        size="small"
+                        :placeholder="t('view.model.searchModelName')"
+                    />
+                </sdxw-search-item>
+            </sdxw-search-layout>
+        </div>
+        <div
+            class=""
+        >
+            <model-list-table
+                :name="searchName"
+                ref="taskList"
+                :order="order"
+                :order-by="orderBy"
+            />
+        </div>
+        <div>
+            <create-model
+                :visible.sync="createDialogVisible"
+                v-if="createDialogVisible"
+                @close="dialogClose"
+            />
         </div>
     </div>
     <!-- <sdxu-content-panel
@@ -110,6 +189,8 @@ export default {
             buildType: '',
             shareType: '',
             modelType: 'ALL',
+            order: 'desc',
+            orderBy: 'createdAt',
             isOwner: '',
             createDialogVisible: false
         };
@@ -166,6 +247,9 @@ export default {
                 this.updateTable();
             });
         },
+        sortChange() {
+            // this.initProjectsList();
+        },
         createModel() {
             this.createDialogVisible = true;
         },
@@ -180,7 +264,7 @@ export default {
             this.buildType = '';
         },
         updateTable() {
-            this.$refs.modelListTable.initModelList(true);
+            // this.$refs.modelListTable.initModelList(true);
         }
     }
 };

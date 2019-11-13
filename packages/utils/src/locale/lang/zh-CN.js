@@ -600,6 +600,9 @@ export default {
             etc: '等'
         },
         model: {
+            Weight_ratio: '权重占比',
+            Flow_ratio: '流量占比',
+            New_gray_level_release: '新增灰度发布',
             Release_to_AI_open_platform: '发布至AI开放平台',
             APIName: 'API名称',
             APIDescription: 'API描述',

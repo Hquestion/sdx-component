@@ -1,7 +1,7 @@
 <template>
     <sdxu-dialog
         :visible.sync="dialogVisible"
-        title="新增灰度发布"
+        :title="t('view.model.New_gray_level_release')"
         class="sdxv-grayscale-release"
         width="720px"
     > 
@@ -13,7 +13,7 @@
             :rules="rules"
         >
             <el-form-item
-                label="模型版本"
+                :label="`${t('view.model.modelVersion')}：`"
                 prop="name"
             >
                 <el-select
@@ -28,7 +28,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                label="实例个数"
+                :label="`${t('view.task.InstanceNum')}：`"
                 prop="name"
             >
                 <el-input-number
@@ -36,11 +36,10 @@
                     @change="handleChange"
                     :min="1"
                     :max="10"
-                    label="描述文字"
                 />
             </el-form-item>
             <el-form-item
-                label="流量占比"
+                :label="`${t('view.model.Flow_ratio')}：`"
                 class="flow-rate"
             >
                 <sdxu-table
@@ -49,10 +48,10 @@
                 >
                     <el-table-column
                         prop="version"
-                        label="版本"
+                        :label="t('view.image.Version')"
                     />
                     <el-table-column
-                        label="权重占比"
+                        :label="t('view.model.Weight_ratio')"
                     >
                         <template>
                             <el-select

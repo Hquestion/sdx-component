@@ -261,7 +261,7 @@ export const getTaskList = authWrapper(function (params) {
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
 // full 版本任务列表
 export function taskList(params) {
-    return httpService.get(`${taskApi}tasks`, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
 }
 // full 版本执行列表
 export function executionList(params) {

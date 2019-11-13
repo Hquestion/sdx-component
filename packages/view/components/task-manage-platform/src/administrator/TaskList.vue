@@ -13,7 +13,7 @@
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('sdxCommon.Creator')}：`">
                 <SdxuInput
-                    v-model="params.ownerId"
+                    v-model="params.username"
                     :placeholder="t('view.task.PleaseInput')"
                 />
             </SdxwSearchItem>
@@ -21,7 +21,7 @@
                 <el-select
                     size="large"
                     :placeholder="t('sdxCommon.PleaseSelect')"
-                    v-model="params.groupId"
+                    v-model="params.group"
                 >
                     <el-option
                         v-for="item in groups"
@@ -38,7 +38,7 @@
                     v-model="params.type"
                 >
                     <el-option
-                        v-for="item in taskType"
+                        v-for="item in TASK_TYPE"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -51,6 +51,7 @@
                 :data="table"
                 @sort-change="handleSortChange"
                 :default-sort="defaultSort"
+                v-loading="tableLoading"
             >
                 <el-table-column
                     prop="name"
@@ -61,19 +62,27 @@
                     :label="t('view.task.taskType')"
                 />
                 <el-table-column
-                    prop="owner_id"
+                    prop="owner.fullName"
                     :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
                     prop="quota.cpu"
-                    :label="'CPU'"
+                    label="CPU"
                     sortable
-                />
+                >
+                    <template #default="{row}">
+                        {{ parseMilli(row.quota.cpu) }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="quota.memory"
                     :label="t('view.task.Memory')"
                     sortable
-                />
+                >
+                    <template #default="{row}">
+                        {{ byteToGB(row.quota.memory) }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="quota.gpu"
                     :label="'GPU'"
@@ -81,22 +90,22 @@
                 />
 
                 <el-table-column
-
+                    prop="group"
                     :label="t('view.task.tipCard.SubordinateGroup')"
                 />
                 <el-table-column
-                    prop="created_at"
+                    prop="createdAt"
                     :label="t('sdxCommon.CreatedTime')"
                 >
                     <template
                         slot-scope="scope"
                     >
-                        {{ dateFormatter(scope.row.created_at) }}
+                        {{ dateFormatter(scope.row.createdAt) }}
                     </template>
                 </el-table-column>
                 <el-table-column
                     :label="t('sdxCommon.Operation')"
-                    min-width="172px"
+                    min-width="100px"
                 >
                     <template #default="{ row }">
                         <SdxuButton
@@ -132,8 +141,9 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import Button from '@sdx/ui/components/button';
-import { taskType } from '../tool/config';
+import { TASK_TYPE } from '@sdx/utils/src/const/task';
 import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
+import {  parseMilli, byteToGB } from '@sdx/utils/src/helper/transform';
 import { taskList } from '@sdx/utils/src/api/task';
 import { getGroups } from '@sdx/utils/src/api/user';
 export default {
@@ -148,7 +158,7 @@ export default {
     },
     data() {
         return {
-            taskType,
+            TASK_TYPE,
             table: [],
             groups: [],
             defaultSort: {
@@ -158,10 +168,11 @@ export default {
             current: 1,
             pageSize: 10,
             total: 0,
+            tableLoading: false,
             params: {
                 name: '',
-                ownerId: '',
-                groupId: '',
+                username: '',
+                group: '',
                 type: '',
                 start: 1,
                 count: 10,
@@ -172,6 +183,8 @@ export default {
     },
     methods: {
         dateFormatter,
+        parseMilli, 
+        byteToGB,
         getGroupList(){
             const params = {
                 start: 1,
@@ -189,13 +202,19 @@ export default {
             });
         },
         getTaskList() {
+            this.tableLoading = true;
             const params = Object.assign({}, this.params, {
                 ...paginate(this.current, this.pageSize),
             });
             removeBlankAttr(params);
             taskList(params).then(res => {
-                this.table = res.data;
+                this.table = res.items;
                 this.total = res.total;
+                this.tableLoading = false;
+            }).catch(() => {
+                this.table = [];
+                this.total = 0;
+                this.tableLoading = false;
             });
         },
         // 根据prop获取orderBy， 譬如 quota.cpu 得到 CPU
@@ -212,11 +231,15 @@ export default {
             this.current = 1;
             this.getTaskList();
         },
+        handlePageChange(index){
+            this.current = index;
+            this.getTaskList();
+        },
         handleReset() {
             this.params = {
                 name: '',
-                ownerId: '',
-                groupId: '',
+                username: '',
+                group: '',
                 type: '',
                 start: 1,
                 count: 10,
@@ -254,7 +277,7 @@ export default {
             padding: 0;
         }
     }
-    .pagination {
+    .sdxu-pagination {
         margin-top: 24px;
     }
 }

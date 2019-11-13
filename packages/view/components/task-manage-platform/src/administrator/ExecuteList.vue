@@ -62,7 +62,7 @@
                     v-model="params.type"
                 >
                     <el-option
-                        v-for="item in taskType"
+                        v-for="item in TASK_TYPE"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -76,7 +76,7 @@
                     v-model="params.executionType"
                 >
                     <el-option
-                        v-for="item in executeType"
+                        v-for="item in EXECUTE_TYPE"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -204,14 +204,14 @@ import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
 import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
-import { taskType, executeType } from '../tool/config';
+import { TASK_TYPE, EXECUTE_TYPE } from '@sdx/utils/src/const/task';
 import { getGroups } from '@sdx/utils/src/api/user';
 export default {
     name: 'SdxvExecuteList',
     data() {
         return {
-            taskType,
-            executeType,
+            TASK_TYPE,
+            EXECUTE_TYPE,
             date: '',
             infoList: [
                 {

@@ -8,15 +8,13 @@
                 <SdxwSearchItem :label="`${t('view.task.taskName')}：`">
                     <sdxu-input
                         v-model="params.name"
-                        type="search"
-                        :placeholder="t('view.project.enterProjectName')"
+                        :placeholder="t('ui.transfer.PleaseEnter')"
                     />
                 </SdxwSearchItem>
                 <SdxwSearchItem :label="`${t('view.model.serviceState')}：`">
                     <sdxu-input
                         v-model="params.state"
-                        type="search"
-                        :placeholder="t('view.project.enterProjectName')"
+                        :placeholder="t('ui.transfer.PleaseEnter')"
                     />
                 </SdxwSearchItem>
             </SdxwSearchLayout>

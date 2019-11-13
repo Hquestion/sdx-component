@@ -601,6 +601,9 @@ export default {
             etc: 'etc'
         },
         model: {
+            Weight_ratio: 'Weight ratio',
+            Flow_ratio: 'Flow ratio',
+            New_gray_level_release: 'New gray level release',
             Release_to_AI_open_platform: 'Release to AI open platform',
             APIName: 'API Name',
             APIDescription: 'API Description',

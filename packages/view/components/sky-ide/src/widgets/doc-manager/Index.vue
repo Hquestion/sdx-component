@@ -98,7 +98,7 @@
                 >
                     {{ t('view.file.Save') }}
                 </el-button>
-                
+
             </span>
         </el-dialog>
     </div>
@@ -257,6 +257,7 @@ export default {
             border: none !important;
             .el-tabs__item {
                 height: 40px;
+                font-size: 14px;
                 display: flex;
                 align-items: center;
                 border: none;
@@ -337,7 +338,7 @@ export default {
                     top: 6px;
                     left:0;
                 }
-                div{ 
+                div{
                     height: 26px;
                     line-height: 26px;
                     color: #C0D2FF;
@@ -349,7 +350,7 @@ export default {
                     font-size: 16px;
                 }
             }
-            
+
         }
     }
 

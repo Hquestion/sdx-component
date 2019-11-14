@@ -24,7 +24,8 @@
                         >
                             <file-manager
                                 @open-file="openFile"
-                                :root-path="file.currentPath"
+                                :root-path="rootPath"
+                                :current-path="file.currentPath"
                                 ref="fileManager"
                             />
                         </Pane>
@@ -133,7 +134,8 @@ export default {
                 currentPath: '',
                 taskPathMap: []
             },
-            taskUuid: this.$route.params.taskId
+            taskUuid: this.$route.params.taskId,
+            rootPath: ''
         };
     },
     computed: {
@@ -182,7 +184,8 @@ export default {
             getTaskDetailBackEnd(this.taskUuid, params).then(res => {
                 const item = this.file.taskPathMap && this.file.taskPathMap.find(item => item.task === this.taskUuid);
                 // this.file.currentPath = item ? item.path : res.displayPath.split(':').pop();
-                this.$set(this.file, 'currentPath', item ? item.path : res.displayPath.split(':').pop());
+                this.rootPath = res.displayPath.split(':').pop();
+                this.$set(this.file, 'currentPath', item && item.path ? item.path : this.rootPath);
             });
         },
         recoverDocManager() {

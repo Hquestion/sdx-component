@@ -4,7 +4,9 @@
         tabindex="1"
     >
         <OperationBar ref="operationBar" />
-        <BreadcrumbBar ref="breadcrumbBar" />
+        <BreadcrumbBar
+            ref="breadcrumbBar"
+        />
         <FileTable ref="fileTable" />
     </div>
 </template>
@@ -39,8 +41,6 @@ export default {
             pageSize: 100,
             // 当前是否位于根路径
             isRoot: true,
-            // 当前路径
-            currentPath: this.rootPath,
             // 当前路径的详细信息
             currentPathMeta: {},
             // 根路径类型，默认为空表示普通文件夹，用于区分我的共享/接收的共享/项目共享
@@ -59,6 +59,10 @@ export default {
     mixins: [locale],
     props: {
         rootPath: {
+            type: String,
+            default: ''
+        },
+        currentPath: {
             type: String,
             default: ''
         }
@@ -179,23 +183,13 @@ export default {
             this.renderFiles.splice(this.renderFiles.findIndex((item => item === fileRemoved)), 1);
         }
     },
-    created() {
-        this.currentPath = this.app.file.currentPath;
-    },
-    mounted() {
-        this.enterDirectory(this.currentPath);
-        this.$refs.breadcrumbBar.buildBreadcrumb('');
-    },
     watch: {
         currentPath(val, oldVal) {
             if (val !== oldVal) {
                 this.enterDirectory(val);
-                this.$refs.breadcrumbBar.buildBreadcrumb(val);
+                this.$refs.breadcrumbBar.buildBreadcrumb(val, this.rootPath);
                 this.app.file.currentPath = val;
             }
-        },
-        rootPath(val, oldVal) {
-            if (val !== oldVal) this.currentPath = val;
         }
     }
 };

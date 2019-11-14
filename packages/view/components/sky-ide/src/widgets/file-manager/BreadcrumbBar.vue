@@ -16,7 +16,7 @@ import locale from '@sdx/utils/src/mixins/locale';
 
 export default {
     name: 'BreadcrumbBar',
-    inject: ['fileManager'],
+    inject: ['fileManager', 'app'],
     mixins: [locale],
     data() {
         return {
@@ -28,22 +28,35 @@ export default {
     },
     methods: {
         buildBreadcrumb(val = '', startPath = '') {
+            let startPathNameMap = {};
+            let startName;
+            if (startPath) {
+                let startPathList = startPath.split('/');
+                startName = startPathList[startPathList.length - 1];
+                startPathNameMap = {
+                    [startName]: startPath
+                };
+                val = val.replace(startPath, `/${startName}`);
+            }
             let list = val.split('/').slice(1);
             let pathObjArr = list.map((item, index) => {
                 let name = getPathName(item);
                 let path = '/' + list.slice(0, index + 1).join('/');
+                if(startName) {
+                    path = path.replace(eval(`/${startName}/`), startPathNameMap[startName].slice(1));
+                }
                 return { name, path };
             });
             pathObjArr.unshift({
                 name: '',
-                path: '',
+                path: startPath,
                 showIcon: true
             });
             this.list = pathObjArr;
             return pathObjArr;
         },
         handleNav(item) {
-            this.fileManager.currentPath = item.path;
+            this.app.file.currentPath = item.path;
         }
     }
 };

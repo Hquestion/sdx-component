@@ -1,4 +1,4 @@
-import { TaskManager, Session } from '@skyide/services';
+import { TaskManager } from '@skyide/services';
 import { getSessionSpecs, getAllTerminals } from '@sdx/utils/src/api/skyide';
 import emitter from '@sdx/utils/src/mixins/emitter';
 const fetch = require('node-fetch');
@@ -23,9 +23,22 @@ export default {
             return await this.taskManager.setupIDE();
         },
         makeSettings() {
+            const protocolMap = {
+                http: 'ws',
+                https: 'wss'
+            };
+            const {
+                protocol,
+                proxyPort,
+                proxyType,
+                urlSuffix
+            } = this.taskManager.task.serviceList[0];
+            const wsProtocol = protocolMap[(protocol || 'http').toLowerCase()];
+            const externalUrl = `${protocol}://${location.hostname}:${proxyPort}/${urlSuffix}`;
+            const wsUrl = `${wsProtocol}://${location.hostname}:${proxyPort}/${urlSuffix}`;
             return {
-                baseUrl: this.taskManager.task.externalUrl,
-                wsUrl: this.taskManager.task.externalUrl.replace('http://', 'ws://'),
+                baseUrl: externalUrl,
+                wsUrl: wsUrl,
                 ideUuid: this.taskManager.ideUuid,
                 WebSocket: WebSocket,
                 init: {cache: 'no-store', credentials: 'same-origin' },
@@ -48,7 +61,6 @@ export default {
             return [this.sessionList, this.terminalSessionList];
         },
         getAllNotebookVms() {
-            console.log(this.doc.openFiles);
             return this.doc && this.doc.openFiles || [];
         },
         getAllTerminalVms() {

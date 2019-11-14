@@ -141,4 +141,16 @@ module.exports = [
         functionName: 'modelDeploy.handler',
         filePath: './compose/modelDeploy.js'
     },
+    {
+        apiId: '/fe-compose/api/v1/project-task-profiles',
+        method: 'GET',
+        functionName: 'projectTaskProfiles.handler',
+        filePath: './compose/projectTaskProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/task-execution-profiles',
+        method: 'GET',
+        functionName: 'taskExecutionProfiles.handler',
+        filePath: './compose/taskExecutionProfiles.js'
+    },
 ];

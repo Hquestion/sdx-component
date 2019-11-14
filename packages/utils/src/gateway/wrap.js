@@ -161,11 +161,12 @@ class Context {
     _log(level, message) {
         // return;
         // eslint-disable-next-line
-        if (level >= this.config.logLevel) {
-            const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
-            const date = new Date().toISOString();
-            rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
-        }
+        rawlog(`[fe-compose] config log level: ${this.config.logLevel}, level ${level}`);
+        // if (level >= this.config.logLevel) {
+        const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
+        const date = new Date().toISOString();
+        rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
+        // }
     }
 
     /* Request */
@@ -263,6 +264,7 @@ class Context {
             req.headers[CONTENT_TYPE_HEADER] = CONTENT_TYPE_APPLICATION_JSON;
             req.body = JSON.stringify(data);
         }
+        this.info('Send With Params:', JSON.stringify(req));
         return req;
     }
 
@@ -282,11 +284,11 @@ class Context {
 
         const response = JSON.parse(TykBatchRequest(JSON.stringify(batch)))[0];
 
-        if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
-            this.debug(`Sent request ${JSON.stringify(request)}. Received response ${JSON.stringify(response)}`);
-        } else {
-            this.info(`Send request ${request.method} ${request.relative_url.split('?')[0]}. Received response ${response.code}`);
-        }
+        // if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
+        this.debug(`Sent request ${JSON.stringify(request)}. Received response ${JSON.stringify(response)}`);
+        // } else {
+        //     this.info(`Send request ${request.method} ${request.relative_url.split('?')[0]}. Received response ${response.code}`);
+        // }
 
         if (response.code < 200 || response.code >= 400) {
             if (!preventError) {

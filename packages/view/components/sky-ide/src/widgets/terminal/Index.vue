@@ -109,12 +109,7 @@ export default {
             let terminalServe  = this.tabTerminal[removeIndex][Number(targetName)];
             terminalServe.shutdown({
                 name: terminalServe.name,
-                settings: {
-                    baseUrl: this.app.taskManager.task.externalUrl,
-                    wsUrl: this.app.taskManager.task.externalUrl.replace('http://', 'ws://'),
-                    ideUuid: this.app.taskManager.ideUuid,
-                    WebSocket: WebSocket
-                }
+                settings: this.app.makeSettings()
             }).then(()=> {
                 requestAnimationFrame(() => {
                     this.editableTabs.splice(index, 1);

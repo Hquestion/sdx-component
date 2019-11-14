@@ -15,14 +15,20 @@ export let handler = wrap(function(ctx, request) {
             path: 'groups.*',
             url: 'http://tyk-gateway/user-manager/api/v1/groups',
             result: 'groups'
-        },
-        {
-            path: 'permissions.*',
-            url: 'http://tyk-gateway/user-manager/api/v1/permissions/list',
-            result: 'permissions',
-            method: 'POST'
         }
     );
+
+    ctx.resolveUuids(user, {
+        paths: [
+            'permissions.*',
+            'groups.*.permissions.*',
+            'groups.*.roles.*.permissions.*',
+            'roles.*.permissions.*',
+        ],
+        url: 'http://tyk-gateway/user-manager/api/v1/permissions/list',
+        result: 'permissions',
+        method: 'POST'
+    });
 
     return ctx.createResponse(200, user);
 });

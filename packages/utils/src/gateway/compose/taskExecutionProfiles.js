@@ -26,10 +26,11 @@ export let handler = wrap(function(ctx, request) {
         ownerIds = ownerIds.concat(users);
         delete request.Params.group;
     }
-    ctx.info('[TaskProfiles Request Body]: ' + JSON.stringify(ownerIds));
+    ctx.info('[TaskExecutionsProfiles Request Body]: ' + JSON.stringify(ownerIds));
+    request.Params.ownerId = ownerIds;
     const projects = ctx.sendRequest(ctx.createGetRequest(
-        'http://tyk-gateway/task-manager/api/v1/tasks',
-        request.Params, {ownerIds: ownerIds}));
+        'http://tyk-gateway/task-manager/api/v1/executions',
+        request.Params));
 
     ctx.resolveUuids(projects,
         {
@@ -53,7 +54,7 @@ export let handler = wrap(function(ctx, request) {
         }
     );
 
-    ctx.info('task profiles result: ' + JSON.stringify(projects));
+    ctx.info('task executions profiles result: ' + JSON.stringify(projects));
 
     ctx.rename(projects, 'data.*.ownerId', 'owner');
 

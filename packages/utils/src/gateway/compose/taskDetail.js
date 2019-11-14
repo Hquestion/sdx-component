@@ -1,8 +1,11 @@
 import wrap from '../wrap';
 
 export let handler = wrap(function(ctx, request) {
+    const uuid = request.Params.uuid && request.Params.uuid[0];
+    delete request.Params.uuid;
+    ctx.debug('[TaskDetail] request params:' + JSON.stringify(request.Params));
     const task = ctx.sendRequest(ctx.createGetRequest(
-        `http://tyk-gateway/task-manager/api/v1/tasks/${request.Params.uuid && request.Params.uuid[0]}`,
+        `http://tyk-gateway/task-manager/api/v1/tasks/${uuid}`,
         request.Params));
 
     ctx.resolveUuids(task,

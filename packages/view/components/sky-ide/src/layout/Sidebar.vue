@@ -84,12 +84,19 @@ export default {
                     });
                 }
             }
+        },
+        calcRect() {
+            let { height, width } = this.$el.parentNode.getBoundingClientRect();
+            this.width = height;
+            this.height = width;
         }
     },
     mounted() {
-        let { height, width } = this.$el.parentNode.getBoundingClientRect();
-        this.width = height;
-        this.height = width;
+        this.calcRect();
+        window.addEventListener('resize', this.calcRect);
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.calcRect);
     }
 };
 </script>

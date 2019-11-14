@@ -34,7 +34,7 @@ export const getTaskList = authWrapper(function (params) {
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
 
 export function getProjectTasks(uuid, params) {
-    return httpService.get(`${projectApi}/${uuid}/tasks`, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}project-task-profiles?projectId=${uuid}`, params);
 }
 
 export function createProjectTask(uuid, params) {

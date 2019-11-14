@@ -82,7 +82,7 @@ import Pagination from '@sdx/ui/components/pagination';
 import Empty from '@sdx/ui/components/empty';
 import SubCard from '@sdx/widget/components/subject-card';
 import { paginate } from '@sdx/utils/src/helper/tool';
-import { getTaskList } from '@sdx/utils/src/api/task';
+import { taskList } from '@sdx/utils/src/api/task';
 import { getProjectTasks } from '@sdx/utils/src/api/project';
 import taskMixin from '@sdx/utils/src/mixins/taskNext';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -181,7 +181,7 @@ export default {
                     this.taskList = [];
                 });
             } else {
-                getTaskList(params).then(res => {
+                taskList(params).then(res => {
                     this.handleResp(res);
                 }).catch(() => {
                     this.loading = false;
@@ -214,18 +214,15 @@ export default {
             this.taskList.forEach(item => {
                 // const isOwn = getUser().userId === item.owner.uuid;
                 // const isOwn = getUser().userId === item.owner_id;
-                item.owner = {
-                    uuid: item.ownerId
-                };
                 item.showOpenIde = item.type === 'SKYIDE';
                 item.showJupyterLink = item.type === 'JUPYTER' && item.state === 'Running' && item.externalUrl;
                 item.showRunningInfo = item.type === 'SKYFLOW';
                 item.meta = {
                     uuid: item.uuid,
-                    owner: {uuid: item.ownerId},
+                    owner: item.owner,
                     title: item.name,
                     description: item.description,
-                    creator: item.name,
+                    creator: item.owner.fullName,
                     createdAt: item.createdAt,
                     icon: this.iconOptions[item.type].icon,
                     iconName: this.iconOptions[item.type].name,

@@ -146,7 +146,7 @@ export default {
                 title: this.t('view.resourceManage.ConfirmDeleteUserRights'),
                 content: this.t('view.file.CantRecoveryAfterDel')
             }).then(() => {
-                deleteResourceConfig(row.uuid).then(() => {
+                deleteResourceConfig(row.user.uuid).then(() => {
                     this.init();
                 });
             });

@@ -125,7 +125,7 @@ export default {
                 const config = this.$refs.userRule.getConfig();
                 if (this.meta) {
                     // 更新
-                    saveResourceConfig(config.resourceUuid, config).then(() => {
+                    saveResourceConfig(this.params.user.uuid, config).then(() => {
                         this.$emit('refresh');
                     });
                 } else {

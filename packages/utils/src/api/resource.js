@@ -72,7 +72,8 @@ export const getResourceConfigDetail = authWrapper(function (uuid) {
 }, readAuths.RESOURCE_GLOBAL_STATE_READ);
 
 export function saveResourceConfig(uuid, params) {
-    return httpService.patch(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_configs/${uuid}`, params);
+    params.userId = uuid;
+    return httpService.patch(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_configs`, params);
 }
 
 export function createResourceTmpl(params) {
@@ -100,7 +101,7 @@ export const getResourceConfigs = authWrapper(function (start = 1, count = -1, p
 }, readAuths.RESOURCE_USER_STATE_READ);
 
 export function deleteResourceConfig(uuid) {
-    return httpService.remove(`${RESOURCE_MANAGE_GATEWAY_BASE}/resource_configs/${uuid}`);
+    return httpService.remove(`${RESOURCE_MANAGE_GATEWAY_BASE}/resource_configs?userId=${uuid}`);
 }
 // 首页
 export const getDashResourceStates = authWrapper(function (params) {

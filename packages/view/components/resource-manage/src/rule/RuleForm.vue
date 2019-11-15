@@ -245,7 +245,7 @@ export default {
             });
         },
         save() {
-            saveResourceConfig(this.params.uuid, {
+            saveResourceConfig(this.userId, {
                 maxConcurrentTasks: +this.params.maxConcurrentTasks,
                 maxConcurrentHeavyTasks: +this.params.heavyTaskArr[1],
                 maxGpuTime: +this.params.maxGpuTime,

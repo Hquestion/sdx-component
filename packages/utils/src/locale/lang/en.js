@@ -337,9 +337,6 @@ export default {
             },
             tipCard: {
                 TotalExecution: 'Total execution',
-                Queuing: 'Queuing',
-                SuccessfulOperation: 'Successful operation',
-                OperationFailure: 'Operation failure',
                 Manual: 'Manual',
                 Dispatch: 'Dispatch',
                 SubordinateGroup: 'Subordinate group',
@@ -601,6 +598,9 @@ export default {
             etc: 'etc'
         },
         model: {
+            Running_time: 'Running time',
+            Instances: 'Instances',
+            Resource: 'Resource',
             Weight_ratio: 'Weight ratio',
             Flow_ratio: 'Flow ratio',
             New_gray_level_release: 'New gray level release',

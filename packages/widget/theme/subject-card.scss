@@ -3,11 +3,7 @@
     box-shadow: 0 2px 4px 0 $sdx-secondary-color--light5;
     border-radius: $sdx-border-radius-large;
     margin-bottom: $sdx-gap-regular;
-    padding: $sdx-gap-small $sdx-gap-regular $sdx-gap-regular $sdx-gap-regular;
-    padding-bottom: 0;
-    @include element('header') {
-        height: $sdxw-subject-card-icon-size;
-    }
+    padding: $sdx-gap-small $sdx-gap-regular 0 $sdx-gap-regular;
     @include element('icon') {
         border: 1px solid $sdx-secondary-color--light6;
         border-radius: $sdx-border-radius;
@@ -53,7 +49,7 @@
 
     @include modifier('large') {
         @include element('header') {
-            margin-bottom: $sdx-gap-regular;
+            padding-bottom: $sdx-gap-regular;
         }
         @include element('content') {
             @include modifier('info') {

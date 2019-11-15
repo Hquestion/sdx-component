@@ -104,9 +104,13 @@ export function deleteResourceConfig(uuid) {
     return httpService.remove(`${RESOURCE_MANAGE_GATEWAY_BASE}/resource_configs?userId=${uuid}`);
 }
 // 首页
-export const getDashResourceStates = authWrapper(function (params) {
+// export const getDashResourceStates = authWrapper(function (params) {
+//     return  httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_states`, params);
+// }, readAuths.SYSTEM_GLOBAL_RESOURCE_READ);
+
+export function getDashResourceStates(params) {
     return  httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_states`, params);
-}, readAuths.SYSTEM_GLOBAL_RESOURCE_READ);
+}
 
 export default {
     getResourceTmplList,

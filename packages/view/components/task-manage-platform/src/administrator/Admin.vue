@@ -23,7 +23,7 @@ export default {
         };
     },
     methods: {
-        headerInfo(searchName, taskType) {
+        headerInfo(taskType) {
             this.taskType = taskType;
         }
     }

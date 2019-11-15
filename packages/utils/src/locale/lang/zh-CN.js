@@ -336,9 +336,6 @@ export default {
             },
             tipCard: {
                 TotalExecution: '执行总数',
-                Queuing: '排队中',
-                SuccessfulOperation: '运行成功',
-                OperationFailure: '运行失败',
                 Manual: '手动',
                 Dispatch: '调度',
                 SubordinateGroup: '所属组',
@@ -600,6 +597,9 @@ export default {
             etc: '等'
         },
         model: {
+            Running_time: '运行时间',
+            Instances: '实例数',
+            Resource: '资源',
             Weight_ratio: '权重占比',
             Flow_ratio: '流量占比',
             New_gray_level_release: '新增灰度发布',

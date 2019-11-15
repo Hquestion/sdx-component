@@ -31,19 +31,18 @@ export default {
     },
     data() {
         return {
-            searchName: '',
             taskType: 'task'
         };
     },
     created() {
-        this.$emit('headerInfo', this.searchName, this.taskType);
+        this.$emit('headerInfo', this.taskType);
     },
     methods: {
         searchTask() {
-            this.$emit('headerInfo', this.searchName, this.taskType);
+            this.$emit('headerInfo', this.taskType);
         },
         switchTaskType() {
-            this.$emit('headerInfo', this.searchName, this.taskType);
+            this.$emit('headerInfo', this.taskType);
         }
     }
 };

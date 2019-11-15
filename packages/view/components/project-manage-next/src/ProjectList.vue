@@ -91,7 +91,7 @@
                                 type="text"
                                 icon="sdx-icon sdx-icon-edit"
                                 v-if="val.meta.showEdit"
-                                @click="$emit('operate', {item: meta, type: 'edit'})"
+                                @click="handleOperate({item: val.meta, type: 'edit'})"
                             >
                                 {{ t('widget.projectCard.title.Edit') }}
                             </sdxu-button>
@@ -99,7 +99,7 @@
                                 type="text"
                                 icon="sdx-icon sdx-icon-delete"
                                 v-if="val.meta.showRemove"
-                                @click="$emit('operate', {id: meta.uuid, type: 'delete'})"
+                                @click="handleOperate({id: val.meta.uuid, type: 'delete'})"
                             >
                                 {{ t('widget.projectCard.title.Delete') }}
                             </sdxu-button>

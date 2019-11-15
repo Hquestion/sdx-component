@@ -17,7 +17,7 @@
                         <span>{{ t('view.task.tipCard.Manual') }}</span>
                         <el-progress
                             :stroke-width="8"
-                            :percentage="50"
+                            :percentage="item.manual / item.total"
                             color="#1144AB"
                             :show-text="false"
                         />
@@ -28,6 +28,8 @@
         </div>
         <SdxwSearchLayout
             :label-width="lang$ ==='en' ? '120px' : '100px'"
+            @search="handleSearch"
+            @reset="handleReset"
         >
             <SdxwSearchItem :label="`${t('view.task.taskName')}：`">
                 <SdxuInput
@@ -37,7 +39,7 @@
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('sdxCommon.Creator')}：`">
                 <SdxuInput
-                    v-model="params.ownerId"
+                    v-model="params.username"
                     :placeholder="t('view.task.PleaseInput')"
                 />
             </SdxwSearchItem>
@@ -45,7 +47,7 @@
                 <el-select
                     size="large"
                     :placeholder="t('sdxCommon.PleaseSelect')"
-                    v-model="params.groupId"
+                    v-model="params.group"
                 >
                     <el-option
                         v-for="item in groups"
@@ -87,7 +89,12 @@
                 <el-select
                     size="large"
                 >
-                    <el-option />
+                    <el-option
+                        v-for="item in STATE_TYPE"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                    />
                 </el-select>
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('view.task.executeTimeRange')}：`">
@@ -104,13 +111,16 @@
         <div class="table">
             <sdxu-table
                 :data="table"
+                v-loading="tableLoading"
+                @sort-change="handleSortChange"
+                :default-sort="defaultSort"
             >
                 <el-table-column
-                    prop="_id"
+                    prop="uuid"
                     :label="t('view.task.executeID')"
                 >
                     <template #default="{ row }">
-                        {{ row._id.slice(0,5) }}
+                        {{ row.uuid.slice(0,5) }}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -122,7 +132,7 @@
                     :label="t('view.task.tipCard.Type')"
                 />
                 <el-table-column
-                    prop="ownerId"
+                    prop="owner.fullName"
                     :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
@@ -134,7 +144,7 @@
                     :label="t('view.task.executeType')"
                 />
                 <el-table-column
-                    prop="cronStartTime"
+                    prop="startedAt"
                     :label="t('view.task.executeStartTime')"
                     sortable
                     min-width="130px"
@@ -142,11 +152,11 @@
                     <template
                         slot-scope="scope"
                     >
-                        {{ dateFormatter(scope.row.cronStartTime) }}
+                        {{ dateFormatter(scope.row.startedAt) }}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="cronEndTime"
+                    prop="stoppedAt"
                     :label="t('view.task.executeStopTime')"
                     sortable
                     min-width="130px"
@@ -154,16 +164,17 @@
                     <template
                         slot-scope="scope"
                     >
-                        {{ dateFormatter(scope.row.cronEndTime) }}
+                        {{ dateFormatter(scope.row.stoppedAt) }}
                     </template>
                 </el-table-column>
                 <el-table-column
                     sortable
                     min-width="100px"
                     :label="t('view.task.executeTime')"
+                    prop="runningTime"
                 >
                     <template #default="{ row }">
-                        {{ timeDuration(row.cronStartTime, row.cronEndTime) }}
+                        {{ timeDuration(row.startedAt, row.stoppedAt) }}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -194,6 +205,13 @@
                     </template>
                 </el-table-column>
             </sdxu-table>
+            <SdxuPagination
+                v-if="total"
+                :current-page.sync="page"
+                :page-size="pageSize"
+                :total="total"
+                @current-change="handlePageChange"
+            />
         </div>
     </div>
 </template>
@@ -204,50 +222,59 @@ import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
 import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
-import { TASK_TYPE, EXECUTE_TYPE } from '@sdx/utils/src/const/task';
+import { TASK_TYPE, EXECUTE_TYPE, STATE_TYPE } from '@sdx/utils/src/const/task';
 import { getGroups } from '@sdx/utils/src/api/user';
+import { executionList} from '@sdx/utils/src/api/task';
+import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
+import SdxuPagination from '@sdx/ui/components/pagination';
 export default {
     name: 'SdxvExecuteList',
     data() {
         return {
             TASK_TYPE,
             EXECUTE_TYPE,
+            STATE_TYPE,
             date: '',
             infoList: [
                 {
-                    total: 123,
+                    total: 0,
                     title: this.t('view.task.tipCard.TotalExecution'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'execute'
+                    manual: 0,
+                    dispatch: 0,
+                    class: 'execute',
+                    type: 'total'
                 },
                 {
-                    total: 123,
-                    title:  this.t('view.task.tipCard.Queuing'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'queuing'
+                    total: 0,
+                    title:  this.t('view.task.state.Scheduling'),
+                    manual: 0,
+                    dispatch: 0,
+                    class: 'queuing',
+                    type: 'scheduling'
                 },
                 {
-                    total: 123,
-                    title: this.t('view.task.state.RUNNING'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'running'
+                    total: 0,
+                    title: this.t('view.task.state.Running'),
+                    manual: 0,
+                    dispatch: 0,
+                    class: 'running',
+                    type: 'running'
                 },
                 {
-                    total: 123,
-                    title:  this.t('view.task.tipCard.SuccessfulOperation'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'success'
+                    total: 0,
+                    title: this.t('view.task.state.Succeeded'),
+                    manual: 0,
+                    dispatch: 0,
+                    class: 'success',
+                    type: 'success'
                 },
                 {
-                    total: 123,
-                    title:  this.t('view.task.tipCard.OperationFailure'),
-                    manual: 63,
-                    dispatch: 60,
-                    class: 'fail'
+                    total: 0,
+                    title: this.t('view.task.state.Failed'),
+                    manual: 0,
+                    dispatch: 0,
+                    class: 'fail',
+                    type: 'fail'
                 },
             ],
             table: [],
@@ -255,20 +282,25 @@ export default {
             pageSize: 10,
             total: 0,
             groups: [],
+            tableLoading: false,
             params: {
                 name: '',
-                ownerId: '',
-                groupId: '',
+                username: '',
+                group: '',
                 type: '',
                 executionType: '',
                 state: '',
-                cronStartTime: '',
-                cronEndTime: '',
+                startedAt: '',
+                stoppedAt: '',
                 order: 'desc',
-                orderBy: 'cronStartTime',
+                orderBy: 'startedAt',
                 start: 1,
                 count: 10,
-            }
+            },
+            defaultSort: {
+                prop: 'startedAt',
+                order: 'descending'
+            },
         };
     },
     mixins: [locale],
@@ -278,7 +310,8 @@ export default {
         SdxuTable,
         [Row.name]: Row,
         [Col.name]: Col,
-        [Progress.name]: Progress
+        [Progress.name]: Progress,
+        SdxuPagination
     },
     methods: {
         dateFormatter,
@@ -299,58 +332,63 @@ export default {
                 });
             });
         },
+        handleSortChange({prop, order}) {
+            this.params.order = order === 'ascending' ? 'asc' : 'desc';
+            this.params.orderBy = prop;
+            this.current = 1;
+            this.getExecutionList();
+        },
+        handleSearch() {
+            this.current = 1;
+            this.getExecutionList();
+        },
+        handleReset() {
+            this.params = {
+                name: '',
+                username: '',
+                group: '',
+                type: '',
+                executionType: '',
+                state: '',
+                startedAt: '',
+                stoppedAt: '',
+                order: 'desc',
+                orderBy: 'startedAt',
+                start: 1,
+                count: 10,
+            };
+            this.current = 1;
+            this.getTaskList();
+        },
+        // 执行列表
+        getExecutionList() {
+            this.tableLoading = true;
+            const params = Object.assign({}, this.params, {
+                ...paginate(this.current, this.pageSize), 
+            }, {
+                startedAt: `${this.date[0]} 00:00:00`,
+                stoppedAt: `${this.date[1]} 23:59:59`
+            });
+            removeBlankAttr(params);
+            executionList(params).then(res => {
+                this.table = res.data;
+                this.total = res.total;
+                for(let i = 0; i < this.infoList.length; i++) {
+                    this.infoList[i].total = res.detail[this.infoList[i].type].manual +  res.detail[this.infoList[i].type].schedule;
+                    this.infoList[i].manual = res.detail[this.infoList[i].type].manual;
+                    this.infoList[i].dispatch = res.detail[this.infoList[i].type].schedule;
+                }
+                this.tableLoading = false;
+            }).catch(() => {
+                this.table = [];
+                this.total = 0;
+                this.tableLoading = false;
+            });
+        }
     },
     created() {
         this.getGroupList();
-        this.table = [
-            {
-                '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-                'createdAt': '2019-10-17T08:49:14.195000Z',
-                'updatedAt': '2019-10-17T08:49:14.194000Z',
-                'ownerId': '99b3d464-0992-4c2f-b127-370895cab26d',
-                'name': 'dylan-jupyter',
-                'description': null,
-                'imageId': 'bd774322-98d3-4912-8af5-70cf01a66e9f',
-                'autoImageId': null,
-                'type': 'JUPYTER',
-                'quota': {
-                    'cpu': 2,
-                    'gpu': 1,
-                    'memory': 4294967296,
-                    'gpu_model': ''
-                },
-                'resourceConfig': {
-                    'DEPLOY': {
-                        'requests': {
-                            'cpu': 2,
-                            'memory': 4294967296,
-                            'nvidia.com/gpu': 0
-                        },
-                        'labels': {
-                            'gpu.model': ''
-                        },
-                        'instance': 1
-                    }
-                },
-                'executeType': 'MANUAL',
-                'delay': 0,
-                'trigger': null,
-                'priority': 2,
-                'crontab': null,
-                'cronStartTime': '2019-10-17T08:49:14.194000Z',
-                'cronEndTime': '2019-10-17T08:59:12.194000Z',
-                'repeatTimes': null,
-                'concurrentType': 'SKIP',
-                'errorHandling': 'CANCEL',
-                'notifications': {},
-                'taskId': '1e82f0b3-c7fe-4008-ae6d-48798dd84034',
-                'state': 'CREATED',
-                'datasources': [],
-                'datasets': [],
-                'homePath': '/usr/dylan'
-            }
-
-        ];
+        this.getExecutionList();
     }
 };
 </script>
@@ -438,6 +476,9 @@ export default {
                 }
             }
         }
+    }
+    .sdxu-pagination {
+        margin-top: 24px;
     }
 }
 </style>

@@ -96,6 +96,7 @@
                 <el-table-column
                     prop="createdAt"
                     :label="t('sdxCommon.CreatedTime')"
+                    sortable
                 >
                     <template
                         slot-scope="scope"
@@ -111,12 +112,14 @@
                         <SdxuButton
                             size="regular"
                             type="link"
+                            @click="handleOperate({row, type: 'detail'})"
                         >
                             {{ t('view.task.tipCard.Detail') }}
                         </SdxuButton>
                         <SdxuButton
                             type="link"
                             size="regular"
+                            @click="handleOperate({row, type: 'delete'})"
                         >
                             {{ t('sdxCommon.Delete') }}
                         </SdxuButton>
@@ -144,8 +147,10 @@ import Button from '@sdx/ui/components/button';
 import { TASK_TYPE } from '@sdx/utils/src/const/task';
 import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import {  parseMilli, byteToGB } from '@sdx/utils/src/helper/transform';
-import { taskList } from '@sdx/utils/src/api/task';
+import { taskList,deleteTask } from '@sdx/utils/src/api/task';
 import { getGroups } from '@sdx/utils/src/api/user';
+import MessageBox from '@sdx/ui/components/message-box';
+import { Message } from 'element-ui';
 export default {
     name: 'SdxvTaskList',
     mixins: [locale],
@@ -177,7 +182,8 @@ export default {
                 start: 1,
                 count: 10,
                 order: 'desc',
-                orderBy: 'CPU'
+                orderBy: 'CPU',
+                all: true
             }
         };
     },
@@ -208,7 +214,7 @@ export default {
             });
             removeBlankAttr(params);
             taskList(params).then(res => {
-                this.table = res.items;
+                this.table = res.data;
                 this.total = res.total;
                 this.tableLoading = false;
             }).catch(() => {
@@ -219,12 +225,18 @@ export default {
         },
         // 根据prop获取orderBy， 譬如 quota.cpu 得到 CPU
         getOrderBy(prop) {
-            return (prop.slice(prop.indexOf('.') + 1)).toUpperCase();
+            let res = '';
+            if(prop.includes('.')) {
+                res = (prop.slice(prop.indexOf('.') + 1)).toUpperCase();
+            } else {
+                res = prop;
+            }
+            return res;
         },
         handleSortChange({prop, order}) {
             this.params.order = order === 'ascending' ? 'asc' : 'desc';
             this.params.orderBy = this.getOrderBy(prop) || 'CPU';
-            this.page = 1;
+            this.current = 1;
             this.getTaskList();
         },
         handleSearch() {
@@ -248,6 +260,31 @@ export default {
             };
             this.current = 1;
             this.getTaskList();
+        },
+        handleOperate(data) {
+            switch(data.type) {
+                case 'delete':
+                    MessageBox({
+                        title: this.t('view.task.deleteTask'),
+                        content: this.t('sdxCommon.ConfirmRemove'),
+                    }).then(() => {
+                        deleteTask(data.row.uuid, {type: data.row.type}).then(() => {
+                            Message({
+                                message: this.t('sdxCommon.RemoveSuccess'),
+                                type: 'success'
+                            });
+                            this.getTaskList();
+                        });
+                    }).catch(() => {});
+                    break;
+                case 'detail':
+                    this.$router.push({
+                        name: 'SdxvTaskList',
+                        params: {
+                            taskId: data.row.uuid
+                        }
+                    });
+            }
         }
     },
     created() {

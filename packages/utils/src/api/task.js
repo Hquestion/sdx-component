@@ -17,7 +17,11 @@ export function taskList(params) {
 }
 // full 版本执行列表
 export function executionList(params) {
-    return httpService.get(`${taskApi}executions`, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-execution-profiles`, params);
+}
+// full 版本删task
+export function deleteTask(uuid, params) {
+    return httpService.remove(`${taskApi}/${uuid}`, params);
 }
 
 export function removeTask(uuid, params) {

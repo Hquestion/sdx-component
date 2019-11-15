@@ -1,0 +1,6 @@
+@include block('create-version', $bem-namespace-view) {
+    @include element('version') {
+        background: #EDEFF2;
+        padding-left: 10px;
+    }
+}

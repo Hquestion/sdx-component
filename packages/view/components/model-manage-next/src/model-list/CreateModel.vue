@@ -5,7 +5,7 @@
         class="sdxv-create-model"
         :title="title"
     >
-        <div style="height: calc(45vh);">
+        <div :style="{height: editingModel ? '290px' : 'calc(45vh)'}">
             <SdxuScroll>
                 <div class="sdxv-create-model__form">
                     <el-form
@@ -76,6 +76,7 @@
                         </el-form-item>
                         <el-form-item
                             :label="`模型版本：`"
+                            v-if="!editingModel"
                         >
                             <div class="sdxv-create-model__version">
                                 V 1.0
@@ -83,6 +84,7 @@
                         </el-form-item>
                         <el-form-item
                             :label="`版本描述：`"
+                            v-if="!editingModel"
                         >
                             <sdxu-input
                                 v-model="modelInfoForm.versionDescription"
@@ -93,6 +95,8 @@
                         </el-form-item>
                         <el-form-item
                             :label="`模型文件：`"
+                            v-if="!editingModel"
+                            prop="modelPath"
                         >
                             <SdxwFileSelect
                                 check-type="file"
@@ -101,7 +105,12 @@
                             />
                         </el-form-item>
                     </el-form>
-                    <SdxwShareForm />
+                    <SdxwShareForm
+                        v-if="!editingModel"
+                        :default-users.sync="modelInfoForm.users"
+                        :default-groups.sync="modelInfoForm.groups"
+                        :default-share-type.sync="modelInfoForm.shareType"
+                    />
                 </div>
             </SdxuScroll>
         </div>
@@ -137,7 +146,7 @@ import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
 import ShareForm from '@sdx/widget/components/share-form';
 import ElSelect from 'element-ui/lib/select';
-import { getLabels, createModel, updateModel } from '@sdx/utils/src/api/model';
+import { getLabels, createModel, updateModel, createVersion } from '@sdx/utils/src/api/model';
 import { nameWithChineseValidator, descValidator, tagArrayValidator } from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
 import FileSelect from '@sdx/widget/lib/file-select';
@@ -152,12 +161,24 @@ export default {
                 name: '',
                 description: '',
                 labels: [],
-                modelPath: ''
+                modelPath: '',
+                modelType: '',
+                users: [],
+                groups: [],
+                shareType: 'PRIVATE',
+                isPublic: false,
+                versionDescription: ''
             },
             modelInfoFormRule: {
                 name: [
                     { required: true, message: this.t('view.model.searchModelName'), trigger: 'blur' },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                modelType: [
+                    { required: true, message: '请输入或选择模型类型', trigger: 'change' }
+                ],
+                modelPath: [
+                    { required: true, message: '请上传或选择模型文件', trigger: 'blur' }
                 ],
                 description: [
                     {
@@ -238,13 +259,24 @@ export default {
                             this.dialogVisible = false;
                         });
                     } else {
-                        createModel(this.modelInfoForm).then(() => {
-                            Message({
-                                message: this.t('sdxCommon.CreateSuccess'),
-                                type: 'success'
+                        if (this.modelInfoForm.shareType === 'PUBLIC') {
+                            this.modelInfoForm.users = [];
+                            this.modelInfoForm.groups = [];
+                            this.modelInfoForm.isPublic = true;
+                        }
+                        createModel(this.modelInfoForm).then((res) => {
+                            const params = {
+                                description: this.modelInfoForm.versionDescription,
+                                modelPath: this.modelInfoForm.modelPath
+                            };
+                            createVersion(res.uuid, params).then(() => {
+                                Message({
+                                    message: this.t('sdxCommon.CreateSuccess'),
+                                    type: 'success'
+                                });
+                                this.needRefresh = true;
+                                this.dialogVisible = false;
                             });
-                            this.needRefresh = true;
-                            this.dialogVisible = false;
                         });
                     }
                 }

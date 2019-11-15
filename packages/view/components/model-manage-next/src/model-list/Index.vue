@@ -5,8 +5,8 @@
         </div>
         <div class="sdxv-model-list__sort">
             <SdxuTabRadioGroup
-                v-model="modelType"
-                @switch="switchModelType"
+                v-model="shareType"
+                @switch="switchShareType"
             >
                 <SdxuTabRadioItem name="ALL">
                     所有模型
@@ -27,6 +27,7 @@
                     trigger="click"
                     style="margin-right: 24px; vertical-align: middle"
                 >
+                    <i class="sdx-icon sdx-icon-plus" />
                     导入模型
                     <template slot="dropdown">
                         <SdxuButton
@@ -41,6 +42,7 @@
                             type="text"
                             size="regular"
                             block
+                            @click="createVersion"
                         >
                             添加已有版本
                         </SdxuButton>
@@ -48,7 +50,7 @@
                 </sdxu-button>
                 <SdxuSortButton
                     :title="t('view.project.sortByCreateTime')"
-                    @sortChange="sortChange"
+                    @sortChange="updateTable"
                     :order.sync="order"
                     style="vertical-align: middle"
                 />
@@ -56,7 +58,8 @@
         </div>
         <div class="sdxv-model-list__filter">
             <sdxw-search-layout
-                @search="search"
+                @search="updateTable"
+                @reset="reset"
             >
                 <sdxw-search-item label="模型名称:">
                     <sdxu-input
@@ -67,20 +70,32 @@
                     />
                 </sdxw-search-item>
                 <sdxw-search-item label="模型类型:">
-                    <sdxu-input
-                        v-model="searchName"
-                        type="search"
-                        size="small"
-                        :placeholder="t('view.model.searchModelName')"
-                    />
+                    <el-select
+                        v-model="modelType"
+                        :placeholder="`请选择模型类型`"
+                    >
+                        <el-option
+                            v-for="item in labelOptions"
+                            :key="item.label"
+                            :label="item.label"
+                            :value="item.label"
+                        />
+                    </el-select>
                 </sdxw-search-item>
                 <sdxw-search-item label="模型标签:">
-                    <sdxu-input
-                        v-model="searchName"
-                        type="search"
-                        size="small"
-                        :placeholder="t('view.model.searchModelName')"
-                    />
+                    <el-select
+                        v-model="searchLabels"
+                        multiple
+                        filterable
+                        :placeholder="t('view.model.selectLabel')"
+                    >
+                        <el-option
+                            v-for="item in labelOptions"
+                            :key="item.label"
+                            :label="item.label"
+                            :value="item.label"
+                        />
+                    </el-select>
                 </sdxw-search-item>
             </sdxw-search-layout>
         </div>
@@ -89,95 +104,38 @@
         >
             <model-list-table
                 :name="searchName"
-                ref="taskList"
+                ref="modelListTable"
                 :order="order"
                 :order-by="orderBy"
+                :share-type="shareType"
+                :search-labels="searchLabels"
+                :model-type="modelType"
             />
         </div>
         <div>
             <create-model
                 :visible.sync="createDialogVisible"
                 v-if="createDialogVisible"
+                @close="dialogClose"
+            />
+            <create-version
+                :visible.sync="createVersionVisible"
+                v-if="createVersionVisible"
                 @close="dialogClose"
             />
         </div>
     </div>
-    <!-- <sdxu-content-panel
-        class="sdxv-model-management"
-        fullscreen
-    >
-        <div class="sdxv-model-management__header">
-            <SdxuTabRadioGroup
-                v-model="modelType"
-                @switch="switchModelType"
-            >
-                <SdxuTabRadioItem name="ALL">
-                    {{ t('view.model.tabs.all') }}
-                </SdxuTabRadioItem>
-                <SdxuTabRadioItem name="PRIVATE">
-                    {{ t('view.model.tabs.private') }}
-                </SdxuTabRadioItem>
-                <SdxuTabRadioItem name="MY_SHARE">
-                    {{ t('view.model.tabs.myShare') }}
-                </SdxuTabRadioItem>
-                <SdxuTabRadioItem name="OTHER_SHARE">
-                    {{ t('view.model.tabs.otherShare') }}
-                </SdxuTabRadioItem>
-            </SdxuTabRadioGroup>
-            <SdxuButton
-                type="primary"
-                icon="sdx-icon-plus"
-                size="small"
-                @click="createModel"
-                v-auth.model.button="'MODEL:CREATE'"
-            >
-                {{ t('view.model.createModel') }}
-            </SdxuButton>
-        </div>
-        <div>
-            <div class="sdxv-model-management__filter">
-                <sdxw-search-layout
-                    @search="search"
-                    style="width: 100%"
-                >
-                    <sdxw-search-item>
-                        <sdxu-input
-                            v-model="searchName"
-                            type="search"
-                            size="small"
-                            :placeholder="t('view.model.searchModelName')"
-                        />
-                    </sdxw-search-item>
-                </sdxw-search-layout>
-            </div>
-        </div>
-        <div
-            class="sdxv-model-management__list"
-        >
-            <model-list-table
-                ref="modelListTable"
-                :model-type="modelType"
-                :name="searchName"
-                :is-owner="isOwner"
-            />
-        </div>
-        <div>
-            <create-model
-                :visible.sync="createDialogVisible"
-                v-if="createDialogVisible"
-                @close="dialogClose"
-            />
-        </div>
-    </sdxu-content-panel> -->
 </template>
 
 <script>
 import TabRadio from '@sdx/ui/components/tab-radio';
+import ElSelect from 'element-ui/lib/select';
 import ModelListTable from './model-list-table/Index';
 import CreateModel from './CreateModel';
-import ContentPanel from '@sdx/ui/components/content-panel';
+import CreateVersion from './CreateVersion';
 import Button from '@sdx/ui/components/button';
 import Input from '@sdx/ui/components/input';
+import { getLabels } from '@sdx/utils/src/api/model';
 import SearchLayout from  '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -186,13 +144,15 @@ export default {
     data() {
         return {
             searchName: '',
-            buildType: '',
-            shareType: '',
-            modelType: 'ALL',
+            shareType: 'ALL',
             order: 'desc',
             orderBy: 'createdAt',
-            isOwner: '',
-            createDialogVisible: false
+            createDialogVisible: false,
+            createVersionVisible: false,
+            labelOptions: [],
+            modelTypeOptions: [],
+            searchLabels: [],
+            modelType: ''
         };
     },
     components: {
@@ -201,14 +161,20 @@ export default {
         [Button.name]: Button,
         [Input.name]: Input,
         ModelListTable,
-        [ContentPanel.name]: ContentPanel,
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
-        CreateModel
+        CreateModel,
+        CreateVersion,
+        ElSelect
     },
     mixins: [locale],
     directives: {
         auth
+    },
+    created() {
+        getLabels().then(res => {
+            this.labelOptions = res.items;
+        });
     },
     methods: {
         dialogClose(needRefresh) {
@@ -219,52 +185,30 @@ export default {
                 this.updateTable();
             });
         },
-        reset() {
+        switchShareType(val) {
             this.resetFilters();
-            this.$nextTick(() => {
-                this.updateTable();
-            });
-        },
-        switchModelType(val) {
-            this.resetVariables();
-            this.modelType = val;
-            switch (val) {
-                case 'private':
-                    this.shareType = 'PRIVATE';
-                    break;
-                case 'myShare':
-                    this.shareType = 'PUBLIC';
-                    this.isOwner = 'true';
-                    break;
-                case 'otherShare':
-                    this.shareType = 'PUBLIC';
-                    this.isOwner = 'false';
-                    break;
-                default:
-                    break;
-            }
-            this.$nextTick(() => {
-                this.updateTable();
-            });
-        },
-        sortChange() {
-            // this.initProjectsList();
+            this.shareType = val;
+            this.updateTable();
         },
         createModel() {
             this.createDialogVisible = true;
         },
+        createVersion() {
+            this.createVersionVisible = true;
+        },
+        reset() {
+            this.resetFilters();
+            this.updateTable();
+        },
         resetFilters() {
             this.searchName = '';
-            this.buildType = '';
-        },
-        resetVariables() {
-            this.searchName = '';
-            this.shareType = '';
-            this.isOwner = '';
-            this.buildType = '';
+            this.searchLabels = [];
+            this.modelType = '';
         },
         updateTable() {
-            // this.$refs.modelListTable.initModelList(true);
+            this.$nextTick(() => {
+                this.$refs.modelListTable.initModelList(true);
+            });
         }
     }
 };

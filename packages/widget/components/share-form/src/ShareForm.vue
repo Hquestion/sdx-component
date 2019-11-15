@@ -8,7 +8,7 @@
         >
             <el-form-item
                 :label="t('widget.shareForm.ShareToGlobal')"
-                v-auth.button="authMap[sourceKind]"
+                v-auth.button="sourceKind && authMap[sourceKind]"
             >
                 <el-radio-group v-model="shareForm.shareType">
                     <el-radio
@@ -54,7 +54,7 @@ export default {
                 skyflow: 'APPLICATION:GLOBAL_SKYFLOW_BUTTON:ACCESS:',
                 model: 'APPLICATION:GLOBAL_MODEL_BUTTON:ACCESS:',
                 dataset: 'APPLICATION:GLOBAL_DATASET_BUTTON:ACCESS:',
-                file: 'APPLICATION:GLOBAL_FILE_BUTTON:ACCESS:',
+                file: 'APPLICATION:GLOBAL_FILE_BUTTON:ACCESS:'
             },
             shareForm: {
                 selectedUsers: [...this.defaultUsers],

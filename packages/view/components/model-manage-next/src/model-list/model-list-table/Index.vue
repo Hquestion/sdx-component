@@ -3,56 +3,46 @@
         class="sdxw-general-task-list"
         v-loading="loading"
     >
-        <div v-if="taskList.length">
+        <div v-if="modelList.length">
             <div>
-                <SdxwTaskRunningLimit style="margin-top: 20px;" />
                 <sdxw-subject-card-list
                     class="sdxw-general-task-list__container"
                 >
                     <sdxw-subject-card
-                        v-for="(item, index) in taskList"
+                        v-for="(item, index) in modelList"
                         :key="index"
+                        :card-icon="false"
                         :meta="item.meta"
                         class="sdxw-general-task-list__container--element"
                     >
-                        <template #footerLeft>
-                            <sdxu-button
-                                type="link"
-                                v-if="item.showOpenIde"
-                                @click="gotoIde(item)"
-                            >
-                                {{ t('view.task.EnterIde') }}
-                            </sdxu-button>
-                            <div v-if="item.showJupyterLink">
-                                <sdxu-button
-                                    type="link"
-                                    @click="handleExternalLink(item, 'lab?')"
-                                >
-                                    {{ t('view.task.EnterJupyterlab') }}
-                                </sdxu-button>
-                                <sdxu-button
-                                    type="link"
-                                    @click="handleExternalLink(item, 'tree?')"
-                                >
-                                    {{ t('view.task.EnterNotebook') }}
-                                </sdxu-button>
-                            </div>
-                            <sdxu-button
-                                type="link"
-                                v-if="item.showRunningInfo"
-                            >
-                                {{ t('view.task.ShowRunningRecord') }}
-                            </sdxu-button>
+                        <template #cardLabel>
+                            <SdxwFoldLabelGroup :list="item.labels" />
                         </template>
                         <template #footerRight>
                             <sdxu-button
-                                v-for="(el, i) in getOperationList(item, false, true)"
-                                :key="i"
-                                :icon="el.icon"
-                                @click="handleOperation(el.value, item, projectId)"
+                                icon="sdx-icon sdx-fenxiang"
+                                @click="handleOperation(item, 'share')"
                                 type="text"
+                                v-if="item.showShare"
+                                v-auth.model.button="'MODEL:SHARE'"
                             >
-                                {{ t(el.label) }}
+                                共享
+                            </sdxu-button>
+                            <sdxu-button
+                                icon="sdx-icon sdx-icon-edit"
+                                @click="handleOperation(item, 'edit')"
+                                type="text"
+                                v-if="item.showEdit"
+                            >
+                                {{ t('sdxCommon.Edit') }}
+                            </sdxu-button>
+                            <sdxu-button
+                                icon="sdx-icon sdx-icon-delete"
+                                @click="handleOperation(item, 'remove')"
+                                type="text"
+                                v-if="item.showRemove"
+                            >
+                                {{ t('sdxCommon.Delete') }}
                             </sdxu-button>
                         </template>
                     </sdxw-subject-card>
@@ -73,78 +63,85 @@
                 @current-change="currentChange"
             />
         </div>
+        <sdxw-share-setting
+            :visible.sync="dialogVisible"
+            v-if="dialogVisible"
+            :default-users="shareForm.users"
+            :default-groups="shareForm.groups"
+            :default-share-type="shareForm.shareType"
+            @confirm-edit="confirmEdit"
+            source-kind="model"
+        />
+        <create-model
+            :visible.sync="createDialogVisible"
+            v-if="createDialogVisible"
+            @close="dialogClose"
+            :editing-model="editingModel"
+        />
     </div>
 </template>
 
 <script>
 import Button from '@sdx/ui/components/button';
+import Dialog from '@sdx/ui/components/dialog';
 import Pagination from '@sdx/ui/components/pagination';
 import Empty from '@sdx/ui/components/empty';
+import { getModelList, removeModel, updateModel, removeGroupModels, updateGroupModels } from '@sdx/utils/src/api/model';
 import SubCard from '@sdx/widget/components/subject-card';
-import { paginate } from '@sdx/utils/src/helper/tool';
-import { getTaskList } from '@sdx/utils/src/api/task';
-import { getProjectTasks } from '@sdx/utils/src/api/project';
-import taskMixin from '@sdx/utils/src/mixins/taskNext';
+import { removeBlankAttr, paginate } from '@sdx/utils/src/helper/tool';
+import CreateModel from '../CreateModel';
+import ShareSetting from '@sdx/widget/components/share-setting';
+import FoldLabel from '@sdx/widget/components/fold-label';
+import MessageBox from '@sdx/ui/components/message-box';
+import auth from '@sdx/widget/components/auth';
+import Message from 'element-ui/lib/message';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
-import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
-// import { getUser } from '@sdx/utils/src/helper/shareCenter';
-import { STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL } from '@sdx/utils/src/const/task';
+
 export default {
-    name: 'SdxwGeneralTaskList',
-    mixins: [taskMixin, locale],
+    name: 'ModelListTable',
+    mixins: [locale],
     data() {
         return {
             current: 1,
             pageSize: 10,
             total: 0,
             refreshTimer: null,
-            iconOptions: {
-                SKYIDE: {
-                    name: 'SkyIDE',
-                    icon: 'sdx-SkyIDErenwu'
-                },
-                CONTAINER_DEV: {
-                    name: this.t('view.task.type.CONTAINERDEV'),
-                    icon: 'sdx-zidingyirongqirenwu'
-                },
-                JUPYTER: {
-                    name: 'Jupyter',
-                    icon: 'sdx-Jupyterrenwu'
-                },
-                SKYFLOW: {
-                    name: 'SkyFlow',
-                    icon: 'sdx-skyflowrenwu'
-                }
-            },
+            modelList: [],
             loading: false,
-            taskList: []
+            taskList: [],
+            dialogVisible: false,
+            shareForm: {
+                shareType: 'PRIVATE',
+                users: [],
+                groups: []
+            },
+            editingModel: null,
+            createDialogVisible: false
         };
     },
     components: {
         [Button.name]: Button,
         [Pagination.name]: Pagination,
-        [TaskRunningLimit.name]: TaskRunningLimit,
+        [Dialog.name]: Dialog,
+        [FoldLabel.FoldLabelGroup.name]: FoldLabel.FoldLabelGroup,
+        CreateModel,
         [Empty.name]: Empty,
         [SubCard.SubjectCard.name]: SubCard.SubjectCard,
-        [SubCard.SubjectCardList.name]: SubCard.SubjectCardList
+        [SubCard.SubjectCardList.name]: SubCard.SubjectCardList,
+        [ShareSetting.name]: ShareSetting
+    },
+    directives: {
+        auth
     },
     created() {
-        this.initList();
-        this.fetchDataMinxin = this.initList;
+        this.initModelList();
     },
     beforeDestroy () {
         clearInterval(this.refreshTimer);
         this.refreshTimer = null;
     },
     props: {
-        projectId: {
-            type: String,
-            default: ''
-        },
-        taskCategory: {
-            type: String,
-            default: ''
-        },
         name: {
             type: String,
             default: ''
@@ -156,120 +153,231 @@ export default {
         orderBy: {
             type: String,
             default: ''
+        },
+        shareType: {
+            type: String,
+            default: 'ALL'
+        },
+        modelType: {
+            type: String,
+            default: ''
+        },
+        searchLabels: {
+            type: Array,
+            default: () => []
         }
     },
     methods: {
-        initList(hideLoading) {
-            if (this._isDestroyed) {
-                clearInterval(this.refreshTimer);
-                this.refreshTimer = null;
-            }
-            this.loading = hideLoading ? false : true;
+        initModelList(reset) {
+            this.loading = true;
+            if (reset) this.current = 1;
             const params = {
                 name: this.name,
                 ...paginate(this.current, this.pageSize),
                 order: this.order,
                 orderBy: this.orderBy,
+                shareType: this.shareType,
+                searchLabels: this.searchLabels,
+                modelType: this.modelType
             };
+            removeBlankAttr(params);
+            getModelList(params).then((res) => {
+                this.modelList = res.items;
+                this.modelList.forEach(item => {
+                    const userId = getUser().userId;
+                    item.showShare = item.showEdit = item.showRemove = item.creator.uuid === userId;
 
-            if (this.projectId) {
-                params.taskCategory = this.taskCategory;
-                getProjectTasks(this.projectId, params).then(res => {
-                    this.handleResp(res);
-                }).catch(() => {
-                    this.loading = false;
-                    this.taskList = [];
+                    item.meta = {
+                        uuid: item.uuid,
+                        owner: item.creator,
+                        title: item.name,
+                        description: item.description,
+                        creator: item.creator.fullName,
+                        createdAt: item.createdAt,
+                        state: {}
+                    };
+                });
+                this.total = res.total;
+            }).finally(() => {
+                this.loading = false;
+            });
+        },
+        dialogClose(needRefresh) {
+            if (needRefresh) this.initModelList();
+            this.editingModel = null;
+        },
+        share() {
+            if (!this.selectedModels.length) {
+                Message({
+                    message: this.t('view.model.modelsToShare'),
+                    type: 'warning'
+                });
+                return;
+            }
+            this.dialogVisible = true;
+            this.shareForm = {
+                shareType: 'PRIVATE',
+                users: [],
+                groups: []
+            };
+        },
+        remove() {
+            if (!this.selectedModels.length) {
+                Message({
+                    message: this.t('view.model.modelsToRemove'),
+                    type: 'warning'
+                });
+                return;
+            }
+            MessageBox({
+                title: this.t('view.model.modelRemoveConfirm'),
+                content: this.t('sdxCommon.ConfirmRemove')
+            }).then(() => {
+                const uuids = [];
+                this.selectedModels.forEach(item => uuids.push(item.uuid));
+                removeGroupModels({ uuids }).then(() => {
+                    Message({
+                        message: this.t('sdxCommon.RemoveSuccess'),
+                        type: 'success'
+                    });
+                    this.initModelList();
+                });
+            }).catch(() => {});
+        },
+        cancelShare() {
+            if (!this.selectedModels.length) {
+                Message({
+                    message: this.t('view.model.modelsToCancelShare'),
+                    type: 'warning'
+                });
+                return;
+            }
+            MessageBox({
+                title: this.t('view.model.modelCancelShareConfirm'),
+            }).then(() => {
+                const uuids = [];
+                this.selectedModels.forEach(item => uuids.push(item.uuid));
+                const params = {
+                    uuids,
+                    setting: {
+                        shareType: 'PRIVATE',
+                        users: [],
+                        groups: [],
+                        isPublic: false
+                    }
+                };
+                updateGroupModels(params).then(() => {
+                    Message({
+                        message: this.t('sdxCommon.OperationSuccess'),
+                        type: 'success'
+                    });
+                    this.initModelList();
+                });
+            }).catch(() => {});
+        },
+        selectionChange(selection) {
+            this.selectedModels = selection;
+        },
+        confirmEdit(users, groups, shareType) {
+            this.shareForm.shareType = shareType;
+            this.shareForm.users = [];
+            this.shareForm.groups = [];
+            if (this.shareForm.shareType !== 'PUBLIC') {
+                this.shareForm.users = users;
+                this.shareForm.groups = groups;
+                this.shareForm.isPublic = false;
+            } else {
+                this.shareForm.isPublic = true;
+            }
+            if (this.editingModel) {
+                // 编辑模型
+                updateModel(this.editingModel.uuid, this.shareForm).then(() => {
+                    Message({
+                        message: this.t('sdxCommon.OperationSuccess'),
+                        type: 'success'
+                    });
+                    this.editingModel = null;
+                    this.dialogVisible = false;
+                    this.initModelList();
                 });
             } else {
-                getTaskList(params).then(res => {
-                    this.handleResp(res);
-                }).catch(() => {
-                    this.loading = false;
-                    this.taskList = [];
+                const uuids = [];
+                this.selectedModels.forEach(item => uuids.push(item.uuid));
+                const params = {
+                    uuids,
+                    setting: this.shareForm
+                };
+                updateGroupModels(params).then(() => {
+                    Message({
+                        message: this.t('sdxCommon.SettingSuccess'),
+                        type: 'success'
+                    });
+                    this.initModelList();
+                    this.dialogVisible = false;
                 });
             }
         },
-        gotoIde(item) {
-            window.open(`/#/sdxv-skyide/${item.uuid}`);
+        currentChange(nVal) {
+            this.current = nVal;
+            this.initModelList();
         },
-        currentChange(val) {
-            this.current = val;
-            this.initList();
-        },
-        handleExternalLink(meta, param) {
-            window.open(`${meta.externalUrl}/` + (param ? `${param}` : ''));
-        },
-        handleResp(res) {
-            this.taskList = res.items || res.data;
-            this.total = res.total;
-            this.loading = false;
-            if (this.taskList.length && this.taskList.find(item => (item.state === 'Terminating' || item.state === 'Running' || item.state === 'Pending' || item.state === 'Scheduling' || item.state === 'Error'))) {
-                if (!this.refreshTimer) {
-                    this.refreshTimer = setInterval(this.initList, 3000, true);
-                }
-            } else {
-                clearInterval(this.refreshTimer);
-                this.refreshTimer = null;
+        sortChange(sort) {
+            this.orderBy = 'createdAt';
+            if (sort && sort.order) {
+                this.order = sort.order === 'ascending' ? 'asc' : 'desc';
+                this.initModelList();
             }
-            this.taskList.forEach(item => {
-                // const isOwn = getUser().userId === item.owner.uuid;
-                // const isOwn = getUser().userId === item.owner_id;
-                item.owner = {
-                    uuid: item.ownerId
-                };
-                item.showOpenIde = item.type === 'SKYIDE';
-                item.showJupyterLink = item.type === 'JUPYTER' && item.state === 'Running' && item.externalUrl;
-                item.showRunningInfo = item.type === 'SKYFLOW';
-                item.meta = {
-                    uuid: item.uuid,
-                    owner: {uuid: item.ownerId},
-                    title: item.name,
-                    description: item.description,
-                    creator: item.name,
-                    createdAt: item.createdAt,
-                    icon: this.iconOptions[item.type].icon,
-                    iconName: this.iconOptions[item.type].name,
-                    state: {}
-                };
-                item.meta.state.type = STATE_MAP_FOLD_LABEL_TYPE[item.state];
-                switch(item.state) {
-                    case 'Created':
-                        item.meta.state.status = '';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+        },
+        handleOperation(row, type) {
+            if (type && row.uuid) {
+                switch (type) {
+                    case 'detail':
+                        this.$router.push({
+                            name: 'versionList',
+                            params: {
+                                modelId: row.uuid
+                            }
+                        });
                         break;
-                    case 'Scheduling':
-                    case 'Pending':
-                        item.meta.state.status = 'loading';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                    case 'share':
+                        this.editingModel = row;
+                        Object.assign(this.shareForm, {
+                            shareType: row.isPublic ? 'PUBLIC' : 'PRIVATE',
+                            users: row.users,
+                            groups: row.groups
+                        });
+                        this.dialogVisible = true;
                         break;
-                    case 'Failed':
-                        item.meta.state.status = 'warning';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                    case 'edit':
+                        this.createDialogVisible = true;
+                        this.editingModel = row;
                         break;
-                    case 'Running':
-                        item.meta.state.status = 'loading';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                    case 'remove':
+                        MessageBox({
+                            title: this.t('view.model.modelRemoveConfirm'),
+                            content: this.t('sdxCommon.ConfirmRemove')
+                        }).then(() => {
+                            removeModel(row.uuid).then(() => {
+                                Message({
+                                    message: this.t('sdxCommon.RemoveSuccess'),
+                                    type: 'success'
+                                });
+                                this.initModelList();
+                            });
+                        }).catch(() => {});
                         break;
-                    case 'Succeeded':
-                        item.meta.state.status = '';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
-                        break;
-                    case 'Terminated':
-                        item.meta.state.status = '';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
-                        break;
-                    case 'Error':
-                        item.meta.state.status = 'warning';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
-                        break;
-                    case 'Terminating':
-                        item.meta.state.status = 'loading';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                    case 'cancelShare':
+                        MessageBox({
+                            title: this.t('view.model.modelCancelShareConfirm')
+                        }).then(() => {
+                            this.editingModel = row;
+                            this.confirmEdit([], [], 'PRIVATE');
+                        }).catch(() => {});
                         break;
                     default:
                         break;
                 }
-            });
+            }
         }
     }
 };

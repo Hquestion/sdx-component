@@ -34,8 +34,8 @@ export default {
                 urlSuffix
             } = this.taskManager.task.serviceList[0];
             const wsProtocol = protocolMap[(protocol || 'http').toLowerCase()];
-            const externalUrl = `${protocol}://${location.hostname}:${proxyPort}/${urlSuffix}`;
-            const wsUrl = `${wsProtocol}://${location.hostname}:${proxyPort}/${urlSuffix}`;
+            const externalUrl = `${protocol}://${location.hostname}:${location.port}/${urlSuffix}`;
+            const wsUrl = `${wsProtocol}://${location.hostname}:${location.port}/${urlSuffix}`;
             return {
                 baseUrl: externalUrl,
                 wsUrl: wsUrl,

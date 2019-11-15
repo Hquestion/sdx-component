@@ -1,0 +1,16 @@
+@include block('copyable', $bem-namespace-ui) {
+    @include state('default') {
+        display: inline-block;
+    }
+    @include state('inner') {
+        padding: $sdx-gap-large $sdx-gap-regular;
+        position: relative;
+    }
+    @include element('icon') {
+        position: absolute;
+        right: $sdx-gap-small;
+        top: $sdx-gap-mini / 2;
+        font-size: 24px;
+        z-index: 2;
+    }
+}

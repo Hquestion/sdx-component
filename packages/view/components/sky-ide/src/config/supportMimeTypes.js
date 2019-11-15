@@ -1,6 +1,8 @@
 import CodeMirror from 'codemirror';
 require('codemirror/mode/meta.js');
 
+import codemirrorMode from '@sdx/utils/src/helper/codemirrorMode';
+
 export const EditorSupportMimeTypes = [
     ...CodeMirror.modeInfo
 ];
@@ -10,19 +12,11 @@ export const notebookSupportMimeTypes = [
     {name: 'Python', mime: 'text/x-python', mode: 'python', ext: ['py']}
 ];
 
-export function extname(file) {
-    let names = file.name.split('.');
-    return names[names.length - 1];
-}
+export const extname = codemirrorMode.extname;
 
-export function findFileMode(file) {
-    let ext = extname(file);
-    return CodeMirror.findModeByExtension(ext);
-}
+export const findFileMode = codemirrorMode.findFileMode;
 
-export function findModeByName(name) {
-    return CodeMirror.findModeByName(name);
-}
+export const findModeByName = codemirrorMode.findModeByName;
 
 export function isFormatSupport(file) {
     let ext = extname(file);

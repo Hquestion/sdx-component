@@ -1,0 +1,9 @@
+@include block('codepan', $bem-namespace-ui) {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    .CodeMirror {
+        height: 100%;
+    }
+}

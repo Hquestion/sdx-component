@@ -29,5 +29,7 @@ module.exports = {
     'context-menu': './components/context-menu/index.js',
     'dropdown-tip': './components/dropdown-tip/index.js',
     'appender': './components/appender/index.js',
-    'button-group': './components/button-group/index.js'
+    'button-group': './components/button-group/index.js',
+    'copyable': './components/copyable/index.js',
+    'codepan': './components/codepan/index.js'
 };

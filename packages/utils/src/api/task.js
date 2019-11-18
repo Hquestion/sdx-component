@@ -25,6 +25,14 @@ export function executionList(params) {
 export function deleteTask(uuid, params) {
     return httpService.remove(`${taskApi}/${uuid}`, params);
 }
+// full 停止task执行记录
+export function stopExecution(taskUuid, executionUuid, params) {
+    return httpService.post(`${taskApi}/${taskUuid}/executions/${executionUuid}/stop`, params);
+}
+// full 启动task执行记录
+export function startExecution(taskUuid, executionUuid, params) {
+    return httpService.post(`${taskApi}/${taskUuid}/executions/${executionUuid}/start`, params);
+}
 
 export function removeTask(uuid, params) {
     return httpService.remove(`${taskApi}/${uuid}`, params);

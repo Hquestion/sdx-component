@@ -339,7 +339,7 @@ export default {
             tipCard: {
                 TotalExecution: '执行总数',
                 Manual: '手动',
-                Dispatch: '调度',
+                Timing: '定时',
                 SubordinateGroup: '所属组',
                 Type: '类型',
                 Detail: '详情'

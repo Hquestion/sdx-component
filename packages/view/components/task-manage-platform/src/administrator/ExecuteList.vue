@@ -21,7 +21,7 @@
                             color="#1144AB"
                             :show-text="false"
                         />
-                        <span>{{ t('view.task.tipCard.Dispatch') }}</span>
+                        <span>{{ t('view.task.tipCard.Timing') }}</span>
                     </div>
                 </div>
             </div>
@@ -88,6 +88,7 @@
             <SdxwSearchItem :label="`${t('sdxCommon.Status')}：`">
                 <el-select
                     size="large"
+                    v-model="params.state"
                 >
                     <el-option
                         v-for="item in STATE_TYPE"
@@ -357,8 +358,9 @@ export default {
                 start: 1,
                 count: 10,
             };
+            this.date = [];
             this.current = 1;
-            this.getTaskList();
+            this.getExecutionList();
         },
         // 执行列表
         getExecutionList() {

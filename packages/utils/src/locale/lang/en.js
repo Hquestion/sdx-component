@@ -340,7 +340,7 @@ export default {
             tipCard: {
                 TotalExecution: 'Total execution',
                 Manual: 'Manual',
-                Dispatch: 'Dispatch',
+                Timing: 'Timing',
                 SubordinateGroup: 'Subordinate group',
                 Type: 'Type',
                 Detail: 'Detail'

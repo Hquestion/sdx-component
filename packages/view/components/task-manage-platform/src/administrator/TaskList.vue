@@ -279,7 +279,7 @@ export default {
                     break;
                 case 'detail':
                     this.$router.push({
-                        name: 'SdxvTaskList',
+                        name: 'SdxvTaskManagementTaskDetail',
                         params: {
                             taskId: data.row.uuid
                         }

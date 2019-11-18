@@ -72,7 +72,7 @@ const routeCfg = [
                 })
             },
             {
-                path: 'modifyTask/:type/:taskId/:projectId',
+                path: 'modifyTask/:type/:taskId/:projectId?',
                 component: FormView,
                 name: 'EditTaskNext',
                 meta: {

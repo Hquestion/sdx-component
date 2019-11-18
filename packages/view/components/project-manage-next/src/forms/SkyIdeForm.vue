@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid || params.Id ? t('view.task.form.edit') : t('view.task.form.create')} SkyIDE ${t('view.task.form.task')}`"
+        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} SkyIDE ${t('view.task.form.task')}`"
         class="form-skyide"
         :label-width="lang$ === 'en' ? 190 : 160"
         icon="sdx-SkyIDErenwu"
@@ -60,7 +60,7 @@
             <el-form-item
                 :label="`${t('view.task.RelatedProject')}:`"
                 prop="project"
-                v-if="!projectId"
+                v-if="!projectId && !params.uuid"
             >
                 <SdxuAppender style="width: 560px">
                     <el-select

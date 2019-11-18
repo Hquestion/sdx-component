@@ -1,6 +1,6 @@
 <template>
     <BaseForm
-        :title="`${params.uuid || params.Id ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
+        :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
         class="form-containerdev"
         :label-width="lang$ === 'en' ? 190 : 100"
         icon="sdx-zidingyirongqirenwu"
@@ -47,7 +47,7 @@
             <el-form-item
                 :label="`${t('view.task.RelatedProject')}:`"
                 prop="project"
-                v-if="!projectId"
+                v-if="!projectId && !params.uuid"
             >
                 <SdxuAppender style="width: 560px">
                     <el-select

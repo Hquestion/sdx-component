@@ -1,9 +1,8 @@
-import { OPERATION_INFO, STATE_TYPE_OPERATION, MONITOR_ALLOW_OPERATION, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION, SPECIAL_TASK_TYPE } from '../const/task';
+import { TASK_CARD_STATE_TYPE_OPERATION, OPERATION_INFO, TASK_TYPE, STATE_TYPE } from '../const/task';
 import { startTask, stopTask, removeTask } from '../api/task';
 import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
-import { getUser } from '../helper/shareCenter';
 import { t } from '../locale';
 import { getImage } from '../api/image';
 
@@ -15,32 +14,9 @@ export default {
         };
     },
     methods: {
-        getOperationList(row, isMonitor = false, hideDetail = false) {
-            const currentUser = getUser();
-            const ownerId = row.owner && row.owner.uuid || '';
-            let isOwnerTask = currentUser && currentUser.userId === ownerId;
-            let list = STATE_TYPE_OPERATION[row.state] || [];
-            let isSkyflowExec = row.type === TASK_TYPE.SKYFLOW_EXEC;
-            let isSecialTask = SPECIAL_TASK_TYPE.includes(row.type) && list.indexOf('edit') !== -1;
-            if (isMonitor) {
-                list = list.filter(item => {
-                    return MONITOR_ALLOW_OPERATION.includes(item);
-                });
-            } else if (!isOwnerTask) {
-                list = list.filter(item => {
-                    return NON_OWNER_TASK_OPERATION.includes(item);
-                });
-            }
-
-            list = list.filter(item => {
-                return (isSkyflowExec ? item !== 'detail' : item !== 'entry')
-                && (isSecialTask ? item !== 'edit' : true)
-                && (hideDetail ? item !== 'detail' : true);
-            });
-
-            return list.map(item => {
-                return OPERATION_INFO[item];
-            });
+        getOperationList(row) {
+            let list = TASK_CARD_STATE_TYPE_OPERATION[row.type] && TASK_CARD_STATE_TYPE_OPERATION[row.type][row.state] || [];
+            return list.map(item => OPERATION_INFO[item]);
         },
         handleOperation(operation, row, projectId) {
             switch(operation) {
@@ -68,7 +44,7 @@ export default {
             let isSelectAutoImage = false;
             try {
                 // 任务类型为jupyter或container_dev且状态不为新建则弹出框
-                if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINERDEV].includes(row.type) && row.state !== STATE_TYPE.CREATED) {
+                if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINER_DEV].includes(row.type) && row.state !== STATE_TYPE.Created) {
                     let image = null;
                     let autoImage = null;
                     if (row.autoImageId) {
@@ -91,7 +67,7 @@ export default {
             let isSaveImage = false;
             try {
                 // 任务类型为jupyter或container_dev且状态为运行中则弹出框
-                if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINERDEV].includes(row.type) && row.state === STATE_TYPE.RUNNING) {
+                if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINER_DEV].includes(row.type) && row.state === STATE_TYPE.Running) {
                     isSaveImage = await SdxwTaskStopDialog({visible: true});
                 } else {
                     await SdxuMessageBox.warning({

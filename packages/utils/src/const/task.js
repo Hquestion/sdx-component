@@ -192,40 +192,40 @@ export const STATE_TYPE_OPERATION_ADMIN = {
     Error: ['kill', 'detail'],
 };
 
-// 任务-状态对应的全部操作
-export const STATE_TYPE_OPERATION_ALL = {
+// 任务卡片-状态对应的全部操作
+export const TASK_CARD_STATE_TYPE_OPERATION = {
     [TASK_TYPE.JUPYTER]: {
-        [STATE_TYPE.Created]: ['start', 'edit', 'remove', 'detail'],
-        [STATE_TYPE.Scheduling]: ['kill', 'detail'],
-        [STATE_TYPE.Pending]: ['kill', 'detail'],
-        [STATE_TYPE.Running]: ['kill', 'detail'],
-        [STATE_TYPE.Succeeded]: ['start', 'edit', 'remove', 'detail'],
-        [STATE_TYPE.Terminating]: ['detail'],
-        [STATE_TYPE.Terminated]: ['start', 'edit', 'remove', 'detail'],
-        [STATE_TYPE.Failed]: ['start', 'edit', 'remove', 'detail'],
-        [STATE_TYPE.Error]: ['kill', 'detail']
+        [STATE_TYPE.Created]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Scheduling]: ['kill'],
+        [STATE_TYPE.Pending]: ['kill'],
+        [STATE_TYPE.Running]: ['kill'],
+        [STATE_TYPE.Succeeded]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Terminating]: [],
+        [STATE_TYPE.Terminated]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Failed]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Error]: ['kill']
     },
     [TASK_TYPE.SKYIDE]: {
-        [STATE_TYPE.Created]: [],
-        [STATE_TYPE.Scheduling]: [],
-        [STATE_TYPE.Pending]: [],
-        [STATE_TYPE.Running]: [],
-        [STATE_TYPE.Succeeded]: [],
+        [STATE_TYPE.Created]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Scheduling]: ['kill'],
+        [STATE_TYPE.Pending]: ['kill'],
+        [STATE_TYPE.Running]: ['kill'],
+        [STATE_TYPE.Succeeded]: ['start', 'edit', 'remove'],
         [STATE_TYPE.Terminating]: [],
-        [STATE_TYPE.Terminated]: [],
-        [STATE_TYPE.Failed]: [],
-        [STATE_TYPE.Error]: []
+        [STATE_TYPE.Terminated]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Failed]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Error]: ['kill']
     },
     [TASK_TYPE.CONTAINER_DEV]: {
-        [STATE_TYPE.Created]: ['start', 'edit', 'remove', 'detail'],
-        [STATE_TYPE.Scheduling]: ['kill', 'detail'],
-        [STATE_TYPE.Pending]: ['kill', 'detail'],
-        [STATE_TYPE.Running]: ['kill', 'detail'],
-        [STATE_TYPE.Succeeded]: ['start', 'edit', 'remove', 'detail'],
-        [STATE_TYPE.Terminating]: ['detail'],
-        [STATE_TYPE.Terminated]: ['start', 'edit', 'remove', 'detail'],
-        [STATE_TYPE.Failed]: ['start', 'edit', 'remove', 'detail'],
-        [STATE_TYPE.Error]: ['kill', 'detail']
+        [STATE_TYPE.Created]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Scheduling]: ['kill'],
+        [STATE_TYPE.Pending]: ['kill'],
+        [STATE_TYPE.Running]: ['kill'],
+        [STATE_TYPE.Succeeded]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Terminating]: [],
+        [STATE_TYPE.Terminated]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Failed]: ['start', 'edit', 'remove'],
+        [STATE_TYPE.Error]: ['kill']
     },
     [TASK_TYPE.SKYFLOW]: {
         [STATE_TYPE.Created]: [],

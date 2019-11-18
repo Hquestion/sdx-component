@@ -31,5 +31,7 @@ module.exports = {
     'appender': './components/appender/index.js',
     'button-group': './components/button-group/index.js',
     'copyable': './components/copyable/index.js',
-    'codepan': './components/codepan/index.js'
+    'codepan': './components/codepan/index.js',
+    'article-title': './components/article-title/index.js',
+    'article-panel': './components/article-panel/index.js'
 };

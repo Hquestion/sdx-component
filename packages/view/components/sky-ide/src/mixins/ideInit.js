@@ -33,9 +33,13 @@ export default {
                 proxyType,
                 urlSuffix
             } = this.taskManager.task.serviceList[0];
+            let hostname = location.hostname;
+            let port = location.port;
+            hostname = '10.115.1.130';
+            port = '80';
             const wsProtocol = protocolMap[(protocol || 'http').toLowerCase()];
-            const externalUrl = `${protocol}://${location.hostname}:${location.port}/${urlSuffix}`;
-            const wsUrl = `${wsProtocol}://${location.hostname}:${location.port}/${urlSuffix}`;
+            const externalUrl = `${protocol}://${hostname}:${port}/${urlSuffix}`;
+            const wsUrl = `${wsProtocol}://${hostname}:${port}/${urlSuffix}`;
             return {
                 baseUrl: externalUrl,
                 wsUrl: wsUrl,

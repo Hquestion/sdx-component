@@ -1,5 +1,8 @@
 <template>
-    <div class="sdxu-codepan">
+    <div
+        class="sdxu-codepan"
+        :class="{'is-light': light}"
+    >
         <codemirror
             ref="codemirror"
             v-model="code"
@@ -15,6 +18,7 @@ require('codemirror/mode/markdown/markdown.js');
 require('codemirror/mode/r/r.js');
 require('codemirror/mode/clike/clike.js');
 require('codemirror/mode/javascript/javascript.js');
+require('codemirror/mode/shell/shell');
 
 import { codemirror } from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -34,17 +38,6 @@ export default {
     data() {
         return {
             code: '',
-            editorOptions: {
-                indentUnit: 4,
-                tabSize: 4,
-                lineNumbers: true,
-                lineWrapping: false,
-                spellcheck: true,
-                autocorrect: true,
-                autofocus: true,
-                theme:'seti',
-                readOnly: this.readonly
-            },
             ready: new Promise(resolve => _resolve = resolve),
             initiated: false
         };
@@ -59,13 +52,40 @@ export default {
             default: ''
         },
         type: {
-            type: String,
+            type: [String, Object],
             default: 'python'
         },
         readonly: {
             type: Boolean,
             default: false
+        },
+        theme: {
+            type: String,
+            default: 'seti'
+        },
+        light: {
+            type: Boolean,
+            default: false
+        },
+        lineNumbers: {
+            type: Boolean,
+            default: true
         }
+    },
+    computed: {
+        editorOptions() {
+            return {
+                indentUnit: 4,
+                tabSize: 4,
+                lineNumbers: this.lineNumbers,
+                lineWrapping: false,
+                spellcheck: true,
+                autocorrect: true,
+                autofocus: true,
+                theme: this.theme,
+                readOnly: this.readonly ? 'nocursor' : false,
+            };
+        },
     },
     methods: {
         async readFile(file) {

@@ -98,6 +98,90 @@ export function getServiceList(params) {
     return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services`, params);
 }
 
+export function getApiDetail(serviceUuid) {
+    return Promise.resolve({
+        'name': 'my-model_service ',
+        'description': 'my-model v1 description.',
+        'modelId': '300277f0-349c-4932-bae3-5f8278b9afef',
+        'versionName': '300277f0-349c-4932-bae3-5f8278b9afef',
+        'versionUpgrade': null,
+        'creatorId': '00277f0-349c-4932-bae3-5f8278b9afe dfs ',
+        'createdAt': '2019-04-02T15:32:42Z',
+        'updatedAt': '2019-04-02T15:32:42Z',
+        'startedAt': '2019-04-02T15:32:42Z',
+        'stoppedAt': '2019-04-02T15:32:42Z',
+        'runtimeImage ': 'TENSORFLOW-serving-20190501',
+        'apiExamples': {
+            'request': {
+                'curl': 'curl url/predict',
+                'python': '....',
+                'java': '...'
+            },
+            'response': {
+                'success': '',
+                'failed': ''
+            }
+        },
+        'apiParams': {
+            'input': [
+                {
+                    'name': 'input_array',
+                    'dtype': 'array',
+                    'range': null,
+                    'default': null,
+                    'description': null
+                },
+                {
+                    'name': 'topNums',
+                    'dtype': 'int',
+                    'range': [
+                        1,
+                        20
+                    ],
+                    'default': 5,
+                    'description': '标签数'
+                }
+            ],
+            'output': [
+                {
+                    'name': 'result',
+                    'dtype': 'string',
+                    'range': null,
+                    'default': null,
+                    'description': '标签名称'
+                },
+                {
+                    'name': 'confidence',
+                    'dtype': 'float',
+                    'range': [
+                        0.00,
+                        1.00
+                    ],
+                    'default': null,
+                    'description': '置信度'
+                }
+            ]
+        },
+        'runtimeResource': {
+            'cpus': 2,
+            'memory': 1024000000,
+            'gpus': 1,
+            'gpuModel': 'k80'
+        },
+        'instances': 2,
+        'apiUrl': 'http://host:port/model-service/{uuid}/',
+        'apiKey': 'fjhdsaiofjas168',
+        'apiCallNums': 111,
+        'state': 'RUNNING',
+        'token': 'eyJhbGciOiJIUzUxMiIsImlhdCI6MTU1OTcwMDg5NiwiZXhwIjoxNTYwMzA1Njk2fQ.eyJ1c2VyX2lkIjoiZDA5NTk3MjItNDdhMy00ZmQxLTk1ZDgtZmY1OTU1Yjg4ZTQ0In0.5Y4rd3WRYtHyoR590qEkl7i1TL7_kIYDdil_hrUf8cQAfw8WlizyYfv0VLv0_TJJ_Gjha6A7ZuxDLn_EFKbmQw',
+        'errors': [],
+        'users': [],
+        'groups': [],
+        'isPublished': false,
+    });
+    return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services/${serviceUuid}`);
+}
+
 export default {
     getModelList,
     getModelInfo,

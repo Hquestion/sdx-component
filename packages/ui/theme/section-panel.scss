@@ -1,0 +1,5 @@
+@include block('section-panel', $bem-namespace-ui) {
+    @extend .shadow;
+    padding: $sdx-gap-regular;
+    background: #fff;
+}

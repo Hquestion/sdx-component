@@ -1,5 +1,5 @@
 <template>
-    <div class="sdxu-appender">
+    <div class="sdxu-appender" :class="{'is-block': block}">
         <div
             class="sdxu-appender__prefix"
             v-if="$slots.prefix || prefix"
@@ -9,7 +9,9 @@
                 <i :class="['sdx-icon', 'sdxu-appender__icon', prefix]" />
             </slot>
         </div>
-        <slot />
+        <div class="sdxu-appender__main">
+            <slot />
+        </div>
         <div
             class="sdxu-appender__postfix"
             v-if="$slots.postfix || postfix"
@@ -38,6 +40,10 @@ export default {
         postfix: {
             type: String,
             default: ''
+        },
+        block: {
+            type: Boolean,
+            default: true
         }
     },
     methods: {

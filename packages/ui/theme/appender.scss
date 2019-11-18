@@ -2,6 +2,9 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    @include element('main') {
+        display: inline-block;
+    }
     @include element('prefix') {
         width: auto;
         margin-right: $sdx-gap-large;
@@ -15,5 +18,11 @@
     @include element('icon') {
         font-size: 22px;
         color: $sdx-secondary-color--light4;
+    }
+    @include state('block') {
+        @include element('main') {
+            flex: 1;
+            display: block;
+        }
     }
 }

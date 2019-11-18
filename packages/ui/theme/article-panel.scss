@@ -1,0 +1,8 @@
+@include block('article-panel', $bem-namespace-ui) {
+    @include element('content') {
+        padding: $sdx-gap-regular $sdx-gap-small;
+    }
+}
+.sdxu-article-panel + .sdxu-article-panel {
+    margin-top: $sdx-gap-mini;
+}

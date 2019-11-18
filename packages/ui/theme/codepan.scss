@@ -6,4 +6,15 @@
     .CodeMirror {
         height: 100%;
     }
+    @include state('light') {
+        .CodeMirror {
+            background: $sdx-secondary-color--light7 !important;
+        }
+        .CodeMirror-gutters {
+            background: $sdx-secondary-color--light6 !important;
+        }
+    }
+}
+.CodeMirror {
+    height: auto;
 }

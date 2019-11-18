@@ -2,7 +2,7 @@
     <div
         class="sdxu-copyable"
         @click="handleClick"
-        :class="{'is-default': isDefault, 'is-inner': isInner}"
+        :class="{'is-default': isDefault, 'is-inner': isInner, 'is-dark': dark}"
     >
         <template v-if="isDefault">
             <slot />
@@ -14,6 +14,7 @@
                     type="default"
                     slot="postfix"
                     @click="handleIconClick"
+                    class="sdxu-copyable__appender-btn"
                 >
                     <i class="sdx-icon sdx-caozuofuzhi" />
                 </SdxuButton>
@@ -22,7 +23,10 @@
         <template v-else-if="isInner">
             <slot />
         </template>
-        <div class="sdxu-copyable__icon" v-if="isInner">
+        <div
+            class="sdxu-copyable__icon"
+            v-if="isInner"
+        >
             <SdxuIconButton
                 icon="sdx-icon sdx-caozuofuzhi"
                 @click="handleIconClick"
@@ -55,6 +59,10 @@ export default {
         content: {
             type: String,
             default: ''
+        },
+        dark: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
@@ -71,13 +79,13 @@ export default {
     methods: {
         handleClick() {
             if (this.isDefault) {
-                this.$copyText(this.content);
+                Vue.prototype.$copyText(this.content);
             } else {
                 this.$emit('click');
             }
         },
         handleIconClick() {
-            this.$copyText(this.content);
+            Vue.prototype.$copyText(this.content);
         }
     }
 };

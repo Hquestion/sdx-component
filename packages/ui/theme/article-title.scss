@@ -1,0 +1,21 @@
+@include block('article-title', $bem-namespace-ui) {
+    height: 25px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    font-size: 0;
+    &:before {
+        content: '';
+        width: 4px;
+        height: 16px;
+        font-size: $sdx-h1-font-size;
+        border-radius: 1px;
+        background: $sdx-primary-color;
+        margin-right: $sdx-gap-small - 2px;
+    }
+    @include element('main') {
+        font-size: $sdx-h1-font-size;
+        color: $sdx-secondary-color;
+        line-height: 1;
+    }
+}

@@ -11,18 +11,18 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     .el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover {
         color: $sdxw-breadcrumb-current-text-color;
         font-size: 14px;
-        font-weight: normal;
+        font-weight: 300;
     }
     .el-breadcrumb__inner.is-link,
     .el-breadcrumb__inner a {
         color: $sdxw-breadcrumb-previous-text-color;
         font-size: 14px;
-        font-weight: normal;
+        font-weight: 300;
     }
     .el-breadcrumb__separator {
         color: $sdxw-breadcrumb-seperator-color;
         margin: 0 $sdxw-breadcrumb-seperator-margin;
         font-size: 14px;
-        font-weight: normal;
+        font-weight: 300;
     }
 }

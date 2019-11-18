@@ -6,11 +6,23 @@
         padding: $sdx-gap-large $sdx-gap-regular;
         position: relative;
     }
+    @include state('dark') {
+        background: $sdx-secondary-color--light7;
+    }
     @include element('icon') {
         position: absolute;
         right: $sdx-gap-small;
         top: $sdx-gap-mini / 2;
-        font-size: 24px;
         z-index: 2;
+        .sdx-icon {
+            color: $sdx-secondary-color--light1;
+            font-size: 20px;
+        }
+    }
+    @include element('appender-btn') {
+        width: 72px;
+        i.sdx-icon {
+            font-size: 20px;
+        }
     }
 }

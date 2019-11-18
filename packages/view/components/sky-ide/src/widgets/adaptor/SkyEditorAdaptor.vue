@@ -14,7 +14,7 @@
 
 <script>
 import SkyNotebook from '../notebook/SkyNotebook';
-import SkyEditor from './SkyEditor';
+import SkyEditor from '@sdx/ui/components/codepan';
 import UnsupportedFile from './UnsupportedFile';
 import { isSNbSupport, isCMSupport } from '../../config/supportMimeTypes';
 

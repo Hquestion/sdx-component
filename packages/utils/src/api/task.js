@@ -11,6 +11,8 @@ const taskApi = `${TASK_MANAGE_GATEWAY_BASE}tasks`;
 export const getTaskList = authWrapper(function (params) {
     return httpService.get(taskApi, params);
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
+
+
 // full 版本任务列表
 export function taskList(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
@@ -45,8 +47,30 @@ export function createTask(params) {
     return httpService.post(taskApi, params);
 }
 
-export function getTaskDetail(uuid, type) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-detail`, {uuid, type});
+// 根据uuid获取任务信息
+export function getTask(uuid, params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}tasks/${uuid}`, params);
+}
+// 根据taskId和uuid获取任务执行记录信息
+export function getExecution(taskId, uuid, params) {
+    return httpService.get(`${taskApi}/${taskId}/executions/${uuid}`, params);
+}
+// 启动执行记录
+export function startExecution(taskId, uuid, params) {
+    return httpService.post(`${taskApi}/${taskId}/executions/${uuid}/start`, params);
+}
+// 停止执行记录
+export function stopExecution(taskId, uuid, params) {
+    return httpService.post(`${taskApi}/${taskId}/executions/${uuid}/stop`, params);
+}
+// 删除执行记录
+export function removeExecution(taskId, uuid, params) {
+    return httpService.remove(`${taskApi}/${taskId}/executions/${uuid}`, params);
+}
+
+// 获取任务详情
+export function getTaskDetail(uuid) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-detail/${uuid}`);
 }
 
 // 任务编辑的时候不需要聚合

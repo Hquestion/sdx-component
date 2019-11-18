@@ -193,7 +193,7 @@ import SdxvInfoItem from './InfoItem';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import SdxvSaveAsDialog from './SaveAsDialog';
 import SdxuButton from '@sdx/ui/components/button';
-import SdxuTable from '@sdx/ui/comonents/table';
+import SdxuTable from '@sdx/ui/components/table';
 import ElTableColumn from 'element-ui/lib/table-column';
 
 export default {

@@ -133,7 +133,6 @@ export default {
         this.fetchDataMinxin = this.initList;
     },
     beforeDestroy () {
-        console.log('222222222222222222222222');
         clearInterval(this.refreshTimer);
         this.refreshTimer = null;
     },
@@ -161,7 +160,6 @@ export default {
     },
     methods: {
         initList(hideLoading) {
-            console.log('333333333333333333', this._isDestroyed);
             if (this._isDestroyed) {
                 clearInterval(this.refreshTimer);
                 this.refreshTimer = null;

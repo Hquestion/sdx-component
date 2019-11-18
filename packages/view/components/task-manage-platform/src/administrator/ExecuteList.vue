@@ -17,7 +17,7 @@
                         <span>{{ t('view.task.tipCard.Manual') }}</span>
                         <el-progress
                             :stroke-width="8"
-                            :percentage="item.manual / item.total"
+                            :percentage="item.percent"
                             color="#1144AB"
                             :show-text="false"
                         />
@@ -143,7 +143,12 @@
                 <el-table-column
                     prop="executeType"
                     :label="t('view.task.executeType')"
-                />
+                >
+                    <template #default="{ row }">
+                        <span v-if="row.executeType === 'MANUAL'">{{ t('view.task.ManualExecution') }}</span>
+                        <span v-else-if="row.executeType === 'CRONTAB'">{{ t('view.task.TimingExecution') }}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="startedAt"
                     :label="t('view.task.executeStartTime')"
@@ -181,7 +186,16 @@
                 <el-table-column
                     prop="state"
                     :label="t('sdxCommon.Status')"
-                />
+                >
+                    <template #default="{ row }">
+                        <SdxwFoldLabel
+                            plain
+                            :type="row.state"
+                        >
+                            {{ t(STATE_TYPE_LABEL[row.state]) }}
+                        </SdxwFoldLabel>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     :label="t('sdxCommon.Operation')"
                     min-width="130px"
@@ -208,7 +222,7 @@
             </sdxu-table>
             <SdxuPagination
                 v-if="total"
-                :current-page.sync="page"
+                :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
                 @current-change="handlePageChange"
@@ -223,11 +237,12 @@ import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
 import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
-import { TASK_TYPE, EXECUTE_TYPE, STATE_TYPE } from '@sdx/utils/src/const/task';
+import { TASK_TYPE, EXECUTE_TYPE, STATE_TYPE, STATE_TYPE_LABEL } from '@sdx/utils/src/const/task';
 import { getGroups } from '@sdx/utils/src/api/user';
 import { executionList} from '@sdx/utils/src/api/task';
 import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import SdxuPagination from '@sdx/ui/components/pagination';
+import FoldLabel from '@sdx/widget/components/fold-label';
 export default {
     name: 'SdxvExecuteList',
     data() {
@@ -235,6 +250,7 @@ export default {
             TASK_TYPE,
             EXECUTE_TYPE,
             STATE_TYPE,
+            STATE_TYPE_LABEL,
             date: '',
             infoList: [
                 {
@@ -312,7 +328,8 @@ export default {
         [Row.name]: Row,
         [Col.name]: Col,
         [Progress.name]: Progress,
-        SdxuPagination
+        SdxuPagination,
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
     },
     methods: {
         dateFormatter,
@@ -332,6 +349,10 @@ export default {
                     });
                 });
             });
+        },
+        handlePageChange(index){
+            this.current = index;
+            this.getExecutionList();
         },
         handleSortChange({prop, order}) {
             this.params.order = order === 'ascending' ? 'asc' : 'desc';
@@ -379,6 +400,12 @@ export default {
                     this.infoList[i].total = res.detail[this.infoList[i].type].manual +  res.detail[this.infoList[i].type].schedule;
                     this.infoList[i].manual = res.detail[this.infoList[i].type].manual;
                     this.infoList[i].dispatch = res.detail[this.infoList[i].type].schedule;
+                    if(this.infoList[i].total === 0) {
+                        this.infoList[i].percent = 0;
+                    } else {
+                        this.infoList[i].percent = (this.infoList[i].manual / this.infoList[i].total) * 100;
+                    }
+                    
                 }
                 this.tableLoading = false;
             }).catch(() => {

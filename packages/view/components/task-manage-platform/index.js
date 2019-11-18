@@ -18,7 +18,7 @@ const routeCfg = [{
             component: TaskManagePlatform,
             meta: {
                 breadcrumb: t('view.task.TaskManagement'),
-                isRoot: true
+                system: 'manage'
             },
         }
     ]

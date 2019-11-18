@@ -128,7 +128,7 @@
             </sdxu-table>
             <SdxuPagination
                 v-if="total"
-                :current-page.sync="page"
+                :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
                 @current-change="handlePageChange"

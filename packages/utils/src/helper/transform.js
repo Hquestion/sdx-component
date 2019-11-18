@@ -133,6 +133,9 @@ export function cpuTplFriendly(config) {
 */ 
 export function timeDuration(startTime, endTime) {
     //如果时间格式是正确的，那下面这一步转化时间格式就可以不用了 转换 2019-12-12 12:12:10
+    if(!endTime) {
+        return '-';
+    }
     let dateBegin = new Date(dateFormatter(startTime));
     let dateEnd = new Date(dateFormatter(endTime));
     //时间差的毫秒数
@@ -149,7 +152,7 @@ export function timeDuration(startTime, endTime) {
     //计算相差秒数
     let leave3=leave2%(60*1000);      //计算分钟数后剩余的毫秒数
     let seconds=Math.round(leave3/1000);
-    let res = '';
+    let res = '-';
     if (dayDiff > 0){
         res = `${dayDiff}d${hours}h${minutes}m${seconds}s`;
     } else if(dayDiff <= 0 && hours > 0) {

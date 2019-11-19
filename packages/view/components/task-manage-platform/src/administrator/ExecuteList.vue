@@ -64,7 +64,7 @@
                     v-model="params.type"
                 >
                     <el-option
-                        v-for="item in TASK_TYPE"
+                        v-for="item in TASK_TYPE_LIST"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -78,7 +78,7 @@
                     v-model="params.executionType"
                 >
                     <el-option
-                        v-for="item in EXECUTE_TYPE"
+                        v-for="item in EXECUTE_TYPE_LIST"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -91,7 +91,7 @@
                     v-model="params.state"
                 >
                     <el-option
-                        v-for="item in STATE_TYPE"
+                        v-for="item in STATE_TYPE_LIST"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -192,7 +192,7 @@
                             plain
                             :type="row.state"
                         >
-                            {{ t(STATE_TYPE_LABEL[row.state]) }}
+                            {{ STATE_TYPE_LABEL[row.state] }}
                         </SdxwFoldLabel>
                     </template>
                 </el-table-column>
@@ -249,9 +249,9 @@ import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
 import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
-import { TASK_TYPE, EXECUTE_TYPE, STATE_TYPE, STATE_TYPE_LABEL, STATE_TYPE_OPERATION_ADMIN } from '@sdx/utils/src/const/task';
+import { STATE_TYPE_LIST, EXECUTE_TYPE_LIST, STATE_TYPE, STATE_TYPE_LABEL, STATE_TYPE_OPERATION_ADMIN,TASK_TYPE_LIST} from '@sdx/utils/src/const/task';
 import { getGroups } from '@sdx/utils/src/api/user';
-import { executionList, startExecution, stopExecution} from '@sdx/utils/src/api/task';
+import { executionList, startExecution, stopExecution, startTask, stopTask} from '@sdx/utils/src/api/task';
 import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import FoldLabel from '@sdx/widget/components/fold-label';
@@ -259,11 +259,12 @@ export default {
     name: 'SdxvExecuteList',
     data() {
         return {
-            TASK_TYPE,
-            EXECUTE_TYPE,
+            STATE_TYPE_LIST,
+            EXECUTE_TYPE_LIST,
             STATE_TYPE,
             STATE_TYPE_LABEL,
             STATE_TYPE_OPERATION_ADMIN,
+            TASK_TYPE_LIST,
             date: '',
             refreshTimer: null,
             infoList: [
@@ -388,10 +389,10 @@ export default {
                 state: '',
                 startedAt: '',
                 stoppedAt: '',
-                order: 'desc',
-                orderBy: 'startedAt',
                 start: 1,
                 count: 10,
+                order: this.params.order,
+                orderBy: this.params.orderBy
             };
             this.date = [];
             this.current = 1;
@@ -399,7 +400,10 @@ export default {
         },
         // 执行列表
         getExecutionList() {
-            this.tableLoading = true;
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             let date = this.date ? {
                 startedAt: `${this.date[0]} 00:00:00`,
                 stoppedAt: `${this.date[1]} 23:59:59`
@@ -410,8 +414,8 @@ export default {
             removeBlankAttr(params);
             executionList(params).then(res => {
                 if (res.data.length && res.data.find(item => (item.state === 'Terminating' || item.state === 'Running' || item.state === 'Pending' || item.state === 'Scheduling' || item.state === 'Error'))) {
-                    if (!this.refreshTimer) {
-                        this.refreshTimer = setInterval(this.getExecutionList(), 3000, true);
+                    if (!this.refreshTimer && !this._isDestroyed) {
+                        this.refreshTimer = setInterval(this.getExecutionList, 5000);
                     }
                 } else {
                     clearInterval(this.refreshTimer);
@@ -439,17 +443,27 @@ export default {
                 this.tableLoading = false;
             });
         },
-        handleOperate(data) {
+        startTaskAPI(data) {
+            if(data.type.toLocaleUpperCase() === 'SKYFLOW') {
+                startExecution(data.uuid, data.executionId, {type: data.type});
+            } else {
+                startTask(data.uuid, {type: data.type});
+            }
+        },
+        stopTaskAPI(data) {
+            if(data.type.toLocaleUpperCase() === 'SKYFLOW') {
+                stopExecution(data.row.uuid, data.row.executionId, {type: data.row.type});
+            } else {
+                stopTask(data.uuid, {type: data.type});
+            }
+        },
+        async handleOperate(data) {
             if(data.type === 'start') {
-                startExecution(data.row.uuid, data.row.executionId, {type: data.row.type})
-                    .then(() => {
-                        this.getExecutionList();
-                    });
+                await this.startTaskAPI(data.row);
+                this.getExecutionList();
             } else if (data.type === 'stop') {
-                stopExecution(data.row.uuid, data.row.executionId, {type: data.row.type})
-                    .then(() => {
-                        this.getExecutionList();
-                    });
+                await this.stopTaskAPI(data.row);
+                this.getExecutionList();
             } else if (data.type === 'detail') {
                 this.$router.push({
                     name: 'SdxvTaskManagementTaskDetail',
@@ -460,9 +474,10 @@ export default {
             }
         }
     },
-    created() {
-        this.getGroupList();
-        this.getExecutionList();
+    async created() {
+        this.tableLoading = true;
+        await this.getGroupList();
+        await this.getExecutionList();
     },
     beforeDestroy () {
         clearInterval(this.refreshTimer);

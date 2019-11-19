@@ -38,7 +38,7 @@
                     v-model="params.type"
                 >
                     <el-option
-                        v-for="item in TASK_TYPE"
+                        v-for="item in TASK_TYPE_LIST"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -144,7 +144,7 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import Button from '@sdx/ui/components/button';
-import { TASK_TYPE } from '@sdx/utils/src/const/task';
+import { TASK_TYPE_LIST } from '@sdx/utils/src/const/task';
 import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import {  parseMilli, byteToGB } from '@sdx/utils/src/helper/transform';
 import { taskList,deleteTask } from '@sdx/utils/src/api/task';
@@ -163,7 +163,7 @@ export default {
     },
     data() {
         return {
-            TASK_TYPE,
+            TASK_TYPE_LIST,
             table: [],
             groups: [],
             defaultSort: {
@@ -255,8 +255,8 @@ export default {
                 type: '',
                 start: 1,
                 count: 10,
-                order: 'desc',
-                orderBy: 'CPU'
+                order: this.params.order,
+                orderBy: this.params.orderBy
             };
             this.current = 1;
             this.getTaskList();

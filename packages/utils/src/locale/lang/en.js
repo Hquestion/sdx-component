@@ -600,6 +600,7 @@ export default {
             etc: 'etc'
         },
         model: {
+            ModelDetail: 'Model detail',
             Running_time: 'Running time',
             Instances: 'Instances',
             Resource: 'Resource',

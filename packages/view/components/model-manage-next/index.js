@@ -1,7 +1,7 @@
 import ModelManage from './src/Index.vue';
 import ModelService from './src/model-service/Index.vue';
 import ModelList from './src/model-list/Index.vue';
-
+import ModelDetail from './src/model-detail/Index.vue';
 import { t } from '@sdx/utils/src/locale';
 
 const routeCfg = [
@@ -32,7 +32,15 @@ const routeCfg = [
                     breadcrumb: t('view.model.model'),
                     isRoot: true
                 }
-            }
+            },
+            {
+                path: 'modelDetail',
+                name:'modelDetail',
+                component: ModelDetail,
+                meta: {
+                    breadcrumb: t('view.model.ModelDetail'),
+                }
+            },
         ]
     }
 ];

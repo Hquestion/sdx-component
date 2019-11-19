@@ -599,6 +599,7 @@ export default {
             etc: '等'
         },
         model: {
+            ModelDetail: '模型详情',
             Running_time: '运行时间',
             Instances: '实例数',
             Resource: '资源',

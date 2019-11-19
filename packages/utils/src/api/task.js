@@ -70,8 +70,8 @@ export function removeExecution(taskId, uuid, params) {
 }
 
 // 获取任务详情
-export function getTaskDetail(uuid) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-detail/${uuid}`);
+export function getTaskDetail(uuid, type) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-detail`, {uuid, type});
 }
 
 // 任务编辑的时候不需要聚合

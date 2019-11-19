@@ -34,11 +34,13 @@
                 </el-form-item>
             </el-form>
 
-            <slot
-                name="form"
-            >
-            <!-- 插入form -->
-            </slot>
+            <div class="sdxv-project-task-form__panel--content">
+                <slot
+                    name="form"
+                >
+                    <!-- 插入form -->
+                </slot>
+            </div>
             <div
                 class="task-from__btn-box"
                 :style="`padding-left: ${labelWidth}px`"
@@ -167,11 +169,12 @@ export default {
                         }
                     }
                 }
-                .el-select {
-                    width: 560px;
-                }
-                .sdxu-input {
-                    width: 560px;
+                .sdxv-project-task-form__panel--content {
+                    .el-form-item {
+                        .el-form-item__content {
+                            width: 560px!important;
+                        }
+                    }
                 }
                 .sdxw-file-select {
                     width: 560px;

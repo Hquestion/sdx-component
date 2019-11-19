@@ -48,7 +48,7 @@
                 prop="project"
                 v-if="!projectId && !params.uuid"
             >
-                <SdxuAppender style="width: 560px;">
+                <SdxuAppender>
                     <el-select
                         v-model="params.project"
                         size="small"

@@ -62,12 +62,11 @@
                 prop="project"
                 v-if="!projectId && !params.uuid"
             >
-                <SdxuAppender style="width: 560px">
+                <SdxuAppender>
                     <el-select
                         v-model="params.project"
                         size="small"
                         :placeholder="t('view.task.EnterRelatedProject')"
-                        style="width:420px;margin-right:10px;"
                         filterable
                         @change="projectSelected"
                     >
@@ -98,7 +97,7 @@
                 prop="imageId"
                 :label="`${t('view.task.RuntimeEnvironment')}:`"
             >
-                <SdxuAppender style="width: 560px;">
+                <SdxuAppender>
                     <el-select
                         v-model="params.imageId"
                         :searchable="true"
@@ -115,7 +114,6 @@
                     </el-select>
                     <SdxuDropdownTip
                         :title="t('view.task.ImagePacInfo')"
-                        width="260px"
                         :disabled="!packagesList.length"
                         slot="postfix"
                     >

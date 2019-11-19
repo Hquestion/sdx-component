@@ -20,7 +20,8 @@ const routeCfg = [
                 component: ModelList,
                 meta: {
                     breadcrumb: t('view.model.model'),
-                    isRoot: true
+                    isRoot: true,
+                    header: '模型仓库'
                 }
             },
             {

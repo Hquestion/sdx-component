@@ -1,9 +1,6 @@
 
 <template>
     <div class="sdxv-project-task-form">
-        <div class="sdxv-project-task-form__title">
-            {{ title }}
-        </div>
         <SdxuContentPanel
             class="sdxv-project-task-form__panel"
             :fullscreen="true"
@@ -110,6 +107,9 @@ export default {
     watch: {
         showCreateProject(nVal) {
             this.createProjectVisible = nVal;
+        },
+        title(nVal) {
+            this.$route.meta.header = nVal;
         }
     },
     data() {
@@ -137,7 +137,10 @@ export default {
         },
     },
     created() {
-
+        this.$route.meta.header = '';
+        this.$nextTick(() => {
+            this.$route.meta.header = this.title;
+        });
     }
 };
 </script>

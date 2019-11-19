@@ -1,8 +1,5 @@
 <template>
     <div class="sdxv-dev-platform">
-        <div class="sdxv-dev-platform__title">
-            {{ t('view.task.TaskList') }}
-        </div>
         <div
             class="sdxv-dev-platform__create-task"
             v-auth.project.button="'TASK:CREATE'"

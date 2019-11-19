@@ -1,8 +1,5 @@
 <template>
     <div class="sdxv-project-detail">
-        <div class="sdxv-project-detail__title">
-            {{ title }}
-        </div>
         <div
             class="sdxv-project-detail__create-task"
             v-auth.project.button="'TASK:CREATE'"
@@ -110,7 +107,6 @@ export default {
                 }
             ],
             clientWidth: 1500,
-            title: '',
             projectId: ''
         };
     },
@@ -128,8 +124,9 @@ export default {
     },
     created() {
         this.projectId = this.$route.params.id;
+        this.$route.meta.header = '';
         getProjectDetail(this.projectId).then(res => {
-            this.title = res.data.name;
+            this.$route.meta.header = res.data.name;
         });
     },
     components: {

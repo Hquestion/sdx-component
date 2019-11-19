@@ -29,7 +29,8 @@ const routeCfg = [
                 component: ProjectList,
                 meta: {
                     breadcrumb: t('view.project.project'),
-                    isRoot: true
+                    isRoot: true,
+                    header: t('view.project.projectList')
                 },
             },
             {
@@ -37,7 +38,8 @@ const routeCfg = [
                 name: 'ProjectDetailNext',
                 component: ProjectDetail,
                 meta: {
-                    breadcrumb: t('view.project.projectDetail')
+                    breadcrumb: t('view.project.projectDetail'),
+                    header: ''
                 }
             },
             {
@@ -63,7 +65,8 @@ const routeCfg = [
                 component: FormView,
                 name: 'CreateTaskNext',
                 meta: {
-                    breadcrumb: t('view.project.createTask')
+                    breadcrumb: t('view.project.createTask'),
+                    header: ''
                 },
                 props: ({
                     params
@@ -76,7 +79,8 @@ const routeCfg = [
                 component: FormView,
                 name: 'EditTaskNext',
                 meta: {
-                    breadcrumb: t('view.project.editTask')
+                    breadcrumb: t('view.project.editTask'),
+                    header: ''
                 },
                 props: ({
                     params

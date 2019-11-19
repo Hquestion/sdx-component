@@ -1,8 +1,5 @@
 <template>
     <div class="sdxv-project-manage-list">
-        <div class="title">
-            {{ t('view.project.projectList') }}
-        </div>
         <div class="condition">
             <SdxwSearchLayout
                 @search="searchProject"

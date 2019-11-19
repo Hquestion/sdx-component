@@ -1,8 +1,5 @@
 <template>
     <div class="sdxv-model-list">
-        <div class="sdxv-model-list__title">
-            模型仓库
-        </div>
         <div class="sdxv-model-list__sort">
             <SdxuTabRadioGroup
                 v-model="shareType"

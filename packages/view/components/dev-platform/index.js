@@ -8,7 +8,8 @@ const routeCfg = [
         component: DevPlatform,
         meta: {
             breadcrumb: '开发工作台',
-            isRoot: true
+            isRoot: true,
+            header: '任务列表'
         }
     }
 ];

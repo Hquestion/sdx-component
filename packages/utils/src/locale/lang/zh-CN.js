@@ -997,7 +997,8 @@ export default {
         requiredInfo: '请输入必填信息！',
         To: '至',
         Index: '序号',
-        Run: '运行'
+        Run: '运行',
+        startUp:'启动'
     },
     utils: {
         validator: {

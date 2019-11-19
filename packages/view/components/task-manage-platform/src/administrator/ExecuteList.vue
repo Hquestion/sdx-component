@@ -151,7 +151,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="startedAt"
-                    :label="t('view.task.executeStartTime')"
+                    :label="t('view.task.startedAt')"
                     sortable
                     min-width="130px"
                 >
@@ -163,7 +163,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="stoppedAt"
-                    :label="t('view.task.executeStopTime')"
+                    :label="t('view.task.stopedAt')"
                     sortable
                     min-width="130px"
                 >
@@ -206,13 +206,25 @@
                                 type="primary"
                                 size="regular"
                                 :plain="true"
+                                v-if="STATE_TYPE_OPERATION_ADMIN[row.state].includes('start')"
+                                @click="handleOperate({row, type: 'start'})"
                             >
-                                {{ t('view.task.CancellationOfExecution') }}
+                                {{ t('sdxCommon.startUp') }}
                             </SdxuButton>
                             <SdxuButton
                                 type="primary"
                                 size="regular"
                                 :plain="true"
+                                v-if="STATE_TYPE_OPERATION_ADMIN[row.state].includes('kill')"
+                                @click="handleOperate({row, type: 'stop'})"
+                            >
+                                {{ t('sdxCommon.Stop') }}
+                            </SdxuButton>
+                            <SdxuButton
+                                type="primary"
+                                size="regular"
+                                :plain="true"
+                                @click="handleOperate({row, type: 'detail'})"
                             >
                                 {{ t('view.task.tipCard.Detail') }}
                             </SdxuButton>
@@ -237,9 +249,9 @@ import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
 import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
-import { TASK_TYPE, EXECUTE_TYPE, STATE_TYPE, STATE_TYPE_LABEL } from '@sdx/utils/src/const/task';
+import { TASK_TYPE, EXECUTE_TYPE, STATE_TYPE, STATE_TYPE_LABEL, STATE_TYPE_OPERATION_ADMIN } from '@sdx/utils/src/const/task';
 import { getGroups } from '@sdx/utils/src/api/user';
-import { executionList} from '@sdx/utils/src/api/task';
+import { executionList, startExecution, stopExecution} from '@sdx/utils/src/api/task';
 import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import FoldLabel from '@sdx/widget/components/fold-label';
@@ -251,7 +263,9 @@ export default {
             EXECUTE_TYPE,
             STATE_TYPE,
             STATE_TYPE_LABEL,
+            STATE_TYPE_OPERATION_ADMIN,
             date: '',
+            refreshTimer: null,
             infoList: [
                 {
                     total: 0,
@@ -386,14 +400,23 @@ export default {
         // 执行列表
         getExecutionList() {
             this.tableLoading = true;
-            const params = Object.assign({}, this.params, {
-                ...paginate(this.current, this.pageSize), 
-            }, {
+            let date = this.date ? {
                 startedAt: `${this.date[0]} 00:00:00`,
                 stoppedAt: `${this.date[1]} 23:59:59`
-            });
+            } : {};
+            const params = Object.assign({}, this.params, {
+                ...paginate(this.current, this.pageSize), 
+            }, date);
             removeBlankAttr(params);
             executionList(params).then(res => {
+                if (res.data.length && res.data.find(item => (item.state === 'Terminating' || item.state === 'Running' || item.state === 'Pending' || item.state === 'Scheduling' || item.state === 'Error'))) {
+                    if (!this.refreshTimer) {
+                        this.refreshTimer = setInterval(this.getExecutionList(), 3000, true);
+                    }
+                } else {
+                    clearInterval(this.refreshTimer);
+                    this.refreshTimer = null;
+                }
                 this.table = res.data;
                 this.total = res.total;
                 for(let i = 0; i < this.infoList.length; i++) {
@@ -409,16 +432,42 @@ export default {
                 }
                 this.tableLoading = false;
             }).catch(() => {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
                 this.table = [];
                 this.total = 0;
                 this.tableLoading = false;
             });
+        },
+        handleOperate(data) {
+            if(data.type === 'start') {
+                startExecution(data.row.uuid, data.row.executionId, {type: data.row.type})
+                    .then(() => {
+                        this.getExecutionList();
+                    });
+            } else if (data.type === 'stop') {
+                stopExecution(data.row.uuid, data.row.executionId, {type: data.row.type})
+                    .then(() => {
+                        this.getExecutionList();
+                    });
+            } else if (data.type === 'detail') {
+                this.$router.push({
+                    name: 'SdxvTaskManagementTaskDetail',
+                    params: {
+                        taskId: data.row.uuid
+                    }
+                });
+            }
         }
     },
     created() {
         this.getGroupList();
         this.getExecutionList();
-    }
+    },
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
+    },
 };
 </script>
 

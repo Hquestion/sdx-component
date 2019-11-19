@@ -25,11 +25,11 @@ export function executionList(params) {
 export function deleteTask(uuid, params) {
     return httpService.remove(`${taskApi}/${uuid}`, params);
 }
-// full 停止task执行记录
+// full 停止task执行记录   type	必填string任务类型
 export function stopExecution(taskUuid, executionUuid, params) {
     return httpService.post(`${taskApi}/${taskUuid}/executions/${executionUuid}/stop`, params);
 }
-// full 启动task执行记录
+// full 启动task执行记录   type	必填string任务类型
 export function startExecution(taskUuid, executionUuid, params) {
     return httpService.post(`${taskApi}/${taskUuid}/executions/${executionUuid}/start`, params);
 }
@@ -63,14 +63,7 @@ export function getTask(uuid, params) {
 export function getExecution(taskId, uuid, params) {
     return httpService.get(`${taskApi}/${taskId}/executions/${uuid}`, params);
 }
-// 启动执行记录
-export function startExecution(taskId, uuid, params) {
-    return httpService.post(`${taskApi}/${taskId}/executions/${uuid}/start`, params);
-}
-// 停止执行记录
-export function stopExecution(taskId, uuid, params) {
-    return httpService.post(`${taskApi}/${taskId}/executions/${uuid}/stop`, params);
-}
+
 // 删除执行记录
 export function removeExecution(taskId, uuid, params) {
     return httpService.remove(`${taskApi}/${taskId}/executions/${uuid}`, params);

@@ -998,7 +998,8 @@ export default {
         requiredInfo: 'Please fill out all required fields!',
         To: 'To',
         Index: 'Index',
-        Run: 'Run'
+        Run: 'Run',
+        startUp:'Start up'
     },
     utils: {
         validator: {

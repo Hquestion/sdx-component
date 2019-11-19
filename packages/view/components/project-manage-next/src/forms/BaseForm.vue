@@ -160,7 +160,7 @@ export default {
                 align-items: center;
             }
             .task-from__btn-box {
-                padding-top: 16px;
+                padding-top: 0;
             }
             & /deep/  {
                 .sdxv-project-task-form__panel--form {

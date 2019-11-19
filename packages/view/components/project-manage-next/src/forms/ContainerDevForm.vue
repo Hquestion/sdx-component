@@ -2,7 +2,7 @@
     <BaseForm
         :title="`${params.uuid ? t('view.task.form.edit') : t('view.task.form.create')} ContainerDev ${t('view.task.form.task')}`"
         class="form-containerdev"
-        :label-width="lang$ === 'en' ? 190 : 100"
+        :label-width="lang$ === 'en' ? 206 : 116"
         icon="sdx-zidingyirongqirenwu"
         @commit="commit"
         :show-create-project="showCreateProject"
@@ -18,317 +18,315 @@
             :rules="rules"
             :model="params"
         >
-            <SdxwExpandLabel
-                :label="t('view.task.BasicSetting')"
-            />
-            <el-form-item
-                prop="name"
-                :label="`${t('view.task.taskName')}:`"
-            >
-                <SdxuInput
-                    v-model="params.name"
-                    :searchable="true"
-                    size="small"
-                    :placeholder="t('view.task.form.Please_enter_the_task_name')"
-                />
-            </el-form-item>
-            <el-form-item
-                prop="description"
-                :label="`${t('view.task.TaskDescription')}:`"
-            >
-                <SdxuInput
-                    type="textarea"
-                    :searchable="true"
-                    v-model="params.description"
-                    size="small"
-                    :placeholder="t('view.task.form.Please_enter_a_task_description')"
-                />
-            </el-form-item>
-            <el-form-item
-                :label="`${t('view.task.RelatedProject')}:`"
-                prop="project"
-                v-if="!projectId && !params.uuid"
-            >
-                <SdxuAppender>
-                    <el-select
-                        v-model="params.project"
-                        size="small"
-                        :placeholder="`${t('view.task.EnterRelatedProject')}`"
-                        filterable
-                        @change="projectSelected"
-                    >
-                        <el-option
-                            v-for="item in projectOptions"
-                            :key="item.uuid"
-                            :label="item.name"
-                            :value="item.uuid"
-                        />
-                    </el-select>
-                    <SdxuButton
-                        type="primary"
-                        invert
-                        slot="postfix"
-                        size="small"
-                        class="create-project-button"
-                        @click="createProject"
-                    >
-                        <i class="sdx-icon sdx-xinjianhao" />
-                        {{ t('view.task.CreateProject') }}
-                    </SdxuButton>
-                </SdxuAppender>
-            </el-form-item>
-            <SdxwExpandLabel
-                :label="`${t('view.task.EnvSetting')}`"
-            />
-            <el-form-item
-                prop="imageId"
-                :label="`${t('view.task.RuntimeEnvironment')}:`"
-            >
-                <SdxuAppender>
-                    <el-select
-                        v-model="params.imageId"
+            <SdxuArticlePanel :title="t('view.task.BasicSetting')">
+                <el-form-item
+                    prop="name"
+                    :label="`${t('view.task.taskName')}:`"
+                >
+                    <SdxuInput
+                        v-model="params.name"
                         :searchable="true"
                         size="small"
-                        @change="getImagePackages"
-                        :placeholder="t('view.task.form.Please_select_the_operating_environment')"
+                        :placeholder="t('view.task.form.Please_enter_the_task_name')"
+                    />
+                </el-form-item>
+                <el-form-item
+                    prop="description"
+                    :label="`${t('view.task.TaskDescription')}:`"
+                >
+                    <SdxuInput
+                        type="textarea"
+                        :searchable="true"
+                        v-model="params.description"
+                        size="small"
+                        :placeholder="t('view.task.form.Please_enter_a_task_description')"
+                    />
+                </el-form-item>
+                <el-form-item
+                    :label="`${t('view.task.RelatedProject')}:`"
+                    prop="project"
+                    v-if="!projectId && !params.uuid"
+                >
+                    <SdxuAppender>
+                        <el-select
+                            v-model="params.project"
+                            size="small"
+                            :placeholder="`${t('view.task.EnterRelatedProject')}`"
+                            filterable
+                            @change="projectSelected"
+                        >
+                            <el-option
+                                v-for="item in projectOptions"
+                                :key="item.uuid"
+                                :label="item.name"
+                                :value="item.uuid"
+                            />
+                        </el-select>
+                        <SdxuButton
+                            type="primary"
+                            invert
+                            slot="postfix"
+                            size="small"
+                            class="create-project-button"
+                            @click="createProject"
+                        >
+                            <i class="sdx-icon sdx-xinjianhao" />
+                            {{ t('view.task.CreateProject') }}
+                        </SdxuButton>
+                    </SdxuAppender>
+                </el-form-item>
+            </SdxuArticlePanel>
+            <SdxuArticlePanel :title="t('view.task.EnvSetting')">
+                <el-form-item
+                    prop="imageId"
+                    :label="`${t('view.task.RuntimeEnvironment')}:`"
+                >
+                    <SdxuAppender>
+                        <el-select
+                            v-model="params.imageId"
+                            :searchable="true"
+                            size="small"
+                            @change="getImagePackages"
+                            :placeholder="t('view.task.form.Please_select_the_operating_environment')"
+                        >
+                            <el-option
+                                v-for="item in imageOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
+                        <SdxuDropdownTip
+                            :title="`${t('view.task.ImagePacInfo')}`"
+                            :disabled="!packagesList.length"
+                            slot="postfix"
+                        >
+                            <SdxuIconButton
+                                slot="ref"
+                                size="large"
+                                icon="sdx-icon sdx-icon-warning"
+                            />
+                            <div
+                                style="height: 300px"
+                            >
+                                <SdxuScroll>
+                                    <div
+                                        v-for="(item, index) in packagesList"
+                                        :key="index"
+                                        class="package-info__item"
+                                    >
+                                        <div>{{ item.name }}</div>
+                                        <div>{{ item.version }}</div>
+                                    </div>
+                                </SdxuScroll>
+                            </div>
+                        </SdxuDropdownTip>
+                    </SdxuAppender>
+                </el-form-item>
+                <el-form-item
+                    prop="resourceConfigObj"
+                    :label="`${t('view.task.form.ResourceAllocation')}:`"
+                >
+                    <i class="icon">*</i>
+                    <SdxwResourceConfig
+                        v-if="!isGpuEnt"
+                        v-model="cpuObj"
+                        type="onlycpu"
+                        :data-ready="dataReady"
+                    />
+
+                    <div v-if="isGpuEnt">
+                        <SdxwResourceConfig
+                            v-model="cpuObj"
+                            type="cpu"
+                            :data-ready="dataReady"
+                        />
+                        <SdxwResourceConfig
+                            v-model="gpuObj"
+                            type="gpu"
+                            :data-ready="dataReady"
+                        />
+                    </div>
+                </el-form-item>
+                <el-form-item
+                    prop="instanceNumber"
+                    :label="`${t('view.task.InstanceNum')}:`"
+                >
+                    <el-input-number
+                        v-model="params.instanceNumber"
+                        :min="1"
+                    />
+                </el-form-item>
+            </SdxuArticlePanel>
+            <SdxuArticlePanel :title="t('view.task.DataSetting')">
+                <el-form-item
+                    prop="datasets"
+                    :label="`${t('view.task.DataSet')}:`"
+                >
+                    <el-select
+                        v-model="params.datasets"
+                        size="small"
+                        :placeholder="t('view.task.form.Please_select_the_dataset')"
+                        multiple
                     >
                         <el-option
-                            v-for="item in imageOptions"
-                            :key="item.value"
+                            v-for="item in datasetsOptions"
+                            :key="item.label"
                             :label="item.label"
                             :value="item.value"
                         />
                     </el-select>
-                    <SdxuDropdownTip
-                        :title="`${t('view.task.ImagePacInfo')}`"
-                        :disabled="!packagesList.length"
-                        slot="postfix"
-                    >
-                        <SdxuIconButton
-                            slot="ref"
-                            size="large"
-                            icon="sdx-icon sdx-icon-warning"
-                        />
-                        <div
-                            style="height: 300px"
-                        >
-                            <SdxuScroll>
-                                <div
-                                    v-for="(item, index) in packagesList"
-                                    :key="index"
-                                    class="package-info__item"
-                                >
-                                    <div>{{ item.name }}</div>
-                                    <div>{{ item.version }}</div>
-                                </div>
-                            </SdxuScroll>
-                        </div>
-                    </SdxuDropdownTip>
-                </SdxuAppender>
-            </el-form-item>
-            <el-form-item
-                prop="resourceConfigObj"
-                :label="`${t('view.task.form.ResourceAllocation')}:`"
-            >
-                <i class="icon">*</i>
-                <SdxwResourceConfig
-                    v-if="!isGpuEnt"
-                    v-model="cpuObj"
-                    type="onlycpu"
-                    :data-ready="dataReady"
-                />
-
-                <div v-if="isGpuEnt">
-                    <SdxwResourceConfig
-                        v-model="cpuObj"
-                        type="cpu"
-                        :data-ready="dataReady"
-                    />
-                    <SdxwResourceConfig
-                        v-model="gpuObj"
-                        type="gpu"
-                        :data-ready="dataReady"
-                    />
-                </div>
-            </el-form-item>
-            <el-form-item
-                prop="instanceNumber"
-                :label="`${t('view.task.InstanceNum')}:`"
-            >
-                <el-input-number
-                    v-model="params.instanceNumber"
-                    :min="1"
-                />
-            </el-form-item>
-            <SdxwExpandLabel
-                :label="`${t('view.task.DataSetting')}`"
-            />
-            <el-form-item
-                prop="datasets"
-                :label="`${t('view.task.DataSet')}:`"
-            >
-                <el-select
-                    v-model="params.datasets"
-                    size="small"
-                    :placeholder="t('view.task.form.Please_select_the_dataset')"
-                    multiple
+                    <div class="form-tip">
+                        {{ t('view.task.DatasetInfo') }}
+                    </div>
+                </el-form-item>
+                <el-form-item
+                    v-if="!cooperation"
+                    prop="datasources"
+                    :label="`${t('view.task.form.DataSource')}:`"
                 >
-                    <el-option
-                        v-for="item in datasetsOptions"
-                        :key="item.label"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
-                <div class="form-tip">
-                    {{ t('view.task.DatasetInfo') }}
-                </div>
-            </el-form-item>
-            <el-form-item
-                v-if="!cooperation"
-                prop="datasources"
-                :label="`${t('view.task.form.DataSource')}:`"
-            >
-                <data-source-select v-model="params.datasources" />
-                <div class="form-tip">
-                    {{ t('view.task.DataSourceInfo') }}
-                </div>
-            </el-form-item>
-            <SdxwExpandLabel
-                :label="`${t('view.task.AdvanceSetting')}`"
+                    <data-source-select v-model="params.datasources" />
+                    <div class="form-tip">
+                        {{ t('view.task.DataSourceInfo') }}
+                    </div>
+                </el-form-item>
+            </SdxuArticlePanel>
+            <SdxuArticlePanel
+                :title="t('view.task.AdvanceSetting')"
                 expandable
                 :expanded.sync="showMoreSetting"
-            />
-            <div v-show="showMoreSetting">
-                <el-form-item
-                    :label="`${t('view.task.EnvVars')}:`"
-                >
-                    <!-- <SdxuInput
+            >
+                <div v-show="showMoreSetting">
+                    <el-form-item
+                        :label="`${t('view.task.EnvVars')}:`"
+                    >
+                        <!-- <SdxuInput
                         v-model="params.environmentsStr"
                         size="small"
                         :placeholder="`${t('view.task.EnvVarsPlaceholder')}`"
                     /> -->
-                    <div>
-                        <div
-                            v-for="(item, index) in params.environments"
-                            :key="index"
-                            style="display:flex;justify-content:space-between;width:580px;margin:5px 0;"
-                        >
-                            <SdxuInput
-                                v-model="item.name"
-                                style="width:230px;"
-                                :placeholder="`${t('view.task.ParamName')}`"
-                            />
-                            <span>-</span>
-                            <SdxuInput
-                                v-model="item.value"
-                                style="width:230px;"
-                                :placeholder="`${t('view.task.ParamValue')}`"
-                            />
-                            <div style="width:70px;">
-                                <sdxu-button
-                                    v-if="!index"
-                                    invert
-                                    @click="handleEnvironChange(true)"
-                                >
-                                    <i class="sdx-icon sdx-icon-plus" />
-                                </sdxu-button>
-                                <sdxu-button
-                                    v-if="index===1"
-                                    invert
-                                    @click="handleEnvironChange()"
-                                >
-                                    <i class="sdx-icon sdx-bianzu3" />
-                                </sdxu-button>
-                            </div>
-                        </div>
-                    </div>
-                </el-form-item>
-                <el-form-item
-                    :label="`${t('view.task.StartCommand')}:`"
-                >
-                    <SdxuInput
-                        v-model="params.startCommand"
-                        size="small"
-                        :placeholder="`${t('view.task.StartCommand')}`"
-                    />
-                    <div class="form-tip">
-                        {{ t('view.task.StartCommandTip') }}
-                    </div>
-                </el-form-item>
-                <el-form-item
-                    :label="`${t('view.task.StartParams')}:`"
-                >
-                    <SdxuInput
-                        v-model="params.startArgsStr"
-                        size="small"
-                        :placeholder="`${t('view.task.Params')}`"
-                    />
-                </el-form-item>
-                <el-form-item
-                    :label="`${t('view.task.OutputPath')}:`"
-                >
-                    <div>
-                        <SdxwFileSelect
-                            v-model="params.outputPath"
-                            :string-model="true"
-                            check-type="folder"
-                            source="ceph"
-                        />
-                    </div>
-                    <div class="form-tip">
-                        {{ t('view.task.OutputPathTip') }}
-                    </div>
-                </el-form-item>
-                <el-form-item
-                    :label="`${t('view.task.PortRoute')}:`"
-                >
-                    <div>
-                        <div
-                            v-for="(item, index) in params.forwardPorts"
-                            :key="index"
-                            style="display:flex;justify-content:space-between;width:580px;margin:5px 0;"
-                        >
-                            <el-select
-                                v-model="item.protocol"
-                                style="width:230px;"
+                        <div>
+                            <div
+                                v-for="(item, index) in params.environments"
+                                :key="index"
+                                style="display:flex;justify-content:space-between;width:580px;margin:5px 0;"
                             >
-                                <el-option
-                                    v-for="option in protocolOptions"
-                                    :key="option"
-                                    :label="option"
-                                    :value="option"
+                                <SdxuInput
+                                    v-model="item.name"
+                                    style="width:230px;"
+                                    :placeholder="`${t('view.task.ParamName')}`"
                                 />
-                            </el-select>
-                            <span>-</span>
-                            <SdxuInput
-                                v-model.number="item.port"
-                                style="width:230px;"
-                                :placeholder="`${t('view.task.PortNumber')}`"
-                            />
-                            <div style="width:70px;">
-                                <sdxu-button
-                                    v-if="!index"
-                                    invert
-                                    @click="handleProtChange(true)"
-                                >
-                                    <i class="sdx-icon sdx-icon-plus" />
-                                </sdxu-button>
-                                <sdxu-button
-                                    v-if="index===1"
-                                    invert
-                                    @click="handleProtChange()"
-                                >
-                                    <i class="sdx-icon sdx-bianzu3" />
-                                </sdxu-button>
+                                <span>-</span>
+                                <SdxuInput
+                                    v-model="item.value"
+                                    style="width:230px;"
+                                    :placeholder="`${t('view.task.ParamValue')}`"
+                                />
+                                <div style="width:70px;">
+                                    <sdxu-button
+                                        v-if="!index"
+                                        invert
+                                        @click="handleEnvironChange(true)"
+                                    >
+                                        <i class="sdx-icon sdx-icon-plus" />
+                                    </sdxu-button>
+                                    <sdxu-button
+                                        v-if="index===1"
+                                        invert
+                                        @click="handleEnvironChange()"
+                                    >
+                                        <i class="sdx-icon sdx-bianzu3" />
+                                    </sdxu-button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-tip">
-                        {{ t('view.task.PortRouteTip') }}
-                    </div>
-                </el-form-item>
-            </div>
+                    </el-form-item>
+                    <el-form-item
+                        :label="`${t('view.task.StartCommand')}:`"
+                    >
+                        <SdxuInput
+                            v-model="params.startCommand"
+                            size="small"
+                            :placeholder="`${t('view.task.StartCommand')}`"
+                        />
+                        <div class="form-tip">
+                            {{ t('view.task.StartCommandTip') }}
+                        </div>
+                    </el-form-item>
+                    <el-form-item
+                        :label="`${t('view.task.StartParams')}:`"
+                    >
+                        <SdxuInput
+                            v-model="params.startArgsStr"
+                            size="small"
+                            :placeholder="`${t('view.task.Params')}`"
+                        />
+                    </el-form-item>
+                    <el-form-item
+                        :label="`${t('view.task.OutputPath')}:`"
+                    >
+                        <div>
+                            <SdxwFileSelect
+                                v-model="params.outputPath"
+                                :string-model="true"
+                                check-type="folder"
+                                source="ceph"
+                            />
+                        </div>
+                        <div class="form-tip">
+                            {{ t('view.task.OutputPathTip') }}
+                        </div>
+                    </el-form-item>
+                    <el-form-item
+                        :label="`${t('view.task.PortRoute')}:`"
+                    >
+                        <div>
+                            <div
+                                v-for="(item, index) in params.forwardPorts"
+                                :key="index"
+                                style="display:flex;justify-content:space-between;width:580px;margin:5px 0;"
+                            >
+                                <el-select
+                                    v-model="item.protocol"
+                                    style="width:230px;"
+                                >
+                                    <el-option
+                                        v-for="option in protocolOptions"
+                                        :key="option"
+                                        :label="option"
+                                        :value="option"
+                                    />
+                                </el-select>
+                                <span>-</span>
+                                <SdxuInput
+                                    v-model.number="item.port"
+                                    style="width:230px;"
+                                    :placeholder="`${t('view.task.PortNumber')}`"
+                                />
+                                <div style="width:70px;">
+                                    <sdxu-button
+                                        v-if="!index"
+                                        invert
+                                        @click="handleProtChange(true)"
+                                    >
+                                        <i class="sdx-icon sdx-icon-plus" />
+                                    </sdxu-button>
+                                    <sdxu-button
+                                        v-if="index===1"
+                                        invert
+                                        @click="handleProtChange()"
+                                    >
+                                        <i class="sdx-icon sdx-bianzu3" />
+                                    </sdxu-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-tip">
+                            {{ t('view.task.PortRouteTip') }}
+                        </div>
+                    </el-form-item>
+                </div>
+            </SdxuArticlePanel>
         </el-form>
     </BaseForm>
 </template>
@@ -348,12 +346,12 @@ import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
-import ExpandLabel from '@sdx/widget/components/expand-label';
 import FileSelect from '@sdx/widget/components/file-select';
 import Appender from '@sdx/ui/components/appender';
 import DropdownTip from '@sdx/ui/components/dropdown-tip';
 import IconButton from '@sdx/ui/components/icon-button';
 import Scroll from '@sdx/ui/components/scroll';
+import ArticlePanel from '@sdx/ui/components/article-panel';
 
 const RESOURCE_KEY = 'DEPLOY';
 
@@ -364,7 +362,6 @@ export default {
         BaseForm,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
-        [ExpandLabel.name]: ExpandLabel,
         [Select.name]: Select,
         [Button.name]: Button,
         SdxuInput,
@@ -376,6 +373,7 @@ export default {
         [DropdownTip.name]: DropdownTip,
         [IconButton.name]: IconButton,
         [Scroll.name]: Scroll,
+        [ArticlePanel.name]: ArticlePanel
     },
     props: {
         task: {

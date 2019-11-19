@@ -3,19 +3,46 @@
     text-align: left;
     display: flex;
     align-items: center;
-    font-size: 0;
-    &:before {
-        content: '';
-        width: 4px;
-        height: 16px;
-        font-size: $sdx-h1-font-size;
-        border-radius: 1px;
-        background: $sdx-primary-color;
-        margin-right: $sdx-gap-small - 2px;
-    }
+    justify-content: space-between;
+
     @include element('main') {
+        &:before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            font-size: $sdx-h1-font-size;
+            border-radius: 1px;
+            background: $sdx-primary-color;
+            margin-right: $sdx-gap-small - 2px;
+        }
         font-size: $sdx-h1-font-size;
         color: $sdx-secondary-color;
         line-height: 1;
+        display: flex;
+        align-items: center;
+
+        &.hoverable:hover {
+            cursor: pointer;
+        }
+
+        @include modifier('icon') {
+            margin-left: 16px;
+            .sdxu-icon-button {
+                font-size: 12px;
+                height: 24px;
+                width: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: $sdx-secondary-color;
+                background: #EDEFF2;
+                &:hover {
+                    color: $sdx-secondary-color;
+                }
+                i {
+                    font-size: 12px;
+                }
+            }
+        }
     }
 }

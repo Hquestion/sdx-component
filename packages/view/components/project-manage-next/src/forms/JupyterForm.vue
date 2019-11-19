@@ -2,7 +2,7 @@
     <BaseForm
         :title="`${params.uuid ? t('view.task.form.edit'):t('view.task.form.create')} Jupyter ${t('view.task.form.task')}`"
         class="form-jupyter"
-        :label-width="lang$ === 'en' ? 190 : 100"
+        :label-width="lang$ === 'en' ? 206 : 116"
         icon="sdx-Jupyterrenwu"
         @commit="commit"
         :show-create-project="showCreateProject"
@@ -18,173 +18,170 @@
             :rules="rules"
             :model="params"
         >
-            <SdxwExpandLabel
-                :label="t('view.task.BasicSetting')"
-            />
-            <el-form-item
-                :label="`${t('view.task.taskName')}:`"
-                prop="name"
-            >
-                <SdxuInput
-                    v-model="params.name"
-                    :searchable="true"
-                    size="small"
-                    :placeholder="t('view.task.form.Please_enter_the_task_name')"
-                />
-            </el-form-item>
-            <el-form-item
-                prop="description"
-                :label="`${t('view.task.TaskDescription')}:`"
-            >
-                <SdxuInput
-                    type="textarea"
-                    v-model="params.description"
-                    size="small"
-                    :placeholder="t('view.task.form.Please_enter_a_task_description')"
-                />
-            </el-form-item>
-            <el-form-item
-                :label="`${t('view.task.RelatedProject')}:`"
-                prop="project"
-                v-if="!projectId && !params.uuid"
-            >
-                <SdxuAppender>
-                    <el-select
-                        v-model="params.project"
-                        size="small"
-                        :placeholder="t('view.task.EnterRelatedProject')"
-                        filterable
-                        @change="projectSelected"
-                    >
-                        <el-option
-                            v-for="item in projectOptions"
-                            :key="item.uuid"
-                            :label="item.name"
-                            :value="item.uuid"
-                        />
-                    </el-select>
-                    <SdxuButton
-                        type="primary"
-                        invert
-                        slot="postfix"
-                        size="small"
-                        class="create-project-button"
-                        @click="createProject"
-                    >
-                        <i class="sdx-icon sdx-xinjianhao" />
-                        {{ t('view.task.CreateProject') }}
-                    </SdxuButton>
-                </SdxuAppender>
-            </el-form-item>
-            <SdxwExpandLabel
-                :label="t('view.task.EnvSetting')"
-            />
-            <el-form-item
-                prop="imageId"
-                :label="`${t('view.task.RuntimeEnvironment')}:`"
-            >
-                <SdxuAppender style="width: 560px;">
-                    <el-select
-                        v-model="params.imageId"
+            <SdxuArticlePanel :title="t('view.task.BasicSetting')">
+                <el-form-item
+                    :label="`${t('view.task.taskName')}:`"
+                    prop="name"
+                >
+                    <SdxuInput
+                        v-model="params.name"
                         :searchable="true"
                         size="small"
-                        @change="getImagePackages"
-                        :placeholder="t('view.task.form.Please_select_the_operating_environment')"
+                        :placeholder="t('view.task.form.Please_enter_the_task_name')"
+                    />
+                </el-form-item>
+                <el-form-item
+                    prop="description"
+                    :label="`${t('view.task.TaskDescription')}:`"
+                >
+                    <SdxuInput
+                        type="textarea"
+                        v-model="params.description"
+                        size="small"
+                        :placeholder="t('view.task.form.Please_enter_a_task_description')"
+                    />
+                </el-form-item>
+                <el-form-item
+                    :label="`${t('view.task.RelatedProject')}:`"
+                    prop="project"
+                    v-if="!projectId && !params.uuid"
+                >
+                    <SdxuAppender>
+                        <el-select
+                            v-model="params.project"
+                            size="small"
+                            :placeholder="t('view.task.EnterRelatedProject')"
+                            filterable
+                            @change="projectSelected"
+                        >
+                            <el-option
+                                v-for="item in projectOptions"
+                                :key="item.uuid"
+                                :label="item.name"
+                                :value="item.uuid"
+                            />
+                        </el-select>
+                        <SdxuButton
+                            type="primary"
+                            invert
+                            slot="postfix"
+                            size="small"
+                            class="create-project-button"
+                            @click="createProject"
+                        >
+                            <i class="sdx-icon sdx-xinjianhao" />
+                            {{ t('view.task.CreateProject') }}
+                        </SdxuButton>
+                    </SdxuAppender>
+                </el-form-item>
+            </SdxuArticlePanel>
+            <SdxuArticlePanel :title="t('view.task.EnvSetting')">
+                <el-form-item
+                    prop="imageId"
+                    :label="`${t('view.task.RuntimeEnvironment')}:`"
+                >
+                    <SdxuAppender style="width: 560px;">
+                        <el-select
+                            v-model="params.imageId"
+                            :searchable="true"
+                            size="small"
+                            @change="getImagePackages"
+                            :placeholder="t('view.task.form.Please_select_the_operating_environment')"
+                        >
+                            <el-option
+                                v-for="item in imageOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
+                        <SdxuDropdownTip
+                            :title="t('view.task.ImagePacInfo')"
+                            width="260px"
+                            :disabled="!packagesList.length"
+                            slot="postfix"
+                        >
+                            <SdxuIconButton
+                                slot="ref"
+                                size="large"
+                                icon="sdx-icon sdx-icon-warning"
+                            />
+                            <div
+                                style="height: 300px"
+                            >
+                                <SdxuScroll>
+                                    <div
+                                        v-for="(item, index) in packagesList"
+                                        :key="index"
+                                        class="package-info__item"
+                                    >
+                                        <div>{{ item.name }}</div>
+                                        <div>{{ item.version }}</div>
+                                    </div>
+                                </SdxuScroll>
+                            </div>
+                        </SdxuDropdownTip>
+                    </SdxuAppender>
+                </el-form-item>
+                <el-form-item
+                    prop="resourceConfigObj"
+                    :label="`${t('view.task.form.ResourceAllocation')}:`"
+                >
+                    <i class="icon">*</i>
+                    <SdxwResourceConfig
+                        v-if="!isGpuEnt"
+                        v-model="cpuObj"
+                        type="onlycpu"
+                        :data-ready="dataReady"
+                    />
+
+                    <div v-if="isGpuEnt">
+                        <SdxwResourceConfig
+                            v-model="cpuObj"
+                            type="cpu"
+                            :data-ready="dataReady"
+                        />
+                        <SdxwResourceConfig
+                            v-model="gpuObj"
+                            type="gpu"
+                            :data-ready="dataReady"
+                        />
+                    </div>
+                </el-form-item>
+            </SdxuArticlePanel>
+            <SdxuArticlePanel :title="t('view.task.DataSetting')">
+                <el-form-item
+                    prop="datasets"
+                    :label="`${t('view.task.DataSet')}:`"
+                >
+                    <el-select
+                        v-model="params.datasets"
+                        size="small"
+                        :placeholder="t('view.task.form.Please_select_the_dataset')"
+                        multiple
                     >
                         <el-option
-                            v-for="item in imageOptions"
-                            :key="item.value"
+                            v-for="item in datasetsOptions"
+                            :key="item.label"
                             :label="item.label"
                             :value="item.value"
                         />
                     </el-select>
-                    <SdxuDropdownTip
-                        :title="t('view.task.ImagePacInfo')"
-                        width="260px"
-                        :disabled="!packagesList.length"
-                        slot="postfix"
-                    >
-                        <SdxuIconButton
-                            slot="ref"
-                            size="large"
-                            icon="sdx-icon sdx-icon-warning"
-                        />
-                        <div
-                            style="height: 300px"
-                        >
-                            <SdxuScroll>
-                                <div
-                                    v-for="(item, index) in packagesList"
-                                    :key="index"
-                                    class="package-info__item"
-                                >
-                                    <div>{{ item.name }}</div>
-                                    <div>{{ item.version }}</div>
-                                </div>
-                            </SdxuScroll>
-                        </div>
-                    </SdxuDropdownTip>
-                </SdxuAppender>
-            </el-form-item>
-            <el-form-item
-                prop="resourceConfigObj"
-                :label="`${t('view.task.form.ResourceAllocation')}:`"
-            >
-                <i class="icon">*</i>
-                <SdxwResourceConfig
-                    v-if="!isGpuEnt"
-                    v-model="cpuObj"
-                    type="onlycpu"
-                    :data-ready="dataReady"
-                />
-
-                <div v-if="isGpuEnt">
-                    <SdxwResourceConfig
-                        v-model="cpuObj"
-                        type="cpu"
-                        :data-ready="dataReady"
-                    />
-                    <SdxwResourceConfig
-                        v-model="gpuObj"
-                        type="gpu"
-                        :data-ready="dataReady"
-                    />
-                </div>
-            </el-form-item>
-            <SdxwExpandLabel
-                :label="t('view.task.DataSetting')"
-            />
-            <el-form-item
-                prop="datasets"
-                :label="`${t('view.task.DataSet')}:`"
-            >
-                <el-select
-                    v-model="params.datasets"
-                    size="small"
-                    :placeholder="t('view.task.form.Please_select_the_dataset')"
-                    multiple
+                    <div class="form-tip">
+                        {{ t('view.task.DatasetInfo') }}
+                    </div>
+                </el-form-item>
+                <el-form-item
+                    v-if="!cooperation"
+                    prop="datasources"
+                    :label="`${t('view.task.form.DataSource')}:`"
                 >
-                    <el-option
-                        v-for="item in datasetsOptions"
-                        :key="item.label"
-                        :label="item.label"
-                        :value="item.value"
-                    />
-                </el-select>
-                <div class="form-tip">
-                    {{ t('view.task.DatasetInfo') }}
-                </div>
-            </el-form-item>
-            <el-form-item
-                v-if="!cooperation"
-                prop="datasources"
-                :label="`${t('view.task.form.DataSource')}:`"
-            >
-                <data-source-select v-model="params.datasources" />
-                <div class="form-tip">
-                    {{ t('view.task.DataSourceInfo') }}
-                </div>
-            </el-form-item>
+                    <data-source-select v-model="params.datasources" />
+                    <div class="form-tip">
+                        {{ t('view.task.DataSourceInfo') }}
+                    </div>
+                </el-form-item>
+            </SdxuArticlePanel>
         </el-form>
     </BaseForm>
 </template>
@@ -206,11 +203,11 @@ import DataSourceSelect from './DataSourceSelect';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
-import ExpandLabel from '@sdx/widget/components/expand-label';
 import DropdownTip from '@sdx/ui/components/dropdown-tip';
 import IconButton from '@sdx/ui/components/icon-button';
 import Scroll from '@sdx/ui/components/scroll';
 import Appender from '@sdx/ui/components/appender';
+import ArticlePanel from '@sdx/ui/components/article-panel';
 
 const RESOURCE_KEY = 'DEPLOY';
 
@@ -222,7 +219,6 @@ export default {
         [Form.name]: Form,
         [Button.name]: Button,
         [FormItem.name]: FormItem,
-        [ExpandLabel.name]: ExpandLabel,
         [Select.name]: Select,
         [DropdownTip.name]: DropdownTip,
         [IconButton.name]: IconButton,
@@ -231,6 +227,7 @@ export default {
         SdxwResourceConfig,
         DataSourceSelect,
         [Appender.name]: Appender,
+        [ArticlePanel.name]: ArticlePanel
     },
     props: {
         task: {

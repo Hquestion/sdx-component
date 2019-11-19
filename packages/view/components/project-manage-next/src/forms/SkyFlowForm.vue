@@ -2,7 +2,7 @@
     <BaseForm
         :title="`${params.uuid || params.Id ? t('view.task.form.edit') : t('view.task.form.create')} SkyFlow ${t('view.task.form.task')}`"
         class="form-containerdev"
-        :label-width="lang$ === 'en' ? 190 : 160"
+        :label-width="lang$ === 'en' ? 206 : 176"
         icon="sdx-skyflowrenwu"
         @commit="commit"
         :show-create-project="showCreateProject"
@@ -18,76 +18,75 @@
             :rules="rules"
             :model="params"
         >
-            <SdxwExpandLabel
-                :label="t('view.task.BasicSetting')"
-            />
-            <el-form-item
-                prop="name"
-                :label="`${t('view.task.WorkflowName')}:`"
-            >
-                <SdxuInput
-                    v-model="params.name"
-                    :searchable="true"
-                    size="small"
-                    :placeholder="t('view.task.EnterWorkflowName')"
-                />
-            </el-form-item>
-            <el-form-item
-                prop="description"
-                :label="`${t('view.task.WorkflowDesc')}:`"
-            >
-                <SdxuInput
-                    type="textarea"
-                    :searchable="true"
-                    v-model="params.description"
-                    size="small"
-                    :placeholder="t('view.task.EnterWorkflowDesc')"
-                />
-            </el-form-item>
-            <el-form-item
-                prop="params"
-                :label="`${t('view.task.Params')}:`"
-            >
-                <SdxuInput
-                    :searchable="true"
-                    v-model="params.params"
-                    size="small"
-                    :placeholder="t('view.task.EnterWorkflowParam')"
-                />
-                <div class="form-tip">
-                    {{ t('view.task.WorkflowParamTip') }}
-                </div>
-            </el-form-item>
-            <el-form-item
-                :label="`${t('view.task.RelatedProject')}:`"
-                prop="project"
-                v-if="!projectId"
-            >
-                <el-select
-                    v-model="params.project"
-                    size="small"
-                    :placeholder="t('view.task.EnterRelatedProject')"
-                    style="width:420px;margin-right:10px;"
-                    filterable
+            <SdxuArticlePanel :title="t('view.task.BasicSetting')">
+                <el-form-item
+                    prop="name"
+                    :label="`${t('view.task.WorkflowName')}:`"
                 >
-                    <el-option
-                        v-for="item in projectOptions"
-                        :key="item.uuid"
-                        :label="item.name"
-                        :value="item.uuid"
+                    <SdxuInput
+                        v-model="params.name"
+                        :searchable="true"
+                        size="small"
+                        :placeholder="t('view.task.EnterWorkflowName')"
                     />
-                </el-select>
-                <SdxuButton
-                    type="primary"
-                    invert
-                    size="small"
-                    class="create-project-button"
-                    @click="createProject"
+                </el-form-item>
+                <el-form-item
+                    prop="description"
+                    :label="`${t('view.task.WorkflowDesc')}:`"
                 >
-                    <i class="sdx-icon sdx-xinjianhao" />
-                    {{ t('view.task.CreateProject') }}
-                </SdxuButton>
-            </el-form-item>
+                    <SdxuInput
+                        type="textarea"
+                        :searchable="true"
+                        v-model="params.description"
+                        size="small"
+                        :placeholder="t('view.task.EnterWorkflowDesc')"
+                    />
+                </el-form-item>
+                <el-form-item
+                    prop="params"
+                    :label="`${t('view.task.Params')}:`"
+                >
+                    <SdxuInput
+                        :searchable="true"
+                        v-model="params.params"
+                        size="small"
+                        :placeholder="t('view.task.EnterWorkflowParam')"
+                    />
+                    <div class="form-tip">
+                        {{ t('view.task.WorkflowParamTip') }}
+                    </div>
+                </el-form-item>
+                <el-form-item
+                    :label="`${t('view.task.RelatedProject')}:`"
+                    prop="project"
+                    v-if="!projectId"
+                >
+                    <el-select
+                        v-model="params.project"
+                        size="small"
+                        :placeholder="t('view.task.EnterRelatedProject')"
+                        style="width:420px;margin-right:10px;"
+                        filterable
+                    >
+                        <el-option
+                            v-for="item in projectOptions"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid"
+                        />
+                    </el-select>
+                    <SdxuButton
+                        type="primary"
+                        invert
+                        size="small"
+                        class="create-project-button"
+                        @click="createProject"
+                    >
+                        <i class="sdx-icon sdx-xinjianhao" />
+                        {{ t('view.task.CreateProject') }}
+                    </SdxuButton>
+                </el-form-item>
+            </SdxuArticlePanel>
         </el-form>
     </BaseForm>
 </template>
@@ -102,7 +101,7 @@ import {  createTask, updateTask } from '@sdx/utils/src/api/project';
 import { nameWithChineseValidator, descValidator} from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
 import projectDetailMixin from './projectDetailMixin';
-import ExpandLabel from '@sdx/widget/components/expand-label';
+import ArticlePanel from '@sdx/ui/components/article-panel';
 export default {
     name: 'SkyFlowForm',
     mixins: [locale, projectDetailMixin],
@@ -110,11 +109,11 @@ export default {
         BaseForm,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
-        [ExpandLabel.name]: ExpandLabel,
         [Select.name]: Select,
         SdxuInput,
         [InputNumber.name]: InputNumber,
-        [Button.name]: Button
+        [Button.name]: Button,
+        [ArticlePanel.name]: ArticlePanel
     },
     props: {
         task: {

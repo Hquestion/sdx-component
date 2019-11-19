@@ -13,6 +13,10 @@ export const getModelList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}model-profiles`, params);
 }, readAuths.MODEL_MODEL_READ);
 
+export const getNativeModelList = authWrapper(function (params) {
+    return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}models`, params);
+}, readAuths.MODEL_MODEL_READ);
+
 export function getModelInfo(modelId) {
     return httpService.get(`${modelApi}/${modelId}`);
 }
@@ -179,11 +183,12 @@ export function getApiDetail(serviceUuid) {
         'groups': [],
         'isPublished': false,
     });
-    return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services/${serviceUuid}`);
+    // return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services/${serviceUuid}`);
 }
 
 export default {
     getModelList,
+    getNativeModelList,
     getModelInfo,
     getLabels,
     createModel,

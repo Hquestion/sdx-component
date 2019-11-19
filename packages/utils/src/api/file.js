@@ -1,11 +1,11 @@
 import httpService from '../http-service';
 import { getProjectList } from './project';
 import shareCenter from '../helper/shareCenter';
-import { FILE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE, PROJECT_MANAGE_GATEWAY_BASE } from './config';
+import { FILE_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config';
 import { isString } from '../helper/tool';
 import { asyncJobStatus } from '../const/file';
 import { Notification } from 'element-ui';
-import {getSimpleUserList} from './user';
+// import {getSimpleUserList} from './user';
 
 export function getFilesList(params = {}) {
     let userInfo = shareCenter.getUser() || {};
@@ -34,7 +34,33 @@ export function getFilesList(params = {}) {
         onlyFile: +onlyFile
     });
 }
-
+export function getNativeFilesList(params = {}) {
+    let userInfo = shareCenter.getUser() || {};
+    const {
+        ownerId = userInfo.userId,
+        path = '/',
+        start = 1,
+        count = -1,
+        orderBy = 'name',
+        order = 'asc',
+        filesystem = 'cephfs',
+        fileExtension = '',
+        onlyDirectory = 0,
+        onlyFile = 0
+    } = params;
+    return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files`, {
+        ownerId: ownerId || userInfo.userId,
+        path,
+        start,
+        count,
+        orderBy,
+        order,
+        filesystem,
+        fileExtensions: fileExtension ? fileExtension.split(',') : undefined,
+        onlyDirectory: +onlyDirectory,
+        onlyFile: +onlyFile
+    });
+}
 export function searchFiles(params) {
     let _resolve, _reject;
     let userInfo = shareCenter.getUser() || {};
@@ -245,16 +271,16 @@ export function getMyAcceptedShare(params) {
     });
 }
 
-export function getProjectShare(params) {
-    let userInfo = shareCenter.getUser() || {};
-    const {
-        ownerId = userInfo.userId,
-        path = params.path || '/',
-        start = 1,
-        count = -1,
-        orderBy = 'name',
-        order = 'asc'
-    } = params;
+export function getProjectShare() {
+    // let userInfo = shareCenter.getUser() || {};
+    // const {
+    //     ownerId = userInfo.userId,
+    //     path = params.path || '/',
+    //     start = 1,
+    //     count = -1,
+    //     orderBy = 'name',
+    //     order = 'asc'
+    // } = params;
     // return httpService.get(`${COMPOSE_GATEWAY_BASE}project-share-profiles`, {
     //     userId: userId || userInfo.userId,
     //     path,
@@ -485,6 +511,7 @@ export function deleteTaskType(jobType) {
 
 export default {
     getFilesList,
+    getNativeFilesList,
     searchFiles,
     mkdir,
     rename,

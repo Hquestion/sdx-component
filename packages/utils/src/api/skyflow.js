@@ -13,6 +13,10 @@ export const getSkyflowList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}skyflow-profiles`, params);
 }, readAuths.SKYFLOW_FLOW_READ);
 
+export const getNativeSkyflowList = authWrapper(function (params) {
+    return httpService.get(`${SKYFLOW_MANAGE_GATEWAY_BASE}skyflows`, params);
+}, readAuths.SKYFLOW_FLOW_READ);
+
 export const getSkyflowListWithAuth = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}skyflow-profiles`, params);
 }, readAuths.SKYFLOW_TEMPLATE_FLOW_READ);
@@ -470,6 +474,7 @@ export function checkDuplicateCrontabName(params) {
 
 export default {
     getSkyflowList,
+    getNativeSkyflowList,
     getSkyflowTemplates,
     updateWorkflow,
     createWorkflow,

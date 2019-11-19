@@ -10,10 +10,10 @@ const projectApi = `${PROJECT_MANAGE_GATEWAY_BASE}projects`;
 
 const taskApi = `${PROJECT_MANAGE_GATEWAY_BASE}tasks`;
 
-// 聚合拿到project
-// export function getProjectList(params) {
-//     return httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params);
-// }
+export const getNativeProjectList = authWrapper(params =>  httpService.get(`${PROJECT_MANAGE_GATEWAY_BASE}projects`, params),
+    readAuths.PROJECT_PROJECT_READ
+);
+
 export const getProjectList = authWrapper(params =>  httpService.get(`${COMPOSE_GATEWAY_BASE}project-profiles`, params),
     readAuths.PROJECT_PROJECT_READ
 );
@@ -31,6 +31,10 @@ export const getSharingProjects = authWrapper(function (params) {
 
 export const getTaskList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
+}, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
+
+export const getNativeTaskList = authWrapper(function (params) {
+    return httpService.get(`${PROJECT_MANAGE_GATEWAY_BASE}tasks`, params);
 }, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
 
 export function getProjectTasks(uuid, params) {
@@ -105,6 +109,8 @@ export function getTaskDataSource(params) {
 
 export default {
     getTaskList,
+    getNativeTaskList,
+    getNativeProjectList,
     getProjectList,
     getProjectDetail,
     createProject,

@@ -14,6 +14,7 @@
                         :key="index"
                         :meta="item.meta"
                         class="sdxw-general-task-list__container--element"
+                        @operate="handleOperate"
                     >
                         <template #footerLeft>
                             <sdxu-button
@@ -52,7 +53,7 @@
                                 @click="handleOperation(el.value, item, projectId)"
                                 type="text"
                             >
-                                {{ t(el.label) }}
+                                {{ el.label }}
                             </sdxu-button>
                         </template>
                     </sdxw-subject-card>
@@ -159,6 +160,9 @@ export default {
         }
     },
     methods: {
+        handleOperate(operate) {
+            this.handleDetail({uuid: operate.id});
+        },
         initList(hideLoading) {
             if (this._isDestroyed) {
                 clearInterval(this.refreshTimer);

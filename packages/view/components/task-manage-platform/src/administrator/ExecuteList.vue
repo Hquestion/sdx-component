@@ -137,9 +137,12 @@
                     :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
-
                     :label="t('view.task.tipCard.SubordinateGroup')"
-                />
+                >
+                    <template #default="{ row }">
+                        {{ getGroupsStr(row.owner && row.owner.groups) }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="executeType"
                     :label="t('view.task.executeType')"
@@ -163,7 +166,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="stoppedAt"
-                    :label="t('view.task.stopedAt')"
+                    :label="t('view.task.stoppedAt')"
                     sortable
                     min-width="130px"
                 >
@@ -333,6 +336,7 @@ export default {
                 prop: 'startedAt',
                 order: 'descending'
             },
+            savaParams: {}
         };
     },
     mixins: [locale],
@@ -349,6 +353,18 @@ export default {
     methods: {
         dateFormatter,
         timeDuration,
+        getGroupsStr(groups) {
+            let [arr,str] = [[], ''];
+            if (!groups.length) {
+                str = '';
+            } else {
+                groups.forEach(item => {
+                    arr.push(item.name);
+                });
+                str = arr.join(',');
+            }
+            return str;
+        },
         getGroupList(){
             const params = {
                 start: 1,
@@ -377,6 +393,7 @@ export default {
         },
         handleSearch() {
             this.current = 1;
+            this.savaParams = JSON.parse(JSON.stringify(this.params));
             this.getExecutionList();
         },
         handleReset() {
@@ -394,6 +411,7 @@ export default {
                 order: this.params.order,
                 orderBy: this.params.orderBy
             };
+            this.savaParams = JSON.parse(JSON.stringify(this.params));
             this.date = [];
             this.current = 1;
             this.getExecutionList();
@@ -404,11 +422,11 @@ export default {
                 clearInterval(this.refreshTimer);
                 this.refreshTimer = null;
             }
-            let date = this.date ? {
+            let date = this.date.length ? {
                 startedAt: `${this.date[0]} 00:00:00`,
                 stoppedAt: `${this.date[1]} 23:59:59`
             } : {};
-            const params = Object.assign({}, this.params, {
+            const params = Object.assign({}, this.savaParams, {
                 ...paginate(this.current, this.pageSize), 
             }, date);
             removeBlankAttr(params);
@@ -476,6 +494,7 @@ export default {
     },
     async created() {
         this.tableLoading = true;
+        this.savaParams = JSON.parse(JSON.stringify(this.params));
         await this.getGroupList();
         await this.getExecutionList();
     },

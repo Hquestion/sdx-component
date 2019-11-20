@@ -1,10 +1,14 @@
 <template>
-    <div>gg</div>
+    <div class="sdxv-model-detail">
+        <div class="title">
+            模型详情
+        </div>
+    </div>
 </template>
 
 <script>
 export default {
-    name: 'SdxuModelDetail',
+    name: 'SdxvModelDetail',
     data() {
         return {
             

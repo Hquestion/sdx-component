@@ -21,6 +21,9 @@ export function taskList(params) {
 export function executionList(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-execution-profiles`, params);
 }
+export function executionNativeList(params) {
+    return httpService.get(`${TASK_MANAGE_GATEWAY_BASE}executions`, params);
+}
 // full 版本删task
 export function deleteTask(uuid, params) {
     return httpService.remove(`${taskApi}/${uuid}`, params);
@@ -94,6 +97,12 @@ export function getTaskDataSource(params) {
 
 export default {
     getTaskList,
+    taskList,
+    executionList,
+    executionNativeList,
+    deleteTask,
+    stopExecution,
+    startExecution,
     removeTask,
     startTask,
     stopTask,

@@ -92,7 +92,11 @@
                 <el-table-column
                     prop="group"
                     :label="t('view.task.tipCard.SubordinateGroup')"
-                />
+                >
+                    <template #default="{ row }">
+                        {{ getGroupsStr(row.owner && row.owner.groups) }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="createdAt"
                     :label="t('sdxCommon.CreatedTime')"
@@ -191,6 +195,18 @@ export default {
         dateFormatter,
         parseMilli, 
         byteToGB,
+        getGroupsStr(groups) {
+            let [arr,str] = [[], ''];
+            if (!groups.length) {
+                str = '';
+            } else {
+                groups.forEach(item => {
+                    arr.push(item.name);
+                });
+                str = arr.join(',');
+            }
+            return str;
+        },
         getGroupList(){
             const params = {
                 start: 1,

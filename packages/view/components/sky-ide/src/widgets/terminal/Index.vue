@@ -218,6 +218,9 @@ export default {
                             color: #DDE5FE;
                         }
                     }
+                    .el-tabs__item {
+                        font-size: 14px;
+                    }
                     .el-tabs__item::after {
                         content: "";
                         display: block;

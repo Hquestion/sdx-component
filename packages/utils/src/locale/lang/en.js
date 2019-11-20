@@ -151,7 +151,7 @@ export default {
             startTime: 'Start Time',
             stopTime: 'Stop Time',
             startedAt: 'Execute Start Time',
-            stopedAt: 'Execute Stop Time',
+            stoppedAt: 'Execute Stop Time',
             executeTime: 'Execute Time',
             executeID: 'Execute ID',
             isOpen: 'isOpen',

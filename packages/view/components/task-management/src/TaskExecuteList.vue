@@ -137,15 +137,15 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="stopedAt"
-                    :label="t('view.task.stopedAt')"
+                    prop="stoppedAt"
+                    :label="t('view.task.stoppedAt')"
                     sortable="custom"
                     :sort-orders="sortOrders"
                     min-width="132px"
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ dateFormatter(row.stopedAt) }}
+                            {{ dateFormatter(row.stoppedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -158,7 +158,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ timeDuration(row.startedAt, row.stopedAt) }}
+                            {{ timeDuration(row.startedAt, row.stoppedAt || new Date()) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -283,7 +283,7 @@ export default {
                 executionType: '',
                 state: '',
                 startedAt: '',
-                stopedAt: '',
+                stoppedAt: '',
                 start: 1, 
                 count: 10
             },
@@ -298,7 +298,7 @@ export default {
             };
             if (Array.isArray(this.paramDate)) {
                 params.startedAt = this.paramDate[0];
-                params.stopedAt = this.paramDate[1];
+                params.stoppedAt = this.paramDate[1];
             }
             return Object.assign({}, this.params, params, {
                 start: (this.page - 1) * this.pageSize + 1,
@@ -371,7 +371,7 @@ export default {
     },
     created() {
         this.fetchData();
-        this.fetchDataMinxin = this.fetchData();
+        this.fetchDataMinxin = this.fetchData;
     },
     beforeDestroy() {
         this.stopPolling();

@@ -67,15 +67,15 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="stopedAt"
-                    :label="t('view.task.stopedAt')"
+                    prop="stoppedAt"
+                    :label="t('view.task.stoppedAt')"
                     sortable="custom"
                     :sort-orders="sortOrders"
                     min-width="120px"
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ dateFormatter(row.stopedAt) }}
+                            {{ dateFormatter(row.stoppedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -239,7 +239,7 @@ export default {
     },
     created() {
         this.fetchData();
-        this.fetchDataMinxin = this.fetchData();
+        this.fetchDataMinxin = this.fetchData;
     },
     watch: {
         queryParams() {

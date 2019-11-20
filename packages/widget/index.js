@@ -1,7 +1,6 @@
 // 这里会暴露所有组件
 import Breadcrumb from './components/breadcrumb';
 import FoldLabel from './components/fold-label';
-import ExpandLabel from './components/expand-label';
 import ChangePassword from './components/change-password';
 import UserinfoDialog from './components/userinfo-dialog';
 import ProjectCard from './components/projectcard';
@@ -29,7 +28,6 @@ import { registerI18n } from '@sdx/utils/src/locale';
 const SdxWidget = {
     Breadcrumb,
     FoldLabel,
-    ExpandLabel,
     ProjectCard,
     ChangePassword,
     UserinfoDialog,
@@ -57,7 +55,6 @@ const SdxWidget = {
 SdxWidget.install = (vue, { i18n } = {}) => {
     Breadcrumb.install(vue);
     FoldLabel.install(vue);
-    ExpandLabel.install(vue);
     ChangePassword.install(vue);
     UserinfoDialog.install(vue);
     ProjectCard.install(vue);

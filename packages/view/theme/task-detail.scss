@@ -17,6 +17,9 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('base-info-container', $bem-namespace-view) {
+    @include element('panel') {
+        margin: 20px 0 0 10px;
+    }
     @include element('link') {
         font-size: 14px;
         margin: 1px 0;

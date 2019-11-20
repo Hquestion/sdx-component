@@ -151,7 +151,7 @@ export default {
             startTime: '开始日期',
             stopTime: '结束日期',
             startedAt: '执行开始时间',
-            stopedAt: '执行结束时间',
+            stoppedAt: '执行结束时间',
             executeTime: '执行时长',
             executeID: '执行ID',
             isOpen: '是否启用',

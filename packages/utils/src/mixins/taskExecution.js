@@ -1,5 +1,5 @@
 import { TASK_TYPE, STATE_TYPE, OPERATION_INFO } from '@sdx/utils/src/const/task';
-import { startTask, stopTask, removeTask } from '../api/task';
+import { startTask, stopTask, removeTask, startExecution, stopExecution, removeExecution } from '../api/task';
 import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
@@ -24,14 +24,14 @@ export default {
                     this.handleKill(row);
                     break;
                 case OPERATION_INFO.detail.value:
-                    this.handleDetail(row);
+                    if (row.type === TASK_TYPE.SKYFLOW) {
+                        this.handleEntry(row);
+                    } else {
+                        this.handleDetail(row);
+                    }
                     break;
                 case OPERATION_INFO.remove.value:
                     this.handleDelete(row);
-                    break;
-                // todo:
-                case OPERATION_INFO.entry.value:
-                    this.handleEntry(row);
                     break;
             }
         },
@@ -49,8 +49,11 @@ export default {
                     }
                     isSelectAutoImage = await SdxwTaskStartDialog({ visible: true, image, autoImage });
                 }
-
-                await startTask(row.uuid, { isAuto: isSelectAutoImage, type: row.type });
+                if (row.type === TASK_TYPE.SKYFLOW) {
+                    await startExecution(row.taskId, row.uuid, { type: row.type });
+                } else {
+                    await startTask(row.uuid, { isAuto: isSelectAutoImage, type: row.type });
+                }
                 this.fetchDataMinxin && this.fetchDataMinxin();
             } catch (e) {
                 // cancel
@@ -70,8 +73,11 @@ export default {
                         content: ''
                     });
                 }
-
-                await stopTask(row.uuid, { needCommitContainer: isSaveImage, type: row.type });
+                if (row.type === TASK_TYPE.SKYFLOW) {
+                    await stopExecution(row.taskId, row.uuid, { type: row.type });
+                } else {
+                    await stopTask(row.uuid, { needCommitContainer: isSaveImage, type: row.type });
+                }
                 this.fetchDataMinxin && this.fetchDataMinxin();
             } catch(e) {
                 // cancel
@@ -85,9 +91,8 @@ export default {
                 this.$router.push(`/sdxv-task-management/sdxv-task-detail/${row.uuid}`);
             }
         },
-        // todo:
         handleEntry(row) {
-            window.open(`/#/editor/${row.project.uuid}/${row.uuid}`);
+            window.open(`/#/editor/${row.taskId}/${row.uuid}`);
         },
         async handleDelete(row) {
             let that = this;
@@ -97,9 +102,14 @@ export default {
                     content: ''
                 });
 
-                removeTask(row.uuid, { type: row.type }).then(() => {
+                if (row.type === TASK_TYPE.SKYFLOW) {
+                    await removeExecution(row.taskId, row.uuid, { type: row.type });
                     this.fetchDataMinxin && this.fetchDataMinxin();
-                });
+                } else {
+                    removeTask(row.uuid, { type: row.type }).then(() => {
+                        this.fetchDataMinxin && this.fetchDataMinxin();
+                    });
+                }
             } catch (e) {
                 // cancel
                 window.console.error(e);

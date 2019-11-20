@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { getTaskDetail } from '@sdx/utils/src/api/project';
+import { getTaskDetail } from '@sdx/utils/src/api/task';
 import { TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
 import TaskDetailPanel from './TaskDetailPanel';
 import TaskInfoPanel from './TaskInfoPanel';

@@ -3,54 +3,58 @@
         class="sdxv-monitor-info"
         v-loading="isLoading"
     >
-        <SdxwExpandLabel :label="t('view.task.RealTimeMonitor')" />
-        <div class="sdxv-monitor-info__content">
-            <SdxuEmpty
-                v-if="isEmpty"
-                :empty-content="t('view.task.NoRealMonitor')"
-                empty-type="sdx-wushuju"
-            />
-            <template v-else>
-                <div class="sdxv-monitor-info__select">
-                    <span>{{ t('view.task.SelectAnInstance') }}：</span>
-                    <el-select
-                        v-if="pods.length > 1"
-                        v-model="currentPod"
-                        size="small"
-                    >
-                        <el-option
-                            v-for="pod in pods"
-                            :key="pod"
-                            :value="pod"
-                            :label="pod"
+        <SdxuArticlePanel
+            :title="t('view.task.RealTimeMonitor')"
+            class="sdxv-base-info-container__panel"
+        >
+            <div class="sdxv-monitor-info__content">
+                <SdxuEmpty
+                    v-if="isEmpty"
+                    :empty-content="t('view.task.NoRealMonitor')"
+                    empty-type="sdx-wushuju"
+                />
+                <template v-else>
+                    <div class="sdxv-monitor-info__select">
+                        <span>{{ t('view.task.SelectAnInstance') }}：</span>
+                        <el-select
+                            v-if="pods.length > 1"
+                            v-model="currentPod"
+                            size="small"
+                        >
+                            <el-option
+                                v-for="pod in pods"
+                                :key="pod"
+                                :value="pod"
+                                :label="pod"
+                            />
+                        </el-select>
+                        <span v-else>
+                            {{ currentPod }}
+                        </span>
+                    </div>
+                    <div class="sdxv-monitor-info__chart">
+                        <div
+                            class="sdxv-monitor-info__chart--item"
+                            ref="usedCpu"
                         />
-                    </el-select>
-                    <span v-else>
-                        {{ currentPod }}
-                    </span>
-                </div>
-                <div class="sdxv-monitor-info__chart">
-                    <div
-                        class="sdxv-monitor-info__chart--item"
-                        ref="usedCpu"
-                    />
-                    <div
-                        class="sdxv-monitor-info__chart--item"
-                        ref="usedMem"
-                    />
-                    <div
-                        v-if="hasGpu"
-                        class="sdxv-monitor-info__chart--item"
-                        ref="usedGpu"
-                    />
-                    <div
-                        v-if="hasGpu"
-                        class="sdxv-monitor-info__chart--item"
-                        ref="usedGpuMem"
-                    />
-                </div>
-            </template>
-        </div>
+                        <div
+                            class="sdxv-monitor-info__chart--item"
+                            ref="usedMem"
+                        />
+                        <div
+                            v-if="hasGpu"
+                            class="sdxv-monitor-info__chart--item"
+                            ref="usedGpu"
+                        />
+                        <div
+                            v-if="hasGpu"
+                            class="sdxv-monitor-info__chart--item"
+                            ref="usedGpuMem"
+                        />
+                    </div>
+                </template>
+            </div>
+        </SdxuArticlePanel>
     </div>
 </template>
 
@@ -63,7 +67,7 @@ import { dateFormatter, byteToMB } from '@sdx/utils/src/helper/transform';
 import { getPodResourceStatus } from '@sdx/utils/src/api/system';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuEmpty from '@sdx/ui/components/empty';
-import SdxwExpandLabel from '@sdx/widget/components/expand-label';
+import SdxuArticlePanel from '@sdx/ui/components/article-panel';
 import CHART_DEFAULT_OPTION from './MonitorConfig';
 
 const POLLING_PERIOD = 15 * 1000;
@@ -74,7 +78,7 @@ export default {
     components: {
         [Select.name]: Select,
         [Option.name]: Option,
-        SdxwExpandLabel,
+        SdxuArticlePanel,
         SdxuEmpty
     },
     props: {

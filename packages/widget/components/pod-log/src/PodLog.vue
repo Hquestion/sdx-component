@@ -82,12 +82,15 @@ export default {
     },
     methods: {
         async fetchData(offset, size) {
+            let count = size;
             // 修正offset
-            offset = size < 0 ? offset + size : offset;
-            offset = offset < 1 ? 1 : offset;
+            if (size < 0) {
+                count = offset < -size ? offset - 1 : -size;
+                offset = offset + size < 1 ? 1 : offset + size;
+            }
             const params = {
                 start: offset,
-                count: Math.abs(size)
+                count: count
             };
             if (this.startedAt) {
                 params.startedAt = this.startedAt;
@@ -190,7 +193,7 @@ export default {
         getTaskInfo() {
             return new Promise(resolve => {
                 getTaskList({ podName: this.podName }).then(data => {
-                    const task = data && Array.isArray(data.items) && data.items[0] || null;
+                    const task = data && Array.isArray(data.data) && data.data[0] || null;
                     this.startedAt = task && (new Date(task.startedAt).getTime() / 1000).toFixed() || '';
                     resolve();
                 }).catch(() => {
@@ -209,8 +212,7 @@ export default {
             }
         },
         getLogByMethod() {
-            this.start = 1;
-            this.end = 1;
+            this.init();
             if (this.method === 'head') {
                 this.getForwardLog();
             } else {
@@ -222,6 +224,12 @@ export default {
                     this.startAutoPull();
                 }
             }
+        },
+        init() {
+            this.start = 1;
+            this.end = 1;
+            this.size = 100;
+            this.logContent = '';
         }
     },
     created() {

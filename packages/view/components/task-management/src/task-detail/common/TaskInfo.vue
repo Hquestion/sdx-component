@@ -37,7 +37,7 @@
 <script>
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
-import { TASK_TYPE_VALUE } from '@sdx/utils/src/const/task';
+import { TASK_TYPE } from '@sdx/utils/src/const/task';
 
 export default {
     name: 'TaskInfo',
@@ -52,23 +52,23 @@ export default {
         iconInfo() {
             let iconInfo = {};
             switch(this.task.type) {
-                case TASK_TYPE_VALUE.SKYIDE:
+                case TASK_TYPE.SKYIDE:
                     iconInfo.icon = 'sdx-SkyIDErenwu';
                     iconInfo.color = '#6cb3f9';
                     break;
-                case TASK_TYPE_VALUE.CONTAINER_DEV:
+                case TASK_TYPE.CONTAINER_DEV:
                     iconInfo.icon = 'sdx-zidingyirongqirenwu';
                     iconInfo.color = '#46a1bc';
                     break;
-                case TASK_TYPE_VALUE.JUPYTER:
+                case TASK_TYPE.JUPYTER:
                     iconInfo.icon = 'sdx-Jupter';
                     iconInfo.color = '#FF882B';
                     break;
-                case TASK_TYPE_VALUE.MODELSERVICE:
+                case TASK_TYPE.MODELSERVICE:
                     iconInfo.icon = 'sdx-icon-tensorboard';
                     iconInfo.color = 'yellow';
                     break;
-                case TASK_TYPE_VALUE.SKYFLOW:
+                case TASK_TYPE.SKYFLOW:
                     iconInfo.icon = 'sdx-skyflowrenwu';
                     iconInfo.color = '#6158ba';
                     break;

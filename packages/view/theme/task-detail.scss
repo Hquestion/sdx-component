@@ -16,6 +16,20 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
 }
 
+@include block('base-info-container', $bem-namespace-view) {
+    @include element('link') {
+        font-size: 14px;
+        margin: 1px 0;
+        @include modifier('http') {
+            color: #1144AB;
+            &:hover {
+                cursor: pointer;
+                text-decoration-line: underline;
+            }
+        }
+    }
+}
+
 @include block('info-container', $bem-namespace-view) {
     padding: 1px 0; // 这里设置的上下padding为1px是为了限制子元素的margin超出范围
 
@@ -116,9 +130,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         margin: 24px 0;
 
         @include modifier('select') {
-            span:first-child {
-                font-size: 14px;
+            font-size: 14px;
+            span:nth-child(1) {
                 color: #6B778C;
+            }
+            span:nth-child(2) {
+                color: #13264D;
             }
             .el-select {
                 width: 348px;
@@ -127,17 +144,6 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
         @include modifier('method') {
             border-radius: 2px;
-            .sdxu-tab-radio {
-                background-color: #D7DBE2;
-                border-color: #D7DBE2;
-                color: #13264D;
-
-                &.is-active {
-                    background-color: #13264D;
-                    border-color: #13264D;
-                    color: #fff;
-                }
-            }
         }
     }
 }
@@ -255,9 +261,12 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     }
 
     @include element('select') {
-        span:first-child {
-            font-size: 14px;
+        font-size: 14px;
+        span:nth-child(1) {
             color: #6B778C;
+        }
+        span:nth-child(2) {
+            color: #13264D;
         }
         .el-select {
             width: 348px;

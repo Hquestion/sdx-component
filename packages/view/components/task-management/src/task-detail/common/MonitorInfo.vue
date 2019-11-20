@@ -14,16 +14,20 @@
                 <div class="sdxv-monitor-info__select">
                     <span>{{ t('view.task.SelectAnInstance') }}：</span>
                     <el-select
+                        v-if="pods.length > 1"
                         v-model="currentPod"
                         size="small"
                     >
                         <el-option
                             v-for="pod in pods"
-                            :key="pod.name"
-                            :value="pod.name"
-                            :label="pod.name"
+                            :key="pod"
+                            :value="pod"
+                            :label="pod"
                         />
                     </el-select>
+                    <span v-else>
+                        {{ currentPod }}
+                    </span>
                 </div>
                 <div class="sdxv-monitor-info__chart">
                     <div
@@ -70,7 +74,7 @@ export default {
     components: {
         [Select.name]: Select,
         [Option.name]: Option,
-        SdxwExpandLabel: SdxwExpandLabel.ExpandLabel,
+        SdxwExpandLabel,
         SdxuEmpty
     },
     props: {
@@ -93,7 +97,7 @@ export default {
     },
     data() {
         return {
-            currentPod: this.pods[0] && this.pods[0].name || '',
+            currentPod: this.pods[0] || '',
             chartInstance: {
                 // chart实例的挂载点
                 usedCpu: null,

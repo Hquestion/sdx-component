@@ -4,7 +4,7 @@
             <SdxwExpandLabel :label="t('view.task.RunningInformation')">
                 <template #right>
                     <SdxuButton
-                        v-if="isJUPYTER || isSKYIDE || isCONTAINERDEV"
+                        v-if="hasSaveImage && isRunning"
                         type="link"
                         @click="handleSaveAsImage"
                     >
@@ -22,9 +22,8 @@
                         <SdxwFoldLabel
                             :plain="true"
                             :type="task && STATE_MAP_FOLD_LABEL_TYPE[task.state] || ''"
-                            :status="stateIcon"
                         >
-                            {{ task && t(STATE_TYPE_LABEL[task.state]) || '-' }}
+                            {{ task && STATE_TYPE_LABEL[task.state] || '-' }}
                         </SdxwFoldLabel>
                     </template>
                 </SdxvInfoItem>
@@ -38,12 +37,12 @@
                 />
                 <SdxvInfoItem
                     :label="t('view.task.RunningTime')"
-                    :value="task ? dealTime(task.startedAt, task.stoppedAt) : ''"
+                    :value="task ? timeDuration(task.startedAt, task.stoppedAt || new Date()) : ''"
                 />
                 <SdxvInfoItem
                     v-if="isSKYIDE"
                     :label="t('view.task.FilePath')"
-                    :value="task.home_path"
+                    :value="task.homePath"
                 />
                 <SdxvInfoItem
                     v-if="isCONTAINERDEV"
@@ -52,14 +51,27 @@
                     <template
                         #value
                     >
-                        <span
-                            v-if="task.externalUrl"
-                            class="sdxv-task-detail__external"
-                            :plain="true"
-                            @click="goTerminal()"
-                        >
-                            {{ task.externalUrl }}
-                        </span>
+                        <template v-if="buildInServeList.length > 0">
+                            <div>
+                                <div
+                                    v-for="(item, i) in buildInServeList"
+                                    :key="i"
+                                    class="sdxv-base-info-container__link"
+                                >
+                                    <div
+                                        v-if="item.protocol === 'HTTP'" 
+                                        @click="goToNewPage(origin + '/' + item.urlSuffix)"
+                                        class="sdxv-base-info-container__link--http"
+                                    >
+                                        {{ origin + '/' + item.urlSuffix }}
+                                    </div>
+                                    <!-- // todo: click -->
+                                    <div v-else>
+                                        {{ hostname + ':' + item.proxyPort }}
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
                         <span v-else>
                             -
                         </span>
@@ -76,6 +88,7 @@
                     :label="t('view.task.StartCommand')"
                     :value="task.startCommand"
                 />
+                <!-- // todo: 列表 -->
                 <SdxvInfoItem
                     v-if="isCONTAINERDEV"
                     :label="t('view.task.StartupParameter')"
@@ -95,21 +108,39 @@
                     <template #value>
                         <SdxuTable
                             :light="true"
-                            :data="task.forwardPorts"
+                            :data="customerServeList"
                             :empty-text="t('sdxCommon.NoData')"
                         >
                             <el-table-column
+                                align="center"
                                 prop="protocol"
                                 :label="t('view.task.Protocol')"
                             />
                             <el-table-column
-                                prop="port"
+                                align="center"
+                                prop="proxyPort"
                                 :label="t('view.task.Port')"
                             />
                             <el-table-column
-                                prop="link"
+                                header-align="center"
                                 :label="t('view.task.Link')"
-                            />
+                            >
+                                <template #default="{ row }">
+                                    <SdxuButton
+                                        v-if="row.protocol === 'HTTP'"
+                                        @click="goToNewPage(origin + '/' + row.urlSuffix)"
+                                        type="link"
+                                    >
+                                        {{ origin + '/' + row.urlSuffix }}
+                                    </SdxuButton>
+                                    <!-- // todo: -->
+                                    <SdxuButton
+                                        v-else
+                                    >
+                                        {{ hostname + ':' + row.proxyPort }}
+                                    </SdxuButton>
+                                </template>
+                            </el-table-column>
                         </SdxuTable>
                     </template>
                 </SdxvInfoItem>
@@ -117,51 +148,24 @@
         </div>
         <div class="sdxv-base-info-container__item">
             <SdxwExpandLabel :label="t('view.task.ResourceInformation')" />
-            <!-- // todo: data service -->
-            <!-- <template v-if="isDATA_SERVICE || isSPARK">
-                <SdxvInfoContainer>
-                    <SdxvInfoItem
-                        :label="t('view.task.DriverCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.SPARK_DRIVER_CPUS || 0) + t('view.task.Core')"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.DriverMemory')"
-                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.SPARK_DRIVER_MEMORY || 0) + 'GB'"
-                    />
-                </SdxvInfoContainer>
-                <SdxvInfoContainer>
-                    <SdxvInfoItem
-                        :label="t('view.task.ExectorCPU')"
-                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.SPARK_EXECUTOR_CPUS || 0) + t('view.task.Core')"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.ExectorMemory')"
-                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.SPARK_EXECUTOR_MEMORY || 0) + 'GB'"
-                    />
-                    <SdxvInfoItem
-                        :label="t('view.task.ExectorInstanceCount')"
-                        :value="task && task.resourceConfig && task.resourceConfig.SPARK_EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
-                    />
-                </SdxvInfoContainer>
-            </template> -->
-            <template>
+            <template v-if="isDeployTask">
                 <SdxvInfoContainer>
                     <SdxvInfoItem
                         label="CPU"
-                        :value="milliCoreToCore(task && task.resourceConfig && task.resourceConfig.EXECUTOR_CPUS || 0) + t('view.task.Core')"
+                        :value="(task && task.resourceConfig && task.resourceConfig.DEPLOY && task.resourceConfig.DEPLOY.requests && task.resourceConfig.DEPLOY.requests.cpu || 0) + t('view.task.Core')"
                     />
                     <SdxvInfoItem
                         label="GPU"
-                        :value="(task && task.resourceConfig && task.resourceConfig.EXECUTOR_GPUS || 0) + t('view.task.Block')"
+                        :value="(task && task.resourceConfig && task.resourceConfig.DEPLOY && task.resourceConfig.DEPLOY.requests && task.resourceConfig.DEPLOY.requests['nvidia.com/gpu'] || 0) + t('view.task.Block')"
                     />
                     <SdxvInfoItem
                         :label="t('view.task.Memory')"
-                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.EXECUTOR_MEMORY || 0) + 'GB'"
+                        :value="byteToGb(task && task.resourceConfig && task.resourceConfig.DEPLOY && task.resourceConfig.DEPLOY.requests && task.resourceConfig.DEPLOY.requests.memory || 0) + 'GB'"
                     />
                     <SdxvInfoItem
                         v-if="isCONTAINERDEV"
                         :label="t('view.task.ExectorInstanceCount')"
-                        :value="task && task.resourceConfig && task.resourceConfig.EXECUTOR_INSTANCES || 0 + t('view.task.Count')"
+                        :value="task && task.resourceConfig && task.resourceConfig.DEPLOY && task.resourceConfig.DEPLOY.instance || 0 + t('view.task.Count')"
                     />
                 </SdxvInfoContainer>
             </template>
@@ -186,6 +190,7 @@
 import DataInfo from './DataInfo';
 import locale from '@sdx/utils/src/mixins/locale';
 import MixinDetail from '../MixinDetail';
+// todo:
 import auth from '@sdx/widget/components/auth';
 import SdxwExpandLabel from '@sdx/widget/components/expand-label';
 import SdxvInfoContainer from './InfoContainer';
@@ -206,7 +211,7 @@ export default {
         DataInfo,
         SdxvInfoContainer,
         SdxvInfoItem,
-        SdxwExpandLabel: SdxwExpandLabel.ExpandLabel,
+        SdxwExpandLabel,
         [SdxwFoldLabel.FoldLabel.name]: SdxwFoldLabel.FoldLabel,
         SdxuButton,
         SdxvSaveAsDialog,
@@ -215,8 +220,20 @@ export default {
     },
     data() {
         return {
-            dialogVisible: false
+            dialogVisible: false,
+            hostname: location.hostname,
+            origin: location.origin
         };
+    },
+    computed: {
+        buildInServeList() {
+            let list = this.task.serviceList || [];
+            return list.filter(item => item.proxyType === 'BUILD-IN');
+        },
+        customerServeList() {
+            let list = this.task.serviceList || [];
+            return list.filter(item => item.proxyType === 'CUSTOMER');
+        }
     },
     methods: {
         goTerminal() {
@@ -227,6 +244,9 @@ export default {
         },
         handleSaveAsImage() {
             this.dialogVisible = true;
+        },
+        goToNewPage(url) {
+            window.open(url);
         }
     }
 };

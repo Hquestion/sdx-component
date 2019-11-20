@@ -4,6 +4,7 @@
         :visible.sync="dialogVisible"
         @confirm="handleConfirm"
         @cancel="handleCancel"
+        width="720px"
     >
         <el-form
             v-if="task"

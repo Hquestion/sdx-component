@@ -39,43 +39,38 @@ export default {
             pollingId: null
         };
     },
-    computed: {
-        // 是否需要状态拉取
-        needPull() {
-            return TASK_POLLING_STATE_TYPE.includes(this.task && this.task.state || '');
-        }
-    },
     methods: {
         getTaskInfo() {
             if (this.taskId) {
                 getTaskDetail(this.taskId)
                     .then(data => {
                         this.task = data || null;
+                        if (TASK_POLLING_STATE_TYPE.includes(this.task && this.task.state || '')) {
+                            this.startPolling();
+                        }
                     }).catch(e => {
                         this.task = null;
                     });
             }
         },
-    },
-    watch: {
-        needPull(nval) {
-            if (nval) {
-                this.pollingId && clearInterval(this.pollingId);
-                this.pollingId = setInterval(() => {
+        startPolling() {
+            if (!this._isDestroyed) {
+                this.pollingId && clearTimeout(this.pollingId);
+                this.pollingId = setTimeout(() => {
                     this.getTaskInfo();
                 }, POLLING_PERIOD);
-            } else {
-                this.pollingId && clearInterval(this.pollingId);
-                this.pollingId = null;
             }
+        },
+        stopPolling() {
+            this.pollingId && clearTimeout(this.pollingId);
+            this.pollingId = null;
         }
     },
     created() {
         this.getTaskInfo();
     },
     beforeDestroy() {
-        this.pollingId && clearInterval(this.pollingId);
-        this.pollingId = null;    
+        this.stopPolling();  
     }
 };
 </script>

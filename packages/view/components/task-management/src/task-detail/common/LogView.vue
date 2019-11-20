@@ -1,6 +1,5 @@
 <template>
     <div class="sdxv-log-view">
-        <SdxwExpandLabel :label="t('view.task.LogInformation')" />
         <div class="sdxv-log-view__content">
             <SdxuEmpty
                 v-if="isEmpty"
@@ -12,16 +11,20 @@
                     <div class="sdxv-log-view__bar--select">
                         <span>{{ t('view.task.SelectAnInstance') }}：</span>
                         <el-select
+                            v-if="pods.length > 1"
                             v-model="currentPod"
                             size="small"
                         >
                             <el-option
                                 v-for="pod in pods"
-                                :key="pod.name"
-                                :value="pod.name"
-                                :label="pod.name"
+                                :key="pod"
+                                :value="pod"
+                                :label="pod"
                             />
                         </el-select>
+                        <span v-else>
+                            {{ currentPod }}
+                        </span>
                     </div>
                     <div class="sdxv-log-view__bar--method">
                         <TabRadioGroup v-model="currentMethod">
@@ -49,7 +52,6 @@ import TabRadio from '@sdx/ui/components/tab-radio';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuEmpty from '@sdx/ui/components/empty';
 import SdxvLogInfo from './LogInfo';
-import SdxwExpandLabel from '@sdx/widget/components/expand-label';
 
 export default {
     name: 'SdxvLogView',
@@ -58,7 +60,6 @@ export default {
         SdxuEmpty,
         TabRadioGroup: TabRadio.TabRadioGroup,
         TabRadioItem: TabRadio.TabRadioItem,
-        SdxwExpandLabel: SdxwExpandLabel.ExpandLabel,
         SdxvLogInfo
     },
     props: {
@@ -73,7 +74,7 @@ export default {
     },
     data() {
         return {
-            currentPod: this.pods[0].name || '',
+            currentPod: this.pods[0] || '',
             currentMethod: 'tail'
         };
     }

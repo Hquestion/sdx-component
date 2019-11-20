@@ -79,7 +79,7 @@
                 :default-sort="defaultSort"
                 v-loading="loading"
                 :empty-text="t('sdxCommon.NoData')"
-                :row-key="row => row.taskId || row._id"
+                :row-key="row => row.uuid"
             >
                 <el-table-column
                     prop="name"
@@ -87,17 +87,26 @@
                     min-width="112px"
                 />
                 <el-table-column
-                    prop="_id"
+                    prop="uuid"
                     :label="t('view.task.executeID')"
                     min-width="56px"
-                />
+                >
+                    <template #default="{ row }">
+                        <span v-if="row.state === TASK_TYPE.SKYFLOW">
+                            {{ row.uuid }}    
+                        </span>
+                        <span v-else>
+                            -    
+                        </span>                      
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="type"
                     :label="t('view.task.taskType')"
                     min-width="72px"
                 >
                     <template #default="{ row }">
-                        {{ t(TASK_TYPE_LABEL[row.type]) }}
+                        {{ TASK_TYPE_LABEL[row.type] }}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -109,7 +118,11 @@
                     prop="executeType"
                     :label="t('view.task.executeType')"
                     min-width="70px"
-                />
+                >
+                    <template #default="{ row }">
+                        {{ EXECUTE_TYPE_LABEL[row.executeType] }}
+                    </template>
+                </el-table-column>
                 <el-table-column
                     prop="startedAt"
                     :label="t('view.task.startedAt')"
@@ -119,7 +132,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.startedAt) }}
+                            {{ dateFormatter(row.startedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -132,11 +145,12 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.stopedAt) }}
+                            {{ dateFormatter(row.stopedAt) }}
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column
+                    prop="runningTime"
                     :label="t('view.task.executeTime')"
                     sortable="custom"
                     :sort-orders="sortOrders"
@@ -144,7 +158,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ dealTime(row.startedAt, row.stopedAt) }}
+                            {{ timeDuration(row.startedAt, row.stopedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -156,9 +170,8 @@
                         <SdxwFoldLabel
                             :plain="true"
                             :type="STATE_MAP_FOLD_LABEL_TYPE[row.state]"
-                            :status="stateIcon(row.state)"
                         >
-                            {{ t(STATE_TYPE_LABEL[row.state]) }}
+                            {{ STATE_TYPE_LABEL[row.state] }}
                         </SdxwFoldLabel>
                     </template>
                 </el-table-column>
@@ -170,12 +183,12 @@
                     <template #default="{ row }">
                         <SdxuIconButtonGroup>
                             <SdxuButton
-                                v-for="(item, i) in getOperationList(row)"
+                                v-for="(item, i) in getOperationList(row.state)"
                                 type="link"
                                 :key="i"
                                 @click="handleOperation(item.value, row)"
                             >
-                                {{ t(item.label) }}
+                                {{ item.label }}
                             </SdxuButton>
                         </SdxuIconButtonGroup>
                     </template>
@@ -193,312 +206,67 @@
 </template>
 
 <script>
+import SdxuTable from '@sdx/ui/components/table';
+import SdxwSearchLayout from '@sdx/widget/components/search-layout';
+import SdxuPagination from '@sdx/ui/components/pagination';
+import SdxuInput from '@sdx/ui/components/input';
+import SdxuButton from '@sdx/ui/components/button';
+import SdxwFoldLabel from '@sdx/widget/components/fold-label';
+import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import { executionList } from '@sdx/utils/src/api/task';
 import locale from '@sdx/utils/src/mixins/locale';
-import { TASK_TYPE, EXECUTE_TYPE, STATE_TYPE, TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
+import taskExecution from '@sdx/utils/src/mixins/taskExecution';
+import { TASK_TYPE, TASK_TYPE_LIST, EXECUTE_TYPE_LABEL, EXECUTE_TYPE_LIST, STATE_TYPE_LIST, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE_LABEL, TASK_POLLING_STATE_TYPE, STATE_TYPE_OPERATION, OPERATION_INFO } from '@sdx/utils/src/const/task';
 
-import TaskManagementMixin from './TaskManagementMixin';
-
-// todo: 操作
-
-const data = [
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'createdAt': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'CREATED',
-        'error_handling': 'CANCEL',
-        'executeType': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T08:50:17.748000Z',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'createdAt': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'LAUNCHING',
-        'error_handling': 'CANCEL',
-        'executeType': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T08:50:17.748000Z',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'createdAt': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'RUNNING',
-        'error_handling': 'CANCEL',
-        'executeType': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T08:50:17.748000Z',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'createdAt': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'FINISHED',
-        'error_handling': 'CANCEL',
-        'executeType': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T08:50:17.748000Z',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'createdAt': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'KILLED',
-        'error_handling': 'CANCEL',
-        'executeType': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T08:50:17.748000Z',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'createdAt': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'FAILED',
-        'error_handling': 'CANCEL',
-        'executeType': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T08:50:17.748000Z',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        '_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'createdAt': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'KILLING',
-        'error_handling': 'CANCEL',
-        'executeType': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T08:50:17.748000Z',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-];     
+import ElTableColumn from 'element-ui/lib/table-column';
+import ElSelect from 'element-ui/lib/select';
+import ElOption from 'element-ui/lib/option';
+import ElDatePicker from 'element-ui/lib/date-picker';
 
 const POLLING_PERIOD = 3 * 1000;
 
 export default {
-    mixins: [TaskManagementMixin, locale],
+    mixins: [locale, taskExecution],
+    components: {
+        [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
+        [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
+        [SdxwFoldLabel.FoldLabel.name]: SdxwFoldLabel.FoldLabel,
+        [SdxwFoldLabel.FoldLabelGroup.name]: SdxwFoldLabel.FoldLabelGroup,
+        SdxuTable,
+        SdxuPagination,
+        SdxuInput,
+        SdxuIconButtonGroup,
+        SdxuButton,
+        ElDatePicker,
+        ElTableColumn,
+        ElSelect,
+        ElOption
+    },
     data() {
+        this.STATE_TYPE_LABEL = STATE_TYPE_LABEL;
+        this.STATE_MAP_FOLD_LABEL_TYPE = STATE_MAP_FOLD_LABEL_TYPE;
+        this.TASK_TYPE_LABEL = TASK_TYPE_LABEL;
+        this.STATE_TYPE_OPERATION = STATE_TYPE_OPERATION;
+        this.OPERATION_INFO = OPERATION_INFO;
+        this.TASK_TYPE = TASK_TYPE;
+        this.EXECUTE_TYPE_LABEL = EXECUTE_TYPE_LABEL;
         return {
+            taskName: '',
+            creator: '',
+            page: 1,
+            pageSize: 10,
+            total: 0,
+            currentUser: getUser(),
             loading: false,
             defaultSort: {
                 prop: 'startedAt',
                 order: 'descending'
             },
             sortOrders: ['descending', 'ascending', null],
-            taskTypeList: TASK_TYPE,
-            taskStateList: STATE_TYPE,
-            executeTypeList: EXECUTE_TYPE,
+            taskTypeList: TASK_TYPE_LIST,
+            taskStateList: STATE_TYPE_LIST,
+            executeTypeList: EXECUTE_TYPE_LIST,
             selectedType: '',
             selectedState: '',
             selectedExecuteType: '',
@@ -507,17 +275,19 @@ export default {
             taskResourceList: [],
             params: {
                 name: '',
+                creator: '',
                 order: 'desc',
                 orderBy: 'startedAt',
                 ownerId: '',
                 type: '',
                 executionType: '',
                 state: '',
-                cronStartTime: '',
-                cronEndTime: '',
+                startedAt: '',
+                stopedAt: '',
                 start: 1, 
                 count: 10
             },
+            paramDate: '',
             pollingId: 0
         };
     },
@@ -526,18 +296,13 @@ export default {
             let params = {
                 ownerId: this.currentUser.userId
             };
-            if (Array.isArray(this.selectedDate)) {
-                params.cronStartTime = this.selectedDate[0];
-                params.cronEndTime = this.selectedDate[1];
+            if (Array.isArray(this.paramDate)) {
+                params.startedAt = this.paramDate[0];
+                params.stopedAt = this.paramDate[1];
             }
             return Object.assign({}, this.params, params, {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
-            });
-        },
-        needPolling() {
-            return this.taskResourceList.some(item =>  {
-                return TASK_POLLING_STATE_TYPE.includes(item.state);
             });
         }
     },
@@ -566,23 +331,26 @@ export default {
             this.params.orderBy = prop || 'startedAt';
             this.page = 1;
         },
+        handlePageChange(page) {
+            this.page = page;
+        },
         handleSearch() {
             this.params.type = this.selectedType;
             this.params.executionType = this.selectedExecuteType;
             this.params.state = this.selectedState;
             this.params.name = this.taskName;
-            // todo: creator
             this.params.creator = this.creator;
+            this.paramDate = this.selectedDate;
             this.page = 1;
         },
         handleReset() {
-            this.params.name = '';
-            this.params.type = '';
-            this.params.executionType = '';
-            this.params.state = '';
-            this.params.creator = '';
+            this.selectedType = '';
+            this.selectedState = '';
+            this.selectedExecuteType = '';
             this.selectedDate = '';
-            this.page = 1;
+            this.taskName = '';
+            this.creator = '';
+            this.handleSearch();
         },
         startPolling() {
             if (!this._isDestroyed) {
@@ -595,10 +363,15 @@ export default {
         stopPolling() {
             this.pollingId && clearTimeout(this.pollingId);
             this.pollingId = null;
+        },
+        getOperationList(state) {
+            let arr = STATE_TYPE_OPERATION[state] || [];
+            return arr.map(item => OPERATION_INFO[item]);
         }
     },
     created() {
         this.fetchData();
+        this.fetchDataMinxin = this.fetchData();
     },
     beforeDestroy() {
         this.stopPolling();

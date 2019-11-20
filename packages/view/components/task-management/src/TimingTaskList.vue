@@ -27,7 +27,7 @@
                         <el-option
                             v-for="item in startupTypeList"
                             :key="item.value"
-                            :label="t(item.label)"
+                            :label="item.label"
                             :value="item.value"
                         />
                     </el-select>
@@ -41,7 +41,7 @@
                 :default-sort="defaultSort"
                 v-loading="loading"
                 :empty-text="t('sdxCommon.NoData')"
-                :row-key="row => row.taskId || row._id"
+                :row-key="row => row.uuid"
             >
                 <el-table-column
                     prop="name"
@@ -62,7 +62,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.startedAt) }}
+                            {{ dateFormatter(row.startedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -75,7 +75,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ formatDate(row.stopedAt) }}
+                            {{ dateFormatter(row.stopedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -97,13 +97,13 @@
                     <template #default="{ row }">
                         <SdxuIconButtonGroup>
                             <SdxuButton
-                                v-for="(item, i) in getOperationList(row, monitor)"
+                                v-for="(item, i) in getOperationList(row)"
                                 :key="i"
-                                :title="t(item.label)"
+                                :title="item.label"
                                 @click="handleOperation(item.value, row)"
                                 type="link"
                             >
-                                {{ t(item.label) }}
+                                {{ item.label }}
                             </SdxuButton>
                         </SdxuIconButtonGroup>
                     </template>
@@ -121,281 +121,51 @@
 </template>
 
 <script>
-import TaskManagementMixin from './TaskManagementMixin';
+import SdxuTable from '@sdx/ui/components/table';
+import SdxwSearchLayout from '@sdx/widget/components/search-layout';
+import SdxuPagination from '@sdx/ui/components/pagination';
+import SdxuInput from '@sdx/ui/components/input';
+import SdxuButton from '@sdx/ui/components/button';
+import SdxwFoldLabel from '@sdx/widget/components/fold-label';
+import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
+import { executionList } from '@sdx/utils/src/api/task';
 import locale from '@sdx/utils/src/mixins/locale';
 import { TIMING_TASK_STARTUP_STATE } from '@sdx/utils/src/const/task';
-import { executionList } from '@sdx/utils/src/api/task';
+import taskExecution from '@sdx/utils/src/mixins/taskExecution';
 
-const data = [
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'CREATED',
-        'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T10:50:17.748000Z',
-        'crontab': '* * * * *',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'CREATED',
-        'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T10:50:17.748000Z',
-        'crontab': '* * * * *',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'CREATED',
-        'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T10:50:17.748000Z',
-        'crontab': '* * * * *',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'CREATED',
-        'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T10:50:17.748000Z',
-        'crontab': '* * * * *',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'CREATED',
-        'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T10:50:17.748000Z',
-        'crontab': '* * * * *',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-    {
-        'task_id': '69c80e50-e27a-44fc-9b18-ae22eb798e6b',
-        'execution_id': '538199c3-3473-42b7-bcec-bac629b21e3e',
-        'concurrent_type': 'SKIP',
-        'created_at': '2019-10-18T07:50:17.748000Z',
-        'delay': 0, 'state': 'CREATED',
-        'error_handling': 'CANCEL',
-        'execute_type': 'MANUAL',
-        'home_path': '/test/jupyter',
-        'image_id': '96418d42-8e24-4cc1-9462-f7028abab846',
-        'name': 'jupyter-task-test',
-        'owner_id': '99b3d464-0992-4c2f-b127-370895cab26d',
-        'priority': 2,
-        'quota': {
-            'cpu': 2,
-            'gpu': 0,
-            'gpu_model': '',
-            'memory': 4294967296
-        },
-        'resource_config': {
-            'DEPLOY': {
-                'instance': 1,
-                'labels': {
-                    'gpu.model': ''
-                },
-                'requests': {
-                    'cpu': 2,
-                    'memory': 4294967296,
-                    'nvidia.com/gpu': 0
-                }
-            }
-        },
-        'type': 'JUPYTER',
-        'updated_at': '2019-10-18T07:50:17.748000Z',
-        'started_at': '2019-10-18T07:50:17.748000Z',
-        'stoped_at': '2019-10-18T08:50:17.748000Z',
-        'startedAt': '2019-10-18T07:50:17.748000Z',
-        'stopedAt': '2019-10-18T10:50:17.748000Z',
-        'crontab': '* * * * *',
-        'owner': {
-            fullName: 'zhangsan'
-        }
-    },
-];
+import ElTableColumn from 'element-ui/lib/table-column';
+import ElSelect from 'element-ui/lib/select';
+import ElOption from 'element-ui/lib/option';
 
 // todo: 轮询
 export default {
-    mixins: [TaskManagementMixin, locale],
+    mixins: [locale, taskExecution],
+    components: {
+        [SdxwSearchLayout.SearchLayout.name]: SdxwSearchLayout.SearchLayout,
+        [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
+        [SdxwFoldLabel.FoldLabel.name]: SdxwFoldLabel.FoldLabel,
+        [SdxwFoldLabel.FoldLabelGroup.name]: SdxwFoldLabel.FoldLabelGroup,
+        SdxuTable,
+        SdxuPagination,
+        SdxuInput,
+        SdxuIconButtonGroup,
+        SdxuButton,
+        ElTableColumn,
+        ElSelect,
+        ElOption
+    },
     data() {
         return {
+            taskName: '',
+            creator: '',
+            page: 1,
+            pageSize: 10,
+            total: 0,
+            currentUser: getUser(),
             startupTypeList: TIMING_TASK_STARTUP_STATE,
             selectedStartupType: '',
-            // taskResourceList: [],
-            taskResourceList: data,
+            taskResourceList: [],
             defaultSort: {
                 prop: 'startedAt',
                 order: 'descending'
@@ -404,6 +174,7 @@ export default {
             loading: false,
             params: {
                 name: '',
+                creator: '',
                 order: 'desc',
                 orderBy: 'startedAt',
                 ownerId: '',
@@ -443,6 +214,9 @@ export default {
             this.params.orderBy = prop || 'startedAt';
             this.page = 1;
         },
+        handlePageChange(page) {
+            this.page = page;
+        },
         handleSearch() {
             this.params.name = this.taskName;
             this.params.creator = this.creator;
@@ -450,14 +224,22 @@ export default {
             this.page = 1;
         },
         handleReset() {
-            this.params.name = '';
-            this.params.creator = '';
-            this.params.isOpen = '';
-            this.page = 1;
+            this.taskName = '';
+            this.creator = '';
+            this.selectedStartupType = '';
+            this.handleSearch();
+        },
+        getOperationList() {
+            // todo:
+            return [];
+        },
+        handleOperation() {
+            // todo:
         }
     },
     created() {
         this.fetchData();
+        this.fetchDataMinxin = this.fetchData();
     },
     watch: {
         queryParams() {

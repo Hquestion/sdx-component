@@ -33,5 +33,7 @@ module.exports = {
     'copyable': './components/copyable/index.js',
     'codepan': './components/codepan/index.js',
     'article-title': './components/article-title/index.js',
-    'article-panel': './components/article-panel/index.js'
+    'article-panel': './components/article-panel/index.js',
+    'section-panel': './components/section-panel/index.js',
+    'autosize-copyable': './components/autosize-copyable/index.js'
 };

@@ -23,6 +23,7 @@ import LangHandle from './components/lang-handle';
 import SubjectCard from './components/subject-card';
 import CreateProjectCard from './components/create-project-card';
 import CreateTaskCard from './components/create-task-card';
+import ApiTest from './components/api-test';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
@@ -49,7 +50,8 @@ const SdxWidget = {
     LangHandle,
     SubjectCard,
     CreateProjectCard,
-    CreateTaskCard
+    CreateTaskCard,
+    ApiTest
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -77,6 +79,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     vue.use(Auth);
     vue.use(ShareForm);
     vue.use(LangHandle);
+    vue.use(ApiTest);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

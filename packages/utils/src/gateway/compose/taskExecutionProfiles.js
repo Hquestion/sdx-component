@@ -3,6 +3,7 @@ import wrap from '../wrap';
 export let handler = wrap(function(ctx, request) {
     let username = request.Params.username && request.Params.username[0];
     let group = request.Params.group && request.Params.group[0];
+    const isAll = request.Params.all && request.Params.all[0];
     let ownerIds = [];
     if (username && username.trim()) {
         // 根据名称获取用户uuid
@@ -26,11 +27,29 @@ export let handler = wrap(function(ctx, request) {
         ownerIds = ownerIds.concat(users);
         delete request.Params.group;
     }
-    ctx.info('[TaskExecutionsProfiles Request Body]: ' + JSON.stringify(ownerIds));
-    request.Params.ownerId = ownerIds;
+    // 非按创建人筛选和非查询所有时，需先查询所有任务获取taskIds
+    let taskIds = [];
+    if (!isAll) {
+        const userProjects = ctx.sendRequest(ctx.createGetRequest(
+            'http://tyk-api-gateway/project-manager/api/v1/projects', {
+                start: 1,
+                count: -1
+            }
+        ), true).data.items;
+        userProjects.forEach(item => {
+            if (item.tasks && item.tasks.length > 0) {
+                taskIds = taskIds.concat(item.tasks);
+            }
+        });
+    }
+
+    ctx.info('[TaskExecutionsProfiles Request Body]: ' + JSON.stringify({ownerIds, taskIds}));
     const projects = ctx.sendRequest(ctx.createGetRequest(
         'http://tyk-gateway/task-manager/api/v1/executions',
-        request.Params));
+        request.Params, {
+            ownerIds,
+            taskIds
+        }));
 
     ctx.resolveUuids(projects,
         {
@@ -50,7 +69,7 @@ export let handler = wrap(function(ctx, request) {
             result: 'groups',
             // 请求异常时，将id替换为errorReplaceKey;
             // 如使用data.items.*.ownerId在获取用户失败时，将会替换为data.items.*.ownerId: {[errorReplaceKey]: data.items.*.ownerId}
-            errorReplaceKey: 'uuid'
+            // errorReplaceKey: 'uuid'
         }
     );
 

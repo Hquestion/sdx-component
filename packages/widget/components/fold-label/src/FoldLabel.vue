@@ -12,11 +12,15 @@
     >
         <i
             class="sdx-icon sdx-icon-loading sdxw-fold-label__loading-icon"
-            v-if="status ==='loading'"
+            v-if="status ==='loading' && !isState"
         />
         <i
             class="sdx-icon sdx-icon-gantanhao sdxw-fold-label__warning-icon"
-            v-if="status ==='warning'"
+            v-if="status ==='warning' && !isState"
+        />
+        <span
+            class="sdxw-fold-label__state-icon"
+            v-if="isState"
         />
         <span class="sdxw-fold-label__main">
             <slot>
@@ -44,7 +48,7 @@ export default {
         },
         type: {
             type: String,
-            default: 'primary' // primary, default, create, processing, running, finish, dying, die, exception, error
+            default: 'primary' // primary, default, pending, success, finish, exception, error
         },
         fold: {
             type: Boolean,
@@ -74,6 +78,9 @@ export default {
             } else {
                 return this.label;
             }
+        },
+        isState() {
+            return ['pending', 'success', 'error', 'exception', 'finish'].includes(this.type);
         }
     },
     methods: {

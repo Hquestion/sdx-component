@@ -69,7 +69,7 @@ export default {
                     python: 'python',
                     java: 'java'
                 };
-                return map[this.current] || 'text';
+                return map[this.current] || 'Plain Text';
             } else {
                 return 'javascript';
             }

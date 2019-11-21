@@ -19,8 +19,8 @@
     left: calc(50% - 230px);
     top: 50%;
     transform: translate3d(0, -50%, 0);
-    border-radius: $sdx-border-radius-large;
-    box-shadow: 0 0 17px 0 rgba(0,0,0,0.25);
+    border-radius: $sdx-border-radius;
+    box-shadow: 0 4px 8px 0 $sdx-secondary-color--light3;
     @include modifier('error') {
         @include element('header') {
             i {
@@ -56,10 +56,14 @@
     }
     @include element('icon-close') {
         position: absolute;
-        right: $sdx-padding;
-        top: $sdx-padding;
+        right: 40px;
+        top: 24px;
         color: $sdx-text-minor-color;
         cursor: pointer;
+        i {
+            font-size: 24px;
+            color: $sdx-secondary-color--light2;
+        }
     }
     @include element('header') {
         line-height: 1;
@@ -73,21 +77,22 @@
         }
         span {
             font-size: 20px;
-            color: $sdx-text-primary-color;
+            color: $sdx-secondary-color;
             display: inline-block;
             line-height: 1.25;
             word-break: break-all;
+            font-weight: 400;
         }
     }
     @include element('main') {
-        margin-top: $sdx-margin;
+        margin-top: $sdx-gap-small;
         padding-left: $sdx-status-icon-margin-right + $sdxu-status-icon-size;
         line-height: 20px;
         font-size: 14px;
-        color: $sdx-text-regular-color;
+        color: $sdx-secondary-color--light3;
     }
     @include element('footer') {
-        margin-top: $sdx-padding-large;
+        margin-top: $sdx-gap-large;
         text-align: right;
     }
 }

@@ -1,7 +1,9 @@
 <template>
     <el-dialog
         :class="['sdxu-dialog',
-                 `sdxu-dialog--${size}`]"
+                 `sdxu-dialog--${size}`,
+                 `is-${display}`
+        ]"
         :visible.sync="dialogVisible"
         :fullscreen="fullscreen"
         :top="top"
@@ -51,14 +53,14 @@
             <slot name="footer">
                 <SdxuButton
                     type="default"
-                    size="small"
+                    size="large"
                     @click="cancel"
                 >
                     {{ cancelLabel }}
                 </SdxuButton>
                 <SdxuButton
                     type="primary"
-                    size="small"
+                    size="large"
                     @click="confirm"
                 >
                     {{ confirmLabel }}
@@ -110,7 +112,7 @@ export default {
         },
         top: {
             type: String,
-            default: '15vh'
+            default: '90px'
         },
         modal: {
             type: Boolean,
@@ -167,6 +169,10 @@ export default {
         confirmHandler: {
             type: Function,
             default: undefined
+        },
+        display: {
+            type: String,
+            default: 'flex' // float, flex
         }
     },
     methods: {

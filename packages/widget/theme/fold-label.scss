@@ -18,6 +18,7 @@
     word-break: break-all;
     white-space: nowrap;
     max-width: 100%;
+    vertical-align: middle;
     &:after {
         content: '\20';
         display: table;
@@ -46,10 +47,6 @@
         color: $sdx-status-running;
         background: rgba($sdx-status-running, 0.1);
     }
-    @include modifier('finish') {
-        color: $sdx-status-finish;
-        background: rgba($sdx-status-finish, 0.1);
-    }
     @include modifier('dying') {
         color: $sdx-status-dying;
         background: rgba($sdx-status-dying, 0.1);
@@ -58,14 +55,6 @@
         color: $sdx-status-die;
         background: rgba($sdx-status-die, 0.1);
     }
-    @include modifier('exception') {
-        color: $sdx-status-exception;
-        background: rgba($sdx-status-exception, 0.1);
-    }
-    @include modifier('error') {
-        color: $sdx-status-error;
-        background: rgba($sdx-status-error, 0.1);
-    }
     @include modifier('stream') {
         color: #fff;
         background: rgba(151,145,255,1);
@@ -73,6 +62,50 @@
     @include modifier('patch') {
         color: #fff;
         background: rgba(38,200,169,1);
+    }
+    @include element('state-icon') {
+        width: 8px;
+        height: 8px;
+        border-radius: 8px;
+        background: $sdx-success-color;
+        margin-right: $sdx-gap-mini;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    @include modifier('pending') {
+        color: $sdx-secondary-color;
+        background: rgba($sdx-warning-color, 0.1);
+        @include element('state-icon') {
+            background: $sdx-warning-color;
+        }
+    }
+    @include modifier('success') {
+        color: $sdx-secondary-color;
+        background: rgba($sdx-success-color, 0.1);
+        @include element('state-icon') {
+            background: $sdx-success-color;
+        }
+    }
+    @include modifier('finish') {
+        color: $sdx-secondary-color;
+        background: rgba(#505F79, 0.1);
+        @include element('state-icon') {
+            background: #505F79;
+        }
+    }
+    @include modifier('error') {
+        color: $sdx-secondary-color;
+        background: rgba($sdx-danger-color, 0.1);
+        @include element('state-icon') {
+            background: $sdx-danger-color;
+        }
+    }
+    @include modifier('exception') {
+        color: $sdx-secondary-color;
+        background: rgba(#5243AA, 0.1);
+        @include element('state-icon') {
+            background: #5243AA;
+        }
     }
     @include state('fold') {
         flex: 0;
@@ -99,6 +132,7 @@
     @include element('main') {
         display: inline-block;
         vertical-align: middle;
+        font-size: 12px;
     }
 }
 

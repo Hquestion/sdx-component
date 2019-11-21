@@ -1,0 +1,64 @@
+@include block('api-test', $bem-namespace-widget) {
+    @include element('uploader') {
+        display: flex;
+        align-items: flex-end;
+        justify-items: flex-start;
+        @include element('img') {
+            width: 200px;
+            height: 200px;
+            background: $sdx-secondary-color--light7;
+            color: $sdx-secondary-color--light3;
+            img {
+                width: 100%;
+                height: 100%;
+            }
+            @include element('placeholder') {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                font-size: 12px;
+                line-height: 1.5;
+            }
+        }
+        @include element('upload-trigger') {
+            flex: 1;
+            padding: 0 $sdx-gap-small;
+            text-align: left;
+            .el-upload__tip {
+                line-height: 2;
+            }
+        }
+    }
+
+    @include element('input-wrapper') {
+        @include element('input-header') {
+            display: flex;
+            @extend .border;
+            .sdxu-select {
+                flex: 1;
+            }
+            .el-select .el-input__inner {
+                height: 40px;
+                line-height: 40px;
+                border: none;
+                text-align: right;
+                text-indent: 20px;
+            }
+            .sdxu-button {
+                width: 60px;
+                border-left: 1px solid $sdx-secondary-color--light6;
+                border-radius: 0;
+            }
+        }
+        @include element('input-code') {
+            height: 160px;
+        }
+    }
+
+    @include element('result') {
+        height: 200px;
+    }
+}

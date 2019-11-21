@@ -7,28 +7,17 @@
             >
                 <SdxuArticlePanel title="API信息">
                     <el-form-item label="版本服务URL:">
-                        <SdxuCopyable
-                            type="appender"
-                            :content="meta.apiUrl"
-                        >
-                            <SdxuInput
-                                autosize
-                                disabled
-                                v-model="meta.apiUrl"
-                            />
-                        </SdxuCopyable>
+                        <SdxuAutosizeCopyable
+                            v-model="meta.apiUrl"
+                        />
                     </el-form-item>
                     <el-form-item label="API Key:">
-                        <SdxuCopyable
-                            type="appender"
-                            :content="meta.apiKey"
-                        >
-                            <SdxuInput
-                                autosize
-                                disabled
-                                v-model="meta.apiKey"
-                            />
-                        </SdxuCopyable>
+                        <SdxuAutosizeCopyable
+                            v-model="meta.apiKey"
+                        />
+                    </el-form-item>
+                    <el-form-item lable="">
+                        <SdxuButton type="primary" size="large" @click="testVisible = true">在线测试</SdxuButton>
                     </el-form-item>
                 </SdxuArticlePanel>
                 <SdxuArticlePanel title="参数说明">
@@ -95,39 +84,35 @@
                 </SdxuArticlePanel>
             </el-form>
         </SdxuSectionPanel>
+        <SdxwApiTestPopper :visible.sync="testVisible" :service-id="serviceId" />
     </div>
 </template>
 
 <script>
-import SdxuCopyable from '@sdx/ui/components/copyable';
-import SdxuInput from '@sdx/ui/components/input';
 import SdxuArticlePanel from '@sdx/ui/components/article-panel';
 import SdxuSectionPanel from '@sdx/ui/components/section-panel';
 import SdxuTable from '@sdx/ui/components/table';
+import SdxuButton from '@sdx/ui/components/button';
+import SdxuAutosizeCopyable from '@sdx/ui/components/autosize-copyable';
 import { getApiDetail } from '@sdx/utils/src/api/model';
 import CodeExample from './CodeExample';
+import ApiTest from '@sdx/widget/components/api-test';
 
 export default {
     name: 'ApiDetail',
     components: {
         CodeExample,
-        SdxuCopyable,
-        SdxuInput,
         SdxuArticlePanel,
         SdxuSectionPanel,
-        SdxuTable
+        SdxuTable,
+        SdxuButton,
+        SdxwApiTestPopper: ApiTest.ApiTestPopper,
+        SdxuAutosizeCopyable
     },
     data() {
         return {
-            content: '123',
-            code: 'print(123)\nprint("helloworld") \n',
-            json: JSON.stringify({
-                a: 1,
-                b:2,
-                c3:3
-            }, undefined, 4),
-            model: {},
-            meta: {}
+            meta: {},
+            testVisible: false
         };
     },
     props: {

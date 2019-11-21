@@ -14,6 +14,9 @@
             background: $sdx-secondary-color--light6 !important;
         }
     }
+    .vue-codemirror {
+        height: 100%;
+    }
 }
 .CodeMirror {
     height: auto;

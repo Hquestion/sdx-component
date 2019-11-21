@@ -17,7 +17,7 @@
                         class="sdxu-message-box__icon-close"
                         @click="close"
                     >
-                        <i class="sdx-icon sdx-icon-check" />
+                        <i class="el-icon el-icon-close" />
                     </div>
                     <div class="sdxu-message-box__header">
                         <i

@@ -17,7 +17,10 @@ export default {
             type: String,
             default: 'file'
         },
-        data: Object,
+        data: {
+            type: Object,
+            default: () => {}
+        },
         headers: Object,
         withCredentials: Boolean,
         multiple: Boolean,
@@ -174,7 +177,7 @@ export default {
                 headers: this.headers,
                 withCredentials: this.withCredentials,
                 file: rawFile,
-                data: {...this.data, path: `${this.data.path || ''}${uploadRelativePath}`},
+                data: {...this.data, path: `${this.data && this.data.path || ''}${uploadRelativePath}`},
                 filename: this.name,
                 action: action,
                 onProgress: e => {

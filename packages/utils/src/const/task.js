@@ -101,13 +101,13 @@ export const STATE_TYPE_LIST = (() => {
 })();
 // 状态映射按钮类型
 export const STATE_MAP_FOLD_LABEL_TYPE = {
-    Created: 'create',
-    Scheduling: 'scheduling',
-    Pending: 'processing',
-    Running: 'running',
-    Succeeded: 'finish',
-    Terminating: 'dying',
-    Terminated: 'die',
+    Created: 'finish',
+    Scheduling: 'pending',
+    Pending: 'pending',
+    Running: 'success',
+    Succeeded: 'success',
+    Terminating: 'pending',
+    Terminated: 'finish',
     Failed: 'error',
     Error: 'exception'
 };
@@ -257,7 +257,7 @@ export const TIMING_TASK_STARTUP_STATE = [
     {
         label: '是',
         value: true
-    }, 
+    },
     {
         label: '否',
         value: false

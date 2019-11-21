@@ -82,7 +82,7 @@ export default {
                 spellcheck: true,
                 autocorrect: true,
                 autofocus: true,
-                theme: this.theme,
+                theme: this.light ? 'default' : this.theme,
                 readOnly: this.readonly ? 'nocursor' : false,
             };
         },
@@ -107,14 +107,16 @@ export default {
                 // this.$refs.codemirror.editor.setOption('mode', mode.mime);
                 // FIXME 当前不能支持动态加载mode的js文件，需对应的解决方案
                 // CodeMirror.autoLoadMode(this.$refs.codemirror.editor, mode);
-                if (file.fileExtension !== '.txt') {
+                if (file.fileExtension !== '.txt' && mode.mode !== 'null') {
                     require(`codemirror/mode/${mode.mode}/${mode.mode}.js`);
                 }
             } else {
                 let mode = findModeByName(this.type);
                 this.editorOptions.mode = mode.mime;
                 // FIXME 当前不能支持动态加载mode的js文件，需对应的解决方案
-                import(`codemirror/mode/${mode.mode}/${mode.mode}.js`);
+                if (mode.mode !== 'null') {
+                    import(`codemirror/mode/${mode.mode}/${mode.mode}.js`);
+                }
             }
         },
         async save() {

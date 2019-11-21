@@ -4,7 +4,7 @@
         class="sdxv-file-main"
     >
         <OperationBar ref="operationBar" />
-        <BreadcrumbBar />
+        <BreadcrumbBar style="margin-top: 20px;" />
         <FileTable ref="fileTable" />
         <SdxvFileTask
             :visible.sync="taskVisible"

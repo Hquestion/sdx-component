@@ -27,6 +27,12 @@ import BubbleTip from './components/bubble-tip';
 import DropdownTip from './components/dropdown-tip';
 import Appender from './components/appender';
 import ButtonGroup from './components/button-group';
+import Copyable from './components/copyable';
+import Codepan from './components/codepan';
+import ArticleTitle from './components/article-title';
+import ArticlePanel from './components/article-panel';
+import SectionPanel from './components/section-panel';
+import AutosizeCopyable from './components/autosize-copyable';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxUI = {
@@ -58,7 +64,13 @@ const SdxUI = {
     BubbleTip,
     DropdownTip,
     Appender,
-    ButtonGroup
+    ButtonGroup,
+    Codepan,
+    Copyable,
+    SectionPanel,
+    ArticlePanel,
+    ArticleTitle,
+    AutosizeCopyable
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -91,6 +103,12 @@ SdxUI.install = (vue, { i18n } = {}) => {
     DropdownTip.install(vue);
     Appender.install(vue);
     ButtonGroup.install(vue);
+    Copyable.install(vue);
+    Codepan.install(vue);
+    ArticleTitle.install(vue);
+    ArticlePanel.install(vue);
+    SectionPanel.install(vue);
+    AutosizeCopyable.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

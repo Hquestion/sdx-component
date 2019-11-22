@@ -193,7 +193,7 @@
                     <template #default="{ row }">
                         <SdxwFoldLabel
                             plain
-                            :type="row.state"
+                            :type="STATE_MAP_FOLD_LABEL_TYPE[row.state]"
                         >
                             {{ STATE_TYPE_LABEL[row.state] }}
                         </SdxwFoldLabel>
@@ -252,7 +252,7 @@ import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
 import { Row, Col, Progress } from 'element-ui';
 import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
-import { STATE_TYPE_LIST, EXECUTE_TYPE_LIST, STATE_TYPE, STATE_TYPE_LABEL, STATE_TYPE_OPERATION_ADMIN,TASK_TYPE_LIST} from '@sdx/utils/src/const/task';
+import { STATE_TYPE_LIST, EXECUTE_TYPE_LIST, STATE_TYPE, STATE_TYPE_LABEL, STATE_TYPE_OPERATION_ADMIN,TASK_TYPE_LIST, STATE_MAP_FOLD_LABEL_TYPE} from '@sdx/utils/src/const/task';
 import { getGroups } from '@sdx/utils/src/api/user';
 import { executionList, startExecution, stopExecution, startTask, stopTask} from '@sdx/utils/src/api/task';
 import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
@@ -267,6 +267,7 @@ export default {
             STATE_TYPE,
             STATE_TYPE_LABEL,
             STATE_TYPE_OPERATION_ADMIN,
+            STATE_MAP_FOLD_LABEL_TYPE,
             TASK_TYPE_LIST,
             date: '',
             refreshTimer: null,

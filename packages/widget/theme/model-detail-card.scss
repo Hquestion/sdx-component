@@ -1,0 +1,53 @@
+@include block('model-detail-card',  $bem-namespace-widget) {
+    border-radius: $sdx-border-radius;
+    background: #FFFFFF;
+    box-shadow: 0 2px 4px 0 $sdx-secondary-color--light5;
+    padding: $sdx-gap-large $sdx-gap-regular;
+    @include element('info') {
+        display: flex;
+        height: $sdxw-model-detail-card-icon-size;
+        div:first-child {
+            margin-right: $sdx-gap-small;
+            svg {
+                width: $sdxw-model-detail-card-icon-size;
+                height: $sdxw-model-detail-card-icon-size;
+            }
+        }
+        & > div:last-child {
+            padding: $sdx-border-radius-large 0;
+            width: 100%;
+            & > div:first-child {
+                font-size: $sdx-title-font-size;
+                color: $sdx-secondary-color;
+                margin-bottom: $sdx-help-font-size;
+            }
+            & > div:last-child {
+                display: flex;
+                justify-content: space-between;
+                div:last-child {
+                    color: $sdxw-subject-card-info-color;
+                    span:last-child {
+                        margin-left: $sdx-gap-mini;
+                    }
+                }
+            }
+        }
+    }
+    @include element('description') {
+        color: $sdx-secondary-color--light3;
+        margin-top: $sdx-gap-regular;
+    }
+    @include element('labels') {
+        display: flex;
+        margin-top: $sdx-gap-regular;
+        div {
+            background: $sdx-secondary-color--light7;
+            border-radius: $sdx-border-radius;
+            height: $sdx-form-element-height-small;
+            padding:0  $sdx-gap-mini;
+            color: $sdx-secondary-color--light1;
+            margin-right:$sdx-gap-small;
+            line-height: $sdx-form-element-height-small;
+        }
+    }
+}

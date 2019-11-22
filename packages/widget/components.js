@@ -25,5 +25,6 @@ module.exports = {
     'subject-card': './components/subject-card/index.js',
     'create-project-card': './components/create-project-card/index.js',
     'create-task-card': './components/create-task-card/index.js',
-    'api-test': './components/api-test/index.js'
+    'api-test': './components/api-test/index.js',
+    'model-detail-card': './components/model-detail-card/index.js',
 };

@@ -75,7 +75,7 @@
                 <el-select
                     size="large"
                     :placeholder="t('sdxCommon.PleaseSelect')"
-                    v-model="params.executionType"
+                    v-model="params.executeType"
                 >
                     <el-option
                         v-for="item in EXECUTE_TYPE_LIST"
@@ -183,7 +183,7 @@
                     prop="runningTime"
                 >
                     <template #default="{ row }">
-                        {{ timeDuration(row.startedAt, row.stoppedAt) }}
+                        {{ timeDuration(row.runningTime) }}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -323,7 +323,7 @@ export default {
                 username: '',
                 group: '',
                 type: '',
-                executionType: '',
+                executeType: '',
                 state: '',
                 startedAt: '',
                 stoppedAt: '',
@@ -331,6 +331,7 @@ export default {
                 orderBy: 'startedAt',
                 start: 1,
                 count: 10,
+                all: true,
             },
             defaultSort: {
                 prop: 'startedAt',
@@ -402,14 +403,15 @@ export default {
                 username: '',
                 group: '',
                 type: '',
-                executionType: '',
+                executeType: '',
                 state: '',
                 startedAt: '',
                 stoppedAt: '',
                 start: 1,
                 count: 10,
                 order: this.params.order,
-                orderBy: this.params.orderBy
+                orderBy: this.params.orderBy,
+                all: true
             };
             this.savaParams = JSON.parse(JSON.stringify(this.params));
             this.date = [];
@@ -423,8 +425,8 @@ export default {
                 this.refreshTimer = null;
             }
             let date = this.date.length ? {
-                startedAt: `${this.date[0]} 00:00:00`,
-                stoppedAt: `${this.date[1]} 23:59:59`
+                startedAt: new Date(`${this.date[0]} 00:00:00`).getTime() / 1000,
+                stoppedAt: new Date(`${this.date[1]} 23:59:59`).getTime() / 1000
             } : {};
             const params = Object.assign({}, this.savaParams, {
                 ...paginate(this.current, this.pageSize), 
@@ -531,6 +533,7 @@ export default {
                     font-size: 48px;
                     height: 74px;
                     line-height: 74px;
+                    font-weight: 600;
                 }
                 .title {
                     display: inline-block;

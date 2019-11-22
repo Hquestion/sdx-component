@@ -272,7 +272,8 @@ export default {
                 start: 1,
                 count: 10,
                 order: this.params.order,
-                orderBy: this.params.orderBy
+                orderBy: this.params.orderBy,
+                all: true
             };
             this.current = 1;
             this.getTaskList();

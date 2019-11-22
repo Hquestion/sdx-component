@@ -27,12 +27,15 @@
         <div class="sdxw-model-detail-card__description">
             {{ (meta && meta.description) ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}
         </div>
-        <div v-if="meta.labels">
-            <div
-                v-for="(item,index) in meta.label"
+        <div
+            v-if="meta.labels.length"
+            class="sdxw-model-detail-card__labels"
+        >
+            <div 
+                v-for="(item,index) in meta.labels"
                 :key="index"
             >
-                {{ item.label }}
+                {{ item }}
             </div>
         </div>
     </div>

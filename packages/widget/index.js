@@ -24,6 +24,7 @@ import SubjectCard from './components/subject-card';
 import CreateProjectCard from './components/create-project-card';
 import CreateTaskCard from './components/create-task-card';
 import ApiTest from './components/api-test';
+import ModelDetailCard from './components/model-detail-card';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
@@ -51,7 +52,8 @@ const SdxWidget = {
     SubjectCard,
     CreateProjectCard,
     CreateTaskCard,
-    ApiTest
+    ApiTest,
+    ModelDetailCard
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -76,6 +78,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     SubjectCard.install(vue);
     CreateProjectCard.install(vue);
     CreateTaskCard.install(vue);
+    ModelDetailCard.install(vue);
     vue.use(Auth);
     vue.use(ShareForm);
     vue.use(LangHandle);

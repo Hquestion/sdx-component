@@ -9,12 +9,14 @@
                 <SdxuInput
                     :placeholder="t('view.task.PleaseInput')"
                     v-model="params.name"
+                    clearable
                 />
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('sdxCommon.Creator')}：`">
                 <SdxuInput
                     v-model="params.username"
                     :placeholder="t('view.task.PleaseInput')"
+                    clearable
                 />
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('view.task.tipCard.SubordinateGroup')}：`">
@@ -23,6 +25,10 @@
                     :placeholder="t('sdxCommon.PleaseSelect')"
                     v-model="params.group"
                 >
+                    <el-option
+                        :label="t('sdxCommon.ALL')"
+                        value=""
+                    />
                     <el-option
                         v-for="item in groups"
                         :key="item.value"

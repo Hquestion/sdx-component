@@ -39,6 +39,7 @@ const routeCfg = [
                 component: ModelDetail,
                 meta: {
                     breadcrumb: t('view.model.ModelDetail'),
+                    isRoot: true
                 }
             },
         ]

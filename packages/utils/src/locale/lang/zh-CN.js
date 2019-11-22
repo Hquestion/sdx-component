@@ -599,6 +599,8 @@ export default {
             etc: '等'
         },
         model: {
+            New_model_service: '新增模型服务',
+            Create_a_new_version: '创建新版本',
             VersionInformation: '版本信息',
             SelectedVersion: '选择版本',
             ModelFile: '模型文件',
@@ -1002,7 +1004,8 @@ export default {
         To: '至',
         Index: '序号',
         Run: '运行',
-        startUp:'启动'
+        startUp:'启动',
+        More: '更多'
     },
     utils: {
         validator: {

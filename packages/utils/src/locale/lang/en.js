@@ -600,6 +600,8 @@ export default {
             etc: 'etc'
         },
         model: {
+            New_model_service: 'New model service',
+            Create_a_new_version: 'Create a new version',
             VersionInformation: 'Version information',
             SelectedVersion: 'Selected version',
             ModelFile: 'Model file',
@@ -1003,7 +1005,8 @@ export default {
         To: 'To',
         Index: 'Index',
         Run: 'Run',
-        startUp:'Start up'
+        startUp:'Start up',
+        More: 'More'
     },
     utils: {
         validator: {

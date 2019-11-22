@@ -35,12 +35,14 @@
                 <SdxuInput
                     :placeholder="t('view.task.PleaseInput')"
                     v-model="params.name"
+                    clearable
                 />
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('sdxCommon.Creator')}：`">
                 <SdxuInput
                     v-model="params.username"
                     :placeholder="t('view.task.PleaseInput')"
+                    clearable
                 />
             </SdxwSearchItem>
             <SdxwSearchItem :label="`${t('view.task.tipCard.SubordinateGroup')}：`">
@@ -49,6 +51,10 @@
                     :placeholder="t('sdxCommon.PleaseSelect')"
                     v-model="params.group"
                 >
+                    <el-option
+                        :label="t('sdxCommon.ALL')"
+                        value=""
+                    />
                     <el-option
                         v-for="item in groups"
                         :key="item.value"
@@ -250,7 +256,7 @@
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuTable from '@sdx/ui/components/table';
 import locale from '@sdx/utils/src/mixins/locale';
-import { Row, Col, Progress } from 'element-ui';
+import { Row, Col, Progress, Select, Option } from 'element-ui';
 import {dateFormatter, timeDuration} from '@sdx/utils/src/helper/transform';
 import { STATE_TYPE_LIST, EXECUTE_TYPE_LIST, STATE_TYPE, STATE_TYPE_LABEL, STATE_TYPE_OPERATION_ADMIN,TASK_TYPE_LIST, STATE_MAP_FOLD_LABEL_TYPE} from '@sdx/utils/src/const/task';
 import { getGroups } from '@sdx/utils/src/api/user';
@@ -352,7 +358,9 @@ export default {
         [Progress.name]: Progress,
         SdxuPagination,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
-        SdxuInput
+        SdxuInput,
+        [Select.name]: Select,
+        [Option.name]: Option,
     },
     methods: {
         dateFormatter,

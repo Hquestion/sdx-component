@@ -27,7 +27,7 @@
                         <el-option
                             v-for="item in taskTypeList"
                             :key="item.value"
-                            :label="item.label"
+                            :label="t(item.label)"
                             :value="item.value"
                         />
                     </el-select>
@@ -41,7 +41,7 @@
                         <el-option
                             v-for="item in executeTypeList"
                             :key="item.value"
-                            :label="item.label"
+                            :label="t(item.label)"
                             :value="item.value"
                         />
                     </el-select>
@@ -55,7 +55,7 @@
                         <el-option
                             v-for="item in taskStateList"
                             :key="item.value"
-                            :label="item.label"
+                            :label="t(item.label)"
                             :value="item.value"
                         />
                     </el-select>
@@ -106,7 +106,7 @@
                     min-width="72px"
                 >
                     <template #default="{ row }">
-                        {{ TASK_TYPE_LABEL[row.type] }}
+                        {{ t(TASK_TYPE_LABEL[row.type]) }}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -120,7 +120,7 @@
                     min-width="70px"
                 >
                     <template #default="{ row }">
-                        {{ EXECUTE_TYPE_LABEL[row.executeType] }}
+                        {{ t(EXECUTE_TYPE_LABEL[row.executeType]) }}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -171,14 +171,14 @@
                             :plain="true"
                             :type="STATE_MAP_FOLD_LABEL_TYPE[row.state]"
                         >
-                            {{ STATE_TYPE_LABEL[row.state] }}
+                            {{ t(STATE_TYPE_LABEL[row.state]) }}
                         </SdxwFoldLabel>
                     </template>
                 </el-table-column>
                 <el-table-column
                     :label="t('sdxCommon.Operation')"
                     fixed="right"
-                    min-width="140px"
+                    :min-width="lang$ === 'en' ? '180px' : '140px'"
                 >
                     <template #default="{ row }">
                         <SdxuButtonGroup>
@@ -188,7 +188,7 @@
                                 :key="i"
                                 @click="handleOperation(item.value, row)"
                             >
-                                {{ item.label }}
+                                {{ t(item.label) }}
                             </SdxuButton>
                         </SdxuButtonGroup>
                     </template>

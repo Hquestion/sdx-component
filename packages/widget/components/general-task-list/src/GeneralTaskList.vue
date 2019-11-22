@@ -53,7 +53,7 @@
                                 @click="handleOperation(el.value, item, projectId)"
                                 type="text"
                             >
-                                {{ el.label }}
+                                {{ t(el.label) }}
                             </sdxu-button>
                         </template>
                     </sdxw-subject-card>
@@ -236,36 +236,36 @@ export default {
                 switch(item.state) {
                     case 'Created':
                         item.meta.state.status = '';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                        item.meta.state.statusText = this.t(STATE_TYPE_LABEL[item.state]);
                         break;
                     case 'Scheduling':
                     case 'Pending':
                         item.meta.state.status = 'loading';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                        item.meta.state.statusText = this.t(STATE_TYPE_LABEL[item.state]);
                         break;
                     case 'Failed':
                         item.meta.state.status = 'warning';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                        item.meta.state.statusText = this.t(STATE_TYPE_LABEL[item.state]);
                         break;
                     case 'Running':
                         item.meta.state.status = 'loading';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                        item.meta.state.statusText = this.t(STATE_TYPE_LABEL[item.state]);
                         break;
                     case 'Succeeded':
                         item.meta.state.status = '';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                        item.meta.state.statusText = this.t(STATE_TYPE_LABEL[item.state]);
                         break;
                     case 'Terminated':
                         item.meta.state.status = '';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                        item.meta.state.statusText = this.t(STATE_TYPE_LABEL[item.state]);
                         break;
                     case 'Error':
                         item.meta.state.status = 'warning';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                        item.meta.state.statusText = this.t(STATE_TYPE_LABEL[item.state]);
                         break;
                     case 'Terminating':
                         item.meta.state.status = 'loading';
-                        item.meta.state.statusText = STATE_TYPE_LABEL[item.state];
+                        item.meta.state.statusText = this.t(STATE_TYPE_LABEL[item.state]);
                         break;
                     default:
                         break;

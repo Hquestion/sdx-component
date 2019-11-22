@@ -201,6 +201,7 @@ export default {
             NoLog: '暂时还没日志哦',
             NoRealMonitor: '暂时还没实时监控哦',
             SelectAnInstance: '请选择实例',
+            Instance: '实例',
             CPUUsageRate: 'CPU使用率',
             MemoryUsage: '内存使用量',
             GPUUsageRate: 'GPU使用率',
@@ -283,7 +284,9 @@ export default {
                 SPARK_SERVING: 'SPARK模型服务',
                 PMML_SERVING: 'PMML模型服务',
                 SKYFLOW_EXEC: 'SKYFLOW执行记录',
-                MODELSERVICE: '模型服务'
+                MODELSERVICE: '模型服务',
+                SKYIDE: 'SKYIDE',
+                SKYFLOW: 'SKYFLOW'
             },
             officiaType: {
                 TENSORFLOW_DIST: 'TensorFlow分布式',

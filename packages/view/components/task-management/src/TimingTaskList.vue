@@ -103,7 +103,7 @@
                                 @click="handleOperation(item.value, row)"
                                 type="link"
                             >
-                                {{ item.label }}
+                                {{ t(item.label) }}
                             </SdxuButton>
                         </SdxuIconButtonGroup>
                     </template>

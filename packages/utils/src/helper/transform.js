@@ -203,7 +203,7 @@ export function dateDiffFormatter(dateDiff) {
         time += `${minutes}m`;
     }
     if (seconds > 0) {
-        time += `${seconds}s}`;
+        time += `${seconds}s`;
     }
     return time;
 }

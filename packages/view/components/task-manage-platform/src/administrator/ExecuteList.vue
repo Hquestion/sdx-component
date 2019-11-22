@@ -72,7 +72,7 @@
                     <el-option
                         v-for="item in TASK_TYPE_LIST"
                         :key="item.value"
-                        :label="item.label"
+                        :label="t(item.label)"
                         :value="item.value"
                     />
                 </el-select>
@@ -86,7 +86,7 @@
                     <el-option
                         v-for="item in EXECUTE_TYPE_LIST"
                         :key="item.value"
-                        :label="item.label"
+                        :label="t(item.label)"
                         :value="item.value"
                     />
                 </el-select>
@@ -99,7 +99,7 @@
                     <el-option
                         v-for="item in STATE_TYPE_LIST"
                         :key="item.value"
-                        :label="item.label"
+                        :label="t(item.label)"
                         :value="item.value"
                     />
                 </el-select>
@@ -201,7 +201,7 @@
                             plain
                             :type="STATE_MAP_FOLD_LABEL_TYPE[row.state]"
                         >
-                            {{ STATE_TYPE_LABEL[row.state] }}
+                            {{ t(STATE_TYPE_LABEL[row.state]) }}
                         </SdxwFoldLabel>
                     </template>
                 </el-table-column>

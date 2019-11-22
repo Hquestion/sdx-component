@@ -201,6 +201,7 @@ export default {
             NoLog: 'No log yet',
             NoRealMonitor: 'No real-time monitoring yet',
             SelectAnInstance: 'Select An Instance',
+            Instance: 'Instance',
             CPUUsageRate: 'CPU Usage Rate',
             MemoryUsage: 'Memory Usage',
             GPUUsageRate: 'GPU Usage Rate',
@@ -278,13 +279,15 @@ export default {
                 TENSORFLOW: 'TENSORFLOW',
                 TENSORFLOW_DIST: 'TENSORFLOW_DIST',
                 TENSORFLOW_AUTO_DIST: 'TENSORFLOW_AUTO_DIST',
-                CONTAINERDEV: 'CONTAINERDEV',
+                CONTAINERDEV: 'CONTAINER_DEV',
                 DATA_SERVICE: 'DATA_SERVICE',
                 TENSORFLOW_SERVING: 'TENSORFLOW_SERVING',
                 SPARK_SERVING: 'SPARK_SERVING',
                 PMML_SERVING: 'PMML_SERVING',
                 SKYFLOW_EXEC: 'SKYFLOW_EXEC',
-                MODELSERVICE: 'MODELSERVICE'
+                MODELSERVICE: 'MODELSERVICE',
+                SKYIDE: 'SKYIDE',
+                SKYFLOW: 'SKYFLOW'
             },
             officiaType: {
                 TENSORFLOW_DIST: 'TensorFlow_DIST',

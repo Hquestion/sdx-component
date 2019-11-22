@@ -25,7 +25,7 @@
                                 :plain="true"
                                 :type="task && STATE_MAP_FOLD_LABEL_TYPE[task.state] || ''"
                             >
-                                {{ task && STATE_TYPE_LABEL[task.state] || '-' }}
+                                {{ task && task.state && t(STATE_TYPE_LABEL[task.state]) || '-' }}
                             </SdxwFoldLabel>
                         </template>
                     </SdxvInfoItem>
@@ -120,7 +120,8 @@
                         :label="t('view.task.StartupParameter')"
                     >
                         <template #value>
-                            <div>
+                            <span v-if="startArgs.length < 1">-</span>
+                            <div v-else>
                                 <div
                                     v-for="(value, i) in startArgs"
                                     :key="i"

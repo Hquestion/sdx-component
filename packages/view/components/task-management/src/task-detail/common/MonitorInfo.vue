@@ -15,7 +15,7 @@
                 />
                 <template v-else>
                     <div class="sdxv-monitor-info__select">
-                        <span>{{ t('view.task.SelectAnInstance') }}：</span>
+                        <span>{{ t('view.task.Instance') }}：</span>
                         <el-select
                             v-if="pods.length > 1"
                             v-model="currentPod"

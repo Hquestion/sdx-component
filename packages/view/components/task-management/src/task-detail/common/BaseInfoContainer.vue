@@ -39,7 +39,7 @@
                     />
                     <SdxvInfoItem
                         :label="t('view.task.RunningTime')"
-                        :value="task ? timeDuration(task.startedAt, task.stoppedAt) : ''"
+                        :value="task ? calculateDateDiffFormatter(task.startedAt, task.stoppedAt) : ''"
                     />
                     <SdxvInfoItem
                         v-if="isSKYIDE"
@@ -78,22 +78,10 @@
                             </span>
                         </template>
                     </SdxvInfoItem>
-                    <!-- // todo: 列表 -->
-                    <SdxvInfoItem
-                        v-if="isCONTAINERDEV"
-                        :label="t('view.task.EnvVars')"
-                        :value="task.environments"
-                    />
                     <SdxvInfoItem
                         v-if="isCONTAINERDEV"
                         :label="t('view.task.StartCommand')"
                         :value="task.startCommand"
-                    />
-                    <!-- // todo: 列表 -->
-                    <SdxvInfoItem
-                        v-if="isCONTAINERDEV"
-                        :label="t('view.task.StartupParameter')"
-                        :value="task.startArgs"
                     />
                     <SdxvInfoItem
                         v-if="isCONTAINERDEV"
@@ -103,10 +91,55 @@
                     <SdxvInfoItem
                         v-if="isCONTAINERDEV"
                         :whole-line="true"
+                        :label="t('view.task.EnvVars')"
+                    >
+                        <template #value>
+                            <span v-if="environments.length < 1">-</span>
+                            <SdxuTable
+                                v-else
+                                :light="true"
+                                :data="task.environments"
+                                :empty-text="t('sdxCommon.NoData')"
+                            >
+                                <el-table-column
+                                    align="center"
+                                    prop="name"
+                                    :label="t('view.task.ParamName')"
+                                />
+                                <el-table-column
+                                    align="center"
+                                    prop="value"
+                                    :label="t('view.task.ParamValue')"
+                                />
+                            </SdxuTable>
+                        </template>
+                    </SdxvInfoItem>
+                    <SdxvInfoItem
+                        v-if="isCONTAINERDEV"
+                        :whole-line="true"
+                        :label="t('view.task.StartupParameter')"
+                    >
+                        <template #value>
+                            <div>
+                                <div
+                                    v-for="(value, i) in startArgs"
+                                    :key="i"
+                                    class="sdxv-base-info-container__list"
+                                >
+                                    <div>{{ i + 1 }}、 </div><div>{{ value }}</div>
+                                </div>
+                            </div>
+                        </template>
+                    </SdxvInfoItem>
+                    <SdxvInfoItem
+                        v-if="isCONTAINERDEV"
+                        :whole-line="true"
                         :label="t('view.task.PortRoute')"
                     >
                         <template #value>
+                            <span v-if="customerServeList.length === 0">-</span>
                             <SdxuTable
+                                v-else
                                 :light="true"
                                 :data="customerServeList"
                                 :empty-text="t('sdxCommon.NoData')"
@@ -115,29 +148,32 @@
                                     align="center"
                                     prop="protocol"
                                     :label="t('view.task.Protocol')"
+                                    width="150px"
                                 />
                                 <el-table-column
                                     align="center"
                                     prop="proxyPort"
                                     :label="t('view.task.Port')"
+                                    width="150px"
                                 />
                                 <el-table-column
                                     header-align="center"
                                     :label="t('view.task.Link')"
                                 >
                                     <template #default="{ row }">
-                                        <SdxuButton
+                                        <span
                                             v-if="row.protocol === 'HTTP'"
                                             @click="goToNewPage(origin + '/' + row.urlSuffix)"
                                             type="link"
+                                            class="sdxv-base-info-container__link--http"
                                         >
                                             {{ origin + '/' + row.urlSuffix }}
-                                        </SdxuButton>
-                                        <SdxuButton
+                                        </span>
+                                        <span
                                             v-else
                                         >
                                             {{ hostname + ':' + row.proxyPort }}
-                                        </SdxuButton>
+                                        </span>
                                     </template>
                                 </el-table-column>
                             </SdxuTable>
@@ -250,6 +286,12 @@ export default {
                 window.console.error(err);
             }
             return obj;
+        },
+        environments() {
+            return this.task.environments || [];
+        },
+        startArgs() {
+            return this.task.startArgs || [];
         }
     },
     methods: {

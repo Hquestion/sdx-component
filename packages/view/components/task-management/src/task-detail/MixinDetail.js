@@ -1,6 +1,6 @@
 
 import { STATE_TYPE, STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, TASK_TYPE } from '@sdx/utils/src/const/task';
-import { byteToGB, parseMilli, dateFormatter, timeDuration } from '@sdx/utils/src/helper/transform';
+import { byteToGB, parseMilli, dateFormatter, calculateDateDiffFormatter } from '@sdx/utils/src/helper/transform';
 
 export default {
     props: {
@@ -15,7 +15,6 @@ export default {
         this.STATE_TYPE = STATE_TYPE;
         return {};
     },
-    // todo:
     computed: {
         hasRealMonitor() {
             return this.task && ![STATE_TYPE.Error, STATE_TYPE.Created, STATE_TYPE.Pending, STATE_TYPE.Scheduling].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
@@ -64,8 +63,8 @@ export default {
         }
     },
     methods: {
-        timeDuration(startTime, endTime) {
-            return timeDuration(startTime, endTime);
+        calculateDateDiffFormatter(startTime, endTime) {
+            return calculateDateDiffFormatter(startTime, endTime);
         },
         byteToGb(byte) {
             return byteToGB(byte);

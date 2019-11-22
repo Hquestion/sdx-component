@@ -3,7 +3,7 @@ import { startTask, stopTask, removeTask, startExecution, stopExecution, removeE
 import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
-import { dateFormatter, timeDuration } from '@sdx/utils/src/helper/transform';
+import { dateFormatter, calculateDateDiffFormatter } from '@sdx/utils/src/helper/transform';
 import { removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import { t } from '../locale';
 import { getImage } from '../api/image';
@@ -119,8 +119,8 @@ export default {
         dateFormatter(date) {
             return dateFormatter(date);
         },
-        timeDuration(startTime, stopTime) {
-            return timeDuration(startTime, stopTime);
+        calculateDateDiffFormatter(startTime, stopTime) {
+            return calculateDateDiffFormatter(startTime, stopTime);
         },
         removeBlankAttr(obj) {
             removeBlankAttr(obj);

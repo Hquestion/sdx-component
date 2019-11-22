@@ -158,7 +158,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ timeDuration(row.startedAt, row.stoppedAt) }}
+                            {{ calculateDateDiffFormatter(row.startedAt, row.stoppedAt) }}
                         </span>
                     </template>
                 </el-table-column>

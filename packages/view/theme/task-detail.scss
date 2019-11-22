@@ -31,6 +31,19 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             }
         }
     }
+    @include element('list') {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+
+        & > div:nth-child(1) {
+            width: 12px;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+    }
 }
 
 @include block('info-container', $bem-namespace-view) {
@@ -88,6 +101,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         align-items: center;
         color: #13264D;
         min-height: 20px;
+        line-height: 20px;
         .sdxw-fold-label {
             padding: 0;
             text-align: left;

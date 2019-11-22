@@ -69,7 +69,7 @@
         >
             {{ (meta && meta.description) ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}
         </div>
-        <div class="sdxw-subject-card__card-label">
+        <div>
             <slot name="cardLabel" />
         </div>
         <div

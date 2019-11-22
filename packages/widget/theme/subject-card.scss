@@ -169,9 +169,5 @@
             color: $sdx-secondary-color--light3;
             padding: $sdx-gap-small 0 $sdx-gap-regular 0;
         }
-
-        @include element('card-label') {
-            margin-top: $sdx-h1-font-size;
-        }
     }
 }

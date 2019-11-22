@@ -600,6 +600,9 @@ export default {
             etc: 'etc'
         },
         model: {
+            VersionInformation: 'Version information',
+            SelectedVersion: 'Selected version',
+            ModelFile: 'Model file',
             ModelDetail: 'Model detail',
             Running_time: 'Running time',
             Instances: 'Instances',

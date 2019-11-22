@@ -599,6 +599,9 @@ export default {
             etc: '等'
         },
         model: {
+            VersionInformation: '版本信息',
+            SelectedVersion: '选择版本',
+            ModelFile: '模型文件',
             ModelDetail: '模型详情',
             Running_time: '运行时间',
             Instances: '实例数',

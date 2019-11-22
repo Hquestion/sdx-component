@@ -2,7 +2,7 @@
     <div
         :class="['sdxw-subject-card', `sdxw-subject-card--${size}`]"
     >
-        <div class="sdxw-subject-card__header">
+        <div :class="['sdxw-subject-card__header', `sdxw-subject-card__header--${cardIcon}`]">
             <div
                 class="sdxw-subject-card__icon"
                 v-if="cardIcon"

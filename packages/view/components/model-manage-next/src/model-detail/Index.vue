@@ -1,13 +1,37 @@
 <template>
     <div class="sdxv-model-detail">
         <div class="title">
-            模型详情
+            {{ t('view.model.ModelDetail') }}
         </div>
         <SdxwModelDetailCard :meta="cardInfo" />
         <sdxu-section-panel>
             <sdxu-article-panel
-                :title="'版本信息'"
-            />
+                :title="t('view.model.VersionInformation')"
+            >
+                <div>
+                    <span>{{ `${t('view.model.SelectedVersion')}：` }}</span>
+                    <el-select
+                        size="large"
+                        :placeholder="t('sdxCommon.PleaseSelect')"
+                        v-model="version"
+                    >
+                        <el-option
+                            v-for="item in versions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        />
+                    </el-select>
+                </div>
+                <div>
+                    <span>{{ `${t('view.model.versionDetail.description')}：` }}</span>
+                    <span>的事发生贾凯里尼爱上曾经阿森纳成绩啊上传说你是首次举办的时间长当时的此刻就是错的事潮男夹克衫不错不错就是差 </span>
+                </div>
+                <div>
+                    <span>{{ `${t('view.model.ModelFile')}：` }}</span>
+                    <span>是错的事潮男夹克衫不错不错就是差 </span>
+                </div>
+            </sdxu-article-panel>
         </sdxu-section-panel>
     </div>
 </template>
@@ -17,6 +41,8 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxwModelDetailCard from '@sdx/widget/components/model-detail-card';
 import SdxuArticleTitle from '@sdx/ui/components/article-panel';
 import SdxuSectionTitle from '@sdx/ui/components/section-panel';
+import { Select, Option } from 'element-ui';
+import Button from '@sdx/ui/components/button';
 export default {
     name: 'SdxvModelDetail',
     data() {
@@ -34,7 +60,9 @@ export default {
                 owner: {
                     uuid: 'asfbadasijo899'
                 }
-            }
+            },
+            versions: [],
+            version: ''
         };
     },
     mixins: [locale],
@@ -42,6 +70,9 @@ export default {
         SdxwModelDetailCard,
         [SdxuArticleTitle.name]: SdxuArticleTitle,
         [SdxuSectionTitle.name]: SdxuSectionTitle,
+        [Select.name]: Select,
+        [Option.name]: Option,
+        [Button.name]: Button,
     }
 };
 </script>
@@ -50,6 +81,20 @@ export default {
 .sdxv-model-detail {
     .sdxu-section-panel {
         margin-top: 24px;
+    }
+    .sdxu-article-panel__content {
+        div {
+            display: flex;
+            span:first-child {
+                width: 70px;
+                height: 40px;
+                line-height: 40px;
+                color: #6E7C94;
+            }
+            .el-select {
+                width: 280px;
+            }
+        }
     }
 }
 </style>

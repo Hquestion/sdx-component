@@ -154,7 +154,8 @@ import {  parseMilli, byteToGB } from '@sdx/utils/src/helper/transform';
 import { taskList,deleteTask } from '@sdx/utils/src/api/task';
 import { getGroups } from '@sdx/utils/src/api/user';
 import MessageBox from '@sdx/ui/components/message-box';
-import { Message } from 'element-ui';
+import { Message, Select, Option } from 'element-ui';
+import SdxuInput from '@sdx/ui/components/input';
 export default {
     name: 'SdxvTaskList',
     mixins: [locale],
@@ -164,6 +165,9 @@ export default {
         SdxuTable,
         [Button.name]: Button,
         SdxuPagination,
+        SdxuInput,
+        [Select.name]: Select,
+        [Option.name]: Option,
     },
     data() {
         return {

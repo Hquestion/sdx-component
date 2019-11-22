@@ -258,6 +258,7 @@ import { executionList, startExecution, stopExecution, startTask, stopTask} from
 import { paginate, removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import FoldLabel from '@sdx/widget/components/fold-label';
+import SdxuInput from '@sdx/ui/components/input';
 export default {
     name: 'SdxvExecuteList',
     data() {
@@ -351,6 +352,7 @@ export default {
         [Progress.name]: Progress,
         SdxuPagination,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
+        SdxuInput
     },
     methods: {
         dateFormatter,

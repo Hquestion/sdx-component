@@ -4,6 +4,7 @@ import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
 import { dateFormatter, timeDuration } from '@sdx/utils/src/helper/transform';
+import { removeBlankAttr } from '@sdx/utils/src/helper/tool';
 import { t } from '../locale';
 import { getImage } from '../api/image';
 
@@ -121,5 +122,8 @@ export default {
         timeDuration(startTime, stopTime) {
             return timeDuration(startTime, stopTime);
         },
+        removeBlankAttr(obj) {
+            removeBlankAttr(obj);
+        }
     }
 };

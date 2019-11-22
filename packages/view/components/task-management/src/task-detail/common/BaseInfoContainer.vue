@@ -39,7 +39,7 @@
                     />
                     <SdxvInfoItem
                         :label="t('view.task.RunningTime')"
-                        :value="task ? timeDuration(task.startedAt, task.stoppedAt || new Date()) : ''"
+                        :value="task ? timeDuration(task.startedAt, task.stoppedAt) : ''"
                     />
                     <SdxvInfoItem
                         v-if="isSKYIDE"
@@ -67,7 +67,6 @@
                                         >
                                             {{ origin + '/' + item.urlSuffix }}
                                         </div>
-                                        <!-- // todo: click -->
                                         <div v-else>
                                             {{ hostname + ':' + item.proxyPort }}
                                         </div>
@@ -96,12 +95,11 @@
                         :label="t('view.task.StartupParameter')"
                         :value="task.startArgs"
                     />
-                    <!-- // todo: 结果输出 -->
-                    <!-- <SdxvInfoItem
+                    <SdxvInfoItem
                         v-if="isCONTAINERDEV"
-                        :label="t('view.task.结果输出')"
-                        :value="task.args"
-                    /> -->
+                        :label="t('view.task.DisplayPath')"
+                        :value="task.displayPath"
+                    />
                     <SdxvInfoItem
                         v-if="isCONTAINERDEV"
                         :whole-line="true"
@@ -135,7 +133,6 @@
                                         >
                                             {{ origin + '/' + row.urlSuffix }}
                                         </SdxuButton>
-                                        <!-- // todo: -->
                                         <SdxuButton
                                             v-else
                                         >
@@ -158,20 +155,20 @@
                     <SdxvInfoContainer>
                         <SdxvInfoItem
                             label="CPU"
-                            :value="(task && task.resourceConfig && task.resourceConfig.DEPLOY && task.resourceConfig.DEPLOY.requests && task.resourceConfig.DEPLOY.requests.cpu || 0) + t('view.task.Core')"
+                            :value="milliCoreToCore(resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && resourceConfig.DEPLOY.requests.cpu || 0) + t('view.task.Core')"
                         />
                         <SdxvInfoItem
                             label="GPU"
-                            :value="(task && task.resourceConfig && task.resourceConfig.DEPLOY && task.resourceConfig.DEPLOY.requests && task.resourceConfig.DEPLOY.requests['nvidia.com/gpu'] || 0) + t('view.task.Block')"
+                            :value="(resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && resourceConfig.DEPLOY.requests['nvidia.com/gpu'] || 0) + t('view.task.Block')"
                         />
                         <SdxvInfoItem
                             :label="t('view.task.Memory')"
-                            :value="byteToGb(task && task.resourceConfig && task.resourceConfig.DEPLOY && task.resourceConfig.DEPLOY.requests && task.resourceConfig.DEPLOY.requests.memory || 0) + 'GB'"
+                            :value="byteToGb(resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && resourceConfig.DEPLOY.requests.memory || 0) + 'GB'"
                         />
                         <SdxvInfoItem
                             v-if="isCONTAINERDEV"
-                            :label="t('view.task.ExectorInstanceCount')"
-                            :value="task && task.resourceConfig && task.resourceConfig.DEPLOY && task.resourceConfig.DEPLOY.instance || 0 + t('view.task.Count')"
+                            :label="t('view.task.InstanceCount')"
+                            :value="resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.instance || 0 + t('view.task.Count')"
                         />
                     </SdxvInfoContainer>
                 </template>
@@ -244,6 +241,15 @@ export default {
         customerServeList() {
             let list = this.task.serviceList || [];
             return list.filter(item => item.proxyType === 'CUSTOMER');
+        },
+        resourceConfig() {
+            let obj = null;
+            try {
+                obj = JSON.parse(this.task.resourceConfig);
+            } catch(err) {
+                window.console.error(err);
+            }
+            return obj;
         }
     },
     methods: {

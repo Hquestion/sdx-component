@@ -158,7 +158,7 @@
                 >
                     <template #default="{ row }">
                         <span>
-                            {{ timeDuration(row.startedAt, row.stoppedAt || new Date()) }}
+                            {{ timeDuration(row.startedAt, row.stoppedAt) }}
                         </span>
                     </template>
                 </el-table-column>
@@ -181,7 +181,7 @@
                     min-width="140px"
                 >
                     <template #default="{ row }">
-                        <SdxuIconButtonGroup>
+                        <SdxuButtonGroup>
                             <SdxuButton
                                 v-for="(item, i) in getOperationList(row.state)"
                                 type="link"
@@ -190,7 +190,7 @@
                             >
                                 {{ item.label }}
                             </SdxuButton>
-                        </SdxuIconButtonGroup>
+                        </SdxuButtonGroup>
                     </template>
                 </el-table-column>
             </SdxuTable>
@@ -212,7 +212,7 @@ import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuInput from '@sdx/ui/components/input';
 import SdxuButton from '@sdx/ui/components/button';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
-import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
+import SdxuButtonGroup from '@sdx/ui/components/button-group';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import { executionList } from '@sdx/utils/src/api/task';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -236,7 +236,7 @@ export default {
         SdxuTable,
         SdxuPagination,
         SdxuInput,
-        SdxuIconButtonGroup,
+        SdxuButtonGroup,
         SdxuButton,
         ElDatePicker,
         ElTableColumn,
@@ -275,12 +275,12 @@ export default {
             taskResourceList: [],
             params: {
                 name: '',
-                creator: '',
+                username: '',
                 order: 'desc',
                 orderBy: 'startedAt',
                 ownerId: '',
                 type: '',
-                executionType: '',
+                executeType: '',
                 state: '',
                 startedAt: '',
                 stoppedAt: '',
@@ -294,16 +294,18 @@ export default {
     computed: {
         queryParams() {
             let params = {
-                ownerId: this.currentUser.userId
+                // ownerId: this.currentUser.userId
             };
             if (Array.isArray(this.paramDate)) {
-                params.startedAt = this.paramDate[0];
-                params.stoppedAt = this.paramDate[1];
+                params.startedAt = +new Date(this.paramDate[0] + ' 00:00:00') / 1000;
+                params.stoppedAt = +new Date(this.paramDate[1] + ' 23:59:59') / 1000;
             }
-            return Object.assign({}, this.params, params, {
+            let obj = Object.assign({}, this.params, params, {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });
+            this.removeBlankAttr(obj);
+            return obj;
         }
     },
     methods: {
@@ -336,10 +338,10 @@ export default {
         },
         handleSearch() {
             this.params.type = this.selectedType;
-            this.params.executionType = this.selectedExecuteType;
+            this.params.executeType = this.selectedExecuteType;
             this.params.state = this.selectedState;
             this.params.name = this.taskName;
-            this.params.creator = this.creator;
+            this.params.username = this.creator;
             this.paramDate = this.selectedDate;
             this.page = 1;
         },

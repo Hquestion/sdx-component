@@ -1,6 +1,6 @@
 <template>
     <div class="sdxv-task-detail">
-        <el-tabs v-model="activeTab">
+        <el-tabs v-model="activeTab">   
             <el-tab-pane
                 :label="t('view.task.BasicInformation')"
                 name="base"
@@ -30,6 +30,16 @@
                 />
             </el-tab-pane>
         </el-tabs>
+        <SdxuButton
+            v-if="isCONTAINERDEV && isRunning && task && !task.startCommand"
+            class="sdxv-task-detail__tensorboard"
+            :invert="true"
+            type="default"
+            size="small"
+            @click="goIntoTensorBoard"
+        >
+            {{ t('view.task.AccessTensorBoard') }}
+        </SdxuButton>
     </div>
 </template>
 
@@ -41,6 +51,7 @@ import LogView from './common/LogView';
 import BaseInfoContainer from './common/BaseInfoContainer';
 import locale from '@sdx/utils/src/mixins/locale';
 import MixinDetail from './MixinDetail';
+import SdxuButton from '@sdx/ui/components/button';
 
 export default {
     name: 'TaskDetailPanel',
@@ -50,12 +61,21 @@ export default {
         ElTabPane,
         MonitorInfo,
         LogView,
-        BaseInfoContainer
+        BaseInfoContainer,
+        SdxuButton
     },
     data() {
         return {
             activeTab: 'base'
         };
+    },
+    methods: {
+        goIntoTensorBoard() {
+            let list = this.task.serviceList || [];
+            let obj = list.find(item => item.proxyType === 'TFBOARD');
+            let url = obj && (location.origin + '/' + obj.urlSuffix) || '';
+            url && window.open(url);
+        }
     }
 };
 </script>

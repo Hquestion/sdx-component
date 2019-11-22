@@ -127,6 +127,7 @@ export default {
     },
     view: {
         task: {
+            AccessTensorBoard: 'Access TensorBoard',
             ManualExecution: 'Manual Execution',
             TimingExecution: 'Timing Execution',
             MultipleExecution: 'Multiple Execution',
@@ -171,6 +172,7 @@ export default {
             LogDirectory: 'Log Directory',
             InstanceCount: 'Instance Count',
             StartupParameter: 'Startup Parameter',
+            DisplayPath: 'Display Path',
             TrainingOutputDirectory: 'Training Output Directory',
             Port: 'Port',
             Protocol: 'Protocol',

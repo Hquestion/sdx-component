@@ -189,10 +189,11 @@ export default {
             let params = {
                 ownerId: this.currentUser.userId
             };
-            return Object.assign({}, this.params, params, {
+            let obj = Object.assign({}, this.params, params, {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });
+            return this.removeBlankAttr(obj);
         },
     },
     methods: {

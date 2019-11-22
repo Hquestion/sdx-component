@@ -127,6 +127,7 @@ export default {
     },
     view: {
         task: {
+            AccessTensorBoard: '进入TensorBoard',
             ManualExecution: '手动执行',
             TimingExecution: '定时执行',
             MultipleExecution: '多次执行',
@@ -171,6 +172,7 @@ export default {
             LogDirectory: '日志目录',
             InstanceCount: '实例个数',
             StartupParameter: '启动参数',
+            DisplayPath: '结果输出',
             TrainingOutputDirectory: '训练输出目录',
             Port: '端口',
             Protocol: '协议',

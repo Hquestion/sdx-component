@@ -84,7 +84,7 @@ export const STATE_TYPE_LABEL = {
 };
 // 状态类型下拉框列表
 export const STATE_TYPE_LIST = (() => {
-    const list = Object.keys(STATE_TYPE).map(item => {
+    const list = Object.keys(STATE_TYPE).filter(item => item !== STATE_TYPE.Created).map(item => {
         return {
             label: STATE_TYPE_LABEL[item],
             value: STATE_TYPE[item]

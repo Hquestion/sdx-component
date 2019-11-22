@@ -3,7 +3,7 @@
         <div
             class="sdxu-article-title__main"
             @click.capture="switchExpand"
-            :class="expandable ? 'hoverable' : ''"
+            :class="{'hoverable' : expandable, 'with-bar' : showBar}"
         >
             <slot>{{ title }}</slot>
             <span
@@ -43,6 +43,15 @@ export default {
         expanded: {
             type: Boolean,
             default: false
+        },
+        showBar: {
+            type: Boolean,
+            default: true
+        }
+    },
+    watch: {
+        expanded(nVal) {
+            this.expandedTemp = nVal;
         }
     },
     components: {

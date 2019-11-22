@@ -15,4 +15,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             margin-bottom: 10px;
         }
     }
+    .el-form-item {
+        margin-bottom: 16px;
+        .el-form-item__error {
+            position: relative;
+        }
+    }
 }

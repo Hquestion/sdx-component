@@ -43,6 +43,14 @@
                         >
                             添加已有版本
                         </SdxuButton>
+                        <SdxuButton
+                            type="text"
+                            size="regular"
+                            block
+                            @click="createService"
+                        >
+                            添加模型服务
+                        </SdxuButton>
                     </template>
                 </sdxu-button>
                 <SdxuSortButton
@@ -120,6 +128,11 @@
                 v-if="createVersionVisible"
                 @close="dialogClose"
             />
+            <create-model-service
+                :visible.sync="createServiceVisible"
+                v-if="createServiceVisible"
+                @close="dialogClose"
+            />
         </div>
     </div>
 </template>
@@ -130,6 +143,7 @@ import ElSelect from 'element-ui/lib/select';
 import ModelListTable from './model-list-table/Index';
 import CreateModel from './CreateModel';
 import CreateVersion from './CreateVersion';
+import CreateModelService from '../service-dialog/create-model-service/Index';
 import Button from '@sdx/ui/components/button';
 import Input from '@sdx/ui/components/input';
 import { getLabels } from '@sdx/utils/src/api/model';
@@ -146,6 +160,7 @@ export default {
             orderBy: 'createdAt',
             createDialogVisible: false,
             createVersionVisible: false,
+            createServiceVisible: false,
             labelOptions: [],
             modelTypeOptions: [],
             searchLabels: [],
@@ -162,6 +177,7 @@ export default {
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
         CreateModel,
         CreateVersion,
+        CreateModelService,
         ElSelect
     },
     mixins: [locale],
@@ -192,6 +208,9 @@ export default {
         },
         createVersion() {
             this.createVersionVisible = true;
+        },
+        createService() {
+            this.createServiceVisible = true;
         },
         reset() {
             this.resetFilters();

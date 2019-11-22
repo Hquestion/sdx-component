@@ -43,7 +43,7 @@
                             </SdxwFoldLabel>
                         </div>
                     </div>
-                    
+
                     <div>
                         <div>
                             {{ (meta && meta.creator ) || '' }}
@@ -69,7 +69,7 @@
         >
             {{ (meta && meta.description) ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}
         </div>
-        <div>
+        <div class="sdxw-subject-card__card-label">
             <slot name="cardLabel" />
         </div>
         <div

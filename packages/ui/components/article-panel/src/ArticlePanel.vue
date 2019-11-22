@@ -5,6 +5,7 @@
             :title="title"
             :expandable="expandable"
             :expanded.sync="expandedTemp"
+            :show-bar="showBar"
         >
             <slot name="title" />
             <div slot="right">
@@ -39,11 +40,18 @@ export default {
         expanded: {
             type: Boolean,
             default: false
+        },
+        showBar: {
+            type: Boolean,
+            default: true
         }
     },
     watch: {
         expandedTemp(nVal) {
             this.$emit('update:expanded', nVal);
+        },
+        expanded(nVal) {
+            this.expandedTemp = nVal;
         }
     }
 };

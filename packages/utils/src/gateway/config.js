@@ -153,4 +153,10 @@ module.exports = [
         functionName: 'taskExecutionProfiles.handler',
         filePath: './compose/taskExecutionProfiles.js'
     },
+    {
+        apiId: '/fe-compose/api/v1/heartbeat',
+        method: 'GET',
+        functionName: 'heartbeat.handler',
+        filePath: './compose/heartbeat.js'
+    }
 ];

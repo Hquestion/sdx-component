@@ -117,9 +117,9 @@ export default {
                     // 如果tab关完了，activeWindows也关闭
                     if(this.editableTabs.length === 0) {
                         this.app.sidebar.activeWindows = [];
-                        if (Object.keys(this.app.nbSessionMap).length === 0) {
-                            return this.app.taskManager.stop();
-                        }
+                        // if (Object.keys(this.app.nbSessionMap).length === 0) {
+                        //     return this.app.taskManager.stop();
+                        // }
                     }
                 });
             });

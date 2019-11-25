@@ -283,9 +283,9 @@ export default {
             this.mode = NotebookMode.EDIT;
             this.session = null;
             // 同时停止任务
-            if (shutdownTask && (!this.app.terminal.tabTerminal || this.app.terminal.tabTerminal.length === 0)) {
-                await this.app.taskManager.stop();
-            }
+            // if (shutdownTask && (!this.app.terminal.tabTerminal || this.app.terminal.tabTerminal.length === 0)) {
+            //     await this.app.taskManager.stop();
+            // }
             this.kernelState = NotebookKernelState.STOPPED;
             return true;
         },

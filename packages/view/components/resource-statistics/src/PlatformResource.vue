@@ -27,7 +27,7 @@
                 />
             </div>
             <div class="sdxv-platform-resource__chart--item">
-                <SdxvChartProcess 
+                <SdxvChartProcess
                     :used="used.memory"
                     :total="allocations.memory"
                 />
@@ -96,7 +96,7 @@ export default {
                     gpu: total.gpu,
                     memory: byteToGB(total.memory)
                 };
-                let usedInfo = usedInfoList && usedInfoList.items.length > 0 ? usedInfoList.items[0].quota : {
+                let usedInfo = usedInfoList && usedInfoList.data.length > 0 ? usedInfoList.data[0].quota : {
                     cpu: 0,
                     gpus: {},
                     memory: 0

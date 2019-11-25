@@ -1,0 +1,13 @@
+.el-tag {
+    font-size: $sdx-content-font-size;
+    background: $sdx-secondary-color--light7;
+    border-radius: $sdx-border-radius;
+    height: 32px;
+    line-height: 32px;
+    border: none;
+    color: $sdx-secondary-color--light1;
+    vertical-align: middle;
+    & + .el-tag {
+        margin-left: $sdx-gap-mini;
+    }
+}

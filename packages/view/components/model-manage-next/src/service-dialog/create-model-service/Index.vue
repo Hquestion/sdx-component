@@ -6,138 +6,138 @@
         size="large"
         :title="title"
     >
-        <div :style="{height: editingModel ? '290px' : 'calc(45vh)'}">
-            <SdxuScroll>
-                <div class="sdxv-create-service__form">
-                    <el-form
-                        :label-width="lang$==='en' ? '150px' : '100px'"
-                        label-position="right"
-                        :model="serviceInfoForm"
-                        ref="serviceInfoForm"
-                        :rules="serviceInfoFormRule"
+        <!-- <div :style="{height: editingModel ? '290px' : 'calc(45vh)'}">
+            <SdxuScroll> -->
+        <div class="sdxv-create-service__form">
+            <el-form
+                :label-width="lang$==='en' ? '150px' : '100px'"
+                label-position="right"
+                :model="serviceInfoForm"
+                ref="serviceInfoForm"
+                :rules="serviceInfoFormRule"
+            >
+                <SdxuArticlePanel
+                    :title="`基本信息`"
+                    :show-bar="false"
+                >
+                    <el-form-item
+                        :label="`服务名称:`"
+                        prop="name"
                     >
-                        <SdxuArticlePanel
-                            :title="`基本信息`"
-                            :show-bar="false"
+                        <SdxuInput
+                            v-model="serviceInfoForm.name"
+                            size="small"
+                            :placeholder="`请输入服务名称`"
+                        />
+                    </el-form-item>
+                    <el-form-item
+                        prop="imageId"
+                        :label="`${t('view.task.RuntimeEnvironment')}:`"
+                    >
+                        <el-select
+                            v-model="serviceInfoForm.imageId"
+                            :searchable="true"
+                            size="small"
+                            :placeholder="t('view.task.form.Please_select_the_operating_environment')"
                         >
-                            <el-form-item
-                                :label="`服务名称:`"
-                                prop="name"
-                            >
-                                <SdxuInput
-                                    v-model="serviceInfoForm.name"
-                                    size="small"
-                                    :placeholder="`请输入服务名称`"
-                                />
-                            </el-form-item>
-                            <el-form-item
-                                prop="imageId"
-                                :label="`${t('view.task.RuntimeEnvironment')}:`"
-                            >
-                                <el-select
-                                    v-model="serviceInfoForm.imageId"
-                                    :searchable="true"
-                                    size="small"
-                                    :placeholder="t('view.task.form.Please_select_the_operating_environment')"
-                                >
-                                    <el-option
-                                        v-for="item in imageOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    />
-                                </el-select>
-                            </el-form-item>
-                        </SdxuArticlePanel>
-                        <SdxuArticlePanel
-                            :title="t('view.task.EnvSetting')"
-                            :show-bar="false"
-                        >
-                            <el-form-item
-                                prop="resourceConfigObj"
-                                :label="`${t('view.task.form.ResourceAllocation')}:`"
-                            >
-                                <i class="icon">*</i>
-                                <SdxwResourceConfig
-                                    v-if="!isGpuEnt"
-                                    v-model="cpuObj"
-                                    type="onlycpu"
-                                    :data-ready="dataReady"
-                                />
+                            <el-option
+                                v-for="item in imageOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            />
+                        </el-select>
+                    </el-form-item>
+                </SdxuArticlePanel>
+                <SdxuArticlePanel
+                    :title="t('view.task.EnvSetting')"
+                    :show-bar="false"
+                >
+                    <el-form-item
+                        prop="resourceConfigObj"
+                        :label="`${t('view.task.form.ResourceAllocation')}:`"
+                    >
+                        <i class="icon">*</i>
+                        <SdxwResourceConfig
+                            v-if="!isGpuEnt"
+                            v-model="cpuObj"
+                            type="onlycpu"
+                            :data-ready="dataReady"
+                        />
 
-                                <div v-if="isGpuEnt">
-                                    <SdxwResourceConfig
-                                        v-model="cpuObj"
-                                        type="cpu"
-                                        :data-ready="dataReady"
-                                    />
-                                    <SdxwResourceConfig
-                                        v-model="gpuObj"
-                                        type="gpu"
-                                        :data-ready="dataReady"
-                                    />
-                                </div>
-                            </el-form-item>
-                            <el-form-item
-                                prop="instanceNumber"
-                                :label="`${t('view.task.InstanceNum')}:`"
-                            >
-                                <el-input-number
-                                    v-model="serviceInfoForm.instanceNumber"
-                                    :min="1"
-                                />
-                            </el-form-item>
-                            <el-form-item
-                                :label="`流量占比:`"
-                            >
-                                100%
-                            </el-form-item>
-                        </SdxuArticlePanel>
-                        <SdxuArticlePanel
-                            :title="t('view.task.AdvanceSetting')"
-                            expandable
-                            :expanded.sync="showMoreSetting"
-                            :show-bar="false"
-                            class="sdxv-create-service__advanced"
+                        <div v-if="isGpuEnt">
+                            <SdxwResourceConfig
+                                v-model="cpuObj"
+                                type="cpu"
+                                :data-ready="dataReady"
+                            />
+                            <SdxwResourceConfig
+                                v-model="gpuObj"
+                                type="gpu"
+                                :data-ready="dataReady"
+                            />
+                        </div>
+                    </el-form-item>
+                    <el-form-item
+                        prop="instanceNumber"
+                        :label="`${t('view.task.InstanceNum')}:`"
+                    >
+                        <el-input-number
+                            v-model="serviceInfoForm.instanceNumber"
+                            :min="1"
+                        />
+                    </el-form-item>
+                    <el-form-item
+                        :label="`流量占比:`"
+                    >
+                        100%
+                    </el-form-item>
+                </SdxuArticlePanel>
+                <SdxuArticlePanel
+                    :title="t('view.task.AdvanceSetting')"
+                    expandable
+                    :expanded.sync="showMoreSetting"
+                    :show-bar="false"
+                    class="sdxv-create-service__advanced"
+                >
+                    <div v-show="showMoreSetting">
+                        <SdxuTabRadioGroup
+                            v-model="settingType"
+                            style="margin-bottom: 16px;"
                         >
-                            <div v-show="showMoreSetting">
-                                <SdxuTabRadioGroup
-                                    v-model="settingType"
-                                    style="margin-bottom: 16px;"
-                                >
-                                    <SdxuTabRadioItem name="params">
-                                        参数设置
-                                    </SdxuTabRadioItem>
-                                    <SdxuTabRadioItem name="request">
-                                        请求示例
-                                    </SdxuTabRadioItem>
-                                    <SdxuTabRadioItem name="response">
-                                        返回示例
-                                    </SdxuTabRadioItem>
-                                </SdxuTabRadioGroup>
-                                <params-setting
-                                    v-show="settingType === 'params'"
-                                    :input-params.sync="serviceInfoForm.inputParams"
-                                    :output-params.sync="serviceInfoForm.outputParams"
-                                    ref="paramsSetting"
-                                />
-                                <request-example
-                                    v-show="settingType === 'request'"
-                                    :request-examples.sync="serviceInfoForm.requestExamples"
-                                    ref="requestExample"
-                                />
-                                <response-example
-                                    v-show="settingType === 'response'"
-                                    :response-success.sync="serviceInfoForm.responseSuccess"
-                                    :response-fail.sync="serviceInfoForm.responseFail"
-                                    ref="responseExample"
-                                />
-                            </div>
-                        </SdxuArticlePanel>
-                    </el-form>
-                </div>
-            </SdxuScroll>
+                            <SdxuTabRadioItem name="params">
+                                参数设置
+                            </SdxuTabRadioItem>
+                            <SdxuTabRadioItem name="request">
+                                请求示例
+                            </SdxuTabRadioItem>
+                            <SdxuTabRadioItem name="response">
+                                返回示例
+                            </SdxuTabRadioItem>
+                        </SdxuTabRadioGroup>
+                        <params-setting
+                            v-show="settingType === 'params'"
+                            :input-params.sync="serviceInfoForm.inputParams"
+                            :output-params.sync="serviceInfoForm.outputParams"
+                            ref="paramsSetting"
+                        />
+                        <request-example
+                            v-show="settingType === 'request'"
+                            :request-examples.sync="serviceInfoForm.requestExamples"
+                            ref="requestExample"
+                        />
+                        <response-example
+                            v-show="settingType === 'response'"
+                            :response-success.sync="serviceInfoForm.responseSuccess"
+                            :response-fail.sync="serviceInfoForm.responseFail"
+                            ref="responseExample"
+                        />
+                    </div>
+                </SdxuArticlePanel>
+            </el-form>
         </div>
+        <!-- </SdxuScroll>
+        </div> -->
 
         <div
             slot="footer"

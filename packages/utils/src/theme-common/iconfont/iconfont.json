@@ -1343,6 +1343,13 @@
       "unicode_decimal": 59060
     },
     {
+      "icon_id": "11362440",
+      "name": "操作:浏览",
+      "font_class": "caozuoliulan",
+      "unicode": "e721",
+      "unicode_decimal": 59169
+    },
+    {
       "icon_id": "11362442",
       "name": "单选框:选中",
       "font_class": "danxuankuangxuanzhong",
@@ -1593,6 +1600,111 @@
       "font_class": "danchuangchahaojinggao",
       "unicode": "e71a",
       "unicode_decimal": 59162
+    },
+    {
+      "icon_id": "11472378",
+      "name": "操作:更多:Default",
+      "font_class": "caozuogengduoDefault",
+      "unicode": "e730",
+      "unicode_decimal": 59184
+    },
+    {
+      "icon_id": "11472380",
+      "name": "操作:更多:hover",
+      "font_class": "caozuogengduohover",
+      "unicode": "e734",
+      "unicode_decimal": 59188
+    },
+    {
+      "icon_id": "11472381",
+      "name": "筛选条件:展开",
+      "font_class": "shaixuantiaojianzhankai",
+      "unicode": "e735",
+      "unicode_decimal": 59189
+    },
+    {
+      "icon_id": "11574007",
+      "name": "SDX Logo",
+      "font_class": "SDXLogo",
+      "unicode": "e7d6",
+      "unicode_decimal": 59350
+    },
+    {
+      "icon_id": "11893444",
+      "name": "分类类型",
+      "font_class": "fenleileixing",
+      "unicode": "e71b",
+      "unicode_decimal": 59163
+    },
+    {
+      "icon_id": "11893445",
+      "name": "聚类类型",
+      "font_class": "juleileixing",
+      "unicode": "e71c",
+      "unicode_decimal": 59164
+    },
+    {
+      "icon_id": "11893446",
+      "name": "时间序列",
+      "font_class": "shijianxulie",
+      "unicode": "e71d",
+      "unicode_decimal": 59165
+    },
+    {
+      "icon_id": "11893447",
+      "name": "关联规则",
+      "font_class": "guanlianguize",
+      "unicode": "e71e",
+      "unicode_decimal": 59166
+    },
+    {
+      "icon_id": "11893448",
+      "name": "推荐类型",
+      "font_class": "tuijianleixing",
+      "unicode": "e71f",
+      "unicode_decimal": 59167
+    },
+    {
+      "icon_id": "11893449",
+      "name": "自动建模",
+      "font_class": "zidongjianmo",
+      "unicode": "e720",
+      "unicode_decimal": 59168
+    },
+    {
+      "icon_id": "11893450",
+      "name": "回归类型",
+      "font_class": "huiguileixing",
+      "unicode": "e722",
+      "unicode_decimal": 59170
+    },
+    {
+      "icon_id": "11893451",
+      "name": "异常检测",
+      "font_class": "yichangjiance",
+      "unicode": "e723",
+      "unicode_decimal": 59171
+    },
+    {
+      "icon_id": "11893452",
+      "name": "特征转换",
+      "font_class": "tezhengzhuanhuan",
+      "unicode": "e724",
+      "unicode_decimal": 59172
+    },
+    {
+      "icon_id": "11893453",
+      "name": "自定义模型",
+      "font_class": "zidingyimoxing",
+      "unicode": "e725",
+      "unicode_decimal": 59173
+    },
+    {
+      "icon_id": "11893454",
+      "name": "自然语言处理",
+      "font_class": "ziranyuyanchuli",
+      "unicode": "e726",
+      "unicode_decimal": 59174
     }
   ]
 }

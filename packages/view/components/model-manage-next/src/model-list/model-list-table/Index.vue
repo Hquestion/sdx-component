@@ -1,22 +1,44 @@
 <template>
     <div
-        class="sdxw-general-task-list"
+        class="sdxw-model-list-table"
         v-loading="loading"
     >
         <div v-if="modelList.length">
             <div>
                 <sdxw-subject-card-list
-                    class="sdxw-general-task-list__container"
+                    class="sdxw-model-list-table__container"
                 >
                     <sdxw-subject-card
                         v-for="(item, index) in modelList"
                         :key="index"
                         :card-icon="false"
                         :meta="item.meta"
-                        class="sdxw-general-task-list__container--element"
+                        class="sdxw-model-list-table__container--element"
                     >
                         <template #cardLabel>
-                            <SdxwFoldLabelGroup :list="item.labels" />
+                            <!-- <SdxwFoldLabelGroup :list="item.labels" /> -->
+                            <div class="sdxw-model-list-table__container--type">
+                                <div style="margin-right: 24px;">
+                                    <el-tag>
+                                        <svg
+                                            class="icon"
+                                            aria-hidden="true"
+                                            style="margin-right: 2px;"
+                                        >
+                                            <use xlink:href="#sdx-zidingyimoxing" />
+                                        </svg>
+                                        类型
+                                    </el-tag>
+                                </div>
+                                <div>
+                                    <el-tag
+                                        v-for="(label, i) in item.labels"
+                                        :key="i"
+                                    >
+                                        {{ label }}
+                                    </el-tag>
+                                </div>
+                            </div>
                         </template>
                         <template #footerRight>
                             <sdxu-button
@@ -51,7 +73,7 @@
         </div>
         <SdxuEmpty v-else />
         <div
-            class="sdxw-general-task-list__footer"
+            class="sdxw-model-list-table__footer"
             slot="footer"
         >
             <div />
@@ -97,6 +119,7 @@ import auth from '@sdx/widget/components/auth';
 import Message from 'element-ui/lib/message';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
+import ElTag from 'element-ui/lib/tag';
 
 export default {
     name: 'ModelListTable',
@@ -129,7 +152,8 @@ export default {
         [Empty.name]: Empty,
         [SubCard.SubjectCard.name]: SubCard.SubjectCard,
         [SubCard.SubjectCardList.name]: SubCard.SubjectCardList,
-        [ShareSetting.name]: ShareSetting
+        [ShareSetting.name]: ShareSetting,
+        ElTag
     },
     directives: {
         auth

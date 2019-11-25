@@ -267,7 +267,7 @@
                     >
                         <div>
                             <SdxwFileSelect
-                                v-model="params.outputPath"
+                                v-model="params.displayPath"
                                 :string-model="true"
                                 check-type="folder"
                                 source="ceph"
@@ -430,8 +430,7 @@ export default {
                 startCommand: '',
                 startArgs: [],
                 startArgsStr: '',
-                outputPaths: [],
-                outputPath: '',
+                displayPath: '',
                 project: '',
                 instanceNumber: 1,
                 forwardPorts: [
@@ -561,7 +560,6 @@ export default {
                 this.params.forwardPorts = this.params.forwardPorts.filter(item => !!item.port);
                 this.params.environments = this.params.environments.filter(item => !!item.value && !!item.name);
                 this.params.startArgs = this.params.startArgsStr.split('/').filter(item => !!item);
-                if (this.params.outputPath) this.params.outputPaths = [this.params.outputPath];
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
                     .then (() => {
                         this.$router.go(-1);
@@ -576,7 +574,6 @@ export default {
             this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
             this.params.instanceNumber = this.params.resourceConfigObj[RESOURCE_KEY].instance;
             this.params.startArgsStr = this.params.startArgs.join('/');
-            this.params.outputPath = this.params.outputPaths.length ? this.params.outputPaths[0] : '';
             if (!this.params.forwardPorts.length) this.params.forwardPorts = [{protocol: 'HTTP',port: ''}];
             if (!this.params.environments.length) this.params.environments = [{name: '',value: ''}];
             this.cpuObj = {

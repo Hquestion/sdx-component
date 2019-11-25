@@ -35,8 +35,6 @@ export default {
             } = this.taskManager.task.serviceList[0];
             let hostname = location.hostname;
             let port = location.port;
-            hostname = '10.115.1.130';
-            port = '80';
             const wsProtocol = protocolMap[(protocol || 'http').toLowerCase()];
             const externalUrl = `${protocol}://${hostname}:${port}/${urlSuffix}`;
             const wsUrl = `${wsProtocol}://${hostname}:${port}/${urlSuffix}`;

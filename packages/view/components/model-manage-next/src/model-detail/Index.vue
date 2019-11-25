@@ -211,11 +211,10 @@ export default {
                 margin-left: 48px;
             }
         }
+    }
+    & /deep/ {
         .sdxu-button__dropdown--main {
             width: 100px !important;
-            .sdxu-button {
-                width: 100px;
-            }
         }
     }
 }

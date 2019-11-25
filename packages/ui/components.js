@@ -30,6 +30,7 @@ module.exports = {
     'dropdown-tip': './components/dropdown-tip/index.js',
     'appender': './components/appender/index.js',
     'button-group': './components/button-group/index.js',
+    'select': './components/select/index.js',
     'copyable': './components/copyable/index.js',
     'codepan': './components/codepan/index.js',
     'article-title': './components/article-title/index.js',

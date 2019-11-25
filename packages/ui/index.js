@@ -14,6 +14,7 @@ import IconButton from './components/icon-button';
 import Empty from './components/empty';
 import UserAvatar from './components/user-avatar';
 import Scroll from './components/scroll';
+import Select from './components/select';
 import Upload from './components/upload';
 import Layout from './components/layout';
 import LazyList from './components/lazy-list';
@@ -65,6 +66,7 @@ const SdxUI = {
     DropdownTip,
     Appender,
     ButtonGroup,
+    Select,
     Codepan,
     Copyable,
     SectionPanel,
@@ -94,6 +96,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     Layout.install(vue);
     LazyList.install(vue);
     IconButtonGroup.install(vue);
+    Select.install(vue);
     RadialProgress.install(vue);
     SortButton.install(vue);
     TextTooltip.install(vue);

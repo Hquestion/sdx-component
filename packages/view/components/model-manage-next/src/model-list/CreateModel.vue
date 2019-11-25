@@ -5,115 +5,113 @@
         class="sdxv-create-model"
         :title="title"
     >
-        <div :style="{height: editingModel ? '290px' : 'calc(45vh)'}">
-            <SdxuScroll>
-                <div class="sdxv-create-model__form">
-                    <el-form
-                        :label-width="lang$==='en' ? '150px' : '110px'"
-                        label-position="right"
-                        :model="modelInfoForm"
-                        ref="modelInfoForm"
-                        :rules="modelInfoFormRule"
-                    >
-                        <el-form-item
-                            :label="t('view.model.createModelForm.name')"
-                            prop="name"
-                        >
-                            <sdxu-input
-                                v-model="modelInfoForm.name"
-                                :placeholder="t('view.model.searchModelName')"
-                            />
-                        </el-form-item>
-                        <el-form-item
-                            :label="t('view.model.createModelForm.description')"
-                            prop="description"
-                        >
-                            <sdxu-input
-                                v-model="modelInfoForm.description"
-                                type="textarea"
-                                :placeholder="t('view.model.modelDescription')"
-                                :rows="3"
-                            />
-                        </el-form-item>
-                        <el-form-item
-                            label="模型类型："
-                            prop="modelType"
-                        >
-                            <el-select
-                                v-model="modelInfoForm.modelType"
-                                filterable
-                                allow-create
-                                :placeholder="`请输入或选择模型类型`"
-                            >
-                                <el-option
-                                    v-for="item in labelOptions"
-                                    :key="item.label"
-                                    :label="item.label"
-                                    :value="item.label"
-                                />
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item
-                            :label="t('view.model.createModelForm.label')"
-                            prop="labels"
-                        >
-                            <el-select
-                                v-model="modelInfoForm.labels"
-                                multiple
-                                filterable
-                                allow-create
-                                default-first-option
-                                :placeholder="t('view.model.selectLabel')"
-                                :multiple-limit="2"
-                            >
-                                <el-option
-                                    v-for="item in labelOptions"
-                                    :key="item.label"
-                                    :label="item.label"
-                                    :value="item.label"
-                                />
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item
-                            :label="`模型版本：`"
-                            v-if="!editingModel"
-                        >
-                            <div class="sdxv-create-model__version">
-                                V 1.0
-                            </div>
-                        </el-form-item>
-                        <el-form-item
-                            :label="`版本描述：`"
-                            v-if="!editingModel"
-                        >
-                            <sdxu-input
-                                v-model="modelInfoForm.versionDescription"
-                                type="textarea"
-                                :placeholder="`请输入版本描述`"
-                                :rows="3"
-                            />
-                        </el-form-item>
-                        <el-form-item
-                            :label="`模型文件：`"
-                            v-if="!editingModel"
-                            prop="modelPath"
-                        >
-                            <SdxwFileSelect
-                                check-type="file"
-                                string-model
-                                v-model="modelInfoForm.modelPath"
-                            />
-                        </el-form-item>
-                    </el-form>
-                    <SdxwShareForm
-                        v-if="!editingModel"
-                        :default-users.sync="modelInfoForm.users"
-                        :default-groups.sync="modelInfoForm.groups"
-                        :default-share-type.sync="modelInfoForm.shareType"
+        <div class="sdxv-create-model__form">
+            <el-form
+                :label-width="lang$==='en' ? '150px' : '110px'"
+                label-position="right"
+                :model="modelInfoForm"
+                ref="modelInfoForm"
+                :rules="modelInfoFormRule"
+            >
+                <el-form-item
+                    :label="t('view.model.createModelForm.name')"
+                    prop="name"
+                >
+                    <sdxu-input
+                        v-model="modelInfoForm.name"
+                        :placeholder="t('view.model.searchModelName')"
                     />
-                </div>
-            </SdxuScroll>
+                </el-form-item>
+                <el-form-item
+                    :label="t('view.model.createModelForm.description')"
+                    prop="description"
+                >
+                    <sdxu-input
+                        v-model="modelInfoForm.description"
+                        type="textarea"
+                        :placeholder="t('view.model.modelDescription')"
+                        :rows="3"
+                    />
+                </el-form-item>
+                <el-form-item
+                    label="模型类型："
+                    prop="modelType"
+                >
+                    <sdxu-select
+                        v-model="modelInfoForm.modelType"
+                        filterable
+                        allow-create
+                        :placeholder="`请输入或选择模型类型`"
+                    >
+                        <sdxu-option
+                            v-for="item in modelTypes"
+                            :key="item.icon"
+                            :label="item.name"
+                            :svg-icon="item.icon"
+                            :value="item.name"
+                        />
+                    </sdxu-select>
+                </el-form-item>
+                <el-form-item
+                    :label="t('view.model.createModelForm.label')"
+                    prop="labels"
+                >
+                    <sdxu-select
+                        v-model="modelInfoForm.labels"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        :placeholder="t('view.model.selectLabel')"
+                        :multiple-limit="2"
+                    >
+                        <sdxu-option
+                            v-for="item in labelOptions"
+                            :key="item.label"
+                            :label="item.label"
+                            :value="item.label"
+                        />
+                    </sdxu-select>
+                </el-form-item>
+                <el-form-item
+                    :label="`模型版本：`"
+                    v-if="!editingModel"
+                >
+                    <div class="sdxv-create-model__version">
+                        V 1.0
+                    </div>
+                </el-form-item>
+                <el-form-item
+                    :label="`版本描述：`"
+                    v-if="!editingModel"
+                >
+                    <sdxu-input
+                        v-model="modelInfoForm.versionDescription"
+                        type="textarea"
+                        :placeholder="`请输入版本描述`"
+                        :rows="3"
+                    />
+                </el-form-item>
+                <el-form-item
+                    :label="`模型文件：`"
+                    v-if="!editingModel"
+                    prop="modelPath"
+                >
+                    <SdxwFileSelect
+                        check-type="file"
+                        string-model
+                        v-model="modelInfoForm.modelPath"
+                    />
+                </el-form-item>
+            </el-form>
+            <SdxwShareForm
+                v-if="!editingModel"
+                :default-users.sync="modelInfoForm.users"
+                :default-groups.sync="modelInfoForm.groups"
+                :default-share-type.sync="modelInfoForm.shareType"
+            />
         </div>
+
 
         <div
             slot="footer"
@@ -141,15 +139,16 @@ import Dialog from '@sdx/ui/components/dialog';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import ElForm from 'element-ui/lib/form';
-import Scroll from '@sdx/ui/components/scroll';
 import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
 import ShareForm from '@sdx/widget/components/share-form';
-import ElSelect from 'element-ui/lib/select';
+import Select from '@sdx/ui/components/select';
 import { getLabels, createModel, updateModel, createVersion } from '@sdx/utils/src/api/model';
 import { nameWithChineseValidator, descValidator, tagArrayValidator } from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
 import FileSelect from '@sdx/widget/lib/file-select';
+import { MODEL_TYPES_ICON } from '@sdx/utils/src/const/model';
+
 export default {
     name: 'CreateModel',
     data() {
@@ -191,7 +190,8 @@ export default {
                     { validator: tagArrayValidator, trigger: 'change' }
                 ]
             },
-            needRefresh: false
+            needRefresh: false,
+            modelTypes: MODEL_TYPES_ICON
         };
     },
     mixins: [locale],
@@ -215,11 +215,11 @@ export default {
         [Button.name]: Button,
         [Input.name]: Input,
         [ShareForm.name]: ShareForm,
-        [Scroll.name]: Scroll,
         [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
+        [Select.Option.name]: Select.Option,
+        [Select.Select.name]: Select.Select,
         ElForm,
-        ElFormItem,
-        ElSelect
+        ElFormItem
     },
     created() {
         getLabels().then(res => {

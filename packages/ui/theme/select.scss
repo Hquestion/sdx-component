@@ -1,0 +1,30 @@
+
+@include block('select', $bem-namespace-ui) {
+    .icon {
+        margin-right: 8px;
+        width: 1.1em;
+        height: 1.1em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+     }
+}
+
+@include block('select-dropdown', $bem-namespace-ui) {
+    &.is-multiple .el-select-dropdown__item.selected::after {
+        content: ''
+    }
+    .el-checkbox {
+        margin-right: 8px;
+    }
+    @include element('item') {
+        .icon {
+            margin-right: 8px;
+            width: 1.1em;
+            height: 1.1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+         }
+    }
+}

@@ -1,7 +1,8 @@
 @include block('log-detail', $bem-namespace-ui) {
     margin-bottom: $sdx-margin;
     height: 60vh;
-    background-color: $sdx-log-background;
+    background-color: $sdx-log-background-normal;
+    color: $sdx-log-color-normal;
     position: relative;
 
     @include element('suf-loading') {
@@ -34,7 +35,7 @@
     }
 
     @include state('dark') {
-        background-color: #3E4757;
-        color: #fff;
+        background-color: $sdx-log-background-dark;
+        color: $sdx-log-color-dark;
     }
 }

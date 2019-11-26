@@ -13,6 +13,7 @@
                 lazy
             >
                 <MonitorInfo
+                    v-if="activeTab === 'monitor'"
                     :is-empty="!hasRealMonitor" 
                     :pods="task && task.pods || []"
                     :polling="isRunning"

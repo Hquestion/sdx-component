@@ -101,6 +101,9 @@ $sdu-empty-normal-size: 200px !default;
 $sdu-empty-large-size: 300px !default;
 
 // log
-$sdx-log-background: #F4F8FD !default;
+$sdx-log-background-normal: #EDEFF2 !default;
+$sdx-log-background-dark: #EDEFF2 !default;
+$sdx-log-color-normal: #13264D !default;
+$sdx-log-color-dark: #fff !default;
 $sdx-log-font-size: $sdx-content-font-size !default;
 $sdx-log-line-height: 26px !default;

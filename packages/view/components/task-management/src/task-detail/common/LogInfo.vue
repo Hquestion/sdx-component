@@ -26,7 +26,7 @@
             :follow-scroll="followScroll"
             :method="method"
             :pod-name="podName"
-            :is-dark="isDark"
+            :is-dark="!isDark"
         />
     </div>
 </template>

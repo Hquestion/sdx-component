@@ -324,14 +324,14 @@ class Context {
             result.push(responseMap[request.relative_url]);
         });
 
-        if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
-            this.debug(`Sent requests ${JSON.stringify(requests)}. Received responses ${JSON.stringify(responses)}`);
-        } else {
-            const methodAndUrls =
-                requests.map(request => request.method + ' ' + request.relative_url.split('?')[0]).join(', ');
-            const codes = result.map(response => response.code).join(', ');
-            this.info(`Send requests ${methodAndUrls}. Received responses ${codes}`);
-        }
+        // if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
+        this.debug(`Sent requests ${JSON.stringify(requests)}. Received responses ${JSON.stringify(responses)}`);
+        // } else {
+        //     const methodAndUrls =
+        //         requests.map(request => request.method + ' ' + request.relative_url.split('?')[0]).join(', ');
+        //     const codes = result.map(response => response.code).join(', ');
+        //     this.info(`Send requests ${methodAndUrls}. Received responses ${codes}`);
+        // }
 
         return result;
     }

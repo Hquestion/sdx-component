@@ -141,7 +141,8 @@ export default {
         },
         configValidator(rule, value, cb) {
             const config = this.$refs.userRule.getConfig();
-            const intKeys = ['maxConcurrentTasks', 'maxConcurrentHeavyTasks', 'maxGpuTime', 'maxCpuTime', 'maxGpus'];
+            const intKeys = ['maxConcurrentSkyideTasks', 'maxConcurrentJupyterTasks', 'maxConcurrentContainerTasks', 'maxConcurrentSkyflowTasks',
+                'maxConcurrentModelTasks', 'maxConcurrentHeavyTasks', 'maxGpuTime', 'maxNonGpuTime', 'maxGpus'];
             for (let i = 0; i < intKeys.length; i++) {
                 let value = config[intKeys[i]];
                 if (!value || +value <= 0 || +value !== +value) {

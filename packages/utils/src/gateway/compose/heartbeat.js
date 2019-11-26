@@ -13,7 +13,11 @@ export let handler = wrap(function(ctx, request) {
             'http://tyk-api-gateway/resource-manager/api/v1/resource_config', {
                 userId: request.Params.userId && request.Params.userId[0]
             }
-        )
+        ),
+        ctx.createGetRequest(
+            'http://tyk-gateway/fe-compose/api/v1/task-resource-profiles',
+            {all: true}
+        ),
     );
     return ctx.createResponse(200, data.map(item => JSON.parse(item.body) || {}));
 });

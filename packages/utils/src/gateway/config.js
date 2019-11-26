@@ -158,5 +158,11 @@ module.exports = [
         method: 'GET',
         functionName: 'heartbeat.handler',
         filePath: './compose/heartbeat.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/task-resource-profiles',
+        method: 'GET',
+        functionName: 'taskResourceProfiles.handler',
+        filePath: './compose/taskResourceProfiles.js'
     }
 ];

@@ -1,13 +1,31 @@
 <template>
     <transition name="sdxu-bubble-fade">
-        <div class="sdxu-bubble-tip" v-show="visible">
+        <div
+            class="sdxu-bubble-tip"
+            v-show="visible"
+            :class="{'is-light': light}"
+        >
             <div class="sdxu-bubble-tip__main">
-                <i :class="['sdx-icon', icon]"></i>
-                <div class="sdxu-bubble-tip__content">
-                    {{ content }}
+                <i :class="['sdx-icon', icon]" />
+                <div
+                    class="sdxu-bubble-tip__content"
+                    :class="{'is-title': !!title}"
+                >
+                    <div
+                        class="sdxu-bubble-tip__title"
+                        v-if="title"
+                    >
+                        {{ title }}
+                    </div>
+                    <div class="sdxu-bubble-tip__detail">
+                        <slot>{{ content }}</slot>
+                    </div>
                 </div>
             </div>
-            <div class="sdxu-bubble-tip__footer">
+            <div
+                class="sdxu-bubble-tip__footer"
+                v-if="showFooter"
+            >
                 <span>{{ timeToClose }}秒后关闭</span>
             </div>
         </div>
@@ -36,6 +54,18 @@ export default {
             default: 5
         },
         visible: {
+            type: Boolean,
+            default: false
+        },
+        title: {
+            type: String,
+            default: ''
+        },
+        showFooter: {
+            type: Boolean,
+            default: true
+        },
+        light: {
             type: Boolean,
             default: false
         }

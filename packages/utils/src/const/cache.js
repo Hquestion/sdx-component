@@ -4,3 +4,5 @@ export const RESOURCE_KEY = 'resource';
 export const RESOURCE_TMPL_KEY = 'resourceTemplate';
 // 缓存的资源配置的key
 export const RESOURCE_CONFIG_KEY = 'resourceConfig';
+
+export const RESOURCE_USED_KEY = 'resourceUsed';

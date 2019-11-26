@@ -1,5 +1,5 @@
 @include block('bubble-tip', $bem-namespace-ui) {
-    padding: $sdx-padding;
+    padding: $sdx-gap-small $sdx-gap-regular;
     background: #4880F8;
     box-shadow: 0 5px 10px 0 #0E162E;
     border-radius: 4px;
@@ -15,6 +15,7 @@
             color: #fff;
         }
     }
+
     @include element('content') {
         margin-left: 12px;
         font-size: 14px;
@@ -22,6 +23,15 @@
         letter-spacing: 0;
         text-align: justify;
         line-height: 22px;
+        @include element('title') {
+            font-size: 18px;
+            font-weight: 400;
+        }
+        @include state('title') {
+            @include element('detail') {
+                margin-top: $sdx-gap-small;
+            }
+        }
     }
     @include element('footer') {
         padding-top: 16px;
@@ -38,6 +48,24 @@
             height: 24px;
             text-align: center;
             line-height: 24px;
+        }
+    }
+    @include state('light') {
+        background: #fff;
+        max-width: 500px;
+        @extend .shadow;
+        @include element('main') {
+            color: $sdx-secondary-color;
+            i {
+                color: $sdx-primary-color;
+            }
+        }
+        @include element('content') {
+            color: $sdx-secondary-color;
+        }
+        @include element('footer') {
+            color: $sdx-secondary-color;
+            background: $sdx-primary-color--light5;
         }
     }
 }

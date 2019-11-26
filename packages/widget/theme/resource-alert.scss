@@ -1,0 +1,6 @@
+@include block('resource-alert', $bem-namespace-widget) {
+    a {
+        color: $sdx-primary-color--light1;
+        text-decoration: underline;
+    }
+}

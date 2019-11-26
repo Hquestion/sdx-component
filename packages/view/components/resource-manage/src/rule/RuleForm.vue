@@ -7,11 +7,11 @@
         <el-form
             :model="params"
             :label-position="labelPosition"
-            :label-width="lang$ === 'en' ? '270px' : '185px'"
+            :label-width="lang$ === 'en' ? '300px' : '255px'"
         >
             <el-form-item
-                :label="t('view.resourceManage.maxConcurrentTasks')"
-                prop="maxConcurrentTasks"
+                :label="t('view.resourceManage.maxConcurrentSkyIDETasks')"
+                prop="maxConcurrentSkyideTasks"
             >
                 <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
                 <SdxuInput
@@ -19,13 +19,93 @@
                     type="number"
                     :min="-1"
                     v-if="!readonly"
-                    v-model="params.maxConcurrentTasks"
+                    v-model="params.maxConcurrentSkyideTasks"
                 />
                 <InputReadonly
                     v-else
                     size="regular"
                 >
-                    {{ params.maxConcurrentTasks }}
+                    {{ params.maxConcurrentSkyideTasks }}
+                </InputReadonly>
+                <span>{{ t('view.resourceManage.NumberUnit') }}</span>
+            </el-form-item>
+            <el-form-item
+                :label="t('view.resourceManage.maxConcurrentJupyterTasks')"
+                prop="maxConcurrentJupyterTasks"
+            >
+                <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
+                <SdxuInput
+                    :inline="true"
+                    type="number"
+                    :min="-1"
+                    v-if="!readonly"
+                    v-model="params.maxConcurrentJupyterTasks"
+                />
+                <InputReadonly
+                    v-else
+                    size="regular"
+                >
+                    {{ params.maxConcurrentJupyterTasks }}
+                </InputReadonly>
+                <span>{{ t('view.resourceManage.NumberUnit') }}</span>
+            </el-form-item>
+            <el-form-item
+                :label="t('view.resourceManage.maxConcurrentContainerTasks')"
+                prop="maxConcurrentContainerTasks"
+            >
+                <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
+                <SdxuInput
+                    :inline="true"
+                    type="number"
+                    :min="-1"
+                    v-if="!readonly"
+                    v-model="params.maxConcurrentContainerTasks"
+                />
+                <InputReadonly
+                    v-else
+                    size="regular"
+                >
+                    {{ params.maxConcurrentContainerTasks }}
+                </InputReadonly>
+                <span>{{ t('view.resourceManage.NumberUnit') }}</span>
+            </el-form-item>
+            <el-form-item
+                :label="t('view.resourceManage.maxConcurrentSkyFlowTasks')"
+                prop="maxConcurrentSkyflowTasks"
+            >
+                <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
+                <SdxuInput
+                    :inline="true"
+                    type="number"
+                    :min="-1"
+                    v-if="!readonly"
+                    v-model="params.maxConcurrentSkyflowTasks"
+                />
+                <InputReadonly
+                    v-else
+                    size="regular"
+                >
+                    {{ params.maxConcurrentSkyflowTasks }}
+                </InputReadonly>
+                <span>{{ t('view.resourceManage.NumberUnit') }}</span>
+            </el-form-item>
+            <el-form-item
+                :label="t('view.resourceManage.maxConcurrentModelTasks')"
+                prop="maxConcurrentModelTasks"
+            >
+                <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
+                <SdxuInput
+                    :inline="true"
+                    type="number"
+                    :min="-1"
+                    v-if="!readonly"
+                    v-model="params.maxConcurrentModelTasks"
+                />
+                <InputReadonly
+                    v-else
+                    size="regular"
+                >
+                    {{ params.maxConcurrentModelTasks }}
                 </InputReadonly>
                 <span>{{ t('view.resourceManage.NumberUnit') }}</span>
             </el-form-item>
@@ -108,20 +188,20 @@
             </el-form-item>
             <el-form-item
                 :label="t('view.resourceManage.NonGroupTaskRunDuration')"
-                prop="maxCpuTime"
+                prop="maxNonGpuTime"
             >
                 <span>{{ t('view.resourceManage.LessOrEqual') }}</span>
                 <SdxuInput
                     :inline="true"
                     type="number"
                     v-if="!readonly"
-                    v-model="maxCpuTimeDay"
+                    v-model="maxNonGpuTimeDay"
                 />
                 <InputReadonly
                     size="regular"
                     v-else
                 >
-                    {{ params.maxCpuTime | secToDay }}
+                    {{ params.maxNonGpuTime | secToDay }}
                 </InputReadonly>
                 <span>{{ t('view.resourceManage.DayUnit') }}</span>
             </el-form-item>
@@ -146,11 +226,15 @@ export default {
     data() {
         return {
             params: {
-                maxConcurrentTasks: 0,
+                maxConcurrentSkyideTasks: 0,
+                maxConcurrentJupyterTasks: 0,
+                maxConcurrentContainerTasks: 0,
+                maxConcurrentSkyflowTasks: 0,
+                maxConcurrentModelTasks: 0,
                 heavyTaskArr: [],
                 maxGpus: 0,
                 maxGpuTime: 0,
-                maxCpuTime: 0,
+                maxNonGpuTime: 0,
             },
             resourceTmplList: [],
             defaultConfig: {},
@@ -210,12 +294,12 @@ export default {
                 this.params.maxGpuTime = hourToSec(+val);
             }
         },
-        maxCpuTimeDay: {
+        maxNonGpuTimeDay: {
             get() {
-                return secToDay(this.params.maxCpuTime || 0);
+                return secToDay(this.params.maxNonGpuTime || 0);
             },
             set(val) {
-                this.params.maxCpuTime = dayToSec(+val);
+                this.params.maxNonGpuTime = dayToSec(+val);
             }
         }
     },
@@ -246,10 +330,14 @@ export default {
         },
         save() {
             saveResourceConfig(this.userId, {
-                maxConcurrentTasks: +this.params.maxConcurrentTasks,
+                maxConcurrentSkyideTasks: +this.params.maxConcurrentSkyideTasks,
+                maxConcurrentJupyterTasks: +this.params.maxConcurrentJupyterTasks,
+                maxConcurrentContainerTasks: +this.params.maxConcurrentContainerTasks,
+                maxConcurrentSkyflowTasks: +this.params.maxConcurrentSkyflowTasks,
+                maxConcurrentModelTasks: +this.params.maxConcurrentModelTasks,
                 maxConcurrentHeavyTasks: +this.params.heavyTaskArr[1],
                 maxGpuTime: +this.params.maxGpuTime,
-                maxCpuTime: +this.params.maxCpuTime,
+                maxNonGpuTime: +this.params.maxNonGpuTime,
                 maxGpus: +this.params.maxGpus,
                 heavyTaskThreshold: this.params.heavyTaskArr[0]
             }).then(() => {
@@ -261,10 +349,14 @@ export default {
         },
         getConfig() {
             return {
-                maxConcurrentTasks: +this.params.maxConcurrentTasks,
+                maxConcurrentSkyideTasks: +this.params.maxConcurrentSkyideTasks,
+                maxConcurrentJupyterTasks: +this.params.maxConcurrentJupyterTasks,
+                maxConcurrentContainerTasks: +this.params.maxConcurrentContainerTasks,
+                maxConcurrentSkyflowTasks: +this.params.maxConcurrentSkyflowTasks,
+                maxConcurrentModelTasks: +this.params.maxConcurrentModelTasks,
                 maxConcurrentHeavyTasks: +this.params.heavyTaskArr[1],
                 maxGpuTime: +this.params.maxGpuTime,
-                maxCpuTime: +this.params.maxCpuTime,
+                maxNonGpuTime: +this.params.maxNonGpuTime,
                 maxGpus: +this.params.maxGpus,
                 heavyTaskThreshold: this.params.heavyTaskArr[0],
                 resourceUuid: this.params.uuid

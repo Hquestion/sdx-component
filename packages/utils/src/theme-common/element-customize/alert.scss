@@ -1,0 +1,38 @@
+.el-alert {
+    font-size: 14px;
+    color: $sdx-secondary-color;
+    letter-spacing: 0;
+    padding: $sdx-gap-small;
+}
+.el-alert--info {
+    background: $sdx-primary-color--light5;
+    .el-alert__icon {
+        color: $sdx-primary-color;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+}
+.el-alert-warning {
+    background: $sdx-warning-color-light5;
+    .el-alert__icon {
+        color: $sdx-warning-color;
+    }
+}
+.el-alert-error {
+    background: $sdx-danger-color--light5;
+    .el-alert__icon {
+        color: $sdx-danger-color;
+    }
+}
+.el-alert-success {
+    background: $sdx-success-color--light5;
+    .el-alert__icon {
+        color: $sdx-success-color;
+    }
+}
+.el-alert .el-alert__description {
+    margin-top: 0;
+    font-size: 14px;
+    color: $sdx-secondary-color;
+}

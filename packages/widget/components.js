@@ -27,4 +27,5 @@ module.exports = {
     'create-task-card': './components/create-task-card/index.js',
     'api-test': './components/api-test/index.js',
     'model-detail-card': './components/model-detail-card/index.js',
+    'resource-alert': './components/resource-alert/index.js'
 };

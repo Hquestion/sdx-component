@@ -25,6 +25,7 @@ import CreateProjectCard from './components/create-project-card';
 import CreateTaskCard from './components/create-task-card';
 import ApiTest from './components/api-test';
 import ModelDetailCard from './components/model-detail-card';
+import ResourceAlert from './components/resource-alert';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxWidget = {
@@ -53,7 +54,8 @@ const SdxWidget = {
     CreateProjectCard,
     CreateTaskCard,
     ApiTest,
-    ModelDetailCard
+    ModelDetailCard,
+    ResourceAlert
 };
 
 SdxWidget.install = (vue, { i18n } = {}) => {
@@ -83,6 +85,7 @@ SdxWidget.install = (vue, { i18n } = {}) => {
     vue.use(ShareForm);
     vue.use(LangHandle);
     vue.use(ApiTest);
+    vue.use(ResourceAlert);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

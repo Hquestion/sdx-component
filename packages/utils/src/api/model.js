@@ -25,6 +25,10 @@ export function getLabels() {
     return httpService.get(`${modelApi}/labels`);
 }
 
+export function getModelTypes() {
+    return httpService.get(`${modelApi}/modelTypes`);
+}
+
 export function createModel(params) {
     return httpService.post(modelApi, params);
 }
@@ -191,6 +195,7 @@ export default {
     getNativeModelList,
     getModelInfo,
     getLabels,
+    getModelTypes,
     createModel,
     removeModel,
     updateModel,

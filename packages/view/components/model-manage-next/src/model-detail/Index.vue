@@ -33,6 +33,7 @@
                     <div>
                         <SdxuButton
                             type="default"
+                            @click="createModelService"
                         >
                             {{ t('view.model.New_model_service') }}
                         </SdxuButton>
@@ -97,6 +98,10 @@
             </sdxu-article-panel>
         </sdxu-section-panel>
         <EditVersion :visible.sync="editVersionVisible" />
+        <create-model-service
+            :visible.sync="createServiceVisible"
+            v-if="createServiceVisible"
+        />
     </div>
 </template>
 
@@ -109,6 +114,7 @@ import { Select, Option } from 'element-ui';
 import Button from '@sdx/ui/components/button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import EditVersion from '../model-list/CreateVersion';
+import CreateModelService from '../service-dialog/create-model-service/Index';
 export default {
     name: 'SdxvModelDetail',
     data() {
@@ -129,7 +135,8 @@ export default {
             },
             versions: [],
             version: '',
-            editVersionVisible: false
+            editVersionVisible: false,
+            createServiceVisible: false
         };
     },
     mixins: [locale],
@@ -140,7 +147,8 @@ export default {
         [Select.name]: Select,
         [Option.name]: Option,
         [Button.name]: Button,
-        EditVersion
+        EditVersion,
+        CreateModelService
     },
     methods: {
         dateFormatter,
@@ -149,6 +157,9 @@ export default {
         },
         editVersion() {
             this.editVersionVisible = true;
+        },
+        createModelService() {
+            this.createServiceVisible = true;
         }
     }
 };

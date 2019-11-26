@@ -14,6 +14,7 @@
                         :card-icon="false"
                         :meta="item.meta"
                         class="sdxw-model-list-table__container--element"
+                        @operate="handleDetail"
                     >
                         <template #cardLabel>
                             <!-- <SdxwFoldLabelGroup :list="item.labels" /> -->
@@ -25,9 +26,9 @@
                                             aria-hidden="true"
                                             style="margin-right: 2px;"
                                         >
-                                            <use xlink:href="#sdx-zidingyimoxing" />
+                                            <use :xlink:href="`#${item.modelTypeIcon}`" />
                                         </svg>
-                                        类型
+                                        {{ item.modelType }}
                                     </el-tag>
                                 </div>
                                 <div>
@@ -120,6 +121,7 @@ import Message from 'element-ui/lib/message';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import ElTag from 'element-ui/lib/tag';
+import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON } from '@sdx/utils/src/const/model';
 
 export default {
     name: 'ModelListTable',
@@ -192,6 +194,14 @@ export default {
         }
     },
     methods: {
+        handleDetail(operate) {
+            this.$router.push({
+                path: '/sdxv-model-manage-next/modelDetail',
+                params: {
+                    uuid: operate.id
+                }
+            });
+        },
         initModelList(reset) {
             this.loading = true;
             if (reset) this.current = 1;
@@ -211,6 +221,8 @@ export default {
                     const userId = getUser().userId;
                     item.showShare = item.showEdit = item.showRemove = item.creator.uuid === userId;
 
+                    let icon = MODEL_TYPES_ICON.find(icon => icon.name === item.modelType);
+                    item.modelTypeIcon = icon ? icon.icon : DEFAULT_MODEL_TYPE_ICON;
                     item.meta = {
                         uuid: item.uuid,
                         owner: item.creator,

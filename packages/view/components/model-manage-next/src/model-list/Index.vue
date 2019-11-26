@@ -43,14 +43,6 @@
                         >
                             添加已有版本
                         </SdxuButton>
-                        <SdxuButton
-                            type="text"
-                            size="regular"
-                            block
-                            @click="createService"
-                        >
-                            添加模型服务
-                        </SdxuButton>
                     </template>
                 </sdxu-button>
                 <SdxuSortButton
@@ -80,10 +72,10 @@
                         :placeholder="`请选择模型类型`"
                     >
                         <el-option
-                            v-for="item in labelOptions"
-                            :key="item.label"
-                            :label="item.label"
-                            :value="item.label"
+                            v-for="item in modelTypeOptions"
+                            :key="item"
+                            :label="item"
+                            :value="item"
                         />
                     </el-select>
                 </sdxw-search-item>
@@ -128,11 +120,6 @@
                 v-if="createVersionVisible"
                 @close="dialogClose"
             />
-            <create-model-service
-                :visible.sync="createServiceVisible"
-                v-if="createServiceVisible"
-                @close="dialogClose"
-            />
         </div>
     </div>
 </template>
@@ -143,10 +130,9 @@ import ElSelect from 'element-ui/lib/select';
 import ModelListTable from './model-list-table/Index';
 import CreateModel from './CreateModel';
 import CreateVersion from './CreateVersion';
-import CreateModelService from '../service-dialog/create-model-service/Index';
 import Button from '@sdx/ui/components/button';
 import Input from '@sdx/ui/components/input';
-import { getLabels } from '@sdx/utils/src/api/model';
+import { getLabels, getModelTypes } from '@sdx/utils/src/api/model';
 import SearchLayout from  '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -160,7 +146,6 @@ export default {
             orderBy: 'createdAt',
             createDialogVisible: false,
             createVersionVisible: false,
-            createServiceVisible: false,
             labelOptions: [],
             modelTypeOptions: [],
             searchLabels: [],
@@ -177,7 +162,6 @@ export default {
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
         CreateModel,
         CreateVersion,
-        CreateModelService,
         ElSelect
     },
     mixins: [locale],
@@ -187,6 +171,9 @@ export default {
     created() {
         getLabels().then(res => {
             this.labelOptions = res.items;
+        });
+        getModelTypes().then(res => {
+            this.modelTypeOptions = res.items;
         });
     },
     methods: {
@@ -208,9 +195,6 @@ export default {
         },
         createVersion() {
             this.createVersionVisible = true;
-        },
-        createService() {
-            this.createServiceVisible = true;
         },
         reset() {
             this.resetFilters();

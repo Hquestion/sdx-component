@@ -4,6 +4,7 @@
         @close="dialogClose"
         class="sdxv-create-model"
         :title="title"
+        size="large"
     >
         <div class="sdxv-create-model__form">
             <el-form
@@ -143,11 +144,11 @@ import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
 import ShareForm from '@sdx/widget/components/share-form';
 import Select from '@sdx/ui/components/select';
-import { getLabels, createModel, updateModel, createVersion } from '@sdx/utils/src/api/model';
+import { getLabels, getModelTypes, createModel, updateModel, createVersion } from '@sdx/utils/src/api/model';
 import { nameWithChineseValidator, descValidator, tagArrayValidator } from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
 import FileSelect from '@sdx/widget/lib/file-select';
-import { MODEL_TYPES_ICON } from '@sdx/utils/src/const/model';
+import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON } from '@sdx/utils/src/const/model';
 
 export default {
     name: 'CreateModel',
@@ -191,7 +192,7 @@ export default {
                 ]
             },
             needRefresh: false,
-            modelTypes: MODEL_TYPES_ICON
+            modelTypes: []
         };
     },
     mixins: [locale],
@@ -224,6 +225,15 @@ export default {
     created() {
         getLabels().then(res => {
             this.labelOptions = res.items;
+        });
+        getModelTypes().then(res => {
+            res.items.forEach(item => {
+                let icon = MODEL_TYPES_ICON.find(icon => icon.name === item);
+                this.modelTypes.push(icon ? icon : {
+                    name: item,
+                    icon: DEFAULT_MODEL_TYPE_ICON
+                });
+            });
         });
         if (this.editingModel) {
             this.title = this.t('view.model.editModel');

@@ -820,7 +820,8 @@ export default {
             Save: '保存',
             NotSave: '不保存',
             NotSupported: '暂不支持当前文件格式',
-            Loading: '加载中...'
+            Loading: '加载中...',
+            please_download_the_file_client_and_upload_again:'上传的文件夹中存在部分超过200M的大文件，请下载文件客户端重新上传。'
         },
         resourceManage: {
             ResourceManage: '资源管理',

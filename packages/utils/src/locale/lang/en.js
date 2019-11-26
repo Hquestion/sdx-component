@@ -821,7 +821,8 @@ export default {
             Save: 'Save',
             NotSave: 'Don\'t Save',
             NotSupported: 'File format not supported.',
-            Loading: 'Loading...'
+            Loading: 'Loading...',
+            please_download_the_file_client_and_upload_again:'There are some large files exceeding 200m in the uploaded folder, please download the file client and upload again.'
         },
         resourceManage: {
             ResourceManage: 'Resource Management',

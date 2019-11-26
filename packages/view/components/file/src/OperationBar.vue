@@ -175,10 +175,14 @@ export default {
             // this.$refs.fileUploader.handleRemove(file);
             // 目前先保留上传记录，不处理
         },
-        onExceedMaxSize() {
+        onExceedMaxSize(dir) {
             let [that,url]  = [this,this.getSystemUrl()];
+            let title = this.t('view.file.upload_or_download_operation_files_are_large');
+            if(dir === 'dir') {
+                title = this.t('view.file.please_download_the_file_client_and_upload_again');
+            }
             MessageBox.custom.warning({
-                title: this.t('view.file.upload_or_download_operation_files_are_large'),
+                title,
                 content(h){
                     return (
                         <div class="fileClient">
@@ -195,7 +199,7 @@ export default {
 
         },
         onExceedMaxSizeDir() {
-            this.onExceedMaxSize();
+            this.onExceedMaxSize('dir');
         },
         //判断系统类型获取url
         getSystemUrl(){

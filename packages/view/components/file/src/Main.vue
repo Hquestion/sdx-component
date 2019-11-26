@@ -390,7 +390,7 @@ export default {
 
 <style lang="scss" scoped>
 .sdxv-file-main {
-    height: 100%;
+    height: calc(100vh - 154px);
     padding-top: 20px;
     /deep/ .sdxu-content-panel__main {
         padding-top: 10px;

@@ -91,7 +91,7 @@ export function byteFormatter(byte) {
     let sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
     let i = Math.floor(Math.log(byte) / Math.log(k));
 
-    return Math.floor(byte / Math.pow(k, i)) + ' ' + sizes[i];
+    return Math.floor(byte / Math.pow(k, i) * 10) / 10 + ' ' + sizes[i];
 }
 
 export function dateFormatter(date, fmt = 'YYYY-MM-DD HH:mm:ss') {
@@ -127,12 +127,12 @@ export function cpuTplFriendly(config) {
     return config && `${parseMilli(config.cpu)}C ${byteToGB(config.memory)}GB` || '';
 }
 
-/* 
+/*
     计算2个时间差 '2019-10-17T08:49:14.195000Z',  '2019-10-17T08:59:15.195000Z',  => 10m1s
     接受2个参数，开始时间和结束时间
 
     如果一个参数的话就是时间差s
-*/ 
+*/
 export function timeDuration(firstTime, secondTime) {
     let dateDiff = 0;
     if(arguments.length === 1) {
@@ -152,8 +152,8 @@ export function timeDuration(firstTime, secondTime) {
     //计算出相差天数
     let dayDiff = Math.floor(dateDiff / (24 * 3600 * 1000));
     //计算天数后剩余的毫秒数
-    let leave1=dateDiff%(24*3600*1000);  
-    //计算出小时数 
+    let leave1=dateDiff%(24*3600*1000);
+    //计算出小时数
     let hours=Math.floor(leave1/(3600*1000));
     //计算相差分钟数
     let leave2=leave1%(3600*1000);    //计算小时数后剩余的毫秒数
@@ -176,14 +176,14 @@ export function timeDuration(firstTime, secondTime) {
 
 /**
  * 日期差格式化
- * @param {number} dateDiff 
+ * @param {number} dateDiff
  */
 export function dateDiffFormatter(dateDiff) {
     //计算出相差天数
     let days = Math.floor(dateDiff / (24 * 3600 * 1000));
     //计算天数后剩余的毫秒数
-    let leave1=dateDiff%(24*3600*1000);  
-    //计算出小时数 
+    let leave1=dateDiff%(24*3600*1000);
+    //计算出小时数
     let hours=Math.floor(leave1/(3600*1000));
     //计算相差分钟数
     let leave2=leave1%(3600*1000);    //计算小时数后剩余的毫秒数
@@ -210,8 +210,8 @@ export function dateDiffFormatter(dateDiff) {
 
 /**
  * 计算两个日期差并格式化
- * @param {Date} startTime 
- * @param {Date} stopTime 
+ * @param {Date} startTime
+ * @param {Date} stopTime
  */
 export function calculateDateDiffFormatter(startTime, stopTime) {
     if(!startTime || !stopTime) {

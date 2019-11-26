@@ -309,7 +309,7 @@ export default {
             let setPanesSizesToDefault = false;
             // Loop through children: some panes and splitters may have been reused by Vue.js recycling mechanism.
             [...this.container.children].forEach((child) => {
-                if (child.classList.contains('splitpanes__pane')) { // Pane
+                if (child.classList && child.classList.contains('splitpanes__pane')) { // Pane
                     const paneIndex = nbPanes;
                     const vm = this.$children[paneIndex];
 
@@ -331,7 +331,7 @@ export default {
                         }
                         child.before(elm);
                     } else if (!vm.visible || (preVM && !preVM.visible)) {
-                        if (child.previousSibling && child.previousSibling.classList.contains('splitpanes__splitter')) {
+                        if (child.previousSibling && child.previousSibling.classList && child.previousSibling.classList.contains('splitpanes__splitter')) {
                             child.previousSibling.remove();
                         }
                     }
@@ -418,10 +418,10 @@ export default {
 
             // Remove the trailing splitter if any.
             [...this.container.children].reverse().some((child) => {
-                if (child.classList.contains('splitpanes__pane')) {
+                if (child.classList && child.classList.contains('splitpanes__pane')) {
                     return true;
                 }
-                if (child.classList.contains('splitpanes__splitter')) {
+                if (child.classList && child.classList.contains('splitpanes__splitter')) {
                     child.onmousedown = undefined;
                     child.onclick = undefined;
                     child.ondblclick = undefined;

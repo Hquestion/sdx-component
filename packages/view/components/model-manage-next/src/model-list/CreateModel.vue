@@ -42,6 +42,7 @@
                         v-model="modelInfoForm.modelType"
                         filterable
                         allow-create
+                        :show-icon="true"
                         :placeholder="`请输入或选择模型类型`"
                     >
                         <sdxu-option

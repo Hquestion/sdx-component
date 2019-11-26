@@ -49,7 +49,7 @@
                     <svg
                         class="icon"
                         aria-hidden="true"
-                        v-if="item.svgIcon"
+                        v-if="item.svgIcon && showIcon"
                     >
                         <use :xlink:href="`#${item.svgIcon}`" />
                     </svg>
@@ -156,7 +156,7 @@
                         :value="query"
                         created
                         v-if="showNewOption"
-                        :svg-icon="DEFAULT_MODEL_TYPE_ICON"
+                        :svg-icon="showIcon ? DEFAULT_MODEL_TYPE_ICON : ''"
                     />
                     <slot />
                 </el-scrollbar>
@@ -322,6 +322,7 @@ export default {
         loading: Boolean,
         popperClass: String,
         remote: Boolean,
+        showIcon: Boolean,
         loadingText: String,
         noMatchText: String,
         noDataText: String,
@@ -438,7 +439,7 @@ export default {
                         if (this.filterable && this.allowCreate &&
                 this.createdSelected && this.createdLabel) {
                             this.selectedLabel = this.createdLabel;
-                            this.selectedLabelSvg = DEFAULT_MODEL_TYPE_ICON;
+                            this.selectedLabelSvg = this.showIcon ? DEFAULT_MODEL_TYPE_ICON : '';
                         } else {
                             this.selectedLabel = this.selected.currentLabel;
                             this.selectedLabelSvg = this.selected.svgIcon;

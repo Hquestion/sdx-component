@@ -28,7 +28,7 @@
                 :label="`${t('view.model.requestExample')}:`"
             >
                 <SdxuInput
-                    v-model="requestForm.example"
+                    v-model="requestForm.code"
                     size="small"
                     type="textarea"
                     :rows="7"
@@ -51,7 +51,7 @@ export default {
         return {
             requestForm: {
                 type: '',
-                example: ''
+                code: ''
             },
             types: [this.t('view.model.crukExample'), this.t('view.model.pythonExample'), this.t('view.model.javaExample')],
             requestFormRule: {

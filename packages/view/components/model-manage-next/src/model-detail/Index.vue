@@ -102,7 +102,8 @@
         <create-model-service
             :visible.sync="createServiceVisible"
             :model-id="$route.params.modelId"
-            :version-name="versionParams.uuid"
+            :version-id="versionParams.uuid"
+            :version-name="versionParams.name"
             v-if="createServiceVisible"
         />
     </div>

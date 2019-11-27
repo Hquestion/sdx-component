@@ -18,11 +18,11 @@
                 />
             </el-form-item>
             <el-form-item
-                prop="type"
+                prop="dtype"
                 :label="`${t('view.model.paramType')}:`"
             >
                 <el-select
-                    v-model="paramForm.type"
+                    v-model="paramForm.dtype"
                     size="small"
                     :placeholder="t('view.model.selectParamType')"
                 >
@@ -39,13 +39,13 @@
             >
                 <div style="display: flex; justify-content: space-between;">
                     <SdxuInput
-                        v-model="paramForm.paramFrom"
+                        v-model="paramForm.begin"
                         style="width:150px;"
                         :placeholder="t('view.model.beginVal')"
                     />
                     <span>-</span>
                     <SdxuInput
-                        v-model="paramForm.paramTo"
+                        v-model="paramForm.end"
                         style="width:150px;"
                         :placeholder="t('view.model.endVal')"
                     />
@@ -91,7 +91,7 @@ export default {
                 name: [
                     { required: true, message: this.t('view.model.enterParamName'), trigger: 'blur' }
                 ],
-                type: [
+                dtype: [
                     { required: true, message: this.t('view.model.selectParamType'), trigger: 'change'}
                 ]
             },

@@ -52,7 +52,7 @@
                     :show-bar="false"
                 >
                     <el-form-item
-                        prop="runtimeResource"
+                        prop="runtimeResourceObj"
                         :label="`${t('view.task.form.ResourceAllocation')}:`"
                     >
                         <i class="icon">*</i>
@@ -209,7 +209,9 @@ export default {
                 instances: 1,
                 modelId: this.modelId,
                 versionName: this.versionName,
-                runtimeResource: {
+                versionId: this.versionId,
+                runtimeResource: '',
+                runtimeResourceObj: {
                     [RESOURCE_KEY]: {
                         requests: {
                             cpu: 0,
@@ -245,7 +247,7 @@ export default {
                 runtimeImage: [
                     { required: true, message: this.t('view.model.selectRunningImage'), trigger: 'change' }
                 ],
-                runtimeResource: [
+                runtimeResourceObj: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -273,6 +275,10 @@ export default {
             default: ''
         },
         versionName: {
+            type: String,
+            default: ''
+        },
+        versionId: {
             type: String,
             default: ''
         }
@@ -319,26 +325,26 @@ export default {
             this.dialogVisible = nVal;
         },
         cpuObj(val) {
-            this.serviceInfoForm.runtimeResource = {
+            this.serviceInfoForm.runtimeResourceObj = {
                 [RESOURCE_KEY]: {
                     requests: {
                         cpu: val.cpu * 1000,
                         memory: val.memory * 1024* 1024*1024,
-                        'nvidia.com/gpu': this.serviceInfoForm.runtimeResource[RESOURCE_KEY].requests['nvidia.com/gpu']
+                        'nvidia.com/gpu': this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].requests['nvidia.com/gpu']
                     },
                     labels: {
-                        'gpu.model': this.serviceInfoForm.runtimeResource[RESOURCE_KEY].labels['gpu.model'],
+                        'gpu.model': this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].labels['gpu.model'],
                     },
                     instance: 1
                 }
             };
         },
         gpuObj(val) {
-            this.serviceInfoForm.runtimeResource = {
+            this.serviceInfoForm.runtimeResourceObj = {
                 [RESOURCE_KEY]: {
                     requests: {
-                        cpu: this.serviceInfoForm.runtimeResource[RESOURCE_KEY].requests.cpu,
-                        memory: this.serviceInfoForm.runtimeResource[RESOURCE_KEY].requests.memory,
+                        cpu: this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].requests.cpu,
+                        memory: this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].requests.memory,
                         'nvidia.com/gpu': val.count
                     },
                     labels: {
@@ -365,9 +371,9 @@ export default {
         },
         imageList() {
             const params = {
-                imageType: 'JUPYTER',
                 start: 1,
                 count: -1,
+                name: '_deployment',
                 ownerId: getUser().userId || ''
             };
             getImageList(params)
@@ -411,9 +417,18 @@ export default {
                             this.dialogVisible = false;
                         });
                     } else {
-                        this.serviceInfoForm.runtimeResource[RESOURCE_KEY].instance = this.serviceInfoForm.instances;
-                        createService(this.serviceInfoForm).then((res) => {
-                            console.log('res', res);
+                        if (!this.isGpuEnt) {
+                            this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].requests['nvidia.com/gpu'] = 0;
+                            this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].labels['gpu.model'] = '';
+                        }
+                        this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].instance = this.serviceInfoForm.instances;
+                        this.serviceInfoForm.runtimeResource = JSON.stringify(this.serviceInfoForm.runtimeResourceObj);
+                        createService(this.serviceInfoForm).then(() => {
+                            Message({
+                                message: this.t('sdxCommon.CreateSuccess'),
+                                type: 'success'
+                            });
+                            this.dialogVisible = false;
                         });
                     }
                 }

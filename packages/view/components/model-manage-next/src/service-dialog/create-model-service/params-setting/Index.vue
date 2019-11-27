@@ -104,9 +104,9 @@ export default {
         addInput() {
             this.input.push({
                 name: '',
-                type: '',
-                paramFrom: '',
-                paramTo: '',
+                dtype: '',
+                begin: '',
+                end: '',
                 default: '',
                 description: ''
             });
@@ -114,9 +114,9 @@ export default {
         addOutput() {
             this.output.push({
                 name: '',
-                type: '',
-                paramFrom: '',
-                paramTo: '',
+                dtype: '',
+                begin: '',
+                end: '',
                 default: '',
                 description: ''
             });

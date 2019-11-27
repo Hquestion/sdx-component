@@ -6,8 +6,6 @@
         size="large"
         :title="title"
     >
-        <!-- <div :style="{height: editingModel ? '290px' : 'calc(45vh)'}">
-            <SdxuScroll> -->
         <div class="sdxv-create-service__form">
             <el-form
                 :label-width="lang$==='en' ? '150px' : '100px'"
@@ -17,25 +15,25 @@
                 :rules="serviceInfoFormRule"
             >
                 <SdxuArticlePanel
-                    :title="`基本信息`"
+                    :title="`${t('view.model.basicInfo')}`"
                     :show-bar="false"
                 >
                     <el-form-item
-                        :label="`服务名称:`"
+                        :label="`${t('view.model.serviceName')}:`"
                         prop="name"
                     >
                         <SdxuInput
                             v-model="serviceInfoForm.name"
                             size="small"
-                            :placeholder="`请输入服务名称`"
+                            :placeholder="t('view.model.enterServiceName')"
                         />
                     </el-form-item>
                     <el-form-item
-                        prop="imageId"
+                        prop="runtimeImage"
                         :label="`${t('view.task.RuntimeEnvironment')}:`"
                     >
                         <el-select
-                            v-model="serviceInfoForm.imageId"
+                            v-model="serviceInfoForm.runtimeImage"
                             :searchable="true"
                             size="small"
                             :placeholder="t('view.task.form.Please_select_the_operating_environment')"
@@ -54,7 +52,7 @@
                     :show-bar="false"
                 >
                     <el-form-item
-                        prop="resourceConfigObj"
+                        prop="runtimeResource"
                         :label="`${t('view.task.form.ResourceAllocation')}:`"
                     >
                         <i class="icon">*</i>
@@ -79,16 +77,16 @@
                         </div>
                     </el-form-item>
                     <el-form-item
-                        prop="instanceNumber"
+                        prop="instances"
                         :label="`${t('view.task.InstanceNum')}:`"
                     >
                         <el-input-number
-                            v-model="serviceInfoForm.instanceNumber"
+                            v-model="serviceInfoForm.instances"
                             :min="1"
                         />
                     </el-form-item>
                     <el-form-item
-                        :label="`流量占比:`"
+                        :label="`${t('view.model.percent')}:`"
                     >
                         100%
                     </el-form-item>
@@ -106,38 +104,36 @@
                             style="margin-bottom: 16px;"
                         >
                             <SdxuTabRadioItem name="params">
-                                参数设置
+                                {{ t('view.model.paramSetting') }}
                             </SdxuTabRadioItem>
                             <SdxuTabRadioItem name="request">
-                                请求示例
+                                {{ t('view.model.requestExample') }}
                             </SdxuTabRadioItem>
                             <SdxuTabRadioItem name="response">
-                                返回示例
+                                {{ t('view.model.respExample') }}
                             </SdxuTabRadioItem>
                         </SdxuTabRadioGroup>
                         <params-setting
                             v-show="settingType === 'params'"
-                            :input-params.sync="serviceInfoForm.inputParams"
-                            :output-params.sync="serviceInfoForm.outputParams"
+                            :input-params.sync="serviceInfoForm.apiParams.input"
+                            :output-params.sync="serviceInfoForm.apiParams.output"
                             ref="paramsSetting"
                         />
                         <request-example
                             v-show="settingType === 'request'"
-                            :request-examples.sync="serviceInfoForm.requestExamples"
+                            :request-examples.sync="serviceInfoForm.apiExamples.request"
                             ref="requestExample"
                         />
                         <response-example
                             v-show="settingType === 'response'"
-                            :response-success.sync="serviceInfoForm.responseSuccess"
-                            :response-fail.sync="serviceInfoForm.responseFail"
+                            :response-success.sync="serviceInfoForm.apiExamples.response.success"
+                            :response-fail.sync="serviceInfoForm.apiExamples.response.failed"
                             ref="responseExample"
                         />
                     </div>
                 </SdxuArticlePanel>
             </el-form>
         </div>
-        <!-- </SdxuScroll>
-        </div> -->
 
         <div
             slot="footer"
@@ -165,17 +161,14 @@ import Dialog from '@sdx/ui/components/dialog';
 import Input from '@sdx/ui/components/input';
 import Button from '@sdx/ui/components/button';
 import ElForm from 'element-ui/lib/form';
-import Scroll from '@sdx/ui/components/scroll';
 import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
-import ShareForm from '@sdx/widget/components/share-form';
 import ElSelect from 'element-ui/lib/select';
 import { getImageList } from '@sdx/utils/src/api/image';
-import { createModel, updateModel, createVersion } from '@sdx/utils/src/api/model';
+import { updateModel, createService } from '@sdx/utils/src/api/model';
 import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import locale from '@sdx/utils/src/mixins/locale';
-import FileSelect from '@sdx/widget/lib/file-select';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import ArticlePanel from '@sdx/ui/components/article-panel';
 import TabRadio from '@sdx/ui/components/tab-radio';
@@ -206,15 +199,17 @@ export default {
         };
         return {
             dialogVisible: this.visible,
-            title: '新增模型服务',
+            title: this.t('view.model.addModelService'),
             imageOptions: [],
             cpuObj: {},
             gpuObj: {},
             serviceInfoForm: {
                 name: '',
-                imageId: '',
-                instanceNumber: 1,
-                resourceConfigObj: {
+                runtimeImage: '',
+                instances: 1,
+                modelId: this.modelId,
+                versionName: this.versionName,
+                runtimeResource: {
                     [RESOURCE_KEY]: {
                         requests: {
                             cpu: 0,
@@ -227,24 +222,30 @@ export default {
                         instance: 1
                     }
                 },
-                inputParams: [],
-                outputParams: [],
-                requestExamples: [],
-                responseSuccess: '',
-                responseFail: ''
+                apiParams: {
+                    input: [],
+                    output: []
+                },
+                apiExamples: {
+                    request: [],
+                    response: {
+                        success: '',
+                        failed: ''
+                    }
+                }
             },
             serviceInfoFormRule: {
                 name: [
-                    { required: true, message: '请输入服务名称', trigger: 'blur' },
+                    { required: true, message: this.t('view.model.enterServiceName'), trigger: 'blur' },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
-                instanceNumber: [
+                instances: [
                     { required: true, message: this.t('view.task.EnterInstanceNum'), trigger: 'change'}
                 ],
-                imageId: [
-                    { required: true, message: '请选择运行环境', trigger: 'change' }
+                runtimeImage: [
+                    { required: true, message: this.t('view.model.selectRunningImage'), trigger: 'change' }
                 ],
-                resourceConfigObj: [
+                runtimeResource: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -263,16 +264,24 @@ export default {
             type: Boolean,
             default: false
         },
-        editingModel: {
+        editingService: {
             type: Object,
             default: null
+        },
+        modelId: {
+            type: String,
+            default: '53193a14-4574-440b-ba97-38fb4ba8b7dd'
+        },
+        versionName: {
+            type: String,
+            default: 'v2'
         }
     },
     computed: {
         isGpuEnt() {
             let isGpuEnt = false;
             for(let i=0; i<this.imageOptions.length; i++) {
-                if(this.imageOptions[i].value ===this.serviceInfoForm.imageId) {
+                if(this.imageOptions[i].value ===this.serviceInfoForm.runtimeImage) {
                     if(this.imageOptions[i].label.includes('gpu')) {
                         isGpuEnt =true;
                     } else {
@@ -287,9 +296,6 @@ export default {
         [Dialog.name]: Dialog,
         [Button.name]: Button,
         [Input.name]: Input,
-        [ShareForm.name]: ShareForm,
-        [Scroll.name]: Scroll,
-        [FileSelect.FileSelectMix.name]: FileSelect.FileSelectMix,
         ElForm,
         ElFormItem,
         ElSelect,
@@ -303,9 +309,9 @@ export default {
     },
     created() {
         this.imageList();
-        if (this.editingModel) {
+        if (this.editingService) {
             this.title = this.t('view.model.editModel');
-            Object.assign(this.serviceInfoForm, this.editingModel);
+            Object.assign(this.serviceInfoForm, this.editingService);
         }
     },
     watch: {
@@ -313,26 +319,26 @@ export default {
             this.dialogVisible = nVal;
         },
         cpuObj(val) {
-            this.serviceInfoForm.resourceConfigObj = {
+            this.serviceInfoForm.runtimeResource = {
                 [RESOURCE_KEY]: {
                     requests: {
                         cpu: val.cpu * 1000,
                         memory: val.memory * 1024* 1024*1024,
-                        'nvidia.com/gpu': this.serviceInfoForm.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu']
+                        'nvidia.com/gpu': this.serviceInfoForm.runtimeResource[RESOURCE_KEY].requests['nvidia.com/gpu']
                     },
                     labels: {
-                        'gpu.model': this.serviceInfoForm.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'],
+                        'gpu.model': this.serviceInfoForm.runtimeResource[RESOURCE_KEY].labels['gpu.model'],
                     },
                     instance: 1
                 }
             };
         },
         gpuObj(val) {
-            this.serviceInfoForm.resourceConfigObj = {
+            this.serviceInfoForm.runtimeResource = {
                 [RESOURCE_KEY]: {
                     requests: {
-                        cpu: this.serviceInfoForm.resourceConfigObj[RESOURCE_KEY].requests.cpu,
-                        memory: this.serviceInfoForm.resourceConfigObj[RESOURCE_KEY].requests.memory,
+                        cpu: this.serviceInfoForm.runtimeResource[RESOURCE_KEY].requests.cpu,
+                        memory: this.serviceInfoForm.runtimeResource[RESOURCE_KEY].requests.memory,
                         'nvidia.com/gpu': val.count
                     },
                     labels: {
@@ -342,7 +348,7 @@ export default {
                 }
             };
         },
-        'serviceInfoForm.imageId'() {
+        'serviceInfoForm.runtimeImage'() {
             this.$refs.serviceInfoForm.clearValidate('resourceConfig');
         }
     },
@@ -375,24 +381,28 @@ export default {
             this.dialogVisible = false;
         },
         confirm() {
-            this.$refs.serviceInfoForm.validate(valid => {
+            this.$refs.serviceInfoForm.validate(async valid => {
                 if (!valid) {
                     Message.error(this.t('sdxCommon.requiredInfo'));
                 } else {
-                    if (!this.$refs.paramsSetting.validate()) {
+                    try {
+                        await this.$refs.paramsSetting.validate();
+                    } catch (e) {
                         this.showMoreSetting = true;
                         this.settingType = 'params';
                         Message.error(this.t('sdxCommon.requiredInfo'));
                         return;
                     }
-                    if (!this.$refs.requestExample.validate()) {
+                    try {
+                        await this.$refs.requestExample.validate();
+                    } catch (e) {
                         this.showMoreSetting = true;
                         this.settingType = 'request';
                         Message.error(this.t('sdxCommon.requiredInfo'));
                         return;
                     }
-                    if (this.editingModel) {
-                        updateModel(this.editingModel.uuid, this.serviceInfoForm).then(() => {
+                    if (this.editingService) {
+                        updateModel(this.editingService.uuid, this.serviceInfoForm).then(() => {
                             Message({
                                 message: this.t('sdxCommon.UpdateSuccess'),
                                 type: 'success'
@@ -401,24 +411,9 @@ export default {
                             this.dialogVisible = false;
                         });
                     } else {
-                        if (this.serviceInfoForm.shareType === 'PUBLIC') {
-                            this.serviceInfoForm.users = [];
-                            this.serviceInfoForm.groups = [];
-                            this.serviceInfoForm.isPublic = true;
-                        }
-                        createModel(this.serviceInfoForm).then((res) => {
-                            const params = {
-                                description: this.serviceInfoForm.versionDescription,
-                                modelPath: this.serviceInfoForm.modelPath
-                            };
-                            createVersion(res.uuid, params).then(() => {
-                                Message({
-                                    message: this.t('sdxCommon.CreateSuccess'),
-                                    type: 'success'
-                                });
-                                this.needRefresh = true;
-                                this.dialogVisible = false;
-                            });
+                        this.serviceInfoForm.runtimeResource[RESOURCE_KEY].instance = this.serviceInfoForm.instances;
+                        createService(this.serviceInfoForm).then((res) => {
+                            console.log('res', res);
                         });
                     }
                 }

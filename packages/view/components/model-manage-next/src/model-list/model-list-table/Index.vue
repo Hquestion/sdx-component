@@ -49,7 +49,7 @@
                                 v-if="item.showShare"
                                 v-auth.model.button="'MODEL:SHARE'"
                             >
-                                共享
+                                {{ t('view.model.share') }}
                             </sdxu-button>
                             <sdxu-button
                                 icon="sdx-icon sdx-icon-edit"

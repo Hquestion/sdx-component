@@ -35,7 +35,7 @@
                     />
                 </el-form-item>
                 <el-form-item
-                    label="模型类型："
+                    :label="`${t('view.model.modelType')}:`"
                     prop="modelType"
                 >
                     <sdxu-select
@@ -43,7 +43,7 @@
                         filterable
                         allow-create
                         :show-icon="true"
-                        :placeholder="`请输入或选择模型类型`"
+                        :placeholder="t('view.model.enterOrSelectModelType')"
                     >
                         <sdxu-option
                             v-for="item in modelTypes"
@@ -76,7 +76,7 @@
                     </sdxu-select>
                 </el-form-item>
                 <el-form-item
-                    :label="`模型版本：`"
+                    :label="`${t('view.model.modelVersion')}:`"
                     v-if="!editingModel"
                 >
                     <div class="sdxv-create-model__version">
@@ -84,18 +84,18 @@
                     </div>
                 </el-form-item>
                 <el-form-item
-                    :label="`版本描述：`"
+                    :label="`${t('view.model.versionColumns.description')}:`"
                     v-if="!editingModel"
                 >
                     <sdxu-input
                         v-model="modelInfoForm.versionDescription"
                         type="textarea"
-                        :placeholder="`请输入版本描述`"
+                        :placeholder="t('view.model.enterDescription')"
                         :rows="3"
                     />
                 </el-form-item>
                 <el-form-item
-                    :label="`模型文件：`"
+                    :label="`${t('view.model.modelFile')}:`"
                     v-if="!editingModel"
                     prop="modelPath"
                 >
@@ -176,10 +176,10 @@ export default {
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 modelType: [
-                    { required: true, message: '请输入或选择模型类型', trigger: 'change' }
+                    { required: true, message: this.t('view.model.enterOrSelectModelType'), trigger: 'change' }
                 ],
                 modelPath: [
-                    { required: true, message: '请上传或选择模型文件', trigger: 'blur' }
+                    { required: true, message: this.t('view.model.enterModelFile'), trigger: 'blur' }
                 ],
                 description: [
                     {

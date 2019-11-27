@@ -20,7 +20,7 @@
                 >
                     <el-select
                         v-model="versionInfoForm.name"
-                        :placeholder="`请选择模型`"
+                        :placeholder="t('view.model.selectModel')"
                         @change="modelSelected"
                     >
                         <el-option
@@ -32,7 +32,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    :label="`模型版本：`"
+                    :label="`${t('view.model.modelVersion')}:`"
                     v-if="(modelId && !editingVersion) || (!modelId && versionInfoForm.version)"
                 >
                     <div class="sdxv-create-version__version">
@@ -40,18 +40,18 @@
                     </div>
                 </el-form-item>
                 <el-form-item
-                    :label="`版本描述：`"
+                    :label="`${t('view.model.versionColumns.description')}:`"
                     v-if="!editingVersion"
                 >
                     <sdxu-input
                         v-model="versionInfoForm.versionDescription"
                         type="textarea"
-                        :placeholder="`请输入版本描述`"
+                        :placeholder="t('view.model.enterDescription')"
                         :rows="3"
                     />
                 </el-form-item>
                 <el-form-item
-                    :label="`模型文件：`"
+                    :label="`${t('view.model.modelFile')}:`"
                     v-if="!editingVersion"
                     prop="modelPath"
                 >
@@ -115,7 +115,7 @@ export default {
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
                 modelPath: [
-                    { required: true, message: '请上传或选择模型文件', trigger: 'blur' }
+                    { required: true, message: this.t('view.model.enterModelFile'), trigger: 'blur' }
                 ],
                 description: [
                     {
@@ -156,7 +156,7 @@ export default {
         ElSelect
     },
     created() {
-        this.title = !this.modelId ? '添加已有版本' : (this.editingVersion ? '编辑版本' : '新建版本');
+        this.title = !this.modelId ? this.t('view.model.addExistingVersion') : (this.editingVersion ? this.t('view.model.editVersion') : this.t('view.model.createVersion'));
         if (!this.modelId) this.getModelOptions();
         if (this.editingVersion) {
             this.title = this.t('view.model.editModel');
@@ -166,7 +166,6 @@ export default {
     methods: {
         modelSelected(modelId) {
             getModelInfo(modelId).then(res => {
-                console.log('res', res);
                 this.versionInfoForm.version = 'V2.0';
             });
         },

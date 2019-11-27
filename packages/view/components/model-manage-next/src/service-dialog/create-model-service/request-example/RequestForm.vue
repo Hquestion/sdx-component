@@ -9,12 +9,12 @@
         >
             <el-form-item
                 prop="type"
-                :label="`请求类型:`"
+                :label="`${t('view.model.requestType')}:`"
             >
                 <el-select
                     v-model="requestForm.type"
                     size="small"
-                    :placeholder="`请选择请求类型`"
+                    :placeholder="t('view.model.enterRequestType')"
                 >
                     <el-option
                         v-for="item in types"
@@ -25,14 +25,14 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                :label="`请求示例:`"
+                :label="`${t('view.model.requestExample')}:`"
             >
                 <SdxuInput
                     v-model="requestForm.example"
                     size="small"
                     type="textarea"
                     :rows="7"
-                    :placeholder="`请输入请求示例`"
+                    :placeholder="t('view.model.enterReqExample')"
                 />
             </el-form-item>
         </el-form>
@@ -44,6 +44,7 @@ import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import ElSelect from 'element-ui/lib/select';
 import Input from '@sdx/ui/components/input';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'RequestForm',
     data() {
@@ -52,14 +53,15 @@ export default {
                 type: '',
                 example: ''
             },
-            types: ['CRUL请求示例', 'Python请求示例', 'JAVA请求示例'],
+            types: [this.t('view.model.crukExample'), this.t('view.model.pythonExample'), this.t('view.model.javaExample')],
             requestFormRule: {
                 type: [
-                    { required: true, message: '请选择请求类型', trigger: 'change'}
+                    { required: true, message: this.t('view.model.enterRequestType'), trigger: 'change'}
                 ]
             },
         };
     },
+    mixins: [locale],
     props: {
         data: {
             type: Object,
@@ -68,9 +70,7 @@ export default {
     },
     methods: {
         validate() {
-            this.$refs.requestForm.validate(valid => {
-                return valid;
-            });
+            return this.$refs.requestForm.validate();
         }
     },
     components: {

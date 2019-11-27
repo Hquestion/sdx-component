@@ -2,7 +2,7 @@
     <div class="sdxv-request-example">
         <div class="sdxv-request-example__item">
             <div class="sdxv-request-example__item--label">
-                请求示例:
+                {{ t('view.model.requestType') }}:
             </div>
             <div class="sdxv-request-example__item--content">
                 <div
@@ -23,7 +23,7 @@
                     @click="addExample"
                 >
                     <i class="sdx-icon sdx-xinjianhao" />
-                    添加请求示例
+                    {{ t('view.model.addReqExample') }}
                 </SdxuButton>
             </div>
         </div>
@@ -34,6 +34,7 @@
 import Button from '@sdx/ui/components/button';
 import RemovableBox from '../RemovableBox';
 import RequestForm from './RequestForm';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'RequestExample',
     data() {
@@ -41,6 +42,7 @@ export default {
             examples: this.requestExamples
         };
     },
+    mixins: [locale],
     props: {
         requestExamples: {
             type: Array,
@@ -71,12 +73,11 @@ export default {
             this.examples.splice(index, 1);
         },
         validate() {
-            let allFormsValid = true;
-            this.examples.forEach((item, index) => {
-                let valid = this.$refs[`exampleForm${index}`][0].validate();
-                if (allFormsValid) allFormsValid = valid;
+            let promises = [];
+            promises = this.examples.map((form,index) => {
+                return this.$refs[`exampleForm${index}`][0].validate();
             });
-            return allFormsValid;
+            return Promise.all(promises);
         }
     }
 };

@@ -8,23 +8,23 @@
             :rules="paramFormRule"
         >
             <el-form-item
-                :label="`参数名:`"
+                :label="`${t('view.model.paramName')}:`"
                 prop="name"
             >
                 <SdxuInput
                     v-model="paramForm.name"
                     size="small"
-                    :placeholder="`请输入参数名`"
+                    :placeholder="t('view.model.enterParamName')"
                 />
             </el-form-item>
             <el-form-item
                 prop="type"
-                :label="`参数类型:`"
+                :label="`${t('view.model.paramType')}:`"
             >
                 <el-select
                     v-model="paramForm.type"
                     size="small"
-                    :placeholder="`请选择参数类型`"
+                    :placeholder="t('view.model.selectParamType')"
                 >
                     <el-option
                         v-for="item in types"
@@ -35,40 +35,40 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                :label="`参数范围:`"
+                :label="`${t('view.model.paramRange')}:`"
             >
                 <div style="display: flex; justify-content: space-between;">
                     <SdxuInput
                         v-model="paramForm.paramFrom"
                         style="width:150px;"
-                        :placeholder="`开始值`"
+                        :placeholder="t('view.model.beginVal')"
                     />
                     <span>-</span>
                     <SdxuInput
                         v-model="paramForm.paramTo"
                         style="width:150px;"
-                        :placeholder="`结束值`"
+                        :placeholder="t('view.model.endVal')"
                     />
                 </div>
             </el-form-item>
             <el-form-item
-                :label="`默认值:`"
+                :label="`${t('view.model.defaultVal')}:`"
             >
                 <SdxuInput
                     v-model="paramForm.default"
                     size="small"
-                    :placeholder="`请输入默认值`"
+                    :placeholder="t('view.model.enterDefaultVal')"
                 />
             </el-form-item>
             <el-form-item
-                :label="`参数说明:`"
+                :label="`${t('view.model.paramDesc')}:`"
             >
                 <SdxuInput
                     v-model="paramForm.description"
                     size="small"
                     type="textarea"
                     :rows="3"
-                    :placeholder="`请输入参数说明`"
+                    :placeholder="t('view.model.enterParamsDesc')"
                 />
             </el-form-item>
         </el-form>
@@ -79,23 +79,25 @@
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import ElSelect from 'element-ui/lib/select';
+import locale from '@sdx/utils/src/mixins/locale';
 import Input from '@sdx/ui/components/input';
 export default {
     name: 'ParamForm',
     data() {
         return {
             paramForm: this.data,
-            types: ['数字', '字符串', '布尔值'],
+            types: [this.t('view.model.number'), this.t('view.model.string'), this.t('view.model.bool')],
             paramFormRule: {
                 name: [
-                    { required: true, message: '请输入参数名', trigger: 'blur' }
+                    { required: true, message: this.t('view.model.enterParamName'), trigger: 'blur' }
                 ],
                 type: [
-                    { required: true, message: '请选择参数类型', trigger: 'change'}
+                    { required: true, message: this.t('view.model.selectParamType'), trigger: 'change'}
                 ]
             },
         };
     },
+    mixins: [locale],
     props: {
         data: {
             type: Object,
@@ -104,9 +106,7 @@ export default {
     },
     methods: {
         validate() {
-            this.$refs.paramForm.validate(valid => {
-                return valid;
-            });
+            return this.$refs.paramForm.validate();
         }
     },
     components: {
@@ -118,6 +118,12 @@ export default {
     watch: {
         data(nVal) {
             this.paramForm = nVal;
+        },
+        paramForm: {
+            deep: true,
+            handler(nVal) {
+                this.$emit('update:data', nVal);
+            }
         }
     }
 };

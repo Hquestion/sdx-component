@@ -6,16 +6,16 @@
                 @switch="switchShareType"
             >
                 <SdxuTabRadioItem name="ALL">
-                    所有模型
+                    {{ t('view.model.allModels') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="PRIVATE">
-                    私有模型
+                    {{ t('view.model.privateModels') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="MY_SHARE">
-                    我的共享
+                    {{ t('view.model.myShare') }}
                 </SdxuTabRadioItem>
                 <SdxuTabRadioItem name="OTHER_SHARE">
-                    他人共享
+                    {{ t('view.model.othersShare') }}
                 </SdxuTabRadioItem>
             </SdxuTabRadioGroup>
             <div>
@@ -25,7 +25,7 @@
                     style="margin-right: 24px; vertical-align: middle"
                 >
                     <i class="sdx-icon sdx-icon-plus" />
-                    导入模型
+                    {{ t('view.model.importModels') }}
                     <template slot="dropdown">
                         <SdxuButton
                             type="text"
@@ -33,7 +33,7 @@
                             block
                             @click="createModel"
                         >
-                            新建模型
+                            {{ t('view.model.createModel') }}
                         </SdxuButton>
                         <SdxuButton
                             type="text"
@@ -41,7 +41,7 @@
                             block
                             @click="createVersion"
                         >
-                            添加已有版本
+                            {{ t('view.model.addExistingVersion') }}
                         </SdxuButton>
                     </template>
                 </sdxu-button>
@@ -58,7 +58,7 @@
                 @search="updateTable"
                 @reset="reset"
             >
-                <sdxw-search-item label="模型名称:">
+                <sdxw-search-item :label="`${t('view.model.modelColumns.name')}:`">
                     <sdxu-input
                         v-model="searchName"
                         type="search"
@@ -66,10 +66,10 @@
                         :placeholder="t('view.model.searchModelName')"
                     />
                 </sdxw-search-item>
-                <sdxw-search-item label="模型类型:">
+                <sdxw-search-item :label="`${t('view.model.modelType')}:`">
                     <el-select
                         v-model="modelType"
-                        :placeholder="`请选择模型类型`"
+                        :placeholder="t('view.model.selectModelType')"
                     >
                         <el-option
                             v-for="item in modelTypeOptions"
@@ -79,7 +79,7 @@
                         />
                     </el-select>
                 </sdxw-search-item>
-                <sdxw-search-item label="模型标签:">
+                <sdxw-search-item :label="`${t('view.model.modelColumns.label')}:`">
                     <el-select
                         v-model="searchLabels"
                         multiple

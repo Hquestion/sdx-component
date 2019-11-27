@@ -2,7 +2,7 @@
     <div class="sdxv-params-setting">
         <div class="sdxv-params-setting__item">
             <div class="sdxv-params-setting__item--label">
-                输入参数:
+                {{ t('view.model.inputParams') }}:
             </div>
             <div class="sdxv-params-setting__item--content">
                 <div
@@ -12,7 +12,7 @@
                     <removable-box @remove="handleRemove(index, true)">
                         <param-form
                             :ref="`inputForm${index}`"
-                            :data="item"
+                            :data.sync="item"
                         />
                     </removable-box>
                 </div>
@@ -23,13 +23,13 @@
                     @click="addInput"
                 >
                     <i class="sdx-icon sdx-xinjianhao" />
-                    添加输入参数
+                    {{ t('view.model.addInputParams') }}
                 </SdxuButton>
             </div>
         </div>
         <div class="sdxv-params-setting__item">
             <div class="sdxv-params-setting__item--label">
-                输出参数:
+                {{ t('view.model.outputParams') }}:
             </div>
             <div class="sdxv-params-setting__item--content">
                 <div
@@ -39,7 +39,7 @@
                     <removable-box @remove="handleRemove(index)">
                         <param-form
                             :ref="`outputForm${index}`"
-                            :data="item"
+                            :data.sync="item"
                         />
                     </removable-box>
                 </div>
@@ -50,7 +50,7 @@
                     @click="addOutput"
                 >
                     <i class="sdx-icon sdx-xinjianhao" />
-                    添加输出参数
+                    {{ t('view.model.addOutputParams') }}
                 </SdxuButton>
             </div>
         </div>
@@ -61,6 +61,7 @@
 import Button from '@sdx/ui/components/button';
 import RemovableBox from '../RemovableBox';
 import ParamForm from './ParamForm';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'ParamsSetting',
     data() {
@@ -69,6 +70,7 @@ export default {
             output: this.outputParams
         };
     },
+    mixins: [locale],
     props: {
         inputParams: {
             type: Array,
@@ -123,16 +125,13 @@ export default {
             fromInput ? this.input.splice(index, 1) : this.output.splice(index, 1);
         },
         validate() {
-            let allFormsValid = true;
-            this.input.forEach((item, index) => {
-                let valid = this.$refs[`inputForm${index}`][0].validate();
-                if (allFormsValid) allFormsValid = valid;
-            });
-            this.output.forEach((item, index) => {
-                let valid = this.$refs[`outputForm${index}`][0].validate();
-                if (allFormsValid) allFormsValid = valid;
-            });
-            return allFormsValid;
+            let promises = [];
+            promises = [...this.output.map((form,index) => {
+                return this.$refs[`outputForm${index}`][0].validate();
+            }), ...this.input.map((form,index) => {
+                return this.$refs[`inputForm${index}`][0].validate();
+            })];
+            return Promise.all(promises);
         }
     }
 };

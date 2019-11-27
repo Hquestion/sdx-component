@@ -4,6 +4,7 @@ import readAuths from './config';
 import { authWrapper } from './helper';
 
 const modelApi = `${MODEL_MANAGE_GATEWAY_BASE}models`;
+const serviceApi = `${MODEL_MANAGE_GATEWAY_BASE}services`;
 
 /* export function getModelList(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}model-profiles`, params);
@@ -31,6 +32,10 @@ export function getModelTypes() {
 
 export function createModel(params) {
     return httpService.post(modelApi, params);
+}
+
+export function createService(params) {
+    return httpService.post(serviceApi, params);
 }
 
 export function removeModel(uuid) {
@@ -211,5 +216,6 @@ export default {
     getVersionInputFormat,
     removeGroupModels,
     updateGroupModels,
-    getComponents
+    getComponents,
+    createService
 };

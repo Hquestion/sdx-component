@@ -8,25 +8,25 @@
             :rules="responseFormRule"
         >
             <el-form-item
-                :label="`成功返回示例:`"
+                :label="`${t('view.model.successExample')}:`"
             >
                 <SdxuInput
                     v-model="responseForm.successExample"
                     size="small"
                     type="textarea"
                     :rows="7"
-                    :placeholder="`请输入成功返回示例`"
+                    :placeholder="t('view.model.enterSuccessExample')"
                 />
             </el-form-item>
             <el-form-item
-                :label="`失败返回示例:`"
+                :label="`${t('view.model.failExample')}:`"
             >
                 <SdxuInput
                     v-model="responseForm.failExample"
                     size="small"
                     type="textarea"
                     :rows="7"
-                    :placeholder="`请输入失败返回示例`"
+                    :placeholder="t('view.model.enterFailExample')"
                 />
             </el-form-item>
         </el-form>
@@ -37,6 +37,7 @@
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import Input from '@sdx/ui/components/input';
+import locale from '@sdx/utils/src/mixins/locale';
 export default {
     name: 'ResponseForm',
     data() {
@@ -49,6 +50,7 @@ export default {
             },
         };
     },
+    mixins: [locale],
     props: {
         responseSuccess: {
             type: String,

@@ -8,18 +8,18 @@
         <el-form
             ref="form"
             :model="params"
-            label-width="80px"
+            label-width="90px"
             label-position="right"
             :rules="rules"
         >
             <el-form-item
-                :label="`${t('view.model.APIName')}：`"
+                :label="`${isModel ? t('view.model.modelColumns.name') : t('view.model.APIName')}：`"
                 prop="name"
             >
                 <SdxuInput />
             </el-form-item>
             <el-form-item
-                :label="`${t('view.model.APIDescription')}：`"
+                :label="`${isModel ? t('view.model.modelColumns.description') : t('view.model.APIDescription')}：`"
             >
                 <SdxuInput
                     type="textarea"
@@ -27,7 +27,7 @@
                 />
             </el-form-item>
             <el-form-item
-                :label="`${t('view.model.APIType')}：`"
+                :label="`${isModel ? t('view.model.modelColumns.type') : t('view.model.APIType')}：`"
             >
                 <el-select
                     style="width: 100%"
@@ -41,7 +41,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                :label="`${t('view.model.APILabel')}：`"
+                :label="`${isModel ? t('view.model.modelColumns.label') : t('view.model.APILabel')}：`"
                 class="tag"
             >
                 <el-tag
@@ -149,6 +149,10 @@ export default {
             type: Boolean,
             default: false
         },
+        isModel: {
+            type: Boolean,
+            default: false
+        }
     },
     computed: {
         dialogVisible: {

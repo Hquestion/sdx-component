@@ -13,7 +13,7 @@
                     {{ meta.title }}
                 </div>
                 <div>
-                    <div>
+                    <div :style="`color: ${meta.labelColor}`">
                         {{ meta.type }}
                     </div>
                     <div>

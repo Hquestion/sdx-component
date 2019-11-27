@@ -672,7 +672,8 @@ export default {
                 description: 'Model Description',
                 label: 'Labels',
                 creator: 'Creator',
-                createdTime: 'Created Time'
+                createdTime: 'Created Time',
+                type: 'Model Type'
             },
             modelsToShare: 'Please select models to share',
             modelsToRemove: 'Please select models to remove',

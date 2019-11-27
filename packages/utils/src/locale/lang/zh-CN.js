@@ -671,7 +671,8 @@ export default {
                 description: '模型描述',
                 label: '模型标签',
                 creator: '创建人',
-                createdTime: '创建时间'
+                createdTime: '创建时间',
+                type: '模型类型'
             },
             modelsToShare: '请先选择需要共享的模型',
             modelsToRemove: '请先选择需要删除的模型',

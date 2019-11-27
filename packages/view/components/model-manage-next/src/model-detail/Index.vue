@@ -45,6 +45,7 @@
                         </SdxuButton>
                         <SdxuButton
                             type="default"
+                            @click="releaseAI"
                         >
                             {{ t('view.model.Release_to_AI_open_platform') }}
                         </SdxuButton>
@@ -66,6 +67,7 @@
                                 <SdxuButton
                                     type="default"
                                     size="regular"
+                                    @click="removeVersion"
                                 >
                                     {{ t('sdxCommon.Delete') }}
                                 </SdxuButton>
@@ -98,13 +100,21 @@
                 </div>
             </sdxu-article-panel>
         </sdxu-section-panel>
-        <EditVersion :visible.sync="editVersionVisible" />
+        <EditVersion
+            :visible.sync="editVersionVisible"
+            :model-id="$route.params.modelId"
+        />
         <create-model-service
             :visible.sync="createServiceVisible"
             :model-id="$route.params.modelId"
             :version-id="versionParams.uuid"
             :version-name="versionParams.name"
             v-if="createServiceVisible"
+        />
+        <PublishPlatform
+            :visible.sync="releaseAIVisible"
+            :is-model="true"
+            v-if="releaseAIVisible"
         />
     </div>
 </template>
@@ -119,30 +129,34 @@ import Button from '@sdx/ui/components/button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import EditVersion from '../model-list/CreateVersion';
 import CreateModelService from '../service-dialog/create-model-service/Index';
-import { getModelInfo } from '@sdx/utils/src/api/model';
+import { getModelInfo,removeVersion } from '@sdx/utils/src/api/model';
+import { getUserSimpleInfo } from '@sdx/utils/src/api/user';
 import {download} from '@sdx/utils/src/api/file';
+import Message from 'element-ui/lib/message';
+import MessageBox from '@sdx/ui/components/message-box';
+import PublishPlatform from '../service-dialog/PublishPlatform';
+import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON } from '@sdx/utils/src/const/model';
 export default {
     name: 'SdxvModelDetail',
     mixins: [locale],
     data() {
         return {
             cardInfo: {
-                icon:'sdx-mobanxiangmu',
-                title: 'skyide',
-                type: '自然语言处理',
-                creator: '吴晓飞',
-                createdAt: '2018/09/11',
-                description: '啊上传即可拿就卡阿大间放假啊飞啊的收纳啊大室家阿多尼斯扩大阿达舒服就啊啊上传呢卡德纳斯就卡阿大 啊是卡德纳斯看贾夫纳市就分手',
-                labels: [
-                    '标签A', '标签S', '标签F',
-                ],
+                icon:'',
+                title: '',
+                type: '',
+                creator: '',
+                createdAt: '',
+                description: '',
+                labels: [],
                 owner: {
-                    uuid: 'asfbadasijo899'
+                    uuid: ''
                 }
             },
             versions: [],
             editVersionVisible: false,
             createServiceVisible: false,
+            releaseAIVisible: false,
             versionInfo: [],
             versionParams: {
                 uuid: '',
@@ -162,7 +176,8 @@ export default {
         [Option.name]: Option,
         [Button.name]: Button,
         EditVersion,
-        CreateModelService
+        CreateModelService,
+        PublishPlatform
     },
     created() {
         this.getModelDetail();
@@ -175,6 +190,23 @@ export default {
         editVersion() {
             this.editVersionVisible = true;
         },
+        releaseAI(){
+            this.releaseAIVisible = true;
+        },
+        removeVersion() {
+            MessageBox({
+                title: this.t('view.model.versionRemoveConfirm'),
+                content: this.t('sdxCommon.ConfirmRemove')
+            }).then(() => {
+                removeVersion(this.$route.params.modelId, this.versionParams.uuid).then(() => {
+                    Message({
+                        message: this.t('sdxCommon.RemoveSuccess'),
+                        type: 'success'
+                    });
+                    this.getModelDetail();
+                });
+            });
+        },
         createModelService() {
             this.createServiceVisible = true;
         },
@@ -186,18 +218,28 @@ export default {
         // 获取模型详情
         getModelDetail() {
             getModelInfo(this.$route.params.modelId).then(res => {
-                this.cardInfo = {
-                    icon:'sdx-mobanxiangmu',
-                    title: res.name,
-                    type: res.modelType,
-                    creator: '吴晓飞',
-                    createdAt: res.createdAt,
-                    description: res.description,
-                    labels: res.labels,
-                    owner: {
-                        uuid: 'asfbadasijo899'
-                    }
-                };
+                // 根据creatorId 得到用户信息 
+                getUserSimpleInfo(res.creatorId).then((data) => {
+                    // 根据模型类型 得到对应的icon，color
+                    let iconColor = MODEL_TYPES_ICON.filter(item => item.name === res.modelType)[0];
+                    iconColor = iconColor ? iconColor : {
+                        icon: DEFAULT_MODEL_TYPE_ICON,
+                        color: '#1144AB'
+                    };
+                    this.cardInfo = {
+                        icon: iconColor.icon,
+                        title: res.name,
+                        type: res.modelType,
+                        creator: data.fullName,
+                        createdAt: res.createdAt,
+                        description: res.description,
+                        labels: res.labels,
+                        owner: {
+                            uuid: res.creatorId
+                        },
+                        labelColor: iconColor.color
+                    };
+                });
                 this.versionInfo = res.versions.items;
                 let items = JSON.parse(JSON.stringify(this.versionInfo));
                 // 获取最新的版本，展示出来

@@ -14,7 +14,8 @@
                         <el-select
                             size="large"
                             :placeholder="t('sdxCommon.PleaseSelect')"
-                            v-model="version"
+                            v-model="versionParams.uuid"
+                            @change="changeVersion"
                         >
                             <el-option
                                 v-for="item in versions"
@@ -74,26 +75,26 @@
                 </div>
                 <div>
                     <span>{{ `${t('view.model.versionDetail.description')}：` }}</span>
-                    <span>的事发生贾凯里尼爱上曾经阿森纳成的事发生贾凯里尼爱上曾经阿森纳成绩啊上传说你是首次举办的时间长当时的此刻就是错的事潮男夹克衫不错不错就是差的事发生贾凯里尼爱上曾经阿森纳成绩啊上传说你是首次举办的时间长当时的此刻就是错的事潮男夹克衫不错不错就是差绩啊上传说你是首次举办的时间长当时的此刻就是错的事潮男夹克衫不错不错就是差 </span>
+                    <span>{{ versionParams.description ? versionParams.description : t('widget.projectCard.NoDescriptionAdded') }} </span>
                 </div>
                 <div>
                     <span>{{ `${t('view.model.ModelFile')}：` }}</span>
-                    <span>是错的事潮男夹克衫不错不错就是差 </span>
+                    <span>{{ versionParams.modelPath }}</span>
                     <SdxuButton
                         size="regular"
                         type="link"
-                        @click="download()"
+                        @click="downLoadModelFile(versionParams.modelPath, versionParams.creatorId)"
                     >
                         {{ t('view.file.Download') }}
                     </SdxuButton>
                 </div>
                 <div>
                     <span>{{ `${t('sdxCommon.CreatedTime')}：` }}</span>
-                    <span>2019/04/21 23:40 </span>
+                    <span>{{ dateFormatter(versionParams.createdAt) }}</span>
                 </div>
                 <div>
                     <span>{{ `${t('sdxCommon.UpdatedTime')}：` }}</span>
-                    <span>2019/04/21 23:40 </span>
+                    <span>{{ dateFormatter(versionParams.updatedAt) }}</span>
                 </div>
             </sdxu-article-panel>
         </sdxu-section-panel>
@@ -115,8 +116,11 @@ import Button from '@sdx/ui/components/button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import EditVersion from '../model-list/CreateVersion';
 import CreateModelService from '../service-dialog/create-model-service/Index';
+import { getModelInfo } from '@sdx/utils/src/api/model';
+import {download} from '@sdx/utils/src/api/file';
 export default {
     name: 'SdxvModelDetail',
+    mixins: [locale],
     data() {
         return {
             cardInfo: {
@@ -134,12 +138,19 @@ export default {
                 }
             },
             versions: [],
-            version: '',
             editVersionVisible: false,
-            createServiceVisible: false
+            createServiceVisible: false,
+            versionInfo: [],
+            versionParams: {
+                uuid: '',
+                modelPath: '',
+                description: '',
+                createdAt: '',
+                updatedAt: '',
+                creatorId: ''
+            }
         };
     },
-    mixins: [locale],
     components: {
         SdxwModelDetailCard,
         [SdxuArticleTitle.name]: SdxuArticleTitle,
@@ -150,16 +161,56 @@ export default {
         EditVersion,
         CreateModelService
     },
+    created() {
+        this.getModelDetail();
+    },
     methods: {
         dateFormatter,
-        download() {
-
+        downLoadModelFile(path, ownerId) {
+            download(path, ownerId);
         },
         editVersion() {
             this.editVersionVisible = true;
         },
         createModelService() {
             this.createServiceVisible = true;
+        },
+        changeVersion(uuid) {
+            let items = JSON.parse(JSON.stringify(this.versionInfo));
+            let index = items.findIndex(item => item.uuid === uuid);
+            this.versionParams = items[index];
+        },
+        // 获取模型详情
+        getModelDetail() {
+            getModelInfo(this.$route.params.modelId).then(res => {
+                this.cardInfo = {
+                    icon:'sdx-mobanxiangmu',
+                    title: res.name,
+                    type: res.modelType,
+                    creator: '吴晓飞',
+                    createdAt: res.createdAt,
+                    description: res.description,
+                    labels: res.labels,
+                    owner: {
+                        uuid: 'asfbadasijo899'
+                    }
+                };
+                this.versionInfo = res.versions.items;
+                let items = JSON.parse(JSON.stringify(this.versionInfo));
+                // 获取最新的版本，展示出来
+                let index = items.findIndex(item => item.name === res.versions.latest);
+                let arr = [];
+                for(let i = 0; i < items.length; i++) {
+                    arr.push({
+                        value: items[i].uuid,
+                        label: items[i].name
+                    });
+                }
+                this.versions = arr;
+                requestAnimationFrame(() => {
+                    this.versionParams = items[index];
+                });
+            });
         }
     }
 };
@@ -215,6 +266,9 @@ export default {
     & /deep/ {
         .sdxu-button__dropdown--main {
             width: 100px !important;
+        }
+        .sdxu-article-panel__content {
+            padding-bottom: 0;
         }
     }
 }

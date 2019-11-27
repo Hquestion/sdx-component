@@ -34,7 +34,7 @@ const routeCfg = [
                 }
             },
             {
-                path: 'modelDetail',
+                path: 'modelDetail/:modelId',
                 name:'modelDetail',
                 component: ModelDetail,
                 meta: {

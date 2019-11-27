@@ -19,6 +19,7 @@ export default {
                 develop: this.t('widget.resourceAlert.dev_type'),
                 model: this.t('widget.resourceAlert.model_type'),
                 develop_flow: this.t('widget.resourceAlert.dev_flow_type'),
+                all: this.t('widget.resourceAlert.all')
             }
         };
     },
@@ -60,14 +61,19 @@ export default {
                     'maxConcurrentSkyflowTasks', 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus'],
                 develop_flow: ['maxConcurrentSkyideTasks', 'maxConcurrentJupyterTasks', 'maxConcurrentContainerTasks',
                     'maxConcurrentSkyflowTasks', 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus'],
-                model: ['maxConcurrentModelTasks', 'maxConcurrentHeavyTasks', 'maxGpus']
+                model: ['maxConcurrentModelTasks', 'maxConcurrentHeavyTasks', 'maxGpus'],
+                all: ['maxConcurrentSkyideTasks', 'maxConcurrentJupyterTasks', 'maxConcurrentContainerTasks',
+                    'maxConcurrentSkyflowTasks', 'maxConcurrentModelTasks', 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus']
             };
         }
     },
     props: {
         type: {
             type: String,
-            default: 'develop' // model, develop, develop_flow
+            default: 'develop', // model, develop, develop_flow
+            validator: value => {
+                return ['model', 'develop', 'develop_flow', 'all'].includes(value);
+            }
         }
     },
     render(h) {

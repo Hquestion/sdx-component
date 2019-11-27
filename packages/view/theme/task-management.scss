@@ -29,6 +29,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
     }
 
+    @include element('alert') {
+        margin-top: $sdx-gap-regular;
+    }
+
     @include element('table') {
         margin-top: $sdx-gap-regular;
         background: #FFFFFF;
@@ -44,7 +48,10 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 }
 
 @include block('timing-task-list', $bem-namespace-view) {
-
+    
+    @include element('alert') {
+        margin-top: $sdx-gap-regular;
+    }
     @include element('table') {
         margin-top: $sdx-gap-regular;
         background: #FFFFFF;

@@ -72,6 +72,9 @@
                 </SdxwSearchItem>
             </SdxwSearchLayout>
         </div>
+        <div class="sdxv-task-execute-list__alert">
+            <SdxwResourceAlert type="all" />
+        </div>
         <div class="sdxv-task-execute-list__table">
             <SdxuTable
                 :data="taskResourceList"
@@ -217,6 +220,7 @@ import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import { executionList } from '@sdx/utils/src/api/task';
 import locale from '@sdx/utils/src/mixins/locale';
 import taskExecution from '@sdx/utils/src/mixins/taskExecution';
+import SdxwResourceAlert from '@sdx/widget/components/resource-alert';
 import { TASK_TYPE, TASK_TYPE_LIST, EXECUTE_TYPE_LABEL, EXECUTE_TYPE_LIST, STATE_TYPE_LIST, STATE_TYPE_LABEL, STATE_MAP_FOLD_LABEL_TYPE, TASK_TYPE_LABEL, TASK_POLLING_STATE_TYPE, STATE_TYPE_OPERATION, OPERATION_INFO } from '@sdx/utils/src/const/task';
 
 import ElTableColumn from 'element-ui/lib/table-column';
@@ -241,7 +245,8 @@ export default {
         ElDatePicker,
         ElTableColumn,
         ElSelect,
-        ElOption
+        ElOption,
+        SdxwResourceAlert
     },
     data() {
         this.STATE_TYPE_LABEL = STATE_TYPE_LABEL;

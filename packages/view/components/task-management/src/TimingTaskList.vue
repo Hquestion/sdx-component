@@ -34,6 +34,9 @@
                 </SdxwSearchItem>
             </SdxwSearchLayout>
         </div>
+        <div class="sdxv-timing-task-list__alert">
+            <SdxwResourceAlert type="all" />
+        </div>
         <div class="sdxv-timing-task-list__table">
             <SdxuTable
                 :data="taskResourceList"

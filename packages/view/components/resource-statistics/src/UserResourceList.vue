@@ -57,41 +57,41 @@
                 </template>
             </el-table-column>
             <el-table-column
-                prop="CPU"
+                prop="cpu"
                 :label="t('view.task.cpuUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="82px"
             >
                 <template #default="{ row }">
-                    {{ row.quota.cpu / 1000 }}
+                    {{ parseMilli(row.cpu) }}
                 </template>
             </el-table-column>
             <el-table-column
-                prop="MEMORY"
+                prop="memory"
                 :label="t('view.task.memoryUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="85px"
             >
                 <template #default="{ row }">
-                    {{ row.quota.memory / (1024 * 1024 * 1024) }}
+                    {{ byteToGB(row.memory) }}
                 </template>
             </el-table-column>
             <el-table-column
-                prop="GPU"
+                prop="gpu"
                 :label="t('view.task.gpuUsed')"
                 sortable="custom"
                 :sort-orders="sortOrders"
                 min-width="82px"
             >
                 <template #default="{ row }">
-                    <div v-if="hasGpu(row.quota.gpus)">
+                    <div v-if="row.gpu > 0">
                         <div
-                            v-for="(value, key) in row.quota.gpus"
+                            v-for="(item, key) in row.gpu_detail"
                             :key="key"
                         >
-                            {{ `${key}: ${value}` }}
+                            {{ `${item.gpu_model}: ${item.num}` }}
                         </div>
                     </div>
                     <div v-else>
@@ -124,10 +124,9 @@ import SdxuInput from '@sdx/ui/components/input';
 import SdxuButton from '@sdx/ui/components/button';
 import SdxuPagination from '@sdx/ui/components/pagination';
 
-import { getTaskList } from '@sdx/utils/src/api/project';
-import { dateFormatter } from '@sdx/utils/src/helper/transform';
+import { getTaskResourceStatistics } from '@sdx/utils/src/api/task';
+import { dateFormatter, byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
-import { STATE_TYPE } from '@sdx/utils/src/const/task';
 
 export default {
     name: 'SdxvUserResourceList',
@@ -158,15 +157,14 @@ export default {
         return {
             userResourceList: [],
             defaultSort: {
-                prop: 'CPU',
+                prop: 'cpu',
                 order: 'descending'
             },
             params: {
                 username: '',
                 order: 'desc',
-                orderBy: 'CPU',
-                groupBy: 'USER',
-                states: `${STATE_TYPE.RUNNING},${STATE_TYPE.LAUNCHING},${STATE_TYPE.KILLING}`
+                orderBy: 'cpu',
+                all: false
             },
             loading: false,
             searchName: '',
@@ -189,8 +187,8 @@ export default {
     methods: {
         fetchData() {
             this.loading = true;
-            getTaskList(this.queryParams).then(data => {
-                this.userResourceList = data.items;
+            getTaskResourceStatistics(this.queryParams).then(data => {
+                this.userResourceList = data.data;
                 this.total = data.total;
                 this.loading = false;
             }).catch(() => {
@@ -201,7 +199,7 @@ export default {
         },
         handleSortChange({prop, order}) {
             this.params.order = order === 'ascending' ? 'asc' : 'desc';
-            this.params.orderBy = prop || 'CPU';
+            this.params.orderBy = prop || 'cpu';
             this.page = 1;
         },
         hasGpu(gpus) {
@@ -219,6 +217,12 @@ export default {
         },
         formatDate(date) {
             return dateFormatter(date, 'YYYY-MM-DD HH:mm:ss');
+        },
+        parseMilli(core) {
+            return parseMilli(core);
+        },
+        byteToGB(memory) {
+            return byteToGB(memory);
         }
     },
     created() {

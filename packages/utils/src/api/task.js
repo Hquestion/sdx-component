@@ -95,6 +95,11 @@ export function getTaskDataSource(params) {
     return httpService.get(`${DATA_MANAGE_GATEWAY_BASE}datasource/taskOptions`, params);
 }
 
+// 任务资源统计
+export function getTaskResourceStatistics(params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}/task-resource-profiles`, params);
+}
+
 export default {
     getTaskList,
     taskList,
@@ -111,5 +116,6 @@ export default {
     updateTask,
     getDataSet,
     getTaskDataSource,
-    getTaskDetailBackEnd
+    getTaskDetailBackEnd,
+    getTaskResourceStatistics
 };

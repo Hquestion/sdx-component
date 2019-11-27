@@ -129,6 +129,7 @@ export default {
             dev_type: 'develop tasks',
             model_type: 'model tasks',
             dev_flow_type: 'develop tasks and SkyFlow tasks',
+            all: 'develop tasks and SkyFlow tasks',
             resource_rule: 'resource rules',
             detail_view: 'detail',
             info: 'if you have special demands，please contact system manager.',

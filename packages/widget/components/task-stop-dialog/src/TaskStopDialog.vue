@@ -2,6 +2,7 @@
     <SdxuDialog
         :visible.sync="dialogVisible"
         @close="handleCancel"
+        display="float"
     >
         <div class="sdxw-task-stop-dialog">
             <div class="sdxw-task-stop-dialog__tip">

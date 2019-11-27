@@ -46,7 +46,7 @@ import SdxvChartGPU from './ChartGPU';
 import SdxvResourceInfo from './ResourceInfo';
 import SdxvChartProcess from './ChartProcess';
 
-import { getTaskList } from '@sdx/utils/src/api/project';
+import { getTaskResourceStatistics } from '@sdx/utils/src/api/task';
 import { getClusterResourceMonitor } from '@sdx/utils/src/api/system';
 import { byteToGB, parseMilli } from '@sdx/utils/src/helper/transform';
 import { STATE_TYPE } from '@sdx/utils/src/const/task';
@@ -78,36 +78,20 @@ export default {
     },
     methods: {
         fetchData() {
-            // 平台资源使用量 参数
-            const params = {
-                groupBy: 'NAMESPACE',
-                states: `${STATE_TYPE.RUNNING},${STATE_TYPE.LAUNCHING},${STATE_TYPE.KILLING}`
-            };
-            Promise.all([getClusterResourceMonitor(), getTaskList(params)]).then(([clusterResource, usedInfoList]) => {
+            Promise.all([getClusterResourceMonitor(), getTaskResourceStatistics({ all: true })]).then(([clusterResource, usedInfoList]) => {
                 const total = clusterResource && clusterResource.total || {
                     cpu: 0,
                     gpu: 0,
                     memory: 0,
                     gpuModels: []
                 };
-                const gpuModels = {};
                 this.allocations = {
                     cpu: total.cpu,
                     gpu: total.gpu,
                     memory: byteToGB(total.memory)
                 };
-                let usedInfo = usedInfoList && usedInfoList.data.length > 0 ? usedInfoList.data[0].quota : {
-                    cpu: 0,
-                    gpus: {},
-                    memory: 0
-                };
-                this.used = {
-                    cpu: parseMilli(usedInfo.cpu),
-                    gpu: Object.values(usedInfo.gpus).reduce((sum, value) => {
-                        return sum + value;
-                    }, 0),
-                    memory: byteToGB(usedInfo.memory)
-                };
+
+                const gpuModels = {};
                 total.gpuModels.forEach(item => {
                     if (gpuModels.hasOwnProperty(item)) {
                         gpuModels[item]++;
@@ -116,7 +100,25 @@ export default {
                     }
                 });
                 this.gpuModelAllocations = gpuModels;
-                this.gpuModelUsedMap = usedInfo.gpus;
+
+                const usedInfo = usedInfoList && usedInfoList.data.length > 0 ? usedInfoList.data[0] : {
+                    cpu: 0,
+                    gpus: {},
+                    memory: 0
+                };
+                this.used = {
+                    cpu: parseMilli(usedInfo.cpu),
+                    gpu: usedInfo.gpu,
+                    memory: byteToGB(usedInfo.memory)
+                };
+                
+                const usedMap = {};
+                usedInfo.gpu_detail.forEach(item => {
+                    if (item.gpu_model) {
+                        usedMap[item.gpu_model] = item.num;
+                    }
+                });
+                this.gpuModelUsedMap = usedMap;
             }).catch(() => {
                 this.gpuModelAllocations = {};
                 this.gpuModelUsedMap = {};

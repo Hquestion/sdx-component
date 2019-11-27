@@ -129,6 +129,7 @@ export default {
             dev_type: '开发类任务',
             model_type: '模型类任务',
             dev_flow_type: '开发类任务与建模任务',
+            all: '开发类任务与建模任务',
             resource_rule: '资源使用规则',
             detail_view: '详情查看',
             info: '如果有特殊资源需求，请联系管理员',

@@ -101,6 +101,8 @@
         <EditVersion :visible.sync="editVersionVisible" />
         <create-model-service
             :visible.sync="createServiceVisible"
+            :model-id="$route.params.modelId"
+            :version-name="versionParams.uuid"
             v-if="createServiceVisible"
         />
     </div>

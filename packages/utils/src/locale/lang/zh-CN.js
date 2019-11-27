@@ -646,7 +646,7 @@ export default {
             Service_URL: '服务URL',
             Input: '输入',
             Prediction_results: '预测结果',
-            modelVersion: '模型版本',
+            modelVersion: '模型版本：',
             serviceList: '服务列表',
             serviceState: '服务状态',
             tabs: {
@@ -747,11 +747,12 @@ export default {
             othersShare: '他人共享',
             importModels: '导入模型',
             addExistingVersion: '添加已有版本',
-            modelType: '模型类型',
+            modelType: '模型类型：',
             selectModelType: '请选择模型类型',
             share: '共享',
+            versionDesription: '版本描述：',
             enterOrSelectModelType: '请输入或选择模型类型',
-            modelFile: '模型文件',
+            modelFile: '模型文件：',
             enterModelFile: '请上传或选择模型文件',
             selectModel: '请选择模型',
             basicInfo: '基本信息',
@@ -791,7 +792,19 @@ export default {
             successExample: '成功返回示例',
             enterSuccessExample: '请输入成功返回示例',
             failExample: '失败返回示例',
-            enterFailExample: '请输入失败返回示例'
+            enterFailExample: '请输入失败返回示例',
+            types: {
+                naturalProcess: '自然语言处理',
+                featureConversion: '特征转换',
+                abnormalDetection: '异常检测',
+                regressionType: '回归类型',
+                automaticModel: '自动建模',
+                recommendType: '推荐类型',
+                associationRule: '关联规则',
+                timeSequence: '时间序列',
+                clusterType: '聚类类型',
+                classificationType: '分类类型'
+            }
         },
         authority: {
             Authority: '权限',

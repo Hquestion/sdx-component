@@ -58,7 +58,7 @@
                 @search="updateTable"
                 @reset="reset"
             >
-                <sdxw-search-item :label="`${t('view.model.modelColumns.name')}:`">
+                <sdxw-search-item :label="`${t('view.model.createModelForm.name')}`">
                     <sdxu-input
                         v-model="searchName"
                         type="search"
@@ -66,7 +66,7 @@
                         :placeholder="t('view.model.searchModelName')"
                     />
                 </sdxw-search-item>
-                <sdxw-search-item :label="`${t('view.model.modelType')}:`">
+                <sdxw-search-item :label="`${t('view.model.modelType')}`">
                     <el-select
                         v-model="modelType"
                         :placeholder="t('view.model.selectModelType')"
@@ -79,7 +79,7 @@
                         />
                     </el-select>
                 </sdxw-search-item>
-                <sdxw-search-item :label="`${t('view.model.modelColumns.label')}:`">
+                <sdxw-search-item :label="`${t('view.model.createModelForm.label')}`">
                     <el-select
                         v-model="searchLabels"
                         multiple
@@ -136,6 +136,8 @@ import { getLabels, getModelTypes } from '@sdx/utils/src/api/model';
 import SearchLayout from  '@sdx/widget/components/search-layout';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
+import { getLabelByName } from '@sdx/utils/src/const/model';
+
 export default {
     name: 'SdxvModelManage',
     data() {
@@ -173,7 +175,7 @@ export default {
             this.labelOptions = res.items;
         });
         getModelTypes().then(res => {
-            this.modelTypeOptions = res.items;
+            this.modelTypeOptions = res.items.map(item => this.t(getLabelByName(item)));
         });
     },
     methods: {

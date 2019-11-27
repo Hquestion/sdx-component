@@ -647,7 +647,7 @@ export default {
             Service_URL: 'Service URL',
             Input: 'Input',
             Prediction_results: 'Prediction results',
-            modelVersion: 'Model Version',
+            modelVersion: 'Model Version:',
             serviceList: 'Service List',
             serviceState: 'Service State',
             tabs: {
@@ -748,11 +748,12 @@ export default {
             othersShare: 'Shared by others',
             importModels: 'Import Model',
             addExistingVersion: 'Add existing version',
-            modelType: 'Model Type',
+            modelType: 'Model Type:',
             selectModelType: 'Please select a model type',
             share: 'Share',
+            versionDesription: 'Version Description:',
             enterOrSelectModelType: 'Please enter or select a model type',
-            modelFile: 'Model File',
+            modelFile: 'Model File:',
             enterModelFile: 'Please upload or select a model file',
             selectModel: 'Please select a model',
             basicInfo: 'Basic Information',
@@ -792,7 +793,19 @@ export default {
             successExample: 'Success Response Example',
             enterSuccessExample: 'Please enter success response example',
             failExample: 'Failed Response Example',
-            enterFailExample: 'Please enter failed response example'
+            enterFailExample: 'Please enter failed response example',
+            types: {
+                naturalProcess: 'Natural Language Processing',
+                featureConversion: 'Feature Conversion',
+                abnormalDetection: 'Abnormal Detection',
+                regressionType: 'Regression Type',
+                automaticModel: 'Automatic Modeling',
+                recommendType: 'Recommended Type',
+                associationRule: 'Association Rule',
+                timeSequence: 'Time Sequence',
+                clusterType: 'Cluster Type',
+                classificationType: 'Classification Type'
+            }
         },
         authority: {
             Authority: 'Permission',

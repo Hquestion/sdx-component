@@ -32,7 +32,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item
-                    :label="`${t('view.model.modelVersion')}:`"
+                    :label="`${t('view.model.modelVersion')}`"
                     v-if="(modelId && !editingVersion) || (!modelId && versionInfoForm.version)"
                 >
                     <div class="sdxv-create-version__version">
@@ -40,7 +40,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item
-                    :label="`${t('view.model.versionColumns.description')}:`"
+                    :label="`${t('view.model.versionDesription')}`"
                     v-if="!editingVersion"
                 >
                     <sdxu-input
@@ -51,7 +51,7 @@
                     />
                 </el-form-item>
                 <el-form-item
-                    :label="`${t('view.model.modelFile')}:`"
+                    :label="`${t('view.model.modelFile')}`"
                     v-if="!editingVersion"
                     prop="modelPath"
                 >
@@ -166,7 +166,8 @@ export default {
     methods: {
         modelSelected(modelId) {
             getModelInfo(modelId).then(res => {
-                this.versionInfoForm.version = 'V2.0';
+                const latest = res.versions.latest || 'v0';
+                this.versionInfoForm.version = `v${parseInt(latest.slice(1))+1}`;
             });
         },
         getModelOptions() {

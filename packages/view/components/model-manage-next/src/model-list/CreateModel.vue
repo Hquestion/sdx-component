@@ -35,7 +35,7 @@
                     />
                 </el-form-item>
                 <el-form-item
-                    :label="`${t('view.model.modelType')}:`"
+                    :label="`${t('view.model.modelType')}`"
                     prop="modelType"
                 >
                     <sdxu-select
@@ -76,7 +76,7 @@
                     </sdxu-select>
                 </el-form-item>
                 <el-form-item
-                    :label="`${t('view.model.modelVersion')}:`"
+                    :label="`${t('view.model.modelVersion')}`"
                     v-if="!editingModel"
                 >
                     <div class="sdxv-create-model__version">
@@ -84,7 +84,7 @@
                     </div>
                 </el-form-item>
                 <el-form-item
-                    :label="`${t('view.model.versionColumns.description')}:`"
+                    :label="`${t('view.model.versionDesription')}`"
                     v-if="!editingModel"
                 >
                     <sdxu-input
@@ -95,7 +95,7 @@
                     />
                 </el-form-item>
                 <el-form-item
-                    :label="`${t('view.model.modelFile')}:`"
+                    :label="`${t('view.model.modelFile')}`"
                     v-if="!editingModel"
                     prop="modelPath"
                 >
@@ -149,7 +149,7 @@ import { getLabels, getModelTypes, createModel, updateModel, createVersion } fro
 import { nameWithChineseValidator, descValidator, tagArrayValidator } from '@sdx/utils/src/helper/validate';
 import locale from '@sdx/utils/src/mixins/locale';
 import FileSelect from '@sdx/widget/lib/file-select';
-import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON } from '@sdx/utils/src/const/model';
+import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON, getLabelByName } from '@sdx/utils/src/const/model';
 
 export default {
     name: 'CreateModel',
@@ -230,9 +230,9 @@ export default {
         getModelTypes().then(res => {
             res.items.forEach(item => {
                 let icon = MODEL_TYPES_ICON.find(icon => icon.name === item);
-                this.modelTypes.push(icon ? icon : {
-                    name: item,
-                    icon: DEFAULT_MODEL_TYPE_ICON
+                this.modelTypes.push({
+                    name: this.t(getLabelByName(item)),
+                    icon: icon ? icon.icon : DEFAULT_MODEL_TYPE_ICON
                 });
             });
         });

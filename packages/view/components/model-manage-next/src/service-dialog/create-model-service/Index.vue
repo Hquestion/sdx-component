@@ -270,11 +270,11 @@ export default {
         },
         modelId: {
             type: String,
-            default: '53193a14-4574-440b-ba97-38fb4ba8b7dd'
+            default: ''
         },
         versionName: {
             type: String,
-            default: 'v2'
+            default: ''
         }
     },
     computed: {

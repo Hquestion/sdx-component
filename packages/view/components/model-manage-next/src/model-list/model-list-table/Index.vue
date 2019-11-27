@@ -28,7 +28,7 @@
                                         >
                                             <use :xlink:href="`#${item.modelTypeIcon}`" />
                                         </svg>
-                                        {{ item.modelType }}
+                                        {{ t(getLabelByName(item.modelType)) }}
                                     </el-tag>
                                 </div>
                                 <div>
@@ -121,7 +121,7 @@ import Message from 'element-ui/lib/message';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import locale from '@sdx/utils/src/mixins/locale';
 import ElTag from 'element-ui/lib/tag';
-import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON } from '@sdx/utils/src/const/model';
+import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON, getLabelByName } from '@sdx/utils/src/const/model';
 
 export default {
     name: 'ModelListTable',
@@ -194,6 +194,7 @@ export default {
         }
     },
     methods: {
+        getLabelByName,
         handleDetail(operate) {
             this.$router.push({
                 path: `/sdxv-model-manage-next/modelDetail/${operate.id}`,

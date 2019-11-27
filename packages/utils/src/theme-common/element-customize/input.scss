@@ -1,5 +1,8 @@
 @import '~element-ui/packages/theme-chalk/src/input.scss';
 
+$--color-danger: $sdx-danger-color;
+$--color-success: $sdx-success-color;
+
 .el-input--small .el-input__inner {
     height: 36px;
     line-height: 36px;

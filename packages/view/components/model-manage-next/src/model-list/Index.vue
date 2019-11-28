@@ -175,7 +175,10 @@ export default {
             this.labelOptions = res.items;
         });
         getModelTypes().then(res => {
-            this.modelTypeOptions = res.items.map(item => this.t(getLabelByName(item)));
+            this.modelTypeOptions = res.items.map(item => {
+                const label = getLabelByName(item);
+                return label ? this.t(label) : item;
+            });
         });
     },
     methods: {

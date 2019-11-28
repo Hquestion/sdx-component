@@ -28,7 +28,7 @@
                                         >
                                             <use :xlink:href="`#${item.modelTypeIcon}`" />
                                         </svg>
-                                        {{ t(getLabelByName(item.modelType)) }}
+                                        {{ getLabelByName(item.modelType) ? t(getLabelByName(item.modelType)) : item.modelType }}
                                     </el-tag>
                                 </div>
                                 <div>

@@ -46,8 +46,8 @@
                         :placeholder="t('view.model.enterOrSelectModelType')"
                     >
                         <sdxu-option
-                            v-for="item in modelTypes"
-                            :key="item.icon"
+                            v-for="(item,index) in modelTypes"
+                            :key="index"
                             :label="item.name"
                             :svg-icon="item.icon"
                             :value="item.name"
@@ -230,8 +230,9 @@ export default {
         getModelTypes().then(res => {
             res.items.forEach(item => {
                 let icon = MODEL_TYPES_ICON.find(icon => icon.name === item);
+                const label = getLabelByName(item);
                 this.modelTypes.push({
-                    name: this.t(getLabelByName(item)),
+                    name: label ? this.t(label) : item,
                     icon: icon ? icon.icon : DEFAULT_MODEL_TYPE_ICON
                 });
             });

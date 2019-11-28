@@ -65,5 +65,5 @@ export const MODEL_TYPES_ICON = [
 
 export function getLabelByName(name) {
     const type = MODEL_TYPES_ICON.find(item => item.name === name);
-    return type ? type.label : name;
+    return type ? type.label : '';
 }

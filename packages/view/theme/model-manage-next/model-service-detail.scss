@@ -1,0 +1,28 @@
+@include block('model-service-detail', $bem-namespace-view) {
+
+    @include element('name') {
+        font-family: PingFangSC-Medium;
+        font-size: 24px;
+        color: #13264D;
+        letter-spacing: 0;
+        margin-bottom: $sdx-gap-regular;
+    }
+
+    @include element('container') {
+        padding: $sdx-gap-regular;
+        background: #FFF;
+        box-shadow: 0 2px 4px 0 #C2CDDE;
+        border-radius: 2px;
+        position: relative;
+
+        @include modifier('test') {
+            position: absolute;
+            top: $sdx-gap-regular;
+            right: $sdx-gap-regular;
+        }
+    }
+}
+
+@include block('model-service-info', $bem-namespace-view) {
+    padding: $sdx-gap-regular $sdx-gap-mini;
+}

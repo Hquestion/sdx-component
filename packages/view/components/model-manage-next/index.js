@@ -3,6 +3,7 @@ import ModelService from './src/model-service/Index.vue';
 import ModelList from './src/model-list/Index.vue';
 import ModelDetail from './src/model-detail/Index.vue';
 import ApiDetail from './src/api-detail/ApiDetail';
+import ModelServiceDetail from './src/model-service/model-service-detail';
 import { t } from '@sdx/utils/src/locale';
 
 const routeCfg = [
@@ -32,7 +33,17 @@ const routeCfg = [
                 meta: {
                     breadcrumb: t('view.model.ModelDetail'),
                 }
-            }
+            },
+            {
+                path: 'modelServiceDetail/:serviceId',
+                name:'modelServiceDetail',
+                component: ModelServiceDetail,
+                props: true,
+                meta: {
+                    breadcrumb: t('view.model.ModelServiceDetail'),
+                    isRoot: true
+                }
+            },
         ]
     },
     {

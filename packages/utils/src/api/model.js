@@ -122,6 +122,12 @@ export function startService(uuid) {
 export function stopService(uuid) {
     return httpService.post(`${MODEL_MANAGE_GATEWAY_BASE}services/${uuid}/stop`);
 }
+
+// 模型服务详情
+export function getServiceDetail(serviceUuid) {
+    return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services/${serviceUuid}`);
+}
+
 export function getApiDetail(serviceUuid) {
     return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services/${serviceUuid}`);
 }
@@ -136,6 +142,7 @@ export default {
     getModelInfo,
     getLabels,
     getModelTypes,
+    getServiceDetail,
     createModel,
     removeModel,
     updateModel,

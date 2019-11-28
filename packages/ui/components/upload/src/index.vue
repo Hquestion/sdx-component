@@ -187,7 +187,7 @@ export default {
                 file.ownerId = this.data.ownerId;
 
                 this.onSuccess(res, file, this.uploadFiles);
-                this.maxNonGpuTime(file, this.uploadFiles);
+                this.onChange(file, this.uploadFiles);
             }
         },
         handleError(err, rawFile) {

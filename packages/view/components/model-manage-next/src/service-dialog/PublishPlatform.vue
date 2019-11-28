@@ -8,7 +8,7 @@
         <el-form
             ref="form"
             :model="params"
-            label-width="90px"
+            :label-width="lang$==='en' ? '150px' : '110px'"
             label-position="right"
             :rules="rules"
         >
@@ -16,65 +16,66 @@
                 :label="`${isModel ? t('view.model.modelColumns.name') : t('view.model.APIName')}：`"
                 prop="name"
             >
-                <SdxuInput />
+                <sdxu-input
+                    v-model="params.name"
+                    :placeholder="t('view.model.searchModelName')"
+                />
             </el-form-item>
             <el-form-item
                 :label="`${isModel ? t('view.model.modelColumns.description') : t('view.model.APIDescription')}：`"
+                prop="description"
             >
-                <SdxuInput
+                <sdxu-input
+                    v-model="params.description"
                     type="textarea"
-                    :autosize="{ minRows: 4, maxRows: 4}"
+                    :placeholder="t('view.model.modelDescription')"
+                    :rows="3"
                 />
             </el-form-item>
             <el-form-item
                 :label="`${isModel ? t('view.model.modelColumns.type') : t('view.model.APIType')}：`"
+                prop="modelType"
             >
-                <el-select
-                    style="width: 100%"
+                <sdxu-select
+                    v-model="params.modelType"
+                    filterable
+                    allow-create
+                    :show-icon="true"
+                    :placeholder="t('view.model.enterOrSelectModelType')"
                 >
-                    <el-option
-                        v-for="item in APIType"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
+                    <sdxu-option
+                        v-for="item in modelTypes"
+                        :key="item.name"
+                        :label="item.name"
+                        :svg-icon="item.icon"
+                        :value="item.name"
                     />
-                </el-select>
+                </sdxu-select>
             </el-form-item>
             <el-form-item
                 :label="`${isModel ? t('view.model.modelColumns.label') : t('view.model.APILabel')}：`"
-                class="tag"
+                prop="labels"
             >
-                <el-tag
-                    :key="tag"
-                    v-for="tag in dynamicTags"
-                    closable
-                    :disable-transitions="false"
-                    @close="handleClose(tag)"
+                <sdxu-select
+                    v-model="params.labels"
+                    multiple
+                    filterable
+                    allow-create
+                    default-first-option
+                    :placeholder="t('view.model.selectLabel')"
+                    :multiple-limit="2"
                 >
-                    {{ tag }}
-                </el-tag>
-                <SdxuInput
-                    class="input-new-tag"
-                    v-if="inputVisible"
-                    v-model="inputValue"
-                    ref="saveTagInput"
-                    size="small"
-                    @keyup.enter.native="handleInputConfirm"
-                    @blur="handleInputConfirm"
-                />
-                <SdxuButton
-                    v-else
-                    class="button-new-tag"
-                    size="small"
-                    @click="showInput"
-                    type="default"
-                >
-                    + New Tag
-                </SdxuButton>
+                    <sdxu-option
+                        v-for="item in labelOptions"
+                        :key="item.label"
+                        :label="item.label"
+                        :value="item.label"
+                    />
+                </sdxu-select>
             </el-form-item>
             <el-form-item
                 :label="`${t('view.model.cover')}：`"
-                prop="name"
+                prop="cover"
                 class="image-test"
             >
                 <el-upload
@@ -82,6 +83,7 @@
                     action="https://jsonplaceholder.typicode.com/posts/"
                     :on-success="handleAvatarSuccess"
                     :show-file-list="false"
+                    accept="image/x-png,image/jpeg"
                 >
                     <img
                         v-if="imageUrl"
@@ -112,26 +114,70 @@
                 </el-upload>
             </el-form-item>
         </el-form>
+        <div
+            slot="footer"
+        >
+            <SdxuButton
+                type="default"
+                size="small"
+                @click="cancel"
+            >
+                {{ t('sdxCommon.Cancel') }}
+            </SdxuButton>
+            <SdxuButton
+                type="primary"
+                size="small"
+                @click="confirm"
+            >
+                {{ t('sdxCommon.Confirm') }}
+            </SdxuButton>
+        </div>
     </sdxu-dialog>
 </template>
 
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuDialog from '@sdx/ui/components/dialog';
-import {Select, Option, Upload, Tag, Form, FormItem}  from 'element-ui';
+import {Select, Option, Upload, Form, FormItem}  from 'element-ui';
 import SdxuButton from '@sdx/ui/components/button';
+import { nameWithChineseValidator, descValidator, tagArrayValidator } from '@sdx/utils/src/helper/validate';
+import { getLabels, getModelTypes,updateModel } from '@sdx/utils/src/api/model';
+import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON, getLabelByName } from '@sdx/utils/src/const/model';
+import Message from 'element-ui/lib/message';
 export default {
     name: 'SdxvPublishPlatform',
     mixins: [locale],
     data() {
         return {
-            dynamicTags: ['标签一', '标签二', '标签三'],
-            inputVisible: false,
-            inputValue: '',
-            APIType: [],
             params: {
+                uuid: '',
+                name: '',
+                description: '',
+                modelType: '',
+                labels: [],
             },
-            imageUrl: ''
+            modelTypes: [],
+            labelOptions: [],
+            imageUrl: '',
+            rules: {
+                name: [
+                    { required: true, message: this.t('view.model.searchModelName'), trigger: 'blur' },
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                description: [
+                    {
+                        validator: descValidator,
+                        trigger: 'blur'
+                    }
+                ],
+                modelType: [
+                    { required: true, message: this.t('view.model.enterOrSelectModelType'), trigger: 'change' }
+                ],
+                labels: [
+                    { required: true, message: this.t('view.model.selectLabel'), trigger: 'change' },
+                    { validator: tagArrayValidator, trigger: 'change' }
+                ]
+            }
         };
     },
     components: {
@@ -140,7 +186,6 @@ export default {
         [Option.name]: Option,
         [Upload.name]: Upload,
         SdxuButton,
-        [Tag.name]: Tag,
         [Form.name]: Form,
         [FormItem.name]: FormItem,
     },
@@ -152,6 +197,14 @@ export default {
         isModel: {
             type: Boolean,
             default: false
+        },
+        isEdit: {
+            type: Boolean,
+            default: false
+        },
+        info: {
+            type: Object,
+            default: null
         }
     },
     computed: {
@@ -168,26 +221,41 @@ export default {
         handleAvatarSuccess(res, file) {
             this.imageUrl = URL.createObjectURL(file.raw);
         },
-        handleClose(tag) {
-            this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+        cancel() {
+            this.$emit('update:visible', false);
         },
-
-        showInput() {
-            this.inputVisible = true;
-            this.$nextTick(_ => {
-                this.$refs.saveTagInput.$refs.input.focus();
+        confirm() {
+            this.$refs.form.validate((valid) => {
+                if(valid) {
+                    updateModel(this.params.uuid, this.params).then(() => {
+                        Message({
+                            message: this.t('sdxCommon.UpdateSuccess'),
+                            type: 'success'
+                        });
+                        this.$emit('update:visible', false);
+                        this.$emit('confirmPublish');
+                    });
+                }
             });
-        },
-
-        handleInputConfirm() {
-            let inputValue = this.inputValue;
-            if (inputValue) {
-                this.dynamicTags.push(inputValue);
-            }
-            this.inputVisible = false;
-            this.inputValue = '';
         }
-    }
+    },
+    created() {
+        getLabels().then(res => {
+            this.labelOptions = res.items;
+        });
+        getModelTypes().then(res => {
+            res.items.forEach(item => {
+                let icon = MODEL_TYPES_ICON.find(icon => icon.name === item);
+                this.modelTypes.push({
+                    name: this.t(getLabelByName(item)),
+                    icon: icon ? icon.icon : DEFAULT_MODEL_TYPE_ICON
+                });
+            });
+        });
+        if(this.isEdit) {
+            this.params = Object.assign(this.info);
+        }
+    },
 };
 </script>
 

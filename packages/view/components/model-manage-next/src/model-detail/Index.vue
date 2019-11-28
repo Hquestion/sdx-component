@@ -27,6 +27,7 @@
                         <SdxuButton
                             icon="sdx-icon-plus"
                             type="primary"
+                            @click="createVersion"
                         >
                             {{ t('view.model.Create_a_new_version') }}
                         </SdxuButton>
@@ -40,6 +41,7 @@
                         </SdxuButton>
                         <SdxuButton
                             type="default"
+                            @click="grayLevelRelease"
                         >
                             {{ t('view.model.New_gray_level_release') }}
                         </SdxuButton>
@@ -100,9 +102,12 @@
                 </div>
             </sdxu-article-panel>
         </sdxu-section-panel>
-        <EditVersion
-            :visible.sync="editVersionVisible"
-            :model-id="$route.params.modelId"
+        <ModelVersion
+            :visible.sync="modelVersionVisible"
+            :is-edit="modelVersionEdit"
+            :info="modelVersionInfo"
+            v-if="modelVersionVisible"
+            @confirm="confirmPublish"
         />
         <create-model-service
             :visible.sync="createServiceVisible"
@@ -115,6 +120,12 @@
             :visible.sync="releaseAIVisible"
             :is-model="true"
             v-if="releaseAIVisible"
+            :is-edit="true"
+            :info="modelInfo"
+            @confirmPublish="confirmPublish"
+        />
+        <GrayscaleRelease
+            :visible.sync="grayscaleReleaseVisible"
         />
     </div>
 </template>
@@ -127,7 +138,7 @@ import SdxuSectionTitle from '@sdx/ui/components/section-panel';
 import { Select, Option } from 'element-ui';
 import Button from '@sdx/ui/components/button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
-import EditVersion from '../model-list/CreateVersion';
+import ModelVersion from '../service-dialog/ModelVersion';         
 import CreateModelService from '../service-dialog/create-model-service/Index';
 import { getModelInfo,removeVersion } from '@sdx/utils/src/api/model';
 import { getUserSimpleInfo } from '@sdx/utils/src/api/user';
@@ -136,6 +147,7 @@ import Message from 'element-ui/lib/message';
 import MessageBox from '@sdx/ui/components/message-box';
 import PublishPlatform from '../service-dialog/PublishPlatform';
 import { MODEL_TYPES_ICON, DEFAULT_MODEL_TYPE_ICON } from '@sdx/utils/src/const/model';
+import GrayscaleRelease from '../service-dialog/GrayscaleRelease';
 export default {
     name: 'SdxvModelDetail',
     mixins: [locale],
@@ -151,12 +163,14 @@ export default {
                 labels: [],
                 owner: {
                     uuid: ''
-                }
+                },
+                latestV: 0
             },
             versions: [],
-            editVersionVisible: false,
+            modelVersionVisible: false,
             createServiceVisible: false,
             releaseAIVisible: false,
+            grayscaleReleaseVisible: false,
             versionInfo: [],
             versionParams: {
                 uuid: '',
@@ -165,7 +179,10 @@ export default {
                 createdAt: '',
                 updatedAt: '',
                 creatorId: ''
-            }
+            },
+            modelInfo: null,
+            modelVersionEdit: false,
+            modelVersionInfo: null
         };
     },
     components: {
@@ -175,20 +192,45 @@ export default {
         [Select.name]: Select,
         [Option.name]: Option,
         [Button.name]: Button,
-        EditVersion,
+        ModelVersion,
         CreateModelService,
-        PublishPlatform
+        PublishPlatform,
+        GrayscaleRelease
     },
     created() {
         this.getModelDetail();
     },
     methods: {
         dateFormatter,
+        confirmPublish() {
+            this.getModelDetail();
+        },
         downLoadModelFile(path, ownerId) {
             download(path, ownerId);
         },
+        grayLevelRelease() {
+            this.grayscaleReleaseVisible = true;
+        },
+        createVersion() {
+            this.modelVersionVisible = true;
+            this.modelVersionEdit = false;
+            this.modelVersionInfo = {
+                modelId: this.$route.params.modelId,
+                name: this.cardInfo.title,
+                latestV: this.cardInfo.latestV,
+            };
+        },
         editVersion() {
-            this.editVersionVisible = true;
+            this.modelVersionVisible = true;
+            this.modelVersionEdit = true;
+            this.modelVersionInfo = {
+                modelId: this.$route.params.modelId,
+                versionId: this.versionParams.uuid,
+                name: this.cardInfo.title,
+                version: this.versionParams.name,
+                description: this.versionParams.description,
+                modelPath: this.versionParams.modelPath,
+            };
         },
         releaseAI(){
             this.releaseAIVisible = true;
@@ -237,9 +279,18 @@ export default {
                         owner: {
                             uuid: res.creatorId
                         },
-                        labelColor: iconColor.color
+                        labelColor: iconColor.color,
+                        latestV: res.latestV
                     };
                 });
+                // 模型信息，弹框
+                this.modelInfo = {
+                    uuid: res.uuid,
+                    name: res.name,
+                    description: res.description,
+                    modelType: res.modelType,
+                    labels: res.labels
+                };
                 this.versionInfo = res.versions.items;
                 let items = JSON.parse(JSON.stringify(this.versionInfo));
                 // 获取最新的版本，展示出来

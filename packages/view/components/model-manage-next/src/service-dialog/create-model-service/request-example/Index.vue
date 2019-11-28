@@ -12,7 +12,7 @@
                     <removable-box @remove="handleRemove(index)">
                         <request-form
                             :ref="`exampleForm${index}`"
-                            :data="item"
+                            :data.sync="item"
                         />
                     </removable-box>
                 </div>
@@ -66,7 +66,7 @@ export default {
         addExample() {
             this.examples.push({
                 type: '',
-                example: ''
+                code: ''
             });
         },
         handleRemove(index) {

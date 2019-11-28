@@ -786,7 +786,7 @@ export default {
             bool: 'Boolean',
             addReqExample: 'Add Request Example',
             enterReqExample: 'Please enter request example',
-            crukExample: 'CRUL Request example',
+            crukExample: 'CURL Request example',
             pythonExample: 'Python Request example',
             javaExample: 'JAVA Request example',
             requestType: 'Request Type',

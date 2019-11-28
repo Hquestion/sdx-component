@@ -28,9 +28,9 @@
                 >
                     <el-option
                         v-for="item in types"
-                        :key="item"
-                        :label="item"
-                        :value="item"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value"
                     />
                 </el-select>
             </el-form-item>
@@ -86,7 +86,20 @@ export default {
     data() {
         return {
             paramForm: this.data,
-            types: [this.t('view.model.number'), this.t('view.model.string'), this.t('view.model.bool')],
+            types: [
+                {
+                    name: this.t('view.model.number'),
+                    value: 'NUMBER'
+                },
+                {
+                    name: this.t('view.model.string'),
+                    value: 'STRING'
+                },
+                {
+                    name: this.t('view.model.bool'),
+                    value: 'BOOLEAN'
+                }
+            ],
             paramFormRule: {
                 name: [
                     { required: true, message: this.t('view.model.enterParamName'), trigger: 'blur' }

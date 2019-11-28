@@ -18,20 +18,20 @@
                 >
                     <el-option
                         v-for="item in types"
-                        :key="item"
-                        :label="item"
-                        :value="item"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value"
                     />
                 </el-select>
             </el-form-item>
             <el-form-item
                 :label="`${t('view.model.requestExample')}:`"
             >
-                <SdxuInput
+                <SdxuCodepan
+                    style="height: 200px;"
                     v-model="requestForm.code"
-                    size="small"
-                    type="textarea"
-                    :rows="7"
+                    type="javascript"
+                    light
                     :placeholder="t('view.model.enterReqExample')"
                 />
             </el-form-item>
@@ -43,17 +43,27 @@
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
 import ElSelect from 'element-ui/lib/select';
-import Input from '@sdx/ui/components/input';
 import locale from '@sdx/utils/src/mixins/locale';
+import Codepan from '@sdx/ui/components/codepan';
 export default {
     name: 'RequestForm',
     data() {
         return {
-            requestForm: {
-                type: '',
-                code: ''
-            },
-            types: [this.t('view.model.crukExample'), this.t('view.model.pythonExample'), this.t('view.model.javaExample')],
+            requestForm: this.data,
+            types: [
+                {
+                    name: this.t('view.model.crukExample'),
+                    value: 'curl'
+                },
+                {
+                    name: this.t('view.model.pythonExample'),
+                    value: 'python'
+                },
+                {
+                    name: this.t('view.model.javaExample'),
+                    value: 'java'
+                }
+            ],
             requestFormRule: {
                 type: [
                     { required: true, message: this.t('view.model.enterRequestType'), trigger: 'change'}
@@ -74,7 +84,7 @@ export default {
         }
     },
     components: {
-        [Input.name]: Input,
+        [Codepan.name]: Codepan,
         ElForm,
         ElFormItem,
         ElSelect,
@@ -82,6 +92,12 @@ export default {
     watch: {
         data(nVal) {
             this.requestForm = nVal;
+        },
+        requestForm: {
+            deep: true,
+            handler(nVal) {
+                this.$emit('update:data', nVal);
+            }
         }
     }
 };

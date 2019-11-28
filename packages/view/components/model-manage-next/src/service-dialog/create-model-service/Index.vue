@@ -356,6 +356,9 @@ export default {
         },
         'serviceInfoForm.runtimeImage'() {
             this.$refs.serviceInfoForm.clearValidate('resourceConfig');
+        },
+        settingType(nVal) {
+            if (nVal === 'response') this.$refs.responseExample.refresh();
         }
     },
     methods: {

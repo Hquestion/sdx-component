@@ -10,22 +10,24 @@
             <el-form-item
                 :label="`${t('view.model.successExample')}:`"
             >
-                <SdxuInput
+                <SdxuCodepan
+                    style="height: 200px;"
+                    ref="successCodepan"
                     v-model="responseForm.successExample"
-                    size="small"
-                    type="textarea"
-                    :rows="7"
+                    light
+                    type="javascript"
                     :placeholder="t('view.model.enterSuccessExample')"
                 />
             </el-form-item>
             <el-form-item
                 :label="`${t('view.model.failExample')}:`"
             >
-                <SdxuInput
+                <SdxuCodepan
+                    style="height: 200px;"
+                    ref="failCodepan"
                     v-model="responseForm.failExample"
-                    size="small"
-                    type="textarea"
-                    :rows="7"
+                    type="javascript"
+                    light
                     :placeholder="t('view.model.enterFailExample')"
                 />
             </el-form-item>
@@ -36,8 +38,8 @@
 <script>
 import ElForm from 'element-ui/lib/form';
 import ElFormItem from 'element-ui/lib/form-item';
-import Input from '@sdx/ui/components/input';
 import locale from '@sdx/utils/src/mixins/locale';
+import Codepan from '@sdx/ui/components/codepan';
 export default {
     name: 'ResponseForm',
     data() {
@@ -61,6 +63,12 @@ export default {
             default: ''
         }
     },
+    methods: {
+        refresh() {
+            this.$refs.successCodepan.refresh();
+            this.$refs.failCodepan.refresh();
+        }
+    },
     watch: {
         responseSuccess(nVal) {
             this.responseForm.successExample = nVal;
@@ -77,7 +85,7 @@ export default {
         }
     },
     components: {
-        [Input.name]: Input,
+        [Codepan.name]: Codepan,
         ElForm,
         ElFormItem
     }

@@ -80,7 +80,7 @@
                     v-if="!editingModel"
                 >
                     <div class="sdxv-create-model__version">
-                        V 1.0
+                        v1
                     </div>
                 </el-form-item>
                 <el-form-item

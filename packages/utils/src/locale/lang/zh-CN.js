@@ -785,7 +785,7 @@ export default {
             bool: '布尔值',
             addReqExample: '添加请求示例',
             enterReqExample: '请输入请求示例',
-            crukExample: 'CRUL请求示例',
+            crukExample: 'CURL请求示例',
             pythonExample: 'Python请求示例',
             javaExample: 'JAVA请求示例',
             requestType: '请求类型',

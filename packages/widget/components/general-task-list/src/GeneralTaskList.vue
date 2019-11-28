@@ -5,7 +5,10 @@
     >
         <div v-if="taskList.length">
             <div>
-                <SdxwTaskRunningLimit style="margin-top: 20px;" />
+                <SdxwResourceAlert
+                    type="develop"
+                    style="margin-top: 24px;"
+                />
                 <sdxw-subject-card-list
                     class="sdxw-general-task-list__container"
                 >
@@ -87,7 +90,7 @@ import { taskList } from '@sdx/utils/src/api/task';
 import { getProjectTasks } from '@sdx/utils/src/api/project';
 import taskMixin from '@sdx/utils/src/mixins/taskNext';
 import locale from '@sdx/utils/src/mixins/locale';
-import TaskRunningLimit from '@sdx/widget/components/task-running-limit';
+import ResourceAlert from '@sdx/widget/components/resource-alert';
 // import { getUser } from '@sdx/utils/src/helper/shareCenter';
 import { STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL } from '@sdx/utils/src/const/task';
 export default {
@@ -124,7 +127,7 @@ export default {
     components: {
         [Button.name]: Button,
         [Pagination.name]: Pagination,
-        [TaskRunningLimit.name]: TaskRunningLimit,
+        [ResourceAlert.name]: ResourceAlert,
         [Empty.name]: Empty,
         [SubCard.SubjectCard.name]: SubCard.SubjectCard,
         [SubCard.SubjectCardList.name]: SubCard.SubjectCardList

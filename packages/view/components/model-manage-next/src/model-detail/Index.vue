@@ -48,6 +48,7 @@
                         <SdxuButton
                             type="default"
                             @click="releaseAI"
+                            v-if="false"
                         >
                             {{ t('view.model.Release_to_AI_open_platform') }}
                         </SdxuButton>

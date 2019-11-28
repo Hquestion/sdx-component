@@ -9,9 +9,8 @@ const routeCfg = [
         path: '/sdxv-model-manage-next',
         name: 'SdxvModelManage',
         component: ModelManage,
-        redirect: '/sdxv-model-manage-next/modelList',
         meta: {
-            breadcrumb: t('view.model.model'),
+            isRoot: true
         },
         children: [
             {
@@ -20,26 +19,25 @@ const routeCfg = [
                 component: ModelList,
                 meta: {
                     breadcrumb: t('view.model.model'),
-                    isRoot: true,
                     header: '模型仓库'
-                }
+                },
+                children: [
+                    {
+                        path: ':modelId',
+                        name:'modelDetail',
+                        component: ModelDetail,
+                        meta: {
+                            breadcrumb: t('view.model.ModelDetail'),
+                        }
+                    },
+                ]
             },
             {
                 path: 'modelService',
                 name:'modelService',
                 component: ModelService,
                 meta: {
-                    breadcrumb: t('view.model.model'),
-                    isRoot: true
-                }
-            },
-            {
-                path: 'modelDetail/:modelId',
-                name:'modelDetail',
-                component: ModelDetail,
-                meta: {
-                    breadcrumb: t('view.model.ModelDetail'),
-                    isRoot: true
+                    breadcrumb: t('view.model.serviceList'),
                 }
             },
         ]

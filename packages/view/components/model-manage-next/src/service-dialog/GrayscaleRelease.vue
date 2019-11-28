@@ -33,7 +33,6 @@
             >
                 <el-input-number
                     v-model="num"
-                    @change="handleChange"
                     :min="1"
                     :max="10"
                 />
@@ -94,7 +93,13 @@ export default {
                     version: 'V 1.0(旧)',
                     weight: 60
                 }
-            ]
+            ],
+            rules: {
+
+            },
+            params: {
+                
+            }
         };
     },
     props: {

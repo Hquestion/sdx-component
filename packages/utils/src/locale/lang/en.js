@@ -812,7 +812,11 @@ export default {
                 timeSequence: 'Time Sequence',
                 clusterType: 'Cluster Type',
                 classificationType: 'Classification Type'
-            }
+            },
+            apiDetail: 'API Detail',
+            apiInfo: 'API Information:',
+            versionUrl: 'Service URL:',
+            fileFormatError: 'Invalid file format，please select image file！'
         },
         authority: {
             Authority: 'Permission',

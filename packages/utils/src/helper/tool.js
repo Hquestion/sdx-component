@@ -122,7 +122,7 @@ export function myBrowser() {
 export function systemType() {
     let system = '';
     const isWindows = /windows|win32/i.test(navigator.userAgent);
-    const isMac = /macintosh|mac os x/i.test(navigator.userAgent); 
+    const isMac = /macintosh|mac os x/i.test(navigator.userAgent);
     const isLinux = (String(navigator.platform).indexOf('Linux') > -1);
     if(isWindows) {
         system = 'Windows';
@@ -141,7 +141,7 @@ export function matchingString(oriStr,matStr) {
         index = oriArr.findIndex(val => val === item);
         oriArr = oriArr.slice(index + 1);
         resArr.push(index);
-        let flag = resArr.findIndex(flagItem => flagItem === -1); 
+        let flag = resArr.findIndex(flagItem => flagItem === -1);
         if(flag > -1) {
             res = false;
         } else {
@@ -165,4 +165,20 @@ export function matchingStringIndex(oriStr,matStr) {
         }
     });
     return indexArr;
+}
+
+export function file2base64(file) {
+    let _resolve, _reject;
+    if(!/image\/\w+/.test(file.type)){
+        _reject('TYPE_INVALID');
+    }
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function(e){
+        _resolve(e.target.result);
+    };
+    return new Promise((resolve, reject) => {
+        _resolve = resolve;
+        _reject = reject;
+    });
 }

@@ -70,9 +70,12 @@
                     <div class="sdxw-api-test__upload-trigger">
                         <SdxuUpload
                             class="upload-image"
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            :on-success="handleUploadSuccess"
+                            action=""
+                            :auto-upload="true"
                             :show-file-list="false"
+                            :before-upload="handleBeforeUpload"
+                            :multiple="false"
+                            :limit="1"
                             accept="image/x-png,image/jpeg"
                         >
                             <SdxuButton type="default" size="small">
@@ -100,6 +103,8 @@
                     <div class="sdxw-api-test__input-header">
                         <el-select
                             v-model="model.inputType"
+                            readonly
+                            disabled
                         >
                             <el-option
                                 v-for="item in testType"
@@ -136,14 +141,13 @@
 </template>
 
 <script>
-import SdxuCopyable from '@sdx/ui/components/copyable';
-import SdxuInput from '@sdx/ui/components/input';
 import SdxuButton from '@sdx/ui/components/button';
 import SdxuUpload from '@sdx/ui/components/upload';
 import SdxuCodepan from '@sdx/ui/components/codepan';
 import SdxuAutosizeCopyable from '@sdx/ui/components/autosize-copyable';
 import locale from '@sdx/utils/src/mixins/locale';
-import { getApiDetail } from '@sdx/utils/src/api/model';
+import { getApiDetail, apiTest } from '@sdx/utils/src/api/model';
+import { file2base64 } from '@sdx/utils/src/helper/tool';
 
 const imageRecognition = '1';
 const machineLearning = '2';
@@ -156,11 +160,11 @@ export default {
             machineLearning,
             model: {
                 method: imageRecognition,
-                apiUrl: 'hjkhjkshckjdshcjkdshcjkdshcjkdhsjkchdsjkchdskjhjkvdfhkjvdfkjvhdfjkvhdfjkhvkjdfhvjkdfhkjv',
+                apiUrl: '',
                 apiKey: '',
                 testCode: '',
                 imageUrl: '',
-                inputType: 'CURL'
+                inputType: 'JSON'
             },
             rules: {
 
@@ -189,8 +193,6 @@ export default {
         }
     },
     components: {
-        SdxuCopyable,
-        SdxuInput,
         SdxuButton,
         SdxuUpload,
         SdxuCodepan,
@@ -202,8 +204,15 @@ export default {
         }
     },
     methods: {
-        handleUploadSuccess() {
-
+        handleBeforeUpload(file) {
+            file2base64(file).then(res => {
+                this.model.imageUrl = res;
+            }, err => {
+                if (err === 'TYPE_INVALID') {
+                    this.$message.error(this.t('view.model.fileFormatError'));
+                }
+            });
+            return false;
         },
         initMetadata(serviceId) {
             if (serviceId) {
@@ -217,7 +226,19 @@ export default {
             }
         },
         handleTest() {
-            // todo 调用测试接口并输出响应
+            let promise;
+            if (this.isMachineLearning) {
+                promise = apiTest(this.model.apiUrl, this.model.testCode);
+            } else {
+                promise = apiTest(this.model.apiUrl, {
+                    image_b64: this.model.imageUrl
+                });
+            }
+            promise.then(res => {
+                this.testReult = JSON.stringify(res, null, '\t');
+            }, err => {
+                this.testReult = JSON.stringify(err, null, '\t');
+            });
         }
     },
     watch: {

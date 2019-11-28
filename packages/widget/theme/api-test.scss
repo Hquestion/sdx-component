@@ -8,9 +8,11 @@
             height: 200px;
             background: $sdx-secondary-color--light7;
             color: $sdx-secondary-color--light3;
+            display: flex;
+            align-items: center;
             img {
                 width: 100%;
-                height: 100%;
+                max-height: 100%;
             }
             @include element('placeholder') {
                 width: 100%;

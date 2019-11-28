@@ -811,7 +811,11 @@ export default {
                 timeSequence: '时间序列',
                 clusterType: '聚类类型',
                 classificationType: '分类类型'
-            }
+            },
+            apiDetail: 'API详情',
+            apiInfo: 'API信息:',
+            versionUrl: '版本服务URL:',
+            fileFormatError: '文件格式错误，请选择图片文件！'
         },
         authority: {
             Authority: '权限',

@@ -10,9 +10,9 @@
             </SdxuTabRadio>
         </SdxuTabRadioGroup>
         <div class="code-present-area">
-            <SdxuCopyable type="inner" :content="exampleCodes[current]" dark>
+            <SdxuCopyable type="inner" :content="showCodes" dark>
                 <SdxuCodepan
-                    :value="exampleCodes[current] || ''"
+                    :value="showCodes || ''"
                     readonly
                     light
                     :type="type"
@@ -27,12 +27,13 @@ import TabRadio from '@sdx/ui/components/tab-radio';
 import Codepan from '@sdx/ui/components/codepan';
 import SdxuCopyable from '@sdx/ui/components/copyable';
 import { t } from '@sdx/utils/src/locale';
+import {isArray} from '@sdx/utils/src/helper/tool';
 const LabelMap = {
-    curl: 'CURL',
-    python: 'PYTHON',
-    java: 'JAVA',
-    success: '正常返回示例',
-    failed: '失败返回示例'
+    curl: 'curl' + t('view.model.requestExample'),
+    python: 'Python' + t('view.model.requestExample'),
+    java: 'Java' + t('view.model.requestExample'),
+    success: t('view.model.successExample'),
+    failed: t('view.model.failExample')
 };
 export default {
     name: 'CodeExample',
@@ -50,8 +51,8 @@ export default {
     },
     props: {
         exampleCodes: {
-            type: Object,
-            default: () => ({})
+            type: [Array, Object],
+            default: () => ([])
         },
         mode: {
             type: String,
@@ -60,7 +61,11 @@ export default {
     },
     computed: {
         codeModes() {
-            return Object.keys(this.exampleCodes);
+            if (isArray(this.exampleCodes)) {
+                return this.exampleCodes.map(item => item.type.toLowerCase());
+            } else {
+                return ['success', 'failed'];
+            }
         },
         type() {
             if (this.mode === 'request') {
@@ -73,12 +78,27 @@ export default {
             } else {
                 return 'javascript';
             }
+        },
+        showCodes() {
+            if (isArray(this.exampleCodes)) {
+                if (this.current) {
+                    return this.exampleCodes.find(code => code.type.toLowerCase() === this.current).code;
+                } else {
+                    return '';
+                }
+            } else {
+                return this.exampleCodes[this.current];
+            }
         }
     },
     watch: {
         exampleCodes(val) {
             if (val) {
-                this.current = Object.keys(val)[0];
+                if (isArray(val)) {
+                    return val[0].type;
+                } else {
+                    this.current = 'success';
+                }
             }
         }
     }

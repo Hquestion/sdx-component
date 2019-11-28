@@ -279,15 +279,6 @@ export default {
             let list = this.task.serviceList || [];
             return list.filter(item => item.proxyType === 'CUSTOMER');
         },
-        resourceConfig() {
-            let obj = null;
-            try {
-                obj = JSON.parse(this.task.resourceConfig);
-            } catch(err) {
-                window.console.error(err);
-            }
-            return obj;
-        },
         environments() {
             return this.task.environments || [];
         },

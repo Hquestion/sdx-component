@@ -46,14 +46,17 @@ export default {
         showSaveAsImage() {
             return (this.isJUPYTER || this.isCONTAINERDEV) && this.task.state === STATE_TYPE.Running;
         },
-        hasGpu() {
-            let has = false;
-            if (this.task && this.task.resourceConfig) {
-                has = Object.keys(this.task.resourceConfig).some(item => {
-                    return item.includes('GPUS') && this.task.resourceConfig[item] > 0;
-                });
+        resourceConfig() {
+            let obj = null;
+            try {
+                obj = JSON.parse(this.task.resourceConfig);
+            } catch(err) {
+                window.console.error(err);
             }
-            return has;
+            return obj;
+        },
+        hasGpu() {
+            return this.resourceConfig && this.resourceConfig.DEPLOY && this.resourceConfig.DEPLOY.requests && this.resourceConfig.DEPLOY.requests['nvidia.com/gpu'];
         },
         hasSaveImage() {
             return this.isJUPYTER || this.isSKYIDE || this.isCONTAINERDEV;

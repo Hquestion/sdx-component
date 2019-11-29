@@ -17,9 +17,9 @@
                         v-model="params.state"
                     >
                         <el-option
-                            v-for="item in STATE_TYPE"
+                            v-for="item in STATE_TYPE_LIST"
                             :key="item.value"
-                            :label="item.label"
+                            :label="t(item.label)"
                             :value="item.value"
                         />
                     </el-select>
@@ -29,8 +29,6 @@
         <div class="table">
             <sdxu-table
                 :data="table"
-                @sort-change="handleSortChange"
-                :default-sort="defaultSort"
                 v-loading="tableLoading"
             >
                 <el-table-column type="expand">
@@ -38,7 +36,7 @@
                         <sdxu-table light>
                             <el-table-column
                                 
-                                :label="t('view.model.modelVersion')"
+                                :label="t('view.model.Model_Version')"
                             />
                             <el-table-column
                                 
@@ -96,7 +94,7 @@
                 /> 
                 <el-table-column
                     prop="versionName"
-                    :label="t('view.model.modelVersion')"
+                    :label="t('view.model.Model_Version')"
                 />
                 <el-table-column
                     prop="apiUrl"
@@ -105,30 +103,37 @@
                 <el-table-column
                     prop="state"
                     :label="t('sdxCommon.Status')"
-                /> 
+                >
+                    <template #default="{ row }">
+                        <SdxwFoldLabel
+                            plain
+                            :type="STATE_MAP_FOLD_LABEL_TYPE[row.state]"
+                        >
+                            {{ t(STATE_TYPE_LABEL[row.state]) }}
+                        </SdxwFoldLabel>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     :label="t('sdxCommon.Operation')"
                     min-width="172px"
                 >
                     <template #default="{ row }">
-                        <SdxuButton
-                            size="regular"
-                            type="link"
-                        >
-                            {{ t('view.task.tipCard.Detail') }} 
-                        </SdxuButton>
-                        <SdxuButton
-                            type="link"
-                            size="regular"
-                        >
-                            {{ t('sdxCommon.Delete') }}
-                        </SdxuButton>
+                        <SdxuButtonGroup>
+                            <SdxuButton
+                                v-for="(item, i) in getOperationList(row.state)"
+                                type="link"
+                                :key="i"
+                                @click="handleOperation(item.value, row)"
+                            >
+                                {{ t(item.label) }}
+                            </SdxuButton>
+                        </SdxuButtonGroup>
                     </template>
                 </el-table-column>
             </sdxu-table>
             <SdxuPagination
                 v-if="total"
-                :current-page.sync="page"
+                :current-page.sync="current"
                 :page-size="pageSize"
                 :total="total"
                 @current-change="handlePageChange"
@@ -143,28 +148,36 @@
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
-import { getServiceList } from '@sdx/utils/src/api/model';
+import { getServiceList,removeService } from '@sdx/utils/src/api/model';
 import { paginate,removeBlankAttr} from '@sdx/utils/src/helper/tool';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import OnlineTesting from '../service-dialog/OnlineTesting';
 import PublishPlatform from '../service-dialog/PublishPlatform';
 import GrayscaleRelease from '../service-dialog/GrayscaleRelease';
-import { Select } from 'element-ui';
-import { STATE_TYPE } from '@sdx/utils/src/const/task';
+import { Select,Option, Message} from 'element-ui';
+import FoldLabel from '@sdx/widget/components/fold-label';
+import {  STATE_TYPE_LABEL,  STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LIST} from '@sdx/utils/src/const/task';
+import MessageBox from '@sdx/ui/components/message-box';
+import SdxuButtonGroup from '@sdx/ui/components/button-group';
+import {  OPERATION_INFO,STATE_MODEL_SERVICE_OPERATION} from '@sdx/utils/src/const/model';
 export default {
     name: 'SdxvModelService',
     mixins: [locale],
     data() {
         return {
-            STATE_TYPE,
+            STATE_TYPE_LABEL,
+            STATE_MAP_FOLD_LABEL_TYPE,
+            STATE_TYPE_LIST,
+            STATE_MODEL_SERVICE_OPERATION,
+            OPERATION_INFO,
             params: {
                 name: '',
                 state: '',
                 start: 1,
                 count: 10,
-                order: 'desc',
-                orderBy: 'updatedAt'
+                // order: 'desc',
+                // orderBy: 'updatedAt'
             },
             current: 1,
             pageSize: 10,
@@ -172,7 +185,8 @@ export default {
             tableLoading: false,
             onlineTestingVisible: false,
             publishPlatformVisible:false,
-            grayscaleReleaseVisible:false
+            grayscaleReleaseVisible:false,
+            table: []
         };
     },
     components: {
@@ -184,11 +198,43 @@ export default {
         PublishPlatform,
         GrayscaleRelease,
         [Select.name]: Select,
+        [Option.name]: Option,
+        [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
+        SdxuButtonGroup,
     },
     created() {
         this.getServices();
     },
     methods: {
+        getOperationList(state) {
+            let arr = this.STATE_MODEL_SERVICE_OPERATION[state] || [];
+            return arr.map(item => this.OPERATION_INFO[item]);
+        },
+        handleOperate(data) {
+            if(data.type === 'delete') {
+                MessageBox({
+                    title: this.t('view.model.Model_deletion_prompt'),
+                    content: this.t('view.model.Are_you_sure_you_want_to_delete_this_model_service'),
+                    status: 'warning'
+                }).then(() => {
+                    removeService(data.row.uuid).then(() => {
+                        Message({
+                            message: this.t('sdxCommon.RemoveSuccess'),
+                            type: 'success'
+                        });
+                        this.getServices();
+                    });
+                });
+            }
+        },
+        handlePageChange(index){
+            this.current = index;
+            this.getServices();
+        },
+        handleSearch() {
+            this.current = 1;
+            this.getServices();
+        },
         getServices() {
             this.tableLoading = true;
             const params = Object.assign({}, this.params, {
@@ -204,10 +250,6 @@ export default {
                 this.total = 0;
                 this.tableLoading = false;
             });
-        },
-        handleSearch() {
-            this.current = 1; 
-            this.getServices();
         },
     }
     

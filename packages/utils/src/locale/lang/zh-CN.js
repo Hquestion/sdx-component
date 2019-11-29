@@ -618,6 +618,10 @@ export default {
         },
         model: {
             ModelRepo: '模型仓库',
+            Offline_from_AI_open_platform: '从AI开放平台下线',
+            Are_you_sure_you_want_to_delete_this_model_service: '您确定要删除此模型服务吗？',
+            Model_deletion_prompt: '模型删除提示',
+            Model_Version: '模型版本',
             Model_service_name: '模型服务名称',
             New_model_service: '新增模型服务',
             Create_a_new_version: '创建新版本',

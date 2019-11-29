@@ -111,6 +111,10 @@ export function getServiceList(params) {
     return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services`, params);
 }
 
+export function removeService(uuid) {
+    return httpService.remove(`${MODEL_MANAGE_GATEWAY_BASE}services/${uuid}`);
+}
+
 export function getApiDetail(serviceUuid) {
     return Promise.resolve({
         'name': 'my-model_service ',
@@ -217,5 +221,6 @@ export default {
     removeGroupModels,
     updateGroupModels,
     getComponents,
-    createService
+    createService,
+    removeService
 };

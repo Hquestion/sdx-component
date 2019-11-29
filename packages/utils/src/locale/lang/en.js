@@ -619,6 +619,10 @@ export default {
         },
         model: {
             ModelRepo: 'Model Repository',
+            Offline_from_AI_open_platform: 'Offline from AI open platform',
+            Are_you_sure_you_want_to_delete_this_model_service: 'Are you sure you want to delete this model service?',
+            Model_deletion_prompt: 'Model deletion prompt',
+            Model_Version: 'Model version',
             Model_service_name: 'Model service name',
             New_model_service: 'New model service',
             Create_a_new_version: 'Create a new version',

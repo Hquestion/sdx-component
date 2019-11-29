@@ -52,7 +52,7 @@
                     :show-bar="false"
                 >
                     <el-form-item
-                        prop="runtimeResourceObj"
+                        prop="runtimeResource"
                         :label="`${t('view.task.form.ResourceAllocation')}:`"
                     >
                         <i class="icon">*</i>
@@ -60,19 +60,16 @@
                             v-if="!isGpuEnt"
                             v-model="cpuObj"
                             type="onlycpu"
-                            :data-ready="dataReady"
                         />
 
                         <div v-if="isGpuEnt">
                             <SdxwResourceConfig
                                 v-model="cpuObj"
                                 type="cpu"
-                                :data-ready="dataReady"
                             />
                             <SdxwResourceConfig
                                 v-model="gpuObj"
                                 type="gpu"
-                                :data-ready="dataReady"
                             />
                         </div>
                     </el-form-item>
@@ -176,21 +173,20 @@ import ParamsSetting from './params-setting/Index';
 import RequestExample from './request-example/Index';
 import ResponseExample from './response-example/Index';
 
-const RESOURCE_KEY = 'DEPLOY';
 export default {
     name: 'CreateModelService',
     data() {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
-                if(value[RESOURCE_KEY].requests.cpu === 0 || value[RESOURCE_KEY].requests.cpu === null || isNaN(value[RESOURCE_KEY].requests.cpu)) {
+                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
-                } else if (!value[RESOURCE_KEY].labels['gpu.model'] || !value[RESOURCE_KEY].requests['nvidia.com/gpu']) {
+                } else if (value.EXECUTOR_GPUS === 0 || value.EXECUTOR_GPUS === null || isNaN(value.EXECUTOR_GPUS)) {
                     callback(new Error(this.t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
-                if(value[RESOURCE_KEY].requests.cpu === 0 || value[RESOURCE_KEY].requests.cpu === null || isNaN(value[RESOURCE_KEY].requests.cpu)) {
+                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
@@ -210,19 +206,12 @@ export default {
                 modelId: this.modelId,
                 versionName: this.versionName,
                 versionId: this.versionId,
-                runtimeResource: '',
-                runtimeResourceObj: {
-                    [RESOURCE_KEY]: {
-                        requests: {
-                            cpu: 0,
-                            memory: 0,
-                            'nvidia.com/gpu': 0
-                        },
-                        labels: {
-                            'gpu.model': '',
-                        },
-                        instance: 1
-                    }
+                runtimeResource: {
+                    'EXECUTOR_INSTANCES': 1,
+                    'EXECUTOR_CPUS': 0,
+                    'EXECUTOR_GPUS': 0,
+                    'EXECUTOR_MEMORY': 0,
+                    'GPU_MODEL': ''
                 },
                 apiParams: {
                     input: [],
@@ -247,7 +236,7 @@ export default {
                 runtimeImage: [
                     { required: true, message: this.t('view.model.selectRunningImage'), trigger: 'change' }
                 ],
-                runtimeResourceObj: [
+                runtimeResource: [
                     {
                         validator: resourceValidate,
                         trigger: 'change'
@@ -255,7 +244,6 @@ export default {
                 ],
             },
             needRefresh: false,
-            dataReady: false,
             showMoreSetting: true,
             settingType: 'params'
         };
@@ -325,37 +313,25 @@ export default {
             this.dialogVisible = nVal;
         },
         cpuObj(val) {
-            this.serviceInfoForm.runtimeResourceObj = {
-                [RESOURCE_KEY]: {
-                    requests: {
-                        cpu: val.cpu * 1000,
-                        memory: val.memory * 1024* 1024*1024,
-                        'nvidia.com/gpu': this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].requests['nvidia.com/gpu']
-                    },
-                    labels: {
-                        'gpu.model': this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].labels['gpu.model'],
-                    },
-                    instance: 1
-                }
+            this.serviceInfoForm.runtimeResource = {
+                'EXECUTOR_INSTANCES': 1,
+                'EXECUTOR_CPUS': val.cpu * 1000,
+                'EXECUTOR_GPUS': this.serviceInfoForm.runtimeResource.EXECUTOR_GPUS,
+                'EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
+                'GPU_MODEL': this.serviceInfoForm.runtimeResource.GPU_MODEL
             };
         },
         gpuObj(val) {
-            this.serviceInfoForm.runtimeResourceObj = {
-                [RESOURCE_KEY]: {
-                    requests: {
-                        cpu: this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].requests.cpu,
-                        memory: this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].requests.memory,
-                        'nvidia.com/gpu': val.count
-                    },
-                    labels: {
-                        'gpu.model': val.label,
-                    },
-                    instance: 1
-                }
+            this.serviceInfoForm.runtimeResource = {
+                'EXECUTOR_INSTANCES': 1,
+                'EXECUTOR_CPUS': this.serviceInfoForm.runtimeResource.EXECUTOR_CPUS,
+                'EXECUTOR_GPUS': val.count,
+                'EXECUTOR_MEMORY': this.serviceInfoForm.runtimeResource.EXECUTOR_MEMORY,
+                'GPU_MODEL': val.label
             };
         },
         'serviceInfoForm.runtimeImage'() {
-            this.$refs.serviceInfoForm.clearValidate('resourceConfig');
+            this.$refs.serviceInfoForm.clearValidate('runtimeResource');
         },
         settingType(nVal) {
             if (nVal === 'response') this.$refs.responseExample.refresh();
@@ -421,11 +397,9 @@ export default {
                         });
                     } else {
                         if (!this.isGpuEnt) {
-                            this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].requests['nvidia.com/gpu'] = 0;
-                            this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].labels['gpu.model'] = '';
+                            this.serviceInfoForm.runtimeResource.EXECUTOR_GPUS = 0;
+                            this.serviceInfoForm.runtimeResource.GPU_MODEL = '';
                         }
-                        this.serviceInfoForm.runtimeResourceObj[RESOURCE_KEY].instance = this.serviceInfoForm.instances;
-                        this.serviceInfoForm.runtimeResource = JSON.stringify(this.serviceInfoForm.runtimeResourceObj);
                         createService(this.serviceInfoForm).then(() => {
                             Message({
                                 message: this.t('sdxCommon.CreateSuccess'),

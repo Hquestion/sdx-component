@@ -37,16 +37,16 @@
         <SdxuArticlePanel :title="t('view.task.ResourceInformation')">
             <el-form :label-width="labelWidth">
                 <el-form-item label="CPU:">
-                    {{ (resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && parseMilli(resourceConfig.DEPLOY.requests.cpu) || 0) + t('view.task.Core') }}
+                    {{ (serviceInfo && serviceInfo.runtimeResource && parseMilli(serviceInfo.runtimeResource.cpus) || 0) + t('view.task.Core') }}
                 </el-form-item>
                 <el-form-item :label="t('view.task.Memory') + ':'">
-                    {{ resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && byteToGB(resourceConfig.DEPLOY.requests.memory) || 0 }}GB
+                    {{ serviceInfo && serviceInfo.runtimeResource && byteToGB(serviceInfo.runtimeResource.memory) || 0 }}GB
                 </el-form-item>
                 <el-form-item label="GPU:">
-                    {{ (resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && resourceConfig.DEPLOY.requests['nvidia.com/gpu'] || 0) + t('view.task.Block') }}
+                    {{ (serviceInfo && serviceInfo.runtimeResource && serviceInfo.runtimeResource.gpus || 0) + t('view.task.Block') }}
                 </el-form-item>
                 <el-form-item :label="t('view.task.InstanceCount') + ':'">
-                    {{ (resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.instance || 0) + t('view.task.Count') }}
+                    {{ (serviceInfo && serviceInfo.instances || 0) + t('view.task.Count') }}
                 </el-form-item>
             </el-form>
         </SdxuArticlePanel>
@@ -75,10 +75,6 @@ export default {
         serviceInfo: {
             type: Object,
             required: true
-        },
-        resourceConfig: {
-            type: Object,
-            default: () => ({})
         },
         image: {
             type: Object,

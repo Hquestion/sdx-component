@@ -1,7 +1,7 @@
 <template>
     <div class="sdxv-model-service-detail">
         <div class="sdxv-model-service-detail__name">
-            {{ serviceInfo && serviceInfo.name || '' + t('view.model.ModelServiceDetail') }}
+            {{ (serviceInfo && serviceInfo.name || '') + t('view.model.ModelServiceDetail') }}
         </div>
         <div class="sdxv-model-service-detail__container">
             <el-tabs v-model="activeTab">
@@ -11,7 +11,6 @@
                 >
                     <ServiceInfo
                         :service-info="serviceInfo || {}"
-                        :resource-config="resourceConfig || {}"
                         :image="image || {}"
                     />
                 </el-tab-pane>
@@ -75,10 +74,12 @@ import ServiceInfo from './ServiceInfo';
 import { getServiceDetail } from '@sdx/utils/src/api/model';
 import { getTaskDetail } from '@sdx/utils/src/api/task';
 import { getImage } from '@sdx/utils/src/api/image';
-import { STATE_TYPE } from '@sdx/utils/src/const/task';
+import { STATE_TYPE, TASK_POLLING_STATE_TYPE } from '@sdx/utils/src/const/task';
 import SdxwApiTest from '@sdx/widget/components/api-test';
 import SdxuButton from '@sdx/ui/components/button';
 import locale from '@sdx/utils/src/mixins/locale';
+
+const POLLING_PERIOD = 3 * 1000;
 
 export default {
     name: '',
@@ -105,7 +106,8 @@ export default {
             task: null,
             image: null,
             serviceInfo: null,
-            testDialogVisible: false
+            testDialogVisible: false,
+            pollingId: null
         };
     },
     computed: {
@@ -116,61 +118,44 @@ export default {
             return this.task && ![STATE_TYPE.Error, STATE_TYPE.Created, STATE_TYPE.Pending, STATE_TYPE.Scheduling].includes(this.task.state) && (Array.isArray(this.task.pods) && this.task.pods.length > 0);
         },
         hasGpu() {
-            return this.resourceConfig && this.resourceConfig.DEPLOY && this.resourceConfig.DEPLOY.requests && this.resourceConfig.DEPLOY.requests['nvidia.com/gpu'];
+            return !!(this.serviceInfo && this.serviceInfo.runtimeResource && this.serviceInfo.runtimeResource.gpus);
         },
         isRunning() {
             return this.task && [STATE_TYPE.Running, STATE_TYPE.Terminating].includes(this.task.state);
-        },
-        resourceConfig() {
-            let obj = null;
-            if (this.task) {
-                try {
-                    obj = JSON.parse(this.serviceInfo.runtimeResource);
-                } catch(err) {
-                    window.console.error(err);
-                }
-            }
-            return obj;
         }
     },
     methods: {
-        fetchData() {
-            getServiceDetail(this.serviceId)
-                .then(data => {
-                    this.serviceInfo = data;
-                    if (data && data.taskId) {
-                        getTaskDetail(data.taskId, 'MODELSERVICE')
-                            .then(res => {
-                                this.task = res;
-                            })
-                            .catch(err => {
-                                window.console.error(err);
-                            });
-                    }
-                    if (data && data.runtimeImage) {
-                        getImage(data.runtimeImage)
-                            .then(image => {
-                                this.image = image;
-                            })
-                            .catch(err => {
-                                window.console.error(err);
-                            });
-                    }
-                })
-                .catch(err => {
-                    window.console.error(err);
-                });
+        async fetchData(polling = false) {
+            this.serviceInfo = await getServiceDetail(this.serviceId);
+            if (this.serviceInfo && this.serviceInfo.runtimeImage && !polling) {
+                this.image = await getImage(this.serviceInfo.runtimeImage);
+            }
+            if (this.serviceInfo && this.serviceInfo.taskId) {
+                this.task = await getTaskDetail(this.serviceInfo.taskId, 'MODELSERVICE');
+            }
+            // 轮询
+            if (TASK_POLLING_STATE_TYPE.includes(this.serviceInfo.state)) {
+                this.startPolling();
+            }
         },
-        // todo: 轮询
         startPolling() {
-
+            if (!this._isDestroyed) {
+                this.pollingId && clearTimeout(this.pollingId);
+                this.pollingId = setTimeout(() => {
+                    this.fetchData(true);
+                }, POLLING_PERIOD);
+            }
         },
         stopPolling() {
-
+            this.pollingId && clearTimeout(this.pollingId);
+            this.pollingId = null;
         }
     },
     created() {
         this.fetchData();
+    },
+    beforeDestroy() {
+        this.stopPolling();
     }
 };
 </script>

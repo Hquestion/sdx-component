@@ -1,4 +1,5 @@
 import ModelManage from './src/Index.vue';
+import ModelServiceList from './src/model-service/ServiceList.vue';
 import ModelService from './src/model-service/Index.vue';
 import ModelList from './src/model-list/Index.vue';
 import ModelDetail from './src/model-detail/Index.vue';
@@ -34,26 +35,37 @@ const routeCfg = [
                     breadcrumb: t('view.model.ModelDetail'),
                 }
             },
-            {
-                path: 'modelServiceDetail/:serviceId',
-                name:'modelServiceDetail',
-                component: ModelServiceDetail,
-                props: true,
-                meta: {
-                    breadcrumb: t('view.model.ModelServiceDetail'),
-                    isRoot: true
-                }
-            },
         ]
     },
     {
         path: '/sdxv-model-manage-service',
         name: 'modelService',
         component: ModelService,
+        redirect: '/sdxv-model-manage-service/list',
         meta: {
-            breadcrumb: t('view.model.serviceList'),
-            isRoot: true
-        }
+            
+        },
+        children: [
+            {
+                path: 'list',
+                name:'modelServiceList',
+                component: ModelServiceList,
+                props: true,
+                meta: {
+                    breadcrumb: t('view.model.serviceList'),
+                    isRoot: true
+                }
+            },
+            {
+                path: 'detail/:serviceId',
+                name:'modelServiceDetail',
+                component: ModelServiceDetail,
+                props: true,
+                meta: {
+                    breadcrumb: t('view.model.ModelServiceDetail')
+                }
+            },
+        ]
     },
     {
         path: '/api-detail/:serviceId',

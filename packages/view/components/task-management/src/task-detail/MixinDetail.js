@@ -56,7 +56,7 @@ export default {
             return obj;
         },
         hasGpu() {
-            return this.resourceConfig && this.resourceConfig.DEPLOY && this.resourceConfig.DEPLOY.requests && this.resourceConfig.DEPLOY.requests['nvidia.com/gpu'];
+            return !!(this.resourceConfig && this.resourceConfig.DEPLOY && this.resourceConfig.DEPLOY.requests && this.resourceConfig.DEPLOY.requests['nvidia.com/gpu']);
         },
         hasSaveImage() {
             return this.isJUPYTER || this.isSKYIDE || this.isCONTAINERDEV;

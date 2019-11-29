@@ -618,6 +618,7 @@ export default {
             etc: 'etc'
         },
         model: {
+            ModelRepo: 'Model Repository',
             Model_service_name: 'Model service name',
             New_model_service: 'New model service',
             Create_a_new_version: 'Create a new version',

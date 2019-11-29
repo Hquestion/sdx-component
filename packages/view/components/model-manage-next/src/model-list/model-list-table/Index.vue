@@ -197,7 +197,7 @@ export default {
         getLabelByName,
         handleDetail(operate) {
             this.$router.push({
-                path: `/sdxv-model-manage-next/modelList/${operate.id}`,
+                path: `/sdxv-model-manage-next/modelDetail/${operate.id}`,
             });
         },
         initModelList(reset) {

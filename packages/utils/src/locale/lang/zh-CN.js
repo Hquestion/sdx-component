@@ -617,6 +617,7 @@ export default {
             etc: '等'
         },
         model: {
+            ModelRepo: '模型仓库',
             Model_service_name: '模型服务名称',
             New_model_service: '新增模型服务',
             Create_a_new_version: '创建新版本',

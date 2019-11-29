@@ -110,11 +110,18 @@ export function getVersionInputFormat(modelId, versionId) {
 export function getServiceList(params) {
     return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services`, params);
 }
-
+// 删除模型服务
 export function removeService(uuid) {
     return httpService.remove(`${MODEL_MANAGE_GATEWAY_BASE}services/${uuid}`);
 }
-
+// 启动模型服务
+export function startService(uuid) {
+    return httpService.post(`${MODEL_MANAGE_GATEWAY_BASE}services/${uuid}/start`);
+}
+// 停止模型服务
+export function stopService(uuid) {
+    return httpService.post(`${MODEL_MANAGE_GATEWAY_BASE}services/${uuid}/stop`);
+}
 export function getApiDetail(serviceUuid) {
     return httpService.get(`${MODEL_MANAGE_GATEWAY_BASE}services/${serviceUuid}`);
 }
@@ -146,5 +153,6 @@ export default {
     updateGroupModels,
     getComponents,
     createService,
-    removeService
+    removeService,
+    startService
 };

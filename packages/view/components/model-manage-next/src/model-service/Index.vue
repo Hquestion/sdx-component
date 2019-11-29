@@ -17,7 +17,7 @@
                         v-model="params.state"
                     >
                         <el-option
-                            v-for="item in STATE_TYPE_LIST"
+                            v-for="item in modelStateList"
                             :key="item.value"
                             :label="t(item.label)"
                             :value="item.value"
@@ -26,6 +26,10 @@
                 </SdxwSearchItem>
             </SdxwSearchLayout>
         </div>
+        <SdxwResourceAlert
+            type="model"
+            style="margin-top: 24px;"
+        />
         <div class="table">
             <sdxu-table
                 :data="table"
@@ -148,7 +152,7 @@
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
-import { getServiceList,removeService } from '@sdx/utils/src/api/model';
+import { getServiceList,removeService,stopService,startService } from '@sdx/utils/src/api/model';
 import { paginate,removeBlankAttr} from '@sdx/utils/src/helper/tool';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
@@ -157,10 +161,11 @@ import PublishPlatform from '../service-dialog/PublishPlatform';
 import GrayscaleRelease from '../service-dialog/GrayscaleRelease';
 import { Select,Option, Message} from 'element-ui';
 import FoldLabel from '@sdx/widget/components/fold-label';
-import {  STATE_TYPE_LABEL,  STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LIST} from '@sdx/utils/src/const/task';
+import {  STATE_TYPE_LABEL,  STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE} from '@sdx/utils/src/const/task';
 import MessageBox from '@sdx/ui/components/message-box';
 import SdxuButtonGroup from '@sdx/ui/components/button-group';
 import {  OPERATION_INFO,STATE_MODEL_SERVICE_OPERATION} from '@sdx/utils/src/const/model';
+import ResourceAlert from '@sdx/widget/components/resource-alert';
 export default {
     name: 'SdxvModelService',
     mixins: [locale],
@@ -168,7 +173,7 @@ export default {
         return {
             STATE_TYPE_LABEL,
             STATE_MAP_FOLD_LABEL_TYPE,
-            STATE_TYPE_LIST,
+            STATE_TYPE,
             STATE_MODEL_SERVICE_OPERATION,
             OPERATION_INFO,
             params: {
@@ -186,7 +191,8 @@ export default {
             onlineTestingVisible: false,
             publishPlatformVisible:false,
             grayscaleReleaseVisible:false,
-            table: []
+            table: [],
+            refreshTimer: null,
         };
     },
     components: {
@@ -201,29 +207,58 @@ export default {
         [Option.name]: Option,
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         SdxuButtonGroup,
+        [ResourceAlert.name]: ResourceAlert,
+    },
+    computed: {
+        modelStateList() {
+            let list = JSON.parse(JSON.stringify(this.STATE_TYPE));
+            let arr = Object.keys(list).filter(item => item !== STATE_TYPE.Succeeded).map(item => {
+                return {
+                    label: STATE_TYPE_LABEL[item],
+                    value: STATE_TYPE[item]
+                };
+            });
+            arr.unshift({
+                value: '',
+                label: 'sdxCommon.All'
+            });
+            return arr;
+        }
     },
     created() {
         this.getServices();
+    },
+    beforeDestroy () {
+        clearInterval(this.refreshTimer);
+        this.refreshTimer = null;
     },
     methods: {
         getOperationList(state) {
             let arr = this.STATE_MODEL_SERVICE_OPERATION[state] || [];
             return arr.map(item => this.OPERATION_INFO[item]);
         },
-        handleOperate(data) {
-            if(data.type === 'delete') {
+        handleOperation(type,data) {
+            if(type === 'remove') {
                 MessageBox({
                     title: this.t('view.model.Model_deletion_prompt'),
                     content: this.t('view.model.Are_you_sure_you_want_to_delete_this_model_service'),
                     status: 'warning'
                 }).then(() => {
-                    removeService(data.row.uuid).then(() => {
+                    removeService(data.uuid).then(() => {
                         Message({
                             message: this.t('sdxCommon.RemoveSuccess'),
                             type: 'success'
                         });
                         this.getServices();
                     });
+                });
+            } else if(type === 'start') {
+                startService(data.uuid).then(() => {
+                    this.getServices();
+                });
+            } else if(type === 'stop') {
+                stopService(data.uuid).then(() => {
+                    this.getServices();
                 });
             }
         },
@@ -235,17 +270,32 @@ export default {
             this.current = 1;
             this.getServices();
         },
+        // 服务列表
         getServices() {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
+            }
             this.tableLoading = true;
             const params = Object.assign({}, this.params, {
                 ...paginate(this.current, this.pageSize),
             });
             removeBlankAttr(params);
             getServiceList(params).then(res => {
+                if (res.items.length && res.items.find(item => (item.state === 'Terminating' || item.state === 'Running' || item.state === 'Pending' || item.state === 'Scheduling' || item.state === 'Error'))) {
+                    if (!this.refreshTimer && !this._isDestroyed) {
+                        this.refreshTimer = setInterval(this.getServices, 5000);
+                    }
+                } else {
+                    clearInterval(this.refreshTimer);
+                    this.refreshTimer = null;
+                }
                 this.table = res.items;
                 this.total = res.total;
                 this.tableLoading = false;
             }).catch(() => {
+                clearInterval(this.refreshTimer);
+                this.refreshTimer = null;
                 this.table = [];
                 this.total = 0;
                 this.tableLoading = false;

@@ -71,10 +71,9 @@ export function getLabelByName(name) {
 // 模型服务列表中状态对应的操作数组
 export const STATE_MODEL_SERVICE_OPERATION = {
     Created: ['start', 'remove', 'edit'],
-    Scheduling: [],
     Pending: ['stop'],
     Running: ['stop', 'test', 'release', 'offline', 'gray'],
-    Succeeded: ['start', 'edit', 'remove'],
+    Scheduling: ['stop', 'test', 'release', 'offline', 'gray'],
     Terminating: [],
     Terminated: ['start', 'edit', 'remove'],
     Failed: ['start', 'edit', 'remove'],
@@ -100,7 +99,7 @@ export const OPERATION_INFO = {
         value: 'remove',
     },
     test: {
-        label: 'view.mode.Online_testing',
+        label: 'view.model.Online_testing',
         value: 'test',
     },
     release: {

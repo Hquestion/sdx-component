@@ -13,14 +13,14 @@
             :rules="rules"
         >
             <el-form-item
-                :label="t('view.model.modelVersion')"
+                :label="isModelService ? t('view.model.Model_service_name') : t('view.model.modelVersion')"
                 prop="name"
             >
                 <el-select
                     style="width: 100%"
                 >
                     <el-option
-                        v-for="item in modelVersion"
+                        v-for="item in options"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value"
@@ -82,7 +82,6 @@ export default {
     mixins: [locale],
     data(){
         return {
-            modelVersion: [],
             num:1,
             table: [
                 {
@@ -107,6 +106,14 @@ export default {
             type: Boolean,
             default: false
         },
+        isModelService: {
+            type: Boolean,
+            default: false
+        },
+        options: {
+            type: Array,
+            default:() => []
+        }
     },
     computed: {
         dialogVisible: {
@@ -142,6 +149,18 @@ export default {
                 .el-input__inner {
                     padding: 0;
                 }
+            }
+            .el-input--small .el-input__inner,.el-input--small .el-input__icon {
+                height: 24px;
+                line-height: 24px;
+            }
+            .el-input__suffix {
+                right: 0;
+                background: #13264D;
+            }
+            .el-icon-arrow-up:before {
+                color: #fff;
+                font-weight: 700;
             }
         }
     }

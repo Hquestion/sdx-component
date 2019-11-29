@@ -20,7 +20,7 @@ const routeCfg = [
                 component: ModelList,
                 meta: {
                     breadcrumb: t('view.model.model'),
-                    header: t('view.model.modelRepo'),
+                    header: t('view.model.ModelRepo'),
                     isRoot: true
                 }
             },

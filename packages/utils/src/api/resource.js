@@ -71,6 +71,12 @@ export const getResourceConfigDetail = authWrapper(function (uuid) {
     return httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_config`, param);
 }, readAuths.RESOURCE_GLOBAL_STATE_READ);
 
+export function getResourceConfigDetailNoAuth(uuid) {
+    return httpService.get(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_config`, {
+        userId: uuid
+    });
+}
+
 export function saveResourceConfig(uuid, params) {
     params.userId = uuid;
     return httpService.patch(`${RESOURCE_MANAGE_GATEWAY_BASE}resource_configs`, params);
@@ -116,6 +122,7 @@ export default {
     getResourceTmplList,
     deleteResourceTmpl,
     getResourceConfigDetail,
+    getResourceConfigDetailNoAuth,
     createResourceTmpl,
     getResourceConfigs,
     getDashResourceStates

@@ -26,7 +26,7 @@
 import ElAlert from 'element-ui/lib/alert';
 import locale from '@sdx/utils/src/mixins/locale';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
-import { getResourceConfigDetail } from '@sdx/utils/src/api/resource';
+import { getResourceConfigDetailNoAuth } from '@sdx/utils/src/api/resource';
 export default {
     name: 'SdxwTaskRunningLimit',
     data() {
@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         fetchUserResource() {
-            getResourceConfigDetail(getUser().userId).then(res => {
+            getResourceConfigDetailNoAuth(getUser().userId).then(res => {
                 this.maxGpuTime = res.maxGpuTime ? res.maxGpuTime / 3600 : '';
                 this.maxCpuTime = res.maxCpuTime ? res.maxCpuTime / 3600 / 24 : '';
             });

@@ -178,15 +178,15 @@ export default {
     data() {
         const resourceValidate = (rule, value, callback) => {
             if(this.isGpuEnt) {
-                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
+                if(value.cpus === 0 || value.cpus === null || isNaN(value.cpus)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
-                } else if (value.EXECUTOR_GPUS === 0 || value.EXECUTOR_GPUS === null || isNaN(value.EXECUTOR_GPUS)) {
+                } else if (value.gpus === 0 || value.gpus === null || isNaN(value.gpus)) {
                     callback(new Error(this.t('view.task.form.GPU_resources_need_to_be_configured')));
                 } else {
                     callback();
                 }
             } else {
-                if(value.EXECUTOR_CPUS === 0 || value.EXECUTOR_CPUS === null || isNaN(value.EXECUTOR_CPUS)) {
+                if(value.cpus === 0 || value.cpus === null || isNaN(value.cpus)) {
                     callback(new Error(this.t('view.task.form.CPU_Memory_resources_need_to_be_configured')));
                 } else {
                     callback();
@@ -207,11 +207,10 @@ export default {
                 versionName: this.versionName,
                 versionId: this.versionId,
                 runtimeResource: {
-                    'EXECUTOR_INSTANCES': 1,
-                    'EXECUTOR_CPUS': 0,
-                    'EXECUTOR_GPUS': 0,
-                    'EXECUTOR_MEMORY': 0,
-                    'GPU_MODEL': ''
+                    cpus: 0,
+                    gpus: 0,
+                    memory: 0,
+                    gpuModel: ''
                 },
                 apiParams: {
                     input: [],
@@ -314,20 +313,18 @@ export default {
         },
         cpuObj(val) {
             this.serviceInfoForm.runtimeResource = {
-                'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': val.cpu * 1000,
-                'EXECUTOR_GPUS': this.serviceInfoForm.runtimeResource.EXECUTOR_GPUS,
-                'EXECUTOR_MEMORY': val.memory * 1024* 1024*1024,
-                'GPU_MODEL': this.serviceInfoForm.runtimeResource.GPU_MODEL
+                cpus: val.cpu * 1000,
+                gpus: this.serviceInfoForm.runtimeResource.gpus,
+                memory: val.memory * 1024* 1024*1024,
+                gpuModel: this.serviceInfoForm.runtimeResource.gpuModel
             };
         },
         gpuObj(val) {
             this.serviceInfoForm.runtimeResource = {
-                'EXECUTOR_INSTANCES': 1,
-                'EXECUTOR_CPUS': this.serviceInfoForm.runtimeResource.EXECUTOR_CPUS,
-                'EXECUTOR_GPUS': val.count,
-                'EXECUTOR_MEMORY': this.serviceInfoForm.runtimeResource.EXECUTOR_MEMORY,
-                'GPU_MODEL': val.label
+                cpus: this.serviceInfoForm.runtimeResource.cpus,
+                gpus: val.count,
+                memory: this.serviceInfoForm.runtimeResource.memory,
+                gpuModel: val.label
             };
         },
         'serviceInfoForm.runtimeImage'() {

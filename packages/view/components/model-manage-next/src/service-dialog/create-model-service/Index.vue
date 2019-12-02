@@ -394,8 +394,8 @@ export default {
                         });
                     } else {
                         if (!this.isGpuEnt) {
-                            this.serviceInfoForm.runtimeResource.EXECUTOR_GPUS = 0;
-                            this.serviceInfoForm.runtimeResource.GPU_MODEL = '';
+                            this.serviceInfoForm.runtimeResource.gpus = 0;
+                            this.serviceInfoForm.runtimeResource.gpuModel = '';
                         }
                         createService(this.serviceInfoForm).then(() => {
                             Message({

@@ -12,6 +12,7 @@
 <script>
 import Transfer from '@sdx/ui/components/transfer';
 import { getGroups, getUserList } from '@sdx/utils/src/api/user';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 export default {
     name: 'SdxwSelectGroupUser',
     data() {
@@ -20,7 +21,8 @@ export default {
             treeData: [],
             tmpTags: [],
             tmpDefaultKeys: [],
-            loading: false
+            loading: false,
+            userId: getUser().userId
         };
     },
     watch: {
@@ -69,7 +71,7 @@ export default {
                 });
                 group.users.forEach(user => {
                     let item = this.treeData.find(data => data.uuid === group.uuid);
-                    if (item) {
+                    if (item && user.uuid !== this.userId) {
                         item.children.push({
                             uuid: group.uuid + '/' + user.uuid,
                             label: user.fullName
@@ -80,7 +82,7 @@ export default {
             // 过滤拿到所有没有组的用户
             getUserList(params).then((res) => {
                 res.users.forEach(user => {
-                    if (!user.groups.length) {
+                    if (!user.groups.length && user.uuid !== this.userId) {
                         this.treeData.push({
                             uuid: '/' + user.uuid,
                             label: user.fullName
@@ -120,10 +122,12 @@ export default {
             // 只选择用户
             getUserList(params).then((res) => {
                 res.users.forEach(user => {
-                    this.treeData.push({
-                        uuid: user.uuid,
-                        label: user.fullName
-                    });
+                    if (user.uuid !== this.userId) {
+                        this.treeData.push({
+                            uuid: user.uuid,
+                            label: user.fullName
+                        });
+                    }
                 });
                 this.loading = false;
             });

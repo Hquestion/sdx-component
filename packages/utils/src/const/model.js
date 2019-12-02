@@ -72,8 +72,8 @@ export function getLabelByName(name) {
 export const STATE_MODEL_SERVICE_OPERATION = {
     Created: ['start', 'remove', 'edit'],
     Pending: ['stop'],
-    Running: ['stop', 'test', 'release', 'offline', 'gray'],
-    Scheduling: ['stop', 'test', 'release', 'offline', 'gray'],
+    Running: ['stop', 'test', 'gray'], // ['stop', 'test', 'release', 'offline', 'gray']
+    Scheduling: ['stop'],
     Terminating: [],
     Terminated: ['start', 'edit', 'remove'],
     Failed: ['start', 'edit', 'remove'],

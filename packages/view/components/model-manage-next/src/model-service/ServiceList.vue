@@ -36,10 +36,13 @@
                 v-loading="tableLoading"
             >
                 <el-table-column type="expand">
-                    <template #default="{row}">
-                        <sdxu-table light>
+                    <template #default="{ row }">
+                        <sdxu-table
+                            light
+                            :data="row.versionInfo"
+                        >
                             <el-table-column
-                                
+                                prop="versionName"
                                 :label="t('view.model.Model_Version')"
                             />
                             <el-table-column
@@ -47,25 +50,38 @@
                                 :label="t('view.model.Instances')"
                             />
                             <el-table-column
-                                
                                 :label="t('view.model.Resource')"
-                            />
+                            >
+                                <template
+                                    slot-scope="scope"
+                                >
+                                    {{ `${scope.row.runtimeResource.cpus / 1000}C / ${scope.row.runtimeResource.gpus}GB` }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 
                                 :label="t('view.model.Flow_ratio')"
                             />
                             <el-table-column
-                                
+                                prop="startedAt"
                                 :label="t('view.model.Running_time')"
-                            />
+                            >
+                                <template
+                                    slot-scope="scope"
+                                >
+                                    {{ dateFormatter(scope.row.startedAt) }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                
+                                prop="updatedAt"
                                 :label="t('view.file.UpdatedAt')"
-                            />
-                            <el-table-column
-                                
-                                :label="t('sdxCommon.Status')"
-                            />
+                            >
+                                <template
+                                    slot-scope="scope"
+                                >
+                                    {{ dateFormatter(scope.row.updatedAt) }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 :label="t('sdxCommon.Operation')"
                                 min-width="172px"
@@ -74,15 +90,11 @@
                                     <SdxuButton
                                         size="regular"
                                         type="link"
+                                        v-if="row.onlineTesting"
                                     >
-                                        {{ t('view.task.tipCard.Detail') }} 
+                                        {{ t('view.model.Online_testing') }} 
                                     </SdxuButton>
-                                    <SdxuButton
-                                        type="link"
-                                        size="regular"
-                                    >
-                                        {{ t('sdxCommon.Delete') }}
-                                    </SdxuButton>
+                                    <span v-else> - </span>
                                 </template>
                             </el-table-column>
                         </sdxu-table> 
@@ -175,6 +187,7 @@ import MessageBox from '@sdx/ui/components/message-box';
 import SdxuButtonGroup from '@sdx/ui/components/button-group';
 import {  OPERATION_INFO,STATE_MODEL_SERVICE_OPERATION} from '@sdx/utils/src/const/model';
 import ResourceAlert from '@sdx/widget/components/resource-alert';
+import {dateFormatter} from '@sdx/utils/src/helper/transform';
 export default {
     name: 'SdxvModelService',
     mixins: [locale],
@@ -243,6 +256,7 @@ export default {
         this.refreshTimer = null;
     },
     methods: {
+        dateFormatter,
         // 服务详情
         serviceDetail(uuid) {
             this.$router.push({
@@ -292,7 +306,6 @@ export default {
                 clearInterval(this.refreshTimer);
                 this.refreshTimer = null;
             }
-           
             const params = Object.assign({}, this.params, {
                 ...paginate(this.current, this.pageSize),
             });
@@ -306,7 +319,39 @@ export default {
                     clearInterval(this.refreshTimer);
                     this.refreshTimer = null;
                 }
-                this.table = res.items;
+                // 表展开后数据的处理
+                let items = JSON.parse(JSON.stringify(res.items));
+                let info =  [];
+                if(items && items.length) {
+                    for(let i = 0; i < items.length; i++) {
+                        if(!items[i].versionUpgrade) {
+                            info = [{
+                                versionName: items[i].versionName,
+                                instances: items[i].instances,
+                                runtimeResource: items[i].runtimeResource,
+                                updatedAt:  items[i].updatedAt,
+                                startedAt: items[i].startedAt,
+                                onlineTesting: items[i].state === 'Running'
+                            }];
+                        } else {
+                            info = [{
+                                versionName: items[i].versionUpgrade.versionName,
+                                instances: items[i].versionUpgrade.instances,
+                                trafficRatio: items[i].versionUpgrade.trafficRatio,
+                                onlineTesting: items[i].state === 'Running'
+                            },{
+                                versionName: items[i].versionName,
+                                instances: items[i].instances,
+                                runtimeResource: items[i].runtimeResource,
+                                updatedAt:  items[i].updatedAt,
+                                startedAt: items[i].startedAt,
+                                onlineTesting: items[i].state === 'Running'
+                            }];
+                        }
+                        items[i]['versionInfo'] = info;
+                    }
+                }
+                this.table = items;
                 this.total = res.total;
                 this.tableLoading = false;
             }).catch(() => {

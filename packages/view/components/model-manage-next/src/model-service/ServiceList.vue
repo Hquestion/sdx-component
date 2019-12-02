@@ -46,7 +46,7 @@
                                 :label="t('view.model.Model_Version')"
                             />
                             <el-table-column
-                                
+
                                 :label="t('view.model.Instances')"
                             />
                             <el-table-column
@@ -59,7 +59,7 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                
+
                                 :label="t('view.model.Flow_ratio')"
                             />
                             <el-table-column
@@ -92,12 +92,12 @@
                                         type="link"
                                         v-if="row.onlineTesting"
                                     >
-                                        {{ t('view.model.Online_testing') }} 
+                                        {{ t('view.model.Online_testing') }}
                                     </SdxuButton>
                                     <span v-else> - </span>
                                 </template>
                             </el-table-column>
-                        </sdxu-table> 
+                        </sdxu-table>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -116,7 +116,7 @@
                 <el-table-column
                     prop="modelName"
                     :label="t('view.model.modelColumns.name')"
-                /> 
+                />
                 <el-table-column
                     prop="versionName"
                     :label="t('view.model.Model_Version')"
@@ -124,7 +124,7 @@
                 <el-table-column
                     prop="apiUrl"
                     label="URL"
-                /> 
+                />
                 <el-table-column
                     prop="state"
                     :label="t('sdxCommon.Status')"
@@ -167,6 +167,12 @@
         <OnlineTesting :visible.sync="onlineTestingVisible" />
         <PublishPlatform :visible.sync="publishPlatformVisible" />
         <GrayscaleRelease :visible.sync="grayscaleReleaseVisible" />
+        <CreateModelService
+            :visible.sync="createServiceVisible"
+            v-if="createServiceVisible"
+            :editing-service="editingService"
+            @close="handleClose"
+        />
     </div>
 </template>
 
@@ -188,6 +194,7 @@ import SdxuButtonGroup from '@sdx/ui/components/button-group';
 import {  OPERATION_INFO,STATE_MODEL_SERVICE_OPERATION} from '@sdx/utils/src/const/model';
 import ResourceAlert from '@sdx/widget/components/resource-alert';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import CreateModelService from '../service-dialog/create-model-service/Index';
 export default {
     name: 'SdxvModelService',
     mixins: [locale],
@@ -213,6 +220,7 @@ export default {
             onlineTestingVisible: false,
             publishPlatformVisible:false,
             grayscaleReleaseVisible:false,
+            createServiceVisible:false,
             table: [],
             refreshTimer: null,
         };
@@ -230,6 +238,7 @@ export default {
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         SdxuButtonGroup,
         [ResourceAlert.name]: ResourceAlert,
+        CreateModelService
     },
     computed: {
         modelStateList() {
@@ -263,6 +272,12 @@ export default {
                 path: `/sdxv-model-manage-service/detail/${uuid}`,
             });
         },
+        handleClose(needRefresh) {
+            if (needRefresh) {
+                this.tableLoading = true;
+                this.getServices();
+            }
+        },
         getOperationList(state) {
             let arr = this.STATE_MODEL_SERVICE_OPERATION[state] || [];
             return arr.map(item => this.OPERATION_INFO[item]);
@@ -290,6 +305,9 @@ export default {
                 stopService(data.uuid).then(() => {
                     this.getServices();
                 });
+            } else if (type === 'edit') {
+                this.createServiceVisible = true;
+                this.editingService = data;
             }
         },
         handlePageChange(index){
@@ -363,7 +381,7 @@ export default {
             });
         },
     }
-    
+
 };
 </script>
 

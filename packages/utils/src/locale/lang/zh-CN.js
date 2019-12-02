@@ -624,6 +624,7 @@ export default {
             Model_Version: '模型版本',
             Model_service_name: '模型服务名称',
             New_model_service: '新增模型服务',
+            EditModelService: '编辑模型服务',
             Create_a_new_version: '创建新版本',
             VersionInformation: '版本信息',
             SelectedVersion: '选择版本',

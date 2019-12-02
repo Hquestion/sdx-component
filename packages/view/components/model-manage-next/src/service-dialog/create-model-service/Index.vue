@@ -162,7 +162,7 @@ import ElFormItem from 'element-ui/lib/form-item';
 import Message from 'element-ui/lib/message';
 import ElSelect from 'element-ui/lib/select';
 import { getImageList } from '@sdx/utils/src/api/image';
-import { updateModel, createService } from '@sdx/utils/src/api/model';
+import { updateService, createService } from '@sdx/utils/src/api/model';
 import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
 import SdxwResourceConfig from '@sdx/widget/components/resource-config';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -303,8 +303,22 @@ export default {
     created() {
         this.imageList();
         if (this.editingService) {
-            this.title = this.t('view.model.editModel');
+            this.title = '编辑模型服务';
             Object.assign(this.serviceInfoForm, this.editingService);
+            const cpu = this.serviceInfoForm.runtimeResource.cpus / 1000;
+            const memory = this.serviceInfoForm.runtimeResource.memory / 1024 / 1024 / 1024;
+            this.cpuObj = {
+                cpu,
+                memory,
+                uuid: `${cpu}-${memory}`
+            };
+            const count = this.serviceInfoForm.runtimeResource.gpus;
+            const label = this.serviceInfoForm.runtimeResource.gpuModel;
+            this.gpuObj = {
+                count,
+                label,
+                uuid: `${label}-${count}`
+            };
         }
     },
     watch: {
@@ -336,11 +350,6 @@ export default {
     },
     methods: {
         dialogClose() {
-            this.serviceInfoForm = {
-                name: '',
-                description: '',
-                labels: []
-            };
             this.$refs.serviceInfoForm.clearValidate();
             this.$emit('update:visible', false);
             this.$emit('close', this.needRefresh);
@@ -383,8 +392,12 @@ export default {
                         Message.error(this.t('sdxCommon.requiredInfo'));
                         return;
                     }
+                    if (!this.isGpuEnt) {
+                        delete this.serviceInfoForm.runtimeResource.gpus;
+                        delete this.serviceInfoForm.runtimeResource.gpuModel;
+                    }
                     if (this.editingService) {
-                        updateModel(this.editingService.uuid, this.serviceInfoForm).then(() => {
+                        updateService(this.editingService.uuid, this.serviceInfoForm).then(() => {
                             Message({
                                 message: this.t('sdxCommon.UpdateSuccess'),
                                 type: 'success'
@@ -393,10 +406,6 @@ export default {
                             this.dialogVisible = false;
                         });
                     } else {
-                        if (!this.isGpuEnt) {
-                            this.serviceInfoForm.runtimeResource.gpus = 0;
-                            this.serviceInfoForm.runtimeResource.gpuModel = '';
-                        }
                         createService(this.serviceInfoForm).then(() => {
                             Message({
                                 message: this.t('sdxCommon.CreateSuccess'),

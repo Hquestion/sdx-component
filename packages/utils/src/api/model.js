@@ -38,6 +38,10 @@ export function createService(params) {
     return httpService.post(serviceApi, params);
 }
 
+export function updateService(uuid, params) {
+    return httpService.patch(`${serviceApi}/${uuid}`, params);
+}
+
 export function removeModel(uuid) {
     return httpService.remove(`${modelApi}/${uuid}`);
 }
@@ -161,5 +165,6 @@ export default {
     getComponents,
     createService,
     removeService,
-    startService
+    startService,
+    updateService
 };

@@ -101,7 +101,7 @@ import {Select, Option,Form, FormItem, InputNumber} from 'element-ui';
 import SdxuTable from '@sdx/ui/components/table';
 import {getServiceList } from '@sdx/utils/src/api/model';
 import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
-import { updateModelService } from '@sdx/utils/src/api/model';
+import { updateService } from '@sdx/utils/src/api/model';
 export default {
     name: 'SdxvGrayscaleRelease',
     mixins: [locale],
@@ -202,7 +202,8 @@ export default {
                     trafficRatio: this.table[0].weight
                 }
             };
-            updateModelService(this.info.uuid,params).then(() => {
+            updateService(this.info.uuid,params).then(() => {
+                this.$emit('update:visible', false);
                 this.$emit('confirmGray');
             });
         }

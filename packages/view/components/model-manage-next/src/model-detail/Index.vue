@@ -130,6 +130,7 @@
             :is-model-service="true"
             :info="versionParams"
             v-if="grayscaleReleaseVisible"
+            @confirmGray="confirmGray"
         />
     </div>
 </template>
@@ -209,6 +210,9 @@ export default {
     },
     methods: {
         dateFormatter,
+        confirmGray() {
+            this.getModelDetail();
+        },
         confirmPublish() {
             this.getModelDetail();
         },

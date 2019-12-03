@@ -204,7 +204,16 @@ export default {
             this.initList();
         },
         handleExternalLink(meta, param) {
-            window.open(`${meta.externalUrl}/` + (param ? `${param}` : ''));
+            if (meta.serviceList && meta.serviceList.length) {
+                const service = meta.serviceList[0];
+                let url = '';
+                if (service.protocol === 'HTTP') {
+                    url = `${window.location.origin}/${service.urlSuffix}`;
+                } else {
+                    url = `${window.location.host}:${service.proxyPort}`;
+                }
+                if (url) window.open(`${url}/` + (param ? `${param}` : ''));
+            }
         },
         handleResp(res) {
             this.taskList = res.items || res.data;
@@ -222,7 +231,7 @@ export default {
                 // const isOwn = getUser().userId === item.owner.uuid;
                 // const isOwn = getUser().userId === item.owner_id;
                 item.showOpenIde = item.type === 'SKYIDE';
-                item.showJupyterLink = item.type === 'JUPYTER' && item.state === 'Running' && item.externalUrl;
+                item.showJupyterLink = item.type === 'JUPYTER' && item.state === 'Running' && item.serviceList && item.serviceList.length;
                 item.showRunningInfo = item.type === 'SKYFLOW';
                 item.meta = {
                     uuid: item.uuid,

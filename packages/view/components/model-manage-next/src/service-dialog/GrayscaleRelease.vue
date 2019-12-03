@@ -202,7 +202,7 @@ export default {
                     trafficRatio: this.table[0].weight
                 }
             };
-            updateService(this.info.uuid,params).then(() => {
+            updateService(this.serviceName,params).then(() => {
                 this.$emit('update:visible', false);
                 this.$emit('confirmGray');
             });
@@ -221,7 +221,7 @@ export default {
         this.trafficRatioOptions = arr;
         if(this.isModelService) {
             let params = {
-                model: this.$route.params.modelId,
+                modelId: this.$route.params.modelId,
                 state: 'Running'
             };
             getServiceList(params).then(res => {

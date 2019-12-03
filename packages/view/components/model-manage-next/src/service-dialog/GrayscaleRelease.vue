@@ -18,6 +18,8 @@
             >
                 <el-select
                     style="width: 100%"
+                    prop="serviceName"
+                    v-model="serviceName"
                 >
                     <el-option
                         v-for="item in options"
@@ -32,9 +34,9 @@
                 prop="name"
             >
                 <el-input-number
-                    v-model="num"
+                    v-model="params.instances"
                     :min="1"
-                    :max="10"
+                    :max="selectModel && selectModel.instances"
                 />
             </el-form-item>
             <el-form-item
@@ -52,14 +54,16 @@
                     <el-table-column
                         :label="t('view.model.Weight_ratio')"
                     >
-                        <template>
+                        <template #default="{row}">
                             <el-select
                                 style="width: 100%"
                                 size="small"
+                                v-model="row.weight"
+                                @change="changeWeight(row)"
                             >
                                 <el-option
-                                    v-for="item in modelVersion"
-                                    :key="item.value"
+                                    v-for="item in trafficRatioOptions"
+                                    :key="item.label"
                                     :label="item.label"
                                     :value="item.value"
                                 />
@@ -69,6 +73,24 @@
                 </sdxu-table>
             </el-form-item>
         </el-form>
+        <div
+            slot="footer"
+        >
+            <SdxuButton
+                type="default"
+                size="small"
+                @click="cancel"
+            >
+                {{ t('sdxCommon.Cancel') }}
+            </SdxuButton>
+            <SdxuButton
+                type="primary"
+                size="small"
+                @click="confirm"
+            >
+                {{ t('sdxCommon.Confirm') }}
+            </SdxuButton>
+        </div>
     </sdxu-dialog>
 </template>
 
@@ -77,6 +99,9 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import {Select, Option,Form, FormItem, InputNumber} from 'element-ui';
 import SdxuTable from '@sdx/ui/components/table';
+import {getServiceList } from '@sdx/utils/src/api/model';
+import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { updateService } from '@sdx/utils/src/api/model';
 export default {
     name: 'SdxvGrayscaleRelease',
     mixins: [locale],
@@ -85,20 +110,28 @@ export default {
             num:1,
             table: [
                 {
-                    version: 'V 2.0(新)',
-                    weight: 40
+                    version: '',
+                    weight: 0
                 },
                 {
-                    version: 'V 1.0(旧)',
-                    weight: 60
+                    version: '',
+                    weight: 0
                 }
             ],
             rules: {
-
+                name: [
+                    { required: true, message: this.t('view.model.searchModelName'), trigger: 'blur' },
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
             },
             params: {
-                
-            }
+                instances: 0
+            },
+            options: [],
+            serviceName: '',
+            selectOptions: [],
+            trafficRatio: 0,
+            trafficRatioOptions: []
         };
     },
     props: {
@@ -110,9 +143,9 @@ export default {
             type: Boolean,
             default: false
         },
-        options: {
-            type: Array,
-            default:() => []
+        info: {
+            type: Object,
+            default:() => {}
         }
     },
     computed: {
@@ -123,7 +156,12 @@ export default {
             set(nval) {
                 this.$emit('update:visible', nval);
             }
-        }
+        },
+        selectModel() {
+            let arr = this.selectOptions.filter(item => item.uuid === this.serviceName);
+            return arr[0];
+        },
+        
     },
     components: {
         SdxuDialog,
@@ -133,6 +171,84 @@ export default {
         [Option.name]: Option,
         [InputNumber.name]: InputNumber,
         SdxuTable
+    },
+    methods: {
+        changeWeight(row) {
+            if(row.version.includes(this.t('view.model.New'))) {
+                this.table = [
+                    row,
+                    {
+                        version: `${this.selectModel.versionName} (${this.t('view.model.Old')})`,
+                        weight: 1 - row.weight
+                    }];
+            } else {
+                this.table = [
+                    {
+                        version: `${this.info.name} (${this.t('view.model.New')})`,
+                        weight: 1 - row.weight
+                    }, 
+                    row
+                ];
+            }
+        },
+        cancel() {
+            this.$emit('update:visible', false);
+        },
+        confirm() {
+            let params = {
+                versionUpdate: {
+                    versionName: this.info.name,
+                    instances: this.params.instances,
+                    trafficRatio: this.table[0].weight
+                }
+            };
+            updateService(this.info.uuid,params).then(() => {
+                this.$emit('confirmGray');
+            });
+        }
+    },
+    created() {
+        let arr=[];
+        for(let i=0; i< 1.05; i+=0.05) {
+            arr.push(
+                {  
+                    label: parseInt(i * 100),
+                    value: Number(i.toFixed(2))
+                }
+            );
+        }
+        this.trafficRatioOptions = arr;
+        if(this.isModelService) {
+            let params = {
+                model: this.$route.params.modelId,
+                state: 'Running'
+            };
+            getServiceList(params).then(res => {
+                this.selectOptions = JSON.parse(JSON.stringify(res.items.filter(item => item.versionName !== this.info.name)));
+                let arr = [];
+                for(let i =0; i< this.selectOptions.length; i++) {
+                    arr.push({
+                        label: this.selectOptions[i].name,
+                        value:  this.selectOptions[i].uuid
+                    });
+                }
+                this.options = arr;
+                this.serviceName = arr.length && arr[0].value;
+            });
+        }
+    },
+    watch: {
+        serviceName() {
+            this.table = [
+                {
+                    version: `${this.info.name} (${this.t('view.model.New')})`,
+                    weight: 0
+                },
+                {
+                    version: `${this.selectModel.versionName} (${this.t('view.model.Old')})`,
+                    weight: 1
+                }];
+        },
     }
 };
 </script>

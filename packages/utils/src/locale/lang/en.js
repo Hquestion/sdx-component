@@ -618,6 +618,8 @@ export default {
             etc: 'etc'
         },
         model: {
+            New: 'New',
+            Old: 'Old',
             ModelRepo: 'Model Repository',
             Offline_from_AI_open_platform: 'Offline from AI open platform',
             Are_you_sure_you_want_to_delete_this_model_service: 'Are you sure you want to delete this model service?',

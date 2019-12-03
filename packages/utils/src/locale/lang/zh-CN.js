@@ -617,6 +617,8 @@ export default {
             etc: '等'
         },
         model: {
+            New: '新',
+            Old: '旧',
             ModelRepo: '模型仓库',
             Offline_from_AI_open_platform: '从AI开放平台下线',
             Are_you_sure_you_want_to_delete_this_model_service: '您确定要删除此模型服务吗？',

@@ -128,7 +128,8 @@
         <GrayscaleRelease
             :visible.sync="grayscaleReleaseVisible"
             :is-model-service="true"
-            :option="serviceList"
+            :info="versionParams"
+            v-if="grayscaleReleaseVisible"
         />
     </div>
 </template>
@@ -143,7 +144,7 @@ import Button from '@sdx/ui/components/button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import ModelVersion from '../service-dialog/ModelVersion';         
 import CreateModelService from '../service-dialog/create-model-service/Index';
-import { getModelInfo,removeVersion,getServiceList } from '@sdx/utils/src/api/model';
+import { getModelInfo,removeVersion } from '@sdx/utils/src/api/model';
 import { getUserSimpleInfo } from '@sdx/utils/src/api/user';
 import {download} from '@sdx/utils/src/api/file';
 import Message from 'element-ui/lib/message';
@@ -176,6 +177,7 @@ export default {
             grayscaleReleaseVisible: false,
             versionInfo: [],
             versionParams: {
+                name: '',
                 uuid: '',
                 modelPath: '',
                 description: '',
@@ -215,13 +217,6 @@ export default {
         },
         grayLevelRelease() {
             this.grayscaleReleaseVisible = true;
-            let params = {
-                model: this.$route.params.modelId,
-                state: 'Running'
-            };
-            getServiceList(params).then(res => {
-                console.log(res,888);
-            });
         },
         createVersion() {
             this.modelVersionVisible = true;

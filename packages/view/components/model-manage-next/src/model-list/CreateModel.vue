@@ -100,7 +100,7 @@
                     prop="modelPath"
                 >
                     <SdxwFileSelect
-                        check-type="file"
+                        check-type="folder"
                         string-model
                         v-model="modelInfoForm.modelPath"
                     />

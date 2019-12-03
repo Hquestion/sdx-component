@@ -371,8 +371,10 @@ export default {
                             });
                             this.needRefresh = true;
                             this.dialogVisible = false;
+
+                        }).finally(() => {
                             this.loading = false;
-                        }).catch(() => {});
+                        });
                     } else {
                         delete this.workflowForm.uuid;
                         createWorkflow(this.workflowForm).then(() => {
@@ -382,8 +384,9 @@ export default {
                             });
                             this.needRefresh = true;
                             this.dialogVisible = false;
+                        }).finally(() => {
                             this.loading = false;
-                        }).catch(() => {});
+                        });
                     }
                 }
             });

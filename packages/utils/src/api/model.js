@@ -127,7 +127,7 @@ export function stopService(uuid) {
     return httpService.post(`${MODEL_MANAGE_GATEWAY_BASE}services/${uuid}/stop`);
 }
 // 更新模型服务
-export function updateService(uuid, params) {
+export function updateModelService(uuid, params) {
     return httpService.patch(`${MODEL_MANAGE_GATEWAY_BASE}services/${uuid}`, params);
 }
 
@@ -170,5 +170,6 @@ export default {
     createService,
     removeService,
     startService,
-    updateService
+    updateService,
+    updateModelService
 };

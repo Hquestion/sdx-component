@@ -389,7 +389,7 @@ export default {
             datasetsOptions: [],
             cooperation:true,
             dataReady: false,
-            showMoreSetting: true
+            showMoreSetting: false
         };
     },
     computed: {

@@ -243,7 +243,7 @@ export default {
                 ],
             },
             needRefresh: false,
-            showMoreSetting: true,
+            showMoreSetting: false,
             settingType: 'params'
         };
     },

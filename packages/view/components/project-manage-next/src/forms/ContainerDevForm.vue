@@ -254,6 +254,7 @@
                         </div>
                     </el-form-item>
                     <el-form-item
+                        v-if="!!params.startCommand"
                         :label="`${t('view.task.StartParams')}:`"
                     >
                         <SdxuInput
@@ -478,7 +479,7 @@ export default {
             datasetsOptions: [],
             cooperation:true,
             dataReady: false,
-            showMoreSetting: true,
+            showMoreSetting: false,
             protocolOptions: ['HTTP', 'TCP']
         };
     },

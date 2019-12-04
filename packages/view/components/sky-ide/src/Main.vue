@@ -272,7 +272,7 @@ export default {
         await this.prepareEnv();
         // 恢复布局
         this.recoveryLocal();
-        await this.sessionSpecs(this.taskManager.ideUuid);
+        await this.sessionSpecs(this.taskManager && this.taskManager.ideUuid);
         // 监听键盘事件
         window.addEventListener('keydown', event => {
             this.commands.processKeydownEvent(event);

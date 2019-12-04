@@ -165,7 +165,7 @@ export const CommandConfigs = {
     [CommandIDs.CELL_COPY]: {
         label: 'Copy Cell',
         iconClass: '',
-        key: [],
+        key: ['Ctrl C'],
         selector: '.sky-doc-manager .sky-editor-adaptor'
     },
     [CommandIDs.UNDO]: {

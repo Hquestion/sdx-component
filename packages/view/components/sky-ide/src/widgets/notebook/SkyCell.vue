@@ -1,8 +1,10 @@
 <template>
     <div
         class="sky-cell"
-        :class="{'is-active': isActive}"
-        @click="selectCell"
+        :class="{'is-active': isActive,
+                 'is-selected': isSelected}"
+        @click.shift.exact="selectMutiCells"
+        @click.exact="selectCell"
     >
         <div class="sky-cell-operations">
             <SdxuIconButton
@@ -113,6 +115,12 @@ export default {
     computed: {
         isActive() {
             return this.snb.activeCellOrder === this.order;
+        },
+        isSelected() {
+            let index = this.index;
+            let source = this.snb.selectedCellsRange.source;
+            let target = this.snb.selectedCellsRange.target;
+            return index <= target && index >= source || index >= target && index <= source;
         }
     },
     methods: {
@@ -202,6 +210,9 @@ export default {
         },
         selectCell() {
             this.$emit('active-cell', this.order);
+        },
+        selectMutiCells() {
+            this.$emit('select-cell', this.index, this.order);
         },
         toggleMarkdownRendered(e) {
             let target = e.target;
@@ -302,6 +313,18 @@ export default {
                 }
                 .sdxu-icon-button:hover {
                     background: #3764C6;
+                }
+            }
+            .sdxu-icon-button + .sdxu-icon-button {
+                margin-left: 0px;
+            }
+        }
+        &.is-selected {
+            box-shadow: 0 5px 10px 0 #091023;
+            & /deep/ {
+                .jp-Collapser {
+                    background: #4880F8;
+                    cursor: pointer;
                 }
             }
             .sdxu-icon-button + .sdxu-icon-button {

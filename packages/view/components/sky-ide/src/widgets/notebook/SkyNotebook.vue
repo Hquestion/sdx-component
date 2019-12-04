@@ -17,6 +17,7 @@
                 @active-cell="onActiveCell"
                 @cell-attach="onAttachCell"
                 @cell-destroy="onRemoveCell"
+                @select-cell="onSelectCell"
             />
         </div>
     </div>
@@ -62,9 +63,13 @@ export default {
             },
             editorSupport: true,
             activeCellOrder: -1,
+            selectedCellsRange: {
+                source: -1,
+                target: -1
+            },
             order: 0,
             cellMap: {},
-            cuttingCell: undefined,
+            clipBoardCells: [],
             session: null,
             mode: NotebookMode.EDIT,
             completer: null,
@@ -166,12 +171,28 @@ export default {
         },
         onActiveCell(order) {
             this.activeCellOrder = order;
+            this.resetSelectedCells();
         },
         onAttachCell(data, widget) {
             this.cellMap[data.order] = widget;
         },
         onRemoveCell(data, widget) {
             delete this.cellMap[data.order];
+        },
+        onSelectCell(index, order) {
+            if (order === this.activeCellOrder || index === this.selectedCellsRange.source) {
+                this.onActiveCell(order);
+            } else {
+                this.selectedCellsRange.source = this.selectedCellsRange.source === -1 ? this.notebook.cells.findIndex(item => item.order === this.activeCellOrder) : this.selectedCellsRange.source;
+                this.selectedCellsRange.target = this.notebook.cells.findIndex(item => item.order === order);
+                this.activeCellOrder = -1;
+            }
+        },
+        resetSelectedCells() {
+            this.selectedCellsRange = {
+                source: -1,
+                target: -1
+            };
         },
         /**
         * 插入cell
@@ -205,9 +226,9 @@ export default {
                     session = await this.startSession();
                 }
                 await CodeCell.execute(widget, session);
-                if (shutdownAfterRun) {
-                    this.shutdownSession(true);
-                }
+                // if (shutdownAfterRun) {
+                //     this.shutdownSession(true);
+                // }
                 return undefined;
             } else if (cell && cell.cell_type === 'markdown') {
                 widget.rendered = true;
@@ -232,9 +253,9 @@ export default {
                 await this.runCell(cell, this.cellMap[cell.order], session, false);
                 execCount++;
             }
-            if (!this.isDebugMode) {
-                await this.shutdownSession(true);
-            }
+            // if (!this.isDebugMode) {
+            //     await this.shutdownSession(true);
+            // }
             return true;
         },
         /**

@@ -11,6 +11,7 @@
                 icon="sdx-icon sdx-fuzhidaima"
                 :title="t('view.skyide.copy')"
                 :native-tooltip="true"
+                @click="copySelectedCells"
             />
             <el-dropdown
                 @command="insertCell"
@@ -116,7 +117,7 @@
             </el-popover>
         </div>
         <div>
-            <kernel-state></kernel-state>
+            <kernel-state />
             <el-select
                 v-model="codeType"
                 :popper-append-to-body="false"
@@ -202,6 +203,9 @@ export default {
     methods: {
         saveNotebook() {
             this.app.commands.execute(CommandIDs.SAVE_DOC);
+        },
+        copySelectedCells() {
+            this.app.commands.execute(CommandIDs.CELL_COPY);
         },
         insertCell(type) {
             if(type === 'code') {
@@ -395,4 +399,3 @@ export default {
     }
 }
 </style>
-

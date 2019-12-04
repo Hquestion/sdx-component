@@ -12,6 +12,29 @@ export default function setupCommands(commands, app) {
     isInit = false;
 
     // notebook commands
+    addCommand(commands, app, CommandIDs.CELL_COPY, async function(app) {
+        let nb = app.docManager.getActiveNotebook();
+        if (!nb) return;
+        let target = nb.selectedCellsRange.target;
+        let source = nb.selectedCellsRange.source;
+        let cellList = [];
+        if (target !== -1 && source !== -1) {
+            if (target > source) {
+                cellList = nb.notebook.cells.slice(source, target + 1).map(item => ({...item}));
+            } else {
+                cellList = nb.notebook.cells.slice(target, source + 1).map(item => ({...item}));
+            }
+            cellList.forEach(cell => {
+                cell.order = nb.nextOrder();
+            });
+            nb.clipBoardCells = cellList;
+        } else if (nb.activeCellOrder !== -1) {
+            let activeCell = {...nb.activeCell};
+            activeCell.order = nb.nextOrder();
+            nb.clipBoardCells = [activeCell];
+        }
+    });
+
     addCommand(commands, app, CommandIDs.CELLS_RUN, async function(app) {
         let nb = app.docManager.getActiveNotebook();
         if (!nb) return;
@@ -82,14 +105,14 @@ export default function setupCommands(commands, app) {
         if (!nb) return;
         let namespace = nb && nb.file && nb.file.path || '';
         let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
-        let activeCell = nb.activeCell;
+        let activeCell = {...nb.activeCell};
 
         function operateFn() {
-            nb.cuttingCell = activeCell;
+            nb.clipBoardCells = [activeCell];
             nb.notebook.cells.splice(index, 1);
         }
         function revokeFn() {
-            nb.cuttingCell = undefined;
+            nb.clipBoardCells = [];
             nb.notebook.cells.splice(index, 0, activeCell);
         }
 
@@ -101,18 +124,17 @@ export default function setupCommands(commands, app) {
         if (!nb) return;
         let namespace = nb && nb.file && nb.file.path || '';
         let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
-        let activeCell = nb.cuttingCell;
-
+        let selectedCells = nb.clipBoardCells;
         function operateFn() {
-            nb.notebook.cells.splice(index + 1, 0, nb.cuttingCell);
-            nb.cuttingCell = undefined;
+            nb.notebook.cells.splice(index + 1, 0, ...selectedCells);
+            nb.clipBoardCells = [];
         }
         function revokeFn() {
-            nb.notebook.cells.splice(index + 1, 1);
-            nb.cuttingCell = activeCell;
+            nb.notebook.cells.splice(index + 1, selectedCells.length);
+            nb.clipBoardCells = selectedCells;
         }
 
-        if (nb.cuttingCell) {
+        if (nb.clipBoardCells.length > 0) {
             undoAndRedo.addOperation(namespace, operateFn, revokeFn);
         }
     });
@@ -122,7 +144,7 @@ export default function setupCommands(commands, app) {
         if (!nb) return;
         let namespace = nb && nb.file && nb.file.path || '';
         let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
-        let activeCell = nb.activeCell;
+        let activeCell = {...nb.activeCell};
         const editor = app.docManager.$refs.editor.find(item => item.file.path === namespace);
 
         function operateFn() {
@@ -146,7 +168,7 @@ export default function setupCommands(commands, app) {
         if (!nb) return;
         let namespace = nb && nb.file && nb.file.path || '';
         let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
-        let activeCell = nb.activeCell;
+        let activeCell = {...nb.activeCell};
         const editor = app.docManager.$refs.editor.find(item => item.file.path === namespace);
 
         function operateFn() {
@@ -170,7 +192,7 @@ export default function setupCommands(commands, app) {
         if (!nb) return;
         let namespace = nb && nb.file && nb.file.path || '';
         let index = nb.notebook.cells.findIndex(item => item.order === nb.activeCellOrder);
-        let activeCell = nb.activeCell;
+        let activeCell = {...nb.activeCell};
         const editor = app.docManager.$refs.editor.find(item => item.file.path === namespace);
 
         function operateFn() {
@@ -202,7 +224,7 @@ export default function setupCommands(commands, app) {
         let nb = app.docManager.getActiveNotebook();
         if (!nb) return;
         let namespace = nb && nb.file && nb.file.path || '';
-        let activeCell = nb.activeCell;
+        let activeCell = {...nb.activeCell};
         let modeType = nb && nb.activeCell && nb.activeCell.cell_type;
         let newOrder = nb.nextOrder();
         let activeCellWidget = nb.activeCellWidget;

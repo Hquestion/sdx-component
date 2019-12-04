@@ -716,7 +716,9 @@ export default {
                 killing: '终止中',
                 killed: '已终止'
             },
-            versionRemoveConfirm: '确定要删除该模型版本吗？',
+            Deleting_this_version_will_delete_the_entire_model: '删除此版本将会删除整个模型，您确定要删除此模型版本吗？',
+            modelVersionDeletionPrompt: '模型版本删除提示',
+            versionRemoveConfirm: '您确定要删除该模型版本吗？',
             versionOfflineConfirm: '确定要下线该模型版本吗？',
             versionDetail: {
                 name: '版本名称',

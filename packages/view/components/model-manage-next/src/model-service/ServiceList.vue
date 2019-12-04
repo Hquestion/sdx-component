@@ -34,6 +34,9 @@
             <sdxu-table
                 :data="table"
                 v-loading="tableLoading"
+                @expand-change="expandChange"
+                :row-key="getRowKeys"
+                :expand-row-keys="expands"
             >
                 <el-table-column type="expand">
                     <template #default="{ row }">
@@ -55,7 +58,7 @@
                                 <template
                                     slot-scope="scope"
                                 >
-                                    {{ `${scope.row.runtimeResource.cpus / 1000}C / ${scope.row.runtimeResource.gpus}GB` }}
+                                    {{ `${scope.row.runtimeResource && scope.row.runtimeResource.cpus / 1000}C / ${scope.row.runtimeResource && scope.row.runtimeResource.gpus}GB` }}
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -146,6 +149,7 @@
                         <SdxuButtonGroup>
                             <SdxuButton
                                 v-for="(item, i) in getOperationList(row.state)"
+                                v-show="!(!row.canUpgrade && item.value === 'gray')"
                                 type="link"
                                 :key="i"
                                 @click="handleOperation(item.value, row)"
@@ -164,13 +168,20 @@
                 @current-change="handlePageChange"
             />
         </div>
-        <OnlineTesting :visible.sync="onlineTestingVisible" />
+        <SdxwApiTestPopper
+            :visible.sync="onlineTestingVisible"
+            :service-id="serviceInfo && serviceInfo.uuid"
+        />
         <PublishPlatform :visible.sync="publishPlatformVisible" />
-        <GrayscaleRelease :visible.sync="grayscaleReleaseVisible" />
+        <GrayscaleRelease
+            :visible.sync="grayscaleReleaseVisible" 
+            :select-options="grayList"
+            :info="serviceInfo"
+        />
         <CreateModelService
             :visible.sync="createServiceVisible"
             v-if="createServiceVisible"
-            :editing-service="editingService"
+            :editing-service="serviceInfo"
             @close="handleClose"
         />
     </div>
@@ -179,11 +190,10 @@
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
-import { getServiceList,removeService,stopService,startService } from '@sdx/utils/src/api/model';
+import { getServiceList,removeService,stopService,startService, getVersionList } from '@sdx/utils/src/api/model';
 import { paginate,removeBlankAttr} from '@sdx/utils/src/helper/tool';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
-import OnlineTesting from '../service-dialog/OnlineTesting';
 import PublishPlatform from '../service-dialog/PublishPlatform';
 import GrayscaleRelease from '../service-dialog/GrayscaleRelease';
 import { Select,Option, Message} from 'element-ui';
@@ -195,6 +205,7 @@ import {  OPERATION_INFO,STATE_MODEL_SERVICE_OPERATION} from '@sdx/utils/src/con
 import ResourceAlert from '@sdx/widget/components/resource-alert';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import CreateModelService from '../service-dialog/create-model-service/Index';
+import ApiTest from '@sdx/widget/components/api-test';
 export default {
     name: 'SdxvModelService',
     mixins: [locale],
@@ -223,6 +234,11 @@ export default {
             createServiceVisible:false,
             table: [],
             refreshTimer: null,
+            // 灰度列表
+            grayList: [],
+            serviceInfo: null,
+            // 要展开的行，数值的元素是row的key值
+            expands: []
         };
     },
     components: {
@@ -230,7 +246,7 @@ export default {
         [SdxwSearchLayout.SearchItem.name]: SdxwSearchLayout.SearchItem,
         SdxuTable,
         SdxuPagination,
-        OnlineTesting,
+        SdxwApiTestPopper: ApiTest.ApiTestPopper,
         PublishPlatform,
         GrayscaleRelease,
         [Select.name]: Select,
@@ -266,6 +282,16 @@ export default {
     },
     methods: {
         dateFormatter,
+        // 获取row的key值
+        getRowKeys(row) {
+            return row.uuid;
+        },
+        expandChange(row, expandedRows) {
+            this.expands = [];
+            for (let i =0; i< expandedRows.length; i++) {
+                this.expands.push(expandedRows[i].uuid);
+            }
+        },
         // 服务详情
         serviceDetail(uuid) {
             this.$router.push({
@@ -283,6 +309,7 @@ export default {
             return arr.map(item => this.OPERATION_INFO[item]);
         },
         handleOperation(type,data) {
+            this.serviceInfo = data;
             if(type === 'remove') {
                 MessageBox({
                     title: this.t('view.model.Model_deletion_prompt'),
@@ -307,7 +334,13 @@ export default {
                 });
             } else if (type === 'edit') {
                 this.createServiceVisible = true;
-                this.editingService = data;
+            } else if(type === 'gray' ) {
+                this.grayscaleReleaseVisible = true;
+                getVersionList(data.modelId).then(res=> {
+                    this.grayList = JSON.parse(JSON.stringify(res.items.filter(item => item.name !== data.versionName)));
+                });
+            } else if(type === 'test') {
+                this.onlineTestingVisible = true;
             }
         },
         handlePageChange(index){

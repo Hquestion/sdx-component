@@ -5,15 +5,13 @@
         class="sdxv-online-testing"
         width="720px"
     >
-        <SdxwApiTest></SdxwApiTest>
+        <SdxwApiTest />
     </sdxu-dialog>
 </template>
 
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuDialog from '@sdx/ui/components/dialog';
-import {RadioGroup, Radio, Select, Option, Upload}  from 'element-ui';
-import SdxuButton from '@sdx/ui/components/button';
 import SdxwApiTest from '@sdx/widget/components/api-test';
 export default {
     name: 'SdxvOnlineTesting',
@@ -21,16 +19,6 @@ export default {
     data() {
         return {
             radio: 'imageRecognition',
-            testType: [
-                {
-                    value: 'CRUL',
-                    label: 'CRUL'
-                },
-                {
-                    value: 'JSON',
-                    label: 'JSON'
-                }
-            ],
             params: {
 
             }

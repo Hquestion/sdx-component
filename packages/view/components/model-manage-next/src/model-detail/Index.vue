@@ -42,6 +42,7 @@
                         <SdxuButton
                             type="default"
                             @click="grayLevelRelease"
+                            :disabled="!grayList.length"
                         >
                             {{ t('view.model.New_gray_level_release') }}
                         </SdxuButton>
@@ -131,6 +132,7 @@
             :info="versionParams"
             v-if="grayscaleReleaseVisible"
             @confirmGray="confirmGray"
+            :select-options="grayList"
         />
     </div>
 </template>
@@ -145,7 +147,7 @@ import Button from '@sdx/ui/components/button';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import ModelVersion from '../service-dialog/ModelVersion';         
 import CreateModelService from '../service-dialog/create-model-service/Index';
-import { getModelInfo,removeVersion } from '@sdx/utils/src/api/model';
+import { getModelInfo,removeVersion, getServiceList, removeModel } from '@sdx/utils/src/api/model';
 import { getUserSimpleInfo } from '@sdx/utils/src/api/user';
 import {download} from '@sdx/utils/src/api/file';
 import Message from 'element-ui/lib/message';
@@ -177,6 +179,7 @@ export default {
             releaseAIVisible: false,
             grayscaleReleaseVisible: false,
             versionInfo: [],
+            // 版本信息
             versionParams: {
                 name: '',
                 uuid: '',
@@ -190,7 +193,9 @@ export default {
             modelVersionEdit: false,
             modelVersionInfo: null,
             // 模型服务列表
-            serviceList: []
+            serviceList: [],
+            // 灰度列表
+            grayList: []
         };
     },
     components: {
@@ -210,8 +215,9 @@ export default {
     },
     methods: {
         dateFormatter,
-        confirmGray() {
-            this.getModelDetail();
+        async confirmGray() {
+            await this.getModelDetail();
+            this.getServices();
         },
         confirmPublish() {
             this.getModelDetail();
@@ -219,6 +225,17 @@ export default {
         downLoadModelFile(path, ownerId) {
             download(path, ownerId);
         },
+        // 获取模型列表
+        getServices() {
+            let params = {
+                modelId: this.$route.params.modelId,
+                state: 'Running'
+            };
+            getServiceList(params).then(res => {
+                this.grayList = JSON.parse(JSON.stringify(res.items.filter(item => item.versionName !== this.versionParams.name)));
+            });
+        },
+        // 新增灰度发布
         grayLevelRelease() {
             this.grayscaleReleaseVisible = true;
         },
@@ -248,15 +265,24 @@ export default {
         },
         removeVersion() {
             MessageBox({
-                title: this.t('view.model.versionRemoveConfirm'),
-                content: this.t('sdxCommon.ConfirmRemove')
+                title: this.t('view.model.modelVersionDeletionPrompt'),
+                content: this.versionInfo.length === 1 ? this.t('view.model.Deleting_this_version_will_delete_the_entire_model') : this.t('view.model.versionRemoveConfirm'),
+                status: 'warning'
             }).then(() => {
                 removeVersion(this.$route.params.modelId, this.versionParams.uuid).then(() => {
                     Message({
                         message: this.t('sdxCommon.RemoveSuccess'),
                         type: 'success'
                     });
-                    this.getModelDetail();
+                    if(this.versionInfo.length === 1) {
+                        removeModel(this.$route.params.modelId).then(() => {
+                            this.$router.push({
+                                path: '/sdxv-model-manage-next/modelList',
+                            });
+                        });
+                    } else {
+                        this.getModelDetail();
+                    }
                 });
             });
         },
@@ -267,6 +293,7 @@ export default {
             let items = JSON.parse(JSON.stringify(this.versionInfo));
             let index = items.findIndex(item => item.uuid === uuid);
             this.versionParams = items[index];
+            this.getServices();
         },
         // 获取模型详情
         getModelDetail() {
@@ -316,6 +343,7 @@ export default {
                 this.versions = arr;
                 requestAnimationFrame(() => {
                     this.versionParams = items[index];
+                    this.getServices();
                 });
             });
         }

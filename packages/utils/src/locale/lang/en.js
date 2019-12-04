@@ -717,6 +717,8 @@ export default {
                 killing: 'Killing',
                 killed: 'Killed'
             },
+            Deleting_this_version_will_delete_the_entire_model: 'Deleting this version will delete the whole model, Are you sure you want to delete this model version?',
+            modelVersionDeletionPrompt: 'Model version deletion prompt',
             versionRemoveConfirm: 'Are you sure to remove the model version?',
             versionOfflineConfirm: 'Are you sure to shut down the model version?',
             versionDetail: {

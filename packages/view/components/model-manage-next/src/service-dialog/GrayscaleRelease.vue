@@ -36,7 +36,7 @@
                 <el-input-number
                     v-model="params.instances"
                     :min="1"
-                    :max="selectModel && selectModel.instances"
+                    :max="isModelService ? (selectModel && selectModel.instances) : (info && info.instances)"
                 />
             </el-form-item>
             <el-form-item
@@ -99,7 +99,6 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxuDialog from '@sdx/ui/components/dialog';
 import {Select, Option,Form, FormItem, InputNumber} from 'element-ui';
 import SdxuTable from '@sdx/ui/components/table';
-import {getServiceList } from '@sdx/utils/src/api/model';
 import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
 import { updateService } from '@sdx/utils/src/api/model';
 export default {
@@ -129,9 +128,9 @@ export default {
             },
             options: [],
             serviceName: '',
-            selectOptions: [],
             trafficRatio: 0,
-            trafficRatioOptions: []
+            trafficRatioOptions: [],
+            saveSelectOptions: []
         };
     },
     props: {
@@ -146,6 +145,10 @@ export default {
         info: {
             type: Object,
             default:() => {}
+        },
+        selectOptions: {
+            type: Array,
+            default:() => {}
         }
     },
     computed: {
@@ -158,7 +161,7 @@ export default {
             }
         },
         selectModel() {
-            let arr = this.selectOptions.filter(item => item.uuid === this.serviceName);
+            let arr = this.saveSelectOptions.filter(item => item.uuid === this.serviceName);
             return arr[0];
         },
         
@@ -174,21 +177,40 @@ export default {
     },
     methods: {
         changeWeight(row) {
-            if(row.version.includes(this.t('view.model.New'))) {
-                this.table = [
-                    row,
-                    {
-                        version: `${this.selectModel.versionName} (${this.t('view.model.Old')})`,
-                        weight: 1 - row.weight
-                    }];
+            if(this.isModelService) {
+                if(row.version.includes(this.t('view.model.New'))) {
+                    this.table = [
+                        row,
+                        {
+                            version: `${this.selectModel.versionName} (${this.t('view.model.Old')})`,
+                            weight: Number((1 - row.weight).toFixed(2))
+                        }];
+                } else {
+                    this.table = [
+                        {
+                            version: `${this.info.name} (${this.t('view.model.New')})`,
+                            weight: Number((1 - row.weight).toFixed(2))
+                        }, 
+                        row
+                    ];
+                }
             } else {
-                this.table = [
-                    {
-                        version: `${this.info.name} (${this.t('view.model.New')})`,
-                        weight: 1 - row.weight
-                    }, 
-                    row
-                ];
+                if(row.version.includes(this.t('view.model.New'))) {
+                    this.table = [
+                        row,
+                        {
+                            version: `${this.info.versionName} (${this.t('view.model.Old')})`,
+                            weight: Number((1 - row.weight).toFixed(2))
+                        }];
+                } else {
+                    this.table = [
+                        {
+                            version: `${this.selectModel.name} (${this.t('view.model.New')})`,
+                            weight: Number((1 - row.weight).toFixed(2))
+                        }, 
+                        row
+                    ];
+                }
             }
         },
         cancel() {
@@ -196,8 +218,8 @@ export default {
         },
         confirm() {
             let params = {
-                versionUpdate: {
-                    versionName: this.info.name,
+                versionUpgrade: {
+                    versionName: this.isModelService ? this.info.name : this.selectModel.name,
                     instances: this.params.instances,
                     trafficRatio: this.table[0].weight
                 }
@@ -210,45 +232,63 @@ export default {
     },
     created() {
         let arr=[];
-        for(let i=0; i< 1.05; i+=0.05) {
+        for(let i=0; i< 105; i+=5) {
             arr.push(
                 {  
-                    label: parseInt(i * 100),
-                    value: Number(i.toFixed(2))
+                    label: parseInt(i),
+                    value: Number((i / 100).toFixed(2))
                 }
             );
         }
         this.trafficRatioOptions = arr;
-        if(this.isModelService) {
-            let params = {
-                modelId: this.$route.params.modelId,
-                state: 'Running'
-            };
-            getServiceList(params).then(res => {
-                this.selectOptions = JSON.parse(JSON.stringify(res.items.filter(item => item.versionName !== this.info.name)));
+    },
+    watch: {
+        selectOptions: {
+            deep: true,
+            immediate: true,
+            handler() {
+                this.options = [];
+                this.serviceName = '';
+                this.saveSelectOptions = JSON.parse(JSON.stringify(this.selectOptions));
                 let arr = [];
-                for(let i =0; i< this.selectOptions.length; i++) {
+                for(let i =0; i< this.saveSelectOptions.length; i++) {
                     arr.push({
-                        label: this.selectOptions[i].name,
-                        value:  this.selectOptions[i].uuid
+                        label: this.saveSelectOptions[i].name,
+                        value:  this.saveSelectOptions[i].uuid
                     });
                 }
                 this.options = arr;
-                this.serviceName = arr.length && arr[0].value;
-            });
-        }
-    },
-    watch: {
-        serviceName() {
-            this.table = [
-                {
-                    version: `${this.info.name} (${this.t('view.model.New')})`,
-                    weight: 0
-                },
-                {
-                    version: `${this.selectModel.versionName} (${this.t('view.model.Old')})`,
-                    weight: 1
-                }];
+                this.serviceName = arr.length ? arr[0].value : '';
+            }
+        },
+        serviceName: {
+            deep: true,
+            immediate: true,
+            handler() {
+                if(this.isModelService) {
+                    this.table = [
+                        {
+                            version: `${this.info.name} (${this.t('view.model.New')})`,
+                            weight: 0
+                        },
+                        {
+                            version: `${this.selectModel ? this.selectModel.versionName : ''} (${this.t('view.model.Old')})`,
+                            weight: 1
+                        }
+                    ];
+                } else {
+                    this.table = [
+                        {
+                            version: `${this.selectModel ? this.selectModel.name : ''} (${this.t('view.model.New')})`,
+                            weight: 0
+                        },
+                        {
+                            version: `${this.info ? this.info.versionName : ''} (${this.t('view.model.Old')})`,
+                            weight: 1
+                        }
+                    ];
+                }
+            }
         },
     }
 };

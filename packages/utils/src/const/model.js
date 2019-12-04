@@ -108,10 +108,10 @@ export const OPERATION_INFO = {
     },
     offline: {
         label: 'view.model.Offline_from_AI_open_platform',
-        value: 'release'
+        value: 'offline'
     },
     gray: {
         label: 'view.model.New_gray_level_release',
-        value: 'release'
+        value: 'gray'
     }
 };

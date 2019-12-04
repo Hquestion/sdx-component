@@ -111,7 +111,7 @@ export default {
             return node;
         },
         isCurrentNodeExpand() {
-            return this.currentNode() && this.currentNode().expanded;
+            return this.currentNode() && this.currentNode().expanded && !this.currentNode().node.data.selectDisable;
         },
         handleTreeShake() {
             this.newable = this.isCurrentNodeExpand();

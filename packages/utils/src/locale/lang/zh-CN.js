@@ -1015,6 +1015,13 @@ export default {
             Modified_user_group_successfully: '修改用户组成功',
             User_group_created_successfully: '创建用户组成功',
             UserGroup_colon: '用户组：',
+            ResetPwd: '重置密码',
+            resetTip: '此操作将重置该用户密码，是否继续？',
+            pwdTip: '密码提示',
+            resetTipStart: '当前用户密码已重置为',
+            copyPwd: '复制密码',
+            copyPwdSuccess: '密码已复制到剪贴板',
+            copyPwdFail: '复制密码失败'
         },
         authorizeManage: {
             user_authorization_list: '用户授权列表',

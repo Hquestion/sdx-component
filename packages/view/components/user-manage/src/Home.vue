@@ -94,6 +94,13 @@
                             :disable="scope.row.initial"
                         />
                         <sdxu-icon-button
+                            @click.native.stop="handleResetPwd(scope.row)"
+                            icon="sdx-icon sdx-chongzhimima"
+                            v-auth.user.button="'USER:PASSWORD-RESET'"
+                            :title="t('view.userManage.ResetPwd')"
+                            :disable="scope.row.initial"
+                        />
+                        <sdxu-icon-button
                             @click.native.stop="handleDeleteUser(scope.row)"
                             icon="sdx-icon sdx-icon-delete"
                             v-auth.user.button="'USER:WRITE'"
@@ -141,19 +148,46 @@
                 @current-change="currentChange"
             />
         </div>
+        <SdxuDialog
+            :visible.sync="resetVisible"
+            :title="t('view.userManage.pwdTip')"
+            display="float"
+        >
+            <div class="pwd-wrapper">
+                <div>
+                    {{ t('view.userManage.resetTipStart') }}
+                </div>
+                <div class="password-container">
+                    {{ newPwd }}
+                </div>
+            </div>
+            <div slot="footer">
+                <SdxuButton
+                    type="default"
+                    @click="resetVisible = false"
+                >
+                    {{ t('sdxCommon.Cancel') }}
+                </SdxuButton>
+                <SdxuButton @click="handleCopyPwd">
+                    {{ t('view.userManage.copyPwd') }}
+                </SdxuButton>
+            </div>
+        </SdxuDialog>
     </sdxu-content-panel>
 </template>
 
 <script>
 import {
     getUserList,
-    deleteUser
+    deleteUser,
+    resetUserPassword
 } from '@sdx/utils/src/api/user';
 import SdxuInput from '@sdx/ui/components/input';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuTable from '@sdx/ui/components/table';
 import MessageBox from '@sdx/ui/components/message-box';
 import FoldLabel from '@sdx/widget/components/fold-label';
+import SdxuDialog from '@sdx/ui/components/dialog';
 import AddUser from './components/AddUser';
 import EditUser from './components/EditUser';
 import JoinGroup from './components/JoinGroup';
@@ -166,6 +200,11 @@ import SdxuTextTooltip from '@sdx/ui/components/text-tooltip';
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import SdxuButton from '@sdx/ui/components/button';
+import VueClipboard from 'vue-clipboard2';
+import Message from 'element-ui/lib/message';
+import Vue from 'vue';
+VueClipboard.config.autoSetContainer = true;
+Vue.use(VueClipboard);
 export default {
     name:'SdxvUserManage',
     mixins: [transformFilter, locale],
@@ -190,7 +229,9 @@ export default {
             searched: false,
             loading: false,
             order: 'desc',
-            orderBy: 'createdAt'
+            orderBy: 'createdAt',
+            newPwd: '',
+            resetVisible: false
         };
     },
     directives: {
@@ -247,6 +288,24 @@ export default {
                     }
                 });
             });
+        },
+        handleResetPwd(user) {
+            MessageBox.confirm({
+                title: `${this.t('view.userManage.resetTip')}`
+            }).then(() => {
+                resetUserPassword(user.uuid).then(res => {
+                    this.newPwd = res.password;
+                    this.resetVisible = true;
+                });
+            });
+        },
+        handleCopyPwd() {
+            Vue.prototype.$copyText(this.newPwd).then(() => {
+                Message.success(this.t('view.userManage.copyPwdSuccess'));
+            }, () => {
+                Message.error(this.t('view.userManage.copyPwdFail'));
+            });
+            this.resetVisible = false;
         },
         getUsers(currentPage){
             this.loading = true;
@@ -316,11 +375,25 @@ export default {
         [SearchLayout.SearchLayout.name]: SearchLayout.SearchLayout,
         [SearchLayout.SearchItem.name]: SearchLayout.SearchItem,
         SdxuPagination,
-        SdxuButton
+        SdxuButton,
+        SdxuDialog
     }
 };
 </script>
 <style lang='scss' scoped>
-
-
+    .pwd-wrapper {
+        text-align: center;
+        font-size: 14px;
+        color: #6B778C;
+        .password-container {
+            display: inline-block;
+            margin-top: 16px;
+            color: #13264D;
+            background: #EDEFF2;
+            font-size: 40px;
+            padding: 8px 40px;
+            font-weight: 500;
+            line-height: 1;
+        }
+    }
 </style>

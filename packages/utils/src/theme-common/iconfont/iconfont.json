@@ -1705,6 +1705,13 @@
       "font_class": "ziranyuyanchuli",
       "unicode": "e726",
       "unicode_decimal": 59174
+    },
+    {
+      "icon_id": "12163275",
+      "name": "chongzhimima",
+      "font_class": "chongzhimima",
+      "unicode": "e7e1",
+      "unicode_decimal": 59361
     }
   ]
 }

@@ -1015,7 +1015,14 @@ export default {
             NoMembers: 'No Members',
             Modified_user_group_successfully: 'Modified user group successfully',
             User_group_created_successfully: 'User group created successfully',
-            UserGroup_colon: 'User Group:'
+            UserGroup_colon: 'User Group:',
+            ResetPwd: 'Reset Password',
+            resetTip: 'Continue to reset the user\'s password?',
+            pwdTip: 'Password Tip',
+            resetTipStart: 'Already reset the user\'s password to',
+            copyPwd: 'Copy Password',
+            copyPwdSuccess: 'Password is copied to clipboard',
+            copyPwdFail: 'Copy password fail'
         },
         authorizeManage: {
             user_authorization_list: 'User Authorization List',

@@ -94,6 +94,10 @@ export const getGroups = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}group-profiles`, params);
 }, readAuths.USER_GROUP_READ);
 
+export const resetUserPassword = authWrapper(function(uuid) {
+    return httpService.post(`${USER_SERVICE_GATEWAY_BASE}users/${uuid}/password/reset`);
+}, readAuths.USER_RESET_PASSWORD);
+
 export function getUserRoleGroupByName(name, type) {
     const pagination = { start: 1, count: type === 'all' ? 5 : 10 };
     let deferArr = [];

@@ -69,7 +69,7 @@ import OperationHandlerMixin from './helper/operationHandlerMixin';
 import FileName from './FileName';
 
 import contextMenu from '@sdx/ui/components/context-menu';
-import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/ui/components/context-menu';
+import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/utils/src/model/ContextMenuModel';
 import Clusterize from 'clusterize.js';
 
 const ROW_HEIGHT = 30;

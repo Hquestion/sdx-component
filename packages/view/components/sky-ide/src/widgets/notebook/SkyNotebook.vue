@@ -43,7 +43,7 @@ import { NotebookMode, NotebookKernelState } from '../../config';
 import '@jupyterlab/completer/style/base.css';
 
 import contextMenu from '@sdx/ui/components/context-menu';
-import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/ui/components/context-menu';
+import { ContextMenuItemModel, ContextMenuModel, ContextMenuGroupModel } from '@sdx/utils/src/model/ContextMenuModel';
 import notebookHelp from '../../mixins/notebookHelper';
 
 

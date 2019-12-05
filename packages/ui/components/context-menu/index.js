@@ -6,4 +6,3 @@ ContextMenu.install = Vue => {
 };
 
 export default ContextMenu;
-export { ContextMenuModel, ContextMenuItemModel, ContextMenuGroupModel } from './src/ContextMenuModel';

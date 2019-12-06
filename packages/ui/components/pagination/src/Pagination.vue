@@ -1,16 +1,19 @@
 <template>
     <div class="sdxu-pagination">
-        <div class="sdxu-pagination__count" v-show="indicator">
-            <span>{{t('ui.pagination.showEveryPage')}}</span>
-            {{pageSize}}
-            <span>{{t('ui.pagination.unit')}}</span>,
-            <span>{{t('ui.pagination.total')}}</span>
-            {{pageCount}}
-            <span>{{t('ui.pagination.page')}}</span>,
-            {{total}}
-            <span>{{t('ui.pagination.recordCount')}}</span>
+        <div
+            class="sdxu-pagination__count"
+            v-show="indicator"
+        >
+            <span>{{ t('ui.pagination.showEveryPage') }}</span>
+            {{ pageSize }}
+            <span>{{ t('ui.pagination.unit') }}</span>,
+            <span>{{ t('ui.pagination.total') }}</span>
+            {{ pageCount }}
+            <span>{{ t('ui.pagination.page') }}</span>,
+            {{ total }}
+            <span>{{ t('ui.pagination.recordCount') }}</span>
         </div>
-        <div></div>
+        <div />
         <el-pagination
             background
             layout="prev, pager, next"
@@ -22,7 +25,6 @@
             @current-change="currentChange"
         />
     </div>
-
 </template>
 
 <script>
@@ -39,6 +41,10 @@ export default {
     watch: {
         currentPage(nVal) {
             this.current = nVal;
+        },
+        current(nVal) {
+            this.$emit('update:currentPage', nVal);
+            this.$emit('current-change', nVal);
         }
     },
     computed: {

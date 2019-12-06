@@ -43,4 +43,19 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         display: inline-block;
         max-width: 100%;
     }
+
+    @include element('nativepopper') {
+        display: inline-block;
+        max-width: 600px;
+        min-width: 50px;
+        background: $sdx-icon-button-background !important;
+        border-radius: $sdx-border-radius;
+        font-size: $sdx-help-font-size;
+        color: $sdx-icon-button-color !important;
+        height: $sdx-gap-regular !important;
+        line-height: $sdx-gap-regular !important;
+        text-align: center;
+        padding: 0 $sdx-gap-mini !important;
+        border: none;
+    }
 }

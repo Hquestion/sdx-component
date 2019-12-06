@@ -267,7 +267,13 @@ export default {
             this.layout.doc.size = e[1].size;
         }
     },
+    beforeCreate() {
+        window.onbeforeunload = function() {
+            return true;
+        };
+    },
     async mounted() {
+    
         // 初始化IDE，获取项目及task信息
         await this.prepareEnv();
         // 恢复布局
@@ -292,6 +298,7 @@ export default {
         this.syncLayout();
         this.prepareRestoreData();
         clearInterval(this.timer);
+        window.removeEventListener('beforeunload', null);
     }
 };
 </script>
@@ -315,11 +322,11 @@ export default {
             }
 
             .splitpanes--horizontal > .splitpanes__splitter {
-                min-height: 10px;
+                min-height: 4px;
             }
 
             .splitpanes--vertical > .splitpanes__splitter {
-                min-width: 10px;
+                min-width: 4px;
             }
         }
 

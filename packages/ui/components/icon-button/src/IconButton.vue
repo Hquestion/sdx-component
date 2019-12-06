@@ -12,15 +12,10 @@
     >
         <TextTooltip
             :title="title"
-            v-if="!nativeTooltip"
+            :native-tooltip="nativeTooltip"
         >
             <i :class="[icon]" />
         </TextTooltip>
-        <i
-            v-else
-            :class="[icon]"
-            :title="title"
-        />
     </div>
 </template>
 

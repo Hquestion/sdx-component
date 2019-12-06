@@ -31,13 +31,8 @@
             </el-form-item>
             <el-form-item
                 :label="`${t('view.task.InstanceNum')}：`"
-                prop="name"
             >
-                <el-input-number
-                    v-model="params.instances"
-                    :min="1"
-                    :max="isModelService ? (selectModel && selectModel.instances) : (info && info.instances)"
-                />
+                {{ 1 }}
             </el-form-item>
             <el-form-item
                 :label="`${t('view.model.Flow_ratio')}：`"
@@ -122,9 +117,6 @@ export default {
                     { required: true, message: this.t('view.model.searchModelName'), trigger: 'blur' },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
                 ],
-            },
-            params: {
-                instances: 0
             },
             options: [],
             serviceName: '',
@@ -220,7 +212,7 @@ export default {
             let params = {
                 versionUpgrade: {
                     versionName: this.isModelService ? this.info.name : this.selectModel.name,
-                    instances: this.params.instances,
+                    instances: 1,
                     trafficRatio: this.table[0].weight
                 }
             };

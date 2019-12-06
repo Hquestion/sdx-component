@@ -42,7 +42,7 @@
                 :title="t('view.skyide.Clear_Output')"
                 @click.native.stop="clearOutput"
                 :native-tooltip="true"
-                v-if="cellData.cell_type ==='code'"
+                v-if="cellData.cell_type ==='code' && (typeof(cellData.outputs) === 'string' ? cellData.outputs : cellData.outputs.length)"
             />
         </div>
     </div>
@@ -286,7 +286,7 @@ export default {
             }
             .sky-cell-operations {
                 display: inline-block;
-                width: 240px;
+                // width: 240px;
                 position: absolute;
                 z-index: 9;
                 right: 8px;

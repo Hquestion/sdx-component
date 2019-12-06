@@ -261,10 +261,10 @@ export default {
                 display: flex;
                 align-items: center;
                 border: none;
-                color: #DDE5FE;
+                color:  #A0A5B8;;
                 &.is-active {
                     color: #DDE5FE;
-                    background: #273250;
+                    background: #394C7E;
                 }
                 &.is-closable {
                     padding-left: 13px;
@@ -278,6 +278,20 @@ export default {
                         background: none;
                     }
                 }
+            }
+            .el-tabs__item::after {
+                content: "";
+                display: block;
+                width: 1px;
+                height: 40px;
+                position: absolute;
+                top: 0px;
+                background: #394C7E;
+                right: 0;
+            }
+            .el-tabs__item:last-child::after {
+                display: none;
+                width: 0;
             }
         }
         #tab-add {

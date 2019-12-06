@@ -297,17 +297,21 @@ export default {
                 box-shadow: 0 5px 10px 0 #0E162E;
                 border-radius: 4px;
             }
-            .el-select-dropdown__item.hover {
-                background-color: #34539B;
+            .el-select-dropdown__item.hover, .el-select-dropdown__item.selected {
+                background-color: #34539B !important;
             }
             .el-select-dropdown__item {
-                color: #ffffff;
-                padding: 0 16px;
-                height: 50px;
-                line-height: 50px;
+                color: #ffffff !important;
+                padding: 0 16px !important;
+                height: 50px !important;
+                line-height: 50px !important;
+                background: #223050 !important;
             }
             .el-select-dropdown {
                 border: none;
+            }
+            .el-scrollbar__wrap {
+                background: #223050;
             }
         }
     }
@@ -391,7 +395,7 @@ export default {
             color: #DDE5FE;
         }
         .el-dropdown-menu__item:hover {
-            background: #2A51A7;
+            background: #2A51A7 !important;
         }
         .popper__arrow::after {
             display: none;

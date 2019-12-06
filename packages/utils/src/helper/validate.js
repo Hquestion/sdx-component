@@ -50,6 +50,8 @@ ValidateReg.prototype.generate = function() {
     let regStr = '';
     if (this.start) {
         regStr += `[${ValidateReg.characterMap[this.start]}]`;
+    } else {
+        regStr += '\\S';
     }
     // if can match any character
     if (this.character.other) {
@@ -71,12 +73,12 @@ ValidateReg.prototype.generate = function() {
     }
     let {min, max} = this.limit;
 
-    min = this.start ? min - 1 : min;
+    min = min - 2;
     min = min <= 0 ? 0 : min;
 
-    max = this.start ? max - 1 : max;
+    max = max - 2;
     max = max <= 0 ? 0 : max;
-    regStr += `{${min},${max}}`;
+    regStr += `{${min},${max}}\\S`;
     return eval(`/^${regStr}$${this.limit.min === 0 ? '|^$' : ''}/`);
 };
 

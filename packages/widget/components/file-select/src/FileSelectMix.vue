@@ -346,7 +346,7 @@ export default {
         },
         beforeUpload(file) {
             return new Promise((resolve, reject) => {
-                const extension = file.name.split('.')[-1, 1];
+                const extension = file.name.split('.').pop();
                 if (this.accept && this.accept.indexOf(extension) < 0) {
                     this.$notify.error({
                         title: this.t('widget.fileSelect.FileTypeError'),

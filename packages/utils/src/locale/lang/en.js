@@ -1071,6 +1071,9 @@ export default {
             State_Starting: 'Starting...',
             State_Stopped: 'Disabled',
             State_Stopping: 'Stopping...'
+        },
+        dataManagement: {
+            Dataset: 'Dataset'
         }
     },
     sdxCommon: {

@@ -20,4 +20,5 @@ module.exports = {
     'dev-platform': './components/dev-platform/index.js',
     'model-manage-next': './components/model-manage-next/index.js',
     'task-manage-platform': './components/task-manage-platform/index.js',
+    'data-management': './components/data-management/index.js',
 };

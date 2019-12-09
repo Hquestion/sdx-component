@@ -1070,6 +1070,9 @@ export default {
             State_Starting: '启动中...',
             State_Stopped: '未启用',
             State_Stopping: '终止中...'
+        },
+        dataManagement: {
+            Dataset: '数据集'
         }
     },
     sdxCommon: {

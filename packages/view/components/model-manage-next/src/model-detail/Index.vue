@@ -149,7 +149,7 @@ import ModelVersion from '../service-dialog/ModelVersion';
 import CreateModelService from '../service-dialog/create-model-service/Index';
 import { getModelInfo,removeVersion, getServiceList, removeModel } from '@sdx/utils/src/api/model';
 import { getUserSimpleInfo } from '@sdx/utils/src/api/user';
-import {download} from '@sdx/utils/src/api/file';
+import {download, pack} from '@sdx/utils/src/api/file';
 import Message from 'element-ui/lib/message';
 import MessageBox from '@sdx/ui/components/message-box';
 import PublishPlatform from '../service-dialog/PublishPlatform';
@@ -222,8 +222,13 @@ export default {
         confirmPublish() {
             this.getModelDetail();
         },
-        downLoadModelFile(path, ownerId) {
-            download(path, ownerId);
+        downLoadModelFile(modelPath, ownerId) {
+            let path = modelPath.split(':')[1];
+            let defer=null;
+            defer = pack([path], ownerId);
+            defer.then(res => {
+                download(res, ownerId);
+            });
         },
         // 获取模型列表
         getServices() {

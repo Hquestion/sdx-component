@@ -31,7 +31,7 @@
                             :accept="accept"
                             :on-change="handlerFileChange"
                             :on-error="onFileError"
-                            :on-progress="onProgress"
+                            :on-progress="handleProgress"
                             :on-success="onSuccess"
                             :on-exceed="onExceed"
                             :data="rebuildUploadParams"
@@ -61,7 +61,7 @@
                             :limit="localFolderRealLimit"
                             :data="rebuildUploadParams"
                             :show-file-list="false"
-                            :on-progress="onProgress"
+                            :on-progress="handleProgress"
                             :on-success="onSuccess"
                             :on-folder-change="handleFolderChange"
                             :before-upload="beforeUploadDir"
@@ -394,6 +394,10 @@ export default {
                 }
             });
         },
+        handleProgress(...rest) {
+            this.makeFileList(true);
+            this.onProgress && this.onProgress(...rest);
+        },
         handlerFileChange() {
             this.makeFileList();
         },
@@ -448,7 +452,7 @@ export default {
                 this.makeFileList();
             }
         },
-        makeFileList() {
+        makeFileList(isUploading) {
             let cephPaths = this.cephPaths;
             let fileUploadFiles = this.$refs.fileSelect && this.$refs.fileSelect.uploadFiles || [];
             let dirUploadFiles = this.$refs.directorySelect && this.$refs.directorySelect.uploadFiles || [];
@@ -476,10 +480,14 @@ export default {
                 ownerId: item.ownerId || this.userId || shareCenter.getUser() && shareCenter.getUser().uuid
             }));
             let temp = [...fileUploadFiles, ...dirUploadFiles, ...cephPathsMap];
-            this.$emit('input',
-                typeof this.value === 'string'
-                    ? temp.map(item => this.getPathFlag(item)).join(',')
-                    : (this.stringModel ? temp.map(item => this.getPathFlag(item)) : temp));
+            if (isUploading && (fileUploadFiles.some(item => item.status === 'uploading') || dirUploadFiles.some(item => item.status === 'uploading'))) {
+                this.$emit('input', temp);
+            } else {
+                this.$emit('input',
+                    typeof this.value === 'string'
+                        ? temp.map(item => this.getPathFlag(item)).join(',')
+                        : (this.stringModel ? temp.map(item => this.getPathFlag(item)) : temp));
+            }
         },
         emitBlurOnFormItem() {
             this.dispatch('ElFormItem', 'el.form.blur');

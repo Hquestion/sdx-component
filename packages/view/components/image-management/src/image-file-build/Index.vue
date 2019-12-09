@@ -90,6 +90,9 @@
                     :project-enable="true"
                     :private-enable="true"
                     :share-enable="true"
+                    :on-progress="() => uploaded = false"
+                    :on-success="() => uploaded = true"
+                    :on-error="() => uploaded = false"
                 />
             </el-form-item>
         </el-form>
@@ -105,6 +108,7 @@
                 type="primary"
                 @click="savaBuild"
                 size="small"
+                :disabled="!uploaded"
             >
                 {{ t('view.image.SaveAndBuild') }}
             </sdxubutton>
@@ -136,6 +140,7 @@ export default {
                 imageType: 'JUPYTER',
                 filePath: ''
             },
+            uploaded: false,
             DOCKER_IMAGE_KIND_LIST,
             rules: {
                 name: [
@@ -244,7 +249,7 @@ export default {
         }
     },
     created() {
-       
+
     }
 };
 </script>
@@ -275,7 +280,7 @@ export default {
                 color: #606266;
                 padding-left: 3px;
             }
-        
+
     }
 }
 </style>

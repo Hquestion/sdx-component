@@ -112,6 +112,10 @@ export default {
         onFolderChange: {
             type: Function,
             default: () => {}
+        },
+        maxSize: {
+            type: Number,
+            default: 200 * 1024 * 1024
         }
     },
 
@@ -311,11 +315,14 @@ export default {
                 'on-remove': this.handleRemove,
                 'http-request': this.httpRequest,
                 directory: this.directory,
-                'on-folder-change': this.onFolderChange
+                'on-folder-change': this.onFolderChange,
+                'max-size': this.maxSize
             },
             ref: 'upload-inner',
             on: {
-                change: this.onChange.bind(this)
+                change: this.onChange.bind(this),
+                'folder-max-size': (files) => this.$emit('folder-max-size', files),
+                'folder-change': (files) => this.$emit('folder-change', files)
             }
         };
 

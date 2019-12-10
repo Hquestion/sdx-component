@@ -60,6 +60,10 @@ export default {
         onFolderChange: {
             type: Function,
             default: () => {}
+        },
+        maxSize: {
+            type: Number,
+            default: 200 * 1024 * 1024
         }
     },
 
@@ -91,6 +95,13 @@ export default {
             }
 
             let postFiles = Array.prototype.slice.call(files);
+            if (this.directory) {
+                // 判断是否存在大文件
+                if (postFiles.some(item => item.size >= this.maxSize)) {
+                    this.$emit('folder-max-size', postFiles);
+                    return;
+                }
+            }
             if (!this.multiple) { postFiles = postFiles.slice(0, 1); }
 
             if (postFiles.length === 0) { return; }

@@ -83,7 +83,8 @@ export default {
             Files: 'Files',
             UseSearchTip: 'Can\'t find your files? Try search.',
             FileTypeError: 'Error file type',
-            PleaseSelectRightFile: 'Please select the accepted files!'
+            PleaseSelectRightFile: 'Please select the accepted files!',
+            FolderUploadSuccess: 'Folder upload success！'
         },
         shareForm: {
             ShareToGlobal: 'Global Share:',

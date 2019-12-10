@@ -55,6 +55,7 @@
                             :multiple="true"
                             :directory="true"
                             :accept="accept"
+                            :max-size="maxSize"
                             :on-change="handlerDirectoryChange"
                             :on-error="onDirectoryError"
                             :on-exceed="onExceed"
@@ -66,6 +67,7 @@
                             :on-folder-change="handleFolderChange"
                             :before-upload="beforeUploadDir"
                             @click.native="$refs.fileSelectPop && $refs.fileSelectPop.close()"
+                            @folder-max-size="handleFolderMaxSize"
                         >
                             <span>{{ localFolderLabel }}</span>
                         </SdxuUpload>
@@ -394,6 +396,17 @@ export default {
                 }
             });
         },
+        handleFolderMaxSize(files) {
+            this.$emit('exceed-max-size-dir', files);
+            if (this.onExceedMaxSizeDir && typeof this.onExceedMaxSizeDir === 'function') {
+                this.onExceedMaxSizeDir(files);
+            } else {
+                this.$notify.error({
+                    title: this.t('widget.fileSelect.ExistLargeFiles'),
+                    message: this.t('widget.fileSelect.LargeFileNotUpload')
+                });
+            }
+        },
         handleProgress(...rest) {
             this.makeFileList(true);
             this.onProgress && this.onProgress(...rest);
@@ -509,6 +522,9 @@ export default {
                 this.$refs.directorySelect && (this.$refs.directorySelect.uploadFiles = [val]);
                 this.makeFileList();
             }
+            this.$notify.success({
+                title: this.t('widget.fileSelect.FolderUploadSuccess')
+            });
         },
         parsePathStr(path) {
             let ownerId = this.userId || shareCenter.getUser() && shareCenter.getUser().uuid,

@@ -85,7 +85,7 @@ export default {
     },
     methods: {
         handleCancelUpload(row) {
-            this.fileManager.$refs.operationBar.$refs.fileUploader.handleRemove(row);
+            this.fileManager.$refs.operationBar.$refs.fileUploader.handleRemove(row, row.raw);
         },
         getRowLabel(row) {
             let label = this.t('view.file.Uploading');
@@ -121,7 +121,10 @@ export default {
             return this.list.length === 0;
         },
         deleteAllTasks() {
-            this.list.forEach(file => this.handleCancelUpload(file));
+            let list = [...this.list];
+            list.forEach(file => {
+                this.handleCancelUpload(file);
+            });
         }
     },
     watch: {

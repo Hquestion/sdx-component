@@ -1073,7 +1073,19 @@ export default {
             State_Stopping: '终止中...'
         },
         dataManagement: {
-            Dataset: '数据集'
+            Dataset: '数据集',
+            FileDataset: '文件数据集',
+            AllDataset: '所有数据集',
+            SelfDataset: '私有数据集',
+            MyShare: '我的共享',
+            OthersShare: '他人共享',
+            CreateDataset: '新建数据集',
+            CreatedTimeSort: '创建时间排序',
+            DatasetNamePlaceholder: '请输入数据集名称',
+            DataFormat: '数据格式',
+            Files: '文件',
+            Count: '个',
+            created_in: '创建于',
         }
     },
     sdxCommon: {
@@ -1091,6 +1103,7 @@ export default {
         Search: '搜索',
         Upgrade: '升级',
         Delete: '删除',
+        Share: '分享',
         Revert: '撤销',
         NoData: '暂无数据',
         PleaseSelect: '请选择',

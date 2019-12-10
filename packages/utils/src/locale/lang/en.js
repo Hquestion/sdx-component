@@ -1074,7 +1074,19 @@ export default {
             State_Stopping: 'Stopping...'
         },
         dataManagement: {
-            Dataset: 'Dataset'
+            Dataset: 'Dataset',
+            FileDataset: 'File Dataset',
+            AllDataset: 'All Dataset',
+            SelfDataset: 'Self Dataset',
+            MyShare: 'My Share',
+            OthersShare: 'Others Share',
+            CreateDataset: 'Create Dataset',
+            CreatedTimeSort: 'Sort by Created Time',
+            DatasetNamePlaceholder: 'Please input dataset name',
+            DataFormat: 'Data Format',
+            Files: 'file(s)',
+            Count: '',
+            created_in: 'created in ',
         }
     },
     sdxCommon: {
@@ -1092,6 +1104,7 @@ export default {
         Search: 'Search',
         Upgrade: 'Upgrade',
         Delete: 'Delete',
+        Share: 'Share',
         Revert: 'Revert',
         NoData: 'No Data',
         PleaseSelect: 'Please Select',

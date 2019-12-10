@@ -125,6 +125,7 @@
             @close="createWorkflowClose"
             :data="editingWorkflow"
             is-copying
+            :execute-id="rowExecuteId"
         />
     </div>
 </template>
@@ -161,7 +162,8 @@ export default {
             createWorkflowVisible: false,
             editingWorkflow: null,
             skyflowInfo: null,
-            refreshTimer: null
+            refreshTimer: null,
+            rowExecuteId: ''
         };
     },
     components: {
@@ -222,38 +224,38 @@ export default {
                     item.showShutdown = this.isOwnWorkflow && (item.state === 'launching' || item.state === 'running');
                     item.label = {};
                     switch(item.state) {
-                    case 'running':
-                        item.label.text = this.t('view.task.state.RUNNING');
-                        item.label.type = 'running';
-                        item.label.status = 'loading';
-                        break;
-                    case 'launching':
-                        item.label.text = this.t('view.task.state.LAUNCHING');
-                        item.label.type = 'processing';
-                        item.label.status = 'loading';
-                        break;
-                    case 'failed':
-                        item.label.text = this.t('view.task.state.FAILED');
-                        item.label.type = 'error';
-                        item.label.status = 'warning';
-                        break;
-                    case 'stopping':
-                        item.label.text = this.t('view.task.state.KILLING');
-                        item.label.type = 'dying';
-                        item.label.status = 'loading';
-                        break;
-                    case 'stopped':
-                        item.label.text = this.t('view.task.state.KILLED');
-                        item.label.type = 'die';
-                        item.label.status = '';
-                        break;
-                    case 'succeeded':
-                        item.label.text = this.t('view.monitor.componentState.state.succeeded');
-                        item.label.type = 'create';
-                        item.label.status = '';
-                        break;
-                    default:
-                        break;
+                        case 'running':
+                            item.label.text = this.t('view.task.state.RUNNING');
+                            item.label.type = 'running';
+                            item.label.status = 'loading';
+                            break;
+                        case 'launching':
+                            item.label.text = this.t('view.task.state.LAUNCHING');
+                            item.label.type = 'processing';
+                            item.label.status = 'loading';
+                            break;
+                        case 'failed':
+                            item.label.text = this.t('view.task.state.FAILED');
+                            item.label.type = 'error';
+                            item.label.status = 'warning';
+                            break;
+                        case 'stopping':
+                            item.label.text = this.t('view.task.state.KILLING');
+                            item.label.type = 'dying';
+                            item.label.status = 'loading';
+                            break;
+                        case 'stopped':
+                            item.label.text = this.t('view.task.state.KILLED');
+                            item.label.type = 'die';
+                            item.label.status = '';
+                            break;
+                        case 'succeeded':
+                            item.label.text = this.t('view.monitor.componentState.state.succeeded');
+                            item.label.type = 'create';
+                            item.label.status = '';
+                            break;
+                        default:
+                            break;
                     }
                 });
                 if (this.runningInfoList.length && this.runningInfoList.find(item => item.state === 'running' || item.state === 'launching' || item.state === 'stopping')) {
@@ -276,43 +278,44 @@ export default {
         handleOperation(row, type) {
             if (type && row.uuid) {
                 switch (type) {
-                case 'canvas':
-                    window.open(`${window.location.origin}/#/editor/${this.$route.params.id}/${row.uuid}`);
-                    break;
-                case 'copy':
-                    this.createWorkflowVisible = true;
-                    this.editingWorkflow = { ...this.skyflowInfo };
-                    break;
-                case 'remove':
-                    MessageBox({
-                        title: this.t('view.skyflow.removeRuntimeConfirm'),
-                        content: this.t('sdxCommon.ConfirmRemove')
-                    }).then(() => {
-                        removeGeneralRunningTask(row.uuid).then(() => {
-                            Message({
-                                message: this.t('sdxCommon.RemoveSuccess'),
-                                type: 'success'
+                    case 'canvas':
+                        window.open(`${window.location.origin}/#/editor/${this.$route.params.id}/${row.uuid}`);
+                        break;
+                    case 'copy':
+                        this.rowExecuteId = row.uuid;
+                        this.createWorkflowVisible = true;
+                        this.editingWorkflow = { ...this.skyflowInfo };
+                        break;
+                    case 'remove':
+                        MessageBox({
+                            title: this.t('view.skyflow.removeRuntimeConfirm'),
+                            content: this.t('sdxCommon.ConfirmRemove')
+                        }).then(() => {
+                            removeGeneralRunningTask(row.uuid).then(() => {
+                                Message({
+                                    message: this.t('sdxCommon.RemoveSuccess'),
+                                    type: 'success'
+                                });
+                                this.initList();
                             });
-                            this.initList();
-                        });
-                    }).catch(() => {});
-                    break;
-                case 'shutdown':
-                    MessageBox({
-                        title: this.t('view.skyflow.shutdownTaskConfirm'),
-                        status: 'warning'
-                    }).then(() => {
-                        shutdownGeneralRunningTask(row.uuid).then(() => {
-                            Message({
-                                message: this.t('sdxCommon.OperationSuccess'),
-                                type: 'success'
+                        }).catch(() => {});
+                        break;
+                    case 'shutdown':
+                        MessageBox({
+                            title: this.t('view.skyflow.shutdownTaskConfirm'),
+                            status: 'warning'
+                        }).then(() => {
+                            shutdownGeneralRunningTask(row.uuid).then(() => {
+                                Message({
+                                    message: this.t('sdxCommon.OperationSuccess'),
+                                    type: 'success'
+                                });
+                                this.initList();
                             });
-                            this.initList();
-                        });
-                    }).catch(() => {});
-                    break;
-                default:
-                    break;
+                        }).catch(() => {});
+                        break;
+                    default:
+                        break;
                 }
             }
         }

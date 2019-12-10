@@ -194,7 +194,7 @@ import WorkflowCard from './workflow-card/WorkflowCard';
 import WorkflowCardList from './workflow-card/WorkflowCardList';
 import { Form, FormItem, Message, Scrollbar, Radio } from 'element-ui';
 import Transfer from '@sdx/ui/components/transfer';
-import { updateWorkflow, getSkyflowList, createWorkflow, getSkyflowTemplates } from '@sdx/utils/src/api/skyflow';
+import { updateWorkflow, getSkyflowList, createWorkflow, getSkyflowTemplates, copyWorkflow } from '@sdx/utils/src/api/skyflow';
 import ElSelect from 'element-ui/lib/select';
 import Scroll from '@sdx/ui/components/scroll';
 import auth from '@sdx/widget/components/auth';
@@ -276,6 +276,10 @@ export default {
         isCopying: {
             type: Boolean,
             default: false
+        },
+        executeId: {
+            type: String,
+            default: ''
         }
     },
     watch: {
@@ -377,16 +381,29 @@ export default {
                         });
                     } else {
                         delete this.workflowForm.uuid;
-                        createWorkflow(this.workflowForm).then(() => {
-                            Message({
-                                message: this.t('sdxCommon.CreateSuccess'),
-                                type: 'success'
+                        if (this.isCopying) {
+                            copyWorkflow(this.executeId, this.workflowForm).then(() => {
+                                Message({
+                                    message: this.t('sdxCommon.CreateSuccess'),
+                                    type: 'success'
+                                });
+                                this.needRefresh = true;
+                                this.dialogVisible = false;
+                            }).finally(() => {
+                                this.loading = false;
                             });
-                            this.needRefresh = true;
-                            this.dialogVisible = false;
-                        }).finally(() => {
-                            this.loading = false;
-                        });
+                        } else {
+                            createWorkflow(this.workflowForm).then(() => {
+                                Message({
+                                    message: this.t('sdxCommon.CreateSuccess'),
+                                    type: 'success'
+                                });
+                                this.needRefresh = true;
+                                this.dialogVisible = false;
+                            }).finally(() => {
+                                this.loading = false;
+                            });
+                        }
                     }
                 }
             });

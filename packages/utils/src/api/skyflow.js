@@ -29,6 +29,10 @@ export function createWorkflow(params) {
     return httpService.post(skyflowApi, params);
 }
 
+export function copyWorkflow(exeId, params) {
+    return httpService.post(`${skyflowExecuteApi}/${exeId}/copy`, params);
+}
+
 export function updateWorkflow(uuid, params) {
     return httpService.patch(`${skyflowApi}/${uuid}`, params);
 }
@@ -478,6 +482,7 @@ export default {
     getSkyflowTemplates,
     updateWorkflow,
     createWorkflow,
+    copyWorkflow,
     removeWorkflow,
     getSkyflowInfo,
     getGeneralRunningInfo,

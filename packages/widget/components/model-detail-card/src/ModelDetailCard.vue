@@ -13,13 +13,28 @@
                     {{ meta.title }}
                 </div>
                 <div>
-                    <div :style="`color: ${meta.labelColor}`">
+                    <div
+                        :style="`color: ${meta.labelColor}`" 
+                        v-if="type === 'model'"
+                    >
                         {{ meta.type }}
                     </div>
+                    <div
+                        v-else
+                        class="sdxw-model-detail-card__creator"
+                    >
+                        <span>
+                            {{ `${t('sdxCommon.Creator')}：` }}
+                        </span>
+                        <span>
+                            {{ meta.creator }}
+                        </span>
+                    </div>
                     <div>
-                        <span>{{ meta.creator }}</span>
-                        <span v-if="getUser().userId === meta.owner.uuid">({{ t('view.project.oneself') }})</span>
+                        <span v-if="type === 'model'">{{ meta.creator }}</span>
+                        <span v-if="getUser().userId === meta.owner.uuid && type === 'model'">({{ t('view.project.oneself') }})</span>
                         <span>{{ `${t('view.project.Created')}${dateFormatter(meta && meta.createdAt)}` }}</span>
+                        <span v-if="type === 'dataset'">{{ `${t('view.dataManagement.Updated')}${dateFormatter(meta && meta.createdAt)}` }}</span>
                     </div>
                 </div>
             </div>
@@ -52,6 +67,10 @@ export default {
         meta: {
             type: Object,
             default: () => {}
+        },
+        type: {
+            type: String,
+            default: 'model'
         }
     },
     methods: {

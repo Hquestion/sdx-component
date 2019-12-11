@@ -619,6 +619,11 @@ export default {
             etc: 'etc'
         },
         model: {
+            Expansion_capacity: 'Expansion capacity',
+            One_click_upgrade: 'One click upgrade',
+            One_key_rollback: 'One key rollback',
+            Traffic_assignment: 'Traffic assignment',
+            Instance_adjustment: 'Instance adjustment',
             New: 'New',
             Old: 'Old',
             ModelRepo: 'Model Repository',
@@ -1087,6 +1092,8 @@ export default {
             Files: 'file(s)',
             Count: '',
             created_in: 'created in ',
+            Dataset_Preview: 'Dataset Preview',
+            Updated: 'Updated'
         }
     },
     sdxCommon: {

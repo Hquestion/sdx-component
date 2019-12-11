@@ -7,7 +7,6 @@
     > 
         <el-form
             ref="form"
-            :model="params"
             :label-width="lang$==='en' ? '150px' : '110px'"
             label-position="right"
             :rules="rules"

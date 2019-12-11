@@ -32,6 +32,9 @@
                 }
             }
         }
+        @include element('creator') {
+            color: $sdx-secondary-color;
+        }
     }
     @include element('description') {
         color: $sdx-secondary-color--light3;

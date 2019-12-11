@@ -43,28 +43,48 @@
                         <sdxu-table
                             light
                             :data="row.versionInfo"
+                            align="center"
+                            header-align="center"
                         >
                             <el-table-column
                                 prop="versionName"
                                 :label="t('view.model.Model_Version')"
-                            />
+                            >
+                                <template #default="{row}">
+                                    <span>{{ row.versionName }}</span>
+                                    <span
+                                        v-if="row.state"
+                                        style="color: #6E7C94"
+                                    >
+                                        （{{ row.state }}）
+                                    </span>
+                                </template>
+                            </el-table-column>
                             <el-table-column
-
+                                prop="instances"
                                 :label="t('view.model.Instances')"
-                            />
+                            >
+                                <template #default="{row}">
+                                    {{ `${row.instances}${t('view.task.Count')}` }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 :label="t('view.model.Resource')"
                             >
                                 <template
                                     slot-scope="scope"
                                 >
-                                    {{ `${scope.row.runtimeResource && scope.row.runtimeResource.cpus / 1000}C / ${scope.row.runtimeResource && scope.row.runtimeResource.gpus}GB` }}
+                                    {{ `${scope.row.runtimeResource.cpus / 1000}C / ${scope.row.runtimeResource.memory / Math.pow(1024, 3)}GB / ${scope.row.runtimeResource.gpus}${t('view.task.Block')}` }}
                                 </template>
                             </el-table-column>
                             <el-table-column
-
+                                prop="trafficRatio"
                                 :label="t('view.model.Flow_ratio')"
-                            />
+                            >
+                                <template #default="{row}">
+                                    {{ `${row.trafficRatio * 100}%` }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 prop="startedAt"
                                 :label="t('view.model.Running_time')"
@@ -97,10 +117,51 @@
                                     >
                                         {{ t('view.model.Online_testing') }}
                                     </SdxuButton>
-                                    <span v-else> - </span>
+                                    <SdxuButton
+                                        size="regular"
+                                        type="link"
+                                        v-if="row.onlineTesting && row.capacity"
+                                        @click="adjustversionUpgrade(row, row.instances, 'capacity')"
+                                    >
+                                        {{ t('view.model.Expansion_capacity') }}
+                                    </SdxuButton>
+                                    <span v-if="!row.onlineTesting">-</span>
                                 </template>
                             </el-table-column>
                         </sdxu-table>
+                        <div
+                            class="btn-group"
+                            v-if="row.versionUpgrade"
+                        >
+                            <SdxuButton
+                                type="default"
+                                size="small"
+                                @click="adjustversionUpgrade(row.versionInfo, row.instances, 'instance')"
+                            >
+                                {{ t('view.model.Instance_adjustment') }}
+                            </SdxuButton>
+                            <SdxuButton
+                                type="default"
+                                size="small"
+                                @click="adjustversionUpgrade(row, row.instances, 'traffic')"
+                            >
+                                {{ t('view.model.Traffic_assignment') }}
+                            </SdxuButton>
+                            <SdxuButton
+                                type="default"
+                                size="small"
+                                @click="resetVersionUpgrade(row, 'rollback')"
+                            >
+                                {{ t('view.model.One_key_rollback') }}
+                            </SdxuButton>
+                            <SdxuButton
+                                type="primary"
+                                size="small"
+                                @click="resetVersionUpgrade(row, 'resume')"
+                            >
+                                {{ t('view.model.One_click_upgrade') }}
+                            </SdxuButton>
+                        </div>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -184,13 +245,21 @@
             :editing-service="serviceInfo"
             @close="handleClose"
         />
+        <VersionUpgrade
+            :visible.sync="versionUpgradeVisible"
+            v-if="versionUpgradeVisible"
+            :type="versionUpgradeType"
+            :data="versionUpgradeData"
+            :total-instance="totalInstance"
+            @confirmUpgrade="confirmUpgrade"
+        />
     </div>
 </template>
 
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxwSearchLayout from '@sdx/widget/components/search-layout';
-import { getServiceList,removeService,stopService,startService, getVersionList } from '@sdx/utils/src/api/model';
+import { getServiceList,removeService,stopService,startService, getVersionList, updateService } from '@sdx/utils/src/api/model';
 import { paginate,removeBlankAttr} from '@sdx/utils/src/helper/tool';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuPagination from '@sdx/ui/components/pagination';
@@ -206,6 +275,8 @@ import ResourceAlert from '@sdx/widget/components/resource-alert';
 import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import CreateModelService from '../service-dialog/create-model-service/Index';
 import ApiTest from '@sdx/widget/components/api-test';
+import Button from '@sdx/ui/components/button';
+import VersionUpgrade from '../service-dialog/VersionUpgrade';
 export default {
     name: 'SdxvModelService',
     mixins: [locale],
@@ -232,13 +303,17 @@ export default {
             publishPlatformVisible:false,
             grayscaleReleaseVisible:false,
             createServiceVisible:false,
+            versionUpgradeVisible: false,
             table: [],
             refreshTimer: null,
             // 灰度列表
             grayList: [],
             serviceInfo: null,
             // 要展开的行，数值的元素是row的key值
-            expands: []
+            expands: [],
+            versionUpgradeType: '',
+            versionUpgradeData: null,
+            totalInstance: 0
         };
     },
     components: {
@@ -254,7 +329,9 @@ export default {
         [FoldLabel.FoldLabel.name]: FoldLabel.FoldLabel,
         SdxuButtonGroup,
         [ResourceAlert.name]: ResourceAlert,
-        CreateModelService
+        CreateModelService,
+        [Button.name]: Button,
+        VersionUpgrade
     },
     computed: {
         modelStateList() {
@@ -282,6 +359,44 @@ export default {
     },
     methods: {
         dateFormatter,
+        confirmUpgrade() {
+            this.getServices();
+        },
+        // 回滚升级
+        resetVersionUpgrade(data, type) {
+            let params = {
+                versionUpgrade: {
+                    versionName: this.table[0].versionName,
+                    instances: this.table[0].instances,
+                    trafficRatio:this.table[0].trafficRatio,
+                    action: type
+                }
+            };
+            MessageBox({
+                title: this.t('view.model.Model_deletion_prompt'),
+                content: this.t('view.model.Are_you_sure_you_want_to_delete_this_model_service'),
+                status: 'warning'
+            }).then(() => {
+                updateService(data.uuid, params).then(()=> {
+                    Message({
+                        message: this.t('sdxCommon.RemoveSuccess'),
+                        type: 'success'
+                    });
+                    this.getServices();
+                });
+            });
+        },
+        //实例调整
+        adjustversionUpgrade(data, instances, type) {
+            // console.log(data, 999);
+            if(type === 'instance') {
+                this.totalInstance = instances;
+            }
+            this.versionUpgradeVisible = true;
+            this.versionUpgradeType = type;
+            this.versionUpgradeData = data;
+           
+        },
         // 获取row的key值
         getRowKeys(row) {
             return row.uuid;
@@ -382,21 +497,32 @@ export default {
                                 runtimeResource: items[i].runtimeResource,
                                 updatedAt:  items[i].updatedAt,
                                 startedAt: items[i].startedAt,
-                                onlineTesting: items[i].state === 'Running'
+                                onlineTesting: items[i].state === 'Running',
+                                trafficRatio: 1,
+                                uuid: items[i].uuid,
+                                capacity: true
                             }];
                         } else {
                             info = [{
                                 versionName: items[i].versionUpgrade.versionName,
                                 instances: items[i].versionUpgrade.instances,
                                 trafficRatio: items[i].versionUpgrade.trafficRatio,
-                                onlineTesting: items[i].state === 'Running'
+                                onlineTesting: items[i].state === 'Running',
+                                updatedAt:  items[i].versionUpgrade.updatedAt,
+                                startedAt: items[i].versionUpgrade.startedAt,
+                                runtimeResource: items[i].runtimeResource,
+                                state: this.t('view.model.New'),
+                                uuid: items[i].uuid
                             },{
                                 versionName: items[i].versionName,
-                                instances: items[i].instances,
+                                instances: items[i].instances - items[i].versionUpgrade.instances,
                                 runtimeResource: items[i].runtimeResource,
                                 updatedAt:  items[i].updatedAt,
                                 startedAt: items[i].startedAt,
-                                onlineTesting: items[i].state === 'Running'
+                                onlineTesting: items[i].state === 'Running',
+                                trafficRatio: 1 - items[i].versionUpgrade.trafficRatio,
+                                state: this.t('view.model.Old'),
+                                uuid: items[i].uuid
                             }];
                         }
                         items[i]['versionInfo'] = info;
@@ -431,6 +557,11 @@ export default {
         border-radius: 2px;
         padding: 24px;
         margin-top: 24px;
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
     }
     .sdxu-pagination {
         margin-top: 24px;

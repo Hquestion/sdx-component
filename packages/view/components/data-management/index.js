@@ -1,7 +1,7 @@
 import DatasetView from './src/DatasetView';
 import DatasetList from './src/DatasetList';
 import { t } from '@sdx/utils/src/locale';
-
+import DataPreview from './src/data-preview/Index.vue';
 DatasetList.install = vue => {
     vue.component(DatasetList.name, DatasetList);
 };
@@ -20,6 +20,15 @@ const routeCfg = [
                 meta: {
                     breadcrumb: t('view.dataManagement.Dataset'),
                     isRoot: true
+                }
+            },
+            {
+                path: 'datasetView/:uuid',
+                name: 'datasetView',
+                component: DataPreview,
+                meta: {
+                    breadcrumb: t('view.dataManagement.Dataset_Preview'),
+                    header: t('view.dataManagement.Dataset_Preview')
                 }
             }
         ]

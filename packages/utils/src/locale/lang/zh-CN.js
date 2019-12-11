@@ -618,6 +618,11 @@ export default {
             etc: '等'
         },
         model: {
+            Expansion_capacity: '扩缩容',
+            One_click_upgrade: '一键升级',
+            One_key_rollback: '一键回滚',
+            Traffic_assignment: '流量分配',
+            Instance_adjustment: '实例调整',
             New: '新',
             Old: '旧',
             ModelRepo: '模型仓库',
@@ -1086,6 +1091,8 @@ export default {
             Files: '文件',
             Count: '个',
             created_in: '创建于',
+            Dataset_Preview: '数据集预览',
+            Updated: '更新于'
         }
     },
     sdxCommon: {

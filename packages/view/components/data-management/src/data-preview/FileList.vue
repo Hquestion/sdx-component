@@ -17,6 +17,7 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxuArticleTitle from '@sdx/ui/components/article-panel';
 import SdxuSectionTitle from '@sdx/ui/components/section-panel';
 import {Tree} from 'element-ui';
+import {getFilesList} from '@sdx/utils/src/api/file';
 export default {
     name: 'SdxvDatasetFileList',
     mixins: [locale],
@@ -28,7 +29,7 @@ export default {
     data() {
         return { 
             // 文件列表
-            treeData: [],
+            treeData:[],
             expandedKey:[]
         };
     },
@@ -70,7 +71,19 @@ export default {
             );
         },
         fetchFiles(node,resolve) {
-
+            let params ={};
+            let promise = getFilesList(params).then(res => {
+                return res.children;
+            });
+            return promise.then(res => {
+                this.isTreeLoading = false;
+                resolve(res);
+            });
+        },
+        handleCheckChange(data, checked) {
+            if(checked) {
+              
+            }
         }
     }
 };

@@ -38,7 +38,10 @@
                 :label="t('view.model.Instances')"
                 v-if="type==='instance'"
             >
-                <template #default="{row}">
+                <template
+                    #default="{row}"
+                    class="instance-input"
+                >
                     <el-input-number
                         v-model="row.instances"
                         @change="handleChange(row, row.instances)"
@@ -94,7 +97,7 @@
 import locale from '@sdx/utils/src/mixins/locale';
 import SdxuTable from '@sdx/ui/components/table';
 import SdxuDialog from '@sdx/ui/components/dialog';
-import {InputNumber, Select, Option} from 'element-ui';
+import {InputNumber, Select, Option, Message} from 'element-ui';
 import { updateService } from '@sdx/utils/src/api/model';
 export default {
     name: 'SdxvVersionUpgrade',
@@ -183,9 +186,13 @@ export default {
                     }
                 };
             }
-            updateService(this.data.uuid, params).then(()=> {
+            updateService(Array.isArray(this.data) ? this.data[0].uuid : this.data.uuid, params).then(()=> {
                 this.$emit('update:visible', false);
                 this.$emit('confirmUpgrade');
+                Message({
+                    message: this.t('sdxCommon.SettingSuccess'),
+                    type: 'success'
+                });
             });
         },
         handleChange(row, num) {
@@ -210,19 +217,22 @@ export default {
             }
         },
         changeWeight(row) {
+            console.log(row, 99);
             if(row.state.includes(this.t('view.model.New'))) {
                 this.table = [
                     row,
                     {
+                        state:  this.saveTable[1].state,
                         versionName: this.saveTable[1].versionName,
-                        instance: Number((1 - row.trafficRatio).toFixed(2))
+                        trafficRatio: Number((1 - row.trafficRatio).toFixed(2))
                     }];
             } else {
                 this.table = [
                     
                     {
+                        state:  this.saveTable[0].state,
                         versionName: this.saveTable[0].versionName,
-                        instance: Number((1 - row.trafficRatio).toFixed(2))
+                        trafficRatio: Number((1 - row.trafficRatio).toFixed(2))
                     },
                     row];
             }
@@ -244,3 +254,57 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+.sdxv-version-upgrade {
+    /deep/ {
+        .el-input-number {
+            height: 24px;
+            line-height: 24px;
+            width: 120px;
+            .input.el-input__inner {
+                height: 24px;
+                line-height: 24px;
+                width: 120px;
+
+            }
+            .el-input__inner {
+                padding: 0 32px;
+                height: 23px;
+                border: 1px solid #13264D;
+            }
+            .el-input-number__decrease,.el-input-number__increase {
+                height: 23px;
+                line-height: 23px;
+                width: 32px;
+                background: #13264D;
+                .el-icon-plus::before,.el-icon-minus::before {
+                    color: #fff;
+                    font-weight: 700;
+                }
+            }
+        }
+        .el-select {
+            width: 90px !important;
+            .el-input {
+                width: 90px;
+                .el-input__inner {
+                    padding: 0;
+                }
+            }
+            .el-input--small .el-input__inner,.el-input--small .el-input__icon {
+                height: 24px;
+                line-height: 24px;
+            }
+            .el-input__suffix {
+                right: 0;
+                background: #13264D;
+            }
+            .el-icon-arrow-up:before {
+                color: #fff;
+                font-weight: 700;
+            }
+        }
+    }
+}
+</style>

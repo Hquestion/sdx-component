@@ -618,6 +618,15 @@ export default {
             etc: '等'
         },
         model: {
+            prompt: {
+                rollback: '您确定要将服务回滚至',
+                version: '版本吗？',
+                Are_you_sure: '您确定要从',
+                version_upgrade: '版本升级到',
+                version_end: '版本吗？'
+            },
+            One_click_upgrade_prompt: '一键升级提示',
+            One_click_rollback_prompt: '一键回滚提示',
             Expansion_capacity: '扩缩容',
             One_click_upgrade: '一键升级',
             One_key_rollback: '一键回滚',
@@ -974,7 +983,7 @@ export default {
             AuthAt: '授权时间',
             AddUserRightsTip: '如有需要，您可以选择添加用户特权哦',
             NewRights: '新建特权',
-            ConfirmDeleteUserRights: '确定要删除次用户特权吗？',
+            ConfirmDeleteUserRights: '确定要删除此用户特权吗？',
             Memory: '内存',
             Model: '型号',
             Core: '核',

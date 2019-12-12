@@ -143,21 +143,21 @@
                             <SdxuButton
                                 type="default"
                                 size="small"
-                                @click="adjustversionUpgrade(row, row.instances, 'traffic')"
+                                @click="adjustversionUpgrade(row.versionInfo, row.instances, 'traffic')"
                             >
                                 {{ t('view.model.Traffic_assignment') }}
                             </SdxuButton>
                             <SdxuButton
                                 type="default"
                                 size="small"
-                                @click="resetVersionUpgrade(row, 'rollback')"
+                                @click="resetVersionUpgrade(row.versionInfo, 'rollback')"
                             >
                                 {{ t('view.model.One_key_rollback') }}
                             </SdxuButton>
                             <SdxuButton
                                 type="primary"
                                 size="small"
-                                @click="resetVersionUpgrade(row, 'resume')"
+                                @click="resetVersionUpgrade(row.versionInfo, 'resume')"
                             >
                                 {{ t('view.model.One_click_upgrade') }}
                             </SdxuButton>
@@ -372,14 +372,22 @@ export default {
                     action: type
                 }
             };
+            let [title, content] = ['', ''];
+            if(type === 'rollback') {
+                title = this.t('view.model.One_click_rollback_prompt');
+                content = `${this.t('view.model.prompt.rollback')}${data[1].versionName}(${data[1].state})${this.t('view.model.prompt.version')}`;
+            } else {
+                title = this.t('view.model.One_click_upgrade_prompt');
+                content = `${this.t('view.model.prompt.Are_you_sure')}${data[1].versionName}(${data[1].state})${this.t('view.model.prompt.version_upgrade')}${data[0].versionName}(${data[0].state})${this.t('view.model.prompt.version_end')}`;
+            }
             MessageBox({
-                title: this.t('view.model.Model_deletion_prompt'),
-                content: this.t('view.model.Are_you_sure_you_want_to_delete_this_model_service'),
+                title,
+                content,
                 status: 'warning'
             }).then(() => {
-                updateService(data.uuid, params).then(()=> {
+                updateService(data[0].uuid, params).then(()=> {
                     Message({
-                        message: this.t('sdxCommon.RemoveSuccess'),
+                        message: this.t('sdxCommon.OperationSuccess'),
                         type: 'success'
                     });
                     this.getServices();
@@ -388,14 +396,12 @@ export default {
         },
         //实例调整
         adjustversionUpgrade(data, instances, type) {
-            // console.log(data, 999);
             if(type === 'instance') {
                 this.totalInstance = instances;
             }
             this.versionUpgradeVisible = true;
             this.versionUpgradeType = type;
             this.versionUpgradeData = data;
-           
         },
         // 获取row的key值
         getRowKeys(row) {
@@ -433,7 +439,7 @@ export default {
                 }).then(() => {
                     removeService(data.uuid).then(() => {
                         Message({
-                            message: this.t('sdxCommon.RemoveSuccess'),
+                            message: this.t('sdxCommon.OperationSuccess'),
                             type: 'success'
                         });
                         this.getServices();

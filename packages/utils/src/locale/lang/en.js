@@ -619,6 +619,15 @@ export default {
             etc: 'etc'
         },
         model: {
+            prompt: {
+                rollback: 'Are you sure you want to roll back the service to version ',
+                version: '?',
+                Are_you_sure: 'Are you sure you want to upgrade from ',
+                version_upgrade: ' version to ',
+                version_end: ' version?'
+            },
+            One_click_upgrade_prompt: 'One click upgrade prompt',
+            One_click_rollback_prompt: 'One click upgrade prompt',
             Expansion_capacity: 'Expansion capacity',
             One_click_upgrade: 'One click upgrade',
             One_key_rollback: 'One key rollback',

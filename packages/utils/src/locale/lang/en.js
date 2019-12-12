@@ -1105,7 +1105,8 @@ export default {
             Updated: 'Updated',
             Target_path: 'Target path',
             Detailed_description: 'Detailed description',
-            FileList: 'File list'
+            FileList: 'File list',
+            CreateNewDataset: 'Create New Dataset',
         }
     },
     sdxCommon: {

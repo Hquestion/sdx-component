@@ -1,5 +1,6 @@
 import DatasetView from './src/DatasetView';
 import DatasetList from './src/DatasetList';
+import DatasetCreation from './src/DatasetCreation';
 import { t } from '@sdx/utils/src/locale';
 import DataPreview from './src/data-preview/Index.vue';
 DatasetList.install = vue => {
@@ -29,6 +30,14 @@ const routeCfg = [
                 meta: {
                     breadcrumb: t('view.dataManagement.Dataset_Preview'),
                     header: t('view.dataManagement.Dataset_Preview')
+                }
+            },
+            {
+                path: 'dataset-creation',
+                name: 'SdxvDatasetCreation',
+                component: DatasetCreation,
+                meta: {
+                    breadcrumb: t('view.dataManagement.CreateNewDataset')
                 }
             }
         ]

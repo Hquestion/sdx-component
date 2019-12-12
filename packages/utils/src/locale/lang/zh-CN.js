@@ -1104,7 +1104,8 @@ export default {
             Updated: '更新于',
             Target_path: '目标路径',
             Detailed_description: '详细说明',
-            FileList: '文件列表'
+            FileList: '文件列表',
+            CreateNewDataset: '新建数据集',
         }
     },
     sdxCommon: {

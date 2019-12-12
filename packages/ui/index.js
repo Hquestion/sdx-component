@@ -35,6 +35,7 @@ import ArticlePanel from './components/article-panel';
 import SectionPanel from './components/section-panel';
 import AutosizeCopyable from './components/autosize-copyable';
 import BubbleTipPopper from './components/bubble-tip-popper';
+import UploadImage from './components/upload-image';
 import { registerI18n } from '@sdx/utils/src/locale';
 
 const SdxUI = {
@@ -74,7 +75,8 @@ const SdxUI = {
     ArticlePanel,
     ArticleTitle,
     AutosizeCopyable,
-    BubbleTipPopper
+    BubbleTipPopper,
+    UploadImage
 };
 
 SdxUI.install = (vue, { i18n } = {}) => {
@@ -115,6 +117,7 @@ SdxUI.install = (vue, { i18n } = {}) => {
     SectionPanel.install(vue);
     AutosizeCopyable.install(vue);
     BubbleTipPopper.install(vue);
+    UploadImage.install(vue);
     // 通用服务注入i18n服务
     registerI18n(i18n);
 };

@@ -37,5 +37,6 @@ module.exports = {
     'article-panel': './components/article-panel/index.js',
     'section-panel': './components/section-panel/index.js',
     'autosize-copyable': './components/autosize-copyable/index.js',
-    'bubble-tip-popper': './components/bubble-tip-popper/index.js'
+    'bubble-tip-popper': './components/bubble-tip-popper/index.js',
+    'upload-image': './components/upload-image/index.js',
 };

@@ -20,11 +20,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             right: 0;
             top: 0;
         }
-    }
 
-    @include element('button') {
-        @include modifier('sort') {
-            margin-left: $sdx-gap-regular;
+        @include element('button') {
+            @include modifier('sort') {
+                margin-left: $sdx-gap-regular;
+            }
         }
     }
 
@@ -37,19 +37,21 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         @include modifier('pagination') {
             margin-top: $sdx-gap-regular;
         }
-    }
 
-    @include element('card') {
-        display: flex;
-        flex-wrap: wrap;
-        margin: -$sdx-gap-regular / 2;
-
-        @include modifier('item') {
-            flex: none;
-            width: calc(50% - #{$sdx-gap-regular});
-            margin: $sdx-gap-regular / 2;
+        @include element('card') {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -$sdx-gap-regular / 2;
+    
+            @include modifier('item') {
+                flex: none;
+                width: calc(50% - #{$sdx-gap-regular});
+                margin: $sdx-gap-regular / 2;
+            }
         }
     }
+
+    
 }
 
 @include block('dataset-card', $bem-namespace-view) {
@@ -59,12 +61,75 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     border-radius: 4px;
 
     @include element('main') {
+        
+        @include element('info') {
+            position: relative;
+    
+            @include modifier('icon') {
+                img {
+                    width: 72px;
+                    height: 72px;
+                }
+            }
+
+            @include element('detail') {
+                margin-left: $sdx-gap-regular;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                
+                @include modifier('first') {
+                    display: flex;
+                    flex-direction: row;
+        
+                    div:nth-child(1) {
+                        font-family: SourceHanSansCN-Medium;
+                        font-size: 18px;
+                        color: #1144AB;
+                        text-align: left;
+                        &:hover {
+                            cursor: pointer;
+                            text-decoration-line: underline;
+                        }
+                    }
+                    div:nth-child(2) {
+                        height: 24px;
+                        background: #EDEFF2;
+                        border-radius: 2px;
+                        font-family: SourceHanSansCN-Normal;
+                        font-size: 12px;
+                        letter-spacing: 0;
+                        color: #253858;
+                        padding: $sdx-gap-mini;
+                        margin-left: 8px;
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+                @include modifier('second') {
+                    font-family: SourceHanSansCN-Normal;
+                    font-size: 14px;
+                    color: #172B4D;
+                    letter-spacing: 0;
+                    margin-top: 10px;
+                }
+            }
+    
+            @include modifier('state') {
+                position: absolute;
+                right: 0;
+                top: 8px;
+            }
+        }
 
         @include modifier('info') {
             display: flex;
             flex-direction: row;
         }
         @include modifier('desc') {
+            // 文字截断
+            @include text-truncation;
+            
             font-family: SourceHanSansCN-Normal;
             font-size: 14px;
             color: #6E7C94;
@@ -78,85 +143,63 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
             display: flex;
             flex-flow: row wrap;
         }
-    }
 
-    @include element('info') {
-        position: relative;
-
-        @include modifier('icon') {
-            img {
-                width: 72px;
-                height: 72px;
-            }
+        @include element('tag') {
+            height: 32px;
+            background: #EDEFF2;
+            border-radius: 2px;
+            margin: 0 $sdx-gap-mini / 2;
+            padding: $sdx-gap-mini;
         }
-
-        @include element('detail') {
-            margin-left: $sdx-gap-regular;
+    
+        @include element('operation') {
+            height: 64px;
+            border-top: 1px solid #D8DEEA;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        @include modifier('state') {
-            position: absolute;
-            right: 0;
-            top: 8px;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 30px;
         }
     }
+}
 
-    @include element('detail') {
+@include block('dataset-creation', $bem-namespace-view) {
 
-        @include modifier('first') {
-            display: flex;
-            flex-direction: row;
-
-            div:nth-child(1) {
-                font-family: SourceHanSansCN-Medium;
-                font-size: 18px;
-                color: #1144AB;
-                text-align: left;
-                &:hover {
-                    cursor: pointer;
-                    text-decoration-line: underline;
-                }
-            }
-            div:nth-child(2) {
-                height: 24px;
-                background: #EDEFF2;
-                border-radius: 2px;
-                font-family: SourceHanSansCN-Normal;
-                font-size: 12px;
-                letter-spacing: 0;
-                color: #253858;
-                padding: $sdx-gap-mini;
-                margin-left: 8px;
-                display: flex;
-                align-items: center;
-            }
-        }
-        @include modifier('second') {
-            font-family: SourceHanSansCN-Normal;
-            font-size: 14px;
-            color: #172B4D;
-            letter-spacing: 0;
-            margin-top: 10px;
-        }
-    }
-
-    @include element('tag') {
-        height: 32px;
-        background: #EDEFF2;
-        border-radius: 2px;
-        margin: 0 $sdx-gap-mini / 2;
-        padding: $sdx-gap-mini;
-    }
-
-    @include element('operation') {
-        height: 64px;
-        border-top: 1px solid #D8DEEA;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
+    @include element('title') {
+        font-family: PingFangSC-Medium;
+        font-size: 24px;
+        color: #13264D;
+        letter-spacing: 0;
         margin-top: 30px;
+        margin-bottom: 32px;
+    }
+
+    @include element('container') {
+        background: #FFFFFF;
+        box-shadow: 0 0 22px 0 rgba(206,213,221,0.27);
+        border-radius: 2px;
+        padding: $sdx-gap-regular;
+
+        @include modifier('content') {
+            max-width: 800px;
+        }
+
+        @include modifier('show-bar') {
+            background: #EDEFF2;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            padding-left: $sdx-gap-mini;
+            min-height: 40px;
+            span {
+                font-family: PingFangSC-Regular;
+                font-size: 14px;
+                color: #13264D;
+            }
+        }
+
+        @include element('container-button') {
+            margin-left: 126px;
+        }
     }
 }

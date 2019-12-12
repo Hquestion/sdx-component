@@ -52,7 +52,7 @@
             <el-table-column
                 v-auth.system.button="'POD-LOG:READ'"
                 :label="t('sdxCommon.Operation')"
-                width="60px"
+                :width="lang$ === 'en' ? '90px' : '60px'"
             >
                 <template #default="{ row }">
                     <SdxuIconButton

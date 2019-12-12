@@ -50,8 +50,6 @@ ValidateReg.prototype.generate = function() {
     let regStr = '';
     if (this.start) {
         regStr += `[${ValidateReg.characterMap[this.start]}]`;
-    } else {
-        regStr += '\\S';
     }
     // if can match any character
     if (this.character.other) {
@@ -73,14 +71,16 @@ ValidateReg.prototype.generate = function() {
     }
     let {min, max} = this.limit;
 
-    min = min - 2;
+    min = this.start ? min - 1 : min;
     min = min <= 0 ? 0 : min;
 
-    max = max - 2;
+    max = this.start ? max - 1 : max;
     max = max <= 0 ? 0 : max;
-    regStr += `{${min},${max}}\\S`;
+    regStr += `{${min},${max}}`;
     return eval(`/^${regStr}$${this.limit.min === 0 ? '|^$' : ''}/`);
 };
+
+const TRIM_REG = /(^\s)|(\s$)/;
 
 // export class ValidateReg {
 //     limit = {
@@ -164,7 +164,9 @@ ValidateReg.prototype.generate = function() {
 
 export function commonNameValidator(rule, value, callback) {
     const reg = new ValidateReg({min:1, max:64}, {at: false, chinese: false}).generate();
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(t('utils.validator.commonNameValidator'));
@@ -173,7 +175,9 @@ export function commonNameValidator(rule, value, callback) {
 
 export function nickNameValidator(rule, value, callback) {
     const reg = new ValidateReg({min:1, max:64}, {underline: false}).generate();
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(t('utils.validator.nickNameValidator'));
@@ -191,7 +195,9 @@ export function passwordValidator(rule, value, callback) {
 
 export function nameWithChineseValidator(rule, value, callback) {
     const reg = new ValidateReg({min:1, max:64}, {at: false}).generate();
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(t('utils.validator.nameWithChineseValidator'));
@@ -209,7 +215,9 @@ export function descValidator(rule, value, callback) {
 
 export function nameStartWithLowerCaseValidator(rule, value, callback) {
     const reg = new ValidateReg({min:1, max:64}, {upperCase: false, chinese: false, at: false, space: false}, 'lowerCase').generate();
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(t('utils.validator.nameStartWithLowerCaseValidator'));
@@ -218,7 +226,9 @@ export function nameStartWithLowerCaseValidator(rule, value, callback) {
 
 export function nameStartWithLetterValidator(rule, value, callback) {
     const reg = new ValidateReg({min:1, max:64}, {chinese: false, at: false}, 'letter').generate();
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(t('utils.validator.nameStartWithLetterValidator'));
@@ -227,7 +237,9 @@ export function nameStartWithLetterValidator(rule, value, callback) {
 
 export function tagValidator(rule, value, callback) {
     const reg = new ValidateReg({min:1, max:10}, {chinese: true, at: false, space: false, underline: false, dash: false, dot: false}).generate();
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(t('utils.validator.tagValidator'));
@@ -250,7 +262,9 @@ export function tagArrayValidator(rule, value, callback) {
 // /^[a-zA-Z\d\\.\\_\\-]{1,64}$/
 export function nameValidate(rule, value, callback) {
     const reg = /^[a-zA-Z][a-zA-Z0-9_.]{3,19}$/i;
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(
@@ -263,7 +277,9 @@ export function nameValidate(rule, value, callback) {
 
 export function cNameValidate(rule, value, callback) {
     const reg = /^[a-zA-Z0-9\u4e00-\u9fa5.@\-_]{1,24}$/;
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(
@@ -279,7 +295,9 @@ export function cNameValidate(rule, value, callback) {
  */
 export function itemNameValidate(rule, value, callback) {
     const reg = /^[a-z][a-z0-9_.]{0,23}$/;
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(
@@ -294,7 +312,9 @@ export function itemNameValidate(rule, value, callback) {
  */
 export function imageNameValidate(rule, value, callback) {
     const reg = /^[a-z][a-z0-9_.-]{0,63}$/;
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(
@@ -309,7 +329,9 @@ export function imageNameValidate(rule, value, callback) {
  */
 export function imageVersionValidate(rule, value, callback) {
     const reg = /^[A-Za-z0-9_.-]{0,63}$/;
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(
@@ -324,7 +346,9 @@ export function imageVersionValidate(rule, value, callback) {
  */
 export function itemNameValidate100(rule, value, callback) {
     const reg = /^[a-z][a-z0-9_.]{0,99}$/;
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(
@@ -340,7 +364,9 @@ export function itemNameValidate100(rule, value, callback) {
  */
 export function tagNameValidate(rule, value, callback) {
     const reg = /^[a-zA-Z0-9][a-zA-Z0-9.]{0,9}$/;
-    if (reg.test(value)) {
+    if (TRIM_REG.test(value)) {
+        callback(t('utils.validator.trimValidateTip'));
+    } else if (reg.test(value)) {
         callback();
     } else {
         callback(

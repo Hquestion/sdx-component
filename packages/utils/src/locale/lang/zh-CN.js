@@ -1166,7 +1166,8 @@ export default {
             imageNameValidate: '请填写长度为1-64个字符，小写英文字母开头，允许小写英文字母、数字、"."、"_"或"-"',
             imageVersionValidate: '请填写长度为1-64个字符，允许英文字母、数字、"."、"_"或"-"',
             tagNameValidate: '请填写1-10位，字母或数字开头，字母、数字与点组成的字符串',
-            testNumber: '请输入正整数'
+            testNumber: '请输入正整数',
+            trimValidateTip: '首尾不能为空字符'
         },
         transform: {
             day_ago: '天前',

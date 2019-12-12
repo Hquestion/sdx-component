@@ -1167,7 +1167,8 @@ export default {
             imageNameValidate: 'Please fill in 1-64 characters in length, beginning with lowercase letters, allowing lowercase letters, numbers,., or-',
             imageVersionValidate: 'Please fill in 1-64 characters in length, allowing English letters, numbers,., or-',
             tagNameValidate: 'Please fill in a string of 1-10 digits, letters or numbers beginning, letters, numbers and points.',
-            testNumber: 'Please enter a positive integer'
+            testNumber: 'Please enter a positive integer',
+            trimValidateTip: 'Head and tail should not be empty'
         },
         transform: {
             'day_ago': 'Day ago',

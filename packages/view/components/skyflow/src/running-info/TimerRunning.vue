@@ -263,13 +263,13 @@ export default {
     },
     methods: {
         expand(row) {
-            if (this.expandingRow !== row) this.$refs.timerRunningTable.$refs.elTable.toggleRowExpansion(this.expandingRow, false);
-            this.expandingRow = row;
-            if (!this.expandingRow.subRunningInfoList) {
-                this.$nextTick(() => {
-                    this.initSubList(true);
-                });
+            if (this.expandingRow !== row) {
+                this.$refs.timerRunningTable.$refs.elTable.toggleRowExpansion(this.expandingRow, false);
             }
+            this.expandingRow = row;
+            this.$nextTick(() => {
+                this.initSubList();
+            });
         },
         createWorkflowClose() {
             this.editingWorkflow = null;

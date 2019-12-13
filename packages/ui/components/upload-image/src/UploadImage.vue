@@ -2,8 +2,8 @@
     <div class="sdxu-upload-image">
         <div class="sdxu-upload-image__img">
             <img
-                v-if="image"
-                :src="image"
+                v-if="imageSrc"
+                :src="imageSrc"
             >
             <div
                 v-else
@@ -20,10 +20,10 @@
         <div class="sdxu-upload-image__upload-trigger">
             <SdxuUpload
                 class="upload-image"
-                action=""
+                :action="type === 'base64' ? '' : ''"
                 :auto-upload="true"
                 :show-file-list="false"
-                :before-upload="handleBeforeUpload"
+                :before-upload="type === 'base64' ? handleBeforeUpload : null"
                 :multiple="false"
                 :limit="1"
                 accept="image/x-png,image/jpeg"
@@ -43,12 +43,6 @@
             </SdxuUpload>
         </div>
         <slot />
-        <!-- <SdxuButton
-            type="link"
-            @click="handleTest"
-        >
-            {{ t('view.model.test') }}
-        </SdxuButton> -->
     </div>
 </template>
 
@@ -67,9 +61,16 @@ export default {
         SdxuUpload,
     },
     props: {
-        imageUrl: {
+        image: {
             type: String,
             default: ''
+        },
+        type: {
+            type: String,
+            default: 'base64',
+            validator: value => {
+                return ['url', 'base64'].includes(value);
+            }
         }
     },
     data() {
@@ -78,19 +79,19 @@ export default {
         };
     },
     computed: {
-        image: {
+        imageSrc: {
             get() {
-                return this.imageUrl;
+                return this.image;
             },
             set(nval) {
-                this.$emit('update:imageUrl', nval);
+                this.$emit('update:image', nval);
             }
         }
     },
     methods: {
         handleBeforeUpload(file) {
             file2base64(file).then(res => {
-                this.image = res;
+                this.imageSrc = res;
             }, err => {
                 if (err === 'TYPE_INVALID') {
                     this.$message.error(this.t('view.model.fileFormatError'));

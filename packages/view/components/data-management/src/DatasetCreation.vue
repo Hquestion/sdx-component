@@ -1,49 +1,49 @@
 <template>
     <div class="sdxv-dataset-creation">
         <div class="sdxv-dataset-creation__title">
-            新建数据集
+            {{ t('view.dataManagement.CreateDataset') }}
         </div>
         <div class="sdxv-dataset-creation__container">
             <div class="sdxv-dataset-creation__container--content">
-                <SdxuArticlePanel title="基本配置">
+                <SdxuArticlePanel :title="t('view.dataManagement.BasicSetting')">
                     <el-form
                         :model="formData"
                         :label-width="labelWidth"
                     >
                         <el-form-item
                             prop="name"
-                            label="数据集名称："
+                            :label="t('view.dataManagement.DatasetName') + '：'"
                             required
                         >
                             <SdxuInput
                                 v-model="formData.name"
-                                placeholder="请输入数据集名称"
+                                :placeholder="t('view.dataManagement.DatasetNamePlaceholder')"
                             />
                         </el-form-item>
                         <el-form-item
                             prop="description"
-                            label="数据集描述："
+                            :label="t('view.dataManagement.DatasetDescription') + '：'"
                         >
                             <SdxuInput
                                 v-model="formData.description"
                                 type="textarea"
-                                placeholder="请输入数据集描述"
+                                :placeholder="t('view.dataManagement.DatasetDescPlaceholder')"
                                 :rows="5"
                             />
                         </el-form-item>
                         <el-form-item
-                            prop="name"
-                            label="数据集标签："
+                            prop="labels"
+                            :label="t('view.dataManagement.DatasetLabel') + '：'"
                         >
                             <el-select
-                                v-model="formData.tags"
+                                v-model="formData.labels"
                                 multiple
                                 filterable
                                 allow-create
-                                placeholder="请选择或输入"
+                                :placeholder="t('view.dataManagement.PleaseSelectOrInput')"
                             >
                                 <el-option
-                                    v-for="(item, i) in tagList"
+                                    v-for="(item, i) in labelList"
                                     :key="i"
                                     :label="item.name"
                                     :value="item.name"
@@ -51,40 +51,40 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                            prop="name"
-                            label="封面："
+                            prop="coverImg"
+                            :label="t('view.dataManagement.CoverImage') + '：'"
                         >
-                            <SdxuUploadImage :image-url.sync="formData.imageUrl" />
+                            <SdxuUploadImage :image.sync="formData.coverImg" />
                         </el-form-item>
                     </el-form>
                 </SdxuArticlePanel>
-                <SdxuArticlePanel title="数据源配置">
+                <SdxuArticlePanel :title="t('view.dataManagement.DataSourceSetting')">
                     <el-form
                         :model="formData"
                         :label-width="labelWidth"
                     >
                         <el-form-item
-                            label="选择文件："
+                            :label="t('view.dataManagement.SelectFile') + '：'"
                             required
                         >
                             <SdxwFileSelect
-                                v-model="formData.filePath"
+                                v-model="formData.sourcePaths"
                                 :string-model="false"
                                 check-type="all"
                                 source="all"
                                 :limit="-1"
                             />
                         </el-form-item>
-                        <el-form-item label="文件类型：">
+                        <el-form-item :label="t('view.dataManagement.FileType') + '：'">
                             <div class="sdxv-dataset-creation__container--show-bar">
                                 <span>{{ fileType }}</span>
                             </div>
                         </el-form-item>
                     </el-form>
                 </SdxuArticlePanel>
-                <SdxuArticlePanel title="数据保存">
+                <SdxuArticlePanel :title="t('view.dataManagement.DataSave')">
                     <el-form :label-width="labelWidth">
-                        <el-form-item label="存储目录：">
+                        <el-form-item :label="t('view.dataManagement.SaveDirectory') + '：'">
                             <div class="sdxv-dataset-creation__container--show-bar">
                                 <span>/.datasets</span>
                             </div>
@@ -93,7 +93,7 @@
                     <SdxwShareForm :label-width="labelWidth" />
                 </SdxuArticlePanel>
                 <SdxuArticlePanel
-                    title="高级配置"
+                    :title="t('view.dataManagement.AdvancedSetting')"
                     expandable
                     :expanded.sync="expanded"
                 >
@@ -101,11 +101,11 @@
                         v-if="expanded"
                         :label-width="labelWidth"
                     >
-                        <el-form-item label="详细说明：">
+                        <el-form-item :label="t('view.dataManagement.DetailedDescription') + '：'">
                             <SdxuInput
-                                v-model="formData.detail"
+                                v-model="formData.advancedConfig"
                                 type="textarea"
-                                placeholder="Markdown格式内容"
+                                :placeholder="t('view.dataManagement.DetailedDescPlaceholder')"
                                 :rows="5"
                             />
                         </el-form-item>
@@ -119,10 +119,10 @@
                         type="default"
                         @click="handleCancel"
                     >
-                        取消
+                        {{ t('sdxCommon.Cancel') }}
                     </SdxuButton>
                     <SdxuButton @click="handleConfirm">
-                        确定
+                        {{ t('sdxCommon.Confirm') }}
                     </SdxuButton>
                 </div>
             </div>
@@ -164,17 +164,20 @@ export default {
             formData: {
                 name: '',
                 description: '',
-                tags: [],
-                image: '',
-                file: '',
-                imageUrl: '',
-                filePath: [],
-                detail: ''
+                labels: [],
+                users: [],
+                groups: [],
+                isPublic: false,
+                sourcePaths: [],
+                coverImg: '',
+                dataFormat: '',
+                advancedConfig: '',
             },
             // todo: 校验
             rules: [],
-            tagList: [],
-            enLabelWidth: 120,
+            // todo: 
+            labelList: [],
+            enLabelWidth: 160,
             zhLabelWidth: 110,
             expanded: false
         };
@@ -186,13 +189,14 @@ export default {
         buttonMarginLeft() {
             return (this.lang$ === 'en' ? this.enLabelWidth : this.zhLabelWidth) + 16 + 'px';
         },
+        // todo: 
         fileType() {
             let type = '';
-            if (this.formData.filePath.length > 1) {
+            if (this.formData.sourcePaths.length > 1) {
                 type = 'other';
-            } else if (this.formData.filePath.length === 1) {
+            } else if (this.formData.sourcePaths.length === 1) {
                 // 
-                let name = this.formData.filePath[0].name;
+                let name = this.formData.sourcePaths[0].name;
                 let index = name.lastIndexOf('.');
                 type = index === 0 ? 'other' : name.slice(index + 1);
             }
@@ -200,15 +204,18 @@ export default {
         }
     },
     methods: {
-        handleCancel() {
+        getLabelList() {
             // todo:
+        },
+        handleCancel() {
+            this.$router.go(-1);
         },
         handleConfirm() {
             // todo:
         }
     },
     watch: {
-        'formData.filePath' (nval) {
+        'formData.sourcePaths' (nval) {
             console.error(nval);
         }
     }

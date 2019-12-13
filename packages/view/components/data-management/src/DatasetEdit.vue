@@ -2,13 +2,14 @@
     <div class="sdxv-dataset-edit">
         <SdxuDialog
             :visible.sync="dialogVisible"
-            title="编辑数据集"
+            :title="t('view.dataManagement.EditDataset')"
             @confirm="handleConfirm"
             @cancel="handleCancel"
         >
             <el-form
                 :model="formData"
                 :rules="rules"
+                :label-width="lang$ === 'en' ? '160px' : '110px'"
             >
                 <el-form-item
                     prop="name"
@@ -97,13 +98,14 @@ export default {
     data() {
         return {
             formData: {
-                name: this.dataset.name,
-                description: this.dataset.description,
-                labels: this.dataset.labels,
-                coverImg: this.dataset.coverImg
+                name: this.dataset.name || '',
+                description: this.dataset.description || '',
+                labels: this.dataset.labels || [],
+                coverImg: this.dataset.coverImg || ''
             },
             // todo:
-            rules: []
+            rules: {},
+            labelList: []
         };
     },
     computed: {

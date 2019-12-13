@@ -1,4 +1,4 @@
-/* global TykBatchRequest, TykJsResponse, log, rawlog */
+/* global TykBatchRequest, TykJsResponse, log, rawlog, _ */
 
 import '@babel/polyfill';
 import { v4 as uuid } from 'uuid';
@@ -58,7 +58,7 @@ const METHODS = {
  * A class to hold the values in the virtual endpoint's "config_data"
  */
 class Config {
-    constructor(config_data) {
+    constructor(config_data = { log_level: 20 }) {
         this.data = {};
         this._parseConfigData(config_data);
     }
@@ -102,12 +102,10 @@ class Context {
      * Construct the context.
      *
      * @param request The Tyk request object
-     * @param session The Tyk session object
      * @param config A {@link Config} object
      */
-    constructor(request, session, config) {
+    constructor(request, config) {
         this.request = request;
-        this.session = session;
         this.config = config;
 
         this._init();
@@ -117,7 +115,7 @@ class Context {
 
     _init() {
         if (this.request.Headers[REQUEST_ID_HEADER] === undefined) {
-            this.request.Headers[REQUEST_ID_HEADER] = [uuid()];
+            this.request.SetHeaders(REQUEST_ID_HEADER, uuid());
         }
     }
 
@@ -162,12 +160,12 @@ class Context {
     _log(level, message) {
         // return;
         // eslint-disable-next-line
-        // rawlog(`[fe-compose] config log level: ${this.config.logLevel}, level ${level}`);
-        if (level >= this.config.logLevel) {
-            const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
-            const date = new Date().toISOString();
-            rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
-        }
+        _.rawlog(`[fe-compose] config log level: ${this.config.logLevel}, level ${level}`);
+        // if (level >= this.config.logLevel) {
+        const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
+        const date = new Date().toISOString();
+        _.rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
+        // }
     }
 
     /* Request */
@@ -283,7 +281,7 @@ class Context {
             'suppress_parallel_execution': true
         };
 
-        const response = JSON.parse(TykBatchRequest(JSON.stringify(batch)))[0];
+        const response = JSON.parse(_.sendRequests(JSON.stringify(batch)))[0];
 
         if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
             this.debug(`Sent request ${JSON.stringify(request)}. Received response ${JSON.stringify(response)}`);
@@ -314,7 +312,7 @@ class Context {
             'suppress_parallel_execution': false
         };
 
-        const responses = JSON.parse(TykBatchRequest(JSON.stringify(batch)));
+        const responses = JSON.parse(_.sendRequests(JSON.stringify(batch)));
 
         const responseMap = {};
         responses.forEach(response => {
@@ -359,7 +357,10 @@ class Context {
         } else {
             response.Body = JSON.stringify(result);
         }
-        return TykJsResponse(response, this.session.meta_data);
+        _.setResponse(code, response.Body);
+        _.setResponseHeader([CONTENT_TYPE_HEADER], CONTENT_TYPE_APPLICATION_JSON);
+        _.setResponseHeader([REQUEST_ID_HEADER], this.request.Headers[REQUEST_ID_HEADER][0]);
+        return response;
     }
 
     /* Helpers */
@@ -563,8 +564,23 @@ function scanObject(obj, path, processor, prefix = undefined) {
  * @return {function(*=, *=, *): TykJsResponse}
  */
 export default function (handler) {
-    return function(request, session, config) {
-        const ctx = new Context(request, session, new Config(config.config_data));
+    return function() {
+        const request = {
+            Headers: {
+                [AUTHORIZATION_HEADER]: [_.getHeader(AUTHORIZATION_HEADER)],
+                [CONTENT_TYPE_APPLICATION_JSON]: [_.getHeader(CONTENT_TYPE_APPLICATION_JSON)],
+                [REQUEST_ID_HEADER]: [_.getHeader(REQUEST_ID_HEADER)]
+            },
+            SetHeaders: (key, val) => {
+                _.setHeader(key, val);
+            },
+            Params: _.getParams(),
+            Body: _.getBody(),
+            Methods: _.getMethod(),
+            Scheme: _.getScheme(),
+            URL: _.getURL()
+        };
+        const ctx = new Context(request, new Config());
 
         let responseData;
         try {
@@ -576,7 +592,7 @@ export default function (handler) {
                 throw e;
             }
         }
-        const response = JSON.parse(responseData).Response;
+        const response = responseData;
 
         if (ctx.config.logLevel <= LOG_LEVELS.DEBUG) {
             ctx.debug(`URL: ${request.URL}; Params: ${JSON.stringify(request.Params)}; In Body: ${JSON.stringify(request.Body)}; Status: ${response.Code}; Out Body: ${response.Body}`.trim());

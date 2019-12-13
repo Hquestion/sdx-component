@@ -78,7 +78,10 @@
                             :limit="1"
                             accept="image/x-png,image/jpeg"
                         >
-                            <SdxuButton type="default" size="small">
+                            <SdxuButton
+                                type="default"
+                                size="small"
+                            >
                                 {{ t('view.model.Select_pictures') }}
                             </SdxuButton>
                             <div
@@ -89,7 +92,10 @@
                             </div>
                         </SdxuUpload>
                     </div>
-                    <SdxuButton type="link" @click="handleTest">
+                    <SdxuButton
+                        type="link"
+                        @click="handleTest"
+                    >
                         {{ t('view.model.test') }}
                     </SdxuButton>
                 </div>
@@ -231,7 +237,11 @@ export default {
                 promise = apiTest(this.model.apiUrl, this.model.testCode);
             } else {
                 promise = apiTest(this.model.apiUrl, {
-                    image_b64: this.model.imageUrl
+                    image2array:1,
+                    resNet50: 1,
+                    instances: [
+                        {image_b64: this.model.imageUrl}
+                    ]
                 });
             }
             promise.then(res => {

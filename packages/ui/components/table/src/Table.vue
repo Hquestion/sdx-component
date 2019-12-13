@@ -1,6 +1,6 @@
 <template>
     <el-table
-        :class="['sdxu-table', light ? 'is-light' : '']"
+        :class="['sdxu-table', light ? 'is-light' : '', center ? 'is-center': '']"
         :data="data"
         :border="light"
         :row-style="tableRowStyle"
@@ -44,6 +44,10 @@ export default {
             default: ''
         },
         light: {
+            type: Boolean,
+            default: false
+        },
+        center: {
             type: Boolean,
             default: false
         }

@@ -1,36 +1,40 @@
 <template>
     <div class="sdxv-data-preview">
-        <SdxwDatasetDetailCard
-            :meta="cardInfo"
-            type="dataset"
-        />
         <el-row
             :gutter="24"
             class="file"
         >
-            <el-col :span="16">
+            <el-col :span="12">
+                <BasicInfo
+                    :meta="cardInfo"
+                />
+            </el-col>
+            <el-col :span="12">
                 <file-list />
             </el-col>
-            <el-col :span="8">
-                <div class="grid-content bg-purple" />
-            </el-col>
         </el-row>
+        <DetailedDesc
+            :detail-info="detailInfo"
+            class="detail-desc"
+        />
     </div>
 </template>
 
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
-import SdxwDatasetDetailCard from '@sdx/widget/components/model-detail-card';
+import BasicInfo from './BasicInfo';
 import { Row, Col } from 'element-ui';
 import FileList from './FileList';
+import DetailedDesc from './DetailedDesc';
 export default {
     name:'DataPreview',
     mixins: [locale],
     components: {
-        SdxwDatasetDetailCard,
+        BasicInfo,
         [Row.name]: Row,
         [Col.name]: Col,
-        FileList
+        FileList,
+        DetailedDesc
     },
     data() {
         return {
@@ -46,6 +50,8 @@ export default {
                     uuid: 'ascfasdfa'
                 }
             },
+            detailInfo: '是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤死飞过俄污垢剋家发 i 哦额个给 i 哦时光i 哦的死哦古第哦是个iodgdiogjdigddgddgiod    是开裆裤 的你看着你从哪说大室家电话好多个ID是个 iu度过丢失韩国 iu 德国 i德国的但是风格但是风格但是风格都发生过g'
+            
         };
     }
 };
@@ -53,7 +59,7 @@ export default {
 
 <style lang="scss" scoped>
 .sdxv-data-preview {
-    .file {
+    .detail-desc {
         margin-top: 24px;
     }
 }

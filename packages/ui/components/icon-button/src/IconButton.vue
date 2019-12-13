@@ -4,7 +4,8 @@
         :class="[
             `sdxu-icon-button--${size}`,
             active ? 'is-active' : '',
-            disable ? 'is-disable': ''
+            disable ? 'is-disable': '',
+            border ? 'is-border' : ''
         ]"
         v-show="visible"
         @click="handlerClick"
@@ -59,6 +60,10 @@ export default {
             default: false
         },
         nativeTooltip: {
+            type: Boolean,
+            default: false
+        },
+        border: {
             type: Boolean,
             default: false
         }

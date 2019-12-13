@@ -1,15 +1,29 @@
 <template>
-    <sdxu-section-panel>
-        <sdxu-article-panel
-            title="文件列表"
-        >
-            <el-tree
-                v-bind="__treeOption"
-                ref="tree"
-                @current-change="handleCheckChange"
-            />
-        </sdxu-article-panel>
-    </sdxu-section-panel>
+    <div class="sdxv-data-file-list">
+        <sdxu-section-panel>
+            <sdxu-article-panel
+                :title="t('view.dataManagement.FileList')"
+            >
+                <template #right>
+                    <IconButton
+                        border
+                        icon="sdx-icon sdx-icon-delete"
+                    />
+                </template>
+                <div
+                    style="height: 220px"
+                >
+                    <SdxuScroll>
+                        <el-tree
+                            v-bind="__treeOption"
+                            ref="tree"
+                            @current-change="handleCheckChange"
+                        />
+                    </SdxuScroll>
+                </div>
+            </sdxu-article-panel>
+        </sdxu-section-panel>
+    </div>
 </template>
 
 <script>
@@ -18,6 +32,8 @@ import SdxuArticleTitle from '@sdx/ui/components/article-panel';
 import SdxuSectionTitle from '@sdx/ui/components/section-panel';
 import {Tree} from 'element-ui';
 import {getFilesList} from '@sdx/utils/src/api/file';
+import Scroll from '@sdx/ui/components/scroll';
+import IconButton from '@sdx/ui/components/icon-button';
 export default {
     name: 'SdxvDatasetFileList',
     mixins: [locale],
@@ -25,6 +41,8 @@ export default {
         [SdxuArticleTitle.name]: SdxuArticleTitle,
         [SdxuSectionTitle.name]: SdxuSectionTitle,
         [Tree.name]: Tree,
+        [Scroll.name]: Scroll,
+        IconButton
     },
     data() {
         return { 
@@ -38,7 +56,7 @@ export default {
             return {
                 'render-content': this.renderContent, // 为文件夹加上图标
                 'check-strictly': true,
-                'show-checkbox': false, // 选中框
+                'show-checkbox': true, // 选中框
                 'highlight-current': true,
                 'empty-text': '没有文件',
                 'node-key': 'path',
@@ -88,3 +106,17 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+.sdxv-data-file-list {
+    &/deep/ {
+            .sdxu-article-panel__content {
+                padding: 24px 0px 0px 0px;
+            }
+            .sdxu-section-panel {
+                height: 312px;
+            }
+        }
+    }
+  
+</style>

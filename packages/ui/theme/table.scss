@@ -72,5 +72,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 }
             }
         }
+
+        @include state('center') {
+            td, th {
+                text-align: center;
+            }
+        }
     }
 }

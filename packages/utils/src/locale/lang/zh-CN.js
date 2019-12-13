@@ -1101,7 +1101,10 @@ export default {
             Count: '个',
             created_in: '创建于',
             Dataset_Preview: '数据集预览',
-            Updated: '更新于'
+            Updated: '更新于',
+            Target_path: '目标路径',
+            Detailed_description: '详细说明',
+            FileList: '文件列表'
         }
     },
     sdxCommon: {

@@ -43,8 +43,7 @@
                         <sdxu-table
                             light
                             :data="row.versionInfo"
-                            align="center"
-                            header-align="center"
+                            center
                         >
                             <el-table-column
                                 prop="versionName"
@@ -313,7 +312,8 @@ export default {
             expands: [],
             versionUpgradeType: '',
             versionUpgradeData: null,
-            totalInstance: 0
+            totalInstance: 0,
+            savaParams: {}
         };
     },
     components: {
@@ -351,6 +351,7 @@ export default {
     },
     created() {
         this.tableLoading = true;
+        this.savaParams = JSON.parse(JSON.stringify(this.params));
         this.getServices();
     },
     beforeDestroy () {
@@ -470,6 +471,7 @@ export default {
         },
         handleSearch() {
             this.current = 1;
+            this.savaParams = JSON.parse(JSON.stringify(this.params));
             this.getServices();
         },
         // 服务列表
@@ -478,7 +480,7 @@ export default {
                 clearInterval(this.refreshTimer);
                 this.refreshTimer = null;
             }
-            const params = Object.assign({}, this.params, {
+            const params = Object.assign({}, this.savaParams, {
                 ...paginate(this.current, this.pageSize),
             });
             removeBlankAttr(params);

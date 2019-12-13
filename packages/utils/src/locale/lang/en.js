@@ -1102,7 +1102,10 @@ export default {
             Count: '',
             created_in: 'created in ',
             Dataset_Preview: 'Dataset Preview',
-            Updated: 'Updated'
+            Updated: 'Updated',
+            Target_path: 'Target path',
+            Detailed_description: 'Detailed description',
+            FileList: 'File list'
         }
     },
     sdxCommon: {

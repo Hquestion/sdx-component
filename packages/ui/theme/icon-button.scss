@@ -42,4 +42,9 @@
         pointer-events: none;
         opacity: 0.6;
     }
+    @include state('border') {
+        border: 1px solid $sdx-secondary-color--light6;
+        border-radius: $sdx-border-radius;
+        padding: $sdx-border-radius-large;
+    }
 }

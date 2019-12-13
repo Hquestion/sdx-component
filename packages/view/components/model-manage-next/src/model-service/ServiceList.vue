@@ -113,6 +113,7 @@
                                         size="regular"
                                         type="link"
                                         v-if="row.onlineTesting"
+                                        @click="testApi(row.apiTest)"
                                     >
                                         {{ t('view.model.Online_testing') }}
                                     </SdxuButton>
@@ -230,7 +231,8 @@
         </div>
         <SdxwApiTestPopper
             :visible.sync="onlineTestingVisible"
-            :service-id="serviceInfo && serviceInfo.uuid"
+            :meta="apiTestMeta"
+            v-if="onlineTestingVisible"
         />
         <PublishPlatform :visible.sync="publishPlatformVisible" />
         <GrayscaleRelease
@@ -313,7 +315,8 @@ export default {
             versionUpgradeType: '',
             versionUpgradeData: null,
             totalInstance: 0,
-            savaParams: {}
+            savaParams: {},
+            apiTestMeta: {}
         };
     },
     components: {
@@ -463,7 +466,18 @@ export default {
                 });
             } else if(type === 'test') {
                 this.onlineTestingVisible = true;
+                this.apiTestMeta = {
+                    apiUrl: data.apiUrl,
+                    apiKey: data.apiKey
+                };
             }
+        },
+        testApi(data) {
+            this.onlineTestingVisible = true;
+            this.apiTestMeta = {
+                apiUrl: data.apiUrl,
+                apiKey: data.apiKey
+            };
         },
         handlePageChange(index){
             this.current = index;
@@ -508,7 +522,11 @@ export default {
                                 onlineTesting: items[i].state === 'Running',
                                 trafficRatio: 1,
                                 uuid: items[i].uuid,
-                                capacity: true
+                                capacity: true,
+                                apiTest: {
+                                    apiKey: items[i].apiKey,
+                                    apiUrl:  items[i].apiUrl
+                                }
                             }];
                         } else {
                             info = [{
@@ -520,7 +538,11 @@ export default {
                                 startedAt: items[i].versionUpgrade.startedAt,
                                 runtimeResource: items[i].runtimeResource,
                                 state: this.t('view.model.New'),
-                                uuid: items[i].uuid
+                                uuid: items[i].uuid,
+                                apiTest: {
+                                    apiKey: items[i].versionUpgrade.apiKey,
+                                    apiUrl:  items[i].versionUpgrade.apiUrl
+                                }
                             },{
                                 versionName: items[i].versionName,
                                 instances: items[i].instances - items[i].versionUpgrade.instances,
@@ -530,7 +552,11 @@ export default {
                                 onlineTesting: items[i].state === 'Running',
                                 trafficRatio: 1 - items[i].versionUpgrade.trafficRatio,
                                 state: this.t('view.model.Old'),
-                                uuid: items[i].uuid
+                                uuid: items[i].uuid,
+                                apiTest: {
+                                    apiKey: items[i].apiKey,
+                                    apiUrl:  items[i].apiUrl
+                                }
                             }];
                         }
                         items[i]['versionInfo'] = info;

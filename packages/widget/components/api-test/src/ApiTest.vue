@@ -119,7 +119,10 @@
                                 :value="item.value"
                             />
                         </el-select>
-                        <SdxuButton type="link">
+                        <SdxuButton
+                            type="link"
+                            @click="handleTest"
+                        >
                             {{ t('view.model.test') }}
                         </SdxuButton>
                     </div>

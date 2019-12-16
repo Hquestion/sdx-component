@@ -189,6 +189,7 @@
             :visible.sync="createWorkflowVisible"
             v-if="createWorkflowVisible"
             @close="createWorkflowClose"
+            :execute-id="executeId"
             :data="editingWorkflow"
             is-copying
         />
@@ -235,7 +236,8 @@ export default {
             editingWorkflow: null,
             skyflowInfo: null,
             expandingRow: null,
-            editingTask: null
+            editingTask: null,
+            executeId: ''
         };
     },
     components: {
@@ -438,6 +440,7 @@ export default {
                     break;
                 case 'copy':
                     this.createWorkflowVisible = true;
+                    this.executeId = row.uuid;
                     this.editingWorkflow = { ...this.skyflowInfo };
                     break;
                 case 'remove':

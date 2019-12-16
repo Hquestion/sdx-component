@@ -7,14 +7,13 @@
                 <SdxuInput
                     v-model="searchName"
                     type="search"
-                    size="small"
                     :placeholder="t('view.monitor.componentState.searchPodPlaceholder')"
                 />
             </SdxwSearchItem>
             <SdxwSearchItem :label="t('view.monitor.componentState.ComponentState') + ':'">
                 <el-select
                     v-model="podState"
-                    size="medium"
+                    size="large"
                 >
                     <el-option
                         v-for="(item, i) in podStateList"

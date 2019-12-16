@@ -1,7 +1,5 @@
 @include block('component-state-list', $bem-namespace-view) {
-    .el-input, .el-select {
-        width: 300px;
-    }
+    
     @include element('pagination') {
         display: flex;
         justify-content: flex-end;

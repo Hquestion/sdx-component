@@ -15,18 +15,18 @@
                 :ranking="true"
             />
         </div>
-        <div
+        <!-- <div
             v-auth.system.button="'POD_REAL_RESOURCE:READ'"
             class="sdxv-resource-statistics__item"
         >
             <SdxvTaskResourceRanking />
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
 import SdxvPlatformResource from './PlatformResource';
-import SdxvTaskResourceRanking from './TaskResourceRanking';
+// import SdxvTaskResourceRanking from './TaskResourceRanking';
 import SdxvUserResourceList from './UserResourceList';
 import auth from '@sdx/widget/components/auth';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -38,7 +38,7 @@ export default {
     components: {
         SdxvPlatformResource,
         SdxvUserResourceList,
-        SdxvTaskResourceRanking
+        // SdxvTaskResourceRanking
     }
 };
 </script>

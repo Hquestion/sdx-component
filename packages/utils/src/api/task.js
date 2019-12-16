@@ -100,7 +100,7 @@ export function getTaskDataSource(params) {
 
 // 任务资源统计
 export function getTaskResourceStatistics(params) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}/task-resource-profiles`, params);
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}task-resource-profiles`, params);
 }
 
 export default {

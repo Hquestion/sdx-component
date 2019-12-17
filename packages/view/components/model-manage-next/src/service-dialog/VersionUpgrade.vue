@@ -171,7 +171,6 @@ export default {
             this.$emit('update:visible', false);
         },
         confirm() {
-            // console.log(this.table, 999);
             let params = null;
             if(this.type === 'capacity') {
                 params = {
@@ -196,7 +195,6 @@ export default {
             });
         },
         handleChange(row, num) {
-            // console.log(row, num, 99);
             if(row.state.includes(this.t('view.model.New'))) {
                 this.table = [
                     row,
@@ -217,7 +215,6 @@ export default {
             }
         },
         changeWeight(row) {
-            console.log(row, 99);
             if(row.state.includes(this.t('view.model.New'))) {
                 this.table = [
                     row,
@@ -249,8 +246,8 @@ export default {
             );
         }
         this.trafficRatioOptions = arr;
-        this.table = this.data;
         this.saveTable = JSON.parse(JSON.stringify(this.data));
+        this.table = this.saveTable;
     }
 };
 </script>

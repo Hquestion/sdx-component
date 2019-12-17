@@ -14,6 +14,7 @@
             >
                 <el-radio-group
                     v-model="model.method"
+                    @change="changeRadio"
                 >
                     <el-radio
                         :label="imageRecognition"
@@ -95,6 +96,7 @@
                     <SdxuButton
                         type="link"
                         @click="handleTest"
+                        :disabled="!model.imageUrl"
                     >
                         {{ t('view.model.test') }}
                     </SdxuButton>
@@ -122,6 +124,7 @@
                         <SdxuButton
                             type="link"
                             @click="handleTest"
+                            :disabled="!model.testCode.trim()"
                         >
                             {{ t('view.model.test') }}
                         </SdxuButton>
@@ -213,6 +216,9 @@ export default {
         }
     },
     methods: {
+        changeRadio() {
+            this.testResult = '';
+        },
         handleBeforeUpload(file) {
             file2base64(file).then(res => {
                 this.model.imageUrl = res;
@@ -235,6 +241,7 @@ export default {
             }
         },
         handleTest() {
+            this.testResult = '';
             let promise;
             if (this.isMachineLearning) {
                 promise = apiTest(this.model.apiUrl, this.model.testCode);
@@ -243,14 +250,14 @@ export default {
                     image2array:1,
                     resNet50: 1,
                     instances: [
-                        {image_b64: this.model.imageUrl}
+                        {image_b64: this.model.imageUrl.match(/base64,(\S*)/)[1]}
                     ]
                 });
             }
             promise.then(res => {
-                this.testReult = JSON.stringify(res, null, '\t');
+                this.testResult = JSON.stringify(res, null, '\t');
             }, err => {
-                this.testReult = JSON.stringify(err, null, '\t');
+                this.testResult = JSON.stringify(err, null, '\t');
             });
         }
     },

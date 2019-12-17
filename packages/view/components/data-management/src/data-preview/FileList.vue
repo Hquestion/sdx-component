@@ -16,8 +16,9 @@
                     <SdxuScroll>
                         <el-tree
                             v-bind="__treeOption"
-                            ref="tree"
-                            @current-change="handleCheckChange"
+                            ref="fileTree"
+                            @check-change="handleCheckChange"
+                            @current-change="handleCurrentkChange"
                         />
                     </SdxuScroll>
                 </div>
@@ -34,6 +35,12 @@ import {Tree} from 'element-ui';
 import {getFilesList} from '@sdx/utils/src/api/file';
 import Scroll from '@sdx/ui/components/scroll';
 import IconButton from '@sdx/ui/components/icon-button';
+import { getPathIcon } from './utils';
+
+const NODE_KEY = '$feKey';
+function getFileKey(file) {
+    return file[NODE_KEY] || `${file.path}@${file.ownerId}`;
+}
 export default {
     name: 'SdxvDatasetFileList',
     mixins: [locale],
@@ -48,43 +55,97 @@ export default {
         return { 
             // 文件列表
             treeData:[],
-            expandedKey:[]
+            expandedKey:[],
+            previewData: {
+                data_rows: Object.freeze([]),
+                sky_schema: Object.freeze([]),
+                path: '',
+                shape: '',
+                ownerId: ''
+            },
         };
     },
+    props: {
+        value: {
+            type: Array,
+            default: () => []
+        },
+        checkable: {
+            type: Boolean,
+            default: true
+        },
+        limit: {
+            type: Number,
+            default: 1 // -1表示不限制
+        },
+    },
     computed: {
+        tree() {
+            return this.$refs.fileTree;
+        },
+        // 已选节点(兼容单选和多选模式)
+        selectedNodes() {
+            return this.value.map(item => typeof item === 'object' ? getFileKey(item) : item);
+        },
         __treeOption() {
             return {
-                'render-content': this.renderContent, // 为文件夹加上图标
+                'render-content': this.renderContent,
                 'check-strictly': true,
-                'show-checkbox': true, // 选中框
+                'show-checkbox': this.checkable,
                 'highlight-current': true,
-                'empty-text': '没有文件',
-                'node-key': 'path',
-                'check-on-click-node': true,
-                'default-expanded-keys': this.expandedKey,
-                data: this.treeData || [],
+                'node-key': NODE_KEY,
+                'empty-text': this.t('widget.fileSelect.NoFile'),
+                accordion: true,
                 lazy: true,
                 load: this.fetchFiles,
+                'default-checked-keys': this.selectedNodes,
+                data: this.treeData || [],
                 props: {
                     label: 'name',
                     children: 'children',
-                    isLeaf: data => !data.is_dir
-                }
+                    isLeaf: (data, node) => {
+                        return !!data.isFile;
+                    },
+                    disabled: data => {
+                        if (this.checkType === 'file') {
+                            return !data.isFile || !!data.selectDisable || !!data.isProject;
+                        }
+                        if (this.checkType === 'folder') {
+                            return !!data.isFile || !!data.selectDisable || !!data.isProject;
+                        }
+                        if (this.checkType === 'all') {
+                            return !!data.selectDisable || !!data.isProject || false;
+                        }
+                    }
+                },
+                ...this.treeOptions,
             };
-        }
+        },
     },
     methods: {
         // 定制 tree 的渲染函数,为文件夹加上图标
         renderContent(h, { node, data }) {
+            return this.renderFileNode(h, node, data);
+        },
+        renderFileNode(h, node, data) {
             return (
                 <span
                     class={{
-                        is_folder: data.is_dir,
-                        not_folder: !data.is_dir,
-                        'caret-right': true
+                        'is-folder': !data.isFile,
+                        'is-file': !!data.isFile,
+                        'sdxw-file-select-tree__node': true,
                     }}
                 >
-                    {data.name}
+                    <svg
+                        class="sdxw-file-select-tree__node-icon"
+                        aria-hidden="true"
+                    >
+                        <use xlinkHref={'#' + getPathIcon(data)}/>
+                    </svg>
+                    {node.label}
+                    {!data.isFile ?  <IconButton
+                        icon="sdx-icon sdx-icon-upload"
+                    /> : ''}
                 </span>
             );
         },
@@ -98,11 +159,96 @@ export default {
                 resolve(res);
             });
         },
-        handleCheckChange(data, checked) {
-            if(checked) {
-              
+        // 单文件选中
+        handleCurrentkChange(data,checked) {
+            if (checked) {
+                console.log(data, 'ff');
+                this.data_file = data.fullpath;
+                this.previewData.ownerId = data.ownerId;
+                this.previewData.path = data.path;
+
+                // 调用预览接口
+                let params = {
+                    dataset: this.id,
+                    data_file: data.fullpath
+                };
+                // 预览文件
+                if (data.name.includes('.csv') || data.name.includes('.txt') || data.name.includes('.orc') || data.name.includes('.parquet')) {
+                    this.datalistHide = false;
+                    this.isPreview = false;
+                    this.getPreview(params);
+                    this.imageUrl = '';
+
+                    this.previewData.path = data.path;
+                } else if (data.is_dir) {
+                    this.isPreview = false;
+                    // 一直张开
+                    this.expandedKey.push(data.path);
+
+                    this.datalistHide = true;
+                    this.dataListPath = data.path;
+
+                    this.imageUrl = '';
+                } else if (data.mimeType.indexOf('image/') === 0) {
+                    this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${data.ownerId}&path=${data.path}&filesystem=cephfs`;
+                    this.isPreview = false;
+                    this.datalistHide = false;
+                } else {
+                    this.isPreview = true;
+                    this.datalistHide = false;
+                    this.imageUrl = '';
+                }
             }
-        }
+        },
+        // 处理"文件选择"问题
+        handleCheckChange(data, checked) {
+            if (checked) {
+                data.checkTimestamp = +new Date();
+                if (this.limit >= 1) {
+                    const checkedNodes = this.tree.getCheckedNodes();
+                    const index = checkedNodes.findIndex(item => getFileKey(item) === getFileKey(data));
+                    checkedNodes.sort((a, b) => a.checkTimestamp - b.checkTimestamp);
+                    if (this.checkType === 'folder') {
+                        if (!data.isFile) {
+                            this.tree.setCheckedNodes(checkedNodes.slice(-1 * this.limit));
+                        } else {
+                            if (index >= 0) {
+                                checkedNodes.splice(index, 1);
+                            }
+                            this.tree.setCheckedNodes(checkedNodes);
+                        }
+                    } else if (this.checkType === 'file') {
+                        if (!data.isFile) {
+                            if (index >= 0) {
+                                checkedNodes.splice(index, 1);
+                            }
+                            this.tree.setCheckedNodes(checkedNodes);
+                        } else {
+                            this.tree.setCheckedNodes(checkedNodes.slice(-1 * this.limit));
+                        }
+                    } else {
+                        this.tree.setCheckedNodes(checkedNodes.slice(-1 * this.limit));
+                    }
+                }
+            }
+            this.$emit('input', this.tree.getCheckedNodes());
+            console.log(data,checked, this.tree.getCheckedNodes(),99);
+        },
+        // 暴露给外部使用
+        getCheckedNodes() {
+            return this.tree.getCheckedNodes();
+        },
+    },
+    watch: {
+        value: {
+            immediate: true,
+            deep: true,
+            handler(val) {
+                if (this.$refs.fileTree) {
+                    this.$refs.fileTree.setCheckedKeys(val.map(item => typeof item === 'object' ? getFileKey(item) : item));
+                }
+            }
+        },
     }
 };
 </script>
@@ -115,6 +261,13 @@ export default {
             }
             .sdxu-section-panel {
                 height: 312px;
+            }
+            .is-folder {
+                width: 100%;
+                .sdxu-icon-button {
+                    float: right;
+                    margin-right: 20px;
+                }
             }
         }
     }

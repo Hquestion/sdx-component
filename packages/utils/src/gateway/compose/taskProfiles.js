@@ -26,7 +26,6 @@ export let handler = wrap(function(ctx, request) {
         ownerIds = ownerIds.concat(users);
         delete request.Params.group;
     }
-    ctx.info('[TaskProfiles Request Body]: ' + JSON.stringify(ownerIds));
     const projects = ctx.sendRequest(ctx.createGetRequest(
         'http://tyk-gateway/task-manager/api/v1/tasks',
         request.Params, {ownerIds: ownerIds}));

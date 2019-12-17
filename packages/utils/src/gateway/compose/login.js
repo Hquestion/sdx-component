@@ -8,7 +8,7 @@ import { AUTHORIZATION_HEADER, CONTENT_TYPE_APPLICATION_JSON, CONTENT_TYPE_HEADE
 export let handler = wrap(function(ctx, request) {
     // Acquire OAuth2 token
     const authToken = ctx.sendRequest(ctx.createPostRequest(
-        'http://10.115.1.130:32673/api/v1/tokens',
+        'http://tyk-gateway/user-manager/api/v1/tokens',
         JSON.parse(request.Body)));
 
     // Set Authorization headers in request after token created
@@ -20,7 +20,7 @@ export let handler = wrap(function(ctx, request) {
     ctx.resolveUuids(authToken,
         {
             path: 'uuid',
-            url: 'http://10.115.1.130:32673/api/v1/users',
+            url: 'http://tyk-gateway/user-manager/api/v1/users',
             result: 'users',
             errorReplaceKey: 'uuid'
         }
@@ -31,12 +31,12 @@ export let handler = wrap(function(ctx, request) {
     ctx.resolveUuids(authToken,
         {
             path: 'user.roles.*',
-            url: 'http://10.115.1.130:32673/api/v1/roles',
+            url: 'http://tyk-gateway/user-manager/api/v1/roles',
             result: 'roles'
         },
         {
             path: 'user.groups.*',
-            url: 'http://10.115.1.130:32673/api/v1/groups',
+            url: 'http://tyk-gateway/user-manager/api/v1/groups',
             result: 'groups'
         },
     );
@@ -44,7 +44,7 @@ export let handler = wrap(function(ctx, request) {
     ctx.resolveUuids(authToken,
         {
             path: 'user.groups.*.roles.*',
-            url: 'http://10.115.1.130:32673/api/v1/roles',
+            url: 'http://tyk-gateway/user-manager/api/v1/roles',
             result: 'roles'
         },
     );
@@ -56,7 +56,7 @@ export let handler = wrap(function(ctx, request) {
             'user.groups.*.roles.*.permissions.*',
             'user.roles.*.permissions.*',
         ],
-        url: 'http://10.115.1.130:32673/api/v1/permissions/list',
+        url: 'http://tyk-gateway/user-manager/api/v1/permissions/list',
         result: 'permissions',
         method: 'POST'
     });

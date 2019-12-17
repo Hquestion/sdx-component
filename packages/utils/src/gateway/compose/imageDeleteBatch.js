@@ -2,7 +2,6 @@ import wrap from '../wrap';
 import errorCode from '../errorCode';
 
 export let handler = wrap(function(ctx, request) {
-    ctx.info('IMAGE DELETE BODY ' + request.Body);
     const requests = JSON.parse(request.Body).uuids.map(uuid => ctx.createDeleteRequest(`http://tyk-gateway/image-manager/api/v1/images/${uuid}`));
     const results = ctx.sendRequests(...requests);
 

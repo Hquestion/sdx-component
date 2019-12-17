@@ -1,12 +1,9 @@
 import wrap from '../wrap';
 
 export let handler = wrap(function(ctx, request) {
-    ctx.info('[images params]' + JSON.stringify(request.Params));
     const projects = ctx.sendRequest(ctx.createGetRequest(
         'http://tyk-gateway/image-manager/api/v1/images',
         request.Params));
-
-    ctx.info('[images result]' + JSON.stringify(projects));
 
     ctx.resolveUuids(projects,
         {

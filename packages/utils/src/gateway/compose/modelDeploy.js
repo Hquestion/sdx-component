@@ -2,10 +2,8 @@ import wrap from '../wrap';
 
 export let handler = wrap(function(ctx, request) {
     const params = JSON.parse(request.Body);
-    ctx.info('model deploy params : ' + JSON.stringify(params));
     let modelId = params.modelId && params.modelId,
         versionId;
-    ctx.info('modelId: ' + modelId);
     if (!modelId) {
         // 没有模型需要先创建模型，获取模型的uuid
         const model = ctx.sendRequest(ctx.createPostRequest(
@@ -14,7 +12,6 @@ export let handler = wrap(function(ctx, request) {
         ));
         modelId = model.uuid;
     }
-    ctx.info('modelId new : ' + modelId);
 
     // 创建模型版本
     const version = ctx.sendRequest(ctx.createPostRequest(

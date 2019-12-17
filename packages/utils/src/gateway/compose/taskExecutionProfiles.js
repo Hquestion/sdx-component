@@ -31,7 +31,7 @@ export let handler = wrap(function(ctx, request) {
     let taskIds = [];
     if (!isAll) {
         const userProjects = ctx.sendRequest(ctx.createGetRequest(
-            'http://tyk-api-gateway/project-manager/api/v1/projects', {
+            'http://tyk-gateway/project-manager/api/v1/projects', {
                 start: 1,
                 count: -1
             }
@@ -43,7 +43,6 @@ export let handler = wrap(function(ctx, request) {
         });
     }
 
-    ctx.info('[TaskExecutionsProfiles Request Body]: ' + JSON.stringify({ownerIds, taskIds}));
     const projects = ctx.sendRequest(ctx.createGetRequest(
         'http://tyk-gateway/task-manager/api/v1/executions',
         request.Params, {
@@ -72,8 +71,6 @@ export let handler = wrap(function(ctx, request) {
             // errorReplaceKey: 'uuid'
         }
     );
-
-    ctx.info('task executions profiles result: ' + JSON.stringify(projects));
 
     ctx.rename(projects, 'data.*.ownerId', 'owner');
 

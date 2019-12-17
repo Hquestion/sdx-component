@@ -5,10 +5,12 @@ import { v4 as uuid } from 'uuid';
 
 // tyk网关协议/服务名
 export const TYK_SERVER_PROTOCOL = 'http://';
-export const TYK_SERVER_NAME = 'tyk-api-gateway';
+export const TYK_SERVER_NAME = 'localhost:10080/gateway';
 // 之前用的tyk-gateway，重新部署后确认修改为tyk-api-gateway
 // 为了简化修改，这里对url做一次处理，替换掉原来的http://tyk-gateway
 const OLD_TYK_NAME = 'tyk-gateway';
+
+const DEFAULT_LOG_LEVEL = 'ERROR';
 
 export const prefixRestApi = url => {
     if (url.indexOf(`${TYK_SERVER_PROTOCOL}${TYK_SERVER_NAME}`) >= 0) {
@@ -58,7 +60,7 @@ const METHODS = {
  * A class to hold the values in the virtual endpoint's "config_data"
  */
 class Config {
-    constructor(config_data = { log_level: 20 }) {
+    constructor(config_data = { log_level: DEFAULT_LOG_LEVEL }) {
         this.data = {};
         this._parseConfigData(config_data);
     }
@@ -161,11 +163,11 @@ class Context {
         // return;
         // eslint-disable-next-line
         _.rawlog(`[fe-compose] config log level: ${this.config.logLevel}, level ${level}`);
-        // if (level >= this.config.logLevel) {
-        const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
-        const date = new Date().toISOString();
-        _.rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
-        // }
+        if (level >= this.config.logLevel) {
+            const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
+            const date = new Date().toISOString();
+            _.rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
+        }
     }
 
     /* Request */
@@ -241,6 +243,7 @@ class Context {
 
         if (method === 'GET' || method === 'DELETE') {
             const query = [];
+            this.debug('[Request Parmas]: url: ' + url + ', params: ' + JSON.stringify(data));
             Object.entries(data).forEach(entry => {
                 if (Array.isArray(entry[1])) {
                     if (entry[1].length === 0) {
@@ -293,7 +296,7 @@ class Context {
             if (!preventError) {
                 throw new RequestError(response.code, response.body);
             } else {
-                return {};
+                response.body = {};
             }
         }
 
@@ -345,6 +348,8 @@ class Context {
      * @return TykJsResponse The response
      */
     createResponse(code, result) {
+        // hack code < 100 skyProxy会报错
+        code = (!code || +code < 100) ? 500 : code;
         const response = {
             Code: code,
             Headers: {
@@ -565,6 +570,7 @@ function scanObject(obj, path, processor, prefix = undefined) {
  */
 export default function (handler) {
     return function() {
+        _.rawlog('handle request start, URL : ' + _.getURL() + ', Params : ' + _.getParams());
         const request = {
             Headers: {
                 [AUTHORIZATION_HEADER]: [_.getHeader(AUTHORIZATION_HEADER)],
@@ -574,7 +580,7 @@ export default function (handler) {
             SetHeaders: (key, val) => {
                 _.setHeader(key, val);
             },
-            Params: _.getParams(),
+            Params: JSON.parse(_.getParams()),
             Body: _.getBody(),
             Methods: _.getMethod(),
             Scheme: _.getScheme(),

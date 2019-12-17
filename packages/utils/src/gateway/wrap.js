@@ -1,4 +1,4 @@
-/* global TykBatchRequest, TykJsResponse, log, rawlog, _ */
+/* global _ */
 
 import '@babel/polyfill';
 import { v4 as uuid } from 'uuid';

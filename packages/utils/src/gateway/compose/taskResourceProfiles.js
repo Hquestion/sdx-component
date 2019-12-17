@@ -2,7 +2,7 @@ import wrap from '../wrap';
 
 export let handler = wrap(function(ctx, request) {
     let username = request.Params.username && request.Params.username[0];
-    let isAll = request.Params.all && request.Params.all[0] === 'true';
+    let isAll = request.Params.all && (request.Params.all[0] === true || request.Params.all[0] === 'true');
     let ownerId = request.Params.ownerId && request.Params.ownerId[0];
     // 非全局且ownerId传了ownerId时，为查询个人任务资源使用情况
     let ownerIds = (ownerId && !isAll) ? [ownerId] : [];

@@ -8,6 +8,7 @@
                     <IconButton
                         border
                         icon="sdx-icon sdx-icon-delete"
+                        v-if="value.length"
                     />
                 </template>
                 <div
@@ -32,11 +33,11 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxuArticleTitle from '@sdx/ui/components/article-panel';
 import SdxuSectionTitle from '@sdx/ui/components/section-panel';
 import {Tree} from 'element-ui';
-import {getFilesList} from '@sdx/utils/src/api/file';
+import {getNativeFilesList} from '@sdx/utils/src/api/file';
 import Scroll from '@sdx/ui/components/scroll';
 import IconButton from '@sdx/ui/components/icon-button';
 import { getPathIcon } from './utils';
-
+import Upload from '@sdx/ui/components/upload';
 const NODE_KEY = '$feKey';
 function getFileKey(file) {
     return file[NODE_KEY] || `${file.path}@${file.ownerId}`;
@@ -49,7 +50,8 @@ export default {
         [SdxuSectionTitle.name]: SdxuSectionTitle,
         [Tree.name]: Tree,
         [Scroll.name]: Scroll,
-        IconButton
+        IconButton,
+        [Upload.name]: Upload,
     },
     data() {
         return { 
@@ -63,13 +65,16 @@ export default {
                 shape: '',
                 ownerId: ''
             },
+            value: [],
+            uploadParams: {
+                ownerId: '',
+                path: '',
+                overwrite: true,
+                files: null
+            }
         };
     },
     props: {
-        value: {
-            type: Array,
-            default: () => []
-        },
         checkable: {
             type: Boolean,
             default: true
@@ -118,7 +123,6 @@ export default {
                         }
                     }
                 },
-                ...this.treeOptions,
             };
         },
     },
@@ -143,26 +147,51 @@ export default {
                         <use xlinkHref={'#' + getPathIcon(data)}/>
                     </svg>
                     {node.label}
-                    {!data.isFile ?  <IconButton
-                        icon="sdx-icon sdx-icon-upload"
-                    /> : ''}
+                    {!data.isFile ?     <SdxuUpload
+                        action="/file-manager/api/v1/files/upload"
+                        show-file-list={false}
+                        data={this.uploadParams}
+                    ><IconButton
+                            icon="sdx-icon sdx-icon-upload"
+                            onClick={this.uploadFile.bind(this, data)}
+                        /></SdxuUpload> : ''}
                 </span>
             );
         },
+        uploadFile(data) {
+            // console.log(data, '上传');
+        },
         fetchFiles(node,resolve) {
-            let params ={};
-            let promise = getFilesList(params).then(res => {
-                return res.children;
-            });
-            return promise.then(res => {
-                this.isTreeLoading = false;
-                resolve(res);
-            });
+            this.isTreeLoading = true;
+            let path;
+            if (node.level === 0) {
+                path = '/';
+            } else {
+                path = node.data.path;
+            }
+            return getNativeFilesList({ path, count: 100 })
+                .then(data => {
+                    if (resolve) {
+                        if (data.children) {
+                            for (let i = 0; i < data.children.length; i++) {
+                                data.children[i].is_dir = !data.children[i].isFile;
+                                data.children[i].fullpath = data.children[i].path;
+                                data.children[i].ext = data.children[i].fileExtension;
+                            }
+                        }
+                        data.paths = data.children;
+                        resolve(data.paths);
+                    }
+                    this.isTreeLoading = false;
+                })
+                .catch(() => {
+                    this.isTreeLoading = false;
+                });
         },
         // 单文件选中
         handleCurrentkChange(data,checked) {
             if (checked) {
-                console.log(data, 'ff');
+                // console.log(data, '单文件选中');
                 this.data_file = data.fullpath;
                 this.previewData.ownerId = data.ownerId;
                 this.previewData.path = data.path;
@@ -231,8 +260,8 @@ export default {
                     }
                 }
             }
-            this.$emit('input', this.tree.getCheckedNodes());
-            console.log(data,checked, this.tree.getCheckedNodes(),99);
+            this.value = this.tree.getCheckedNodes();
+            // console.log(data,this.tree.getCheckedNodes().length, this.tree.getCheckedNodes(),99);
         },
         // 暴露给外部使用
         getCheckedNodes() {
@@ -245,6 +274,7 @@ export default {
             deep: true,
             handler(val) {
                 if (this.$refs.fileTree) {
+                    // console.log(this.tree.getCheckedNodes(), 'v');
                     this.$refs.fileTree.setCheckedKeys(val.map(item => typeof item === 'object' ? getFileKey(item) : item));
                 }
             }
@@ -264,7 +294,7 @@ export default {
             }
             .is-folder {
                 width: 100%;
-                .sdxu-icon-button {
+                & > div{
                     float: right;
                     margin-right: 20px;
                 }

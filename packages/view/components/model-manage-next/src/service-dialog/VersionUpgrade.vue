@@ -9,7 +9,7 @@
             <span>{{ `${t('view.task.InstanceNum')}：` }}</span>
             <el-input-number
                 v-model="table.instances"
-                :min="0"
+                :min="1"
             />
         </div>
         <sdxu-table

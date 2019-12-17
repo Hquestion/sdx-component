@@ -162,7 +162,6 @@ class Context {
     _log(level, message) {
         // return;
         // eslint-disable-next-line
-        _.rawlog(`[fe-compose] config log level: ${this.config.logLevel}, level ${level}`);
         if (level >= this.config.logLevel) {
             const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
             const date = new Date().toISOString();
@@ -570,7 +569,6 @@ function scanObject(obj, path, processor, prefix = undefined) {
  */
 export default function (handler) {
     return function() {
-        _.rawlog('handle request start, URL : ' + _.getURL() + ', Params : ' + _.getParams());
         const request = {
             Headers: {
                 [AUTHORIZATION_HEADER]: [_.getHeader(AUTHORIZATION_HEADER)],
@@ -587,6 +585,7 @@ export default function (handler) {
             URL: _.getURL()
         };
         const ctx = new Context(request, new Config());
+        ctx.debug('handle request start, URL : ' + _.getURL() + ', Params : ' + _.getParams());
 
         let responseData;
         try {

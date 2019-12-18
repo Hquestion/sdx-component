@@ -236,7 +236,7 @@ export default {
 
 <style scoped lang="scss">
 .sky-doc-manager {
-    height: 100%;
+    height: calc(100% - 40px);
     width: 100%;
     position: relative;
     & /deep/ {

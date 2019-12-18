@@ -2,6 +2,7 @@ import httpService from '../http-service';
 import { MODEL_MANAGE_GATEWAY_BASE, COMPOSE_GATEWAY_BASE } from './config.js';
 import readAuths from './config';
 import { authWrapper } from './helper';
+import { download, pack } from './file';
 
 const modelApi = `${MODEL_MANAGE_GATEWAY_BASE}models`;
 const serviceApi = `${MODEL_MANAGE_GATEWAY_BASE}services`;
@@ -140,6 +141,14 @@ export function apiTest(url, params) {
     return httpService.post(url, params);
 }
 
+export function downloadVersion(path, ownerId) {
+    // 打包，然后下载
+    let defer = pack([path], ownerId);
+    defer.then(res => {
+        download(res, ownerId);
+    });
+}
+
 export default {
     getModelList,
     getNativeModelList,
@@ -155,6 +164,7 @@ export default {
     shutdownVersion,
     getFrameworks,
     createVersion,
+    downloadVersion,
     startVersion,
     updateVersion,
     getVersionInfo,

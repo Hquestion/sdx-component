@@ -84,27 +84,10 @@
                 <template slot-scope="scope">
                     <sdxu-icon-button-group>
                         <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'detail')"
-                            icon="sdx-icon sdx-icon-tickets"
-                            :title="t('sdxCommon.Detail')"
-                        />
-                        <sdxu-icon-button
                             @click="handleOperation(scope.row, 'publish')"
                             icon="sdx-icon sdx-fabu"
                             :title="t('view.model.publish')"
                             v-if="scope.row.showPublish"
-                        />
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'edit')"
-                            icon="sdx-icon sdx-icon-edit"
-                            :title="t('sdxCommon.Edit')"
-                            v-if="scope.row.showEdit"
-                        />
-                        <sdxu-icon-button
-                            @click="handleOperation(scope.row, 'remove')"
-                            icon="sdx-icon sdx-icon-delete"
-                            :title="t('sdxCommon.Delete')"
-                            v-if="scope.row.showRemove"
                         />
                         <sdxu-icon-button
                             @click="handleOperation(scope.row, 'shutdown')"
@@ -117,6 +100,28 @@
                             icon="sdx-icon sdx-ceshi"
                             :title="t('view.model.test')"
                             v-if="scope.row.showTest"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'download')"
+                            icon="sdx-icon sdx-icon--download"
+                            :title="t('view.file.Download')"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'detail')"
+                            icon="sdx-icon sdx-icon-tickets"
+                            :title="t('sdxCommon.Detail')"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'edit')"
+                            icon="sdx-icon sdx-icon-edit"
+                            :title="t('sdxCommon.Edit')"
+                            v-if="scope.row.showEdit"
+                        />
+                        <sdxu-icon-button
+                            @click="handleOperation(scope.row, 'remove')"
+                            icon="sdx-icon sdx-icon-delete"
+                            :title="t('sdxCommon.Delete')"
+                            v-if="scope.row.showRemove"
                         />
                     </sdxu-icon-button-group>
                 </template>
@@ -163,7 +168,7 @@ import Button from '@sdx/ui/components/button';
 import FoldLabel from '@sdx/widget/components/fold-label';
 import SdxuIconButton from '@sdx/ui/components/icon-button';
 import SdxuIconButtonGroup from '@sdx/ui/components/icon-button-group';
-import { getVersionList, removeVersion, shutdownVersion, getModelInfo } from '@sdx/utils/src/api/model';
+import { getVersionList, removeVersion, shutdownVersion, getModelInfo, downloadVersion } from '@sdx/utils/src/api/model';
 import Pagination from '@sdx/ui/components/pagination';
 import MessageBox from '@sdx/ui/components/message-box';
 import Message from 'element-ui/lib/message';
@@ -262,7 +267,7 @@ export default {
                     item.showShutdown = this.isModelOwner && (item.state === 'RUNNING' || item.state === 'LAUNCHING');
                     item.showEdit = this.isModelOwner && (item.state === 'CREATED' || item.state === 'FAILED' || item.state === 'KILLED');
                     item.showRemove = this.isModelOwner && (item.state === 'CREATED' || item.state === 'FAILED' || item.state === 'KILLED');
-                    item.showTest = this.isModelOwner && item.state === 'RUNNING';
+                    item.showTest = item.state === 'RUNNING';
                     item.label = {};
                     switch(item.state) {
                     case 'CREATED':
@@ -327,6 +332,9 @@ export default {
                 case 'edit':
                     this.createDialogVisible = true;
                     this.editingVersion = row;
+                    break;
+                case 'download':
+                    downloadVersion(row.modelPath, row.creatorId);
                     break;
                 case 'remove':
                     MessageBox({

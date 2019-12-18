@@ -185,7 +185,7 @@ export default {
                 title,
                 content(h){
                     return (
-                        <div class="fileClient">
+                        <div class="operation-bar-file-client">
                             <a target="_blank" href={url}>{that.t('view.file.Download_Now')}</a>
                             <div class={that.lang$ === 'en' ? 'english' : 'chinese'}>
                                 <span>{that.t('view.file.And_install_SkyDiscovery_File_Management_Client')}</span>
@@ -224,19 +224,25 @@ export default {
     flex-direction: row-reverse;
     justify-content: space-between;
 }
-.fileClient {
+.operation-bar-file-client {
     display: flex;
     justify-content: center;
     flex-direction: column;
     &>a{
-        margin-left: 140px;
+        margin-left: 68px;
         text-align: center;
         display: block;
         width: 150px;
         background: #4781F8;
-        color: #fff;
+        color: #fff !important;
         height: 30px;
         line-height: 30px;
+    }
+    &>div {
+        a {
+            padding-right: 4px;
+            color:#5C89FF;
+        }
     }
     .chinese {
         text-align: center;

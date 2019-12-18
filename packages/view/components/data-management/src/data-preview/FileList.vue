@@ -9,6 +9,7 @@
                         border
                         icon="sdx-icon sdx-icon-delete"
                         v-if="value.length"
+                        @click="deleteFiles"
                     />
                 </template>
                 <div
@@ -33,15 +34,13 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxuArticleTitle from '@sdx/ui/components/article-panel';
 import SdxuSectionTitle from '@sdx/ui/components/section-panel';
 import {Tree} from 'element-ui';
-import {getNativeFilesList} from '@sdx/utils/src/api/file';
+import {getNativeFilesList, deletePath} from '@sdx/utils/src/api/file';
 import Scroll from '@sdx/ui/components/scroll';
 import IconButton from '@sdx/ui/components/icon-button';
 import { getPathIcon } from './utils';
 import Upload from '@sdx/ui/components/upload';
-const NODE_KEY = '$feKey';
-function getFileKey(file) {
-    return file[NODE_KEY] || `${file.path}@${file.ownerId}`;
-}
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
+
 export default {
     name: 'SdxvDatasetFileList',
     mixins: [locale],
@@ -57,6 +56,7 @@ export default {
         return { 
             // 文件列表
             treeData:[],
+            // 展开的key
             expandedKey:[],
             previewData: {
                 data_rows: Object.freeze([]),
@@ -67,11 +67,10 @@ export default {
             },
             value: [],
             uploadParams: {
-                ownerId: '',
+                ownerId: getUser().userId || '',
                 path: '',
-                overwrite: true,
-                files: null
-            }
+                overwrite: 1,
+            },
         };
     },
     props: {
@@ -88,22 +87,18 @@ export default {
         tree() {
             return this.$refs.fileTree;
         },
-        // 已选节点(兼容单选和多选模式)
-        selectedNodes() {
-            return this.value.map(item => typeof item === 'object' ? getFileKey(item) : item);
-        },
         __treeOption() {
             return {
                 'render-content': this.renderContent,
                 'check-strictly': true,
                 'show-checkbox': this.checkable,
                 'highlight-current': true,
-                'node-key': NODE_KEY,
+                'node-key': 'path',
                 'empty-text': this.t('widget.fileSelect.NoFile'),
                 accordion: true,
                 lazy: true,
                 load: this.fetchFiles,
-                'default-checked-keys': this.selectedNodes,
+                'default-expanded-keys': this.expandedKey,
                 data: this.treeData || [],
                 props: {
                     label: 'name',
@@ -127,6 +122,10 @@ export default {
         },
     },
     methods: {
+        // 删除文件
+        deleteFiles() {
+
+        },
         // 定制 tree 的渲染函数,为文件夹加上图标
         renderContent(h, { node, data }) {
             return this.renderFileNode(h, node, data);
@@ -147,19 +146,31 @@ export default {
                         <use xlinkHref={'#' + getPathIcon(data)}/>
                     </svg>
                     {node.label}
-                    {!data.isFile ?     <SdxuUpload
-                        action="/file-manager/api/v1/files/upload"
-                        show-file-list={false}
-                        data={this.uploadParams}
-                    ><IconButton
-                            icon="sdx-icon sdx-icon-upload"
-                            onClick={this.uploadFile.bind(this, data)}
-                        /></SdxuUpload> : ''}
+                    {!data.isFile ?     
+                        <SdxuUpload
+                            action="/file-manager/api/v1/files/upload"
+                            show-file-list={false}
+                            data={this.uploadParams}
+                            name="files"
+                            onSuccess={this.uploadSuccess.bind(this)}
+                        >
+                            <IconButton
+                                icon="sdx-icon sdx-icon-upload"
+                                onClick={this.uploadFile.bind(this, data)}
+                            />
+                        </SdxuUpload>
+                        :
+                        ''
+                    }
                 </span>
             );
         },
         uploadFile(data) {
-            // console.log(data, '上传');
+            this.uploadParams = Object.assign({}, this.uploadParams, {path: data.path});
+        },
+        uploadSuccess() {
+            console.log('afga');
+            this.fetchFiles();
         },
         fetchFiles(node,resolve) {
             this.isTreeLoading = true;

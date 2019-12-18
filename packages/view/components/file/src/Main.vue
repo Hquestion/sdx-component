@@ -115,6 +115,9 @@ export default {
             this.isCheckAll = false;
         },
         enterDirectory(dir) {
+            if (dir === this.currentPath) {
+                if (this.loading) return;
+            }
             this.resetFlags();
             this.isSearch = false;
             // 更新路径

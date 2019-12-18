@@ -21,19 +21,7 @@ export const DOCKER_IMAGE_KIND_LIST = [
     {
         label: 'CONTAINER_DEV',
         value: 'CONTAINER_DEV'
-    }/* ,
-    {
-        label: 'TENSORFLOW_DEPLOYMENT',
-        value: 'TENSORFLOW_DEPLOYMENT'
-    },
-    {
-        label: 'PMML_DEPLOYMENT',
-        value: 'PMML_DEPLOYMENT'
-    },
-    {
-        label: 'SPARK_DEPLOYMENT',
-        value: 'SPARK_DEPLOYMENT'
-    } */
+    }
 ];
 
 // 构建任务列表状态映射表

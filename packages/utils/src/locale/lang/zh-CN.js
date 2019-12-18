@@ -989,6 +989,9 @@ export default {
             Core: '核',
             Piece: '块',
             ConfirmDeleteTemplate: '确定要删除此资源模板吗？',
+            'Please input a positive integer': '请输入正整数',
+            'Please select a resource template': '请选择资源模板',
+            'Task limit can only be a positive integer': '任务总数限制为正整数'
         },
         userManage: {
             OneDay: '一天',

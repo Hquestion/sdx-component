@@ -990,6 +990,9 @@ export default {
             Core: 'Core',
             Piece: 'Piece',
             ConfirmDeleteTemplate: 'Are you sure to delete the resource template?',
+            'Please input a positive integer': 'Please input a positive integer',
+            'Please select a resource template': 'Please select a resource template',
+            'Task limit can only be a positive integer': 'Task limit can only be a positive integer'
         },
         userManage: {
             OneDay: 'One Day',

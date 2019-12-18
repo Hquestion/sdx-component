@@ -6,6 +6,7 @@
     >
         <el-form
             :model="params"
+            :rules="rules"
             :label-position="labelPosition"
             :label-width="lang$ === 'en' ? '300px' : '255px'"
         >
@@ -220,10 +221,13 @@ import Select from 'element-ui/lib/select';
 import { byteToGB, secToHour, secToDay, cpuTplFriendly, hourToSec, dayToSec, parseMilli } from '@sdx/utils/src/helper/transform';
 import locale from '@sdx/utils/src/mixins/locale';
 
+const numberReg = /^[1-9]\d*$/;
+
 export default {
     name: 'RuleForm',
     mixins: [locale],
     data() {
+        const self = this;
         return {
             params: {
                 maxConcurrentSkyideTasks: 0,
@@ -238,7 +242,89 @@ export default {
             },
             resourceTmplList: [],
             defaultConfig: {},
-            loading: false
+            loading: false,
+            rules: {
+                maxConcurrentSkyideTasks: [
+                    {
+                        pattern: numberReg,
+                        message: this.t('view.resourceManage.Please input a positive integer'),
+                        trigger: 'blur'
+                    }
+                ],
+                maxConcurrentJupyterTasks: [
+                    {
+                        pattern: numberReg,
+                        message: this.t('view.resourceManage.Please input a positive integer'),
+                        trigger: 'blur'
+                    }
+                ],
+                maxConcurrentContainerTasks: [
+                    {
+                        pattern: numberReg,
+                        message: this.t('view.resourceManage.Please input a positive integer'),
+                        trigger: 'blur'
+                    }
+                ],
+                maxConcurrentSkyflowTasks: [
+                    {
+                        pattern: numberReg,
+                        message: this.t('view.resourceManage.Please input a positive integer'),
+                        trigger: 'blur'
+                    }
+                ],
+                maxConcurrentModelTasks: [
+                    {
+                        pattern: numberReg,
+                        message: this.t('view.resourceManage.Please input a positive integer'),
+                        trigger: 'blur'
+                    }
+                ],
+                maxGpus: [
+                    {
+                        pattern: numberReg,
+                        message: this.t('view.resourceManage.Please input a positive integer'),
+                        trigger: 'blur'
+                    }
+                ],
+                maxGpuTime: [
+                    {
+                        validator(rule, value, callback) {
+                            if (value && numberReg.test(value)) {
+                                callback();
+                            } else {
+                                callback(self.t('view.resourceManage.Please input a positive integer'));
+                            }
+                        },
+                        trigger: 'blur'
+                    }
+                ],
+                maxNonGpuTime: [
+                    {
+                        validator(rule, value, callback) {
+                            if (value && numberReg.test(value)) {
+                                callback();
+                            } else {
+                                callback(self.t('view.resourceManage.Please input a positive integer'));
+                            }
+                        },
+                        trigger: 'blur'
+                    }
+                ],
+                heavyTaskArr: [
+                    {
+                        validator(rule, value, callback) {
+                            if (!value[0]) {
+                                callback(self.t('view.resourceManage.Please select a resource template'));
+                            } else if (!numberReg.test(value[1])) {
+                                callback(self.t('view.resourceManage.Task limit can only be a positive integer'));
+                            } else {
+                                callback();
+                            }
+                        },
+                        trigger: 'change'
+                    }
+                ]
+            }
         };
     },
     components: {

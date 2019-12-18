@@ -77,8 +77,9 @@ export default {
             this.mode = 'edit';
         },
         save() {
-            this.$refs.ruleForm.save();
-            this.mode = 'read';
+            this.$refs.ruleForm.save().then(() => {
+                this.mode = 'read';
+            });
         },
         cancel() {
             this.$refs.ruleForm.cancel();

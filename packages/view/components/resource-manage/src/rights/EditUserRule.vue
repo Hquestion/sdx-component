@@ -121,7 +121,7 @@ export default {
     methods: {
         handleConfirm() {
             if(this.readonly) return Promise.resolve();
-            return this.$refs.ruleForm.validate().then(() => {
+            return Promise.all([this.$refs.ruleForm.validate(), this.$refs.userRule.$refs.form.validate()]).then(() => {
                 const config = this.$refs.userRule.getConfig();
                 if (this.meta) {
                     // 更新

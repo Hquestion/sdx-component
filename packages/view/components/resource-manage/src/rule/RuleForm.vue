@@ -5,6 +5,7 @@
         v-loading="loading"
     >
         <el-form
+            ref="form"
             :model="params"
             :rules="rules"
             :label-position="labelPosition"
@@ -415,19 +416,21 @@ export default {
             });
         },
         save() {
-            saveResourceConfig(this.userId, {
-                maxConcurrentSkyideTasks: +this.params.maxConcurrentSkyideTasks,
-                maxConcurrentJupyterTasks: +this.params.maxConcurrentJupyterTasks,
-                maxConcurrentContainerTasks: +this.params.maxConcurrentContainerTasks,
-                maxConcurrentSkyflowTasks: +this.params.maxConcurrentSkyflowTasks,
-                maxConcurrentModelTasks: +this.params.maxConcurrentModelTasks,
-                maxConcurrentHeavyTasks: +this.params.heavyTaskArr[1],
-                maxGpuTime: +this.params.maxGpuTime,
-                maxNonGpuTime: +this.params.maxNonGpuTime,
-                maxGpus: +this.params.maxGpus,
-                heavyTaskThreshold: this.params.heavyTaskArr[0]
-            }).then(() => {
-                this.defaultConfig = deepCopy(this.params);
+            return this.$refs.form.validate().then(() => {
+                return saveResourceConfig(this.userId, {
+                    maxConcurrentSkyideTasks: +this.params.maxConcurrentSkyideTasks,
+                    maxConcurrentJupyterTasks: +this.params.maxConcurrentJupyterTasks,
+                    maxConcurrentContainerTasks: +this.params.maxConcurrentContainerTasks,
+                    maxConcurrentSkyflowTasks: +this.params.maxConcurrentSkyflowTasks,
+                    maxConcurrentModelTasks: +this.params.maxConcurrentModelTasks,
+                    maxConcurrentHeavyTasks: +this.params.heavyTaskArr[1],
+                    maxGpuTime: +this.params.maxGpuTime,
+                    maxNonGpuTime: +this.params.maxNonGpuTime,
+                    maxGpus: +this.params.maxGpus,
+                    heavyTaskThreshold: this.params.heavyTaskArr[0]
+                }).then(() => {
+                    this.defaultConfig = deepCopy(this.params);
+                });
             });
         },
         cancel() {

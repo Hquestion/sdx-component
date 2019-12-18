@@ -345,7 +345,8 @@ export default {
                 prop: 'startedAt',
                 order: 'descending'
             },
-            savaParams: {}
+            savaParams: {},
+            refreshInfoTimer: null
         };
     },
     mixins: [locale],
@@ -429,6 +430,41 @@ export default {
             this.current = 1;
             this.getExecutionList();
         },
+        // 统计执行列表信息
+        getExecutionInfo() {
+            if (this._isDestroyed) {
+                clearInterval(this.refreshInfoTimer);
+                this.refreshInfoTimer = null;
+            }
+            let params = {
+                start: 1,
+                count: -1,
+                all: true,
+            };
+            executionList(params).then(res=> {
+                if (res.data.length && res.data.find(item => (item.state === 'Terminating' || item.state === 'Running' || item.state === 'Pending' || item.state === 'Scheduling' || item.state === 'Error'))) {
+                    if (!this.refreshInfoTimer && !this._isDestroyed) {
+                        this.refreshInfoTimer = setInterval(this.getExecutionInfo, 5000);
+                    }
+                } else {
+                    clearInterval(this.refreshInfoTimer);
+                    this.refreshInfoTimer = null;
+                }
+                for(let i = 0; i < this.infoList.length; i++) {
+                    this.infoList[i].total = res.detail[this.infoList[i].type].manual +  res.detail[this.infoList[i].type].schedule;
+                    this.infoList[i].manual = res.detail[this.infoList[i].type].manual;
+                    this.infoList[i].dispatch = res.detail[this.infoList[i].type].schedule;
+                    if(this.infoList[i].total === 0) {
+                        this.infoList[i].percent = 0;
+                    } else {
+                        this.infoList[i].percent = (this.infoList[i].manual / this.infoList[i].total) * 100;
+                    } 
+                }
+            }).catch(() => {
+                clearInterval(this.refreshInfoTimer);
+                this.refreshInfoTimer = null;
+            });
+        },
         // 执行列表
         getExecutionList() {
             if (this._isDestroyed) {
@@ -454,17 +490,6 @@ export default {
                 }
                 this.table = res.data;
                 this.total = res.total;
-                for(let i = 0; i < this.infoList.length; i++) {
-                    this.infoList[i].total = res.detail[this.infoList[i].type].manual +  res.detail[this.infoList[i].type].schedule;
-                    this.infoList[i].manual = res.detail[this.infoList[i].type].manual;
-                    this.infoList[i].dispatch = res.detail[this.infoList[i].type].schedule;
-                    if(this.infoList[i].total === 0) {
-                        this.infoList[i].percent = 0;
-                    } else {
-                        this.infoList[i].percent = (this.infoList[i].manual / this.infoList[i].total) * 100;
-                    }
-                    
-                }
                 this.tableLoading = false;
             }).catch(() => {
                 clearInterval(this.refreshTimer);
@@ -474,6 +499,7 @@ export default {
                 this.tableLoading = false;
             });
         },
+
         startTaskAPI(data) {
             if(data.type.toLocaleUpperCase() === 'SKYFLOW') {
                 startExecution(data.uuid, data.executionId, {type: data.type});
@@ -510,10 +536,13 @@ export default {
         this.savaParams = JSON.parse(JSON.stringify(this.params));
         await this.getGroupList();
         await this.getExecutionList();
+        await this.getExecutionInfo();
     },
     beforeDestroy () {
         clearInterval(this.refreshTimer);
         this.refreshTimer = null;
+        clearInterval(this.refreshInfoTimer);
+        this.refreshInfoTimer = null;
     },
 };
 </script>

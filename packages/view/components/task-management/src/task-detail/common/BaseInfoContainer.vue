@@ -44,7 +44,7 @@
                     <SdxvInfoItem
                         v-if="isSKYIDE"
                         :label="t('view.task.FilePath')"
-                        :value="task.homePath"
+                        :value="displayPath"
                     />
                     <SdxvInfoItem
                         v-if="isCONTAINERDEV"
@@ -86,7 +86,7 @@
                     <SdxvInfoItem
                         v-if="isCONTAINERDEV"
                         :label="t('view.task.DisplayPath')"
-                        :value="task.displayPath"
+                        :value="displayPath"
                     />
                     <SdxvInfoItem
                         v-if="isCONTAINERDEV"
@@ -284,6 +284,10 @@ export default {
         },
         startArgs() {
             return this.task.startArgs || [];
+        },
+        displayPath() {
+            let dir = this.task.displayPath || '';
+            return dir.slice(dir.indexOf(':') + 1);
         }
     },
     methods: {

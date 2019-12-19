@@ -40,7 +40,7 @@ import IconButton from '@sdx/ui/components/icon-button';
 import { getPathIcon } from './utils';
 import Upload from '@sdx/ui/components/upload';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
-
+import MessageBox from '@sdx/ui/components/message-box';
 export default {
     name: 'SdxvDatasetFileList',
     mixins: [locale],
@@ -74,14 +74,7 @@ export default {
         };
     },
     props: {
-        checkable: {
-            type: Boolean,
-            default: true
-        },
-        limit: {
-            type: Number,
-            default: 1 // -1表示不限制
-        },
+      
     },
     computed: {
         tree() {
@@ -91,7 +84,7 @@ export default {
             return {
                 'render-content': this.renderContent,
                 'check-strictly': true,
-                'show-checkbox': this.checkable,
+                'show-checkbox': true,
                 'highlight-current': true,
                 'node-key': 'path',
                 'empty-text': this.t('widget.fileSelect.NoFile'),
@@ -105,17 +98,6 @@ export default {
                     children: 'children',
                     isLeaf: (data, node) => {
                         return !!data.isFile;
-                    },
-                    disabled: data => {
-                        if (this.checkType === 'file') {
-                            return !data.isFile || !!data.selectDisable || !!data.isProject;
-                        }
-                        if (this.checkType === 'folder') {
-                            return !!data.isFile || !!data.selectDisable || !!data.isProject;
-                        }
-                        if (this.checkType === 'all') {
-                            return !!data.selectDisable || !!data.isProject || false;
-                        }
                     }
                 },
             };
@@ -124,9 +106,21 @@ export default {
     methods: {
         // 删除文件
         deleteFiles() {
-
+            let paths = [];
+            this.value.forEach(item => {
+                paths.push(item.path);
+            });
+            MessageBox.confirm.error({
+                title: this.t('view.dataManagement.Are_you_sure_you_want_to_delete_the_selected_file'),
+                content: this.t('view.file.CantRecoveryAfterDel')
+            }).then(() => {
+                deletePath(paths).then(() => {
+                    // 删除之后刷新页面
+                    this.tree.root.loaded = false;
+                    this.tree.root.loadData();
+                });
+            });
         },
-        // 定制 tree 的渲染函数,为文件夹加上图标
         renderContent(h, { node, data }) {
             return this.renderFileNode(h, node, data);
         },
@@ -152,7 +146,7 @@ export default {
                             show-file-list={false}
                             data={this.uploadParams}
                             name="files"
-                            onSuccess={this.uploadSuccess.bind(this)}
+                            propsOnSuccess={this.uploadSuccess.bind(this, node, data)}
                         >
                             <IconButton
                                 icon="sdx-icon sdx-icon-upload"
@@ -169,8 +163,8 @@ export default {
             this.uploadParams = Object.assign({}, this.uploadParams, {path: data.path});
         },
         uploadSuccess() {
-            console.log('afga');
-            this.fetchFiles();
+            this.tree.root.loaded = false;
+            this.tree.root.loadData();
         },
         fetchFiles(node,resolve) {
             this.isTreeLoading = true;
@@ -241,55 +235,13 @@ export default {
             }
         },
         // 处理"文件选择"问题
-        handleCheckChange(data, checked) {
-            if (checked) {
-                data.checkTimestamp = +new Date();
-                if (this.limit >= 1) {
-                    const checkedNodes = this.tree.getCheckedNodes();
-                    const index = checkedNodes.findIndex(item => getFileKey(item) === getFileKey(data));
-                    checkedNodes.sort((a, b) => a.checkTimestamp - b.checkTimestamp);
-                    if (this.checkType === 'folder') {
-                        if (!data.isFile) {
-                            this.tree.setCheckedNodes(checkedNodes.slice(-1 * this.limit));
-                        } else {
-                            if (index >= 0) {
-                                checkedNodes.splice(index, 1);
-                            }
-                            this.tree.setCheckedNodes(checkedNodes);
-                        }
-                    } else if (this.checkType === 'file') {
-                        if (!data.isFile) {
-                            if (index >= 0) {
-                                checkedNodes.splice(index, 1);
-                            }
-                            this.tree.setCheckedNodes(checkedNodes);
-                        } else {
-                            this.tree.setCheckedNodes(checkedNodes.slice(-1 * this.limit));
-                        }
-                    } else {
-                        this.tree.setCheckedNodes(checkedNodes.slice(-1 * this.limit));
-                    }
-                }
-            }
-            this.value = this.tree.getCheckedNodes();
-            // console.log(data,this.tree.getCheckedNodes().length, this.tree.getCheckedNodes(),99);
-        },
-        // 暴露给外部使用
-        getCheckedNodes() {
-            return this.tree.getCheckedNodes();
+        handleCheckChange() {
+            const checkedNodes = this.tree.getCheckedNodes();
+            this.value = checkedNodes;
         },
     },
     watch: {
-        value: {
-            immediate: true,
-            deep: true,
-            handler(val) {
-                if (this.$refs.fileTree) {
-                    // console.log(this.tree.getCheckedNodes(), 'v');
-                    this.$refs.fileTree.setCheckedKeys(val.map(item => typeof item === 'object' ? getFileKey(item) : item));
-                }
-            }
-        },
+       
     }
 };
 </script>

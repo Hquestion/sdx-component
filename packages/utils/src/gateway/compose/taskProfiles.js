@@ -31,7 +31,7 @@ export let handler = wrap(function(ctx, request) {
         'http://tyk-gateway/task-manager/api/v1/tasks',
         request.Params, {ownerIds: ownerIds}));
 
-    projects.forEach(item => item.taskId = item.uuid);
+    projects.data.forEach(item => item.taskId = item.uuid);
 
     ctx.resolveUuids(projects,
         {
@@ -65,6 +65,7 @@ export let handler = wrap(function(ctx, request) {
     );
 
     ctx.rename(projects, 'data.*.ownerId', 'owner');
+    ctx.rename(projects, 'data.*.taskId', 'project');
 
     return ctx.createResponse(200, projects);
 });

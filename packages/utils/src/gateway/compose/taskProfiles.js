@@ -31,6 +31,8 @@ export let handler = wrap(function(ctx, request) {
         'http://tyk-gateway/task-manager/api/v1/tasks',
         request.Params, {ownerIds: ownerIds}));
 
+    projects.forEach(item => item.taskId = item.uuid);
+
     ctx.resolveUuids(projects,
         {
             path: 'data.*.ownerId',
@@ -39,6 +41,15 @@ export let handler = wrap(function(ctx, request) {
             // 请求异常时，将id替换为errorReplaceKey;
             // 如使用data.items.*.ownerId在获取用户失败时，将会替换为data.items.*.ownerId: {[errorReplaceKey]: data.items.*.ownerId}
             errorReplaceKey: 'uuid'
+        }, {
+            path: 'data.*.taskId',
+            url: 'http://tyk-gateway/project-manager/api/v1/projects',
+            result: 'data.items',
+            paramKey: 'taskIds',
+            paramAsBody: true,
+            // 请求异常时，将id替换为errorReplaceKey;
+            // 如使用data.items.*.ownerId在获取用户失败时，将会替换为data.items.*.ownerId: {[errorReplaceKey]: data.items.*.ownerId}
+            errorReplaceKey: 'taskId'
         }
     );
 

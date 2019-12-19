@@ -444,9 +444,11 @@ class Context {
             const uuids = new Set();
             const path = pattern.path;
             const paths = pattern.paths;
+            const paramKey = pattern.paramKey || 'uuids';
             const url = prefixRestApi(pattern.url);
             const result = pattern.result;
             const method = (pattern.method || 'GET').toUpperCase();
+            const paramAsBody = pattern.paramAsBody;
             resultIdKeys[url] = pattern.resultIdKey || 'uuid';
             if (result !== undefined) {
                 resultKeys[url] = result;
@@ -464,7 +466,12 @@ class Context {
                 paths.forEach(path => scanObject(object, path, collector));
             }
             if (uuids.size > 0) {
-                requests.push(this._createRequest(method, url, {uuids: [...uuids]}));
+                let data = {[paramKey]: [...uuids]};
+                if (paramAsBody) {
+                    requests.push(this._createRequest(method, url, {}, data));
+                } else {
+                    requests.push(this._createRequest(method, url, data));
+                }
             }
         });
         if (requests.length > 0) {

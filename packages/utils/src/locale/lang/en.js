@@ -1131,7 +1131,9 @@ export default {
             EditDataset: 'Edit Dataset',
             DatasetDeleteTips: 'Dataset Delete Tips',
             DatasetDeleteContent: 'Are you sure you want to delete this dataset?',
-            Are_you_sure_you_want_to_delete_the_selected_file: 'Are you sure you want to delete the selected file?'
+            Are_you_sure_you_want_to_delete_the_selected_file: 'Are you sure you want to delete the selected file?',
+            FileSize: 'File Size',
+            FilePreview: 'File Preview'
         }
     },
     sdxCommon: {

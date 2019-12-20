@@ -1130,7 +1130,9 @@ export default {
             EditDataset: '编辑数据集',
             DatasetDeleteTips: '数据集删除提示',
             DatasetDeleteContent: '您确认要删除此数据集吗？',
-            Are_you_sure_you_want_to_delete_the_selected_file: '您确认要删除选中的文件吗？'
+            Are_you_sure_you_want_to_delete_the_selected_file: '您确认要删除选中的文件吗？',
+            FileSize: '文件大小',
+            FilePreview: '文件预览'
         }
     },
     sdxCommon: {

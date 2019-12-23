@@ -166,6 +166,7 @@ export default {
             for (let i =0; i < moveNodes.length ; i++ ) {
                 // if (tags.find(item => item.name === moveNodes[i].label)) continue;
                 if (tags.find(item => item[this.treeNodeKey] === moveNodes[i][this.treeNodeKey])) continue;
+                if (!moveNodes[i].isGroup && tags.find(item => item[this.treeNodeKey].split('/')[1] === moveNodes[i][this.treeNodeKey].split('/')[1])) continue;
                 tags.push(
                     {
                         name: moveNodes[i].label,
@@ -217,12 +218,36 @@ export default {
             this.is_moveall = false;
             this.checkedTags = this.getTags();
             this.$emit('update:defaultKeys',obj.checkedKeys);
+            this.updateSameUserInGroups();
         },
         removeAllTag() {
             this.checkedTags = [];
             this.$emit('update:tags',[]);
             this.$emit('update:defaultKeys',[]);
             this.$refs.tree && this.$refs.tree.setCheckedKeys([]);
+        },
+        updateSameUserInGroups() {
+            let checkedKeys = this.$refs.tree.getCheckedKeys();
+            let tmp = [...checkedKeys];
+            for (let key of checkedKeys) {
+                if (!key.includes('/')) {
+                    !tmp.includes(key) && tmp.push(key);
+                } else {
+                    this.data.forEach(item => {
+                        if (item.children) {
+                            for (let j = 0; j < item.children.length; j++) {
+                                if ((item.children[j][this.treeNodeKey].split('/')[1] === key.split('/')[1])) {
+                                    !tmp.includes(item.children[j][this.treeNodeKey]) && tmp.push(item.children[j][this.treeNodeKey]);
+                                }
+                            }
+                        }
+                        if (!item.isGroup && (item[this.treeNodeKey].split('/')[1] === key.split('/')[1])) {
+                            !tmp.includes(item[this.treeNodeKey]) && tmp.push(item[this.treeNodeKey]);
+                        }
+                    });
+                }
+            }
+            this.$refs.tree.setCheckedKeys(tmp);
         }
     },
     mounted() {

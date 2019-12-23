@@ -1,5 +1,11 @@
 <template>
     <div class="sdxv-data-preview">
+        <SdxuButton
+            type="primary"
+            @click="toJupyter"
+        >
+            {{ t('view.dataManagement.Use_in_Jupyter') }}
+        </SdxuButton>
         <el-row
             :gutter="24"
             class="file"
@@ -51,12 +57,16 @@
                 <template #right>
                     <IconButton
                         border
-                        icon="sdx-icon sdx-icon--download"
+                        icon="sdx-icon sdx-shaixuan-X"
+                    />
+                    <IconButton
+                        border
+                        icon="sdx-icon sdx-xiazaiX"
                         @click="downLoadFile(dataListPath)" 
                     />
                     <IconButton
                         border
-                        icon="sdx-icon iconzuixiaohua"
+                        :icon="['sdx-icon', fullScreen ? 'sdx-zuixiaohua1' : 'sdx-zuidahua1']"
                         @click="fullScreen = !fullScreen"
                     />
                 </template>
@@ -99,6 +109,7 @@ import DataListView from './DatasListView';
 import DataImage from './DataImage';
 import Empty from '@sdx/ui/components/empty';
 import {download, pack} from '@sdx/utils/src/api/file';
+import SdxuButton from '@sdx/ui/components/button';
 export default {
     name:'DataPreview',
     mixins: [locale],
@@ -115,7 +126,8 @@ export default {
         [Upload.name]: Upload,
         DataListView,
         DataImage,
-        [Empty.name]: Empty
+        [Empty.name]: Empty,
+        SdxuButton
     },
     data() {
         return {
@@ -191,6 +203,20 @@ export default {
         },
     },
     methods: {
+        // 跳转到jupyter
+        toJupyter(){
+            this.$router.push(
+                {
+                    name: 'CreateTaskNext',
+                    params: {
+                        type: 'JUPYTER'
+                    },
+                    query: {
+                        from: 'dataManagement'
+                    }
+                }
+            );
+        },
         // 下载文件
         downLoadFile(path){
             let defer=null;
@@ -240,19 +266,21 @@ export default {
                         <use xlinkHref={'#' + getPathIcon(data)}/>
                     </svg>
                     {node.label}
-                    {!data.isFile ?     
-                        <SdxuUpload
-                            action="/file-manager/api/v1/files/upload"
-                            show-file-list={false}
-                            data={this.uploadParams}
-                            name="files"
-                            propsOnSuccess={this.uploadSuccess.bind(this, node, data)}
-                        >
-                            <IconButton
-                                icon="sdx-icon sdx-icon-upload"
-                                onClick={this.uploadFile.bind(this, data)}
-                            />
-                        </SdxuUpload>
+                    {!data.isFile ?  
+                        <div  onClick={e => e.stopPropagation()}> 
+                            <SdxuUpload
+                                action="/file-manager/api/v1/files/upload"
+                                show-file-list={false}
+                                data={this.uploadParams}
+                                name="files"
+                                propsOnSuccess={this.uploadSuccess.bind(this, node, data)}
+                            >
+                                <IconButton
+                                    icon="sdx-icon sdx-icon-upload"
+                                    onClick={this.uploadFile.bind(this, data)}
+                                />
+                            </SdxuUpload>
+                        </div>
                         :
                         ''
                     }
@@ -320,7 +348,8 @@ export default {
                 } else {
                     // 剩下就是无法预览
                     this.emptyHide = true;
-                    this.emptyType = 'sdx-wushuju';
+                    this.emptyType = 'sdx-wuyulan1';
+                    this.emptyContent = this.t('view.dataManagement.cannotPreview');
                 }
             }
         },
@@ -370,6 +399,12 @@ export default {
 
 <style lang="scss" scoped>
 .sdxv-data-preview {
+    position: relative;
+    & > .sdxu-button {
+        position: absolute;
+        top: -72px;
+        right: 0;
+    }
     .detail-desc {
         margin-top: 24px;
     }

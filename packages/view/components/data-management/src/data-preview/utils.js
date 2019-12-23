@@ -1,5 +1,5 @@
 export function getPathIcon(path) {
-    const DEFAULT_FOLDER_ICON = 'sdx-wenjianjia';
+    const DEFAULT_FOLDER_ICON = 'sdx-File-x';
     const DEFAULT_FILE_ICON = 'sdx-morenwenjian';
     let iconClass;
     if (!path.isFile) {

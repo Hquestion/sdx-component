@@ -1712,6 +1712,104 @@
       "font_class": "chongzhimima",
       "unicode": "e7e1",
       "unicode_decimal": 59361
+    },
+    {
+      "icon_id": "12383019",
+      "name": "强制删除",
+      "font_class": "qiangzhishanchu1",
+      "unicode": "e7e4",
+      "unicode_decimal": 59364
+    },
+    {
+      "icon_id": "12455285",
+      "name": "File-x",
+      "font_class": "File-x",
+      "unicode": "e7e7",
+      "unicode_decimal": 59367
+    },
+    {
+      "icon_id": "12455286",
+      "name": "DOC",
+      "font_class": "DOC1",
+      "unicode": "e7e8",
+      "unicode_decimal": 59368
+    },
+    {
+      "icon_id": "12455287",
+      "name": "ORC-x",
+      "font_class": "ORC-x",
+      "unicode": "e7e9",
+      "unicode_decimal": 59369
+    },
+    {
+      "icon_id": "12455288",
+      "name": "Json-x",
+      "font_class": "Json-x",
+      "unicode": "e7ea",
+      "unicode_decimal": 59370
+    },
+    {
+      "icon_id": "12455289",
+      "name": "PNG-x",
+      "font_class": "PNG-x",
+      "unicode": "e7eb",
+      "unicode_decimal": 59371
+    },
+    {
+      "icon_id": "12455290",
+      "name": "TXT-x",
+      "font_class": "TXT-x",
+      "unicode": "e7ec",
+      "unicode_decimal": 59372
+    },
+    {
+      "icon_id": "12455291",
+      "name": "wuyulan-x",
+      "font_class": "wuyulan-x",
+      "unicode": "e7ed",
+      "unicode_decimal": 59373
+    },
+    {
+      "icon_id": "12455292",
+      "name": "Parquet-x",
+      "font_class": "Parquet-x",
+      "unicode": "e7ee",
+      "unicode_decimal": 59374
+    },
+    {
+      "icon_id": "12460219",
+      "name": "zuidahua",
+      "font_class": "zuidahua1",
+      "unicode": "e7f0",
+      "unicode_decimal": 59376
+    },
+    {
+      "icon_id": "12460220",
+      "name": "zuixiaohua",
+      "font_class": "zuixiaohua1",
+      "unicode": "e7f1",
+      "unicode_decimal": 59377
+    },
+    {
+      "icon_id": "12460221",
+      "name": "shaixuan-X",
+      "font_class": "shaixuan-X",
+      "unicode": "e7f2",
+      "unicode_decimal": 59378
+    },
+    {
+      "icon_id": "12460225",
+      "name": "xiazai X",
+      "font_class": "xiazaiX",
+      "unicode": "e7ef",
+      "unicode_decimal": 59375
+    },
+    {
+      "icon_id": "12472492",
+      "name": "wu yulan",
+      "font_class": "wuyulan1",
+      "unicode": "e7f3",
+      "unicode_decimal": 59379
     }
   ]
 }

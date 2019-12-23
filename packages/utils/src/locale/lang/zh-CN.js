@@ -1132,7 +1132,9 @@ export default {
             DatasetDeleteContent: '您确认要删除此数据集吗？',
             Are_you_sure_you_want_to_delete_the_selected_file: '您确认要删除选中的文件吗？',
             FileSize: '文件大小',
-            FilePreview: '文件预览'
+            FilePreview: '文件预览',
+            cannotPreview: '无法预览',
+            Use_in_Jupyter: '在Jupyter中使用'
         }
     },
     sdxCommon: {

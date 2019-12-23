@@ -154,7 +154,14 @@
                     prop="datasets"
                     :label="`${t('view.task.DataSet')}:`"
                 >
+                    <div
+                        v-if="$route.query.from === 'dataManagement'"
+                        class="default-dataset"
+                    >
+                        {{ 'dataSetName' }}
+                    </div>
                     <el-select
+                        v-else
                         v-model="params.datasets"
                         size="small"
                         :placeholder="t('view.task.form.Please_select_the_dataset')"
@@ -435,7 +442,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .package-info__item {
     height: 30px;
     padding: 10px;
@@ -443,5 +450,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.default-dataset {
+    color: #13264D;
+    background: #EDEFF2;
+    border-radius: 4px;
+    padding: 0 8px;
 }
 </style>

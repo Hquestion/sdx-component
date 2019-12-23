@@ -7,7 +7,7 @@
                 <template #right>
                     <IconButton
                         border
-                        icon="sdx-icon sdx-icon--download"
+                        icon="sdx-icon sdx-xiazaiX"
                     />
                 </template>
                 <div class="top">

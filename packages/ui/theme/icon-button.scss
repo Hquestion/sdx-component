@@ -1,6 +1,6 @@
 @include block('icon-button', $bem-namespace-ui) {
     position: relative;
-    color: $sdx-text-holder-color;
+    color: $sdx-icon-button-icon-color;
     font-size: $sdx-h2-font-size;
     display: inline-block;
     vertical-align: middle;

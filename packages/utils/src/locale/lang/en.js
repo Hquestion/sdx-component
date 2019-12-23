@@ -1133,7 +1133,9 @@ export default {
             DatasetDeleteContent: 'Are you sure you want to delete this dataset?',
             Are_you_sure_you_want_to_delete_the_selected_file: 'Are you sure you want to delete the selected file?',
             FileSize: 'File Size',
-            FilePreview: 'File Preview'
+            FilePreview: 'File Preview',
+            cannotPreview: 'Cannot Preview',
+            Use_in_Jupyter: 'Use in Jupyter'
         }
     },
     sdxCommon: {

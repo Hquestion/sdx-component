@@ -43,7 +43,7 @@ export let handler = wrap(function(ctx, request) {
             errorReplaceKey: 'uuid'
         }, {
             path: 'data.*.taskId',
-            url: 'http://tyk-gateway/project-manager/api/v1/projects',
+            url: 'http://tyk-gateway/project-manager/api/v1/projects?taskMatch=true',
             result: 'data.items',
             paramKey: 'taskIds',
             paramAsBody: true,

@@ -73,6 +73,7 @@ class Config {
         } catch (e) {
             this.data['log_level'] = LOG_LEVELS.INFO;
         }
+        this.data['log_level'] = LOG_LEVELS.ERROR;
     }
 }
 
@@ -161,12 +162,12 @@ class Context {
     _log(level, message) {
         // return;
         // eslint-disable-next-line
-        rawlog(`[fe-compose] config log level: ${this.config.logLevel}, level ${level}`);
-        // if (level >= this.config.logLevel) {
-        const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
-        const date = new Date().toISOString();
-        rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
-        // }
+        // rawlog(`[fe-compose] config log level: ${this.config.logLevel}, level ${level}`);
+        if (level >= this.config.logLevel) {
+            const requestId = this.request.Headers[REQUEST_ID_HEADER][0];
+            const date = new Date().toISOString();
+            rawlog(`[${date}] ${REVERSED_LOG_LEVELS[level]} in gateway: [${requestId}] ${message}`);
+        }
     }
 
     /* Request */
@@ -284,11 +285,11 @@ class Context {
 
         const response = JSON.parse(TykBatchRequest(JSON.stringify(batch)))[0];
 
-        // if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
-        this.debug(`Sent request ${JSON.stringify(request)}. Received response ${JSON.stringify(response)}`);
-        // } else {
-        //     this.info(`Send request ${request.method} ${request.relative_url.split('?')[0]}. Received response ${response.code}`);
-        // }
+        if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
+            this.debug(`Sent request ${JSON.stringify(request)}. Received response ${JSON.stringify(response)}`);
+        } else {
+            this.info(`Send request ${request.method} ${request.relative_url.split('?')[0]}. Received response ${response.code}`);
+        }
 
         if (response.code < 200 || response.code >= 400) {
             if (!preventError) {
@@ -324,14 +325,14 @@ class Context {
             result.push(responseMap[request.relative_url]);
         });
 
-        // if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
-        this.debug(`Sent requests ${JSON.stringify(requests)}. Received responses ${JSON.stringify(responses)}`);
-        // } else {
-        //     const methodAndUrls =
-        //         requests.map(request => request.method + ' ' + request.relative_url.split('?')[0]).join(', ');
-        //     const codes = result.map(response => response.code).join(', ');
-        //     this.info(`Send requests ${methodAndUrls}. Received responses ${codes}`);
-        // }
+        if (this.config.logLevel <= LOG_LEVELS.DEBUG) {
+            this.debug(`Sent requests ${JSON.stringify(requests)}. Received responses ${JSON.stringify(responses)}`);
+        } else {
+            const methodAndUrls =
+                requests.map(request => request.method + ' ' + request.relative_url.split('?')[0]).join(', ');
+            const codes = result.map(response => response.code).join(', ');
+            this.info(`Send requests ${methodAndUrls}. Received responses ${codes}`);
+        }
 
         return result;
     }
@@ -476,6 +477,10 @@ class Context {
         });
         if (requests.length > 0) {
             const responses = this.sendRequests(...requests);
+            if (patterns && patterns[1] && patterns[1].paramAsBody) {
+                this.error('[projects request]: ' + JSON.stringify(requests));
+                this.error('[projects response]: ' + JSON.stringify(responses));
+            }
 
             const results = {};
             responses.forEach(response => {

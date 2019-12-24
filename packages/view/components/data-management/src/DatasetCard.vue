@@ -3,73 +3,78 @@
         <div class="sdxv-dataset-card__container">
             <div
                 v-if="checkable"
-                class="sdxv-dataset-card__container--checkbox"
-                :class="{
-                    'is-checked': isChecked
-                }"
+                class="sdxv-dataset-card__checkbox"
                 @click="isChecked = !isChecked"
-            />
-            <div class="sdxv-dataset-card__main">
+            >
+                <div
+                    class="sdxv-dataset-card__checkbox--content" 
+                    :class="{
+                        'is-checked': isChecked
+                    }"
+                />
+            </div>
+            <div 
+                class="sdxv-dataset-card__main" 
+                :class="{'is-checkable': checkable}"
+            >
                 <div class="sdxv-dataset-card__main--info sdxv-dataset-card__info">
                     <div class="sdxv-dataset-card__info--icon">
                         <img
-                            :src="datasetInfo.coverImg || ''"
+                            :src="datasetInfo.coverImg || defaultImgCover"
                             alt="icon"
                         >
                     </div>
                     <div class="sdxv-dataset-card__info--detail sdxv-dataset-card__detail">
-                        <div class="sdxv-dataset-card__detail--first">
-                            <div
-                                @click="handleClickName"
+                        <div>
+                            <span 
+                                @click="handleClickName" 
                                 :title="datasetInfo.name"
                             >
                                 {{ datasetInfo.name }}
-                            </div>
-                            <div>
-                                <span>{{ datasetInfo.count + t('view.dataManagement.Count') + ' ' }}<b>{{ datasetInfo.fileType }}</b>{{ ' ' + t('view.dataManagement.Files') + ' ' + byteToMB(datasetInfo.size) + 'MB' }}</span>
-                            </div>
+                            </span>
                         </div>
-                        <div class="sdxv-dataset-card__detail--second">
-                            {{ datasetInfo.creator + ' ' + t('view.dataManagement.created_in') + dateFormatter(datasetInfo.createdAt) }}
+                        <div>
+                            <span>{{ datasetInfo.fileCount + t('view.dataManagement.Count') + ' ' }}<b>{{ datasetInfo.dataFormat }}</b>{{ ' ' + t('view.dataManagement.Files') + ' ' + byteToMB(datasetInfo.dataSize) + 'MB' }}</span>
                         </div>
                     </div>
                     <div class="sdxv-dataset-card__info--state">
-                        <!-- // todo: 状态映射 -->
                         <SdxwFoldLabel
                             :plain="true"
-                            type="die"
+                            :type="STATE_MAP_FOLD_LABEL_TYPE[datasetInfo.state]"
                         >
-                            成功
+                            {{ t(STATE_TYPE_LABEL[datasetInfo.state]) }}
                         </SdxwFoldLabel>
                     </div>
                 </div>
+                <div class="sdxv-dataset-card__create-info">
+                    {{ datasetInfo.creator + ' ' + t('view.dataManagement.created_in') + dateFormatter(datasetInfo.createdAt) }}
+                </div>
                 <div
-                    class="sdxv-dataset-card__main--desc"
+                    class="sdxv-dataset-card__desc"
                     :title="datasetInfo.description"
                 >
-                    {{ datasetInfo.description }}
+                    {{ datasetInfo.description || t('view.dataManagement.NoDescription') }}
                 </div>
-                <div class="sdxv-dataset-card__main--tags">
+                <div class="sdxv-dataset-card__tags">
                     <div
-                        class="sdxv-dataset-card__tag"
-                        v-for="item in datasetInfo.labels"
-                        :key="item.label"
+                        class="sdxv-dataset-card__tags--item"
+                        v-for="(item, i) in datasetInfo.labels"
+                        :key="i"
                     >
-                        <div>{{ item.label }}</div>
+                        <div>{{ item }}</div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="sdxv-dataset-card__operation">
-            <!-- // todo: 操作映射 -->
             <SdxuButton
-                v-for="item in datasetInfo.operations"
-                :key="item.value"
-                :icon="item.icon"
+                v-for="item in getOperationList(datasetInfo.state)"
+                :key="OPERATION_INFO[item].value"
+                :icon="OPERATION_INFO[item].icon"
                 type="text"
-                @click="handleOperate(item.value)"
+                @click="handleOperate(OPERATION_INFO[item].value)"
             >
-                {{ item.label }}
+                {{ t(OPERATION_INFO[item].label) }}
             </SdxuButton>
         </div>
     </div>
@@ -79,7 +84,9 @@
 import SdxuButton from '@sdx/ui/components/button';
 import { byteToMB, dateFormatter } from '@sdx/utils/src/helper/transform';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
+import { STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, STATE_TYPE_OPERATION, OPERATION_INFO, MY_SHARE_OPERATION } from './config';
 import locale from '@sdx/utils/src/mixins/locale';
+import defaultImgCover from '@sdx/utils/src/theme-common/static/defaultImgCover.svg';
 
 export default {
     name: 'DatasetCard',
@@ -99,26 +106,60 @@ export default {
             validator: value => {
                 return ['ALL', 'PRIVATE', 'MY_SHARE', 'OTHER_SHARE'].includes(value);
             }
+        },
+        checkedList: {
+            type: Array,
+            default: () => []
+        },
+        userId: {
+            type: String,
+            required: true
         }
     },
     data() {
         return {
-            isChecked: false
+            OPERATION_INFO,
+            STATE_TYPE_LABEL,
+            STATE_MAP_FOLD_LABEL_TYPE,
+            defaultImgCover
         };
     },
     computed: {
         checkable() {
             return ['PRIVATE', 'MY_SHARE'].includes(this.shareType);
+        },
+        isChecked: {
+            get() {
+                return this.checkedList.includes(this.datasetInfo.uuid);
+            },
+            set(nval) {
+                if (nval) {
+                    if (!this.checkedList.includes(this.datasetInfo.uuid)) {
+                        this.checkedList.push(this.datasetInfo.uuid);
+                    }
+                } else {
+                    if (this.checkedList.includes(this.datasetInfo.uuid)) {
+                        this.checkedList.splice(this.checkedList.indexOf(this.datasetInfo.uuid), 1);
+                    }
+                }
+            }
         }
     },
     methods: {
         handleOperate(operation) {
-            // todo:
             this.$emit('operate', operation, this.datasetInfo);
         }, 
         handleClickName() {
-            // todo:
             this.$emit('detail', this.datasetInfo.uuid);
+        },
+        getOperationList(state) {
+            if (this.shareType === 'MY_SHARE') {
+                return MY_SHARE_OPERATION;
+            } else if (this.datasetInfo.creatorId !== this.userId) {
+                return [];
+            } else {
+                return STATE_TYPE_OPERATION[state];
+            }
         },
         byteToMB,
         dateFormatter

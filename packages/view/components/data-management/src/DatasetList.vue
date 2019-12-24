@@ -54,7 +54,7 @@
                             v-for="item in labelList"
                             :key="item.label"
                             :label="item.label"
-                            :value="item.label"
+                            :value="item.value"
                         />
                     </el-select>
                 </SdxwSearchItem>
@@ -73,57 +73,88 @@
                 </SdxwSearchItem>
             </SdxwSearchLayout>
         </div>
-        <div class="sdxv-dataset-list__operation">
-            <SdxuButton
-                v-if="params.shareType === 'PRIVATE'"
-                @click="handleShareAll"
-                icon="sdx-fenxiang"
-            >
-                {{ t('view.dataManagement.ShareAll') }}
-            </SdxuButton>
-            <SdxuButton
-                v-if="params.shareType === 'PRIVATE'"
-                type="default"
-                @click="handleDeleteBatch"
-                icon="sdx-kapianshanchu"
-            >
-                {{ t('view.dataManagement.DeleteBatch') }}
-            </SdxuButton>
-            <SdxuButton
-                v-if="params.shareType === 'MY_SHARE'"
-                @click="handleCancelShare"
-                icon="sdx-quxiaofenxiang"
-            >
-                {{ t('view.dataManagement.CancelShare') }}
-            </SdxuButton>
-        </div>
-        <div class="sdxv-dataset-list__list">
-            <div class="sdxv-dataset-list__card">
-                <DatasetCard
-                    class="sdxv-dataset-list__card--item"
-                    v-for="(item, i) in datasetList"
-                    :key="i"
-                    :dataset-info="item"
-                    :share-type="params.shareType"
-                    @operate="handleOperation"
-                    @detail="handleDetail"
+        <div
+            class="sdxv-dataset-list__list"
+            v-loading="loading"
+        >
+            <template v-if="datasetList.length === 0">
+                <SdxuEmpty />
+            </template>
+            <template v-else>
+                <div 
+                    v-if="params.shareType === 'PRIVATE' || params.shareType === 'MY_SHARE'" 
+                    class="sdxv-dataset-list__list--operation"
+                >
+                    <SdxuButton
+                        type="default"
+                        @click="handleSelectAll"
+                    >
+                        {{ t('sdxCommon.SelectAll') }}
+                    </SdxuButton>
+                    <div>
+                        <SdxuButton
+                            v-if="params.shareType === 'PRIVATE'"
+                            type="default"
+                            @click="handleShareAll"
+                            :disabled="checkedDatasetList.length === 0"
+                        >
+                            {{ t('view.dataManagement.ShareAll') }}
+                        </SdxuButton>
+                        <SdxuButton
+                            v-if="params.shareType === 'PRIVATE'"
+                            type="default"
+                            @click="handleDeleteBatch"
+                            :disabled="checkedDatasetList.length === 0"
+                        >
+                            {{ t('view.dataManagement.DeleteBatch') }}
+                        </SdxuButton>
+                        <SdxuButton
+                            v-if="params.shareType === 'MY_SHARE'"
+                            type="default"
+                            @click="handleCancelShareBatch"
+                            :disabled="checkedDatasetList.length === 0"
+                        >
+                            {{ t('view.dataManagement.CancelShare') }}
+                        </SdxuButton>
+                    </div>
+                </div>
+                <div class="sdxv-dataset-list__card">
+                    <DatasetCard
+                        class="sdxv-dataset-list__card--item"
+                        v-for="(item, i) in datasetList"
+                        :key="i"
+                        :dataset-info="item"
+                        :share-type="params.shareType"
+                        :checked-list="checkedDatasetList"
+                        :user-id="currentUser.uuid"
+                        @operate="handleOperation"
+                        @detail="handleDetail"
+                    />
+                </div>
+                <SdxuPagination
+                    class="sdxv-dataset-list__list--pagination"
+                    :current-page.sync="page"
+                    :page-size="pageSize"
+                    :total="total"
+                    @current-change="handlePageChange"
                 />
-            </div>
-            <SdxuPagination
-                class="sdxv-dataset-list__list--pagination"
-                :current-page.sync="page"
-                :page-size="pageSize"
-                :total="total"
-                @current-change="handlePageChange"
-            />
+            </template>
         </div>
-        <SdxwShareSetting
+        <DatasetShareDialog
+            v-if="shareDialogVisible"
             :visible.sync="shareDialogVisible"
-            @confirm-edit="confirmShare"
+            :dataset="shareDataset"
+            @refresh="fetchData"
         />
-        <DatasetEdit
+        <DatasetEditDialog
+            v-if="editDialogVisible"
             :visible.sync="editDialogVisible"
             :dataset="editDataset"
+            @refresh="fetchData"
+        />
+        <SdxwShareSetting
+            :visible.sync="shareAllDialog"
+            @confirm-edit="handleShareAll"
         />
     </div>
 </template>
@@ -135,16 +166,22 @@ import SdxwSearchLayout from '@sdx/widget/components/search-layout';
 import SdxuInput from '@sdx/ui/components/input';
 import SdxuPagination from '@sdx/ui/components/pagination';
 import DatasetCard from './DatasetCard';
-import DatasetEdit from './DatasetEdit';
+import DatasetEditDialog from './DatasetEditDialog';
+import DatasetShareDialog from './DatasetShareDialog';
 import SdxuButton from '@sdx/ui/components/button';
 import SdxuSortButton from '@sdx/ui/components/sort-button';
-import SdxwShareSetting from '@sdx/widget/components/share-setting';
 import MessageBox from '@sdx/ui/components/message-box';
+import SdxuEmpty from '@sdx/ui/components/empty';
+import SdxwShareSetting from '@sdx/widget/components/share-setting';
+import { getDatasetList, getLabels, deleteDataset, updateDataset, datasetDeleteBatch, datasetShareBatch } from '@sdx/utils/src/api/dataset';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 
-import { DATA_FORMAT_LIST } from './config';
+import { DATA_FORMAT_LIST, POLLING_STATE_LIST } from './config';
 
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
+
+const POLLING_PERIOD = 3 * 1000;
 
 export default {
     name: 'DatasetList',
@@ -158,11 +195,13 @@ export default {
         SdxuPagination,
         ElSelect,
         ElOption,
+        SdxwShareSetting,
         DatasetCard,
-        DatasetEdit,
+        DatasetEditDialog,
+        DatasetShareDialog,
         SdxuButton,
         SdxuSortButton,
-        SdxwShareSetting,
+        SdxuEmpty,
     },
     data() {
         return {
@@ -170,169 +209,86 @@ export default {
             selectedLabel: '',
             name: '',
             dataTypeList: DATA_FORMAT_LIST,
-            // todo:
             labelList: [],
             page: 1,
             pageSize: 10,
             total: 0,
-            order: 'desc',
             shareDialogVisible: false,
+            shareDataset: {},
             editDialogVisible: false,
             editDataset: {},
+            shareAllDialog: false,
             params: {
                 name: '',
-                order: '',
+                order: 'desc',
                 orderBy: 'createdAt',
                 start: 1,
                 count: 10,
                 shareType: 'ALL',
-                isPublic: false,
-                label: '',
+                labels: '',
                 dataFormat: ''
             },
-            datasetList: [
-                {
-                    name: 'xxx数据集',
-                    size: 1073741824,
-                    count: 10,
-                    fileType: 'CSV',
-                    creator: 'zhangsan',
-                    createdAt: '2019-10-18T07:50:17.748000Z',
-                    description: 'safa阿斯顿发多发法师法师打发到沙发上丰富',
-                    state: 'Running',
-                    coverImg: 'https://ss1.baidu.com/9vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=05b297ad39fa828bce239be3cd1e41cd/0eb30f2442a7d9337119f7dba74bd11372f001e0.jpg',
-                    labels: [
-                        {
-                            label: 'tag1'
-                        },
-                        {
-                            label: 'tag2'
-                        },
-                        {
-                            label: 'tag3'
-                        },
-                    ],
-                    operations: [
-                        {
-                            label: '分享',
-                            value: 'share',
-                            icon: 'sdx-fenxiang'
-                        },
-                        {
-                            label: '编辑',
-                            value: 'edit',
-                            icon: 'sdx-kapianbianji'
-                        },
-                        {
-                            label: '删除',
-                            value: 'delete',
-                            icon: 'sdx-kapianshanchu'
-                        },
-                    ]
-                },
-                {
-                    name: 'xxx数据集',
-                    size: 1073741824,
-                    count: 10,
-                    fileType: 'CSV',
-                    creator: 'zhangsan',
-                    createdAt: '2019-10-18T07:50:17.748000Z',
-                    description: 'safa阿斯顿发多发法师法师打发到沙发上丰富',
-                    state: 'Running',
-                    coverImg: 'https://ss1.baidu.com/9vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=05b297ad39fa828bce239be3cd1e41cd/0eb30f2442a7d9337119f7dba74bd11372f001e0.jpg',
-                    labels: [
-                        {
-                            label: 'tag1'
-                        },
-                        {
-                            label: 'tag2'
-                        },
-                        {
-                            label: 'tag3'
-                        },
-                    ],
-                    operations: [
-                        {
-                            label: '分享',
-                            value: 'share',
-                            icon: 'sdx-fenxiang'
-                        },
-                        {
-                            label: '编辑',
-                            value: 'edit',
-                            icon: 'sdx-kapianbianji'
-                        },
-                        {
-                            label: '删除',
-                            value: 'delete',
-                            icon: 'sdx-kapianshanchu'
-                        },
-                    ]
-                },
-                {
-                    name: 'xxx数据集',
-                    size: 1073741824,
-                    count: 10,
-                    fileType: 'CSV',
-                    creator: 'zhangsan',
-                    createdAt: '2019-10-18T07:50:17.748000Z',
-                    description: 'safa阿斯顿发多发法师法师打发到沙发上丰富',
-                    state: 'Running',
-                    coverImg: 'https://ss1.baidu.com/9vo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=05b297ad39fa828bce239be3cd1e41cd/0eb30f2442a7d9337119f7dba74bd11372f001e0.jpg',
-                    labels: [
-                        {
-                            label: 'tag1'
-                        },
-                        {
-                            label: 'tag2'
-                        },
-                        {
-                            label: 'tag3'
-                        },
-                    ],
-                    operations: [
-                        {
-                            label: '分享',
-                            value: 'share',
-                            icon: 'sdx-fenxiang'
-                        },
-                        {
-                            label: '编辑',
-                            value: 'edit',
-                            icon: 'sdx-kapianbianji'
-                        },
-                        {
-                            label: '删除',
-                            value: 'delete',
-                            icon: 'sdx-kapianshanchu'
-                        },
-                    ]
-                },
-            ],
+            loading: false,
+            pollingId: 0,
+            checkedDatasetList: [],
+            datasetList: [],
+            currentUser: getUser()
         };
     },
     computed: {
         queryParams() {
-            // todo:
             return Object.assign({}, this.params, {
-                start: this.page * this.pageSize + 1,
+                start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });
         }
     },
     methods: {
-        fetchData() {
-            // todo:
+        fetchData(showLoading = true) {
+            if (showLoading) {
+                this.loading = true;
+            }
+            getDatasetList(this.queryParams)
+                .then(data => {
+                    this.checkedDatasetList = [];
+                    this.datasetList = data.items;
+                    this.total = data.total;
+                    this.loading = false;
+                    if (this.datasetList.some(item => POLLING_STATE_LIST.includes(item.state))) {
+                        this.startPolling();
+                    }
+                })
+                .catch(err => {
+                    window.console.error(err);
+                    this.datasetList = [];
+                    this.total = 0;
+                    this.loading = false;
+                });
         },
         getLabelList() {
-            // todo:
+            getLabels()
+                .then(data => {
+                    const list = data.items.map(item => ({
+                        label: item.label,
+                        value: item.label
+                    }));
+                    list.unshift({
+                        label: this.t('sdxCommon.ALL'),
+                        value: ''
+                    });
+                    this.labelList = list;
+                })
+                .catch(err => {
+                    window.console.error(err);
+                    this.labelList = [];
+                });
         },
         handlePageChange(page) {
             this.page = page;
         },
         handleSearch() {
             this.params.name = this.name;
-            this.params.label = this.selectedLabel;
+            this.params.labels = this.selectedLabel;
             this.params.dataFormat = this.selectedDataFormat;
             this.page = 1;
         },
@@ -349,18 +305,23 @@ export default {
         handleOperation(operation, dataset) {
             switch(operation) {
                 case 'share':
+                    this.shareDataset = dataset;
                     this.shareDialogVisible = true;
-                    // todo: dataset??
                     break;
                 case 'edit':
-                    // todo:
-                    this.editDialogVisible = true;
                     this.editDataset = dataset;
+                    this.editDialogVisible = true;
                     break;
                 case 'delete':
-                    // todo:
-                    this.handleDeleteDataset();
+                    this.handleDeleteDataset(dataset.uuid);
                     break;
+                case 'f_delete': 
+                    this.handleDeleteDataset(dataset.uuid, {force: true});
+                    break;
+                case 'c_share': 
+                    this.handleCancelShare(dataset);
+                    break;
+
             }
         },
         handleDetail(uuid) {
@@ -371,33 +332,98 @@ export default {
                 }
             });
         },
-        handleDeleteDataset() {
+        handleDeleteDataset(uuid, params) {
             MessageBox.confirm.warning({
                 title: this.t('view.dataManagement.DatasetDeleteTips'),
                 content: this.t('view.dataManagement.DatasetDeleteContent')
             }).then(() => {
-                // todo: 请求接口删除
-                // todo: 刷新列表
+                // 请求接口删除
+                deleteDataset(uuid, params)
+                    .then(() => {
+                        // 刷新列表
+                        this.fetchData();
+                    });
             });
-        },
-        confirmShare() {
-            // todo:
-            // todo: 刷新列表
         },
         handleDatasetCreation() {
             this.$router.push({
                 name: 'SdxvDatasetCreation'
             });
         },
-        handleShareAll() {
-            // todo:
+        handleSelectAll() {
+            this.checkedDatasetList = this.datasetList.map(item => {
+                return item.uuid;
+            });
+        },
+        handleShareAll(users, groups, shareType) {
+            datasetShareBatch(this.checkedDatasetList, {
+                users,
+                groups,
+                isPublic: shareType === 'PRIVATE' ? false : true
+            })
+                .then(() => {
+                    // 刷新列表
+                    // todo: 验证刷新
+                    this.fetchData();
+                });
         },
         handleDeleteBatch() {
-            // todo:
+            datasetDeleteBatch(this.checkedDatasetList)
+                .then(() => {
+                    // 刷新列表
+                    // todo: 验证刷新
+                    this.fetchData();
+                });
         },
-        handleCancelShare() {
-            // todo:
+        handleCancelShareBatch() {
+            datasetShareBatch(this.checkedDatasetList, {
+                users: [],
+                groups: [],
+                isPublic: false
+            })
+                .then(() => {
+                    // 刷新列表
+                    // todo: 验证刷新
+                    this.fetchData();
+                });
         },
+        handleCancelShare(dataset) {
+            updateDataset(dataset.uuid, {
+                users: [],
+                groups: [],
+                isPublic: false
+            })
+                .then(() => {
+                    // 刷新列表
+                    // todo: 验证刷新
+                    this.fetchData();
+                });
+        },
+        startPolling() {
+            if (!this._isDestroyed) {
+                this.pollingId && clearTimeout(this.pollingId);
+                this.pollingId = setTimeout(() => {
+                    this.fetchData(false);
+                }, POLLING_PERIOD);
+            }
+        },
+        stopPolling() {
+            this.pollingId && clearTimeout(this.pollingId);
+            this.pollingId = 0;
+        }
+    },
+    created() {
+        this.fetchData();
+        this.getLabelList();
+    },
+    watch: {
+        // todo:
+        // checkedDatasetList(nval) {
+        //     window.console.error(nval);
+        // },
+        queryParams() {
+            this.fetchData();
+        }
     }
 };
 </script>

@@ -5,11 +5,13 @@
         </div>
         <div class="sdxv-dataset-creation__container">
             <div class="sdxv-dataset-creation__container--content">
-                <SdxuArticlePanel :title="t('view.dataManagement.BasicSetting')">
-                    <el-form
-                        :model="formData"
-                        :label-width="labelWidth"
-                    >
+                <el-form
+                    :model="formData"
+                    :label-width="labelWidth"
+                    ref="form"
+                    :rules="rules"
+                >
+                    <SdxuArticlePanel :title="t('view.dataManagement.BasicSetting')">
                         <el-form-item
                             prop="name"
                             :label="t('view.dataManagement.DatasetName') + '：'"
@@ -40,13 +42,14 @@
                                 multiple
                                 filterable
                                 allow-create
+                                :multiple-limit="2"
                                 :placeholder="t('view.dataManagement.PleaseSelectOrInput')"
                             >
                                 <el-option
                                     v-for="(item, i) in labelList"
                                     :key="i"
-                                    :label="item.name"
-                                    :value="item.name"
+                                    :label="item.label"
+                                    :value="item.value"
                                 />
                             </el-select>
                         </el-form-item>
@@ -56,20 +59,15 @@
                         >
                             <SdxuUploadImage :image.sync="formData.coverImg" />
                         </el-form-item>
-                    </el-form>
-                </SdxuArticlePanel>
-                <SdxuArticlePanel :title="t('view.dataManagement.DataSourceSetting')">
-                    <el-form
-                        :model="formData"
-                        :label-width="labelWidth"
-                    >
+                    </SdxuArticlePanel>
+                    <SdxuArticlePanel :title="t('view.dataManagement.DataSourceSetting')">
                         <el-form-item
+                            prop="sourcePaths"
                             :label="t('view.dataManagement.SelectFile') + '：'"
-                            required
                         >
                             <SdxwFileSelect
                                 v-model="formData.sourcePaths"
-                                :string-model="false"
+                                :string-model="true"
                                 check-type="all"
                                 source="all"
                                 :limit="-1"
@@ -80,28 +78,24 @@
                                 <span>{{ fileType }}</span>
                             </div>
                         </el-form-item>
-                    </el-form>
-                </SdxuArticlePanel>
-                <SdxuArticlePanel :title="t('view.dataManagement.DataSave')">
-                    <el-form :label-width="labelWidth">
+                    </SdxuArticlePanel>
+                    <SdxuArticlePanel :title="t('view.dataManagement.DataSave')">
                         <el-form-item :label="t('view.dataManagement.SaveDirectory') + '：'">
                             <div class="sdxv-dataset-creation__container--show-bar">
                                 <span>/.datasets</span>
                             </div>
                         </el-form-item>
-                    </el-form>
-                    <SdxwShareForm :label-width="labelWidth" />
-                </SdxuArticlePanel>
-                <SdxuArticlePanel
-                    :title="t('view.dataManagement.AdvancedSetting')"
-                    expandable
-                    :expanded.sync="expanded"
-                >
-                    <el-form
-                        v-if="expanded"
-                        :label-width="labelWidth"
+                        <SdxwShareForm :label-width="labelWidth" />
+                    </SdxuArticlePanel>
+                    <SdxuArticlePanel
+                        :title="t('view.dataManagement.AdvancedSetting')"
+                        expandable
+                        :expanded.sync="expanded"
                     >
-                        <el-form-item :label="t('view.dataManagement.DetailedDescription') + '：'">
+                        <el-form-item
+                            v-if="expanded"
+                            :label="t('view.dataManagement.DetailedDescription') + '：'"
+                        >
                             <SdxuInput
                                 v-model="formData.advancedConfig"
                                 type="textarea"
@@ -109,8 +103,8 @@
                                 :rows="5"
                             />
                         </el-form-item>
-                    </el-form>
-                </SdxuArticlePanel>
+                    </SdxuArticlePanel>
+                </el-form>
                 <div
                     class="sdxv-dataset-creation__container-button"
                     :style="{ 'margin-left': buttonMarginLeft }"
@@ -138,6 +132,9 @@ import SdxwShareForm from '@sdx/widget/components/share-form';
 import SdxuArticlePanel from '@sdx/ui/components/article-panel';
 import SdxuUploadImage from '@sdx/ui/components/upload-image';
 import locale from '@sdx/utils/src/mixins/locale';
+import { getLabels, createDataset } from '@sdx/utils/src/api/dataset';
+import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { DATA_FORMAT_MAP, DATA_FORMAT } from './config';
 
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
@@ -173,9 +170,15 @@ export default {
                 dataFormat: '',
                 advancedConfig: '',
             },
-            // todo: 校验
-            rules: [],
-            // todo: 
+            rules: {
+                name: [
+                    { required: true, message: this.t('view.dataManagement.DatasetNameNotBeNull'), trigger: 'blur' },
+                    { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                sourcePaths: [
+                    { required: true, message: this.t('view.dataManagement.FileRequired'), trigger: 'blur' }
+                ]
+            },
             labelList: [],
             enLabelWidth: 160,
             zhLabelWidth: 110,
@@ -189,35 +192,60 @@ export default {
         buttonMarginLeft() {
             return (this.lang$ === 'en' ? this.enLabelWidth : this.zhLabelWidth) + 16 + 'px';
         },
-        // todo: 
         fileType() {
             let type = '';
             if (this.formData.sourcePaths.length > 1) {
-                type = 'other';
+                type = DATA_FORMAT.Other;
             } else if (this.formData.sourcePaths.length === 1) {
                 // 
-                let name = this.formData.sourcePaths[0].name;
+                let name = this.formData.sourcePaths[0];
                 let index = name.lastIndexOf('.');
-                type = index === 0 ? 'other' : name.slice(index + 1);
+                let suffix = index === 0 || index === -1 ? '' : name.slice(index + 1).toLowerCase();
+                if (suffix === '') {
+                    type = DATA_FORMAT.Other;
+                } else if (DATA_FORMAT_MAP.CSV.includes(suffix)) {
+                    type = DATA_FORMAT.CSV;
+                } else if (DATA_FORMAT_MAP.JPEG.includes(suffix)) {
+                    type = DATA_FORMAT.JPEG;
+                } else if (DATA_FORMAT_MAP.Text.includes(suffix)) {
+                    type = DATA_FORMAT.Text;
+                }
             }
             return type;
         }
     },
     methods: {
-        getLabelList() {
-            // todo:
-        },
         handleCancel() {
             this.$router.go(-1);
         },
         handleConfirm() {
-            // todo:
-        }
+            this.$refs.form.validate(valid => {
+                if (valid) {
+                    createDataset(this.formData)
+                        .then(() => {
+                            this.$router.go(-1);
+                        });
+                } else {
+                    return false;
+                }
+            });
+        },
+        getLabelList() {
+            getLabels()
+                .then(data => {
+                    this.labelList = data.items.map(item => ({
+                        label: item.label,
+                        value: item.label
+                    }));
+                })
+                .catch(err => {
+                    window.console.error(err);
+                    this.labelList = [];
+                });
+        },
     },
-    watch: {
-        'formData.sourcePaths' (nval) {
-            console.error(nval);
-        }
+    created() {
+        this.getLabelList();
     }
 };
 </script>

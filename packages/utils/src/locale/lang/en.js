@@ -1135,7 +1135,17 @@ export default {
             FileSize: 'File Size',
             FilePreview: 'File Preview',
             cannotPreview: 'Cannot Preview',
-            Use_in_Jupyter: 'Use in Jupyter'
+            Use_in_Jupyter: 'Use in Jupyter',
+            DatasetNameNotBeNull: 'Dataset name not be null',
+            FileRequired: 'Please select files',
+            NoDescription: 'No Description',
+            state: {
+                Creating: 'Creating',
+                Created: 'Created',
+                Failed: 'Failed',
+                Deleting: 'Deleting',
+                DeleteFailed: 'DeleteFailed'
+            },
         }
     },
     sdxCommon: {
@@ -1153,6 +1163,7 @@ export default {
         Search: 'Search',
         Upgrade: 'Upgrade',
         Delete: 'Delete',
+        ForceDelete: 'Force Delete',
         Share: 'Share',
         Revert: 'Revert',
         NoData: 'No Data',
@@ -1168,7 +1179,7 @@ export default {
         Seconds: 'Seconds',
         ConfirmRemove: 'Operation can not be reverted after removing',
         ShareAll: 'Share All',
-        CancelShare: 'Cancel Sharing',
+        CancelShare: 'Cancel Share',
         Detail: 'Show Detail',
         OperationSuccess: 'Operation succeeded',
         SettingSuccess: 'Setting succeeded',
@@ -1195,6 +1206,7 @@ export default {
         JPEG: 'JPEG',
         Text: 'Text',
         Other: 'Other',
+        SelectAll: 'Select All',
     },
     utils: {
         validator: {

@@ -1134,7 +1134,17 @@ export default {
             FileSize: '文件大小',
             FilePreview: '文件预览',
             cannotPreview: '无法预览',
-            Use_in_Jupyter: '在Jupyter中使用'
+            Use_in_Jupyter: '在Jupyter中使用',
+            DatasetNameNotBeNull: '数据集名称不能为空',
+            FileRequired: '请选择文件',
+            NoDescription: '没有添加描述',
+            state: {
+                Creating: '创建中',
+                Created: '成功',
+                Failed: '失败',
+                Deleting: '删除中',
+                DeleteFailed: '删除失败'
+            }
         }
     },
     sdxCommon: {
@@ -1152,6 +1162,7 @@ export default {
         Search: '搜索',
         Upgrade: '升级',
         Delete: '删除',
+        ForceDelete: '强制删除',
         Share: '分享',
         Revert: '撤销',
         NoData: '暂无数据',
@@ -1194,6 +1205,7 @@ export default {
         JPEG: 'JPEG',
         Text: 'Text',
         Other: 'Other',
+        SelectAll: '全部选择',
     },
     utils: {
         validator: {

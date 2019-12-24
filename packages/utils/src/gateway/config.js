@@ -164,5 +164,23 @@ module.exports = [
         method: 'GET',
         functionName: 'taskResourceProfiles.handler',
         filePath: './compose/taskResourceProfiles.js'
-    }
+    },
+    {
+        apiId: '/fe-compose/api/v1/datasets-profiles',
+        method: 'GET',
+        functionName: 'datasetProfiles.handler',
+        filePath: './compose/datasetProfiles.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/dataset-delete-batch',
+        method: 'POST',
+        functionName: 'datasetDeleteBatch.handler',
+        filePath: './compose/datasetDeleteBatch.js'
+    },
+    {
+        apiId: '/fe-compose/api/v1/dataset-share-batch',
+        method: 'POST',
+        functionName: 'datasetShareBatch.handler',
+        filePath: './compose/datasetShareBatch.js'
+    },
 ];

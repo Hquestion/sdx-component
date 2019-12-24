@@ -2,7 +2,7 @@ import wrap from '../wrap';
 
 export let handler = wrap(function(ctx, request) {
     let username = request.Params.username && request.Params.username[0];
-    let isAll = request.Params.all && request.Params.all[0] === true;
+    let isAll = request.Params.all && request.Params.all[0] === 'true';
     let ownerIds = [];
     if (username && username.trim()) {
         // 根据名称获取用户uuid

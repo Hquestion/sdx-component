@@ -477,10 +477,10 @@ class Context {
         });
         if (requests.length > 0) {
             const responses = this.sendRequests(...requests);
-            if (patterns && patterns[1] && patterns[1].paramAsBody) {
-                this.error('[projects request]: ' + JSON.stringify(requests));
-                this.error('[projects response]: ' + JSON.stringify(responses));
-            }
+            // if (patterns && patterns[1] && patterns[1].paramAsBody) {
+            //     this.error('[projects request]: ' + JSON.stringify(requests));
+            //     this.error('[projects response]: ' + JSON.stringify(responses));
+            // }
 
             const results = {};
             responses.forEach(response => {

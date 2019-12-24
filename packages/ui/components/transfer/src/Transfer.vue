@@ -166,7 +166,15 @@ export default {
             for (let i =0; i < moveNodes.length ; i++ ) {
                 // if (tags.find(item => item.name === moveNodes[i].label)) continue;
                 if (tags.find(item => item[this.treeNodeKey] === moveNodes[i][this.treeNodeKey])) continue;
-                if (!moveNodes[i].isGroup && tags.find(item => item[this.treeNodeKey].split('/')[1] === moveNodes[i][this.treeNodeKey].split('/')[1])) continue;
+                if (!moveNodes[i].isGroup
+                    && tags.find(item => {
+                        if (item[this.treeNodeKey].split('/')[1]) {
+                            return item[this.treeNodeKey].split('/')[1] === moveNodes[i][this.treeNodeKey].split('/')[1];
+                        } else {
+                            return false;
+                        }
+                    })
+                ) continue;
                 tags.push(
                     {
                         name: moveNodes[i].label,

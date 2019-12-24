@@ -1,6 +1,6 @@
 {
     "name": "@sdx/widget",
-    "version": "2.0.9",
+    "version": "2.0.10",
     "description": "控件级业务组件库",
     "keywords": [
         "widget"
@@ -45,7 +45,7 @@
     },
     "devDependencies": {
         "@sdx/ui": "^1.0.2",
-        "@sdx/utils": "^2.0.10"
+        "@sdx/utils": "^2.0.11"
     },
     "gitHead": "e9761c175fe80a7f4bd6f9ce6ba1f1abb66f24c5"
 }

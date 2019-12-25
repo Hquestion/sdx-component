@@ -1,5 +1,10 @@
 <template>
-    <div class="sdxv-dataset-card">
+    <div
+        class="sdxv-dataset-card" 
+        :class="{
+            'is-checked': isChecked
+        }"
+    >
         <div class="sdxv-dataset-card__container">
             <div
                 v-if="checkable"

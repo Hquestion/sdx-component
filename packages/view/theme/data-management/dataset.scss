@@ -69,99 +69,67 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     border: 1px solid #D8DEEA;
     border-radius: 4px;
     width: calc((100% - 2 * #{$sdx-gap-regular}) / 2);
+    transition: border .25s cubic-bezier(.71,-.46,.29,1.46);
+
+    @include state('checked') {
+        border: 2px solid #4CAAFF;
+        transition: border .25s cubic-bezier(.71,-.46,.29,1.46)
+    }
 
     @include element('container') {
+        $checkboxSize: 24px;
         display: flex;
         width: 100%;
-        position: relative;
 
         @include element('checkbox') {
-            position: absolute;
-            top: -8px;
-            left: -16px;
-            width: 32px;
-            height: 32px;
-            border-radius: 2px;
-            overflow: hidden;
+            width: $checkboxSize;
+            height: $checkboxSize;
+            margin-right: $sdx-gap-mini;
+            flex: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
             @include modifier('content') {
-                transform: rotate(45deg);
-                background-color: #E4E7ED;
-                width: 45.3px;
-                height: 45.3px;
-                top: -22px;
-                left: -22px;
                 position: relative;
+                border: 1px solid #E4E7ED;
                 border-radius: 2px;
+                width: 18px;
+                height: 18px;
+                background-color: #FFF;
+                z-index: 1;
+                transition: border-color .25s cubic-bezier(.71,-.46,.29,1.46),background-color .25s cubic-bezier(.71,-.46,.29,1.46);
+
+                @include state('checked') {
+                    background-color: #1144AB;
+                    border-color: #1144AB;
+                    &::after {
+                        transform: rotate(45deg) scaleY(1);
+                        transition: transform .15s ease-out .05s;
+                    }
+                    transition: background-color .25s cubic-bezier(.71,-.46,.29,1.46),border-color .25s cubic-bezier(.71,-.46,.29,1.46);
+                }
                 &:hover {
                     cursor: pointer;
+                    border-color: #1144AB;
                 }
                 &::after {
-                    content: "";
                     box-sizing: content-box;
+                    content: "";
                     border: 2px solid #fff;
                     border-left: 0;
                     border-top: 0;
-                    width: 5px;
-                    height: 10px;
+                    width: 3px;
+                    height: 9px;
+                    left: 6px;
                     position: absolute;
-                    left: 32px;
-                    top: 16px;
-                    transform: rotate(0deg) scaleY(0);
+                    top: 1px;
+                    transform: rotate(45deg) scaleY(0);
                     transition: transform .15s ease-in .05s;
                     transform-origin: center;
                 }
-
-                @include state('checked') {
-                    background-color: #1b47a5;
-                    &::after {
-                        transform: rotate(0deg) scaleY(1);
-                    }
-                }
             }
         }
-        // @include element('checkbox') {
-        //     position: absolute;
-        //     top: -8px;
-        //     left: -16px;
-        //     flex: none;
-        //     display: inline-block;
-        //     border: 1px solid #dcdfe6;
-        //     border-radius: 2px;
-        //     box-sizing: border-box;
-        //     width: 32px;
-        //     height: 32px;
-        //     background-color: #E4E7ED;
-        //     border-radius: 2px 0 0;
-        //     z-index: 1;
-        //     transition: border-color .25s cubic-bezier(.71,-.46,.29,1.46),background-color .25s cubic-bezier(.71,-.46,.29,1.46);
-        //     @include state('checked') {
-        //         background-color: #1b47a5;
-        //         border-color: #1b47a5;
-        //         &::after {
-        //             transform: rotate(45deg) scaleY(1);
-        //         }
-        //     }
-        //     &:hover {
-        //         cursor: pointer;
-        //         border-color: #1b47a5;
-        //     }
-        //     &::after {
-        //         box-sizing: content-box;
-        //         content: "";
-        //         border: 1px solid #fff;
-        //         border-left: 0;
-        //         border-top: 0;
-        //         width: 4px;
-        //         height: 8px;
-        //         left: 4px;
-        //         position: absolute;
-        //         top: 1px;
-        //         transform: rotate(45deg) scaleY(0);
-        //         transition: transform .15s ease-in .05s;
-        //         transform-origin: center;
-        //     }
-        // }
 
         @include element('main') {
             $imageSize: 72px;
@@ -169,6 +137,11 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
             flex: auto;
             width: 100%;
+
+            @include state('checkable') {
+                width: calc(100% - #{$checkboxSize + $sdx-gap-small});
+            }
+
             @include element('info') {
                 display: flex;
                 height: 72px;
@@ -209,7 +182,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                         background: #EDEFF2;
                         border-radius: 2px;
                         font-family: SourceHanSansCN-Normal;
-                        font-size: 12px;
+                        font-size: 14px;
                         letter-spacing: 0;
                         color: #253858;
                         padding: 0 $sdx-gap-mini;
@@ -234,7 +207,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 font-size: 14px;
                 color: #172B4D;
                 letter-spacing: 0;
-                margin-top: 10px;
+                margin-top: $sdx-gap-small;
             }
             @include element('desc') {
                 // 文字截断
@@ -250,15 +223,19 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 margin: $sdx-gap-regular 0 $sdx-gap-small;
             }
             @include element('tags') {
-                margin: 0 -$sdx-gap-mini / 2;
+                margin: 0 (-$sdx-gap-mini / 2);
                 display: flex;
                 flex-flow: row wrap;
                 height: 32px;
+                font-family: SourceHanSansCN-Normal;
+                font-size: 14px;
+                color: #253858;
+                letter-spacing: 0;
                 @include modifier('item') {
                     height: 32px;
                     background: #EDEFF2;
                     border-radius: 2px;
-                    margin: 0 $sdx-gap-mini / 2;
+                    margin: 0 ($sdx-gap-mini / 2);
                     padding: $sdx-gap-mini;
                 }
             }
@@ -269,12 +246,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-                margin-top: 30px;
-            }
-
-            @include state('checkable') {
-                margin-left: 32px;
-                width: calc(100% - #{32px + $sdx-gap-small});
+                margin-top: $sdx-gap-regular;
             }
         }
     }

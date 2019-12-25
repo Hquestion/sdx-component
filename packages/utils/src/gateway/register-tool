@@ -103,7 +103,7 @@ register()
         return 1
     fi
     # register
-    log_info "curl -s -H \"Content-Type: application/json\" -X POST -d \"{    \"apis\":[        {            \"gatewayPath\":\"$gateway_path\",            \"method\":\"$method\",            \"cache\":false,            \"blackList\":[],            \"whiteList\":[],            \"functionName\":\"$function_name\",            \"functionSource\":\"$source\",            \"attributes\":{}        }    ]}\"  http://$cluster_ip:$port/api/v1/aggregation-apis"
+    # log_info "curl -s -H \"Content-Type: application/json\" -X POST -d \"{    \"apis\":[        {            \"gatewayPath\":\"$gateway_path\",            \"method\":\"$method\",            \"cache\":false,            \"blackList\":[],            \"whiteList\":[],            \"functionName\":\"$function_name\",            \"functionSource\":\"$source\",            \"attributes\":{}        }    ]}\"  http://$cluster_ip:$port/api/v1/aggregation-apis"
     temp_file=$(mktemp)
     echo "{\"apis\":[{\"gatewayPath\":\"$gateway_path\",\"method\":\"$method\",\"cache\":false,\"blackList\":[],\"whiteList\":[],\"functionName\":\"$function_name\",\"functionSource\":\"" > $temp_file
     cat $function_source | base64 >> $temp_file

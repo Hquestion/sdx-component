@@ -34,7 +34,7 @@
                             </span>
                         </div>
                         <div>
-                            <span>{{ datasetInfo.fileCount + t('view.dataManagement.Count') + ' ' }}<b>{{ datasetInfo.dataFormat }}</b>{{ ' ' + t('view.dataManagement.Files') + ' ' + byteToMB(datasetInfo.dataSize) + 'MB' }}</span>
+                            <span>{{ (datasetInfo.fileCount || 0) + t('view.dataManagement.Count') + ' ' }}<b>{{ datasetInfo.dataFormat }}</b>{{ ' ' + t('view.dataManagement.Files') + ' ' + byteFormatter(datasetInfo.dataSize) }}</span>
                         </div>
                     </div>
                     <div class="sdxv-dataset-card__info--state">
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="sdxv-dataset-card__create-info">
-                    {{ datasetInfo.creator + ' ' + t('view.dataManagement.created_in') + dateFormatter(datasetInfo.createdAt) }}
+                    {{ (datasetInfo.creator && datasetInfo.creator.fullName) + ' ' + t('view.dataManagement.created_in') + dateFormatter(datasetInfo.createdAt) }}
                 </div>
                 <div
                     class="sdxv-dataset-card__desc"
@@ -82,7 +82,7 @@
 
 <script>
 import SdxuButton from '@sdx/ui/components/button';
-import { byteToMB, dateFormatter } from '@sdx/utils/src/helper/transform';
+import { byteFormatter, dateFormatter } from '@sdx/utils/src/helper/transform';
 import SdxwFoldLabel from '@sdx/widget/components/fold-label';
 import { STATE_MAP_FOLD_LABEL_TYPE, STATE_TYPE_LABEL, STATE_TYPE_OPERATION, OPERATION_INFO, MY_SHARE_OPERATION } from './config';
 import locale from '@sdx/utils/src/mixins/locale';
@@ -155,13 +155,13 @@ export default {
         getOperationList(state) {
             if (this.shareType === 'MY_SHARE') {
                 return MY_SHARE_OPERATION;
-            } else if (this.datasetInfo.creatorId !== this.userId) {
+            } else if (this.datasetInfo && this.datasetInfo.creator && this.datasetInfo.creator.uuid !== this.userId) {
                 return [];
             } else {
                 return STATE_TYPE_OPERATION[state];
             }
         },
-        byteToMB,
+        byteFormatter,
         dateFormatter
     }
 };

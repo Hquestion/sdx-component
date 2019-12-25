@@ -13,7 +13,6 @@
             <el-form-item
                 prop="name"
                 :label="t('view.dataManagement.DatasetName') + '：'"
-                required
             >
                 <SdxuInput
                     v-model="formData.name"
@@ -83,7 +82,7 @@ import SdxuInput from '@sdx/ui/components/input';
 import SdxuUploadImage from '@sdx/ui/components/upload-image';
 import SdxuButton from '@sdx/ui/components/button';
 import locale from '@sdx/utils/src/mixins/locale';
-import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator, tagArrayValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import { updateDataset, getLabels } from '@sdx/utils/src/api/dataset';
 
 import ElSelect from 'element-ui/lib/select';
@@ -126,6 +125,12 @@ export default {
                 name: [
                     { required: true, message: this.t('view.dataManagement.DatasetNameNotBeNull'), trigger: 'blur' },
                     { validator: nameWithChineseValidator, trigger: 'blur' }
+                ],
+                labels: [
+                    { validator: tagArrayValidator, trigger: 'change' }
+                ],
+                description: [
+                    { validator: descValidator, trigger: 'blur' }
                 ]
             },
             labelList: []
@@ -147,7 +152,6 @@ export default {
                 if (valid) {
                     updateDataset(this.dataset.uuid, this.formData)
                         .then(() => {
-                            // todo: 验证刷新
                             this.$emit('refresh');
                         })
                         .finally(() => {

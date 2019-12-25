@@ -15,7 +15,6 @@
                         <el-form-item
                             prop="name"
                             :label="t('view.dataManagement.DatasetName') + '：'"
-                            required
                         >
                             <SdxuInput
                                 v-model="formData.name"
@@ -133,7 +132,7 @@ import SdxuArticlePanel from '@sdx/ui/components/article-panel';
 import SdxuUploadImage from '@sdx/ui/components/upload-image';
 import locale from '@sdx/utils/src/mixins/locale';
 import { getLabels, createDataset } from '@sdx/utils/src/api/dataset';
-import { nameWithChineseValidator } from '@sdx/utils/src/helper/validate';
+import { nameWithChineseValidator, tagArrayValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import { DATA_FORMAT_MAP, DATA_FORMAT } from './config';
 
 import ElSelect from 'element-ui/lib/select';
@@ -177,12 +176,19 @@ export default {
                 ],
                 sourcePaths: [
                     { required: true, message: this.t('view.dataManagement.FileRequired'), trigger: 'blur' }
+                ],
+                labels: [
+                    { validator: tagArrayValidator, trigger: 'change' }
+                ],
+                description: [
+                    { validator: descValidator, trigger: 'blur' }
                 ]
             },
             labelList: [],
             enLabelWidth: 160,
             zhLabelWidth: 110,
-            expanded: false
+            expanded: false,
+            labelValidateMsg: ''
         };
     },
     computed: {

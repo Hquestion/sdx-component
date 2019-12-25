@@ -4,7 +4,7 @@
         :default-users="dataset.users"
         :default-groups="dataset.groups"
         :default-share-type="dataset.isPublic ? 'PUBLIC' : 'PRIVATE'"
-        @confirm-edit="handleShare"
+        :handler="handleShare"
     />
 </template>
 
@@ -39,13 +39,12 @@ export default {
     },
     methods: {
         handleShare(users, groups, shareType) {
-            updateDataset(this.dataset.uuid, {
+            return updateDataset(this.dataset.uuid, {
                 users,
                 groups,
                 isPublic: shareType === 'PRIVATE' ? false : true
             })
                 .then(() => {
-                    // todo: 验证刷新
                     this.$emit('refresh');
                 })
                 .finally(() => {

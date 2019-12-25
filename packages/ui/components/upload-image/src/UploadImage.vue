@@ -26,6 +26,7 @@
                 :before-upload="type === 'base64' ? handleBeforeUpload : null"
                 :multiple="false"
                 :limit="1"
+                :max-size="maxSize"
                 accept="image/x-png,image/jpeg"
             >
                 <SdxuButton
@@ -75,7 +76,7 @@ export default {
     },
     data() {
         return {
-
+            maxSize: 2 * 1024 * 1024
         };
     },
     computed: {

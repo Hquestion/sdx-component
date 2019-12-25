@@ -27,11 +27,31 @@ export function deleteDataset(uuid, params) {
 export function getLabels() {
     return httpService.get(`${DATA_MANAGE_GATEWAY_BASE}labels`);
 }
-
+/**
+ * 批量删除 - 聚合
+ * @param {{Array}} uuidList 
+ */
 export function datasetDeleteBatch(uuidList) {
-    return httpService.remove(`${COMPOSE_GATEWAY_BASE}dataset-delete-batch`, uuidList);
+    return httpService.post(`${COMPOSE_GATEWAY_BASE}dataset-delete-batch`, {
+        uuids: uuidList
+    });
+}
+/**
+ * 批量分享 - 聚合
+ * @param {{Array}} uuidList 
+ * @param {{Object}} params 
+ */
+export function datasetShareBatch(uuidList, params) {
+    return httpService.post(`${COMPOSE_GATEWAY_BASE}dataset-share-batch`, {
+        uuids: uuidList,
+        setting: params
+    });
 }
 
-export function datasetShareBatch(uuidList, params) {
-    return httpService.patch(`${COMPOSE_GATEWAY_BASE}dataset-share-batch`, uuidList, params);
+/**
+ * 获取数据集列表 - 聚合
+ * @param {{Object}} params 
+ */
+export function datasetListProfiles(params) {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}datasets-profiles`, params);
 }

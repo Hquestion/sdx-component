@@ -86,7 +86,7 @@
                     class="sdxv-dataset-list__list--operation"
                 >
                     <SdxuButton
-                        type="default"
+                        :type="checkedAll ? 'primary' : 'default'"
                         @click="handleSelectAll"
                     >
                         {{ t('sdxCommon.SelectAll') }}
@@ -95,7 +95,7 @@
                         <SdxuButton
                             v-if="params.shareType === 'PRIVATE'"
                             type="default"
-                            @click="handleShareAll"
+                            @click="shareAllDialog = true"
                             :disabled="checkedDatasetList.length === 0"
                         >
                             {{ t('view.dataManagement.ShareAll') }}
@@ -153,6 +153,7 @@
             @refresh="fetchData"
         />
         <SdxwShareSetting
+            v-if="shareAllDialog"
             :visible.sync="shareAllDialog"
             @confirm-edit="handleShareAll"
         />
@@ -173,7 +174,7 @@ import SdxuSortButton from '@sdx/ui/components/sort-button';
 import MessageBox from '@sdx/ui/components/message-box';
 import SdxuEmpty from '@sdx/ui/components/empty';
 import SdxwShareSetting from '@sdx/widget/components/share-setting';
-import { getDatasetList, getLabels, deleteDataset, updateDataset, datasetDeleteBatch, datasetShareBatch } from '@sdx/utils/src/api/dataset';
+import { datasetListProfiles, getLabels, deleteDataset, updateDataset, datasetDeleteBatch, datasetShareBatch } from '@sdx/utils/src/api/dataset';
 import { getUser } from '@sdx/utils/src/helper/shareCenter';
 
 import { DATA_FORMAT_LIST, POLLING_STATE_LIST } from './config';
@@ -241,6 +242,9 @@ export default {
                 start: (this.page - 1) * this.pageSize + 1,
                 count: this.pageSize
             });
+        },
+        checkedAll() {
+            return this.checkedDatasetList.length !== 0 && this.checkedDatasetList.length === this.datasetList.length;
         }
     },
     methods: {
@@ -248,7 +252,7 @@ export default {
             if (showLoading) {
                 this.loading = true;
             }
-            getDatasetList(this.queryParams)
+            datasetListProfiles(this.queryParams)
                 .then(data => {
                     this.checkedDatasetList = [];
                     this.datasetList = data.items;
@@ -351,9 +355,13 @@ export default {
             });
         },
         handleSelectAll() {
-            this.checkedDatasetList = this.datasetList.map(item => {
-                return item.uuid;
-            });
+            if (this.checkedAll) {
+                this.checkedDatasetList = [];
+            } else {
+                this.checkedDatasetList = this.datasetList.map(item => {
+                    return item.uuid;
+                });
+            }
         },
         handleShareAll(users, groups, shareType) {
             datasetShareBatch(this.checkedDatasetList, {
@@ -363,7 +371,6 @@ export default {
             })
                 .then(() => {
                     // 刷新列表
-                    // todo: 验证刷新
                     this.fetchData();
                 });
         },
@@ -371,7 +378,6 @@ export default {
             datasetDeleteBatch(this.checkedDatasetList)
                 .then(() => {
                     // 刷新列表
-                    // todo: 验证刷新
                     this.fetchData();
                 });
         },
@@ -383,7 +389,6 @@ export default {
             })
                 .then(() => {
                     // 刷新列表
-                    // todo: 验证刷新
                     this.fetchData();
                 });
         },
@@ -395,7 +400,6 @@ export default {
             })
                 .then(() => {
                     // 刷新列表
-                    // todo: 验证刷新
                     this.fetchData();
                 });
         },
@@ -417,10 +421,6 @@ export default {
         this.getLabelList();
     },
     watch: {
-        // todo:
-        // checkedDatasetList(nval) {
-        //     window.console.error(nval);
-        // },
         queryParams() {
             this.fetchData();
         }

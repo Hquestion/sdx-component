@@ -54,7 +54,7 @@ import FormItem from 'element-ui/lib/form-item';
 import locale from '@sdx/utils/src/mixins/locale';
 import { buildImageBasic } from '@sdx/utils/src/api/image';
 
-import { itemNameValidate, tagNameValidate } from '@sdx/utils/src/helper/validate';
+import { imageNameValidate, imageVersionValidate } from '@sdx/utils/src/helper/validate';
 
 export default {
     name: 'SdxvSaveAsDialog',
@@ -87,7 +87,7 @@ export default {
                     message: this.t('view.image.ImageNameNotBeNull'),
                     trigger: 'blur'
                 }, {
-                    validator: itemNameValidate,
+                    validator: imageNameValidate,
                     trigger: 'blur'
                 }],
                 version: [{
@@ -95,7 +95,7 @@ export default {
                     message: this.t('view.image.ImageVersionNotBeNull'),
                     trigger: 'blur'
                 }, {
-                    validator: tagNameValidate,
+                    validator: imageVersionValidate,
                     trigger: 'blur'
                 }]
             }

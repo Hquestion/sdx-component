@@ -84,8 +84,7 @@ export const OPERATION_INFO = {
     f_delete: {
         label: 'sdxCommon.ForceDelete',
         value: 'f_delete',
-        // todo:
-        icon: 'sdx-kapianshanchu'
+        icon: 'sdx-qiangzhishanchu1'
     },
     c_share: {
         label: 'sdxCommon.CancelShare',

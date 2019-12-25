@@ -1,6 +1,6 @@
 {
     "name": "@sdx/view",
-    "version": "2.0.19",
+    "version": "2.0.20",
     "description": "页面级组件库",
     "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
     "homepage": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component#readme",
@@ -73,8 +73,8 @@
     },
     "devDependencies": {
         "@sdx/ui": "^2.0.18",
-        "@sdx/utils": "^2.0.12",
-        "@sdx/widget": "^2.0.11",
+        "@sdx/utils": "^2.0.13",
+        "@sdx/widget": "^2.0.12",
         "@skyide/services": "^1.1.6",
         "fake-indexeddb": "^2.1.1"
     },

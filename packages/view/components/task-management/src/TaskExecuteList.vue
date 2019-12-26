@@ -96,7 +96,7 @@
                 >
                     <template #default="{ row }">
                         <span v-if="row.state === TASK_TYPE.SKYFLOW">
-                            {{ row.uuid }}    
+                            {{ row.uuid.slice(0,5) }}
                         </span>
                         <span v-else>
                             -    

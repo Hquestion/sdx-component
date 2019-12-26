@@ -38,6 +38,7 @@
                                         ref="fileTree"
                                         @check-change="handleCheckChange"
                                         @current-change="handleCurrentkChange"
+                                        v-loading="isTreeLoading"
                                     />
                                 </SdxuScroll>
                             </div>
@@ -47,10 +48,13 @@
             </el-col>
         </el-row>
         <DetailedDesc
-            :detail-info="detailInfo"
+            :detail-info="advancedConfig"
             class="detail-desc"
         />
-        <sdxu-section-panel :class="['file-preview',fullScreen ? 'full-screen' : '']">
+        <sdxu-section-panel
+            :class="['file-preview',fullScreen ? 'full-screen' : '']"
+            v-loading="previewLoading"
+        >
             <sdxu-article-panel
                 :title="t('view.dataManagement.FilePreview')"
             >
@@ -66,7 +70,7 @@
                     />
                     <IconButton
                         border
-                        :icon="['sdx-icon', fullScreen ? 'sdx-zuixiaohua1' : 'sdx-zuidahua1']"
+                        :icon="fullScreen ? 'sdx-icon sdx-zuixiaohua1' : 'sdx-icon sdx-zuidahua1'"
                         @click="fullScreen = !fullScreen"
                     />
                 </template>
@@ -77,6 +81,7 @@
                     @expandNode="expandNode"
                     ref="dataListView"
                 />
+                <DatasetPreview />
                 <data-image
                     :image-url="imageUrl"
                     v-if="imageUrl"
@@ -98,7 +103,7 @@ import { Row, Col,Tree } from 'element-ui';
 import DetailedDesc from './DetailedDesc';
 import SdxuArticleTitle from '@sdx/ui/components/article-panel';
 import SdxuSectionTitle from '@sdx/ui/components/section-panel';
-import {getNativeFilesList, deletePath} from '@sdx/utils/src/api/file';
+import {getNativeFilesList, deletePath, download, pack} from '@sdx/utils/src/api/file';
 import Scroll from '@sdx/ui/components/scroll';
 import IconButton from '@sdx/ui/components/icon-button';
 import { getPathIcon } from './utils';
@@ -108,8 +113,9 @@ import MessageBox from '@sdx/ui/components/message-box';
 import DataListView from './DatasListView';
 import DataImage from './DataImage';
 import Empty from '@sdx/ui/components/empty';
-import {download, pack} from '@sdx/utils/src/api/file';
 import SdxuButton from '@sdx/ui/components/button';
+import {getDatasetDetail, datasetPreview} from '@sdx/utils/src/api/dataset';
+import DatasetPreview from './preview/DataSetPreview';
 export default {
     name:'DataPreview',
     mixins: [locale],
@@ -127,23 +133,24 @@ export default {
         DataListView,
         DataImage,
         [Empty.name]: Empty,
-        SdxuButton
+        SdxuButton,
+        DatasetPreview
     },
     data() {
         return {
             cardInfo: {
-                icon:'sdx-ziranyuyanchuli',
-                title: '我是数据集',
-                type: '',
-                creator: '吴晓飞',
-                createdAt: '2018/09/09',
-                description: '安东尼奥尼接口论文飞机我那时非法是你附近的司法局四方集i 还是i u 粉丝就看你地上i u 的设计方式呢发的个 i 的悲剧  ',
-                labels: ['asfna', 'bashf'],
-                owner: {
-                    uuid: 'ascfasdfa'
-                }
+                coverImg:'',
+                name: '',
+                createdAt: '',
+                updatedAt: '',
+                description: '',
+                labels: [],
+                creatorId:'',
+                // 文件列表路经
+                datasetPath: '',
             },
-            detailInfo: '是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤是的成败得失肌肤死飞过俄污垢剋家发 i 哦额个给 i 哦时光i 哦的死哦古第哦是个iodgdiogjdigddgddgiod    是开裆裤 的你看着你从哪说大室家电话好多个ID是个 iu度过丢失韩国 iu 德国 i德国的但是风格但是风格但是风格都发生过g',
+            // 详细说明
+            advancedConfig: '',
             // 文件列表
             treeData:[],
             // 展开的key
@@ -172,7 +179,9 @@ export default {
             emptyType: '',
             emptyContent: '',
             // 是否全屏
-            fullScreen: false
+            fullScreen: false,
+            isTreeLoading: false,
+            previewLoading: false
         };
     },
     computed: {
@@ -202,7 +211,73 @@ export default {
             };
         },
     },
+    created() {
+        this.getDatasetInfo();
+    },
     methods: {
+        // 数据集文件预览
+        getDatasetPreview(params) {
+            this.previewLoading = true;
+            console.log(params, 'cs');
+            datasetPreview(params).then(res => {
+                this.previewLoading = false;
+                console.log(res, 'view');
+            });
+        },
+        // 获取数据集信息
+        getDatasetInfo() {
+            let uuid = this.$route.params.uuid;
+            getDatasetDetail(uuid).then(res=> {
+                this.cardInfo = res;
+                this.advancedConfig = res.advancedConfig;
+                this.getFileList(res.datasetPath);
+            });
+        },
+        // 文件列表
+        getFileList(path){
+            this.isTreeLoading = true;
+            this.datalistHide = false;
+            this.emptyHide = false;
+            this.previewLoading = true;
+            getNativeFilesList({path}).then(res => {
+                this.treeData = res.children;
+                this.isTreeLoading = false;
+                this.previewLoading = false;
+                // 判断是否有文件
+                if(res.children.length) {
+                    this.$nextTick(() => {
+                        this.tree.setCurrentKey(res.children[0].path);
+                    });
+                    if(!res.children[0].isFile) {
+                        this.expandedKey = [res.children[0].path];
+                        this.dataListPath = res.children[0].path;
+                        this.datalistHide = true;
+                        setTimeout(() => {
+                            this.$refs.dataListView.getFlieList(this.dataListPath);
+                        }, 1000);
+                    } else {
+                        if(res.children[0].mimeType.indexOf('image/') === 0) {
+                            // 预览图片
+                            this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${res.children[0].ownerId}&path=${res.children[0].path}&filesystem=cephfs`;
+                        } else {
+                            let params = {
+                                datasetId: this.$route.params.uuid,
+                                fileUri:  res.children[0].path
+                            };
+                            this.getDatasetPreview(params);
+                        }
+                    }
+                } else {
+                    this.emptyHide = true;
+                    this.emptyType = 'noData';
+                }
+            }).catch(()=> {
+                this.treeData = [];
+                this.isTreeLoading = false;
+                this.emptyHide = false;
+                this.previewLoading = false;
+            });
+        },
         // 跳转到jupyter
         toJupyter(){
             this.$router.push(
@@ -300,56 +375,57 @@ export default {
         },
         fetchFiles(node,resolve) {
             this.isTreeLoading = true;
+            this.previewLoading = true;
             let path;
             if (node.level === 0) {
-                path = '/';
+                if (!node.isInit) {
+                    return;
+                }
             } else {
                 path = node.data.path;
             }
-            return getNativeFilesList({ path, count: 100 })
+            return getNativeFilesList({ path })
                 .then(data => {
                     if (resolve) {
                         data.paths = data.children;
                         resolve(data.paths);
                     }
                     this.isTreeLoading = false;
+                    this.previewLoading = false;
                 })
                 .catch(() => {
                     this.isTreeLoading = false;
+                    this.previewLoading = false;
                 });
         },
         // 单文件选中
         handleCurrentkChange(data,checked) {
             if (checked) {
-                // console.log(data, '单文件选中');
-                this.dataListPath = data.path;
-                this.previewData.ownerId = data.ownerId;
-                this.previewData.path = data.path;
+                console.log(data, '单文件选中');
+                // this.dataListPath = data.path;
+                // this.previewData.ownerId = data.ownerId;
+                // this.previewData.path = data.path;
                 this.imageUrl = '';
                 this.datalistHide = false;
                 this.emptyHide = false;
-                
-                // 调用预览接口
-                let params = {
-                    dataset: this.id,
-                    data_file: data.path
-                };
-                // 预览文件
-                if (data.name.includes('.csv') || data.name.includes('.txt') || data.name.includes('.orc') || data.name.includes('.parquet')) {
-                    this.getPreview(params);
-                    this.previewData.path = data.path;
-                } else if (!data.isFile) {
-                    // 文件夹
-                    this.expandedKey.push(data.path);
+                if(!data.isFile) {
+                    this.expandedKey = [data.path];
+                    this.dataListPath = data.path;
                     this.datalistHide = true;
-                } else if (data.mimeType.indexOf('image/') === 0) {
-                    // 图片
-                    this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${data.ownerId}&path=${data.path}&filesystem=cephfs`;
+                    setTimeout(() => {
+                        this.$refs.dataListView.getFlieList(data.path);
+                    }, 1000);
                 } else {
-                    // 剩下就是无法预览
-                    this.emptyHide = true;
-                    this.emptyType = 'sdx-wuyulan1';
-                    this.emptyContent = this.t('view.dataManagement.cannotPreview');
+                    if(data.mimeType.indexOf('image/') === 0) {
+                        // 预览图片
+                        this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${data.ownerId}&path=${data.path}&filesystem=cephfs`;
+                    } else {
+                        let params = {
+                            datasetId: this.$route.params.uuid,
+                            fileUri:  data.path
+                        };
+                        this.getDatasetPreview(params);
+                    }
                 }
             }
         },
@@ -377,17 +453,17 @@ export default {
             this.previewData.path = path;
             this.previewData.ownerId = ownerId;
             this.tree.setCurrentKey(path);
-            let params = {
-                dataset: this.id,
-                data_file: path
-            };
             this.datalistHide = false;
             if (type === 'image') {
                 // 预览图片
                 this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${ownerId}&path=${path}&filesystem=cephfs`;
             } else {
                 // 预览文件
-                this.getPreview(params);
+                let params = {
+                    datasetId: this.$route.params.uuid,
+                    fileUri: path
+                };
+                this.getDatasetPreview(params);
             }
         },
     },
@@ -434,6 +510,7 @@ export default {
             }
         }
     .file-preview {
+        min-height: 200px;
         margin-top: 24px;
         &/deep/ {
             .sdxu-article-panel__content {

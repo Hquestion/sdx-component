@@ -12,6 +12,10 @@ export function getDatasetDetail(uuid) {
     return httpService.get(`${dataApi}/${uuid}`);
 }
 
+export function datasetPreview(params) {
+    return httpService.post(`${DATA_MANAGE_GATEWAY_BASE}preview`,params);
+}
+
 export function updateDataset(uuid, params) {
     return httpService.patch(`${dataApi}/${uuid}`, params);
 }

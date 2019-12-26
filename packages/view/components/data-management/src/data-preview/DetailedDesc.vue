@@ -10,9 +10,10 @@
                         @click="changeDescStyle"
                     />
                 </template>
-                <div class="desc">
-                    <span>{{ detailInfo }}</span> 
-                </div>
+                <div
+                    class="desc"
+                    v-html="markdown.markdown.toHTML(detailInfo)"
+                />
             </sdxu-article-panel>
         </sdxu-section-panel>
     </div>
@@ -23,6 +24,7 @@ import locale from '@sdx/utils/src/mixins/locale';
 import SdxuArticleTitle from '@sdx/ui/components/article-panel';
 import SdxuSectionTitle from '@sdx/ui/components/section-panel';
 import IconButton from '@sdx/ui/components/icon-button';
+import markdown from 'markdown';
 export default {
     name: 'SdxwModelDetailCard',
     mixins: [locale],
@@ -39,7 +41,8 @@ export default {
     },
     data() {
         return {
-            show: false
+            show: false,
+            markdown
         };
     },
     methods: {

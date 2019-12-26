@@ -8,24 +8,23 @@
                     <IconButton
                         border
                         icon="sdx-icon sdx-xiazaiX"
+                        @click="downLoadFile(meta.datasetPath)"
+                        v-if="meta.datasetPath"
                     />
                 </template>
                 <div class="top">
                     <div>
-                        <svg
-                            aria-hidden="true"
-                            style="width: 64px; height: 64px; margin-right: 16px"
+                        <img
+                            :src="meta.coverImg || defaultImgCover"
                         >
-                            <use :xlink:href="`#${meta.icon}`" />
-                        </svg>
                         <div>
-                            <div>{{ meta.title }}</div>
+                            <div>{{ meta.name }}</div>
                             <div>
                                 <span>
                                     {{ `${t('sdxCommon.Creator')}：` }}
                                 </span>
                                 <span>
-                                    {{ meta.creator }}
+                                    {{ creator }}
                                 </span>
                             </div>
                         </div>
@@ -42,19 +41,19 @@
                 <div class="center">
                     <div>
                         <span>{{ `${t('sdxCommon.CreatedTime')}：` }}</span>
-                        <span>{{ 134141 }}</span>
+                        <span>{{ dateFormatter(meta.createdAt) }}</span>
                     </div>
                     <div>
                         <span>{{ `${t('sdxCommon.UpdatedTime')}：` }}</span>
-                        <span>{{ 134141 }}</span>
+                        <span>{{ dateFormatter(meta.updatedAt) }}</span>
                     </div>
                     <div>
                         <span>{{ `${t('view.dataManagement.Target_path')}：` }}</span>
-                        <span>{{ 134141 }}</span>
+                        <span>{{ meta.datasetPath }}</span>
                     </div>
                 </div>
                 <div class="bottom">
-                    {{ meta.description }}
+                    {{ meta.description ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}
                 </div>
             </sdxu-article-panel>
         </sdxu-section-panel>
@@ -63,10 +62,13 @@
 
 <script>
 import locale from '@sdx/utils/src/mixins/locale';
-import {dateFormatter} from '@sdx/utils/src/helper/transform';
 import SdxuArticleTitle from '@sdx/ui/components/article-panel';
 import SdxuSectionTitle from '@sdx/ui/components/section-panel';
 import IconButton from '@sdx/ui/components/icon-button';
+import defaultImgCover from '@sdx/utils/src/theme-common/static/defaultImgCover.svg';
+import {getUserSimpleInfo} from '@sdx/utils/src/api/user';
+import {dateFormatter} from '@sdx/utils/src/helper/transform';
+import { download, pack} from '@sdx/utils/src/api/file';
 export default {
     name: 'SdxvBasicInfo',
     mixins: [locale],
@@ -75,14 +77,35 @@ export default {
         [SdxuSectionTitle.name]: SdxuSectionTitle,
         IconButton
     },
+    data() {
+        return {
+            creator: '',
+            defaultImgCover
+        };
+    },
     props: {
         meta: {
             type: Object,
             default: () => {}
         },
     },
+    watch: {
+        meta(val) {
+            getUserSimpleInfo(val.creatorId).then(res => {
+                this.creator = res.fullName;
+            });
+        }
+    },
     methods: {
-        dateFormatter
+        dateFormatter,
+        // 下载文件
+        downLoadFile(path){
+            let defer=null;
+            defer = pack([path]);
+            defer.then(res => {
+                download(res);
+            });
+        },
     }
 };
 </script>
@@ -100,6 +123,11 @@ export default {
     .top {
         display: flex;
         justify-content: space-between;
+        img {
+            width: 64px;
+            height: 64px;
+            margin-right: 16px;
+        }
         &>div:first-child {
             display: flex;
             justify-content: space-between;

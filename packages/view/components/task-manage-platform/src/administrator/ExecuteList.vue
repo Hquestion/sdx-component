@@ -127,7 +127,7 @@
                     :label="t('view.task.executeID')"
                 >
                     <template #default="{ row }">
-                        {{ row.uuid.slice(0,5) }}
+                        {{ row.type === 'SKYFLOW' ? row.uuid.slice(0,5) : '-' }}
                     </template>
                 </el-table-column>
                 <el-table-column

@@ -5,46 +5,45 @@
             class="table table-loadmore"
             v-loadmore="loadMore"
         >
-            <CusElTable
+            <SdxuTable
                 class="preview-table"
                 :data="lazyShowData"
-                border
                 :fit="true"
                 :style="{width: '100%', height: height}"
                 :height="height"
                 ref="table"
-                :lazy="true"
-                :lazy-top-height="topHeight"
-                :lazy-bottom-height="bottomHeight"
-                stripe
+                :dynamic="true"
+                :dynamic-top-height="topHeight"
+                :dynamic-bottom-height="bottomHeight"
+                :border="false"
             >
-                <CusElTableColumn
+                <el-table-column
                     prop="__fe__order"
                     :fixed="columns.length > 0"
                     label="序号"
                     :width="columns.length > 0 ? '80px' : undefined"
                 >
-                    <CusElTableColumn
+                    <el-table-column
                         v-if="readonly && hasAnalysis"
                         prop="__fe__order"
                         :width="columns.length > 0 ? '80px' : '100%'"
                     />
-                </CusElTableColumn>
+                </el-table-column>
                 <!--fix bug: 使用v-if导致列位置错乱，改成最小1px，不影响展示，保证列位置-->
-                <CusElTableColumn
+                <el-table-column
                     v-if="(viewPortMaxCount + 2) < columns.length"
                     min-width="1"
                     :width="leftWidth"
                     label=""
                     class-name="placeholder-column"
                 >
-                    <CusElTableColumn
+                    <el-table-column
                         v-if="readonly && hasAnalysis"
                         :width="leftWidth"
                         class-name="placeholder-column"
                     />
-                </CusElTableColumn>
-                <CusElTableColumn
+                </el-table-column>
+                <el-table-column
                     :prop="item['fieldName']"
                     :label="item.fieldName"
                     :key="index"
@@ -53,28 +52,28 @@
                     :show-overflow-tooltip="true"
                     :render-header="handleRenderHeader"
                 >
-                    <CusElTableColumn
+                    <el-table-column
                         v-if="readonly && hasAnalysis"
                         :render-header="renderSubHeader"
                         :prop="item['fieldName']"
                         :label="item.fieldName"
                         :width="(viewPortMaxCount + 2) < columns.length ? columnWidth : 'auto'"
                     />
-                </CusElTableColumn>
-                <CusElTableColumn
+                </el-table-column>
+                <el-table-column
                     v-if="(viewPortMaxCount + 2) < columns.length"
                     min-width="1"
                     :width="rightWidth"
                     label=""
                     class-name="placeholder-column"
                 >
-                    <CusElTableColumn
+                    <el-table-column
                         v-if="readonly && hasAnalysis"
                         :width="rightWidth"
                         class-name="placeholder-column"
                     />
-                </CusElTableColumn>
-            </CusElTable>
+                </el-table-column>
+            </SdxuTable>
         </div>
         <div
             ref="reference"
@@ -88,10 +87,10 @@ import Vue from 'vue';
 import Popper from 'element-ui/src/utils/vue-popper';
 import CascadeDropdown from './CascadeDropdown';
 import DataSetPreviewActionsMixin from './DataSetPreviewActionsMixin';
-import CusElTableColumn from './table/src/table-column';
-import CusElTable from './table';
+// import CusElTableColumn from './table/src/table-column';
+// import CusElTable from './table';
 import { isNumber, isString } from './util';
-
+import SdxuTable from '@sdx/ui/components/table';
 const popperMixin = {
     props: {
         placement: {
@@ -111,8 +110,7 @@ const popperMixin = {
 export default {
     value: 'DataSetPreview',
     components: {
-        CusElTable,
-        CusElTableColumn
+        SdxuTable
     },
     mixins: [popperMixin, DataSetPreviewActionsMixin],
     data() {
@@ -126,7 +124,7 @@ export default {
             viewPortMaxCount: 0,
             viewPortMaxVerticalCount: 0,
             topCount: 0,
-            rowHeight: 48,
+            rowHeight: 52,
             lazyShowData: []
         };
     },
@@ -162,14 +160,24 @@ export default {
         showDataTypeIcon: {
             type: Boolean,
             default: true
+        },
+        propId: {
+            type: Array,
+            default: () => []
         }
     },
     computed: {
         showData() {
-            return this.data.map((item, index) => ({
-                __fe__order: index + 1,
-                ...item
-            }));
+            let arr = [];
+            this.data.map((item,index) => {
+                let obj={};
+                for(let i =0; i< item.length; i++) {
+                    obj[this.propId[i]]= item[i];
+                    obj['__fe__order'] = index + 1;
+                }
+                arr.push(obj);
+            });
+            return arr;
         },
         hasAnalysis() {
             if (this.analysis == '' || this.analysis == null || typeof(this.analysis) == 'undefined' || JSON.stringify(this.analysis) == '{}') {
@@ -332,23 +340,27 @@ export default {
             );
             if (!field) return <span />;
             let analysisData = this.analysis[field.fieldName] || [];
+            console.log(column,analysisData,'yy');
             return (
+                // <div class="header-count">
+                //     {analysisData.map(item => {
+                //         let analysisItem =
+                //             (typeof item === 'string' && JSON.parse(item)) ||
+                //             item;
+                //         return (
+                //             <div class="count">
+                //                 <span>{analysisItem.summary}:</span>
+                //                 <span>
+                //                     {Number(
+                //                         analysisItem[field.fieldName]
+                //                     ).toFixed(2)}
+                //                 </span>
+                //             </div>
+                //         );
+                //     })}
+                // </div>
                 <div class="header-count">
-                    {analysisData.map(item => {
-                        let analysisItem =
-                            (typeof item === 'string' && JSON.parse(item)) ||
-                            item;
-                        return (
-                            <div class="count">
-                                <span>{analysisItem.summary}:</span>
-                                <span>
-                                    {Number(
-                                        analysisItem[field.fieldName]
-                                    ).toFixed(2)}
-                                </span>
-                            </div>
-                        );
-                    })}
+                    {analysisData.max}
                 </div>
             );
         },
@@ -450,7 +462,7 @@ export default {
                 this.topCount,
                 this.topCount + this.viewPortMaxVerticalCount + 5
             );
-            this.$refs.table.doLayout();
+            this.$refs.table.$refs.elTable.doLayout();
         }
     },
     mounted() {
@@ -470,7 +482,7 @@ export default {
                             this.leftCount + this.viewPortMaxCount + 2
                             // this.leftCount + this.viewPortMaxCount
                         );
-                        this.$refs.table.doLayout();
+                        this.$refs.table.$refs.elTable.doLayout();
                     });
                 }
             },
@@ -486,7 +498,7 @@ export default {
                         this.leftCount + this.viewPortMaxCount + 2
                         // this.leftCount + this.viewPortMaxCount
                     );
-                    this.$refs.table.doLayout();
+                    this.$refs.table.$refs.elTable.doLayout();
                 });
             }
         },
@@ -499,7 +511,7 @@ export default {
                             this.topCount,
                             this.topCount + this.viewPortMaxVerticalCount + 5
                         );
-                        this.$refs.table.doLayout();
+                        this.$refs.table.$refs.elTable.doLayout();
                     });
                 } else {
                     this.lazyShowData = [];
@@ -516,7 +528,7 @@ export default {
                         this.topCount,
                         this.topCount + this.viewPortMaxVerticalCount + 5
                     );
-                    this.$refs.table.doLayout();
+                    this.$refs.table.$refs.elTable.doLayout();
                 });
             }
         }

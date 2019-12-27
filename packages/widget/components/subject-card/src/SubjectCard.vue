@@ -10,10 +10,10 @@
                 <svg
                     aria-hidden="true"
                 >
-                    <use :xlink:href="`#${meta.icon}`" />
+                    <use :xlink:href="`#${meta && meta.icon}`" />
                 </svg>
                 <div>
-                    {{ meta.iconName }}
+                    {{ meta && meta.iconName }}
                 </div>
             </div>
             <div
@@ -35,11 +35,11 @@
                         <div>
                             <SdxwFoldLabel
                                 plain
-                                :type="meta.state && meta.state.type"
-                                :status="meta.state && meta.state.status"
-                                v-if="meta.state && meta.state.type && size === 'small'"
+                                :type="meta && meta.state && meta.state.type"
+                                :status="meta && meta.state && meta.state.status"
+                                v-if="meta && meta.state && meta.state.type && size === 'small'"
                             >
-                                {{ meta.state && meta.state.statusText }}
+                                {{ meta && meta.state && meta.state.statusText }}
                             </SdxwFoldLabel>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                     <div>
                         <div>
                             {{ (meta && meta.creator ) || '' }}
-                            <span v-if="getUser().userId === meta.owner.uuid">({{ t('view.project.oneself') }})</span>
+                            <span v-if="getUser().userId === (meta && meta.owner.uuid)">({{ t('view.project.oneself') }})</span>
                         </div>
                         <i v-if="size === 'large'" />
                         <div>
@@ -65,16 +65,29 @@
         </div>
         <div
             class="sdxw-subject-card__taskdesc"
-            v-if="size === 'small'"
+            v-if="size === 'small' && !needProjectName"
         >
             {{ (meta && meta.description) ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}
+        </div>
+        <div
+            v-if="size === 'small' && needProjectName"
+            class="sdxw-subject-card__projectName"
+        >
+            <div>
+                <span>{{ `${t('view.task.TaskDescription')}：` }}</span>
+                <span> {{ (meta && meta.description) ? meta.description : t('widget.projectCard.NoDescriptionAdded') }}</span>
+            </div>
+            <div>
+                <span>{{ `${t('view.task.taskProject')}：` }}</span>
+                <span @click="$emit('goProjectDetail',meta.projectId)">{{ meta && meta.projectName }}</span>
+            </div>
         </div>
         <div>
             <slot name="cardLabel" />
         </div>
         <div
             class="sdxw-subject-card__footer"
-            v-if="meta.footer !== false"
+            v-if="meta && meta.footer !== false"
         >
             <div>
                 <slot name="footerLeft" />
@@ -111,6 +124,10 @@ export default {
         cardIcon: {
             type: Boolean,
             default: true
+        },
+        needProjectName: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

@@ -18,6 +18,8 @@
                         :meta="item.meta"
                         class="sdxw-general-task-list__container--element"
                         @operate="handleOperate"
+                        :need-project-name="!projectId"
+                        @goProjectDetail="goProjectDetail"
                     >
                         <template #footerLeft>
                             <sdxu-button
@@ -163,6 +165,9 @@ export default {
         }
     },
     methods: {
+        goProjectDetail(id) {
+            this.$router.push(`/sdxv-project-manage-next/project-detail/${id}`);
+        },
         handleOperate(operate) {
             this.handleDetail({uuid: operate.id});
         },
@@ -242,8 +247,14 @@ export default {
                     createdAt: item.createdAt,
                     icon: this.iconOptions[item.type].icon,
                     iconName: this.iconOptions[item.type].name,
-                    state: {}
+                    state: {},
                 };
+                if(!this.projectId) {
+                    item.meta = Object.assign({}, item.meta, {
+                        projectName: item.project.name,
+                        projectId: item.project.uuid
+                    });
+                }
                 item.meta.state.type = STATE_MAP_FOLD_LABEL_TYPE[item.state];
                 switch(item.state) {
                     case 'Created':

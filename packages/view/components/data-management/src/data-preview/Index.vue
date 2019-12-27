@@ -53,26 +53,97 @@
         />
         <sdxu-section-panel
             :class="['file-preview',fullScreen ? 'full-screen' : '']"
-            v-loading="previewLoading"
         >
-            <sdxu-article-panel
-                :title="t('view.dataManagement.FilePreview')"
-            >
+            <sdxu-article-panel>
+                <template #title>
+                    <span>{{ t('view.dataManagement.FilePreview') }}</span>
+                    <span
+                        class="colInfo"
+                        v-if="showData.length > 0 && !datalistHide && !imageUrl"
+                    >
+                        预览   {{ `${viewData.previewData.data.length}*${viewData.previewData.columns.length}` }}
+                    </span>
+                    <span
+                        class="colInfo"
+                        v-if="showData.length > 0 && !datalistHide && !imageUrl"
+                    >
+                        实际   {{ viewData.shape }}
+                    </span>
+                </template>
                 <template #right>
-                    <IconButton
-                        border
-                        icon="sdx-icon sdx-shaixuan-X"
-                    />
-                    <IconButton
-                        border
-                        icon="sdx-icon sdx-xiazaiX"
-                        @click="downLoadFile(dataListPath)" 
-                    />
-                    <IconButton
-                        border
-                        :icon="fullScreen ? 'sdx-icon sdx-zuixiaohua1' : 'sdx-icon sdx-zuidahua1'"
-                        @click="fullScreen = !fullScreen"
-                    />
+                    <div
+                        class="headerIcon"
+                        v-poploadmore="poploadmore"
+                    >
+                        <el-popover
+                            placement="left"
+                            width="420"
+                            trigger="click"
+                            v-model="visiblePopover"
+                            @show="show"
+                            v-if="showData.length > 0 && !datalistHide && !imageUrl"
+                        >
+                            <div class="popover-header">
+                                <el-checkbox
+                                    :indeterminate="isIndeterminate"
+                                    v-model="checkAll"
+                                    @change="handleCheckAllChange"
+                                >
+                                    列名
+                                </el-checkbox>
+                                <el-input
+                                    class="wd200"
+                                    placeholder="搜索"
+                                    suffix-icon="el-icon-search"
+                                    size="small"
+                                    v-model="searchName"
+                                />
+                            </div>
+                            <el-checkbox-group
+                                v-model="checkedCols"
+                                @change="handleCheckedColsChange"
+                                class="list-name"
+                            >
+                                <div :style="{ height: `${lazyTopHeight}px`}" />
+                                <el-checkbox
+                                    v-for="item in showSchema"
+                                    :key="item.fieldName"
+                                    :label="item.fieldName"
+                                    :value="item.fieldName"
+                                >
+                                    <span><i :class="['iconfont', dealIcon(item.fieldType)]" /></span>
+                                    <span>{{ item.fieldName }}</span>
+                                </el-checkbox>
+                                <div :style="{ height: `${lazyBottomHeight}px`}" />
+                            </el-checkbox-group>
+                            <div class="datapreview-btn">
+                                <el-button
+                                    type="primary"
+                                    @click="submitForm"
+                                >
+                                    {{ t('sdxCommon.Confirm') }}
+                                </el-button>
+                                <el-button @click="resetForm">
+                                    {{ t('sdxCommon.Cancel') }}
+                                </el-button>
+                            </div>
+                            <IconButton
+                                border
+                                icon="sdx-icon sdx-shaixuan-X"
+                                slot="reference"
+                            />
+                        </el-popover>
+                        <IconButton
+                            border
+                            icon="sdx-icon sdx-xiazaiX"
+                            @click="downLoadFile(dataListPath)" 
+                        />
+                        <IconButton
+                            border
+                            :icon="fullScreen ? 'sdx-icon sdx-zuixiaohua1' : 'sdx-icon sdx-zuidahua1'"
+                            @click="handleFullScreen"
+                        />
+                    </div>
                 </template>
                 <DataListView
                     v-if="datalistHide"
@@ -80,8 +151,19 @@
                     @viewData="handleViewData"
                     @expandNode="expandNode"
                     ref="dataListView"
+                    v-loading="dataListLoading"
                 />
-                <DatasetPreview />
+                <DatasetPreview
+                    :data="showData"
+                    :columns="selectColumns"
+                    :prop-id="viewData.previewData && viewData.previewData.columns"
+                    :height="dataHeight"
+                    @reach-bottom="loadMore"
+                    v-loading="previewLoading"
+                    :readonly="true"
+                    v-if="tablePreview"
+                    :analysis="viewData.analysisData"
+                />
                 <data-image
                     :image-url="imageUrl"
                     v-if="imageUrl"
@@ -116,6 +198,8 @@ import Empty from '@sdx/ui/components/empty';
 import SdxuButton from '@sdx/ui/components/button';
 import {getDatasetDetail, datasetPreview} from '@sdx/utils/src/api/dataset';
 import DatasetPreview from './preview/DataSetPreview';
+import poploadmore from './preview/loadMore';
+import { isNumber, isString } from './preview/util';
 export default {
     name:'DataPreview',
     mixins: [locale],
@@ -155,13 +239,6 @@ export default {
             treeData:[],
             // 展开的key
             expandedKey:[],
-            previewData: {
-                data_rows: Object.freeze([]),
-                sky_schema: Object.freeze([]),
-                path: '',
-                shape: '',
-                ownerId: ''
-            },
             checkedValue: [],
             uploadParams: {
                 ownerId: getUser().userId || '',
@@ -181,10 +258,57 @@ export default {
             // 是否全屏
             fullScreen: false,
             isTreeLoading: false,
-            previewLoading: false
+            previewLoading: false,
+            // 预览数据表格
+            viewData: {
+                analysisData: {},
+                fileUri: '',
+                previewData: {
+                    data: Object.freeze([]),
+                    columns: Object.freeze([]),
+                },
+                schema: Object.freeze([]),
+                shape: ''
+            },
+            showData: Object.freeze([]),
+            pageIndex: 0,
+            pageSize: 50,
+            dataHeight: '600px',
+            tablePreview: false,
+            dataListLoading: false,
+            totalPage: 0,
+            // 列名选择
+            topCount: 0,
+            visiblePopover: false,
+            isIndeterminate: false,
+            searchSchema: [],
+            checkAll: true,
+            searchName: '',
+            checkedCols: [],
+            selectColumns: [],
+            totalCols: [],
+            saveSchema: []
         };
     },
     computed: {
+        lazyTopHeight() {
+            return this.topCount * 40;
+        },
+        lazyBottomHeight() {
+            let height = 0;
+            if (this.saveSchema.length) {
+                if (this.searchSchema.length < 7) {
+                    height = 0;
+                } else {
+                    height = (this.searchSchema.length - 7) * 40 - this.lazyTopHeight;
+                }
+            }
+            return height;
+        },
+        showSchema() {
+            this.searchSchema = Object.freeze(this.saveSchema.filter(item => item.fieldName.includes(this.searchName)));
+            return this.searchSchema.slice(this.topCount, this.topCount + 7);
+        },
         tree() {
             return this.$refs.fileTree;
         },
@@ -204,7 +328,7 @@ export default {
                 props: {
                     label: 'name',
                     children: 'children',
-                    isLeaf: (data, node) => {
+                    isLeaf: (data) => {
                         return !!data.isFile;
                     }
                 },
@@ -214,14 +338,115 @@ export default {
     created() {
         this.getDatasetInfo();
     },
+    directives: {
+        poploadmore
+    },
     methods: {
+        // 图标
+        dealIcon(fieldType) {
+            if (isNumber(fieldType)) {
+                return 'iconN';
+            } else if (isString(fieldType)) {
+                return 'iconS';
+            } else {
+                return '';
+            }
+        },
+        show() {
+            this.topCount = 0;
+            this.checkedCols = Object.freeze(this.selectColumns.map(item => item.fieldName));
+        },
+        // 预览
+        handleCheckAllChange(val) {
+            this.checkedCols = Object.freeze(val ? this.totalCols.map(item => item.fieldName) : []);
+            this.isIndeterminate = false;
+        },
+        handleCheckedColsChange(value) {
+            let checkedCount = value.length;
+            this.checkAll = checkedCount === this.totalCols.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.totalCols.length;
+        },
+        // 确定
+        submitForm() {
+            if (this.checkedCols.length === 0) {
+                this.$message({
+                    message: '请选择列名',
+                    type: 'warning'
+                });
+            } else {
+                this.visiblePopover = false;
+                let params = {
+                    datasetId: this.$route.params.uuid,
+                    fileUri:  this.dataListPath,
+                    columns:this.checkedCols
+                };
+                this.getDatasetPreview(params);
+            }
+        },
+        // 取消
+        resetForm() {
+            this.visiblePopover = false;
+            this.searchName = '';
+            this.checkedCols = Object.freeze([]);
+            this.isIndeterminate = this.totalCols.length !== this.checkedCols.length;
+        },
+        poploadmore(direction, scrollDistance) {
+            this.topCount = Math.floor(scrollDistance / 40);
+        },
+        // 全屏
+        handleFullScreen() {
+            this.fullScreen = !this.fullScreen;
+            if (this.fullScreen) {
+                this.dataHeight = 'calc(100vh - 160px)';
+                this.loadMore();
+            } else {
+                this.dataHeight = '600px';
+            }
+        },
+        loadMore() {
+            if (this.pageIndex < this.totalPage - 1) {
+                this.pageIndex += 1;
+                setTimeout(() => {
+                    this.showData = Object.freeze([...this.showData, ...this.viewData.previewData.data.slice(this.pageIndex * this.pageSize, (this.pageIndex + 1) * this.pageSize)]);
+                }, 10);
+            }
+        },
         // 数据集文件预览
         getDatasetPreview(params) {
             this.previewLoading = true;
-            console.log(params, 'cs');
+            this.selectColumns = [];
+            let arr = [];
             datasetPreview(params).then(res => {
+                this.viewData = res;
+                this.totalCols = res.schema;
+                // 选中的列名
+                this.checkedCols = Object.freeze(res.schema.map(item => item.fieldName));
+                // 复制一份
+                this.saveSchema = JSON.parse(JSON.stringify(res.schema));
+                // 重置当前页码，重新获取分页数据
+                this.pageIndex = 0;
+                this.showData = Object.freeze(res.previewData.data.slice(this.pageIndex, this.pageSize));
+                this.totalPage = Math.ceil(res.previewData.data.length / this.pageSize);
                 this.previewLoading = false;
-                console.log(res, 'view');
+                for(let i =0; i < res.previewData.columns.length; i++) {
+                    arr.push(res.schema.filter(item => item.fieldName === res.previewData.columns[i])[0]);
+                }
+                this.selectColumns = arr;
+            }).catch(() => {
+                this.selectColumns = [];
+                this.tablePreview = false;
+                this.viewData = {
+                    analysisData: {},
+                    fileUri: '',
+                    previewData: {
+                        data: []
+                    },
+                    schema: [],
+                    shape: ''
+                };
+                this.showData = [];
+                this.totalPage = 0;
+                this.previewLoading = false;
             });
         },
         // 获取数据集信息
@@ -239,6 +464,8 @@ export default {
             this.datalistHide = false;
             this.emptyHide = false;
             this.previewLoading = true;
+            this.tablePreview = false;
+            this.dataListLoading = true;
             getNativeFilesList({path}).then(res => {
                 this.treeData = res.children;
                 this.isTreeLoading = false;
@@ -252,6 +479,7 @@ export default {
                         this.expandedKey = [res.children[0].path];
                         this.dataListPath = res.children[0].path;
                         this.datalistHide = true;
+                        this.dataListLoading = false;
                         setTimeout(() => {
                             this.$refs.dataListView.getFlieList(this.dataListPath);
                         }, 1000);
@@ -260,6 +488,9 @@ export default {
                             // 预览图片
                             this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${res.children[0].ownerId}&path=${res.children[0].path}&filesystem=cephfs`;
                         } else {
+                            this.$nextTick(() => {
+                                this.tablePreview = true;
+                            });
                             let params = {
                                 datasetId: this.$route.params.uuid,
                                 fileUri:  res.children[0].path
@@ -276,6 +507,8 @@ export default {
                 this.isTreeLoading = false;
                 this.emptyHide = false;
                 this.previewLoading = false;
+                this.tablePreview = false;
+                this.dataListLoading = false;
             });
         },
         // 跳转到jupyter
@@ -401,17 +634,16 @@ export default {
         // 单文件选中
         handleCurrentkChange(data,checked) {
             if (checked) {
-                console.log(data, '单文件选中');
-                // this.dataListPath = data.path;
-                // this.previewData.ownerId = data.ownerId;
-                // this.previewData.path = data.path;
                 this.imageUrl = '';
                 this.datalistHide = false;
                 this.emptyHide = false;
+                this.tablePreview = false;
+                this.dataListLoading = true;
+                this.dataListPath = data.path;
                 if(!data.isFile) {
                     this.expandedKey = [data.path];
-                    this.dataListPath = data.path;
                     this.datalistHide = true;
+                    this.dataListLoading = false;
                     setTimeout(() => {
                         this.$refs.dataListView.getFlieList(data.path);
                     }, 1000);
@@ -420,6 +652,9 @@ export default {
                         // 预览图片
                         this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${data.ownerId}&path=${data.path}&filesystem=cephfs`;
                     } else {
+                        this.$nextTick(() => {
+                            this.tablePreview = true;
+                        });
                         let params = {
                             datasetId: this.$route.params.uuid,
                             fileUri:  data.path
@@ -450,14 +685,20 @@ export default {
         },
         handleViewData(path, type, ownerId) {
             console.log(path, 'path');
-            this.previewData.path = path;
-            this.previewData.ownerId = ownerId;
+            // this.previewData.path = path;
+            // this.previewData.ownerId = ownerId;
             this.tree.setCurrentKey(path);
             this.datalistHide = false;
+            this.previewLoading = false;
+            this.tablePreview = false;
             if (type === 'image') {
                 // 预览图片
                 this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${ownerId}&path=${path}&filesystem=cephfs`;
             } else {
+                this.$nextTick(() => {
+                    this.tablePreview = true;
+                });
+                this.previewLoading = true;
                 // 预览文件
                 let params = {
                     datasetId: this.$route.params.uuid,
@@ -468,12 +709,15 @@ export default {
         },
     },
     watch: {
-     
+        searchName() {
+            this.topCount = 0;
+            localStorage.setItem('scrollTop', true);
+        }
     }
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .sdxv-data-preview {
     position: relative;
     & > .sdxu-button {
@@ -516,6 +760,14 @@ export default {
             .sdxu-article-panel__content {
                 padding:  0px;
             }
+            .sdxu-icon-button + .sdxu-icon-button,.sdxu-icon-button.is-border {
+                margin-left: 16px;
+            }
+            .colInfo {
+                font-size: 12px;
+                color: #6E7C94;
+                margin-left: 24px;
+            }
         }
     }
     .full-screen {
@@ -527,5 +779,37 @@ export default {
         z-index: 99;
         overflow: auto;
     }
+}
+.list-name {
+    height: 266px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+    overflow-x: hidden;
+    width: 100%;
+    .el-checkbox {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid rgba(201,210,225,0.6);
+        padding-left: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding-right: 12px;
+    }
+}
+.popover-header {
+    height: 58px;
+    border-bottom: 1px solid rgba(201,210,225,0.6);
+    line-height: 58px;
+    padding: 0 12px;
+    .wd200 {
+        width: 200px;
+        float: right;
+    }
+}
+.datapreview-btn {
+    float: right;
+    margin: 0 12px 12px 0;
 }
 </style>

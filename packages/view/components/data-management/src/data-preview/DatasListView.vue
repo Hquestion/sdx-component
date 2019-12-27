@@ -1,14 +1,13 @@
 <template>
     <div
         class="data-list-view"
-        v-loading="loading"
     >
         <div
             v-for="(v, k) in list"
             :key="k"
         >
             <div
-                @click="viewData(v.isFile, v.path, v.mimeType, v.ownerId)"
+                @click="viewData(v.isFile, v.path, v.fileExtension, v.ownerId)"
                 :class="[viewDisabled(v) ?'disabledClick':'', 'card']"
             >
                 <div class="icon">
@@ -75,7 +74,6 @@ export default {
         return {
             list: [],
             fullpath: '',
-            loading: false,
             total: 0,
             pageSize: 100,
             current: 1,
@@ -132,7 +130,7 @@ export default {
             } else if (ext === 'orc') {
                 ext = '#sdx-ORC';
             } else if (ext === 'parquet') {
-                ext = '#sdx-Parquet';
+                ext = '#sdx-Parquet-x';
             } else if (!isFile) {
                 ext = '#sdx-wenjianjia';
             } else if (ext !== 'csv' && ext !== 'txt' && ext !== 'orc' && ext !== 'parquet' && isFile) {
@@ -142,7 +140,6 @@ export default {
         },
         // 文件列表
         getFlieList(path, ownerId, currentChange) {
-            this.loading = true;
             if (!currentChange) {
                 this.current = 1;
             }
@@ -158,8 +155,6 @@ export default {
                     data.paths = data.children;
                     this.list = data.paths;
                     this.total = data.childrenCount;
-                }).finally(() => {
-                    this.loading = false;
                 });
         },
         currentChange(val) {
@@ -168,13 +163,11 @@ export default {
         },
         // 查看数据
         viewData(isFile, path, type, ownerId) {
-            let [arr, ext] = [[], ''];
-            ext = arr[arr.length - 1];
             //  文件夹
             if (!isFile) {
                 this.getFlieList(path, ownerId);
                 this.$emit('expandNode', path);
-            } else if (ext === 'csv' || ext === 'txt' || ext === 'orc' || ext === 'parquet') {
+            } else if (type === '.csv' || type === '.txt' || type === '.orc' || type === '.parquet') {
                 this.$emit('viewData', path);
             } else if (type.indexOf('image/') === 0) {
                 this.$emit('viewData', path, 'image', ownerId);

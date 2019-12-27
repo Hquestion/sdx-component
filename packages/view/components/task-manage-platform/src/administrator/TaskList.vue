@@ -291,9 +291,9 @@ export default {
         handleOperate(data) {
             switch(data.type) {
                 case 'delete':
-                    MessageBox({
-                        title: this.t('view.task.deleteTask'),
-                        content: this.t('sdxCommon.ConfirmRemove'),
+                    MessageBox.warning({
+                        title: this.t('view.task.deleteTaskTitle'),
+                        content: this.t('view.task.deleteTaskContent'),
                     }).then(() => {
                         deleteTask(data.row.uuid, {type: data.row.type}).then(() => {
                             Message({

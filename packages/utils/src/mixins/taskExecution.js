@@ -70,8 +70,8 @@ export default {
                     isSaveImage = await SdxwTaskStopDialog({visible: true});
                 } else {
                     await SdxuMessageBox.warning({
-                        title: t.call(that, 'view.task.stopTask'),
-                        content: ''
+                        title: t.call(that, 'view.task.killTaskTitle'),
+                        content: t.call(that, 'view.task.killTaskContent')
                     });
                 }
                 if (row.type === TASK_TYPE.SKYFLOW) {
@@ -99,8 +99,8 @@ export default {
             let that = this;
             try {
                 await SdxuMessageBox.warning({
-                    title: t.call(that, 'view.task.deleteTask'),
-                    content: ''
+                    title: t.call(that, 'view.task.deleteTaskTitle'),
+                    content: t.call(that, 'view.task.deleteTaskContent'),
                 });
 
                 if (row.type === TASK_TYPE.SKYFLOW) {

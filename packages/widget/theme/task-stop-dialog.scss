@@ -14,16 +14,24 @@
             color: $sdx-text-primary-color;
         }
     }
-    @include element('checkbox') {
+    @include element('content') {
         margin-top: $sdx-margin;
         margin-left: 39px;
+        font-family: PingFangSC-Regular;
         font-size: 14px;
-        display: flex;
-        align-items: start;
-        .el-checkbox__label {
-            color: $sdx-text-regular-color;
-            font-weight: normal;
-            white-space: normal;
+        color: #6E7C94;
+        @include element('checkbox') {
+            display: flex;
+            align-items: start;
+            margin-top: 20px;
+            .el-checkbox__inner {
+                margin-top: 2px;
+            }
+            .el-checkbox__label {
+                color: #6E7C94;
+                font-weight: normal;
+                white-space: normal;
+            }
         }
     }
 }

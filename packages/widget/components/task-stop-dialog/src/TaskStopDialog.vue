@@ -8,15 +8,18 @@
             <div class="sdxw-task-stop-dialog__tip">
                 <i class="sdx-icon sdx-icon-warning" />
                 <span>
-                    {{ t('view.task.killTask') }}
+                    {{ t('view.task.killTaskTitle') }}
                 </span>
             </div>
-            <el-checkbox
-                v-model="isAutoSave"
-                class="sdxw-task-stop-dialog__checkbox"
-            >
-                {{ t('view.task.saveIntoImage') }}
-            </el-checkbox>
+            <div class="sdxw-task-stop-dialog__content">
+                <div>{{ t('view.task.killTaskContent') }}</div>
+                <el-checkbox
+                    v-model="isAutoSave"
+                    class="sdxw-task-stop-dialog__checkbox"
+                >
+                    {{ t('view.task.saveIntoImage') }}
+                </el-checkbox>
+            </div>
         </div>
         <template #footer>
             <SdxuButton

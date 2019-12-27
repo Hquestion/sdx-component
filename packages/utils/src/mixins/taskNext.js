@@ -44,7 +44,7 @@ export default {
             let isSelectAutoImage = false;
             try {
                 // 任务类型为jupyter或container_dev且状态不为新建则弹出框
-                if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINER_DEV].includes(row.type) && row.state !== STATE_TYPE.Created) {
+                if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINER_DEV, TASK_TYPE.SKYIDE].includes(row.type) && row.state !== STATE_TYPE.Created) {
                     let image = null;
                     let autoImage = null;
                     if (row.autoImageId) {
@@ -67,12 +67,12 @@ export default {
             let isSaveImage = false;
             try {
                 // 任务类型为jupyter或container_dev且状态为运行中则弹出框
-                if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINER_DEV].includes(row.type) && row.state === STATE_TYPE.Running) {
+                if ([TASK_TYPE.JUPYTER, TASK_TYPE.CONTAINER_DEV, TASK_TYPE.SKYIDE].includes(row.type) && row.state === STATE_TYPE.Running) {
                     isSaveImage = await SdxwTaskStopDialog({visible: true});
                 } else {
                     await SdxuMessageBox.warning({
-                        title: t.call(that, 'view.task.stopTask'),
-                        content: ''
+                        title: t.call(that, 'view.task.killTaskTitle'),
+                        content: t.call(that, 'view.task.killTaskContent')
                     });
                 }
 
@@ -104,8 +104,8 @@ export default {
             let that = this;
             try {
                 await SdxuMessageBox.warning({
-                    title: t.call(that, 'view.task.deleteTask'),
-                    content: ''
+                    title: t.call(that, 'view.task.deleteTaskTitle'),
+                    content: t.call(that, 'view.task.deleteTaskContent'),
                 });
 
                 removeTask(row.uuid, { type: row.type }).then(() => {

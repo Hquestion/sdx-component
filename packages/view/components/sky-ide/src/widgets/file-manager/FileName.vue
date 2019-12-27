@@ -139,7 +139,7 @@ export default {
                 display: inline-block;
                 vertical-align: middle;
                 &.accept-icon {
-                    color: $sdx-primary-color;
+                    color: $sdx-h1-font-size;
                 }
                 &.cancel-icon {
                     color: $sdx-text-holder-color;

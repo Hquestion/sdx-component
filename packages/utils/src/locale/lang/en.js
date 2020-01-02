@@ -1150,6 +1150,7 @@ export default {
                 Deleting: 'Deleting',
                 DeleteFailed: 'DeleteFailed'
             },
+            Preview: 'Preview'
         }
     },
     sdxCommon: {

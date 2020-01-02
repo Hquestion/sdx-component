@@ -158,7 +158,7 @@
                         v-if="$route.query.from === 'dataManagement'"
                         class="default-dataset"
                     >
-                        {{ 'dataSetName' }}
+                        {{ datasetName }}
                     </div>
                     <el-select
                         v-else
@@ -215,7 +215,7 @@ import IconButton from '@sdx/ui/components/icon-button';
 import Scroll from '@sdx/ui/components/scroll';
 import Appender from '@sdx/ui/components/appender';
 import ArticlePanel from '@sdx/ui/components/article-panel';
-
+import {getDatasetDetail} from '@sdx/utils/src/api/dataset';
 const RESOURCE_KEY = 'DEPLOY';
 
 export default {
@@ -317,7 +317,8 @@ export default {
                     }
                 ],
             },
-            dataReady: false
+            dataReady: false,
+            datasetName: ''
         };
     },
     computed: {
@@ -340,6 +341,13 @@ export default {
         this.projectCooperation();
         this.getDataSetList();
         this.getProjectList();
+        //判断是否挂载数据集展示数据集名称
+        if(this.$route.query.from === 'dataManagement') { 
+            getDatasetDetail(this.$route.query.datasetId).then(res => {
+                this.datasetName = res.name;
+                this.params.datasets = [this.$route.query.datasetId];
+            });
+        }
     },
     methods: {
         // 数据集列表
@@ -377,14 +385,31 @@ export default {
                 this.params.resourceConfigObj[RESOURCE_KEY].requests['nvidia.com/gpu'] = 0;
                 this.params.resourceConfigObj[RESOURCE_KEY].labels['gpu.model'] = '';
             }
-            this.$refs.jupyter.validate().then(() => {
-                this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
-                const id = this.params.uuid || this.params.Id;
-                (id ? updateTask(id,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
-                    .then (() => {
-                        this.$router.go(-1);
-                    });
-            });
+            // 挂载数据集
+            if(this.$route.query.from === 'dataManagement') {
+                this.$refs.jupyter.validate().then(() => {
+                    this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
+                    console.log(this.params, 'params');
+                    // createTask(this.params)
+                    //     .then(res => {
+                    //         let id = res.uuid;
+                    //         startTask(id, { isAuto: false })
+                    //             .then(() => {
+                    //                 this.$router.go(-1);
+                    //                 window.open(`/#/jupyterurl/${id}/${this.$route.params.dataset}`);
+                    //             });
+                    //     });
+                });
+            } else {
+                this.$refs.jupyter.validate().then(() => {
+                    this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
+                    const id = this.params.uuid || this.params.Id;
+                    (id ? updateTask(id,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
+                        .then (() => {
+                            this.$router.go(-1);
+                        });
+                });
+            }
         }
     },
     watch: {

@@ -299,7 +299,7 @@ export default {
             const classes = [column.id, column.align, column.className];
 
             if (this.isColumnHidden(columnIndex)) {
-                classes.push('is-hidden');
+                // classes.push('is-hidden');
             }
 
             const cellClassName = this.table.cellClassName;

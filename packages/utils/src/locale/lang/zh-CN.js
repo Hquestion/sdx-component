@@ -1148,7 +1148,8 @@ export default {
                 Failed: '失败',
                 Deleting: '删除中',
                 DeleteFailed: '删除失败'
-            }
+            },
+            Preview: '预览'
         }
     },
     sdxCommon: {
@@ -1159,7 +1160,7 @@ export default {
         UpdatedTime: '更新时间',
         Operation: '操作',
         Cancel: '取消',
-        Confirm: '确认',
+        Confirm: '确定',
         Log: '日志',
         expand: '展开',
         retract: '收起',

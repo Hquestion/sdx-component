@@ -77,13 +77,20 @@
                     >
                         <el-popover
                             placement="left"
-                            width="420"
+                            width="340"
                             trigger="click"
                             v-model="visiblePopover"
                             @show="show"
                             v-if="showData.length > 0 && !datalistHide && !imageUrl"
+                            popper-class="data-preview-popper"
                         >
                             <div class="popover-header">
+                                <el-input
+                                    placeholder="搜索"
+                                    suffix-icon="el-icon-search"
+                                    size="small"                    
+                                    v-model="searchName"
+                                />
                                 <el-checkbox
                                     :indeterminate="isIndeterminate"
                                     v-model="checkAll"
@@ -91,13 +98,6 @@
                                 >
                                     列名
                                 </el-checkbox>
-                                <el-input
-                                    class="wd200"
-                                    placeholder="搜索"
-                                    suffix-icon="el-icon-search"
-                                    size="small"
-                                    v-model="searchName"
-                                />
                             </div>
                             <el-checkbox-group
                                 v-model="checkedCols"
@@ -111,21 +111,24 @@
                                     :label="item.fieldName"
                                     :value="item.fieldName"
                                 >
-                                    <span><i :class="['iconfont', dealIcon(item.fieldType)]" /></span>
+                                    <!-- <span><i :class="['iconfont', dealIcon(item.fieldType)]" /></span> -->
                                     <span>{{ item.fieldName }}</span>
                                 </el-checkbox>
                                 <div :style="{ height: `${lazyBottomHeight}px`}" />
                             </el-checkbox-group>
                             <div class="datapreview-btn">
-                                <el-button
+                                <SdxuButton
+                                    @click="resetForm"
+                                    type="default"
+                                >
+                                    {{ t('sdxCommon.Cancel') }}
+                                </SdxuButton>
+                                <SdxuButton
                                     type="primary"
                                     @click="submitForm"
                                 >
                                     {{ t('sdxCommon.Confirm') }}
-                                </el-button>
-                                <el-button @click="resetForm">
-                                    {{ t('sdxCommon.Cancel') }}
-                                </el-button>
+                                </SdxuButton>
                             </div>
                             <IconButton
                                 border
@@ -151,7 +154,6 @@
                     @viewData="handleViewData"
                     @expandNode="expandNode"
                     ref="dataListView"
-                    v-loading="dataListLoading"
                 />
                 <DatasetPreview
                     :data="showData"
@@ -287,7 +289,7 @@ export default {
             checkedCols: [],
             selectColumns: [],
             totalCols: [],
-            saveSchema: []
+            saveSchema: [],
         };
     },
     computed: {
@@ -520,7 +522,8 @@ export default {
                         type: 'JUPYTER'
                     },
                     query: {
-                        from: 'dataManagement'
+                        from: 'dataManagement',
+                        datasetId:  this.$route.params.uuid
                     }
                 }
             );
@@ -544,13 +547,22 @@ export default {
                 content: this.t('view.file.CantRecoveryAfterDel')
             }).then(() => {
                 deletePath(paths).then(() => {
-                    // 删除之后刷新页面
-                    this.tree.root.loaded = false;
-                    this.tree.root.loadData();
+                    let [selectedPaths, keys] = [new Set(), []];
+                    for(let i = 0; i < this.checkedValue.length; i++) {
+                        selectedPaths.add(this.checkedValue[i].path.split('/').slice(0,-1).join('/'));
+                    }
+                    keys = [...selectedPaths];
+                    keys.forEach(item => {
+                        let node = this.tree.getNode(item);
+                        node.loaded = false;
+                        node.loadData();
+                    });
                     // 触发子组件更新
                     setTimeout(() => {
                         this.tree.setCurrentKey(this.dataListPath);
-                        this.$refs.dataListView.getFlieList(this.dataListPath);
+                        if(this.datalistHide) {
+                            this.$refs.dataListView.getFlieList(this.dataListPath);
+                        }
                     }, 1000);
                 });
             });
@@ -585,7 +597,7 @@ export default {
                             >
                                 <IconButton
                                     icon="sdx-icon sdx-icon-upload"
-                                    onClick={this.uploadFile.bind(this, data)}
+                                    onClick={this.uploadFile.bind(this,node, data)}
                                 />
                             </SdxuUpload>
                         </div>
@@ -595,15 +607,17 @@ export default {
                 </span>
             );
         },
-        uploadFile(data) {
+        uploadFile(node,data) {
             this.uploadParams = Object.assign({}, this.uploadParams, {path: data.path});
         },
-        uploadSuccess() {
-            this.tree.root.loaded = false;
-            this.tree.root.loadData();
+        uploadSuccess(node) {
+            node.loaded = false;
+            node.loadData();
             setTimeout(() => {
                 this.tree.setCurrentKey(this.dataListPath);
-                this.$refs.dataListView.getFlieList(this.dataListPath);
+                if(this.dataListPath === this.uploadParams.path) {
+                    this.$refs.dataListView.getFlieList(this.dataListPath);
+                }
             }, 1000);
         },
         fetchFiles(node,resolve) {
@@ -684,7 +698,6 @@ export default {
             this.dataListPath = path;
         },
         handleViewData(path, type, ownerId) {
-            console.log(path, 'path');
             // this.previewData.path = path;
             // this.previewData.ownerId = ownerId;
             this.tree.setCurrentKey(path);
@@ -719,6 +732,7 @@ export default {
 
 <style lang="scss">
 .sdxv-data-preview {
+    min-height: 200px;
     position: relative;
     & > .sdxu-button {
         position: absolute;
@@ -780,36 +794,56 @@ export default {
         overflow: auto;
     }
 }
-.list-name {
-    height: 266px;
-    overflow-y: auto;
-    margin-bottom: 12px;
-    overflow-x: hidden;
-    width: 100%;
-    .el-checkbox {
+
+.data-preview-popper {
+    padding: 0 !important;
+    .list-name {
+        height: 280px;
+        overflow-y: auto;
+        margin-bottom: 12px;
+        overflow-x: hidden;
         width: 100%;
-        height: 40px;
-        line-height: 40px;
-        border-bottom: 1px solid rgba(201,210,225,0.6);
-        padding-left: 12px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        padding-right: 12px;
+        .el-checkbox {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            .el-checkbox__label {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        } 
+    }
+    .popover-header {
+        padding: 24px;
+        padding-bottom: 0;
+        & > label {
+            height: 40px;
+            line-height: 40px;
+        }
+        .el-input {
+            margin-bottom: 24px;
+        }
+        .el-checkbox {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            display: flex;
+            align-items: center;
+            .el-checkbox__label {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        } 
+    }
+    .datapreview-btn {
+        padding: 24px;
+        border-top: 1px solid #D8DEEA;
     }
 }
-.popover-header {
-    height: 58px;
-    border-bottom: 1px solid rgba(201,210,225,0.6);
-    line-height: 58px;
-    padding: 0 12px;
-    .wd200 {
-        width: 200px;
-        float: right;
-    }
-}
-.datapreview-btn {
-    float: right;
-    margin: 0 12px 12px 0;
-}
+
 </style>

@@ -87,10 +87,9 @@ import Vue from 'vue';
 import Popper from 'element-ui/src/utils/vue-popper';
 import CascadeDropdown from './CascadeDropdown';
 import DataSetPreviewActionsMixin from './DataSetPreviewActionsMixin';
-// import CusElTableColumn from './table/src/table-column';
-// import CusElTable from './table';
 import { isNumber, isString } from './util';
 import SdxuTable from '@sdx/ui/components/table';
+import BarEcharts from './BarEcharts';
 const popperMixin = {
     props: {
         placement: {
@@ -340,27 +339,9 @@ export default {
             );
             if (!field) return <span />;
             let analysisData = this.analysis[field.fieldName] || [];
-            console.log(column,analysisData,'yy');
             return (
-                // <div class="header-count">
-                //     {analysisData.map(item => {
-                //         let analysisItem =
-                //             (typeof item === 'string' && JSON.parse(item)) ||
-                //             item;
-                //         return (
-                //             <div class="count">
-                //                 <span>{analysisItem.summary}:</span>
-                //                 <span>
-                //                     {Number(
-                //                         analysisItem[field.fieldName]
-                //                     ).toFixed(2)}
-                //                 </span>
-                //             </div>
-                //         );
-                //     })}
-                // </div>
                 <div class="header-count">
-                    {analysisData.max}
+                    <BarEcharts data={analysisData} key={column.label} width="100%"/>
                 </div>
             );
         },
@@ -555,6 +536,7 @@ export default {
         &.header-count {
             color: rgba(129, 130, 134, 1);
             padding: 0;
+            width: 100%;
             .count {
                 display: flex;
                 font-weight: normal;
@@ -588,6 +570,11 @@ export default {
     & /deep/ .el-table--border,
     & /deep/ .el-table--group {
         border: none;
+    }
+    & /deep/ {
+        .el-table thead.is-group th {
+            background: #fff;
+        }
     }
 }
 </style>

@@ -1,13 +1,14 @@
 <template>
     <div
         class="data-list-view"
+        v-loading="listLoading"
     >
         <div
             v-for="(v, k) in list"
             :key="k"
         >
             <div
-                @click="viewData(v.isFile, v.path, v.fileExtension, v.ownerId)"
+                @click="viewData(v.isFile, v.path, v.fileExtension,v.mimeType, v.ownerId)"
                 :class="[viewDisabled(v) ?'disabledClick':'', 'card']"
             >
                 <div class="icon">
@@ -78,7 +79,8 @@ export default {
             pageSize: 100,
             current: 1,
             savePath: '',
-            saveOwnerId: ''
+            saveOwnerId: '',
+            listLoading: false
         };
     },
     components: {
@@ -140,6 +142,7 @@ export default {
         },
         // 文件列表
         getFlieList(path, ownerId, currentChange) {
+            this.listLoading = true;
             if (!currentChange) {
                 this.current = 1;
             }
@@ -155,6 +158,9 @@ export default {
                     data.paths = data.children;
                     this.list = data.paths;
                     this.total = data.childrenCount;
+                    this.listLoading = false;
+                }).catch(() => {
+                    this.listLoading = false;
                 });
         },
         currentChange(val) {
@@ -162,14 +168,15 @@ export default {
             this.getFlieList(this.savePath, this.saveOwnerId, true);
         },
         // 查看数据
-        viewData(isFile, path, type, ownerId) {
+        viewData(isFile, path, type,mimeType, ownerId) {
+            console.log(type, 'type');
             //  文件夹
             if (!isFile) {
                 this.getFlieList(path, ownerId);
                 this.$emit('expandNode', path);
             } else if (type === '.csv' || type === '.txt' || type === '.orc' || type === '.parquet') {
                 this.$emit('viewData', path);
-            } else if (type.indexOf('image/') === 0) {
+            } else if (mimeType.indexOf('image/') === 0) {
                 this.$emit('viewData', path, 'image', ownerId);
             }
         },
@@ -185,7 +192,7 @@ export default {
         }
     },
     created() {
-        this.getFlieList(this.dataListPath, this.ownerId);
+        // this.getFlieList(this.dataListPath, this.ownerId);
     },
     watch: {
         dataListPath() {

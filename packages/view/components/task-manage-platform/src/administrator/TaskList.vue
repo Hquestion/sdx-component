@@ -72,27 +72,27 @@
                     :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
-                    prop="quota.cpu"
+                    prop="resourceInfo.cpu"
                     label="CPU"
-                    sortable
+                    sortable="custom"
                 >
                     <template #default="{row}">
-                        {{ parseMilli(row.quota.cpu) }}
+                        {{ parseMilli(row.resourceInfo.cpu) }}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="quota.memory"
+                    prop="resourceInfo.memory"
                     :label="t('view.task.Memory')"
-                    sortable
+                    sortable="custom"
                 >
                     <template #default="{row}">
-                        {{ byteToGB(row.quota.memory) }}
+                        {{ byteToGB(row.resourceInfo.memory) }}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="quota.gpu"
+                    prop="resourceInfo.gpu"
                     :label="'GPU'"
-                    sortable
+                    sortable="custom"
                 />
 
                 <el-table-column
@@ -106,7 +106,7 @@
                 <el-table-column
                     prop="createdAt"
                     :label="t('sdxCommon.CreatedTime')"
-                    sortable
+                    sortable="custom"
                 >
                     <template
                         slot-scope="scope"
@@ -181,7 +181,7 @@ export default {
             table: [],
             groups: [],
             defaultSort: {
-                prop: 'quota.cpu',
+                prop: 'resourceInfo.cpu',
                 order: 'descending'
             },
             current: 1,
@@ -241,6 +241,13 @@ export default {
             removeBlankAttr(params);
             taskList(params).then(res => {
                 this.table = res.data;
+                this.table.forEach(item=> {
+                    item.resourceInfo = {
+                        cpu: JSON.parse(item.resourceConfig).DEPLOY.requests.cpu,
+                        gpu: JSON.parse(item.resourceConfig).DEPLOY.requests['nvidia.com/gpu'],
+                        memory: JSON.parse(item.resourceConfig).DEPLOY.requests.memory
+                    };
+                });
                 this.total = res.total;
                 this.tableLoading = false;
             }).catch(() => {

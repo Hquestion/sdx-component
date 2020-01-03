@@ -44,7 +44,7 @@ export default {
                     }
                 },
                 grid: {
-                    left: '3%',
+                    left: '4%',
                     right: '4%',
                     bottom: '0',
                     top: '2%',

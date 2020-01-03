@@ -468,6 +468,7 @@ export default {
             this.previewLoading = true;
             this.tablePreview = false;
             this.dataListLoading = true;
+            this.imageUrl = '';
             getNativeFilesList({path}).then(res => {
                 this.treeData = res.children;
                 this.isTreeLoading = false;
@@ -488,7 +489,7 @@ export default {
                     } else {
                         if(res.children[0].mimeType.indexOf('image/') === 0) {
                             // 预览图片
-                            this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${res.children[0].ownerId}&path=${res.children[0].path}&filesystem=cephfs`;
+                            this.imageUrl = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${res.children[0].ownerId}&path=${res.children[0].path}&filesystem=cephfs`;
                         } else {
                             this.$nextTick(() => {
                                 this.tablePreview = true;
@@ -552,6 +553,44 @@ export default {
                         selectedPaths.add(this.checkedValue[i].path.split('/').slice(0,-1).join('/'));
                     }
                     keys = [...selectedPaths];
+                    console.log(this.checkedValue, 'keys');
+                    // 判断是否选中的节点和父节点是否被删除了
+                    this.checkedValue.forEach(item => {
+                        if(this.dataListPath.includes(item.path)){
+                            this.dataListPath = '';
+                            this.tablePreview = false;
+                            this.imageUrl = '';
+                            this.emptyHide = false;
+                            if(this.treeData.length) {
+                                if(!this.treeData[0].isFile) {
+                                    this.expandedKey = [this.treeData[0].path];
+                                    this.dataListPath = this.treeData[0].path;
+                                    this.datalistHide = true;
+                                    setTimeout(() => {
+                                        this.$refs.dataListView.getFlieList(this.dataListPath);
+                                    }, 1000);
+                                } else {
+                                    if(this.treeData[0].mimeType.indexOf('image/') === 0) {
+                                        // 预览图片
+                                        this.imageUrl = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${this.treeData[0].ownerId}&path=${this.treeData[0].path}&filesystem=cephfs`;
+                                    } else {
+                                        this.$nextTick(() => {
+                                            this.tablePreview = true;
+                                        });
+                                        let params = {
+                                            datasetId: this.$route.params.uuid,
+                                            fileUri:  this.treeData[0].path
+                                        };
+                                        this.getDatasetPreview(params);
+                                    }
+                                }
+                            }else {
+                                this.emptyHide = true;
+                                this.emptyType = 'noData';
+                            }
+                        }
+                    });
+                    // 删除后更新子树节点
                     keys.forEach(item => {
                         let node = this.tree.getNode(item);
                         node.loaded = false;
@@ -664,7 +703,7 @@ export default {
                 } else {
                     if(data.mimeType.indexOf('image/') === 0) {
                         // 预览图片
-                        this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${data.ownerId}&path=${data.path}&filesystem=cephfs`;
+                        this.imageUrl = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${data.ownerId}&path=${data.path}&filesystem=cephfs`;
                     } else {
                         this.$nextTick(() => {
                             this.tablePreview = true;
@@ -706,7 +745,7 @@ export default {
             this.tablePreview = false;
             if (type === 'image') {
                 // 预览图片
-                this.imageUrl = `${location.origin}/file-manager/api/v1/files/download?ownerId=${ownerId}&path=${path}&filesystem=cephfs`;
+                this.imageUrl = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${ownerId}&path=${path}&filesystem=cephfs`;
             } else {
                 this.$nextTick(() => {
                     this.tablePreview = true;

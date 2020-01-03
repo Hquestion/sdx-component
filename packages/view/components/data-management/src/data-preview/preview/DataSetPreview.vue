@@ -341,6 +341,7 @@ export default {
             let analysisData = this.analysis[field.fieldName] || [];
             return (
                 <div class="header-count">
+                    <i class="sdx-icon sdx-icon-info" />
                     <BarEcharts data={analysisData} key={column.label} width="100%"/>
                 </div>
             );
@@ -537,6 +538,12 @@ export default {
             color: rgba(129, 130, 134, 1);
             padding: 0;
             width: 100%;
+            position: relative;
+            i {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+            }
             .count {
                 display: flex;
                 font-weight: normal;

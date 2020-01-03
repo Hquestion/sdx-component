@@ -188,7 +188,7 @@ export default {
             return res;
         },
         getUrl(ownerId, path) {
-            return `${location.origin}/file-manager/api/v1/files/download?ownerId=${ownerId}&path=${path}&filesystem=cephfs`;
+            return `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${ownerId}&path=${path}&filesystem=cephfs`;
         }
     },
     created() {

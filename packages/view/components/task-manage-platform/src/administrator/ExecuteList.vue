@@ -161,7 +161,7 @@
                 <el-table-column
                     prop="startedAt"
                     :label="t('view.task.startedAt')"
-                    sortable
+                    sortable="custom"
                     min-width="130px"
                 >
                     <template
@@ -173,7 +173,7 @@
                 <el-table-column
                     prop="stoppedAt"
                     :label="t('view.task.stoppedAt')"
-                    sortable
+                    sortable="custom"
                     min-width="130px"
                 >
                     <template
@@ -183,7 +183,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    sortable
+                    sortable="custom"
                     min-width="100px"
                     :label="t('view.task.executeTime')"
                     prop="runningTime"
@@ -401,6 +401,7 @@ export default {
         handleSortChange({prop, order}) {
             this.params.order = order === 'ascending' ? 'asc' : 'desc';
             this.params.orderBy = prop;
+            this.savaParams = JSON.parse(JSON.stringify(this.params));
             this.current = 1;
             this.getExecutionList();
         },

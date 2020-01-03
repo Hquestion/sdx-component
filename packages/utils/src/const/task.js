@@ -98,10 +98,10 @@ export const STATE_TYPE_LIST = (() => {
 })();
 // 状态映射按钮类型
 export const STATE_MAP_FOLD_LABEL_TYPE = {
-    Created: 'finish',
+    Created: 'success',
     Scheduling: 'pending',
     Pending: 'pending',
-    Running: 'success',
+    Running: 'pending',
     Succeeded: 'success',
     Terminating: 'pending',
     Terminated: 'finish',

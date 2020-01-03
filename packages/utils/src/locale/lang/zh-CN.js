@@ -272,7 +272,7 @@ export default {
             Params: '参数之间以 / 分隔',
             StartCommandTip: '此处不填写，系统默认启动一个可在页面访问的初始化的容器环境',
             OutputPath: '输出路径',
-            OutputPathTip: '存放训练输出的日志或模型等',
+            OutputPathTip: '存放训练输出的日志或模型等。此处设置目录，系统后台将默认启动TensorBoard，详情页即可快速进入TensorBoard',
             PortRoute: '端口转发',
             PortNumber: '端口号',
             PortRouteTip: '定义容器中的某一端口转发到容器外部',

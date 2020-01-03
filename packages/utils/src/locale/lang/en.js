@@ -272,7 +272,7 @@ export default {
             Params: 'Seperated by /',
             StartCommandTip: 'Default to initialized Container Dev environment if not specified',
             OutputPath: 'Output Path',
-            OutputPathTip: 'To save training output log or models',
+            OutputPathTip: 'Store logs or models for training output. Set the directory here, the system background will start TensorBoard by default, the details page can quickly enter TensorBoard',
             PortRoute: 'Port Route',
             PortNumber: 'Port Number',
             PortRouteTip: 'Specify to route port to outer',

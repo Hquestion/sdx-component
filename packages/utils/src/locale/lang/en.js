@@ -413,7 +413,7 @@ export default {
             }
         },
         project: {
-            project: 'Project',
+            project: 'Project Management',
             projectDetail: 'Project Detail',
             taskDetail: 'Task Detail',
             logDetail: 'Log Detail',

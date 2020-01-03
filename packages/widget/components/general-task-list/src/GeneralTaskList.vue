@@ -6,7 +6,7 @@
         <div v-if="taskList.length">
             <div>
                 <SdxwResourceAlert
-                    type="develop"
+                    :type="!projectId ? 'develop' : 'develop_flow'"
                     style="margin-top: 24px;"
                 />
                 <sdxw-subject-card-list

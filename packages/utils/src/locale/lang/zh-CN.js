@@ -412,7 +412,7 @@ export default {
             }
         },
         project: {
-            project: '项目',
+            project: '项目管理',
             projectDetail: '项目详情',
             taskDetail: '任务详情',
             logDetail: '日志详情',
@@ -457,7 +457,7 @@ export default {
                 template: '模版项目',
             },
             devTask: '开发任务',
-            skyflowTask: '可视化数据分析与建模任务',
+            skyflowTask: '可视化分析与建模任务',
             devTool: '开发工具',
             skyflowType: '可视化分析与建模',
             addJupyter: '添加Jupyter任务',

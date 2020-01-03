@@ -23,6 +23,12 @@ export default {
             total: 'totally',
             page: 'pages',
             recordCount: 'records'
+        },
+        sortButton: {
+            createTime: 'Created Time',
+            sortBy: 'Sort by',
+            desc: '',
+            asc: ''
         }
     },
     widget: {
@@ -458,7 +464,8 @@ export default {
             addJupyter: 'Create Jupyter Task',
             addSkyIde: 'Create SkyIDE Task',
             addContainerDev: 'Create ContainerDev Task',
-            addSkyflow: 'Create Skyflow Task'
+            addSkyflow: 'Create Skyflow Task',
+            searchTaskName: 'Search task name'
         },
         skyflow: {
             skyflowList: 'Workflows List',

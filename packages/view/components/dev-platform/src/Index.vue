@@ -24,7 +24,7 @@
                         <sdxu-input
                             v-model="searchName"
                             type="search"
-                            :placeholder="t('view.project.enterTaskName')"
+                            :placeholder="t('view.project.searchTaskName')"
                         />
                     </sdxw-search-item>
                 </sdxw-search-layout>

@@ -117,12 +117,12 @@ export const OPERATION_INFO = {
     start: {
         label: 'view.task.operation.start',
         value: 'start',
-        icon: 'sdx-icon sdx-icon-yunxing'
+        icon: 'sdx-icon iconkapianyunhang'
     },
     kill: {
         label: 'view.task.operation.kill',
         value: 'kill',
-        icon: 'sdx-icon sdx-tingzhi'
+        icon: 'sdx-icon icontingzhirenwu'
     },
     detail: {
         label: 'view.task.operation.detail',
@@ -132,12 +132,12 @@ export const OPERATION_INFO = {
     edit: {
         label: 'view.task.operation.edit',
         value: 'edit',
-        icon: 'sdx-icon sdx-icon-edit'
+        icon: 'sdx-icon iconkapianbianji'
     },
     remove: {
         label: 'view.task.operation.remove',
         value: 'remove',
-        icon: 'sdx-icon sdx-icon-delete'
+        icon: 'sdx-icon iconkapianshanchu'
     },
     entry: {
         label: 'view.task.operation.entry',
@@ -254,7 +254,7 @@ export const TIMING_TASK_STARTUP_STATE = [
     {
         label: '是',
         value: true
-    }, 
+    },
     {
         label: '否',
         value: false

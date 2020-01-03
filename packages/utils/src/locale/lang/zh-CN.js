@@ -23,6 +23,12 @@ export default {
             total: '共',
             page: '页',
             recordCount: '条记录'
+        },
+        sortButton: {
+            createTime: '创建时间',
+            sortBy: '按',
+            desc: '降序',
+            asc: '升序'
         }
     },
     widget: {
@@ -457,7 +463,8 @@ export default {
             addJupyter: '添加Jupyter任务',
             addSkyIde: '添加SkyIDE任务',
             addContainerDev: '添加自定义容器任务',
-            addSkyflow: '添加SkyFlow任务'
+            addSkyflow: '添加SkyFlow任务',
+            searchTaskName: '搜索任务名称'
         },
         skyflow: {
             skyflowList: '工作流列表',

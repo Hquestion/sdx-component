@@ -80,7 +80,7 @@ export default {
         const {t, taskType, typeKeys, resourceConfigMap, type} = this;
         return (
             <ElAlert type="info" closable={false} show-icon={true} class="sdxw-resource-alert">
-                {t('widget.resourceAlert.currentUser') }{ taskType }
+                {t('widget.resourceAlert.currentUser') }{ taskType }{t('widget.resourceAlert.resource_rule') }
                 <BubbleTipPopper title={t('widget.resourceAlert.resourceLimitTip')} light={true}>
                     <a slot="ref">{ t('widget.resourceAlert.detail_view') }</a>
                     <div>

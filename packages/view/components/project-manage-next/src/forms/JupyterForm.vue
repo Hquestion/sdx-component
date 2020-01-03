@@ -169,9 +169,9 @@
                     >
                         <el-option
                             v-for="item in datasetsOptions"
-                            :key="item.label"
-                            :label="item.label"
-                            :value="item.value"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid"
                         />
                     </el-select>
                     <div class="form-tip">
@@ -342,7 +342,7 @@ export default {
         this.getDataSetList();
         this.getProjectList();
         //判断是否挂载数据集展示数据集名称
-        if(this.$route.query.from === 'dataManagement') { 
+        if(this.$route.query.from === 'dataManagement') {
             getDatasetDetail(this.$route.query.datasetId).then(res => {
                 this.datasetName = res.name;
                 this.params.datasets = [this.$route.query.datasetId];
@@ -360,7 +360,7 @@ export default {
             }
             getDataSet({ share_kinds: params })
                 .then(data => {
-                    this.datasetsOptions = data.data.options;
+                    this.datasetsOptions = data.items;
                 });
         },
         projectSelected(project) {
@@ -389,7 +389,6 @@ export default {
             if(this.$route.query.from === 'dataManagement') {
                 this.$refs.jupyter.validate().then(() => {
                     this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
-                    console.log(this.params, 'params');
                     // createTask(this.params)
                     //     .then(res => {
                     //         let id = res.uuid;

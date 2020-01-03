@@ -175,9 +175,9 @@
                     >
                         <el-option
                             v-for="item in datasetsOptions"
-                            :key="item.label"
-                            :label="item.label"
-                            :value="item.value"
+                            :key="item.uuid"
+                            :label="item.name"
+                            :value="item.uuid"
                         />
                     </el-select>
                     <div class="form-tip">
@@ -419,7 +419,7 @@ export default {
         getDataSetList() {
             getDataSet({ share_kinds: '1,2,3' })
                 .then(data => {
-                    this.datasetsOptions = data.data.options;
+                    this.datasetsOptions = data.items;
                 });
         },
         projectSelected(project) {

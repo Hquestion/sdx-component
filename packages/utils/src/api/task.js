@@ -91,7 +91,7 @@ export function updateTask(uuid,params) {
 
 // 数据集列表
 export function getDataSet(params) {
-    return httpService.get(`${DATA_MANAGE_GATEWAY_BASE}dataset/options`, params);
+    return httpService.get(`${DATA_MANAGE_GATEWAY_BASE}datasets`, params);
 }
 // 数据源列表
 export function getTaskDataSource(params) {

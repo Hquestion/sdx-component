@@ -53,10 +53,10 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item
-                            prop="coverImg"
+                            prop="coverUpPath"
                             :label="t('view.dataManagement.CoverImage') + '：'"
                         >
-                            <SdxuUploadImage :image.sync="formData.coverImg" />
+                            <SdxuUploadImage :image.sync="formData.coverUpPath" />
                         </el-form-item>
                     </SdxuArticlePanel>
                     <SdxuArticlePanel :title="t('view.dataManagement.DataSourceSetting')">
@@ -165,7 +165,7 @@ export default {
                 groups: [],
                 isPublic: false,
                 sourcePaths: [],
-                coverImg: '',
+                coverUpPath: '',
                 dataFormat: '',
                 advancedConfig: '',
             },

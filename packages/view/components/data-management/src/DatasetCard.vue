@@ -25,7 +25,7 @@
                 <div class="sdxv-dataset-card__main--info sdxv-dataset-card__info">
                     <div class="sdxv-dataset-card__info--icon">
                         <img
-                            :src="datasetInfo.coverImg || defaultImgCover"
+                            :src="imageUrl"
                             alt="icon"
                         >
                     </div>
@@ -148,6 +148,13 @@ export default {
                     }
                 }
             }
+        },
+        imageUrl() {
+            let url = this.defaultImgCover;
+            if (this.datasetInfo.coverImg) {
+                url = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${this.userId}&path=${this.datasetInfo.coverImg}&filesystem=cephfs`;
+            }
+            return url;
         }
     },
     methods: {

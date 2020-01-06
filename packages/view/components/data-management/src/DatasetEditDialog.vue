@@ -54,7 +54,10 @@
                 prop="coverImg"
                 :label="t('view.dataManagement.CoverImage') + '：'"
             >
-                <SdxuUploadImage :image.sync="formData.coverImg" />
+                <SdxuUploadImage
+                    :image.sync="formData.coverUpPath"
+                    :default-image="imageUrl"
+                />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -84,6 +87,7 @@ import SdxuButton from '@sdx/ui/components/button';
 import locale from '@sdx/utils/src/mixins/locale';
 import { nameWithChineseValidator, tagArrayValidator, descValidator } from '@sdx/utils/src/helper/validate';
 import { updateDataset, getLabels } from '@sdx/utils/src/api/dataset';
+import { getUser } from '@sdx/utils/src/helper/shareCenter';
 
 import ElSelect from 'element-ui/lib/select';
 import ElOption from 'element-ui/lib/option';
@@ -119,7 +123,7 @@ export default {
                 name: this.dataset.name || '',
                 description: this.dataset.description || '',
                 labels: this.dataset.labels || [],
-                coverImg: this.dataset.coverImg || ''
+                coverUpPath: ''
             },
             rules: {
                 name: [
@@ -133,7 +137,8 @@ export default {
                     { validator: descValidator, trigger: 'blur' }
                 ]
             },
-            labelList: []
+            labelList: [],
+            currentUser: getUser()
         };
     },
     computed: {
@@ -144,6 +149,13 @@ export default {
             set(nval) {
                 this.$emit('update:visible', nval);
             }
+        },
+        imageUrl() {
+            let url = '';
+            if (this.dataset.coverImg) {
+                url = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${this.currentUser.userId}&path=${this.dataset.coverImg}&filesystem=cephfs`;
+            }
+            return url;
         }
     },
     methods: {

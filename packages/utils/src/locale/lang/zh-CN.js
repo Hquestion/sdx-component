@@ -12,7 +12,7 @@ export default {
         transfer: {
             moveAll: '移动全部',
             deleteAll: '删除全部',
-            PleaseEnter: '请输入'
+            PleaseEnter: '用户组或用户名'
         },
         panel: {
             noContent: '暂无内容'
@@ -430,8 +430,8 @@ export default {
             templateEdit: '编辑模板项目',
             copyEdit: '编辑复制创建',
             sortByCreateTime: '按创建时间排序',
-            enterProjectName: '搜索项目名称',
-            enterProjectDescription: '请输入项目描述',
+            enterProjectName: '请输入项目名称',
+            enterProjectDescription: '请输入项目描述，最多可输入256个字。',
             confirmRemove: '确定删除该项目吗？',
             createForm: {
                 name: '项目名称：',

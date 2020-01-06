@@ -26,7 +26,7 @@
             </div>
             <div class="sdxu-transfer__moveall">
                 <SdxuButton
-                    type="default"
+                    type="primary"
                     size="regular"
                     :plain="true"
                     @click="moveAllTag"
@@ -44,15 +44,24 @@
         <div class="sdxu-transfer__right">
             <div class="sdxu-transfer__tag">
                 <SdxuScroll>
-                    <el-tag
-                        v-for="tag in tags"
-                        :key="tag[treeNodeKey]"
-                        closable
-                        @close="handleClose(tag)"
-                        :class="tag.is_group ? 'is-group' : 'is-user'"
-                    >
-                        {{ tag.name }}
-                    </el-tag>
+                    <div style="border: 1px dotted #D8DEEA; height: 270px; padding: 4px;">
+                        <div
+                            v-if="!tags.length"
+                            class="sdxu-transfer__please-select"
+                        >
+                            请选择
+                        </div>
+                        <el-tag
+                            v-else
+                            v-for="tag in tags"
+                            :key="tag[treeNodeKey]"
+                            closable
+                            @close="handleClose(tag)"
+                            :class="tag.is_group ? 'is-group' : 'is-user'"
+                        >
+                            {{ tag.name }}
+                        </el-tag>
+                    </div>
                 </SdxuScroll>
             </div>
             <div class="sdxu-transfer__moveall">

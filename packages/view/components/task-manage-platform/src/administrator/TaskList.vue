@@ -65,32 +65,32 @@
                 />
                 <el-table-column
                     prop="type"
-                    :label="t('view.task.taskType')"
+                    :label="t('sdxCommon.Type')"
                 />
                 <el-table-column
                     prop="owner.fullName"
                     :label="t('sdxCommon.Creator')"
                 />
                 <el-table-column
-                    prop="resourceInfo.cpu"
+                    prop="quota.cpu"
                     label="CPU"
                     sortable="custom"
                 >
                     <template #default="{row}">
-                        {{ parseMilli(row.resourceInfo.cpu) }}
+                        {{ parseMilli(row.quota.cpu) }}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="resourceInfo.memory"
+                    prop="quota.memory"
                     :label="t('view.task.Memory')"
                     sortable="custom"
                 >
                     <template #default="{row}">
-                        {{ byteToGB(row.resourceInfo.memory) }}
+                        {{ byteToGB(row.quota.memory) }}
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="resourceInfo.gpu"
+                    prop="quota.gpu"
                     :label="'GPU'"
                     sortable="custom"
                 />
@@ -181,7 +181,7 @@ export default {
             table: [],
             groups: [],
             defaultSort: {
-                prop: 'resourceInfo.cpu',
+                prop: 'quota.cpu',
                 order: 'descending'
             },
             current: 1,
@@ -241,13 +241,6 @@ export default {
             removeBlankAttr(params);
             taskList(params).then(res => {
                 this.table = res.data;
-                this.table.forEach(item=> {
-                    item.resourceInfo = {
-                        cpu: JSON.parse(item.resourceConfig).DEPLOY.requests.cpu,
-                        gpu: JSON.parse(item.resourceConfig).DEPLOY.requests['nvidia.com/gpu'],
-                        memory: JSON.parse(item.resourceConfig).DEPLOY.requests.memory
-                    };
-                });
                 this.total = res.total;
                 this.tableLoading = false;
             }).catch(() => {
@@ -258,6 +251,7 @@ export default {
         },
         // 根据prop获取orderBy， 譬如 quota.cpu 得到 CPU
         getOrderBy(prop) {
+            if(prop == null) return; 
             let res = '';
             if(prop.includes('.')) {
                 res = (prop.slice(prop.indexOf('.') + 1)).toUpperCase();

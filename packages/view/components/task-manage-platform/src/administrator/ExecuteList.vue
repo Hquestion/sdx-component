@@ -21,7 +21,7 @@
                             color="#1144AB"
                             :show-text="false"
                         />
-                        <span>{{ t('view.task.tipCard.Timing') }}</span>
+                        <span>{{ t('view.task.tipCard.schedule') }}</span>
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                 />
                 <el-table-column
                     prop="type"
-                    :label="t('view.task.tipCard.Type')"
+                    :label="t('sdxCommon.Type')"
                 />
                 <el-table-column
                     prop="owner.fullName"

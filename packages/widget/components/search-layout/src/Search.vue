@@ -20,7 +20,7 @@
                     type="primary"
                     @click="handleSearch"
                 >
-                    {{ t('sdxCommon.Search') }}
+                    {{ t('sdxCommon.Query') }}
                 </SdxuButton>
                 <SdxuButton
                     @click="handleReset"
@@ -35,7 +35,10 @@
             class="sdxw-search-layout__show"
             v-if="minVisible < children.length"
         >
-            <i :class="['sdx-icon', 'sdx-cebianlanzhankaiICON', singlerow ? '' : 'is-reverse']" @click="showItem"></i>
+            <i
+                :class="['sdx-icon', 'sdx-cebianlanzhankaiICON', singlerow ? '' : 'is-reverse']"
+                @click="showItem"
+            />
         </div>
     </div>
 </template>

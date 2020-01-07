@@ -172,7 +172,7 @@ export default {
             taskName: 'Task Name',
             taskProject: 'Subordinate Project',
             executeType: 'Execute Type',
-            executeTimeRange: 'Time',
+            executeTimeRange: 'Date',
             startTime: 'Start Time',
             stopTime: 'Stop Time',
             startedAt: 'Execute Start Time',
@@ -372,7 +372,8 @@ export default {
                 Timing: 'Timing',
                 SubordinateGroup: 'Subordinate group',
                 Type: 'Type',
-                Detail: 'Detail'
+                Detail: 'Detail',
+                schedule: 'schedule'
             }
         },
         monitor: {
@@ -1157,7 +1158,11 @@ export default {
                 Deleting: 'Deleting',
                 DeleteFailed: 'DeleteFailed'
             },
-            Preview: 'Preview'
+            Preview: 'Preview',
+            Reality: 'Reality',
+            Column_names: 'Column names',
+            Please_select_a_column_name: 'Please select a column name',
+            Please_enter_a_column_name: 'Please enter a column name'
         }
     },
     sdxCommon: {
@@ -1219,6 +1224,8 @@ export default {
         Text: 'Text',
         Other: 'Other',
         SelectAll: 'Select All',
+        Query: 'Query',
+        Type: 'Type'
     },
     utils: {
         validator: {

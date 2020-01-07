@@ -1,7 +1,7 @@
 import throttle from '@sdx/utils/src/helper/throttle';
 export default {
     update(el, binding) {
-        const selectWrap = el.querySelector('.el-checkbox-group');
+        const selectWrap = el;
         if (selectWrap === null) { return; }
         let boxHeight = 0;
         el.$$lastScrollLeft = 0;
@@ -28,7 +28,7 @@ export default {
         selectWrap.addEventListener('scroll', el.$$scrollcb);
     },
     unbind(el) {
-        const selectWrap = el.querySelector('.el-checkbox-group');
+        const selectWrap = el;
         el.$$lastScrollLeft = 0;
         if (selectWrap === null) { return; }
         selectWrap.removeEventListener('scroll', el.$$scrollcb);

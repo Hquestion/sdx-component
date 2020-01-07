@@ -22,6 +22,12 @@
                             :title="t('view.dataManagement.FileList')"
                         >
                             <template #right>
+                                <SdxuInput
+                                    :placeholder="t('view.file.PleaseInputFileName')"
+                                    type="search"
+                                    v-model="key"
+                                    size="small"
+                                />
                                 <IconButton
                                     border
                                     icon="sdx-icon sdx-icon-delete"
@@ -61,19 +67,18 @@
                         class="colInfo"
                         v-if="showData.length > 0 && !datalistHide && !imageUrl"
                     >
-                        预览   {{ `${viewData.previewData.data.length}*${viewData.previewData.columns.length}` }}
+                        {{ t('view.dataManagement.Preview') }}   {{ `${viewData.previewData.data.length}*${viewData.previewData.columns.length}` }}
                     </span>
                     <span
                         class="colInfo"
                         v-if="showData.length > 0 && !datalistHide && !imageUrl"
                     >
-                        实际   {{ viewData.shape }}
+                        {{ t('view.dataManagement.Reality') }}  {{ viewData.shape }}
                     </span>
                 </template>
                 <template #right>
                     <div
                         class="headerIcon"
-                        v-poploadmore="poploadmore"
                     >
                         <el-popover
                             placement="left"
@@ -96,13 +101,14 @@
                                     v-model="checkAll"
                                     @change="handleCheckAllChange"
                                 >
-                                    列名
+                                    {{ t('view.dataManagement.Column_names') }}
                                 </el-checkbox>
                             </div>
                             <el-checkbox-group
                                 v-model="checkedCols"
                                 @change="handleCheckedColsChange"
                                 class="list-name"
+                                v-poploadmore="poploadmore"
                             >
                                 <div :style="{ height: `${lazyTopHeight}px`}" />
                                 <el-checkbox
@@ -156,6 +162,7 @@
                     ref="dataListView"
                 />
                 <DatasetPreview
+                    style="margin-top: 20px"
                     :data="showData"
                     :columns="selectColumns"
                     :prop-id="viewData.previewData && viewData.previewData.columns"
@@ -165,6 +172,7 @@
                     :readonly="true"
                     v-if="tablePreview"
                     :analysis="viewData.analysisData"
+                    :value-cut-chart="viewData.valueCutChart"
                 />
                 <data-image
                     :image-url="imageUrl"
@@ -270,7 +278,8 @@ export default {
                     columns: Object.freeze([]),
                 },
                 schema: Object.freeze([]),
-                shape: ''
+                shape: '',
+                valueCutChart: {}
             },
             showData: Object.freeze([]),
             pageIndex: 0,
@@ -290,6 +299,7 @@ export default {
             selectColumns: [],
             totalCols: [],
             saveSchema: [],
+            key: ''
         };
     },
     computed: {
@@ -327,6 +337,7 @@ export default {
                 load: this.fetchFiles,
                 'default-expanded-keys': this.expandedKey,
                 data: this.treeData || [],
+                'filter-node-method':this.filterNode,
                 props: {
                     label: 'name',
                     children: 'children',
@@ -347,9 +358,9 @@ export default {
         // 图标
         dealIcon(fieldType) {
             if (isNumber(fieldType)) {
-                return 'iconN';
+                return 'sdx-N';
             } else if (isString(fieldType)) {
-                return 'iconS';
+                return 'sdx-S';
             } else {
                 return '';
             }
@@ -372,7 +383,7 @@ export default {
         submitForm() {
             if (this.checkedCols.length === 0) {
                 this.$message({
-                    message: '请选择列名',
+                    message: this.t('view.dataManagement.Please_select_a_column_name'),
                     type: 'warning'
                 });
             } else {
@@ -553,7 +564,6 @@ export default {
                         selectedPaths.add(this.checkedValue[i].path.split('/').slice(0,-1).join('/'));
                     }
                     keys = [...selectedPaths];
-                    console.log(this.checkedValue, 'keys');
                     // 判断是否选中的节点和父节点是否被删除了
                     this.checkedValue.forEach(item => {
                         if(this.dataListPath.includes(item.path)){
@@ -628,14 +638,14 @@ export default {
                     {!data.isFile ?  
                         <div  onClick={e => e.stopPropagation()}> 
                             <SdxuUpload
-                                action="/file-manager/api/v1/files/upload"
+                                action="gatway/file-manager/api/v1/files/upload"
                                 show-file-list={false}
                                 data={this.uploadParams}
                                 name="files"
                                 propsOnSuccess={this.uploadSuccess.bind(this, node, data)}
                             >
                                 <IconButton
-                                    icon="sdx-icon sdx-icon-upload"
+                                    icon="sdx-icon sdx-daochu"
                                     onClick={this.uploadFile.bind(this,node, data)}
                                 />
                             </SdxuUpload>
@@ -759,11 +769,18 @@ export default {
                 this.getDatasetPreview(params);
             }
         },
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.name.indexOf(value) !== -1;
+        }
     },
     watch: {
         searchName() {
             this.topCount = 0;
             localStorage.setItem('scrollTop', true);
+        },
+        key(val) {
+            this.tree.filter(val);
         }
     }
 };
@@ -803,6 +820,16 @@ export default {
                     width: 14px;
                     height: 14px;
                     margin-right: 8px;
+                }
+                .sdxu-input--small .el-input__inner {
+                    height: 32px;
+                    line-height: 32px;
+                }
+                .sdxu-input {
+                    display: inline-block;
+                }
+                .sdxu-icon-button {
+                    margin-left: 16px;
                 }
             }
         }

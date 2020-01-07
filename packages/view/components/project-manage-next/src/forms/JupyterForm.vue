@@ -216,6 +216,7 @@ import Scroll from '@sdx/ui/components/scroll';
 import Appender from '@sdx/ui/components/appender';
 import ArticlePanel from '@sdx/ui/components/article-panel';
 import {getDatasetDetail} from '@sdx/utils/src/api/dataset';
+import { startTask} from '@sdx/utils/src/api/task';
 const RESOURCE_KEY = 'DEPLOY';
 
 export default {
@@ -389,15 +390,15 @@ export default {
             if(this.$route.query.from === 'dataManagement') {
                 this.$refs.jupyter.validate().then(() => {
                     this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
-                    // createTask(this.params)
-                    //     .then(res => {
-                    //         let id = res.uuid;
-                    //         startTask(id, { isAuto: false })
-                    //             .then(() => {
-                    //                 this.$router.go(-1);
-                    //                 window.open(`/#/jupyterurl/${id}/${this.$route.params.dataset}`);
-                    //             });
-                    //     });
+                    createProjectTask(this.projectId || this.params.project, this.params)
+                        .then(res => {
+                            let id = res.uuid;
+                            startTask(id, { isAuto: false })
+                                .then(() => {
+                                    this.$router.go(-1);
+                                    window.open(`/#/jupyterurl/${id}/${this.$route.query.datasetId}`);
+                                });
+                        });
                 });
             } else {
                 this.$refs.jupyter.validate().then(() => {

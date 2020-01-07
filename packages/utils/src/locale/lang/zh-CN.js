@@ -172,7 +172,7 @@ export default {
             taskName: '任务名称',
             taskProject: '所属项目',
             executeType: '执行方式',
-            executeTimeRange: '时间',
+            executeTimeRange: '日期',
             startTime: '开始日期',
             stopTime: '结束日期',
             startedAt: '执行开始时间',
@@ -371,7 +371,8 @@ export default {
                 Timing: '定时',
                 SubordinateGroup: '所属组',
                 Type: '类型',
-                Detail: '详情'
+                Detail: '详情',
+                schedule: '调度'
             }
         },
         monitor: {
@@ -1156,7 +1157,11 @@ export default {
                 Deleting: '删除中',
                 DeleteFailed: '删除失败'
             },
-            Preview: '预览'
+            Preview: '预览',
+            Reality: '实际',
+            Column_names: '列名',
+            Please_select_a_column_name: '请选择列名',
+            Please_enter_a_column_name: '请输入列名'
         }
     },
     sdxCommon: {
@@ -1218,6 +1223,8 @@ export default {
         Text: 'Text',
         Other: 'Other',
         SelectAll: '全部选择',
+        Query: '查询',
+        Type: '类型'
     },
     utils: {
         validator: {

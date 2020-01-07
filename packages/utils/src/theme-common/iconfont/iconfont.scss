@@ -6,6 +6,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.sdx-N:before {
+  content: "\e652";
+}
+
+.sdx-S:before {
+  content: "\e666";
+}
+
 .sdx-xitongruanjian:before {
   content: "\e6e6";
 }
@@ -1036,5 +1044,13 @@
 
 .sdx-wuyulan1:before {
   content: "\e7f3";
+}
+
+.sdx-daochu:before {
+  content: "\e7f4";
+}
+
+.sdx-wenjian:before {
+  content: "\e7f5";
 }
 

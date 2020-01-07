@@ -276,7 +276,7 @@ export default {
             const classes = [column.id, column.order, column.headerAlign, column.className, column.labelClassName];
 
             if (rowIndex === 0 && this.isCellHidden(columnIndex, row)) {
-                classes.push('is-hidden');
+                // classes.push('is-hidden');
             }
 
             if (!column.children) {

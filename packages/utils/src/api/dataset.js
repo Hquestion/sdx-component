@@ -59,3 +59,8 @@ export function datasetShareBatch(uuidList, params) {
 export function datasetListProfiles(params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}datasets-profiles`, params);
 }
+
+// 在Jupyter中打开
+export function getJupyterUrl(uuid) {
+    return httpService.get(`${dataApi}/${uuid}/jupyter`);
+}

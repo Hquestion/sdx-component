@@ -51,6 +51,7 @@
                     :width="(viewPortMaxCount + 2) < columns.length ? columnWidth : 'auto'"
                     :show-overflow-tooltip="true"
                     :render-header="handleRenderHeader"
+                    min-width="250px"
                 >
                     <el-table-column
                         v-if="readonly && hasAnalysis"
@@ -90,6 +91,7 @@ import DataSetPreviewActionsMixin from './DataSetPreviewActionsMixin';
 import { isNumber, isString } from './util';
 import SdxuTable from '@sdx/ui/components/table';
 import BarEcharts from './BarEcharts';
+import DataPopover from './DataPopover';
 const popperMixin = {
     props: {
         placement: {
@@ -109,7 +111,7 @@ const popperMixin = {
 export default {
     value: 'DataSetPreview',
     components: {
-        SdxuTable
+        SdxuTable,
     },
     mixins: [popperMixin, DataSetPreviewActionsMixin],
     data() {
@@ -118,7 +120,7 @@ export default {
             editingColumn: null,
             schemaActions: [],
             leftCount: 0,
-            columnWidth: 150,
+            columnWidth: 240,
             visibleColumns: [],
             viewPortMaxCount: 0,
             viewPortMaxVerticalCount: 0,
@@ -163,6 +165,10 @@ export default {
         propId: {
             type: Array,
             default: () => []
+        },
+        valueCutChart: {
+            type: Object,
+            default: () => {}
         }
     },
     computed: {
@@ -277,13 +283,13 @@ export default {
                 item => item.fieldName === column.label
             );
             if (!field) return <span />;
-            isNumber(field.fieldType) && (iconClass = 'icon-N');
-            isString(field.fieldType) && (iconClass = 'icon-S');
+            isNumber(field.fieldType) && (iconClass = 'sdx-N');
+            isString(field.fieldType) && (iconClass = 'sdx-S');
             if (this.readonly) {
                 return (
                     <span class="table-header_customize" title={column.label}>
                         {this.showDataTypeIcon && <i
-                            class={['iconfont', iconClass]}
+                            class={['sdx-icon', iconClass]}
                             style="margin-right:5px"
                         />}
                         <span>{column.label}</span>
@@ -338,11 +344,36 @@ export default {
                 item => item.fieldName === column.label
             );
             if (!field) return <span />;
-            let analysisData = this.analysis[field.fieldName] || [];
+            let analysisData = this.analysis[field.fieldName] || {};
+            let barData = this.valueCutChart[field.fieldName];
             return (
                 <div class="header-count">
-                    <i class="sdx-icon sdx-icon-info" />
-                    <BarEcharts data={analysisData} key={column.label} width="100%"/>
+                    <DataPopover width="260" info={analysisData}>
+                        <div slot="ref"/>
+                    </DataPopover>
+                    <div class="echarts">
+                        <DataPopover width="260" 
+                            info={analysisData}
+                            placement="right"
+                        >
+                            <span slot="ref"/>
+                        </DataPopover>
+                        {
+                            barData ? 
+                                <BarEcharts data={barData} key={column.label} width="100%"/>
+                                :
+                                <div class="unique">
+                                    <div>Unique Value</div>
+                                    <div>{analysisData.unique}</div>
+                                </div>
+                        }
+                        <DataPopover width="260" 
+                            info={analysisData}
+                            placement="left"
+                        >
+                            <span slot="ref" />
+                        </DataPopover>
+                    </div>
                 </div>
             );
         },
@@ -538,19 +569,41 @@ export default {
             color: rgba(129, 130, 134, 1);
             padding: 0;
             width: 100%;
-            position: relative;
-            i {
-                position: absolute;
-                top: 20px;
-                left: 20px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            & > span{
+                height:30px;
+                width: 100%;
+                div {
+                    height: 30px;
+                    width: 100%;
+                }
             }
-            .count {
+            .echarts {
                 display: flex;
-                font-weight: normal;
-                line-height: 1.2;
-                padding: 0;
-                & > span:first-child {
-                    width: 54px;
+                width: 100%;
+                justify-content: center;
+                span {
+                    span {
+                        width: 25px;
+                        display: inline-block;
+                        height: 100%;
+                        cursor: pointer;
+                    }
+                }
+                .unique {
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 12px;
+                    color: #1144AB;
+                    div {
+                        height: 30px;
+                    }
+                    div:first-child {
+                        color: #172B4D;
+                    }
                 }
             }
         }
@@ -581,6 +634,22 @@ export default {
     & /deep/ {
         .el-table thead.is-group th {
             background: #fff;
+        }
+        .el-table thead {
+            tr:last-child th{
+                padding: 0 !important;
+                div {
+                    padding: 0 !important;
+                }
+            }
+        }
+        .table-header_customize {
+            .sdx-N {
+                color: #FF9001;
+            }
+            .sdx-S {
+                color: #02BE86;
+            }
         }
     }
 }

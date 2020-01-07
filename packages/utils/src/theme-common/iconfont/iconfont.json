@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "6299247",
+      "name": "N",
+      "font_class": "N",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "6299248",
+      "name": "S",
+      "font_class": "S",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
       "icon_id": "7169275",
       "name": "系统软件",
       "font_class": "xitongruanjian",
@@ -1810,6 +1824,20 @@
       "font_class": "wuyulan1",
       "unicode": "e7f3",
       "unicode_decimal": 59379
+    },
+    {
+      "icon_id": "12479545",
+      "name": "daochu",
+      "font_class": "daochu",
+      "unicode": "e7f4",
+      "unicode_decimal": 59380
+    },
+    {
+      "icon_id": "12479733",
+      "name": "wenjian",
+      "font_class": "wenjian",
+      "unicode": "e7f5",
+      "unicode_decimal": 59381
     }
   ]
 }

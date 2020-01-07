@@ -9,7 +9,7 @@
         >
             <div
                 @click="viewData(v.isFile, v.path, v.fileExtension,v.mimeType, v.ownerId)"
-                :class="[viewDisabled(v) ?'disabledClick':'', 'card']"
+                class="card"
             >
                 <div class="icon">
                     <svg
@@ -136,7 +136,7 @@ export default {
             } else if (!isFile) {
                 ext = '#sdx-wenjianjia';
             } else if (ext !== 'csv' && ext !== 'txt' && ext !== 'orc' && ext !== 'parquet' && isFile) {
-                ext = '#iconwuyulan';
+                ext = '#sdx-wenjian';
             }
             return ext;
         },
@@ -169,15 +169,14 @@ export default {
         },
         // 查看数据
         viewData(isFile, path, type,mimeType, ownerId) {
-            console.log(type, 'type');
             //  文件夹
             if (!isFile) {
                 this.getFlieList(path, ownerId);
                 this.$emit('expandNode', path);
-            } else if (type === '.csv' || type === '.txt' || type === '.orc' || type === '.parquet') {
-                this.$emit('viewData', path);
             } else if (mimeType.indexOf('image/') === 0) {
                 this.$emit('viewData', path, 'image', ownerId);
+            } else {
+                this.$emit('viewData', path);
             }
         },
         viewDisabled(v) {

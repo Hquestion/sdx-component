@@ -36,40 +36,54 @@ export default {
             this.chart && this.chart.clear();
             this.chart = echarts.init(this.$el);
             this.chart.setOption({
-                color: ['#3398DB'],
+                color: ['#1144AB'],
                 tooltip : {
-                    trigger: 'axis',
-                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                    }
+                    trigger: 'item',
+                    padding: 10,
+                    borderColor: 'rgba(0,0,0,0.03)' ,
+                    borderWidth: 1 ,
+                    backgroundColor: '#fff',
+                    axisPointer: {
+                        shadowStyle: {
+                            color: '0 0 2px 0 rgba(0,0,0,0.23)'
+                        }
+                    },
+                    formatter: '<div style="color: #13264D;border-radius: 2px; padding: 0 10px;z-index: 999 ">{b}<br/><span style="color:#6E7C94">{a}</span> {c}</div>'
                 },
                 grid: {
-                    left: '4%',
-                    right: '4%',
-                    bottom: '0',
-                    top: '2%',
+                    left: '0%',
+                    right: '0%',
+                    bottom: '0px',
+                    top: '6%',
                     containLabel: true
                 },
                 xAxis : [
                     {
                         type : 'category',
-                        data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        data : Object.keys(this.data),
                         axisTick: {
                             alignWithLabel: true
-                        }
+                        },
+                        show : false
                     }
                 ],
                 yAxis : [
                     {
-                        type : 'value'
+                        type : 'value',
+                        show : false,
                     }
                 ],
                 series : [
                     {
-                        name:'直接访问',
+                        name:'Count',
                         type:'bar',
-                        barWidth: '60%',
-                        data:[10, 52, 200, 334, 390, 330, 220]
+                        barWidth: '8',
+                        data: Object.values(this.data),
+                        emphasis: {
+                            itemStyle: {
+                                color: '#3197FF'
+                            }
+                        }
                     }
                 ]
             });

@@ -20,7 +20,8 @@ export default {
                 model: this.t('widget.resourceAlert.model_type'),
                 develop_flow: this.t('widget.resourceAlert.dev_flow_type'),
                 all: this.t('widget.resourceAlert.all')
-            }
+            },
+            resourceCfg: {}
         };
     },
     computed: {
@@ -28,8 +29,7 @@ export default {
             return this.typeMap[this.type];
         },
         userResourceConfig() {
-            const config = Cache.get(RESOURCE_CONFIG_KEY);
-            return config || {};
+            return this.resourceCfg || {};
         },
         resourceConfigMap() {
             return {
@@ -48,7 +48,7 @@ export default {
                                             ${this.t('view.resourceManage.CountOfTotalTasksLessOrEqual')}
                                             ${this.userResourceConfig.maxConcurrentHeavyTasks}${this.t('view.resourceManage.NumberUnit')}`,
                 'maxGpuTime': `${this.t('widget.resourceAlert.singleGPUDevTaskRunTime')}${this.t('view.resourceManage.LessOrEqual')}
-                                ${secToHour(this.userResourceConfig.maxGpuTime)}${this.t('view.resourceManage.HourUnit')}`,
+                                ${secToDay(this.userResourceConfig.maxGpuTime)}${this.t('view.resourceManage.DayUnit')}`,
                 'maxCpuTime': `${this.t('widget.resourceAlert.singleNonGPUDevTaskRunTime')}${this.t('view.resourceManage.LessOrEqual')}
                                 ${secToDay(this.userResourceConfig.maxNonGpuTime)}${this.t('view.resourceManage.DayUnit')}`,
                 'maxGpus': `${this.t('view.resourceManage.GPUsOccupied')}${this.t('view.resourceManage.LessOrEqual')}
@@ -58,12 +58,12 @@ export default {
         typeKeys() {
             return {
                 develop: ['maxConcurrentSkyideTasks', 'maxConcurrentJupyterTasks', 'maxConcurrentContainerTasks',
-                    'maxConcurrentSkyflowTasks', 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus'],
+                    /*'maxConcurrentSkyflowTasks',*/ 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus'],
                 develop_flow: ['maxConcurrentSkyideTasks', 'maxConcurrentJupyterTasks', 'maxConcurrentContainerTasks',
-                    'maxConcurrentSkyflowTasks', 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus'],
+                    /*'maxConcurrentSkyflowTasks',*/ 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus'],
                 model: ['maxConcurrentModelTasks', 'maxConcurrentHeavyTasks', 'maxGpus'],
                 all: ['maxConcurrentSkyideTasks', 'maxConcurrentJupyterTasks', 'maxConcurrentContainerTasks',
-                    'maxConcurrentSkyflowTasks', 'maxConcurrentModelTasks', 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus']
+                    /*'maxConcurrentSkyflowTasks',*/ 'maxConcurrentModelTasks', 'maxGpuTime', 'maxCpuTime', 'maxConcurrentHeavyTasks', 'maxGpus']
             };
         }
     },
@@ -96,6 +96,31 @@ export default {
         ， { t('widget.resourceAlert.info') }
             </ElAlert>
         );
+    },
+    mounted() {
+        let tryCount = 0;
+        this.timer = null;
+        const waitCacheReady = () => {
+            tryCount++;
+            if (tryCount > 3) {
+                clearTimeout(this.timer);
+                this.resourceCfg = {};
+                return false;
+            }
+            if (Cache.get(RESOURCE_CONFIG_KEY)) {
+                this.resourceCfg = Cache.get(RESOURCE_CONFIG_KEY) || {};
+                clearTimeout(this.timer);
+            } else {
+                clearTimeout(this.timer);
+                this.timer = setTimeout(() => {
+                    waitCacheReady();
+                }, 1000);
+            }
+        };
+        waitCacheReady();
+    },
+    beforeDestroy() {
+        clearTimeout(this.timer);
     }
 };
 </script>

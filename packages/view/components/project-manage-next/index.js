@@ -2,7 +2,7 @@ import ProjectManagement from './src/Index.vue';
 import ProjectList from './src/ProjectList.vue';
 import DataSourceSelect from './src/forms/DataSourceSelect';
 import BaseForm from './src/forms/BaseForm';
-import { TaskDetailView, TaskLogInfo} from '../task-management';
+import TaskManageMent from '../task-management';
 
 import FormView from './src/FormView.vue';
 import * as forms from './src/forms';
@@ -45,7 +45,7 @@ const routeCfg = [
             {
                 path: 'sdxv-project-task-detail/:taskId',
                 name: 'SdxvProjectTaskDetail',
-                component: TaskDetailView,
+                component: TaskManageMent.TaskDetailView,
                 props: true,
                 meta: {
                     breadcrumb: t('view.project.taskDetail')
@@ -55,7 +55,7 @@ const routeCfg = [
                 path: 'sdxv-project-task-log/:method/:podId',
                 name: 'SdxvProjectTaskLog',
                 props: true,
-                component: TaskLogInfo,
+                component: TaskManageMent.TaskLogInfo,
                 meta: {
                     breadcrumb: t('view.project.logDetail')
                 }

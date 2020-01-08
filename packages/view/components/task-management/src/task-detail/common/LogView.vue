@@ -41,6 +41,7 @@
                     :pod-name="currentPod"
                     :method="currentMethod"
                     :is-dark="true"
+                    :started-at="startedAt"
                 />
             </template>
         </div>
@@ -70,6 +71,10 @@ export default {
         pods: {
             type: Array,
             default: () => []
+        },
+        startedAt: {
+            type: String,
+            required: true
         }
     },
     data() {

@@ -29,6 +29,7 @@
                     <LogView
                         :is-empty="!hasLog"
                         :pods="task && task.pods || []"
+                        :started-at="task && task.startedAt || ''"
                     />
                 </el-tab-pane>
                 <el-tab-pane

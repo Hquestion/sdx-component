@@ -27,6 +27,7 @@
             :method="method"
             :pod-name="podName"
             :is-dark="!isDark"
+            :started-at="startedAt"
         />
     </div>
 </template>
@@ -53,6 +54,10 @@ export default {
         method: {
             type: String,
             default: ''
+        },
+        startedAt: {
+            type: String,
+            required: true
         },
         isDark: {
             type: Boolean,

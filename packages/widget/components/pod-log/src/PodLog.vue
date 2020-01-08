@@ -16,7 +16,6 @@ import SdxuLogDetail from '@sdx/ui/components/log-detail';
 import ElMessage from 'element-ui/lib/message';
 
 import { getPodLog } from '@sdx/utils/src/api/system';
-import { getTaskList } from '@sdx/utils/src/api/project';
 import locale from '@sdx/utils/src/mixins/locale';
 import { dateFormatter } from '@sdx/utils/src/helper/transform';
 
@@ -58,6 +57,10 @@ export default {
         isDark: {
             type: Boolean,
             default: false
+        },
+        startedAt: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -67,7 +70,6 @@ export default {
             size: 100,
             autoPullInstance: null,
             logContent: '',
-            startedAt: '',
             preLoading: false,
             sufLoading: false
         };
@@ -78,6 +80,13 @@ export default {
         },
         loading() {
             return this.isLoading && this.logContent === '';
+        },
+        startDate() {
+            let timestamp = '';
+            if (this.startedAt) {
+                timestamp = (new Date(this.startedAt).getTime() / 1000).toFixed() || '';
+            }
+            return timestamp;
         }
     },
     methods: {
@@ -92,8 +101,8 @@ export default {
                 start: offset,
                 count: count
             };
-            if (this.startedAt) {
-                params.startedAt = this.startedAt;
+            if (this.startDate) {
+                params.startedAt = this.startDate;
             }
             try {
                 const data = await getPodLog(this.podName, params);
@@ -174,8 +183,8 @@ export default {
                 start: 1,
                 count: 1
             };
-            if (this.startedAt) {
-                params.startedAt = this.startedAt;
+            if (this.startDate) {
+                params.startedAt = this.startDate;
             }
             this.preLoading = true;
             // tail 查看时的初始化方法，先查询最新日志
@@ -189,17 +198,6 @@ export default {
                 window.console.error(e);
                 this.preLoading = false;
             }
-        },
-        getTaskInfo() {
-            return new Promise(resolve => {
-                getTaskList({ podName: this.podName }).then(data => {
-                    const task = data && Array.isArray(data.data) && data.data[0] || null;
-                    this.startedAt = task && (new Date(task.startedAt).getTime() / 1000).toFixed() || '';
-                    resolve();
-                }).catch(() => {
-                    resolve();
-                });
-            });
         },
         handleScroll({ scrollInfo }) {
             let { scrollTop, warpHeight, offsetHeight } = scrollInfo;
@@ -233,13 +231,7 @@ export default {
         }
     },
     created() {
-        if (this.type === 'user') {
-            this.getTaskInfo().then(() => {
-                this.getLogByMethod();
-            });
-        } else {
-            this.getLogByMethod();
-        }
+        this.getLogByMethod();
     },
     beforeDestroy() {
         this.stopAutoPull();

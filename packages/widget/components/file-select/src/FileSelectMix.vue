@@ -24,7 +24,7 @@
                         <SdxuUpload
                             ref="fileSelect"
                             class="upload-type-item"
-                            action="/file-manager/api/v1/files/upload"
+                            action="/gateway/file-manager/api/v1/files/upload"
                             :multiple="true"
                             name="files"
                             :directory="false"
@@ -50,7 +50,7 @@
                         <SdxuUpload
                             ref="directorySelect"
                             class="upload-type-item"
-                            action="/file-manager/api/v1/files/upload"
+                            action="/gateway/file-manager/api/v1/files/upload"
                             name="files"
                             :multiple="true"
                             :directory="true"

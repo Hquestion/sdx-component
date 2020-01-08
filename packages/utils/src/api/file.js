@@ -392,7 +392,7 @@ export function unzip(path, targetPath, ownerId) {
 export function download(path, ownerId, filesystem = 'cephfs') {
     let userInfo = shareCenter.getUser() || {};
     const origin = location.origin;
-    location.href =`${origin}/gateway${FILE_MANAGE_GATEWAY_BASE}files/download?ownerId=${ownerId || userInfo.userId}&path=${path}&filesystem=${filesystem}&disposition=attachment`;
+    window.open(`${origin}/gateway${FILE_MANAGE_GATEWAY_BASE}files/download?ownerId=${ownerId || userInfo.userId}&path=${path}&filesystem=${filesystem}&disposition=attachment`);
     // return httpService.get(`${FILE_MANAGE_GATEWAY_BASE}files/download`, {
     //     userId: userInfo.userId,
     //     path,

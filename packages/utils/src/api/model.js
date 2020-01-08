@@ -138,7 +138,9 @@ export function getApiDetail(serviceUuid) {
 }
 
 export function apiTest(url, params) {
-    return httpService.post(url, params);
+    return httpService.post(url, params, {
+        baseURL: ''
+    });
 }
 
 export function downloadVersion(path, ownerId) {

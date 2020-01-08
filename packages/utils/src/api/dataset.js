@@ -21,7 +21,7 @@ export function updateDataset(uuid, params) {
 }
 
 export function getDatasetList(params) {
-    return httpService.get(`${dataApi}/`, params);
+    return httpService.get(`${dataApi}`, params);
 }
 
 export function deleteDataset(uuid, params) {

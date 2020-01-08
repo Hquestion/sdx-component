@@ -32,20 +32,17 @@ export default {
         task() {
             return this.app.taskManager && this.app.taskManager.task || null;
         },
-        isRunning() {
-            return this.task && [STATE_TYPE.LAUNCHING, STATE_TYPE.RUNNING, STATE_TYPE.KILLING].includes(this.task.state) || false;
-        },
         cpu() {
-            return this.isRunning && this.task && this.task.quota && parseMilli(this.task.quota.cpu) || 0;
+            return this.task && this.task.quota && parseMilli(this.task.quota.cpu) || 0;
         },
         memory() {
-            return this.isRunning && this.task && this.task.quota && byteToGB(this.task.quota.memory) || 0;
+            return this.task && this.task.quota && byteToGB(this.task.quota.memory) || 0;
         },
         gpu() {
-            return this.isRunning && this.task && this.task.quota && this.task.quota.gpu || 0;
+            return this.task && this.task.quota && this.task.quota.gpu || 0;
         },
         gpuModel() {
-            return this.isRunning && this.task && this.task.quota && this.task.quota.gpuModel || '-';
+            return this.task && this.task.quota && this.task.quota.gpuModel || '-';
         }
     }
 };

@@ -65,7 +65,7 @@
                     <span>{{ t('view.dataManagement.FilePreview') }}</span>
                     <span
                         class="colInfo"
-                        v-if="showData.length > 0 && !datalistHide && !imageUrl"
+                        v-if="showData.length > 0 && !datalistHide && !imageUrl && !stringText"
                     >
                         {{ t('view.dataManagement.Preview') }}   {{ `${viewData.previewData.data.length}*${viewData.previewData.columns.length}` }}
                     </span>
@@ -86,7 +86,7 @@
                             trigger="click"
                             v-model="visiblePopover"
                             @show="show"
-                            v-if="showData.length > 0 && !datalistHide && !imageUrl"
+                            v-if="showData.length > 0 && !datalistHide && !imageUrl && !stringText"
                             popper-class="data-preview-popper"
                         >
                             <div class="popover-header">
@@ -161,19 +161,28 @@
                     @expandNode="expandNode"
                     ref="dataListView"
                 />
-                <DatasetPreview
-                    style="margin-top: 20px"
-                    :data="showData"
-                    :columns="selectColumns"
-                    :prop-id="viewData.previewData && viewData.previewData.columns"
-                    :height="dataHeight"
-                    @reach-bottom="loadMore"
+                <div
+                    style="min-height: 200px"
                     v-loading="previewLoading"
-                    :readonly="true"
                     v-if="tablePreview"
-                    :analysis="viewData.analysisData"
-                    :value-cut-chart="viewData.valueCutChart"
-                />
+                >
+                    <string-view
+                        :string-text="stringText"
+                        v-if="stringText"
+                    />
+                    <DatasetPreview
+                        v-else
+                        style="margin-top: 20px"
+                        :data="showData"
+                        :columns="selectColumns"
+                        :prop-id="viewData.previewData && viewData.previewData.columns"
+                        :height="dataHeight"
+                        @reach-bottom="loadMore"
+                        :readonly="true"
+                        :analysis="viewData.analysisData"
+                        :value-cut-chart="viewData.valueCutChart"
+                    />
+                </div>
                 <data-image
                     :image-url="imageUrl"
                     v-if="imageUrl"
@@ -210,6 +219,7 @@ import {getDatasetDetail, datasetPreview} from '@sdx/utils/src/api/dataset';
 import DatasetPreview from './preview/DataSetPreview';
 import poploadmore from './preview/loadMore';
 import { isNumber, isString } from './preview/util';
+import StringView from './StringView';
 export default {
     name:'DataPreview',
     mixins: [locale],
@@ -228,7 +238,8 @@ export default {
         DataImage,
         [Empty.name]: Empty,
         SdxuButton,
-        DatasetPreview
+        DatasetPreview,
+        StringView
     },
     data() {
         return {
@@ -299,7 +310,8 @@ export default {
             selectColumns: [],
             totalCols: [],
             saveSchema: [],
-            key: ''
+            key: '',
+            stringText: ''
         };
     },
     computed: {
@@ -430,21 +442,26 @@ export default {
             this.selectColumns = [];
             let arr = [];
             datasetPreview(params).then(res => {
-                this.viewData = res;
-                this.totalCols = res.schema;
-                // 选中的列名
-                this.checkedCols = Object.freeze(res.schema.map(item => item.fieldName));
-                // 复制一份
-                this.saveSchema = JSON.parse(JSON.stringify(res.schema));
-                // 重置当前页码，重新获取分页数据
-                this.pageIndex = 0;
-                this.showData = Object.freeze(res.previewData.data.slice(this.pageIndex, this.pageSize));
-                this.totalPage = Math.ceil(res.previewData.data.length / this.pageSize);
                 this.previewLoading = false;
-                for(let i =0; i < res.previewData.columns.length; i++) {
-                    arr.push(res.schema.filter(item => item.fieldName === res.previewData.columns[i])[0]);
+                if(res.schema) {
+                    this.stringText = '';
+                    this.viewData = res;
+                    this.totalCols = res.schema;
+                    // 选中的列名
+                    this.checkedCols = Object.freeze(res.schema.map(item => item.fieldName));
+                    // 复制一份
+                    this.saveSchema = JSON.parse(JSON.stringify(res.schema));
+                    // 重置当前页码，重新获取分页数据
+                    this.pageIndex = 0;
+                    this.showData = Object.freeze(res.previewData.data.slice(this.pageIndex, this.pageSize));
+                    this.totalPage = Math.ceil(res.previewData.data.length / this.pageSize);
+                    for(let i =0; i < res.previewData.columns.length; i++) {
+                        arr.push(res.schema.filter(item => item.fieldName === res.previewData.columns[i])[0]);
+                    }
+                    this.selectColumns = arr;
+                } else {
+                    this.stringText = res.previewData;
                 }
-                this.selectColumns = arr;
             }).catch(() => {
                 this.selectColumns = [];
                 this.tablePreview = false;
@@ -460,6 +477,7 @@ export default {
                 this.showData = [];
                 this.totalPage = 0;
                 this.previewLoading = false;
+                this.stringText = '';
             });
         },
         // 获取数据集信息
@@ -480,6 +498,7 @@ export default {
             this.tablePreview = false;
             this.dataListLoading = true;
             this.imageUrl = '';
+            this.stringText = '';
             getNativeFilesList({path}).then(res => {
                 this.treeData = res.children;
                 this.isTreeLoading = false;
@@ -502,9 +521,7 @@ export default {
                             // 预览图片
                             this.imageUrl = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${res.children[0].ownerId}&path=${res.children[0].path}&filesystem=cephfs`;
                         } else {
-                            this.$nextTick(() => {
-                                this.tablePreview = true;
-                            });
+                            this.tablePreview = true;
                             let params = {
                                 datasetId: this.$route.params.uuid,
                                 fileUri:  res.children[0].path
@@ -571,6 +588,7 @@ export default {
                             this.tablePreview = false;
                             this.imageUrl = '';
                             this.emptyHide = false;
+                            this.stringText = '';
                             if(this.treeData.length) {
                                 if(!this.treeData[0].isFile) {
                                     this.expandedKey = [this.treeData[0].path];
@@ -584,9 +602,7 @@ export default {
                                         // 预览图片
                                         this.imageUrl = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${this.treeData[0].ownerId}&path=${this.treeData[0].path}&filesystem=cephfs`;
                                     } else {
-                                        this.$nextTick(() => {
-                                            this.tablePreview = true;
-                                        });
+                                        this.tablePreview = true;
                                         let params = {
                                             datasetId: this.$route.params.uuid,
                                             fileUri:  this.treeData[0].path
@@ -603,11 +619,16 @@ export default {
                     // 删除后更新子树节点
                     keys.forEach(item => {
                         let node = this.tree.getNode(item);
-                        node.loaded = false;
-                        node.loadData();
+                        if(node) {
+                            node.loaded = false;
+                            node.loadData();
+                        } else {
+                            this.getFileList(this.cardInfo.datasetPath);
+                        }
                     });
                     // 触发子组件更新
                     setTimeout(() => {
+                        this.checkedValue = [];
                         this.tree.setCurrentKey(this.dataListPath);
                         if(this.datalistHide) {
                             this.$refs.dataListView.getFlieList(this.dataListPath);
@@ -638,7 +659,7 @@ export default {
                     {!data.isFile ?  
                         <div  onClick={e => e.stopPropagation()}> 
                             <SdxuUpload
-                                action="gatway/file-manager/api/v1/files/upload"
+                                action="gateway/file-manager/api/v1/files/upload"
                                 show-file-list={false}
                                 data={this.uploadParams}
                                 name="files"
@@ -697,6 +718,7 @@ export default {
         // 单文件选中
         handleCurrentkChange(data,checked) {
             if (checked) {
+                this.stringText = '';
                 this.imageUrl = '';
                 this.datalistHide = false;
                 this.emptyHide = false;
@@ -715,9 +737,7 @@ export default {
                         // 预览图片
                         this.imageUrl = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${data.ownerId}&path=${data.path}&filesystem=cephfs`;
                     } else {
-                        this.$nextTick(() => {
-                            this.tablePreview = true;
-                        });
+                        this.tablePreview = true;
                         let params = {
                             datasetId: this.$route.params.uuid,
                             fileUri:  data.path
@@ -757,10 +777,8 @@ export default {
                 // 预览图片
                 this.imageUrl = `${location.origin}/gateway/file-manager/api/v1/files/download?ownerId=${ownerId}&path=${path}&filesystem=cephfs`;
             } else {
-                this.$nextTick(() => {
-                    this.tablePreview = true;
-                });
                 this.previewLoading = true;
+                this.tablePreview = true;
                 // 预览文件
                 let params = {
                     datasetId: this.$route.params.uuid,

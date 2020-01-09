@@ -20,14 +20,22 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
 @include block('task-execute-list', $bem-namespace-view) {
     
-    .el-date-editor--daterange.el-input__inner {
-        width: auto;
-        .el-range-input {
-            &::placeholder {
-                color: #8E9BB1;
+    .el-date-editor--daterange {
+        &.el-input__inner {
+            width: auto;
+            .el-range-input {
+                &::placeholder {
+                    color: #8E9BB1;
+                }
             }
         }
+
+        & > .el-range__icon {
+            font-size: 24px;
+            color: #333;
+        }
     }
+    
 
     @include element('alert') {
         margin-top: $sdx-gap-regular;

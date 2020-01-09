@@ -138,7 +138,7 @@ export default {
         },
         /** 将获取的数据处理成 chart 需要的形式 */
         processData() {
-            this.xAxisData = this.statList.map(item => dateFormatter(new Date(+item.timestamp * 1000)));
+            this.xAxisData = this.statList.map(item => dateFormatter(new Date(+item.timestamp * 1000), 'MM-DD HH:mm:ss'));
             // 整理 cpu 使用
             this.usedCpuSeriesData = [
                 {
@@ -157,10 +157,10 @@ export default {
                             y2: 1,
                             colorStops: [{
                                 offset: 0,
-                                color: '#0052CC'
+                                color: 'rgba(47,73,204,100%)'
                             }, {
                                 offset: 1,
-                                color: '#fff'
+                                color: 'rgba(207,214,245,0%)'
                             }]
                         }
                     },
@@ -175,7 +175,7 @@ export default {
                     name: this.t('view.task.MemoryUsage'),
                     type: 'line',
                     itemStyle: {
-                        color: '#00A3BF',
+                        color: '#0052CC',
                         borderWidth: 2
                     },
                     areaStyle: {
@@ -187,10 +187,10 @@ export default {
                             y2: 1,
                             colorStops: [{
                                 offset: 0,
-                                color: '#00A3BF'
+                                color: 'rgba(47,73,204,100%)'
                             }, {
                                 offset: 1,
-                                color: '#fff'
+                                color: 'rgba(207,214,245,0%)'
                             }]
                         }
                     },
@@ -206,7 +206,7 @@ export default {
                         name: this.t('view.task.GPUUsageRate'),
                         type: 'line',
                         itemStyle: {
-                            color: '#6554C0',
+                            color: '#0052CC',
                             borderWidth: 2
                         },
                         areaStyle: {
@@ -218,10 +218,10 @@ export default {
                                 y2: 1,
                                 colorStops: [{
                                     offset: 0,
-                                    color: '#6554C0'
+                                    color: 'rgba(47,73,204,100%)'
                                 }, {
                                     offset: 1,
-                                    color: '#fff'
+                                    color: 'rgba(207,214,245,0%)'
                                 }]
                             }
                         },
@@ -236,7 +236,7 @@ export default {
                         name: this.t('view.task.GPUMemoryUsage'),
                         type: 'line',
                         itemStyle: {
-                            color: '#6554C0',
+                            color: '#0052CC',
                             borderWidth: 2
                         },
                         areaStyle: {
@@ -248,10 +248,10 @@ export default {
                                 y2: 1,
                                 colorStops: [{
                                     offset: 0,
-                                    color: '#6554C0'
+                                    color: 'rgba(47,73,204,100%)'
                                 }, {
                                     offset: 1,
-                                    color: '#fff'
+                                    color: 'rgba(207,214,245,0%)'
                                 }]
                             }
                         },
@@ -293,19 +293,19 @@ export default {
             switch (name) {
                 case 'usedCpu':
                     text = this.t('view.task.CPUUsageRate');
-                    yAxisName = '(%)';
+                    yAxisName = '%';
                     break;
                 case 'usedMem':
                     text = this.t('view.task.MemoryUsage');
-                    yAxisName = '(MB)';
+                    yAxisName = 'MB';
                     break;
                 case 'usedGpu':
                     text = this.t('view.task.GPUUsageRate');
-                    yAxisName = '(%)';
+                    yAxisName = '%';
                     break;
                 case 'usedGpuMem':
                     text = this.t('view.task.GPUMemoryUsage');
-                    yAxisName = '(MB)';
+                    yAxisName = 'MB';
             }
             return {
                 ...CHART_DEFAULT_OPTION,
@@ -314,12 +314,14 @@ export default {
                 //     text: text
                 // },
                 legend: {
-                    icon: 'rect',
+                    icon: 'none',
                     borderColor: '#000',
                     selectedMode: false,
                     data: [{
                         name: text,
                         textStyle: {
+                            fontFamily: 'PingFangSC-Medium',
+                            fontSize: 14,
                             color: '#13264D'
                         }
                     }]
@@ -330,7 +332,10 @@ export default {
                 },
                 yAxis: {
                     ...CHART_DEFAULT_OPTION.yAxis,
-                    name: yAxisName
+                    // name: yAxisName
+                    axisLabel: {
+                        formatter: '{value}' + yAxisName
+                    }
                 }
             };
         },

@@ -66,6 +66,7 @@
                         type="daterange"
                         size="large"
                         value-format="yyyy-MM-dd"
+                        prefix-icon="sdx-icon iconshijianzujianIOCN"
                         :start-placeholder="t('view.task.startTime')"
                         :end-placeholder="t('view.task.stopTime')"
                     />

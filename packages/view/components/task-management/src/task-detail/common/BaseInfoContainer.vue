@@ -17,8 +17,11 @@
                 <SdxvInfoContainer>
                     <SdxvInfoItem
                         :label="t('view.task.RuntimeEnvironment')"
-                        :value="task && task.image && task.image.name || ''"
-                    />
+                    >
+                        <template #value>
+                            {{ runtimeEnvironment }}
+                        </template>
+                    </SdxvInfoItem>
                     <SdxvInfoItem :label="t('view.task.taskState')">
                         <template #value>
                             <SdxwFoldLabel
@@ -195,12 +198,12 @@
                             :value="milliCoreToCore(resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && resourceConfig.DEPLOY.requests.cpu || 0) + t('view.task.Core')"
                         />
                         <SdxvInfoItem
-                            label="GPU"
-                            :value="(resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && resourceConfig.DEPLOY.requests['nvidia.com/gpu'] || 0) + t('view.task.Block')"
-                        />
-                        <SdxvInfoItem
                             :label="t('view.task.Memory')"
                             :value="byteToGb(resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && resourceConfig.DEPLOY.requests.memory || 0) + 'GB'"
+                        />
+                        <SdxvInfoItem
+                            label="GPU"
+                            :value="(resourceConfig && resourceConfig.DEPLOY && resourceConfig.DEPLOY.requests && resourceConfig.DEPLOY.requests['nvidia.com/gpu'] || 0) + t('view.task.Block')"
                         />
                         <SdxvInfoItem
                             v-if="isCONTAINERDEV"
@@ -288,6 +291,10 @@ export default {
         displayPath() {
             let dir = this.task.displayPath || '';
             return dir.slice(dir.indexOf(':') + 1);
+        },
+        runtimeEnvironment() {
+            let image = this.task && this.task.image || null;
+            return image ? `${image.projectName}/${image.name}:${image.version}` : '';
         }
     },
     methods: {

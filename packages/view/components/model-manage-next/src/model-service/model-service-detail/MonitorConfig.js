@@ -3,11 +3,12 @@ const CHART_DEFAULT_OPTION = {
     // title: {
     //     text: '', // 需要自己设置
     //     textStyle: {
+    //         fontFamily: 'PingFangSC-Medium',
     //         fontSize: 14,
-    //         color: '#333'
+    //         color: '#13264D'
     //     },
-    //     left: '10px',
-    //     top: '10px'
+    //     left: '50%',
+    //     top: '50%'
     // },
     tooltip: {
         trigger: 'axis',

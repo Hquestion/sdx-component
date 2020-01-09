@@ -430,7 +430,7 @@ export default {
             templateEdit: 'Edit From Template',
             copyEdit: 'Edit From Existing Projects',
             sortByCreateTime: 'Sort By Created Time',
-            enterProjectName: 'Please enter project name',
+            enterProjectName: 'Search project name',
             enterProjectDescription: 'Please enter project description',
             confirmRemove: 'Are you sure to remove the project?',
             createForm: {

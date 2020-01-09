@@ -20,7 +20,7 @@
                     type="primary"
                     @click="handleSearch"
                 >
-                    {{ t('sdxCommon.Query') }}
+                    {{ children.length > 1 ? t('sdxCommon.Query') : t('sdxCommon.Search') }}
                 </SdxuButton>
                 <SdxuButton
                     @click="handleReset"

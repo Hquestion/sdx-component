@@ -429,7 +429,7 @@ export default {
             templateEdit: '编辑模板项目',
             copyEdit: '编辑复制创建',
             sortByCreateTime: '按创建时间排序',
-            enterProjectName: '请输入项目名称',
+            enterProjectName: '搜索项目名称',
             enterProjectDescription: '请输入项目描述',
             confirmRemove: '确定删除该项目吗？',
             createForm: {

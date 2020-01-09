@@ -10,7 +10,7 @@
         <div
             slot="title"
         >
-            <span>{{ title }}</span>
+            <span>{{ t('view.project.createProject') }}</span>
         </div>
         <el-form
             :label-width="lang$ === 'en' ? '155px' : '110px'"
@@ -81,7 +81,6 @@
                     <sdxu-input
                         v-model="searchName"
                         type="search"
-                        size="small"
                         :placeholder="t('view.project.enterProjectName')"
                     />
                 </SdxwSearchItem>
@@ -236,27 +235,6 @@ export default {
     computed: {
         isEditing() {
             return !!this.data;
-        },
-        title() {
-            let title = '';
-            if (this.isEditing) {
-                if (this.createType === 'empty') {
-                    title =this.t('view.project.emptyEdit');
-                } else if(this.createType === 'template') {
-                    title =this.t('view.project.templateEdit');
-                } else if(this.createType === 'project') {
-                    title =this.t('view.project.copyEdit');
-                }
-            } else {
-                if (this.createType === 'empty') {
-                    title = this.t('view.project.emptyCreate');
-                } else if(this.createType === 'template') {
-                    title =this.t('view.project.templateCreate');
-                } else if(this.createType === 'project') {
-                    title =this.t('view.project.copyCreate');
-                }
-            }
-            return title;
         }
     },
     created() {

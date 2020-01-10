@@ -104,14 +104,15 @@
                     />
                 </el-select>
             </SdxwSearchItem>
-            <SdxwSearchItem :label="`${t('view.task.executeTimeRange')}：`">
+            <SdxwSearchItem :label="`${t('view.task.Date')}：`">
                 <el-date-picker
                     v-model="date"
                     type="daterange"
                     size="large"
+                    value-format="yyyy-MM-dd"
+                    prefix-icon="sdx-icon iconshijianzujianIOCN"
                     :start-placeholder="t('view.task.startTime')"
                     :end-placeholder="t('view.task.stopTime')"
-                    value-format="yyyy-MM-dd"
                 />
             </SdxwSearchItem>
         </SdxwSearchLayout>
@@ -407,7 +408,11 @@ export default {
         },
         handleSearch() {
             this.current = 1;
-            this.savaParams = JSON.parse(JSON.stringify(this.params));
+            let date = this.date.length ? {
+                startedAt: new Date(`${this.date[0]} 00:00:00`).getTime() / 1000,
+                stoppedAt: new Date(`${this.date[1]} 23:59:59`).getTime() / 1000
+            } : {};
+            this.savaParams = JSON.parse(JSON.stringify(Object.assign({}, this.params, date)));
             this.getExecutionList();
         },
         handleReset() {
@@ -472,13 +477,9 @@ export default {
                 clearInterval(this.refreshTimer);
                 this.refreshTimer = null;
             }
-            let date = this.date.length ? {
-                startedAt: new Date(`${this.date[0]} 00:00:00`).getTime() / 1000,
-                stoppedAt: new Date(`${this.date[1]} 23:59:59`).getTime() / 1000
-            } : {};
             const params = Object.assign({}, this.savaParams, {
                 ...paginate(this.current, this.pageSize), 
-            }, date);
+            });
             removeBlankAttr(params);
             executionList(params).then(res => {
                 if (res.data.length && res.data.find(item => (item.state === 'Terminating' || item.state === 'Running' || item.state === 'Pending' || item.state === 'Scheduling' || item.state === 'Error'))) {
@@ -631,6 +632,10 @@ export default {
                     color: #8E9BB1;
                 }
             }
+        }
+        .el-date-editor .el-range__icon {
+            color: #505F79;
+            font-size: 24px;
         }
     }
     .sdxu-pagination {

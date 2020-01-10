@@ -147,6 +147,7 @@ export default {
     },
     view: {
         task: {
+            Date: 'Date',
             AccessTensorBoard: 'Access TensorBoard',
             ManualExecution: 'Manual Execution',
             TimingExecution: 'Timing Execution',

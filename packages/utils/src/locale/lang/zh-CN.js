@@ -147,6 +147,7 @@ export default {
     },
     view: {
         task: {
+            Date: '日期',
             AccessTensorBoard: '进入TensorBoard',
             ManualExecution: '手动执行',
             TimingExecution: '定时执行',

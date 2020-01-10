@@ -215,7 +215,8 @@ export default {
                     trafficRatio: this.table[0].weight
                 }
             };
-            updateService(this.serviceName,params).then(() => {
+            let uuid = this.isModelService ? this.serviceName : this.info.uuid;
+            updateService(uuid, params).then(() => {
                 this.$emit('update:visible', false);
                 this.$emit('confirmGray');
             });

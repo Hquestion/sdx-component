@@ -467,7 +467,7 @@ export default {
             } else if(type === 'test') {
                 this.onlineTestingVisible = true;
                 this.apiTestMeta = {
-                    apiUrl: `/${data.apiUrl ? data.apiUrl : ''}`,
+                    apiUrl: data.apiUrl,
                     apiKey: data.apiKey
                 };
             }
@@ -475,7 +475,7 @@ export default {
         testApi(data) {
             this.onlineTestingVisible = true;
             this.apiTestMeta = {
-                apiUrl: `/${data.apiUrl ? data.apiUrl : ''}`,
+                apiUrl: data.apiUrl,
                 apiKey: data.apiKey
             };
         },

@@ -22,7 +22,7 @@ export function getGroupDetail(uuid) {
 } */
 
 export const getSimpleUserList = authWrapper(function (params) {
-    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users/`, params);
+    return httpService.get(`${USER_SERVICE_GATEWAY_BASE}users`, params);
 }, readAuths.USER_USER_READ);
 
 /* export function getUserList(params) {
@@ -63,7 +63,7 @@ export function getUserSimpleInfo(uuid) {
 }
 
 export function getUserDetail(uuid) {
-    return httpService.get(`${COMPOSE_GATEWAY_BASE}user-detail/`, {
+    return httpService.get(`${COMPOSE_GATEWAY_BASE}user-detail`, {
         uuid
     }).then(res => {
         const { roles, groups, permissions } = res;

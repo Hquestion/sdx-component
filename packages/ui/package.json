@@ -1,6 +1,6 @@
 {
     "name": "@sdx/ui",
-    "version": "2.0.21",
+    "version": "2.0.22",
     "description": "iluvatar基础组件库",
     "keywords": [
         "ui"
@@ -44,7 +44,7 @@
         "dexie": "^2.0.4",
         "popper.js": "^1.15.0"
     },
-    "gitHead": "e9761c175fe80a7f4bd6f9ce6ba1f1abb66f24c5",
+    "gitHead": "b093bc9626bcae1f079fcb25bad45862cc94a789",
     "devDependencies": {
         "vue-codemirror": "^4.0.6"
     }

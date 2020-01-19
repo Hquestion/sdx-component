@@ -22,6 +22,7 @@ if (config.analysis.enable) {
 
 module.exports = {
     mode: 'production',
+    devtool: 'source-map',
     entry: components,
     output: {
         filename: '[name].js',

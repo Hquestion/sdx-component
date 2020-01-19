@@ -27,6 +27,7 @@ if (config.analysis.enable) {
 
 module.exports = {
     mode: 'production',
+    devtool: 'source-map',
     entry: {
         index: './index.js'
     },

@@ -209,7 +209,7 @@ export default {
                 order: this.order,
                 orderBy: this.orderBy,
                 shareType: this.shareType,
-                searchLabels: this.searchLabels,
+                labels: this.searchLabels.join(';'),
                 modelType: this.modelType
             };
             removeBlankAttr(params);

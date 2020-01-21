@@ -189,6 +189,9 @@ export const STATE_TYPE_OPERATION_ADMIN = {
     Error: ['kill', 'detail'],
 };
 
+// 非任务所有者的操作权限列表
+export const NON_OWNER_TASK_OPERATION = ['detail'];
+
 // 任务卡片-状态对应的全部操作
 export const TASK_CARD_STATE_TYPE_OPERATION = {
     [TASK_TYPE.JUPYTER]: {

@@ -1,10 +1,11 @@
-import { TASK_CARD_STATE_TYPE_OPERATION, OPERATION_INFO, TASK_TYPE, STATE_TYPE } from '../const/task';
+import { TASK_CARD_STATE_TYPE_OPERATION, OPERATION_INFO, TASK_TYPE, STATE_TYPE, NON_OWNER_TASK_OPERATION } from '../const/task';
 import { startTask, stopTask, removeTask } from '../api/task';
 import SdxwTaskStartDialog from '@sdx/widget/lib/task-start-dialog';
 import SdxwTaskStopDialog from '@sdx/widget/lib/task-stop-dialog';
 import SdxuMessageBox from '@sdx/ui/lib/message-box';
 import { t } from '../locale';
 import { getImage } from '../api/image';
+import { getUser } from '../helper/shareCenter';
 
 export default {
     data() {
@@ -15,7 +16,13 @@ export default {
     },
     methods: {
         getOperationList(row) {
+            const currentUser = getUser();
+            const ownerId = row.owner && row.owner.uuid || '';
+            let isOwnerTask = currentUser && currentUser.userId === ownerId;
             let list = TASK_CARD_STATE_TYPE_OPERATION[row.type] && TASK_CARD_STATE_TYPE_OPERATION[row.type][row.state] || [];
+            if (!isOwnerTask) {
+                list = list.filter(item => NON_OWNER_TASK_OPERATION.includes(item));
+            }
             return list.map(item => OPERATION_INFO[item]);
         },
         handleOperation(operation, row, projectId) {

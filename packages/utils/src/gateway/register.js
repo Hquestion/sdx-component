@@ -5,16 +5,9 @@
  */
 /* eslint-disable */
 const childProcess = require('child_process');
-childProcess.execSync('npm install minimist');
-const parseArgs = require('minimist');
 let configs = require('./config');
 
-let argsName = parseArgs(process.argv.slice(2));
-if (argsName._ && Array.isArray(argsName._)) {
-    argsName = argsName._;
-} else {
-    argsName = [];
-}
+let argsName = [];
 
 childProcess.exec('chmod 777 ./register-tool', function() {
     configs = configs.filter(cfg => {

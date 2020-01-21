@@ -19,7 +19,7 @@
                         :filter-node-method="filterNode"
                         check-on-click-node
                         :default-checked-keys="defaultKeys"
-                        @check="checkChange"
+                        @check-change="checkChange"
                         v-loading="loading"
                     />
                 </SdxuScroll>
@@ -231,11 +231,40 @@ export default {
             this.$emit('update:defaultKeys',keys);
             this.$emit('update:tags',tags);
         },
-        checkChange(data, obj) {
+        checkChange(data, checked) {
             this.is_moveall = false;
-            this.checkedTags = this.getTags();
-            this.$emit('update:defaultKeys',obj.checkedKeys);
-            this.updateSameUserInGroups();
+            if (!checked) {
+                if (data.isGroup) return;
+                let userIds = [];
+                if (!data.isGroup) {
+                    userIds.push(data.uuid.split('/')[1]);
+                } else {
+                    data.children.forEach(item => {
+                        userIds.push(item.uuid.split('/')[1]);
+                    });
+                }
+                let checkedKeys = this.$refs.tree.getCheckedKeys();
+                let tmp = [];
+                for (let key of checkedKeys) {
+                    this.data.forEach(item => {
+                        if (item.children) {
+                            for (let j = 0; j < item.children.length; j++) {
+                                let id = item.children[j][this.treeNodeKey].split('/')[1];
+                                if ((id === key.split('/')[1]) && !userIds.includes(id)) {
+                                    !tmp.includes(item.children[j][this.treeNodeKey]) && tmp.push(item.children[j][this.treeNodeKey]);
+                                }
+                            }
+                        }
+                        if (!item.isGroup && (item[this.treeNodeKey].split('/')[1] === key.split('/')[1]) && !userIds.includes(item[this.treeNodeKey].split('/')[1])) {
+                            !tmp.includes(item[this.treeNodeKey]) && tmp.push(item[this.treeNodeKey]);
+                        }
+                    });
+                }
+                this.$refs.tree.setCheckedKeys(tmp);
+            } else {
+                this.updateSameUserInGroups();
+            }
+
         },
         removeAllTag() {
             this.checkedTags = [];

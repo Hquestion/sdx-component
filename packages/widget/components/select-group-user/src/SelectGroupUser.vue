@@ -2,7 +2,7 @@
     <sdxu-transfer
         :data="treeData"
         :tags.sync="tmpTags"
-        :default-keys.sync="tmpDefaultKeys"
+        :default-keys="tmpDefaultKeys"
         :tree-node-key="treeNodeKey"
         class="sdxw-select-group-user"
         :loading="loading"

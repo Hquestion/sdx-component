@@ -12,7 +12,7 @@ export default {
         transfer: {
             moveAll: 'Move all',
             deleteAll: 'Delete all',
-            PleaseEnter: 'Please enter'
+            PleaseEnter: 'User Group or Username'
         },
         panel: {
             noContent: 'No Content'
@@ -431,8 +431,8 @@ export default {
             templateEdit: 'Edit From Template',
             copyEdit: 'Edit From Existing Projects',
             sortByCreateTime: 'Sort By Created Time',
-            enterProjectName: 'Search project name',
-            enterProjectDescription: 'Please enter project description',
+            enterProjectName: 'Please enter project name',
+            enterProjectDescription: 'Please enter project description, 256 characters maximum.',
             confirmRemove: 'Are you sure to remove the project?',
             createForm: {
                 name: 'Project Name:',

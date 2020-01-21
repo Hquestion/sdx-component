@@ -61,6 +61,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         position: absolute;
         left: 0;
         bottom: 0;
+        justify-content: center;
         .sdxu-button--default.is-plain {
             color: $sdx-info-color;
         }
@@ -84,9 +85,13 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
     @include element('right') {
         @extend .boxStyle;
         position: relative;
+        border: 1px dotted#D8DEEA;
+        @include element('please-select') {
+            text-align: center;
+        }
     }
     @include element('tag') {
-        padding: $sdxu-transfer-margin-tag 0 0 $sdxu-transfer-margin-small ;
+        padding: $sdxu-transfer-margin-tag $sdxu-transfer-margin-small;
         display: flex;
         flex-wrap: wrap;
         justify-content: baseline;

@@ -4,6 +4,7 @@
         :visible.sync="dialogVisible"
         @close="dialogClose"
         :confirm-handler="confirmEdit"
+        size="large"
     >
         <sdxw-share-form
             :default-users.sync="shareForm.selectedUsers"

@@ -245,7 +245,11 @@ export default {
         },
         saveEdit() {
             // todo: 保存修改,然后清空editingRow,刷新列表
-            this.doRenameOrMakePath();
+            if (this.tempRowName === this.editingRow.name) {
+                this.cancelEdit();
+            } else {
+                this.doRenameOrMakePath();
+            }
         },
         cancelEdit() {
             if (!this.editingRow.path) {

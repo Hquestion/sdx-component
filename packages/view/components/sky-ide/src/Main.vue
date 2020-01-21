@@ -185,7 +185,8 @@ export default {
                 const item = this.file.taskPathMap && this.file.taskPathMap.find(item => item.task === this.taskUuid);
                 // this.file.currentPath = item ? item.path : res.displayPath.split(':').pop();
                 this.rootPath = res.displayPath.split(':').pop();
-                this.$set(this.file, 'currentPath', item && item.path ? item.path : this.rootPath);
+                let path = item && item.path ? (item.rootPath === this.rootPath ? item.path : this.rootPath) : this.rootpath;
+                this.$set(this.file, 'currentPath', path);
             });
         },
         recoverDocManager() {
@@ -231,11 +232,13 @@ export default {
             let item = this.file.taskPathMap && this.file.taskPathMap.find(item => item.task === this.taskUuid);
             if (item) {
                 item.path = this.file.currentPath;
+                item.rootPath = this.rootPath;
             } else {
                 if (!this.file.taskPathMap) this.file.taskPathMap = [];
                 this.file.taskPathMap.push({
                     task: this.taskUuid,
-                    path: this.file.currentPath
+                    path: this.file.currentPath,
+                    rootPath: this.rootPath
                 });
             }
             item = this.doc.taskOpenFileMap && this.doc.taskOpenFileMap.find(item => item.task === this.taskId);
@@ -273,7 +276,7 @@ export default {
         };
     },
     async mounted() {
-    
+
         // 初始化IDE，获取项目及task信息
         await this.prepareEnv();
         // 恢复布局

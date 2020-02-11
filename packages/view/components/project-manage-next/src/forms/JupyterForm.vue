@@ -98,9 +98,8 @@
                         <SdxuDropdownTip
                             :title="t('view.task.ImagePacInfo')"
                             width="260px"
-                            :disabled="!packagesList.length"
+                            v-if="packagesList.length"
                             slot="postfix"
-                            v-if="showImagePacInfo"
                         >
                             <SdxuIconButton
                                 slot="ref"
@@ -286,7 +285,6 @@ export default {
                 project: ''
             },
             projectId: this.$route.params.projectId,
-            showImagePacInfo: true,
             imageOptions: [],
             cpuObj: {},
             gpuObj: {},
@@ -350,8 +348,6 @@ export default {
                 this.datasetName = res.name;
                 this.params.datasets = [this.$route.query.datasetId];
             });
-        } else if(this.$route.query.from === 'projectManagement') {
-            this.showImagePacInfo = false;
         }
     },
     methods: {
@@ -471,7 +467,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .package-info__item {
     height: 30px;
     padding: 10px;

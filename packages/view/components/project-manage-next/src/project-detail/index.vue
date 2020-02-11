@@ -151,6 +151,9 @@ export default {
                     params: {
                         type: task.type,
                         projectId: this.$route.params.id
+                    },
+                    query: {
+                        from: 'projectManagement'
                     }
                 }
             );

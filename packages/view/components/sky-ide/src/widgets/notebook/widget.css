@@ -738,3 +738,6 @@
     font-weight: bolder;
     color: #666;
 }
+.jp-Stdin-prompt {
+    color: var(--md-grey-50);
+}

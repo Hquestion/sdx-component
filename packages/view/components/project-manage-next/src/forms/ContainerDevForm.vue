@@ -86,7 +86,6 @@
                             v-model="params.imageId"
                             :searchable="true"
                             size="small"
-                            @change="getImagePackages"
                             :placeholder="t('view.task.form.Please_select_the_operating_environment')"
                         >
                             <el-option
@@ -96,31 +95,6 @@
                                 :value="item.value"
                             />
                         </el-select>
-                        <SdxuDropdownTip
-                            :title="`${t('view.task.ImagePacInfo')}`"
-                            :disabled="!packagesList.length"
-                            slot="postfix"
-                        >
-                            <SdxuIconButton
-                                slot="ref"
-                                size="large"
-                                icon="sdx-icon sdx-icon-warning"
-                            />
-                            <div
-                                style="height: 300px"
-                            >
-                                <SdxuScroll>
-                                    <div
-                                        v-for="(item, index) in packagesList"
-                                        :key="index"
-                                        class="package-info__item"
-                                    >
-                                        <div>{{ item.name }}</div>
-                                        <div>{{ item.version }}</div>
-                                    </div>
-                                </SdxuScroll>
-                            </div>
-                        </SdxuDropdownTip>
                     </SdxuAppender>
                 </el-form-item>
                 <el-form-item

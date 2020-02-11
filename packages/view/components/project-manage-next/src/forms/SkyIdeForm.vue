@@ -99,7 +99,6 @@
                             v-model="params.imageId"
                             :searchable="true"
                             size="small"
-                            @change="getImagePackages"
                             :placeholder="t('view.task.form.Please_select_the_operating_environment')"
                         >
                             <el-option
@@ -109,31 +108,6 @@
                                 :value="item.value"
                             />
                         </el-select>
-                        <SdxuDropdownTip
-                            :title="t('view.task.ImagePacInfo')"
-                            :disabled="!packagesList.length"
-                            slot="postfix"
-                        >
-                            <SdxuIconButton
-                                slot="ref"
-                                size="large"
-                                icon="sdx-icon sdx-icon-warning"
-                            />
-                            <div
-                                style="height: 300px"
-                            >
-                                <SdxuScroll>
-                                    <div
-                                        v-for="(item, index) in packagesList"
-                                        :key="index"
-                                        class="package-info__item"
-                                    >
-                                        <div>{{ item.name }}</div>
-                                        <div>{{ item.version }}</div>
-                                    </div>
-                                </SdxuScroll>
-                            </div>
-                        </SdxuDropdownTip>
                     </SdxuAppender>
                 </el-form-item>
                 <el-form-item
@@ -216,36 +190,45 @@
                         >
                             {{ t('widget.shareForm.No') }}
                         </el-radio>
-                    </el-form-item>
-                    <el-form-item
-                        :label="`${t('view.task.KernalReleaseTime')}:`"
-                        v-if="autoRelease"
-                    >
-                        <el-input-number
-                            v-model="notebookKernelExpireTime"
-                            :min="3"
-                        />
-                        <span
-                            class="form-tip"
-                            style="margin-left:10px;"
-                        >
-                            {{ t('view.task.ExceedKernalReleaseTime') }}
-                        </span>
-                    </el-form-item>
-                    <el-form-item
-                        :label="`${t('view.task.PodReleaseTime')}:`"
-                        v-if="autoRelease"
-                    >
-                        <el-input-number
-                            v-model="podExpireTime"
-                            :min="30"
-                        />
-                        <span
-                            class="form-tip"
-                            style="margin-left:10px;"
-                        >
-                            {{ t('view.task.ExceedPodReleaseTime') }}
-                        </span>
+                        <div v-if="autoRelease">
+                            <div>
+                                <div
+                                    class="form-tip"
+                                >
+                                    {{ t('view.task.KernalReleaseTime') }}
+                                </div>
+                                <el-input-number
+                                    v-model="notebookKernelExpireTime"
+                                    :min="3"
+                                >
+                                    <div>分钟</div>
+                                </el-input-number>
+                                <span
+                                    class="form-tip"
+                                    style="margin-left:10px;"
+                                >
+                                    {{ t('view.task.ExceedKernalReleaseTime') }}
+                                </span>
+                            </div>
+                            <div>
+                                <div
+                                    class="form-tip"
+                                    style="margin-top:10px;"
+                                >
+                                    {{ t('view.task.PodReleaseTime') }}
+                                </div>
+                                <el-input-number
+                                    v-model="podExpireTime"
+                                    :min="30"
+                                />
+                                <span
+                                    class="form-tip"
+                                    style="margin-left:10px;"
+                                >
+                                    {{ t('view.task.ExceedPodReleaseTime') }}
+                                </span>
+                            </div>
+                        </div>
                     </el-form-item>
                 </div>
             </SdxuArticlePanel>

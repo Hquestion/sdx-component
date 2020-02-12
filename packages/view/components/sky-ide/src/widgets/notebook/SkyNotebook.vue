@@ -274,6 +274,7 @@ export default {
             });
             this.app.nbSessionMap[this.file.path] = this.session;
             this.kernelState = NotebookKernelState.RUNNING;
+            this.setupCompleter();
             return this.session;
         },
 
@@ -290,10 +291,12 @@ export default {
                         this.mode = NotebookMode.CELL_DEBUG;
                         this.app.nbSessionMap[this.file.path] = this.session;
                         this.kernelState = NotebookKernelState.RUNNING;
+                        this.setupCompleter();
                     }
                 }
                 this.initConnection = true;
             }
+            this.setupCompleter();
         },
 
         async shutdownSession(shutdownTask = true) {
@@ -308,6 +311,7 @@ export default {
             //     await this.app.taskManager.stop();
             // }
             this.kernelState = NotebookKernelState.STOPPED;
+            this.disposeCompleter();
             return true;
         },
         /**
@@ -352,6 +356,12 @@ export default {
             this.completer = completer;
             this.completerHandler = handler;
             // watch activeCell 变化，改变completer的editor
+        },
+        async disposeCompleter() {
+            if (this.completer) {
+                Widget.detach(this.completer);
+                this.completerHandler.dispose();
+            }
         },
         /**
          * 切换cell类型
@@ -503,6 +513,8 @@ export default {
         activeCell(val) {
             if (this.completerHandler) {
                 this.completerHandler.editor = this.cellMap[val.order].editor;
+            } else {
+                this.setupCompleter();
             }
         },
         notebook: {

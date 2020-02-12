@@ -220,6 +220,9 @@ export default {
             });
         },
         handlePathNameClick(row) {
+            if (!row.path) {
+                return;
+            }
             if (!row.isFile) {
                 unlock(this.$el.querySelector('.el-table__body-wrapper'));
                 if (row.path[0] !== '/') {

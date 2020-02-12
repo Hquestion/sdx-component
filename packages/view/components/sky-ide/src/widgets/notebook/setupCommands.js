@@ -72,7 +72,7 @@ export default function setupCommands(commands, app) {
     addCommand(commands, app, CommandIDs.COMPLETE, function execute(app) {
         let nb = app.docManager.getActiveNotebook();
         if (!nb) return;
-        if (nb.activeCell && nb.activeCell.cell_type === 'code' && nb.mode === NotebookMode.CELL_DEBUG) {
+        if (nb.activeCell && nb.activeCell.cell_type === 'code') {
             if (nb.completer) {
                 nb.completerHandler.invoke();
             }

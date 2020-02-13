@@ -201,11 +201,6 @@
                     <el-form-item
                         :label="`${t('view.task.EnvVars')}:`"
                     >
-                        <!-- <SdxuInput
-                        v-model="params.environmentsStr"
-                        size="small"
-                        :placeholder="`${t('view.task.EnvVarsPlaceholder')}`"
-                    /> -->
                         <div>
                             <div
                                 v-for="(item, index) in params.environments"
@@ -225,21 +220,20 @@
                                 />
                                 <div style="width:70px;">
                                     <sdxu-button
-                                        v-if="!index"
-                                        invert
-                                        @click="handleEnvironChange(true)"
+                                        type="default"
+                                        @click="handleEnvironChange(false, index)"
                                     >
-                                        <i class="sdx-icon sdx-icon-plus" />
-                                    </sdxu-button>
-                                    <sdxu-button
-                                        v-if="index===1"
-                                        invert
-                                        @click="handleEnvironChange()"
-                                    >
-                                        <i class="sdx-icon sdx-bianzu3" />
+                                        <i class="sdx-icon sdx-caozuoshanchu" />
                                     </sdxu-button>
                                 </div>
                             </div>
+                            <SdxuButton
+                                type="default"
+                                @click="handleEnvironChange(true)"
+                            >
+                                <i class="sdx-icon sdx-xinjianhao" />
+                                {{ t('view.task.AddEnvVars') }}
+                            </SdxuButton>
                         </div>
                     </el-form-item>
                     <el-form-item
@@ -255,14 +249,36 @@
                         </div>
                     </el-form-item>
                     <el-form-item
-                        v-if="!!params.startCommand"
                         :label="`${t('view.task.StartParams')}:`"
                     >
-                        <SdxuInput
-                            v-model="params.startArgsStr"
-                            size="small"
-                            :placeholder="`${t('view.task.Params')}`"
-                        />
+                        <div>
+                            <div
+                                v-for="(item, index) in params.startParams"
+                                :key="index"
+                                style="display:flex;justify-content:space-between;width:580px;margin:5px 0;"
+                            >
+                                <SdxuInput
+                                    v-model="item.value"
+                                    style="width:494px;"
+                                    :placeholder="`${t('view.task.Params')}`"
+                                />
+                                <div style="width:70px;">
+                                    <sdxu-button
+                                        type="default"
+                                        @click="handleParamsChange(false, index)"
+                                    >
+                                        <i class="sdx-icon sdx-caozuoshanchu" />
+                                    </sdxu-button>
+                                </div>
+                            </div>
+                            <SdxuButton
+                                type="default"
+                                @click="handleParamsChange(true)"
+                            >
+                                <i class="sdx-icon sdx-xinjianhao" />
+                                {{ t('view.task.AddStartParams') }}
+                            </SdxuButton>
+                        </div>
                     </el-form-item>
                     <el-form-item
                         :label="`${t('view.task.OutputPath')}:`"
@@ -307,24 +323,26 @@
                                 />
                                 <div style="width:70px;">
                                     <sdxu-button
-                                        v-if="!index"
-                                        invert
-                                        @click="handleProtChange(true)"
+                                        type="default"
+                                        @click="handleProtChange(false, index)"
                                     >
-                                        <i class="sdx-icon sdx-icon-plus" />
-                                    </sdxu-button>
-                                    <sdxu-button
-                                        v-if="index===1"
-                                        invert
-                                        @click="handleProtChange()"
-                                    >
-                                        <i class="sdx-icon sdx-bianzu3" />
+                                        <i class="sdx-icon sdx-caozuoshanchu" />
                                     </sdxu-button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-tip">
-                            {{ t('view.task.PortRouteTip') }}
+                            <SdxuButton
+                                type="default"
+                                @click="handleProtChange(true)"
+                            >
+                                <i class="sdx-icon sdx-xinjianhao" />
+                                {{ t('view.task.AddPortRoute') }}
+                            </SdxuButton>
+                            <span
+                                class="form-tip"
+                                style="margin-left: 10px;"
+                            >
+                                {{ t('view.task.PortRouteTip') }}
+                            </span>
                         </div>
                     </el-form-item>
                 </div>
@@ -423,24 +441,14 @@ export default {
                 },
                 datasources: [],
                 datasets: [],
-                environments: [
-                    {
-                        name: '',
-                        value: ''
-                    }
-                ],
+                environments: [],
+                startParams: [],
                 startCommand: '',
                 startArgs: [],
-                startArgsStr: '',
                 displayPath: '',
                 project: '',
                 instanceNumber: 1,
-                forwardPorts: [
-                    {
-                        protocol: 'HTTP',
-                        port: ''
-                    }
-                ]
+                forwardPorts: []
             },
             projectId: this.$route.params.projectId,
             imageOptions: [],
@@ -508,24 +516,33 @@ export default {
     },
     methods: {
         // 数据集列表
-        handleProtChange(adding) {
+        handleParamsChange(adding, index) {
+            if (adding) {
+                this.params.startParams.push({
+                    value: ''
+                });
+            } else {
+                this.params.startParams.splice(index, 1);
+            }
+        },
+        handleProtChange(adding, index) {
             if (adding) {
                 this.params.forwardPorts.push({
                     protocol: 'HTTP',
                     port: ''
                 });
             } else {
-                this.params.forwardPorts.pop();
+                this.params.forwardPorts.splice(index, 1);
             }
         },
-        handleEnvironChange(adding) {
+        handleEnvironChange(adding, index) {
             if (adding) {
                 this.params.environments.push({
                     name: '',
                     value: ''
                 });
             } else {
-                this.params.environments.pop();
+                this.params.environments.splice(index, 1);
             }
         },
         getDataSetList() {
@@ -561,7 +578,7 @@ export default {
                 this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
                 this.params.forwardPorts = this.params.forwardPorts.filter(item => !!item.port);
                 this.params.environments = this.params.environments.filter(item => !!item.value && !!item.name);
-                this.params.startArgs = this.params.startArgsStr.split('/').filter(item => !!item);
+                this.params.startArgs = this.params.startParams.map(item => item.value).filter(item => !!item);
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))
                     .then (() => {
                         this.$router.go(-1);
@@ -575,7 +592,7 @@ export default {
             this.params = { ...this.params, ...nval};
             this.params.resourceConfigObj = JSON.parse(this.params.resourceConfig);
             this.params.instanceNumber = this.params.resourceConfigObj[RESOURCE_KEY].instance;
-            this.params.startArgsStr = this.params.startArgs.join('/');
+            this.params.startParams = this.params.startArgs.map(item => ({ 'value': item }));
             if (!this.params.forwardPorts.length) this.params.forwardPorts = [{protocol: 'HTTP',port: ''}];
             if (!this.params.environments.length) this.params.environments = [{name: '',value: ''}];
             this.cpuObj = {

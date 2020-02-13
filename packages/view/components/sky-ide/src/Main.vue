@@ -24,6 +24,7 @@
                         >
                             <file-manager
                                 @open-file="openFile"
+                                @handle-rename="handleRename"
                                 :root-path="rootPath"
                                 :current-path="file.currentPath"
                                 ref="fileManager"

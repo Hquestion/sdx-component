@@ -5,6 +5,9 @@ export default {
         },
         handleFileDelete(path) {
             this.$refs.docManager.handleFileDelete(path);
+        },
+        handleRename(file, newName) {
+            this.$refs.docManager.handleRename(file, newName);
         }
     }
 };

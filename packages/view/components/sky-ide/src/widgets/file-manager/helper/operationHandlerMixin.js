@@ -84,6 +84,7 @@ export default {
             if (this.editingRow.path) {
                 rename(this.editingRow.path, this.tempRowName, this.editingRow.ownerId).then(() => {
                     unlock(this.$el.querySelector('.el-table__body-wrapper'));
+                    this.$parent.$emit('handle-rename', this.editingRow, this.tempRowName);
                     this.editingRow = null;
                     this.tempRowName = '';
                     this.fileManager.enterDirectory(this.fileManager.currentPath);

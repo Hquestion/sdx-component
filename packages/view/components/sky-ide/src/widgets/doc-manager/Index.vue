@@ -150,6 +150,18 @@ export default {
             const item = this.app.doc.openFiles.find(item => item.path === path);
             item && this.closeDoc(item.path, true);
         },
+        handleRename(file, newName) {
+            let item = this.app.doc.openFiles.find(tab => tab.path === file.path);
+            if (!item) return;
+            let [oldName, oldPath] = [item.name, item.path];
+            let newPath = item.path.replace(oldName, newName);
+            if (this.app.doc.currentFile.path === oldPath) {
+                this.activeTab = newPath;
+            }
+            item.name = newName;
+            item.path = newPath;
+            this.$refs.tabs.$refs.nav.$forceUpdate();
+        },
         saveCurrent() {
             this.saveDoc(this.app.doc.openFiles.find(item => item.path === this.activeTab));
         },

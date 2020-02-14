@@ -170,6 +170,7 @@ export default {
                 });
                 this.sidebar = extend(this.sidebar, restorerJSON.sidebar);
                 this.doc = extend(this.doc, restorerJSON.doc);
+                restorerJSON.file.currentPath = '';
                 this.file = extend(this.file, restorerJSON.file);
                 this.docManager.openFile(this.doc.currentFile);
             } else {
@@ -186,7 +187,7 @@ export default {
                 const item = this.file.taskPathMap && this.file.taskPathMap.find(item => item.task === this.taskUuid);
                 // this.file.currentPath = item ? item.path : res.displayPath.split(':').pop();
                 this.rootPath = res.displayPath.split(':').pop();
-                let path = item && item.path ? (item.rootPath === this.rootPath ? item.path : this.rootPath) : this.rootpath;
+                let path = (item && item.path) ? (item.rootPath === this.rootPath ? item.path : this.rootPath) : this.rootPath;
                 this.$set(this.file, 'currentPath', path);
             });
         },

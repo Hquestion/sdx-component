@@ -214,7 +214,7 @@ export const TASK_CARD_STATE_TYPE_OPERATION = {
         [STATE_TYPE.Terminating]: [],
         [STATE_TYPE.Terminated]: ['start', 'edit', 'remove'],
         [STATE_TYPE.Failed]: ['start', 'edit', 'remove'],
-        [STATE_TYPE.Error]: ['kill']
+        [STATE_TYPE.Error]: ['start', 'edit', 'remove']
     },
     [TASK_TYPE.CONTAINER_DEV]: {
         [STATE_TYPE.Created]: ['start', 'edit', 'remove'],

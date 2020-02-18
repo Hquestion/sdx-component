@@ -257,6 +257,20 @@
                             </div>
                         </div>
                     </el-form-item>
+                    <el-form-item
+                        :label="`${t('view.task.LimitSessionCount')}:`"
+                    >
+                        <el-input-number
+                            v-model="limitSessionCount"
+                            :min="1"
+                        />
+                        <span
+                            class="form-tip"
+                            style="margin-left:10px;display:none"
+                        >
+                            {{ t('view.task.ExceedKernalReleaseTime') }}
+                        </span>
+                    </el-form-item>
                 </div>
             </SdxuArticlePanel>
         </el-form>
@@ -362,6 +376,7 @@ export default {
             autoRelease: true,
             notebookKernelExpireTime: 3,
             podExpireTime: 30,
+            limitSessionCount: 5,
             imageOptions: [],
             cpuObj: {},
             gpuObj: {},
@@ -456,6 +471,7 @@ export default {
             }
             this.params.notebookKernelExpireTime = !this.autoRelease ? 0 : this.notebookKernelExpireTime * 60;
             this.params.podExpireTime = !this.autoRelease ? 0 : this.podExpireTime * 60;
+            this.params.sessionCountLimit = this.limitSessionCount || 5;
             this.$refs.skyide.validate().then(() => {
                 this.params.resourceConfig = JSON.stringify(this.params.resourceConfigObj);
                 (this.params.uuid ? updateTask(this.params.uuid,this.params) : createProjectTask(this.projectId || this.params.project, this.params))

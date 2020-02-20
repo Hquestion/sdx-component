@@ -3,7 +3,7 @@
         <div
             class="sdxu-article-title__main"
             @click.capture="switchExpand"
-            :class="{'hoverable' : expandable, 'with-bar' : showBar}"
+            :class="{'hoverable' : expandable, 'with-bar' : showBar, 'small-title': size === 'small'}"
         >
             <slot>{{ title }}</slot>
             <span
@@ -47,6 +47,13 @@ export default {
         showBar: {
             type: Boolean,
             default: true
+        },
+        size: {
+            type: String,
+            default: 'normal',
+            validator: value => {
+                return ['small', 'normal'].includes(value);
+            }
         }
     },
     watch: {

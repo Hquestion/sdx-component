@@ -12,6 +12,9 @@
         display: flex;
         align-items: center;
 
+        &.small-title {
+            font-size: $sdx-h2-font-size;
+        }
         &.hoverable:hover {
             cursor: pointer;
         }

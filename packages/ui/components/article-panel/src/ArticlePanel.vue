@@ -3,6 +3,7 @@
         <SdxuArticleTitle
             class="sdxu-article-panel__title"
             :title="title"
+            :size="size"
             :expandable="expandable"
             :expanded.sync="expandedTemp"
             :show-bar="showBar"
@@ -32,6 +33,13 @@ export default {
         title: {
             type: String,
             default: ''
+        },
+        size: {
+            type: String,
+            default: 'middle',
+            validator: value => {
+                return ['small', 'middle'].includes(value);
+            }
         },
         expandable: {
             type: Boolean,

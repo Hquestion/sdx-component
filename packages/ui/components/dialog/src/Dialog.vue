@@ -5,7 +5,6 @@
                  `is-${display}`
         ]"
         :visible.sync="dialogVisible"
-        :fullscreen="fullscreen"
         :top="top"
         :modal="modal"
         :modal-append-to-body="modalAppendToBody"
@@ -40,9 +39,21 @@
                 <slot
                     name="title"
                 >
-                    {{ title }}
+                    <span>{{ title }}</span>
+                    <span
+                        class="sdxu-dialog__subtitle"
+                        v-if="subtitle"
+                    >
+                        {{ subtitle }}
+                    </span>
                 </slot>
             </div>
+            <sdxu-icon-button
+                v-if="scaleable"
+                class="sdxu-dialog__scale-handler"
+                icon="sdx-icon sdx-zuidahua1"
+                @click="toggleFullscreen"
+            />
         </div>
         <div><slot /></div>
         <div
@@ -80,7 +91,8 @@ export default {
     name: 'SdxuDialog',
     data() {
         return {
-            dialogVisible: this.visible
+            dialogVisible: this.visible,
+            dialogFullscreen: false
         };
     },
     watch: {
@@ -99,6 +111,10 @@ export default {
             default: false
         },
         title: {
+            type: String,
+            default: ''
+        },
+        subtitle: {
             type: String,
             default: ''
         },
@@ -173,6 +189,10 @@ export default {
         display: {
             type: String,
             default: 'flex' // float, flex
+        },
+        scaleable: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {
@@ -206,10 +226,26 @@ export default {
             this.dialogVisible = false;
             this.$emit('update:visible', false);
             this.$emit('cancel');
+        },
+        toggleFullscreen() {
+            if (!this.dialogFullscreen) {
+                this.dialogFullscreen = true;
+                this.$el.querySelector('.el-dialog').style.width = window.innerWidth - 80 + 'px';
+                this.$el.querySelector('.el-dialog').style.marginTop = 40 + 'px';
+                this.$el.querySelector('.el-dialog__body').style.maxHeight = 'calc(100vh - 217px)';
+            } else {
+                this.dialogFullscreen = false;
+                this.$el.querySelector('.el-dialog').style.width = this.originSize.width + 'px';
+                this.$el.querySelector('.el-dialog').style.marginTop = 90 + 'px';
+                this.$el.querySelector('.el-dialog__body').style.maxHeight = 'calc(100vh - 317px)';
+            }
+            this.$emit('resize');
         }
     },
     mounted() {
-
+        this.$nextTick(() => {
+            this.originSize = this.$el.querySelector('.el-dialog').getBoundingClientRect();
+        });
     }
 };
 </script>

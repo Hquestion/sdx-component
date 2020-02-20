@@ -222,7 +222,7 @@
                                 <div
                                     class="form-tip"
                                 >
-                                    {{ t('view.task.KernalReleaseTime') }}
+                                    {{ t('view.task.KernalReleaseTime') }}：
                                 </div>
                                 <el-input-number
                                     v-model="notebookKernelExpireTime"
@@ -242,7 +242,7 @@
                                     class="form-tip"
                                     style="margin-top:10px;"
                                 >
-                                    {{ t('view.task.PodReleaseTime') }}
+                                    {{ t('view.task.PodReleaseTime') }}：
                                 </div>
                                 <el-input-number
                                     v-model="podExpireTime"

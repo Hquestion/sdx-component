@@ -61,7 +61,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
         }
         .el-dialog__body {
             padding: 20px 40px;
-            max-height: 558px;
+            max-height: calc(100vh - 317px);
             overflow: auto;
         }
         @include element('footer') {
@@ -85,5 +85,19 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 
     @include element('title-with-top-margin') {
         margin-top: 30px;
+    }
+
+    @include element('subtitle') {
+        margin-left: $sdx-gap-mini;
+        font-size: $sdx-content-font-size;
+        font-weight: 300;
+        color: $sdx-secondary-color--light3;
+    }
+    @include element('scale-handler') {
+        &.sdxu-icon-button {
+            position: absolute;
+            right: 80px;
+            top: 24px;
+        }
     }
 }

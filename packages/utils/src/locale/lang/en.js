@@ -293,6 +293,7 @@ export default {
             PodReleaseTime: 'Pod Release Time(min):',
             ExceedKernalReleaseTime: 'Kernel will be inactive if exceeding specified time',
             ExceedPodReleaseTime: 'Pod will be shutted down if exceeding specified time',
+            LimitSessionCount: 'Maximum Session Connections',
             EnterIde: 'Go to SkyIDE',
             EnterJupyterlab: 'Go to Jupyter Lab',
             EnterNotebook: 'Go to Jupyter NoteBook',

@@ -2,7 +2,7 @@
     <div class="sdxv-project-detail">
         <div
             class="sdxv-project-detail__create-task"
-            v-auth.project.button="'TASK:CREATE'"
+            v-auth.task.button="'TASK:CREATE'"
         >
             <sdxw-create-task-card
                 v-for="(item,index) in createTaskOptions"

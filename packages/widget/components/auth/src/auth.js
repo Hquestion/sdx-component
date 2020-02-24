@@ -10,7 +10,8 @@ const systemMap = {
     image: 'IMAGE-MANAGER',
     model: 'MODEL-MANAGER',
     file: 'FILE-MANAGER',
-    skyflow: 'SKYFLOW-MANAGER'
+    skyflow: 'SKYFLOW-MANAGER',
+    task: 'TASK-MANAGER'
 };
 
 const tagMap = {

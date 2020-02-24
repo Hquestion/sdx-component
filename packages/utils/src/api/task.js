@@ -10,20 +10,23 @@ const taskApi = `${TASK_MANAGE_GATEWAY_BASE}tasks`;
 
 export const getTaskList = authWrapper(function (params) {
     return httpService.get(taskApi, params);
-}, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ]);
+}, [readAuths.PROJECT_TASK_READ, readAuths.SYSTEM_POD_REAL_RESOURCE_READ, readAuths.SYSTEM_GLOBAL_RESOURCE_READ, readAuths.TASK_TASK_READ]);
 
 
 // full 版本任务列表
-export function taskList(params) {
+export const taskList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-profiles`, params);
-}
+}, [readAuths.TASK_TASK_READ]);
+
 export function nativeTaskList(params) {
     return httpService.get(taskApi, params);
 }
 // full 版本执行列表
-export function executionList(params) {
+export const executionList = authWrapper(function (params) {
     return httpService.get(`${COMPOSE_GATEWAY_BASE}task-execution-profiles`, params);
-}
+}, [readAuths.TASK_EXECUTION_READ]);
+
+
 export function executionNativeList(params) {
     return httpService.get(`${TASK_MANAGE_GATEWAY_BASE}executions`, params);
 }

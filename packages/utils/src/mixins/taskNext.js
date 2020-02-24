@@ -23,6 +23,13 @@ export default {
             if (!isOwnerTask) {
                 list = list.filter(item => NON_OWNER_TASK_OPERATION.includes(item));
             }
+            list = list.filter(item => {
+                if (item === 'start') {
+                    return this.$auth('TASK-MANAGER:TASK:EXCUTE', 'BUTTON');
+                } else {
+                    return true;
+                }
+            });
             return list.map(item => OPERATION_INFO[item]);
         },
         handleOperation(operation, row, projectId) {

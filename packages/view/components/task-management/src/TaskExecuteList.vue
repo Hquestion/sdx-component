@@ -374,7 +374,13 @@ export default {
         },
         getOperationList(state) {
             let arr = STATE_TYPE_OPERATION[state] || [];
-            return arr.map(item => OPERATION_INFO[item]);
+            return arr.map(item => OPERATION_INFO[item]).filter(item => {
+                if (item === 'start') {
+                    return this.$auth('TASK-MANAGER:TASK:EXCUTE', 'BUTTON');
+                } else {
+                    return true;
+                }
+            });
         }
     },
     created() {

@@ -49,7 +49,7 @@
                 </slot>
             </div>
             <sdxu-icon-button
-                v-if="scaleable"
+                v-if="scalable"
                 class="sdxu-dialog__scale-handler"
                 icon="sdx-icon sdx-zuidahua1"
                 @click="toggleFullscreen"
@@ -190,7 +190,7 @@ export default {
             type: String,
             default: 'flex' // float, flex
         },
-        scaleable: {
+        scalable: {
             type: Boolean,
             default: false
         }

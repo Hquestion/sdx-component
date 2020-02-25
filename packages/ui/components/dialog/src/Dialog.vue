@@ -51,7 +51,7 @@
             <sdxu-icon-button
                 v-if="scalable"
                 class="sdxu-dialog__scale-handler"
-                icon="sdx-icon sdx-zuidahua1"
+                :icon="dialogFullscreen ? 'sdx-icon sdx-zuixiaohua1' : 'sdx-icon sdx-zuidahua1'"
                 @click="toggleFullscreen"
             />
         </div>

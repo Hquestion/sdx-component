@@ -1,6 +1,6 @@
 {
     "name": "@sdx/view",
-    "version": "2.0.31",
+    "version": "2.0.32",
     "description": "页面级组件库",
     "author": "贺小雷 <xiaolei.he@iluvatar.ai>",
     "homepage": "http://bitbucket.iluvatar.ai:7990/scm/csdx/sdx-component#readme",
@@ -73,7 +73,7 @@
         "vue-codemirror": "^4.0.6"
     },
     "devDependencies": {
-        "@sdx/ui": "^2.0.28",
+        "@sdx/ui": "^2.0.29",
         "@sdx/utils": "^2.0.22",
         "@sdx/widget": "^2.0.21",
         "@skyide/services": "^1.1.6",

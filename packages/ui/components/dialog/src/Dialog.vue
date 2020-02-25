@@ -92,7 +92,8 @@ export default {
     data() {
         return {
             dialogVisible: this.visible,
-            dialogFullscreen: false
+            dialogFullscreen: false,
+            originSize: null
         };
     },
     watch: {
@@ -229,6 +230,9 @@ export default {
         },
         toggleFullscreen() {
             if (!this.dialogFullscreen) {
+                if (!this.originSize) {
+                    this.originSize = this.$el.querySelector('.el-dialog').getBoundingClientRect();
+                }
                 this.dialogFullscreen = true;
                 this.$el.querySelector('.el-dialog').style.width = window.innerWidth - 80 + 'px';
                 this.$el.querySelector('.el-dialog').style.marginTop = 40 + 'px';
@@ -243,9 +247,7 @@ export default {
         }
     },
     mounted() {
-        this.$nextTick(() => {
-            this.originSize = this.$el.querySelector('.el-dialog').getBoundingClientRect();
-        });
+
     }
 };
 </script>
